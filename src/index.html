@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html ng-app="codexen">
+  <head>
+    <title>
+      CodeXen App
+    </title>
+
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta charset="utf-8">
+    <meta name=viewport content="width=device-width, initial-scale=1">
+    <meta name="description" content="CodeXen - Short code storage service">
+
+    <title>Codexen!</title>
+
+  </head>
+  <body>
+    <div ui-view name="side-view" id="side-view"></div>
+    <div ui-view name="main-view" id="main-view"></div>
+
+    <script src="vendor/ace.js"></script>
+    <script src="vendor/angular.js"></script>
+    <script src="vendor/angular-sanitize.js"></script>
+    <script src="vendor/angular-ui-router.js"></script>
+    <script src="vendor/ui-ace.js"></script>
+    <script src="vendor/ui-bootstrap-tpls.js"></script>
+    <script src="vendor/select.js"></script>
+
+    <% scripts.forEach(function(script){ %>
+    <script src="<%=script %>"></script>
+    <% }) %>
+  </body>
+</html>

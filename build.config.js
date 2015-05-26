@@ -1,0 +1,44 @@
+module.exports = {
+  vendors: [
+    {
+      name:'ace',
+      src:'node_modules/@rokt33r/ace-builds/src/**/*',
+      cdn:'https://cdnjs.cloudflare.com/ajax/libs/ace/1.1.9/ace.js'
+    },
+    {
+      name:'angular',
+      src:'node_modules/angular/angular.js',
+      cdn:'https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js'
+    },
+    {
+      name:'angular-ui-ace',
+      src:'node_modules/@rokt33r/angular-ui-ace/src/ui-ace.js',
+      cdn:'https://cdn.rawgit.com/angular-ui/ui-ace/v0.2.3/ui-ace.min.js'
+    },
+    {
+      name:'angular-bootstrap',
+      src:'node_modules/angular-bootstrap/dist/ui-bootstrap-tpls.js',
+      cdn:'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.min.js'
+    },
+    {
+      name:'angular-sanitize',
+      src:'node_modules/angular-sanitize/angular-sanitize.js',
+      cdn:'https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.15/angular-animate.min.js'
+    },
+    {
+      name:'angular-ui-router',
+      src:'node_modules/angular-ui-router/build/angular-ui-router.js',
+      cdn:'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.14/angular-ui-router.min.js'
+    },
+    {
+      name:'ui-select',
+      src:'node_modules/ui-select/dist/select.js',
+      cdn:'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-select/0.11.2/select.js'
+    },
+    {
+      name:'satellizer',
+      src:'node_modules/satellizer/satellizer.js',
+      cdn:'https://cdn.jsdelivr.net/satellizer/0.10.1/satellizer.min.js'
+    }
+  ]
+}
