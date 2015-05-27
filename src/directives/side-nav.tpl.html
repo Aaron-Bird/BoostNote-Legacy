@@ -1,0 +1,26 @@
+
+<div class="current-user">
+  <div ng-if="vm.currentUser">
+    <img width="30" ng-src="http://www.gravatar.com/avatar/{{ vm.currentUser.email | gravatar }}">
+    <span ng-bind="vm.currentUser.name"></span>
+    <span class="dropdown" dropdown is-open>
+      <button type="button" name="button" dropdown-toggle class="btn btn-default dropdown-toggle"><i class="fa fa-caret-down"></i></button>
+      <ul class="dropdown-menu">
+        <li>
+          <a ng-click="vm.signOut()"><i class="fa fa-signout"></i> Sign Out</a>
+        </li>
+      </ul>
+    </span>
+
+  </div>
+  <div ng-if="!vm.currentUser">
+    <span>Guest</span>
+  </div>
+</div>
+
+<p>Side Nav</p>
+<ul class="nav nav-pills nav-stacked">
+  <li>
+    <a href="">My Page</a>
+  </li>
+</ul>

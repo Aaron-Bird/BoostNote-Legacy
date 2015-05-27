@@ -39,6 +39,11 @@ module.exports = {
       name:'satellizer',
       src:'node_modules/satellizer/satellizer.js',
       cdn:'https://cdn.jsdelivr.net/satellizer/0.10.1/satellizer.min.js'
+    },
+    {
+      name:'angular-md5',
+      src:'node_modules/angular-md5/angular-md5.js',
+      cdn:'https://raw.githubusercontent.com/gdi2290/angular-md5/v0.1.7/angular-md5.min.js'
     }
   ]
 }

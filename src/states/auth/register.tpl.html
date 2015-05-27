@@ -1,0 +1,56 @@
+<div class="row">
+  <div class="col-sm-6 col-sm-offset-3">
+    <form novalidate name="registerForm" ng-submit="vm.signup()">
+
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input ng-model="vm.email" type="text" id="email" name="email" class="form-control" placeholder="E-mail" required>
+
+        <div class="alert alert-danger" ng-if="(registerForm.$submitted || registerForm.email.$touched) && !vm.isEmpty(registerForm.email.$error)">
+          <div ng-show="registerForm.email.$error.required">No E-mail given.</div>
+            <div ng-show="registerForm.email.$error.email">Invalid Address.</div>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input ng-model="vm.password" type="password" id="password" name="password" class="form-control" placeholder="Password" required>
+
+        <div ng-click="vm.log(registerForm.password.$error)" class="alert alert-danger" ng-if="(registerForm.$submitted || registerForm.password.$touched) && !vm.isEmpty(registerForm.password.$error)">
+          <div ng-show="registerForm.password.$error.required">No password given.</div>
+        </div>
+      </div>
+
+      <hr>
+
+      <!-- Username -->
+      <div class="form-group">
+        <label for="name">Username</label>
+        <input ng-model="vm.name" ng-pattern="'^[A-Za-z0-9\-\_]+$'" type="text" id="name" name="name" class="form-control" required>
+
+        <div class="alert alert-danger" ng-if="(registerForm.$submitted || registerForm.name.$touched) && !vm.isEmpty(registerForm.name.$error)">
+          <div ng-show="registerForm.name.$error.required">No Username given.</div>
+            <div ng-show="registerForm.name.$error.pattern">Username should be ^[A-Za-z0-9\-\_]+$</div>
+        </div>
+      </div>
+
+
+      <!-- Profile name -->
+      <div class="form-group">
+        <label for="profileName">Profile name</label>
+        <input ng-model="vm.profileName" type="text" name="profileName" class="form-control" required>
+
+        <div class="alert alert-danger" ng-if="(registerForm.$submitted || registerForm.profileName.$touched) && !vm.isEmpty(registerForm.profileName.$error)">
+          <div ng-show="registerForm.profileName.$error.required">No Profile name given.</div>
+        </div>
+      </div>
+
+
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary form-control">Register</button>
+      </div>
+    </form>
+  </div>
+</div>

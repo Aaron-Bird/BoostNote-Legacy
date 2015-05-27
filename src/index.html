@@ -12,9 +12,14 @@
 
     <title>Codexen!</title>
 
+    <% styles.forEach(function(style){ %>
+    <link rel="stylesheet" href="<%=style %>" media="screen" title="no title" charset="utf-8">
+    <% }) %>
+
+
   </head>
   <body>
-    <div ui-view name="side-view" id="side-view"></div>
+    <div side-nav id="side-view"></div>
     <div ui-view name="main-view" id="main-view"></div>
 
     <script src="vendor/ace.js"></script>
@@ -24,6 +29,8 @@
     <script src="vendor/ui-ace.js"></script>
     <script src="vendor/ui-bootstrap-tpls.js"></script>
     <script src="vendor/select.js"></script>
+    <script src="vendor/satellizer.js"></script>
+    <script src="vendor/angular-md5.js"></script>
 
     <% scripts.forEach(function(script){ %>
     <script src="<%=script %>"></script>
