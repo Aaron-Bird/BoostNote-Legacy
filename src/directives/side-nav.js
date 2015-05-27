@@ -1,8 +1,9 @@
+
 angular.module('codexen.directives')
   .directive('sideNav', function(){
     return {
-      templateUrl:'directives/side-nav.tpl.html',
-      controller:'SideNavController as vm'
+      templateUrl: 'directives/side-nav.tpl.html',
+      controller: 'SideNavController as vm'
     }
   })
   .controller('SideNavController', function($auth, User, $rootScope, $scope){

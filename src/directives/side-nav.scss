@@ -1,0 +1,19 @@
+@import "../variables";
+
+$side-view-link-hover-color: $gray-dark;
+$side-view-link-active-color: $link-color;
+$side-view-link-active-bg: $body-bg;
+
+#side-view ul.nav.nav-pills{
+  li a{
+    color: white;
+    &:hover{
+      color: $side-view-link-hover-color;
+    }
+  }
+
+  li.active a{
+    color:$side-view-link-active-color;
+    background-color: $side-view-link-active-bg;
+  }
+}

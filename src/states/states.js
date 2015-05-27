@@ -29,7 +29,12 @@ angular.module('codexen.states')
       /* Home */
       .state('home', {
         url: '/',
-        template: 'this is a home'
+        views:{
+          'main-view': {
+            templateUrl: 'states/home/home.tpl.html',
+            controller: 'HomeController as vm'
+          }
+        }
       })
 
   })

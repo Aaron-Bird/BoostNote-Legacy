@@ -4,11 +4,6 @@ $fa-font-path: "./resources/fonts";
 @import "bootstrap";
 @import "ui-select";
 
-@import "../node_modules/bootstrap-sass/assets/stylesheets/bootstrap/variables";
-
-$side-view-bg: $navbar-inverse-bg;
-$side-view-color: $navbar-inverse-color;
-
 html {
   overflow: hidden;
   height: 100%;
@@ -17,6 +12,10 @@ html {
 body {
   height: 100%;
   overflow: auto;
+  font-family: "Lato", sans-serif;
+}
+label{
+  font-family: "Lato", sans-serif;
 }
 
 #side-view{
@@ -45,5 +44,5 @@ body {
   left: 200px;
   right: 0;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
