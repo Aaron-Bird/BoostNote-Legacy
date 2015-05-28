@@ -49,3 +49,29 @@ $snippet-list-item-hover-bg: #EEE;
     right: 0;
   }
 }
+
+.snippets-detail-state{
+  .detail-header{
+    padding: 5px 10px;
+    height: 50px;
+    border-bottom: solid 1px $border-color;
+    .detail-header-title{
+      small{
+        font-size: 0.6em;
+      }
+      line-height: 40px;
+      font-size: 1.2em;
+    }
+    .detail-header-control{
+      padding:3px;
+    }
+  }
+  .detail-body{
+    padding: 5px 10px;
+    .ace_editor {
+      height: 500px;
+      border: solid 1px $border-color;
+      border-radius: 5px;
+    }
+  }
+}

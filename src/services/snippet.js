@@ -16,8 +16,15 @@ angular.module('codexen.services')
       return $http.post(url, params)
     }
 
+    var show = function (id) {
+      var url = apiUrl + 'snippets/' + id
+
+      return $http.get(url)
+    }
+
     return {
       findByUser: findByUser,
-      create: create
+      create: create,
+      show: show
     }
   })

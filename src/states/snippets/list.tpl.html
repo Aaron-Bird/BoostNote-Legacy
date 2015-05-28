@@ -23,7 +23,7 @@
         <a ui-sref="auth.signin" class="btn btn-default"><i class="fa fa-signin"></i> Sign In</a>
       </li>
 
-      <li ng-repeat="snippet in vm.snippets">
+      <li ng-repeat="snippet in vm.snippets" ui-sref="snippets.detail({id:snippet._id})">
         <div class="media">
           <div class="media-left">
             <img width="25" height="25" src="http://www.gravatar.com/avatar/ea0b6ad1c11700120d1af08810caa19d" alt="" />
@@ -42,9 +42,10 @@
   </div>
 
   <div class="right-pane">
-    <div class="">
-
+    <div ng-if="'snippets'|isState">
+      No snippet selected.
     </div>
+    <div ui-view></div>
   </div>
 
 

@@ -1,0 +1,33 @@
+<div class="snippets-detail-state">
+
+  <div class="detail-header">
+    <span class="detail-header-title">
+      <small>Title : </small> 
+      <span ng-bind="vm.snippet.title"></span></span>
+    <span class="detail-header-control pull-right">
+      <button type="button" name="button" class="btn btn-default"><i class="fa fa-share"></i></button>
+      <button type="button" name="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
+      <button type="button" name="button" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+    </span>
+  </div>
+
+  <div class="detail-body">
+
+    <div ng-if="!vm.isLoaded" class="">
+      Loadding
+    </div>
+
+    <div ng-if="vm.isLoaded" class="">
+      <p>
+        <span ng-repeat="tag in vm.snippet.tags" ng-bind="tag.name"></span>
+      </p>
+      <label>Description</label>
+      <p ng-bind="vm.snippet.description"></p>
+      <label>Content</label>
+      <div ui-ace="{
+        readonly: true,
+        showGutter: false
+      }" ng-model="vm.snippet.content"></div>
+    </div>
+  </div>
+</div>
