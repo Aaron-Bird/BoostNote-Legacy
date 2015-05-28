@@ -10,10 +10,12 @@ angular.module('codexen', [
   'templates',
   'codexen.config',
   'codexen.directives',
+  'codexen.modals',
   'codexen.services',
   'codexen.states'])
 angular.module('templates', [])
 angular.module('codexen.config', [])
 angular.module('codexen.directives', [])
+angular.module('codexen.modals', [])
 angular.module('codexen.services', [])
 angular.module('codexen.states', [])

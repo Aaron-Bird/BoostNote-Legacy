@@ -1,3 +1,4 @@
+/* global angular */
 angular.module('codexen.config')
   .constant('apiUrl', 'http://localhost:8000/')
   .config(function ($authProvider, $httpProvider) {

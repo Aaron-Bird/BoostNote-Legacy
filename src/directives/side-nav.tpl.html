@@ -3,7 +3,7 @@
     <img width="30" ng-src="http://www.gravatar.com/avatar/{{ vm.currentUser.email | gravatar }}">
     <span ng-bind="vm.currentUser.name"></span>
     <span class="dropdown" dropdown is-open>
-      <button type="button" name="button" dropdown-toggle class="btn btn-default dropdown-toggle"><i class="fa fa-caret-down"></i></button>
+      <a type="button" name="button" dropdown-toggle class="btn btn-sm btn-default dropdown-toggle"><i class="fa fa-caret-down"></i></a>
       <ul class="dropdown-menu">
         <li>
           <a ng-click="vm.signOut()"><i class="fa fa-signout"></i> Sign Out</a>
@@ -19,10 +19,23 @@
 
 <p>Side Nav</p>
 <ul class="nav nav-pills nav-stacked">
+  <li>
+    <a btn-new-snippet href="#"><i class="fa fa-plus-square-o"></i> New Snippet</a>
+  </li>
+  <li class="divider"><hr></li>
+  <li>
+  </li>
   <li ui-sref-active="active">
     <a ui-sref="home"><i class="fa fa-home"></i> Home</a>
   </li>
+  <li ui-sref-active="active">
+    <a ui-sref="snippets"><i class="fa fa-code"></i> Snippets</a>
+  </li>
+  <li ui-sref-active="active">
+    <a ui-sref="clips"><i class="fa fa-paperclip"></i> Clips</a>
+  </li>
+  <li class="divider"><hr></li>
   <li>
-    <a href="">My Page</a>
+    <a href=""><i class="fa fa-gears"></i> Configuration</a>
   </li>
 </ul>

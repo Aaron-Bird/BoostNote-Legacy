@@ -1,0 +1,34 @@
+<div class="new-snippet-modal">
+  <div class="modal-header">
+    <input ng-model="vm.title" type="title" class="form-control input-lg" placeholder="Title">
+  </div>
+
+  <div class="modal-body">
+    <div class="form-group">
+      <textarea ng-model="vm.description" name="description" class="form-control" placeholder="Description..."></textarea>
+    </div>
+    <div class="form-group">
+        <input ng-model="vm.prefix" type="text" name="prefix" class="inline-form-control" placeholder="Prefix">
+
+        <ui-select ng-model="vm.mode" style="display: inline-block;" on-select="vm.log(vm.mode.name.toLowerCase())" theme="bootstrap" ng-disabled="disabled">
+          <ui-select-match placeholder="Select Type">{{$select.selected.name}}</ui-select-match>
+            <ui-select-choices repeat="mode in vm.aceModes | filter: {name: $select.search}">
+            <div ng-bind-html="mode.name | highlight: $select.search"></div>
+          </ui-select-choices>
+        </ui-select>
+    </div>
+
+    <div
+      ui-ace="{
+        mode: vm.mode.name.toLowerCase()
+
+      }"
+      ng-model="vm.content"
+    ></div>
+  </div>
+
+  <div class="modal-footer">
+    <button ng-click="vm.submit()" type="button" name="button" class="btn btn-primary">Submit</button>
+    <button ng-click="vm.cancel()" type="button" name="button" class="btn btn-default">Cancel</button>
+  </div>
+</div>

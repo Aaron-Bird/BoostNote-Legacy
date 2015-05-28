@@ -4,6 +4,7 @@ angular.module('codexen.states')
     $urlRouterProvider
       .when('/auth', '/auth/register')
       .when('/auth/', '/auth/register')
+      .otherwise('/')
 
     $stateProvider
       /* Auth */
@@ -26,10 +27,26 @@ angular.module('codexen.states')
         controller: 'AuthSignInController as vm'
       })
 
+      /* Snippets */
+      .state('snippets', {
+        url: '/snippets',
+        views:{
+          'main-view': {
+            templateUrl: 'states/snippets/list.tpl.html',
+            controller: 'SnippetsListController as vm'
+          }
+        }
+      })
+      .state('snippets.detail', {
+        url: '/:id',
+        templateUrl: 'states/snippets/detail.tpl.html',
+        controller: 'SnippetsDetailController as vm'
+      })
+
       /* Home */
       .state('home', {
         url: '/',
-        views:{
+        views: {
           'main-view': {
             templateUrl: 'states/home/home.tpl.html',
             controller: 'HomeController as vm'

@@ -1,51 +1,6 @@
 @import "../../variables";
 @import "../../mixins";
 
-$left-pane-width: 275px;
-
-
-$pane-border-color: #ddd;
-$snippet-list-border-color: #ddd;
-$snippet-list-item-hover-bg: #EEE;
-
 .home-state{
-  position: absolute;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
-  .left-pane{
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: $left-pane-width;
-    overflow-x: hidden;
-    overflow-y: auto;
-    border-right: solid 1px $pane-border-color;
-    .snippet-list{
-      list-style: none;
-      padding: 0;
-      li{
-        padding: 5px;
-        border-bottom: solid 1px $snippet-list-border-color;
-        h4{
-          margin: 0;
-        }
-        &:hover{
-          background-color: $snippet-list-item-hover-bg;
-        }
-        p{
-          margin:0;
-        }
-      }
-    }
-  }
-  .right-pane{
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: $left-pane-width;
-    right: 0;
-  }
+  padding: 10px;
 }

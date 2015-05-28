@@ -1,51 +1,10 @@
 <div class="home-state">
+  <h1 class="jumbotron">Codexen App, v0.1 (breakthru)</h1>
+  <p>
+    App for Code snippets<br>
 
-  <div class="left-pane">
-    <ul class="snippet-list">
+    App: <a href="https://github.com/Rokt33r/codexen-app">Rokt33r/codexen-app</a><br>
+    Server: <a href="https://github.com/Rokt33r/codexen-server">Rokt33r/codexen-server</a>
 
-      <li ng-if="!vm.isLoaded" class="message-item">
-        <h4>
-          Loading
-        </h4>
-      </li>
-
-      <li ng-if="vm.isLoaded && vm.snippets==0 && !vm.isGuest" class="message-item">
-        <h4>
-          Empty List
-        </h4>
-        <button class="btn btn-xs btn-default"><i class="fa fa-plus-square-o"></i> New Snippet</button>
-      </li>
-
-      <li ng-if="vm.isLoaded && vm.isGuest" class="message-item">
-        <h4>
-          Sign In to access
-        </h4>
-        <a ui-sref="auth.signin" class="btn btn-xs btn-default"><i class="fa fa-signin"></i> Sign In</a>
-      </li>
-
-      <li ng-repeat="snippet in vm.snippets">
-        <div class="media">
-          <div class="media-left">
-            <img width="25" height="25" src="http://www.gravatar.com/avatar/ea0b6ad1c11700120d1af08810caa19d" alt="" />
-          </div>
-          <div class="media-body">
-            <h4 ng-bind="snippet.title"></h4>
-            <p class="created-at">created at <span ng-bind="snippet.createdAt"></span></p>
-          </div>
-        </div>
-        <p ng-bind="snippet.description"></p>
-        <p>
-          <a ng-repeat="tag in snippet.tags" ng-bind="tag.name" href="#" class="label label-default"></a>
-        </p>
-      </li>
-    </ul>
-  </div>
-
-  <div class="right-pane">
-    <div class="">
-
-    </div>
-  </div>
-
-
+  </p>
 </div>

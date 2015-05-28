@@ -46,3 +46,9 @@ label{
   overflow-x: hidden;
   overflow-y: auto;
 }
+
+.inline-form-control{
+  @extend .form-control;
+  width: auto;
+  display: inline-block;
+}

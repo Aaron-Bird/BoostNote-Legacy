@@ -111,6 +111,7 @@ body > .select2-container.open {
 .ui-select-bootstrap > .ui-select-match > .btn{
   /* Instead of center because of .btn */
   text-align: left !important;
+  padding-right: 25px;
 }
 
 .ui-select-bootstrap > .ui-select-match > .caret {

@@ -32,7 +32,7 @@ gulp.task('js', function(){
 gulp.task('sass', function () {
   return gulp.src('src/**/*.scss')
     .pipe(cached('styles'))
-    .pipe(sass().on('error', sass.logError))
+    .pipe(sass())
     .pipe(autoprefixer())
     .pipe(remember('styles'))
     .pipe(concat('all.css'))
