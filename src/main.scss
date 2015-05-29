@@ -17,6 +17,9 @@ body {
 label{
   font-family: "Lato", sans-serif;
 }
+textarea{
+  resize: vertical;
+}
 
 #side-view{
   position:absolute;

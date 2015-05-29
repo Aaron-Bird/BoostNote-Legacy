@@ -34,8 +34,8 @@
           </div>
         </div>
         <p ng-bind="snippet.description"></p>
-        <p>
-          <a ng-repeat="tag in snippet.tags" ng-bind="tag.name" href="#" class="label label-default"></a>
+        <p class="tags">
+          <small><i class="fa fa-tags"></i></small> <a ng-repeat="tag in snippet.tags" ng-bind="tag.name" href="#" class="label label-default"></a>
         </p>
       </li>
     </ul>
