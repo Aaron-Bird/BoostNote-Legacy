@@ -11,11 +11,6 @@ module.exports = {
       cdn:'https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.min.js'
     },
     {
-      name:'angular-ui-ace',
-      src:'node_modules/@rokt33r/angular-ui-ace/src/ui-ace.js',
-      cdn:'https://cdn.rawgit.com/angular-ui/ui-ace/v0.2.3/ui-ace.min.js'
-    },
-    {
       name:'angular-bootstrap',
       src:'node_modules/angular-bootstrap/dist/ui-bootstrap-tpls.js',
       cdn:'https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.min.js'

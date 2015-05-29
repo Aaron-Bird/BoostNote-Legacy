@@ -1,6 +1,6 @@
 <div class="new-snippet-modal">
   <div class="modal-header">
-    <input ng-model="vm.title" type="title" class="form-control input-lg" placeholder="Title">
+    New Snippet
   </div>
 
   <div class="modal-body">
@@ -8,7 +8,7 @@
       <textarea ng-model="vm.description" name="description" class="form-control" placeholder="Description..."></textarea>
     </div>
     <div class="form-group">
-        <input ng-model="vm.prefix" type="text" name="prefix" class="inline-form-control" placeholder="Prefix">
+        <input ng-model="vm.callSign" type="text" name="callSign" class="inline-form-control" placeholder="Call sign">
 
         <ui-select ng-model="vm.mode" style="display: inline-block;" on-select="vm.log(vm.mode.name.toLowerCase())" theme="bootstrap">
           <ui-select-match placeholder="Select Type">{{$select.selected.name}}</ui-select-match>
@@ -18,13 +18,15 @@
         </ui-select>
     </div>
 
-    <div
-      ui-ace="{
-        mode: vm.mode.name.toLowerCase()
+    <div class="form-group">
+      <div
+        ui-ace="{
+          mode: vm.mode.name.toLowerCase()
 
-      }"
-      ng-model="vm.content"
-    ></div>
+        }"
+        ng-model="vm.content"
+      ></div>
+    </div>
 
     <div class="form-group">
       <ui-select multiple tagging="vm.transform" tagging-tokens="SPACE|,|/" ng-model="vm.tags" theme="bootstrap">
@@ -34,8 +36,6 @@
           <div><span ng-bind-html="tag.name | highlight: $select.search"></span><span ng-if="tag.isTag">(new)</span></div>
         </ui-select-choices>
       </ui-select>
-
-
     </div>
 
   </div>

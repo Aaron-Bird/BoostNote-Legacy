@@ -29,14 +29,11 @@
             <img width="25" height="25" src="http://www.gravatar.com/avatar/ea0b6ad1c11700120d1af08810caa19d" alt="" />
           </div>
           <div class="media-body">
-            <h4 ng-bind="snippet.title"></h4>
+            <h4 ng-bind="snippet.description"></h4>
             <p class="created-at">created at <span ng-bind="snippet.createdAt"></span></p>
           </div>
         </div>
-        <p ng-bind="snippet.description"></p>
-        <p class="tags" ng-if="snippet.tags.length">
-          <small><i class="fa fa-tags"></i></small> <a ng-repeat="tag in snippet.tags" ng-bind="tag.name" href="#" class="label label-default"></a>
-        </p>
+        <div tags="snippet.tags"></div>
       </li>
     </ul>
   </div>

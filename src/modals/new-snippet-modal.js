@@ -18,9 +18,8 @@ angular.module('codexen.modals')
 
     vm.submit = function () {
       var params = {
-        title: vm.title,
         description: vm.description,
-        prefix: vm.prefix,
+        callSign: vm.callSign,
         mode: vm.mode==null?null:vm.mode.name.toLowerCase(),
         content: vm.content,
         tags: angular.isArray(vm.tags)?vm.tags.map(function (tag) { return {_id: tag._id, name: tag.name} }):[]

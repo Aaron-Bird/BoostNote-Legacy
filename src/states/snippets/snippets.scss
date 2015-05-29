@@ -47,6 +47,8 @@ $snippet-list-item-hover-bg: #EEE;
     bottom: 0;
     left: $left-pane-width;
     right: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 }
 
@@ -69,13 +71,14 @@ $snippet-list-item-hover-bg: #EEE;
   .detail-body{
     padding: 5px 10px;
     .ace_editor {
-      height: 500px;
+      min-height: 300px;
       border: solid 1px $border-color;
       border-radius: 5px;
     }
   }
 }
 .tags{
+  word-break: break-all;
   a{
     margin: 0 2px;
   }

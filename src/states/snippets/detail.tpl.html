@@ -1,9 +1,7 @@
 <div class="snippets-detail-state">
 
   <div class="detail-header">
-    <span class="detail-header-title">
-      <small>Title : </small>
-      <span ng-bind="vm.snippet.title"></span></span>
+    <span class="detail-header-title"><small>call sign : </small><span ng-bind="vm.snippet.callSign"></span></span>
     <span class="detail-header-control pull-right">
       <button type="button" name="button" class="btn btn-default"><i class="fa fa-share"></i></button>
       <button type="button" name="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
@@ -18,15 +16,15 @@
     </div>
 
     <div ng-if="vm.isLoaded" class="">
-      <p class="tags" ng-if="vm.snippet.tags">
-        <small><i class="fa fa-tags"></i></small> <a ng-repeat="tag in vm.snippet.tags" ng-bind="tag.name" href="#" class="label label-default"></a>
-      </p>
-      <label>Description</label>
       <p ng-bind="vm.snippet.description"></p>
+      <div tags="vm.snippet.tags"></div>
       <label>Content</label>
       <div ui-ace="{
-        readonly: true,
         showGutter: false,
+        useWrapMode : true,
+        mode:vm.snippet.mode,
+        maxLines: -1,
+        readOnly: true,
         rendererOptions: {
             maxLinks: Infinity
         }
