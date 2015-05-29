@@ -37,4 +37,8 @@ angular.module('codexen.states')
       laodSnippets()
     })
 
+    $scope.$on('snippetDeleted', function () {
+      laodSnippets()
+    })
+
   })

@@ -7,7 +7,7 @@
     <span class="detail-header-control pull-right">
       <button type="button" name="button" class="btn btn-default"><i class="fa fa-share"></i></button>
       <button type="button" name="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
-      <button type="button" name="button" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+      <button ng-click="vm.delete()" type="button" name="button" class="btn btn-danger"><i class="fa fa-trash"></i></button>
     </span>
   </div>
 
@@ -18,7 +18,7 @@
     </div>
 
     <div ng-if="vm.isLoaded" class="">
-      <p class="tags">
+      <p class="tags" ng-if="vm.snippet.tags">
         <small><i class="fa fa-tags"></i></small> <a ng-repeat="tag in vm.snippet.tags" ng-bind="tag.name" href="#" class="label label-default"></a>
       </p>
       <label>Description</label>

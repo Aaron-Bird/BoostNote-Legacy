@@ -22,9 +22,16 @@ angular.module('codexen.services')
       return $http.get(url)
     }
 
+    var destroy = function (id) {
+      var url = apiUrl + 'snippets/id/' + id
+
+      return $http.delete(url)
+    }
+
     return {
       findByUser: findByUser,
       create: create,
-      show: show
+      show: show,
+      delete: destroy
     }
   })
