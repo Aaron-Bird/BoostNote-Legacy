@@ -5,14 +5,14 @@
 
   <div class="modal-body">
     <div class="form-group">
-      <textarea ng-model="vm.description" name="description" class="form-control" placeholder="Description..."></textarea>
+      <textarea ng-model="vm.snippet.description" name="description" class="form-control" placeholder="Description..."></textarea>
     </div>
     <div class="form-group">
-        <input ng-model="vm.callSign" type="text" name="callSign" class="inline-form-control" placeholder="Call sign">
+        <input ng-model="vm.snippet.callSign" type="text" name="callSign" class="inline-form-control" placeholder="Call sign">
 
-        <ui-select ng-model="vm.mode" style="display: inline-block;" on-select="vm.log(vm.mode.name.toLowerCase())" theme="bootstrap">
+        <ui-select ng-model="vm.snippet.mode" style="display: inline-block;" theme="bootstrap">
           <ui-select-match placeholder="Select Type">{{$select.selected}}</ui-select-match>
-          <ui-select-choices repeat="mode in vm.aceModes | filter: $select.search">
+          <ui-select-choices repeat="mode in vm.aceModes | filter:$select.search">
             <div ng-bind-html="mode | highlight: $select.search"></div>
           </ui-select-choices>
         </ui-select>
@@ -21,15 +21,15 @@
     <div class="form-group">
       <div
         ui-ace="{
-          mode: vm.mode.toLowerCase()
+          mode: vm.snippet.mode.toLowerCase()
 
         }"
-        ng-model="vm.content"
+        ng-model="vm.snippet.content"
       ></div>
     </div>
 
     <div class="form-group">
-      <ui-select multiple tagging="vm.transform" tagging-tokens="SPACE|,|/" ng-model="vm.tags" theme="bootstrap">
+      <ui-select multiple tagging="vm.transform" tagging-tokens="SPACE|,|/" ng-model="vm.snippet.tags" theme="bootstrap">
         <ui-select-match placeholder="Write Tags">{{$item.name}}</ui-select-match>
         <ui-select-choices repeat="tag in vm.tagCandidates" refresh="vm.refreshTagCandidates($select.search)"
          refresh-delay="200">

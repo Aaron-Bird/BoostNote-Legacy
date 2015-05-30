@@ -1,10 +1,13 @@
 <div class="snippets-detail-state">
 
   <div class="detail-header">
-    <span class="detail-header-title"><small>call sign : </small><span ng-bind="vm.snippet.callSign"></span></span>
+    <span class="detail-header-title">
+      <span ng-bind="vm.snippet.callSign"></span>
+      <small><span ng-bind="snippet.updatedAt|fromNow"></span> <i class="fa fa-clock-o"></i></small>
+    </span>
     <span class="detail-header-control pull-right">
       <button type="button" name="button" class="btn btn-default"><i class="fa fa-share"></i></button>
-      <button type="button" name="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
+      <button btn-edit-snippet="vm.snippet" type="button" name="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
       <button ng-click="vm.delete()" type="button" name="button" class="btn btn-danger"><i class="fa fa-trash"></i></button>
     </span>
   </div>
@@ -18,17 +21,17 @@
     <div ng-if="vm.isLoaded" class="">
       <p ng-bind="vm.snippet.description"></p>
       <div tags="vm.snippet.tags"></div>
-      <label>Content</label>
       <div ui-ace="{
         showGutter: false,
         useWrapMode : true,
-        mode:vm.snippet.mode,
+        mode:vm.snippet.mode.toLowerCase(),
         maxLines: -1,
-        readOnly: true,
         rendererOptions: {
             maxLinks: Infinity
         }
-      }" ng-model="vm.snippet.content"></div>
+      }"
+      readonly
+      ng-model="vm.snippet.content"></div>
     </div>
   </div>
 </div>

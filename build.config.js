@@ -39,6 +39,11 @@ module.exports = {
       name:'angular-md5',
       src:'node_modules/angular-md5/angular-md5.js',
       cdn:'https://raw.githubusercontent.com/gdi2290/angular-md5/v0.1.7/angular-md5.min.js'
+    },
+    {
+      name:'moment',
+      src:'node_modules/moment/moment.js',
+      cdn:'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js'
     }
   ]
 }

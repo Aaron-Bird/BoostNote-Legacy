@@ -22,6 +22,12 @@ angular.module('codexen.services')
       return $http.get(url)
     }
 
+    var update = function (id, params) {
+      var url = apiUrl + 'snippets/id/' + id
+
+      return $http.put(url, params)
+    }
+
     var destroy = function (id) {
       var url = apiUrl + 'snippets/id/' + id
 
@@ -32,6 +38,7 @@ angular.module('codexen.services')
       findByUser: findByUser,
       create: create,
       show: show,
-      delete: destroy
+      delete: destroy,
+      update: update
     }
   })

@@ -1,6 +1,9 @@
 <div class="snippets-list-state">
 
   <div class="left-pane">
+    <div class="snippet-search">
+      <input ng-model="vm.search" type="text" name="name" class="form-control" placeholder="Search ...">
+    </div>
     <ul class="snippet-list">
 
       <li ng-if="!vm.isLoaded" class="message-item">
@@ -23,14 +26,19 @@
         <a ui-sref="auth.signin" class="btn btn-default"><i class="fa fa-signin"></i> Sign In</a>
       </li>
 
-      <li ng-repeat="snippet in vm.snippets" ui-sref="snippets.detail({id:snippet._id})">
+      <li ng-repeat="snippet in vm.snippets | filter:vm.search" ui-sref="snippets.detail({id:snippet._id})" ui-sref-active="active">
         <div class="media">
           <div class="media-left">
             <img width="25" height="25" src="http://www.gravatar.com/avatar/ea0b6ad1c11700120d1af08810caa19d" alt="" />
           </div>
           <div class="media-body">
-            <h4 ng-bind="snippet.description"></h4>
-            <p class="created-at">created at <span ng-bind="snippet.createdAt"></span></p>
+            <p ng-bind="snippet.callSign" class="call-sign">
+            </p>
+            <p ng-bind="snippet.description">
+            </p>
+            <p class="created-at">
+              <span ng-bind="snippet.updatedAt|fromNow"></span>
+            </p>
           </div>
         </div>
         <div tags="snippet.tags"></div>

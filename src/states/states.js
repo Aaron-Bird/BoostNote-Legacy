@@ -1,6 +1,6 @@
 /* global angular */
 angular.module('codexen.states')
-  .config(function($stateProvider, $urlRouterProvider){
+  .config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider
       .when('/auth', '/auth/register')
       .when('/auth/', '/auth/register')
@@ -10,7 +10,7 @@ angular.module('codexen.states')
       /* Auth */
       .state('auth', {
         url: '/auth',
-        views:{
+        views: {
           'main-view': {
             templateUrl: 'states/auth/auth.tpl.html'
           }
@@ -30,7 +30,7 @@ angular.module('codexen.states')
       /* Snippets */
       .state('snippets', {
         url: '/snippets',
-        views:{
+        views: {
           'main-view': {
             templateUrl: 'states/snippets/list.tpl.html',
             controller: 'SnippetsListController as vm'

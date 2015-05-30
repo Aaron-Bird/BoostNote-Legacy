@@ -7,6 +7,8 @@ $left-pane-width: 275px;
 $pane-border-color: $border-color;
 $snippet-list-border-color: $border-color;
 $snippet-list-item-hover-bg: #EEE;
+$snippet-list-active-color: white;
+$snippet-list-active-bg: $brand-primary;
 
 .snippets-list-state{
   position: absolute;
@@ -20,13 +22,29 @@ $snippet-list-item-hover-bg: #EEE;
     bottom: 0;
     left: 0;
     width: $left-pane-width;
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow:hidden;
     border-right: solid 1px $pane-border-color;
+    .snippet-search{
+      position: absolute;
+      top: 0;
+      height: 50px;
+      left: 0;
+      right: 0;
+      border-bottom: solid 1px $snippet-list-border-color;
+      padding: 7px 5px;
+    }
     .snippet-list{
+      position: absolute;
+      top: 50px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
       list-style: none;
       padding: 0;
       li{
+        cursor: pointer;
         padding: 5px;
         border-bottom: solid 1px $snippet-list-border-color;
         h4{
@@ -37,6 +55,20 @@ $snippet-list-item-hover-bg: #EEE;
         }
         p{
           margin:0;
+        }
+        p.call-sign{
+          font-size:0.8em;
+        }
+        p.created-at{
+          font-size:0.8em;
+          opacity: 0.8;
+        }
+        &.active{
+          color: $snippet-list-active-color;
+          background-color: $snippet-list-active-bg;
+          a{
+            color: white;
+          }
         }
       }
     }

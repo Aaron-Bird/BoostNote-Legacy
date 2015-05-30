@@ -1,14 +1,16 @@
 angular.module('codexen.directives')
-  .directive('btnNewSnippet', function (newSnippetModal, $rootScope) {
+  .directive('btnEditSnippet', function (editSnippetModal, $rootScope) {
     return {
+      scope:{
+        snippet: '=btnEditSnippet'
+      },
       link: function (scope, el) {
         el.on('click', function () {
-          newSnippetModal.open()
+          editSnippetModal.open(scope.snippet)
             .result.then(function (snippet) {
-              console.log('event fire', snippet)
               $rootScope.$broadcast('snippetUpdated', snippet)
             }, function () {
-              console.log('new snippet modal dismissed')
+              console.log('edit snippet modal dismissed')
             })
         })
       }

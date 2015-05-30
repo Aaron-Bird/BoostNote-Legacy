@@ -17,7 +17,6 @@ angular.module('codexen.states')
       Snippet.delete(vm.snippet._id)
       .success(function () {
         $rootScope.$broadcast('snippetDeleted')
-        $state.go('snippets')
       })
     }
   })

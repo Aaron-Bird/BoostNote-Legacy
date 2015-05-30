@@ -20,7 +20,7 @@ angular.module('codexen.modals')
       var params = {
         description: vm.description,
         callSign: vm.callSign,
-        mode: vm.mode==null?null:vm.mode.name.toLowerCase(),
+        mode: vm.mode==null?null:vm.mode.toLowerCase(),
         content: vm.content,
         tags: angular.isArray(vm.tags)?vm.tags.map(function (tag) { return {_id: tag._id, name: tag.name} }):[]
       }
@@ -28,7 +28,6 @@ angular.module('codexen.modals')
       Snippet.create(params)
         .success(function(data){
           $modalInstance.close(data.snippet)
-          console.log('snippet created!', data)
         })
     }
 
