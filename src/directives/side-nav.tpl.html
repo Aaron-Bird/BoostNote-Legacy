@@ -6,7 +6,7 @@
       <a type="button" name="button" dropdown-toggle class="btn btn-sm btn-default dropdown-toggle"><i class="fa fa-caret-down"></i></a>
       <ul class="dropdown-menu">
         <li>
-          <a ng-click="vm.signOut()"><i class="fa fa-signout"></i> Sign Out</a>
+          <a ng-click="vm.signOut()"><i class="fa fa-sign-out"></i> Sign Out</a>
         </li>
       </ul>
     </span>
@@ -14,6 +14,18 @@
   </div>
   <div ng-if="!vm.currentUser">
     <span>Guest</span>
+
+    <span class="dropdown" dropdown is-open>
+      <a type="button" name="button" dropdown-toggle class="btn btn-sm btn-default dropdown-toggle"><i class="fa fa-caret-down"></i></a>
+      <ul class="dropdown-menu">
+        <li>
+          <a ui-sref="auth.signin"><i class="fa fa-sign-in"></i> Sign In</a>
+        </li>
+        <li>
+          <a ui-sref="auth.register"><i class="fa fa-user-plus"></i> Register</a>
+        </li>
+      </ul>
+    </span>
   </div>
 </div>
 
