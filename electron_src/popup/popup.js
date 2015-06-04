@@ -1,11 +1,17 @@
-// document.getElementById('search-input').focus()
+/* global angular */
 
 var remote = require('remote')
 var ipc = require('ipc')
+var clipboard = require('clipboard')
 
 var SEARCH_INPUT = 1
 var RESULT_LIST = 2
-var RESULT_DETAIL = 3
+var RESULT_CONTROL = 3
+var RESULT_CONTENT = 4
+var btnClipboard = document.getElementById('btnClipboard')
+var btnEdit = document.getElementById('btnEdit')
+var btnShare = document.getElementById('btnShare')
+var aceView = document.getElementById('aceView')
 
 angular.module('codexen.popup', [
   'ui.ace',
@@ -26,35 +32,99 @@ angular.module('codexen.popup', [
 
   hotkeys.bindTo($scope)
     .add('down', function (e) {
-      if ($scope.isFocusing === RESULT_LIST) selectNextItem()
+      switch ($scope.isFocusing) {
+        case RESULT_LIST:
+          selectNextItem()
+          break
+        case RESULT_CONTROL:
+          focusContent()
+          break
+      }
       e.preventDefault()
     })
     .add('up', function (e) {
-      if ($scope.isFocusing === RESULT_LIST) selectPriorItem()
+      switch ($scope.isFocusing) {
+        case RESULT_LIST:
+          selectPriorItem()
+          break
+        case RESULT_CONTENT:
+          focusControl()
+          break
+      }
       e.preventDefault()
     })
     .add('right', function (e) {
-      if ($scope.isFocusing === RESULT_LIST) focusDetail()
+      if ($scope.isFocusing === RESULT_LIST) {
+        focusControl()
+        return
+      }
+      if ($scope.isFocusing === RESULT_CONTROL) {
+        nextControl()
+      }
     })
     .add('left', function (e) {
-      if ($scope.isFocusing === RESULT_DETAIL) focusList()
+      if ($scope.isFocusing === RESULT_CONTROL) {
+        priorControl()
+      }
     })
     .add('esc', function (e) {
       switch ($scope.isFocusing) {
         case RESULT_LIST:
           focusSearchInput()
           break
-        case RESULT_DETAIL:
+        case RESULT_CONTROL:
           focusList()
+          break
+        case RESULT_CONTENT:
+          console.log('esc fr content')
+          focusControl()
           break
         case SEARCH_INPUT:
           hidePopUp()
       }
     })
-    .add('tab', function (e) {
-      if ($scope.isFocusing === RESULT_LIST) focusDetail()
-
+    .add('shift+tab', function (e) {
+      e.preventDefault()
+      if ($scope.isFocusing === RESULT_CONTROL) {
+        priorControl()
+        return
+      }
     })
+    .add('tab', function (e) {
+      e.preventDefault()
+      if ($scope.isFocusing === RESULT_LIST) {
+        focusControl()
+        return
+      }
+      if ($scope.isFocusing === RESULT_CONTROL) {
+        nextControl()
+        return
+      }
+    })
+    .add('enter', function (e) {
+      switch ($scope.isFocusing) {
+        case RESULT_LIST:
+          console.log($scope.selectedItem.content)
+          clipboard.writeText($scope.selectedItem.content)
+          hidePopUp()
+          break
+      }
+      e.preventDefault()
+    })
+
+
+  $scope.aceLoaded = function (editor) {
+    editor.commands.addCommand({
+      name: 'escape',
+      bindKey: {win: 'esc', mac: 'esc'},
+      exec: function (editor) {
+        editor.blur()
+        focusControl()
+        $scope.$apply()
+      },
+      readOnly: true
+    })
+  }
 
   // Init Data
   $scope.snippets = []
@@ -63,62 +133,98 @@ angular.module('codexen.popup', [
   Snippet.findByUser(userId)
     .success(function (data) {
       $scope.snippets = data.snippets
-      $scope.selectedItem = $scope.snippets[0]
       filterList()
     })
+
+  // Functions
+
+  // Search Filter
   function filterList (needle) {
     $scope.filteredSnippets = $filter('filter')($scope.snippets, needle)
+    $scope.selectIndex = 0
+    selectItem($scope.selectIndex)
   }
   $scope.filterList = filterList
 
-  $scope.isFocusing = 0
+  function hidePopUp () {
+    ipc.send('hidePopUp')
+  }
+
+  // Result Item control
   $scope.selectIndex = 0
 
   $scope.selectItem = selectItem
   function selectItem (index) {
     $scope.selectIndex = index
     $scope.selectedItem = $scope.filteredSnippets[index]
+
+    $scope.controlIndex = 0
   }
 
   function selectNextItem () {
-    if ($scope.selectIndex >= ($scope.filteredSnippets.length -1)) {
+    if ($scope.selectIndex >= ($scope.filteredSnippets.length - 1)) {
       return
     }
     selectItem(++$scope.selectIndex)
   }
 
   function selectPriorItem () {
-    if ($scope.selectIndex == 0) {
+    if ($scope.selectIndex === 0) {
       focusSearchInput()
       return
     }
     selectItem(--$scope.selectIndex)
   }
 
+  // Focusing control
+  $scope.isFocusing = 0
+
   function focusSearchInput () {
     $scope.isFocusing = SEARCH_INPUT
     document.getElementById('search-input').focus()
+
+    $scope.controlIndex = 0
   }
+  $scope.focusSearchInput = focusSearchInput
 
   function focusList () {
     $scope.isFocusing = RESULT_LIST
     document.getElementById('search-input').blur()
+
+    $scope.controlIndex = 0
   }
   $scope.focusList = focusList
 
-  function focusDetail () {
-    $scope.isFocusing = RESULT_DETAIL
-  }
-
-  function hidePopUp () {
-    remote.getCurrentWindow().hide()
-  }
-})
-.directive('resultItem', function () {
-  return {
-    link: function (scope, el, attr) {
-
+  function focusControl () {
+    if ($scope.controlIndex === 0) {
+      $scope.controlIndex = 1
     }
+    $scope.isFocusing = RESULT_CONTROL
+  }
+  $scope.focusControl = focusControl
+
+  function focusContent () {
+    angular.element(aceView).scope().focus()
+    $scope.isFocusing = RESULT_CONTENT
+  }
+
+  $scope.controlIndex = 0
+
+  function nextControl () {
+    if ($scope.controlIndex === 3) {
+      $scope.controlIndex = 0
+      focusContent()
+      return
+    }
+    $scope.controlIndex ++
+  }
+
+  function priorControl () {
+    if ($scope.controlIndex === 1) {
+      focusList()
+      return
+    }
+    $scope.controlIndex --
   }
 })
 .directive('searchInput', function () {

@@ -332,6 +332,12 @@ angular.module('ui.ace', [])
 
         scope.Infinity = -1
 
+        scope.focus = function () {
+          acee.focus()
+        }
+
+        scope.addCommand = acee.commands.addCommand
+
       }
     };
   }]);

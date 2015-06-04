@@ -17,26 +17,27 @@
     <!-- Dev!!-->
     <button style="position:fixed;bottom:0;right:0;padding:5px;z-index:1000;" type="button" name="button" ng-click="toggleDev()">DEV!</button>
 
-    <div class="search-block">
+    <div ng-click="focusSearchInput()" class="search-block">
       <input ng-change="filterList(searchNeedle)" search-input id="search-input" type="text" class="form-control" ng-model="searchNeedle" ng-change="refreshResult">
     </div>
 
     <div class="result-block row-fluid">
-      <ul ng-click="focusList()" class="result-list" ng-class="{focused:isFocusing == 2}">
+      <ul ng-click="focusList()" class="result-list left-pane" ng-class="{focused:isFocusing == 2}">
         <li ng-click="selectItem($index)" ng-repeat="snippet in filteredSnippets"><a ng-class="{selected:$index == selectIndex}" href="#">{{snippet.description}}</a></li>
       </ul>
 
-      <div class="result-detail" ng-class="{focused:isFocusing == 3}">
-        <div class="result-detail-control">
-          <button type="button" name="button" class="btn btn-default"><i class="fa fa-clipboard"></i></button>
-          <button type="button" name="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
-          <button type="button" name="button" class="btn btn-default"><i class="fa fa-share"></i></button>
+      <div class="right-pane">
+        <div ng-click="focusControl()" class="result-detail-control">
+          <button ng-class="{focus: controlIndex == 1}" id="btnClipboard" type="button" name="button" class="btn btn-default"><i class="fa fa-clipboard"></i></button>
+          <button ng-class="{focus: controlIndex == 2}" id="btnEdit" type="button" name="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
+          <button ng-class="{focus: controlIndex == 3}" id="btnShare" type="button" name="button" class="btn btn-default"><i class="fa fa-share"></i></button>
         </div>
-        <div class="result-detail-cotent"
+        <div ng-click="focusContent()" id="aceView" class="result-detail-content"
           ui-ace="{
             showGutter: false,
             useWrapMode: true,
-            mode:selectedItem.mode.toLowerCase()
+            mode:selectedItem.mode.toLowerCase(),
+            onLoad : aceLoaded
           }"
 
           readonly

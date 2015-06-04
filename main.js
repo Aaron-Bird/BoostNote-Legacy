@@ -12,7 +12,12 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
 
+var Tray = require('tray')
+var appIcon = null
+
 app.on('ready', function () {
+  appIcon = new Tray('./icon.png')
+  appIcon.setToolTip('This is my application.')
 
   mainWindow = new BrowserWindow({width: 800, height: 600})
 
