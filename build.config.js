@@ -44,6 +44,10 @@ module.exports = {
       name:'moment',
       src:'node_modules/moment/moment.js',
       cdn:'https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment.min.js'
+    },
+    {
+      name:'angular-hotkeys',
+      src:'node_modules/angular-hotkeys/build/hotkeys.js'
     }
   ]
 }

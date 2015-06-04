@@ -47,7 +47,7 @@ gulp.task('tpls', function(){
 })
 
 gulp.task('index', function () {
-  var files = globby.sync(['build/**/*', '!build/vendor/**/*'])
+  var files = globby.sync(['build/**/*', '!build/vendor/**/*', '!build/electron/**/*'])
 
   var filter = function (files, ext) {
     return files.filter(function (file) {
@@ -118,3 +118,5 @@ gulp.task('default', function (cb) {
 
   runSequence('del', 'build', 'watch', cb)
 })
+
+require('./gulp-electron')(gulp)

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html ng-app="codexen.popup">
+  <head>
+    <title>
+      CodeXen App
+    </title>
+
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <meta name="description" content="CodeXen - Short code storage service">
+
+    <link rel="stylesheet" href="../../all.css" media="screen" title="no title" charset="utf-8">
+  </head>
+  <body class="popup-body" ng-controller="PopUpController">
+
+    <!-- Dev!!-->
+    <button style="position:fixed;bottom:0;right:0;padding:5px;z-index:1000;" type="button" name="button" ng-click="toggleDev()">DEV!</button>
+
+    <div class="search-block">
+      <input ng-change="filterList(searchNeedle)" search-input id="search-input" type="text" class="form-control" ng-model="searchNeedle" ng-change="refreshResult">
+    </div>
+
+    <div class="result-block row-fluid">
+      <ul ng-click="focusList()" class="result-list" ng-class="{focused:isFocusing == 2}">
+        <li ng-click="selectItem($index)" ng-repeat="snippet in filteredSnippets"><a ng-class="{selected:$index == selectIndex}" href="#">{{snippet.description}}</a></li>
+      </ul>
+
+      <div class="result-detail" ng-class="{focused:isFocusing == 3}">
+        <div class="result-detail-control">
+          <button type="button" name="button" class="btn btn-default"><i class="fa fa-clipboard"></i></button>
+          <button type="button" name="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
+          <button type="button" name="button" class="btn btn-default"><i class="fa fa-share"></i></button>
+        </div>
+        <div class="result-detail-cotent"
+          ui-ace="{
+            showGutter: false,
+            useWrapMode: true,
+            mode:selectedItem.mode.toLowerCase()
+          }"
+
+          readonly
+          ng-model="selectedItem.content"
+        ></div>
+      </div>
+    </div>
+    <script src="../../vendor/ace.js"></script>
+    <script src="../../vendor/angular.js" charset="utf-8"></script>
+    <script src="../../directives/ui-ace.js"></script>
+    <script src="../../vendor/satellizer.js"></script>
+    <script src="../../vendor/hotkeys.js" charset="utf-8"></script>
+    <script src="popup.js" charset="utf-8"></script>
+    <script src="services/snippet.js" charset="utf-8"></script>
+  </body>
+</html>

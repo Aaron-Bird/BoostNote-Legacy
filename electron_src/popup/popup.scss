@@ -1,0 +1,75 @@
+@import "../../src/variables";
+@import "../../src/mixins";
+
+$selected-color: white;
+$selected-bg: $brand-primary;
+
+$focused-shadow-color: $brand-primary;
+
+
+.popup-body{
+  .search-block{
+    padding: 5px;
+    height:44px;
+    position:absolute;
+    top: 0;
+    width: 100%;
+  }
+  .result-block{
+    position:absolute;
+    top: 44px;
+    bottom: 0;
+    width: 100%;
+    overflow: hidden;
+    .result-list{
+      margin: 0;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 40%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      list-style:none;
+      padding: 0;
+      &.focused{
+        border: solid 1px $brand-primary;
+      }
+      li{
+        a{
+          display:block;
+          padding: 5px 10px;
+          border-bottom: 1px solid $border-color;
+
+          &.selected{
+            color: $selected-color;
+            background-color: $selected-bg;
+          }
+
+          &:hover{
+          }
+        }
+      }
+      border-right: 1px solid $border-color;
+    }
+    .result-detail{
+      &.focused{
+        border: solid 1px $brand-primary;
+      }
+      position: absolute;
+      left: 40%;
+      top: 0;
+      bottom: 0;
+      width: 60%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      .result-detail-cotent{
+        position: absolute;
+        top: 34px;
+        bottom: 0;
+        width: 100%;
+      }
+    }
+  }
+
+}
