@@ -2,15 +2,14 @@
 
 var remote = require('remote')
 var ipc = require('ipc')
-var clipboard = require('clipboard')
 
 var SEARCH_INPUT = 1
 var RESULT_LIST = 2
 var RESULT_CONTROL = 3
 var RESULT_CONTENT = 4
-var btnClipboard = document.getElementById('btnClipboard')
-var btnEdit = document.getElementById('btnEdit')
-var btnShare = document.getElementById('btnShare')
+// var btnClipboard = document.getElementById('btnClipboard')
+// var btnEdit = document.getElementById('btnEdit')
+// var btnShare = document.getElementById('btnShare')
 var aceView = document.getElementById('aceView')
 
 angular.module('codexen.popup', [
@@ -105,8 +104,7 @@ angular.module('codexen.popup', [
       switch ($scope.isFocusing) {
         case RESULT_LIST:
           console.log($scope.selectedItem.content)
-          clipboard.writeText($scope.selectedItem.content)
-          hidePopUp()
+          ipc.send('writeCode', $scope.selectedItem.content)
           break
       }
       e.preventDefault()

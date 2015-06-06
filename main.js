@@ -12,6 +12,10 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
 
+var robot = require('robotjs')
+
+var clipboard = require('clipboard')
+
 var Tray = require('tray')
 var appIcon = null
 
@@ -19,7 +23,13 @@ app.on('ready', function () {
   appIcon = new Tray('./icon.png')
   appIcon.setToolTip('This is my application.')
 
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({
+    width: 800,
+    height: 600,
+    'web-preferences': {
+        'overlay-scrollbars': true
+      }
+    })
 
   mainWindow.loadUrl('file://' + __dirname + '/electron_build/index.html')
 
@@ -36,7 +46,10 @@ app.on('ready', function () {
     width: 600,
     height: 400,
     show: false,
-    frame: false
+    frame: false,
+    'web-preferences': {
+        'overlay-scrollbars': true
+      }
   })
 
   popUpWindow.loadUrl('file://' + __dirname + '/electron_build/electron/popup/index.html')
@@ -72,6 +85,13 @@ app.on('ready', function () {
 
   var ipc = require('ipc')
   ipc.on('hidePopUp', function () {
+    hidePopUp()
+  })
+  ipc.on('writeCode', function (e, code) {
+    clipboard.writeText(code)
+    // setTimeout(function () {
+    //   robot.typeString(code)
+    // }, 200)
     hidePopUp()
   })
 

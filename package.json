@@ -35,12 +35,15 @@
     "angular-ui-router": "^0.2.15",
     "font-awesome": "^4.3.0",
     "moment": "^2.10.3",
+    "robotjs": "^0.1.2",
     "satellizer": "^0.10.1",
     "ui-select": "^0.11.2"
   },
   "devDependencies": {
     "bootstrap-sass": "^3.3.4",
     "del": "^1.2.0",
+    "electron-prebuilt": "^0.27.2",
+    "electron-rebuild": "^0.2.1",
     "globby": "^2.0.0",
     "gulp": "^3.8.11",
     "gulp-angular-templatecache": "^1.6.0",
