@@ -1,5 +1,5 @@
 /* global angular */
-angular.module('codexen.states')
+angular.module('codexen')
   .config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider
       .when('/auth', '/auth/register')
@@ -12,18 +12,18 @@ angular.module('codexen.states')
         url: '/auth',
         views: {
           'main-view': {
-            templateUrl: 'states/auth/auth.tpl.html'
+            templateUrl: 'tpls/states/auth.tpl.html'
           }
         }
       })
       .state('auth.register', {
         url: '/register',
-        templateUrl: 'states/auth/register.tpl.html',
+        templateUrl: 'tpls/states/auth.register.tpl.html',
         controller: 'AuthRegisterController as vm'
       })
       .state('auth.signin', {
         url: '/signin',
-        templateUrl: 'states/auth/signin.tpl.html',
+        templateUrl: 'tpls/states/auth.signin.tpl.html',
         controller: 'AuthSignInController as vm'
       })
 
@@ -32,14 +32,14 @@ angular.module('codexen.states')
         url: '/snippets',
         views: {
           'main-view': {
-            templateUrl: 'states/snippets/list.tpl.html',
+            templateUrl: 'tpls/states/snippets.list.tpl.html',
             controller: 'SnippetsListController as vm'
           }
         }
       })
       .state('snippets.detail', {
         url: '/:id',
-        templateUrl: 'states/snippets/detail.tpl.html',
+        templateUrl: 'tpls/states/snippets.detail.tpl.html',
         controller: 'SnippetsDetailController as vm'
       })
 
@@ -48,7 +48,7 @@ angular.module('codexen.states')
         url: '/',
         views: {
           'main-view': {
-            templateUrl: 'states/home/home.tpl.html',
+            templateUrl: 'tpls/states/home.tpl.html',
             controller: 'HomeController as vm'
           }
         }

@@ -1,22 +1,6 @@
-angular.module('codexen.modals')
-  .factory('editSnippetModal', function ($modal) {
-    var open = function (snippet) {
-      return $modal.open({
-        resolve:{
-          snippet: function () {
-            return snippet
-          }
-        },
-        templateUrl:'modals/edit-snippet-modal.tpl.html',
-        controller:'EditSnippetModalController as vm'
-      })
-    }
-
-    return {
-      open: open
-    }
-  })
-  .controller('EditSnippetModalController', function ($modalInstance, aceModes, $log, Snippet, $rootScope, Tag, snippet){
+/* global angular */
+angular.module('codexen')
+  .controller('EditSnippetModalController', function ($modalInstance, aceModes, $log, Snippet, $rootScope, Tag, snippet) {
     var vm = this
 
     vm.aceModes = aceModes
@@ -24,13 +8,13 @@ angular.module('codexen.modals')
     console.log(snippet)
 
     vm.submit = function () {
-      console.log('mode: ',vm.snippet.mode)
+      console.log('mode: ', vm.snippet.mode)
       var params = {
         description: vm.snippet.description,
         callSign: vm.snippet.callSign,
-        mode: vm.snippet.mode==null?null:vm.snippet.mode.toLowerCase(),
+        mode: vm.snippet.mode == null ? null : vm.snippet.mode.toLowerCase(),
         content: vm.snippet.content,
-        tags: angular.isArray(vm.snippet.tags)?vm.snippet.tags.map(function (tag) { return {_id: tag._id, name: tag.name} }):[]
+        tags: angular.isArray(vm.snippet.tags) ? vm.snippet.tags.map(function (tag) { return {_id: tag._id, name: tag.name} }) : []
       }
 
       Snippet.update(vm.snippet._id, params)
@@ -43,7 +27,7 @@ angular.module('codexen.modals')
     // vm.tags = []
     vm.tagCandidates = []
     vm.refreshTagCandidates = function (tagName) {
-      if (tagName == null || tagName == '') return null
+      if (tagName == null || tagName === '') return null
       return Tag.findByName(tagName)
         .success(function (data) {
           console.log('tags fetched!!', data)
@@ -52,8 +36,8 @@ angular.module('codexen.modals')
     }
     vm.transform = function (tagName) {
       return {
-        _id:0,
-        name:tagName
+        _id: 0,
+        name: tagName
       }
     }
 

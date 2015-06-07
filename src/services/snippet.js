@@ -1,4 +1,5 @@
-angular.module('codexen.services')
+/* global angular */
+angular.module('codexen')
   .factory('Snippet', function ($http, $auth, apiUrl) {
     var findByUser = function (user) {
       var url = apiUrl + 'snippets/search'

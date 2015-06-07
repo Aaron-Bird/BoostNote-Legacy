@@ -1,5 +1,5 @@
 /* global angular */
-angular.module('codexen.states')
+angular.module('codexen')
   .controller('SnippetsDetailController', function (Snippet, $state, $rootScope) {
     var vm = this
 

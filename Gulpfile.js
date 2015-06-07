@@ -1,53 +1,61 @@
+require('dotenv').load()
+var env = process.env
+
 var gulp = require('gulp')
-var sass = require('gulp-sass')
+var styl = require('gulp-stylus')
 var autoprefixer = require('gulp-autoprefixer')
 var templateCache = require('gulp-angular-templatecache')
 var globby = require('globby')
 var template = require('gulp-template')
-var concat = require('gulp-concat')
 var del = require('del')
 var runSequence = require('run-sequence')
-var merge = require('merge-stream')
-
+var plumber = require('gulp-plumber')
+var notify = require('gulp-notify')
 var changed = require('gulp-changed')
-var cached = require('gulp-cached')
-var remember = require('gulp-remember')
 var livereload = require('gulp-livereload')
-var childProcess = require('child_process')
 
 // for Dist
 var rev = require('gulp-rev')
 var ngAnnotate = require('gulp-ng-annotate')
 var uglify = require('gulp-uglify')
 var minifyCss = require('gulp-minify-css')
+var merge = require('merge-stream')
 
 var config = require('./build.config.js')
 
-gulp.task('js', function(){
+gulp.task('env', function () {
+  return gulp.src('tpls/env.js')
+    .pipe(template({
+      apiUrl: env.BUILD_API_URL
+    }))
+    .pipe(gulp.dest('build/config'))
+})
+
+gulp.task('js', function (){
   return gulp.src(['src/**/*.js'])
     .pipe(changed('build'))
     .pipe(gulp.dest('build'))
 })
 
-gulp.task('sass', function () {
-  return gulp.src('src/**/*.scss')
-    .pipe(cached('styles'))
-    .pipe(sass().on('error', sass.logError))
+gulp.task('styl', function () {
+  return gulp.src('src/styles/main.styl')
+    .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
+    .pipe(styl())
     .pipe(autoprefixer())
-    .pipe(remember('styles'))
-    .pipe(concat('all.css'))
     .pipe(gulp.dest('build'))
+    .pipe(notify("Stylus!!"))
     .pipe(livereload())
 })
 
 gulp.task('tpls', function(){
   return gulp.src('src/**/*.tpl.html')
     .pipe(templateCache())
+    .pipe(notify("Tpls Done!! :)"))
     .pipe(gulp.dest('build'))
 })
 
 gulp.task('index', function () {
-  var files = globby.sync(['build/**/*', '!build/vendor/**/*', '!build/electron/**/*'])
+  var files = globby.sync(['build/**/*', '!build/vendor/**/*'])
 
   var filter = function (files, ext) {
     return files.filter(function (file) {
@@ -64,7 +72,7 @@ gulp.task('index', function () {
     .pipe(template({
       scripts: scripts,
       styles: styles,
-      env: 'build'
+      env: env
     }))
     .pipe(gulp.dest('build'))
     .pipe(livereload())
@@ -77,6 +85,10 @@ gulp.task('vendor', function () {
     return vendor.src
   })
 
+  vendorFiles.push('node_modules/font-awesome/**/font-awesome.css')
+  vendorFiles.push('node_modules/font-awesome/**/fontawesome-webfont.*')
+  vendorFiles.push('node_modules/font-awesome/**/FontAwesome.*')
+
   return gulp.src(vendorFiles)
     .pipe(gulp.dest('build/vendor'))
 })
@@ -88,13 +100,15 @@ gulp.task('resources', function () {
 })
 
 gulp.task('build', function (cb) {
-  runSequence(['js', 'sass', 'tpls', 'vendor', 'resources'], 'index', cb)
+  runSequence(['env', 'js', 'styl', 'tpls', 'vendor', 'resources'], 'index', cb)
 })
 
 gulp.task('watch', function (cb) {
-  gulp.watch(['src/**/*.js'], ['js'])
+  gulp.watch(['.env', 'tpls/env.js'], ['env'])
 
-  gulp.watch('src/**/*.scss', ['sass'])
+  gulp.watch('src/**/*.js', ['js'])
+
+  gulp.watch('src/styles/**/*.styl', ['styl'])
 
   gulp.watch('src/**/*.tpl.html', ['tpls'])
 
@@ -108,15 +122,7 @@ gulp.task('del', function (cb) {
 })
 
 gulp.task('default', function (cb) {
-  var spawn = childProcess.spawn('http-server', ['build'])
-  spawn.stdout.on('data', function (data) {
-    console.log('OUT: ' + data)
-  })
-  spawn.stderr.on('data', function (data) {
-    console.log('ERR: ' + data)
-  })
-
   runSequence('del', 'build', 'watch', cb)
 })
 
-require('./gulp-electron')(gulp)
+// require('./gulp-electron')(gulp)

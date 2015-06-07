@@ -1,6 +1,7 @@
-angular.module('codexen.services')
+/* global angular */
+angular.module('codexen')
   .factory('User', function ($http, apiUrl, $rootScope, $state) {
-    $rootScope.$on('userSignOut', function(){
+    $rootScope.$on('userSignOut', function () {
       $state.go('auth.signin')
     })
 

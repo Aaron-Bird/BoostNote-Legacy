@@ -1,5 +1,5 @@
 /* global angular */
-angular.module('codexen.states')
+angular.module('codexen')
   .controller('AuthRegisterController', function ($auth, $log) {
     var vm = this
     vm.isEmpty = function (obj) {

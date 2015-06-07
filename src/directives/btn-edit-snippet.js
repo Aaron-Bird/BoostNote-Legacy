@@ -1,12 +1,13 @@
-angular.module('codexen.directives')
-  .directive('btnEditSnippet', function (editSnippetModal, $rootScope) {
+/* global angular */
+angular.module('codexen')
+  .directive('btnEditSnippet', function (Modal, $rootScope) {
     return {
-      scope:{
+      scope: {
         snippet: '=btnEditSnippet'
       },
       link: function (scope, el) {
         el.on('click', function () {
-          editSnippetModal.open(scope.snippet)
+          Modal.editSnippet(scope.snippet)
             .result.then(function (snippet) {
               $rootScope.$broadcast('snippetUpdated', snippet)
             }, function () {

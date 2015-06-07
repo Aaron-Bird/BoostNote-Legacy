@@ -1,9 +1,10 @@
-angular.module('codexen.directives')
-  .directive('btnNewSnippet', function (newSnippetModal, $rootScope) {
+/* global angular */
+angular.module('codexen')
+  .directive('btnNewSnippet', function (Modal, $rootScope) {
     return {
       link: function (scope, el) {
         el.on('click', function () {
-          newSnippetModal.open()
+          Modal.newSnippet()
             .result.then(function (snippet) {
               console.log('event fire', snippet)
               $rootScope.$broadcast('snippetUpdated', snippet)
