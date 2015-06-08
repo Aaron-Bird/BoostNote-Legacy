@@ -1,0 +1,25 @@
+.alert
+  margin: 5px 0
+
+.inline-form-control
+  @extend .form-control
+  width: auto
+  display: inline-block
+
+
+textarea.form-control, .ace_editor
+  border-radius $input-border-radius
+
+.ace_editor
+  border solid 1px $input-border
+  box-shadow inset 0 1px 1px rgba(0, 0, 0, .075)
+  font-family: 'Lucida Grande'
+
+.ace_editor.ace_focus
+  controlGlow()
+
+.modal-content
+  background-color $bg
+
+.jumbotron
+  padding 48px 10px

@@ -1,77 +1,11 @@
-@import 'bootstrap'
+@import '_vars'
+@import 'mixins/*'
+
+@import '_bootstrap'
+
+@import '_index'
+@import '_shared'
 
 @import 'modals/*'
 @import 'directives/*'
 @import 'states/*'
-// @import 'mixins/*'
-
-html
-  overflow: hidden
-  height: 100%
-
-body
-  height: 100%
-  overflow: auto
-  font-family: "Lato", sans-serif
-  color $color
-  background-color: $bg
-
-// body:before
-//   content ''
-//   background-image url('http://img10.deviantart.net/f372/i/2014/283/8/3/blue_pattern_design_free_vector_by_vecree-d829oba.jpg')
-//   filter blur(5px)
-//   opacity 1
-//   position absolute
-//   left 0
-//   top 0
-//   bottom 0
-//   right 0
-
-label
-  font-family: "Lato", sans-serif
-  color $color
-
-textarea
-  resize: vertical
-
-
-#side-view
-  position:absolute
-  top: 0
-  bottom: 0
-  left: 0
-  width: 200px
-  background-color: $bgDarker
-  border-right solid 2px $borderEdge
-  box-sizing: border-box
-  padding: 10px 0 10px 10px
-  .nav.nav-pills>li
-    &.active>a{
-      background-color $bg
-    }
-
-  .nav.nav-pills>li>a
-    color white
-    border-top-right-radius: 0
-    border-bottom-right-radius: 0
-
-
-.alert
-  margin: 5px 0
-
-
-#main-view
-  position:absolute
-  top: 0
-  bottom: 0
-  left: 200px
-  right: 0
-  overflow-x: hidden
-  overflow-y: auto
-  background-color $bg
-
-
-.inline-form-control
-  @extend .form-control
-  width: auto
-  display: inline-block

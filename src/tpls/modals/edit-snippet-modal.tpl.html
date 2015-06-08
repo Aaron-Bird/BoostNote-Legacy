@@ -1,6 +1,6 @@
 <div class="new-snippet-modal">
   <div class="modal-header">
-    New Snippet
+    <h4>Edit Snippet</h4>
   </div>
 
   <div class="modal-body">
@@ -21,7 +21,8 @@
     <div class="form-group">
       <div
         ui-ace="{
-          mode: vm.snippet.mode.toLowerCase()
+          mode: vm.snippet.mode.toLowerCase(),
+          theme:'solarized_dark'
 
         }"
         ng-model="vm.snippet.content"

@@ -1,14 +1,10 @@
 <div class="current-user">
   <div ng-if="vm.currentUser">
-    <img width="30" ng-src="http://www.gravatar.com/avatar/{{ vm.currentUser.email | gravatar }}">
-    <span ng-bind="vm.currentUser.name"></span>
-    <span class="dropdown" dropdown is-open>
-      <a type="button" name="button" dropdown-toggle class="btn btn-sm btn-default dropdown-toggle"><i class="fa fa-caret-down"></i></a>
-      <ul class="dropdown-menu">
-        <li>
-          <a ng-click="vm.signOut()"><i class="fa fa-sign-out"></i> Sign Out</a>
-        </li>
-      </ul>
+    <img width="30" class="img-circle" ng-src="http://www.gravatar.com/avatar/{{ vm.currentUser.email | gravatar }}">
+    <a href ng-bind="vm.currentUser.name"></a>
+    <span class="nav-control-group pull-right">
+      <a href class="btn btn-sm btn-primary"><i class="fa fa-gears"></i></a>
+      <a href class="btn btn-sm btn-primary" ng-click="vm.signOut()"><i class="fa fa-sign-out"></i></a>
     </span>
 
   </div>
@@ -29,7 +25,6 @@
   </div>
 </div>
 
-<p>Side Nav</p>
 <ul class="nav nav-pills nav-stacked">
   <li>
     <a btn-new-snippet href="#"><i class="fa fa-plus-square-o"></i> New Snippet</a>
@@ -45,9 +40,5 @@
   </li>
   <li ui-sref-active="active">
     <a><i class="fa fa-paperclip"></i> Clips(ready)</a>
-  </li>
-  <li class="divider"><hr></li>
-  <li>
-    <a href=""><i class="fa fa-gears"></i> Configuration</a>
   </li>
 </ul>

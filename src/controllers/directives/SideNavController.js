@@ -9,7 +9,7 @@ angular.module('codexen')
       if (vm.isAuthenticated) {
         User.me().success(function (data) {
           console.log('currentUser', data)
-          vm.currentUser = data.user
+          vm.currentUser = data
         })
       }
     }

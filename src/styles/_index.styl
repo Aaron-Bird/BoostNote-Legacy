@@ -1,0 +1,43 @@
+
+html
+  overflow: hidden
+  height: 100%
+
+body
+  height: 100%
+  overflow: auto
+  font-family: "Lato", sans-serif
+  color $textColor
+  background-color: $appBackgroundColor
+
+label
+  font-family: "Lato", sans-serif
+  color $textColor
+
+h1, h2, h3, h4, h5
+  color $textColorHighlight
+  margin 0
+
+textarea
+  resize: vertical
+
+#side-view
+  position:absolute
+  top: 0
+  bottom: 0
+  left: 0
+  width: 200px
+  background-color: $baseBackgroundColor
+  border-right solid 1px $baseBorderColor
+  box-sizing: border-box
+  padding: 10px 0 10px 10px
+
+#main-view
+  position:absolute
+  top: 0
+  bottom: 0
+  left: 200px
+  right: 0
+  overflow-x: hidden
+  overflow-y: auto
+  background-color $bgDarker
