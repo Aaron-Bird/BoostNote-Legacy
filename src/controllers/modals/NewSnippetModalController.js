@@ -11,12 +11,12 @@ angular.module('codexen')
         callSign: vm.callSign,
         mode: vm.mode == null ? null : vm.mode.toLowerCase(),
         content: vm.content,
-        tags: angular.isArray(vm.tags) ? vm.tags.map(function (tag) { return {_id: tag._id, name: tag.name} }) : []
+        tags: angular.isArray(vm.tags) ? vm.tags.map(function (tag) { return tag.name }) : []
       }
 
       Snippet.create(params)
         .success(function (data) {
-          $modalInstance.close(data.snippet)
+          $modalInstance.close(data)
         })
     }
 

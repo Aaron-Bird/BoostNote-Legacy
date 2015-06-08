@@ -7,13 +7,13 @@ angular.module('codexen')
 
     var loadSnippets = function () {
       if ($auth.isAuthenticated) {
-        console.log($auth.getPayload())
-        var userId = $auth.getPayload().sub
-        Snippet.findByUser(userId)
+        Snippet.findMine({
+          'include': ['Tag']
+        })
           .success(function (data) {
-            console.log('snippets fetched', data.snippets)
+            console.log('snippets fetched', data)
             vm.isLoaded = true
-            vm.snippets = data.snippets
+            vm.snippets = data
             vm.isGuest = false
           })
       }else {

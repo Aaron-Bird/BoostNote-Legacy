@@ -22,7 +22,8 @@
       <div
         ui-ace="{
           mode: vm.snippet.mode.toLowerCase(),
-          theme:'solarized_dark'
+          theme:'solarized_dark',
+          useWrapMode : true
 
         }"
         ng-model="vm.snippet.content"
@@ -30,7 +31,7 @@
     </div>
 
     <div class="form-group">
-      <ui-select multiple tagging="vm.transform" tagging-tokens="SPACE|,|/" ng-model="vm.snippet.tags" theme="bootstrap">
+      <ui-select multiple tagging="vm.transform" tagging-tokens="SPACE|,|/" ng-model="vm.snippet.Tags" theme="bootstrap">
         <ui-select-match placeholder="Write Tags">{{$item.name}}</ui-select-match>
         <ui-select-choices repeat="tag in vm.tagCandidates" refresh="vm.refreshTagCandidates($select.search)"
          refresh-delay="200">

@@ -7,14 +7,16 @@ angular.module('codexen')
 
     var snippetId = $state.params.id
 
-    Snippet.show(snippetId)
+    Snippet.show(snippetId, {
+      'include': ['Tag']
+    })
     .success(function (data) {
-      vm.snippet = data.snippet
+      vm.snippet = data
       vm.isLoaded = true
     })
 
     vm.delete = function () {
-      Snippet.delete(vm.snippet._id)
+      Snippet.delete(vm.snippet.id)
       .success(function () {
         $rootScope.$broadcast('snippetDeleted')
       })

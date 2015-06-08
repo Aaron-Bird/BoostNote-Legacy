@@ -14,12 +14,12 @@ angular.module('codexen')
         callSign: vm.snippet.callSign,
         mode: vm.snippet.mode == null ? null : vm.snippet.mode.toLowerCase(),
         content: vm.snippet.content,
-        tags: angular.isArray(vm.snippet.tags) ? vm.snippet.tags.map(function (tag) { return {_id: tag._id, name: tag.name} }) : []
+        tags: angular.isArray(vm.snippet.tags) ? vm.snippet.tags.map(function (tag) { return tag.name }) : []
       }
 
       Snippet.update(vm.snippet._id, params)
         .success(function (data) {
-          $modalInstance.close(data.snippet)
+          $modalInstance.close(data)
           console.log('snippet created!', data)
         })
     }

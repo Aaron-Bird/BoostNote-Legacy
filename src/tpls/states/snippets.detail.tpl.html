@@ -3,7 +3,7 @@
   <div class="detail-header">
     <span class="detail-header-title">
       <span ng-bind="vm.snippet.callSign"></span>
-      <small><span ng-bind="snippet.updatedAt|fromNow"></span> <i class="fa fa-clock-o"></i></small>
+      <small><span ng-bind="vm.snippet.updatedAt|fromNow"></span> <i class="fa fa-clock-o"></i></small>
     </span>
     <span class="detail-header-control pull-right">
       <button type="button" name="button" class="btn btn-default"><i class="fa fa-share"></i></button>
@@ -20,12 +20,13 @@
 
     <div ng-if="vm.isLoaded" class="">
       <p ng-bind="vm.snippet.description"></p>
-      <div tags="vm.snippet.tags"></div>
+      <div tags="vm.snippet.Tags"></div>
       <div ui-ace="{
         showGutter: false,
         useWrapMode : true,
         mode:vm.snippet.mode.toLowerCase(),
         maxLines: -1,
+        theme:'solarized_dark',
         rendererOptions: {
             maxLinks: Infinity
         }

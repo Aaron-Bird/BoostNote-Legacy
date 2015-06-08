@@ -26,7 +26,7 @@
         <a ui-sref="auth.signin" class="btn btn-default"><i class="fa fa-signin"></i> Sign In</a>
       </li>
 
-      <li ng-repeat="snippet in vm.snippets | filter:vm.search" ui-sref="snippets.detail({id:snippet._id})" ui-sref-active="active">
+      <li ng-repeat="snippet in vm.snippets | filter:vm.search" ui-sref="snippets.detail({id:snippet.id})" ui-sref-active="active">
         <div class="media">
           <div class="media-left">
             <img width="25" height="25" src="http://www.gravatar.com/avatar/ea0b6ad1c11700120d1af08810caa19d" alt="" />
@@ -41,7 +41,7 @@
             </p>
           </div>
         </div>
-        <div tags="snippet.tags"></div>
+        <div tags="snippet.Tags"></div>
       </li>
     </ul>
   </div>
