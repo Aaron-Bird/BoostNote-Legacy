@@ -11,7 +11,7 @@ angular.module('codexen')
         callSign: vm.callSign,
         mode: vm.mode == null ? null : vm.mode.toLowerCase(),
         content: vm.content,
-        tags: angular.isArray(vm.tags) ? vm.tags.map(function (tag) { return tag.name }) : []
+        tags: angular.isArray(vm.Tags) ? vm.Tags.map(function (tag) { return tag.name }) : []
       }
 
       Snippet.create(params)
@@ -27,12 +27,12 @@ angular.module('codexen')
       return Tag.findByName(tagName)
         .success(function (data) {
           console.log('tags fetched!!', data)
-          vm.tagCandidates = data.tags
+          vm.tagCandidates = data
         })
     }
     vm.transform = function (tagName) {
       return {
-        _id: 0,
+        id: 0,
         name: tagName
       }
     }

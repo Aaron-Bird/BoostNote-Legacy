@@ -1,6 +1,6 @@
 /* global angular */
 angular.module('codexen')
-  .controller('SnippetsDetailController', function (Snippet, $state, $rootScope) {
+  .controller('SnippetsDetailController', function (Snippet, $state, $rootScope, $scope) {
     var vm = this
 
     vm.isLoaded = false
@@ -23,4 +23,9 @@ angular.module('codexen')
         $rootScope.$broadcast('snippetDeleted')
       })
     }
+
+    $scope.$on('snippetUpdated', function (e, snippet) {
+      console.log('event received', snippet)
+      if (snippet.id === vm.snippet.id) vm.snippet = snippet
+    })
   })

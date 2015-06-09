@@ -6,7 +6,6 @@ angular.module('codexen')
         el.on('click', function () {
           Modal.newSnippet()
             .result.then(function (snippet) {
-              console.log('event fire', snippet)
               $rootScope.$broadcast('snippetUpdated', snippet)
             }, function () {
               console.log('new snippet modal dismissed')

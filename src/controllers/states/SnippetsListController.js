@@ -34,7 +34,7 @@ angular.module('codexen')
     })
 
     $scope.$on('snippetUpdated', function (e, snippet) {
-      $state.go('snippets.detail', {id: snippet._id})
+      $state.go('snippets.detail', {id: snippet.id})
       loadSnippets()
     })
 

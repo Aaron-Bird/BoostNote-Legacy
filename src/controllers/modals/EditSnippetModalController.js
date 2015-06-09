@@ -5,22 +5,19 @@ angular.module('codexen')
 
     vm.aceModes = aceModes
     vm.snippet = snippet
-    console.log(snippet)
 
     vm.submit = function () {
-      console.log('mode: ', vm.snippet.mode)
       var params = {
         description: vm.snippet.description,
         callSign: vm.snippet.callSign,
         mode: vm.snippet.mode == null ? null : vm.snippet.mode.toLowerCase(),
         content: vm.snippet.content,
-        tags: angular.isArray(vm.snippet.tags) ? vm.snippet.tags.map(function (tag) { return tag.name }) : []
+        Tags: angular.isArray(vm.snippet.Tags) ? vm.snippet.Tags.map(function (tag) { return tag.name }) : []
       }
-
-      Snippet.update(vm.snippet._id, params)
+      Snippet.update(vm.snippet.id, params)
         .success(function (data) {
+          console.log('updated res :', data)
           $modalInstance.close(data)
-          console.log('snippet created!', data)
         })
     }
 
@@ -31,12 +28,12 @@ angular.module('codexen')
       return Tag.findByName(tagName)
         .success(function (data) {
           console.log('tags fetched!!', data)
-          vm.tagCandidates = data.tags
+          vm.tagCandidates = data
         })
     }
     vm.transform = function (tagName) {
       return {
-        _id: 0,
+        id: 0,
         name: tagName
       }
     }
