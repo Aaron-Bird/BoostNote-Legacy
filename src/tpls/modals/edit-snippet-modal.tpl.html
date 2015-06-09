@@ -8,7 +8,7 @@
       <textarea ng-model="vm.snippet.description" name="description" class="form-control" placeholder="Description..."></textarea>
     </div>
     <div class="form-group">
-        <input ng-model="vm.snippet.callSign" type="text" name="callSign" class="inline-form-control" placeholder="Call sign">
+        <input ng-model="vm.snippet.callSign" type="text" name="callSign" class="inline-form-control" placeholder="Callsign">
 
         <ui-select ng-model="vm.snippet.mode" style="display: inline-block;" theme="bootstrap">
           <ui-select-match placeholder="Select Type">{{$select.selected}}</ui-select-match>
@@ -32,7 +32,7 @@
 
     <div class="form-group">
       <ui-select multiple tagging="vm.transform" tagging-tokens="SPACE|,|/" ng-model="vm.snippet.Tags" theme="bootstrap">
-        <ui-select-match placeholder="Write Tags">{{$item.name}}</ui-select-match>
+        <ui-select-match placeholder="Tags...">{{$item.name}}</ui-select-match>
         <ui-select-choices repeat="tag in vm.tagCandidates" refresh="vm.refreshTagCandidates($select.search)"
          refresh-delay="200">
           <div><span ng-bind-html="tag.name | highlight: $select.search"></span><span ng-if="tag.isTag">(new)</span></div>

@@ -44,11 +44,16 @@ $snippet-list-active-bg= $brand-primary
         cursor: pointer
         padding: 5px
         border-right 1px solid $baseBorderColor
+        border-bottom 1px solid $baseBorderColor
+        &:nth-child(even)
+          background-color $baseBackgroundColor
+        &:nth-child(odd)
+          background-color lighten($baseBackgroundColor, 2%)
         h4
           margin: 0
 
         &:hover
-          background-color: $snippet-list-item-hover-bg
+          background-color: $backgroundColorSelected
 
         p
           margin:0
@@ -78,17 +83,21 @@ $snippet-list-active-bg= $brand-primary
     right: 0
     overflow-x: hidden
     overflow-y: auto
+    background-color lighten($baseBackgroundColor, 2%)
 
 
 
 .snippets-detail-state
   .detail-header
+    background-color lighten($baseBackgroundColor, 5%)
     padding: 5px 10px
     height: 50px
-    border-bottom: solid 1px $border-color
+    border-bottom: solid 1px $baseBorderColor
     .detail-header-title
+      color: $textColorHighlight
       small
         font-size: 0.6em
+        color: $textColor
 
       line-height: 40px
       font-size: 1.2em

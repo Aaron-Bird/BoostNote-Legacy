@@ -87,6 +87,8 @@ body > .select2-container.open
 .ui-select-bootstrap .ui-select-toggle
   position: relative
   border-radius $input-border-radius
+  .ui-select-placeholder
+    color $textColor
 
 
 .ui-select-bootstrap .ui-select-toggle > .caret
@@ -104,7 +106,7 @@ body > .select2-container.open
 
 
 .input-group > .ui-select-bootstrap > input.ui-select-search.form-control
-  border-radius: 4px /* FIXME hardcoded value :-/ */
+  border-radius: $input-border-radius
   border-top-right-radius: 0
   border-bottom-right-radius: 0
 
@@ -114,6 +116,7 @@ body > .select2-container.open
   text-align: left !important
   padding-right: 25px
   border-radius $input-border-radius
+  border solid 1px $input-border
 
 
 .ui-select-bootstrap > .ui-select-match > .caret

@@ -7,7 +7,7 @@ angular.module('codexen')
       },
       link: function (scope, el) {
         el.on('click', function () {
-          Modal.editSnippet(scope.snippet)
+          Modal.editSnippet(angular.copy(scope.snippet))
             .result.then(function (snippet) {
               $rootScope.$broadcast('snippetUpdated', snippet)
             }, function () {

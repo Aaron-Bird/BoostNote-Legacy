@@ -338,6 +338,10 @@ angular.module('ui.ace', [])
 
         scope.addCommand = acee.commands.addCommand
 
+        elm.on('click', function () {
+          acee.focus()
+        })
+
       }
     };
   }]);

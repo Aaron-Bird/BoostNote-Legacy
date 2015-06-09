@@ -29,7 +29,7 @@
       <li ng-repeat="snippet in vm.snippets | filter:vm.search" ui-sref="snippets.detail({id:snippet.id})" ui-sref-active="active">
         <div class="media">
           <div class="media-left">
-            <img width="25" height="25" src="http://www.gravatar.com/avatar/ea0b6ad1c11700120d1af08810caa19d" alt="" />
+            <img width="25" height="25" class="img-circle" src="http://www.gravatar.com/avatar/ea0b6ad1c11700120d1af08810caa19d" alt="" />
           </div>
           <div class="media-body">
             <p ng-bind="snippet.callSign" class="call-sign">

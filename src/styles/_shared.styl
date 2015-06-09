@@ -1,11 +1,36 @@
 .alert
   margin: 5px 0
 
+input.form-control, textarea.form-control, input.inline-form-control
+  &::-webkit-input-placeholder
+   color $textColor
+  &:-moz-placeholder  /* Firefox 18- */
+   color $textColor
+  &::-moz-placeholder   /* Firefox 19+ */
+   color $textColor
+  &:-ms-input-placeholder
+    color $textColor
+
+
 .inline-form-control
   @extend .form-control
   width: auto
   display: inline-block
 
+.btn.btn-default
+  border-style solid
+  border-width 1px
+  btn-color($btn-default-color, $btn-default-bg, $btn-default-border)
+.btn.btn-primary
+  btn-color($btn-primary-color, $btn-primary-bg, $btn-primary-border)
+.btn.btn-info
+  btn-color($btn-info-color, $btn-info-bg, $btn-info-border)
+.btn.btn-success
+  btn-color($btn-success-color, $btn-success-bg, $btn-success-border)
+.btn.btn-danger
+  btn-color($btn-danger-color, $btn-danger-bg, $btn-danger-border)
+.btn.btn-warning
+  btn-color($btn-warning-color, $btn-warning-bg, $btn-warning-border)
 
 textarea.form-control, .ace_editor
   border-radius $input-border-radius

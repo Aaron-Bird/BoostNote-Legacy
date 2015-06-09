@@ -1,9 +1,19 @@
-<div class="container-fluid">
+<div class="auth-state container-fluid">
+  <div class="row">
+    <div class="col-sm-6 col-sm-offset-3 panel panel-default">
 
-  <div class="text-center">
-    <h1>Auth</h1>
-    <a class="btn btn-default" ui-sref-active="active" ui-sref="auth.register">Register</a> or <a class="btn btn-default" ui-sref-active="active" ui-sref="auth.signin">Sign In</a>
+      <div class="text-center">
+
+        <h1>Authentication</h1>
+
+        <div class="auth-control">
+          <a class="btn btn-default" ui-sref-active="active" ui-sref="auth.register"><i class="fa fa-user-plus fa-fw"></i> Register</a> or <a class="btn btn-default" ui-sref-active="active" ui-sref="auth.signin"><i class="fa fa-sign-in fa-fw"></i> Sign In</a>
+        </div>
+
+      </div>
+
+      <ui-view></ui-view>
+
+    </div>
   </div>
-  <ui-view></ui-view>
-
 </div>
