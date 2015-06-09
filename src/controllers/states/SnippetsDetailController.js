@@ -10,18 +10,18 @@ angular.module('codexen')
     Snippet.show(snippetId, {
       'include': ['Tag']
     })
-    .success(function (data) {
-      vm.snippet = data
-      vm.isLoaded = true
-    })
+      .success(function (data) {
+        vm.snippet = data
+        vm.isLoaded = true
+      })
 
     // TODO: When deletion occurs, switch the next snippet
     // TODO: Add deletion confirmation modal
     vm.delete = function () {
       Snippet.delete(vm.snippet.id)
-      .success(function () {
-        $rootScope.$broadcast('snippetDeleted')
-      })
+        .success(function () {
+          $rootScope.$broadcast('snippetDeleted')
+        })
     }
 
     $scope.$on('snippetUpdated', function (e, snippet) {

@@ -7,14 +7,14 @@ angular.module('codexen')
       return true
     }
     vm.signup = function () {
-    $auth.signup({
-      email: vm.email,
-      password: vm.password,
-      name: vm.name,
-      profileName: vm.profileName
-    }).then(function (data) {
-      $rootScope.$broadcast('userSignIn')
-      $state.go('home')
-    })
+      $auth.signup({
+        email: vm.email,
+        password: vm.password,
+        name: vm.name,
+        profileName: vm.profileName
+      }).then(function (data) {
+        $rootScope.$broadcast('userSignIn')
+        $state.go('home')
+      })
     }
   })

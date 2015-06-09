@@ -6,10 +6,10 @@ angular.module('codexen')
         el.on('click', function () {
           Modal.newSnippet()
             .result.then(function (snippet) {
-              $rootScope.$broadcast('snippetUpdated', snippet)
-            }, function () {
-              console.log('new snippet modal dismissed')
-            })
+            $rootScope.$broadcast('snippetUpdated', snippet)
+          }, function () {
+            console.log('new snippet modal dismissed')
+          })
         })
       }
     }

@@ -1,6 +1,6 @@
 /* global angular */
 angular.module('codexen')
-  .controller('NewSnippetModalController', function ($modalInstance, aceModes, $log, Snippet, $rootScope, Tag){
+  .controller('NewSnippetModalController', function ($modalInstance, aceModes, $log, Snippet, $rootScope, Tag) {
     var vm = this
 
     vm.aceModes = aceModes

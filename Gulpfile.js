@@ -31,7 +31,7 @@ gulp.task('env', function () {
     .pipe(gulp.dest('build/config'))
 })
 
-gulp.task('js', function (){
+gulp.task('js', function () {
   return gulp.src(['src/**/*.js'])
     .pipe(changed('build'))
     .pipe(gulp.dest('build'))
@@ -43,14 +43,14 @@ gulp.task('styl', function () {
     .pipe(styl())
     .pipe(autoprefixer())
     .pipe(gulp.dest('build'))
-    .pipe(notify("Stylus!!"))
+    .pipe(notify('Stylus!!'))
     .pipe(livereload())
 })
 
-gulp.task('tpls', function(){
+gulp.task('tpls', function () {
   return gulp.src('src/**/*.tpl.html')
     .pipe(templateCache())
-    .pipe(notify("Tpls Done!! :)"))
+    .pipe(notify('Tpls Done!! :)'))
     .pipe(gulp.dest('build'))
 })
 

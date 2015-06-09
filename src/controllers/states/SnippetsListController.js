@@ -16,7 +16,7 @@ angular.module('codexen')
             vm.snippets = data
             vm.isGuest = false
           })
-      }else {
+      } else {
         vm.isLoaded = true
         vm.isGuest = true
         vm.snippets = void 0
@@ -45,8 +45,8 @@ angular.module('codexen')
           if (vm.snippets[i]._id === currentSnippetId) {
             var targetSnippet = null
 
-            if (i === 0) targetSnippet = vm.snippets[i+1]
-            else targetSnippet = vm.snippets[i-1]
+            if (i === 0) targetSnippet = vm.snippets[i + 1]
+            else targetSnippet = vm.snippets[i - 1]
 
             console.log('target', targetSnippet)
             $state.go('snippets.detail', {id: targetSnippet._id})

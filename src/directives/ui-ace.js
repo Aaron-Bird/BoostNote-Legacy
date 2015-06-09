@@ -1,4 +1,5 @@
-'use strict';
+/* global angular */
+'use strict'
 
 /**
  * Binds a ACE Editor widget
@@ -6,9 +7,8 @@
 angular.module('ui.ace', [])
   .constant('uiAceConfig', {})
   .directive('uiAce', ['uiAceConfig', function (uiAceConfig) {
-
     if (angular.isUndefined(window.ace)) {
-      throw new Error('ui-ace need ace to work... (o rly?)');
+      throw new Error('ui-ace need ace to work... (o rly?)')
     }
 
     /**
@@ -28,41 +28,40 @@ angular.module('ui.ace', [])
      * @param session ACE editor session
      * @param {object} opts Options to be set
      */
-    var setOptions = function(acee, session, opts) {
-
+    var setOptions = function (acee, session, opts) {
       // sets the ace worker path, if running from concatenated
       // or minified source
       if (angular.isDefined(opts.workerPath)) {
-        var config = window.ace.require('ace/config');
-        config.set('workerPath', opts.workerPath);
+        var config = window.ace.require('ace/config')
+        config.set('workerPath', opts.workerPath)
       }
       // ace requires loading
       if (angular.isDefined(opts.require)) {
         opts.require.forEach(function (n) {
-            window.ace.require(n);
-        });
+          window.ace.require(n)
+        })
       }
       // Boolean options
       if (angular.isDefined(opts.showGutter)) {
-        acee.renderer.setShowGutter(opts.showGutter);
+        acee.renderer.setShowGutter(opts.showGutter)
       }
       if (angular.isDefined(opts.useWrapMode)) {
-        session.setUseWrapMode(opts.useWrapMode);
+        session.setUseWrapMode(opts.useWrapMode)
       }
       if (angular.isDefined(opts.showInvisibles)) {
-        acee.renderer.setShowInvisibles(opts.showInvisibles);
+        acee.renderer.setShowInvisibles(opts.showInvisibles)
       }
       if (angular.isDefined(opts.showIndentGuides)) {
-        acee.renderer.setDisplayIndentGuides(opts.showIndentGuides);
+        acee.renderer.setDisplayIndentGuides(opts.showIndentGuides)
       }
       if (angular.isDefined(opts.useSoftTabs)) {
-        session.setUseSoftTabs(opts.useSoftTabs);
+        session.setUseSoftTabs(opts.useSoftTabs)
       }
       if (angular.isDefined(opts.showPrintMargin)) {
-        acee.setShowPrintMargin(opts.showPrintMargin);
+        acee.setShowPrintMargin(opts.showPrintMargin)
       }
       if (angular.isDefined(opts.maxLines)) {
-        if(opts.maxLines < 0) opts.maxLines = Infinity
+        if (opts.maxLines < 0) opts.maxLines = Infinity
         acee.setOptions({
           maxLines: opts.maxLines
         })
@@ -78,80 +77,79 @@ angular.module('ui.ace', [])
               mac: 'Command-F'
             },
             exec: function () {
-              return false;
+              return false
             },
             readOnly: true
           }
-        ]);
+        ])
       }
 
       // Basic options
       if (angular.isString(opts.theme)) {
-        acee.setTheme('ace/theme/' + opts.theme);
+        acee.setTheme('ace/theme/' + opts.theme)
       }
       if (angular.isString(opts.mode)) {
-        session.setMode('ace/mode/' + opts.mode);
+        session.setMode('ace/mode/' + opts.mode)
       }
       // Advanced options
       if (angular.isDefined(opts.firstLineNumber)) {
         if (angular.isNumber(opts.firstLineNumber)) {
-          session.setOption('firstLineNumber', opts.firstLineNumber);
+          session.setOption('firstLineNumber', opts.firstLineNumber)
         } else if (angular.isFunction(opts.firstLineNumber)) {
-          session.setOption('firstLineNumber', opts.firstLineNumber());
+          session.setOption('firstLineNumber', opts.firstLineNumber())
         }
       }
 
       // advanced options
-      var key, obj;
+      var key, obj
       if (angular.isDefined(opts.advanced)) {
-          for (key in opts.advanced) {
-              // create a javascript object with the key and value
-              obj = { name: key, value: opts.advanced[key] };
-              // try to assign the option to the ace editor
-              acee.setOption(obj.name, obj.value);
-          }
+        for (key in opts.advanced) {
+          // create a javascript object with the key and value
+          obj = { name: key, value: opts.advanced[key] }
+          // try to assign the option to the ace editor
+          acee.setOption(obj.name, obj.value)
+        }
       }
 
       // advanced options for the renderer
       if (angular.isDefined(opts.rendererOptions)) {
-          for (key in opts.rendererOptions) {
-              // create a javascript object with the key and value
-              obj = { name: key, value: opts.rendererOptions[key] };
-              // try to assign the option to the ace editor
-              acee.renderer.setOption(obj.name, obj.value);
-          }
+        for (key in opts.rendererOptions) {
+          // create a javascript object with the key and value
+          obj = { name: key, value: opts.rendererOptions[key] }
+          // try to assign the option to the ace editor
+          acee.renderer.setOption(obj.name, obj.value)
+        }
       }
 
       // onLoad callbacks
       angular.forEach(opts.callbacks, function (cb) {
         if (angular.isFunction(cb)) {
-          cb(acee);
+          cb(acee)
         }
-      });
-    };
+      })
+    }
 
     return {
       restrict: 'EA',
       require: '?ngModel',
       link: function (scope, elm, attrs, ngModel) {
-
         /**
          * Corresponds the uiAceConfig ACE configuration.
          * @type object
          */
-        var options = uiAceConfig.ace || {};
+        var options = uiAceConfig.ace || {}
 
         /**
          * uiAceConfig merged with user options via json in attribute or data binding
          * @type object
          */
-        var opts = angular.extend({}, options, scope.$eval(attrs.uiAce));
+        var opts = angular.extend({}, options, scope.$eval(attrs.uiAce))
 
         /**
          * ACE editor
          * @type object
          */
-        var acee = window.ace.edit(elm[0]);
+        var acee = window.ace.edit(elm[0])
         acee.$blockScrolling = Infinity
 
         /**
@@ -159,21 +157,21 @@ angular.module('ui.ace', [])
          * @type object
          * @see [EditSession]{@link http://ace.c9.io/#nav=api&api=edit_session}
          */
-        var session = acee.getSession();
+        var session = acee.getSession()
 
         /**
          * Reference to a change listener created by the listener factory.
          * @function
          * @see listenerFactory.onChange
          */
-        var onChangeListener;
+        var onChangeListener
 
         /**
          * Reference to a blur listener created by the listener factory.
          * @function
          * @see listenerFactory.onBlur
          */
-        var onBlurListener;
+        var onBlurListener
 
         /**
          * Calls a callback by checking its existing. The argument list
@@ -182,7 +180,6 @@ angular.module('ui.ace', [])
          * @throws {Error} If the callback isn't a function
          */
         var executeUserCallback = function () {
-
           /**
            * The callback function grabbed from the array-like arguments
            * object. The first argument should always be the callback.
@@ -190,7 +187,7 @@ angular.module('ui.ace', [])
            * @see [arguments]{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope/arguments}
            * @type {*}
            */
-          var callback = arguments[0];
+          var callback = arguments[0]
 
           /**
            * Arguments to be passed to the callback. These are taken
@@ -200,18 +197,18 @@ angular.module('ui.ace', [])
            * @see [arguments]{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions_and_function_scope/arguments}
            * @type {Array}
            */
-          var args = Array.prototype.slice.call(arguments, 1);
+          var args = Array.prototype.slice.call(arguments, 1)
 
           if (angular.isDefined(callback)) {
             scope.$evalAsync(function () {
               if (angular.isFunction(callback)) {
-                callback(args);
+                callback(args)
               } else {
-                throw new Error('ui-ace use a function as callback.');
+                throw new Error('ui-ace use a function as callback.')
               }
-            });
+            })
           }
-        };
+        }
 
         /**
          * Listener factory. Until now only change listeners can be created.
@@ -229,20 +226,20 @@ angular.module('ui.ace', [])
            */
           onChange: function (callback) {
             return function (e) {
-              var newValue = session.getValue();
+              var newValue = session.getValue()
 
               if (ngModel && newValue !== ngModel.$viewValue &&
-                  // HACK make sure to only trigger the apply outside of the
-                  // digest loop 'cause ACE is actually using this callback
-                  // for any text transformation !
-                  !scope.$$phase && !scope.$root.$$phase) {
+                // HACK make sure to only trigger the apply outside of the
+                // digest loop 'cause ACE is actually using this callback
+                // for any text transformation !
+                !scope.$$phase && !scope.$root.$$phase) {
                 scope.$evalAsync(function () {
-                  ngModel.$setViewValue(newValue);
-                });
+                  ngModel.$setViewValue(newValue)
+                })
               }
 
-              executeUserCallback(callback, e, acee);
-            };
+              executeUserCallback(callback, e, acee)
+            }
           },
           /**
            * Creates a blur listener which propagates the editor session
@@ -255,80 +252,79 @@ angular.module('ui.ace', [])
            */
           onBlur: function (callback) {
             return function () {
-              executeUserCallback(callback, acee);
-            };
+              executeUserCallback(callback, acee)
+            }
           }
-        };
+        }
 
         attrs.$observe('readonly', function (value) {
-          acee.setReadOnly(!!value || value === '');
-        });
+          acee.setReadOnly(!!value || value === '')
+        })
 
         // Value Blind
         if (ngModel) {
           ngModel.$formatters.push(function (value) {
             if (angular.isUndefined(value) || value === null) {
-              return '';
+              return ''
+            } else if (angular.isObject(value) || angular.isArray(value)) {
+              throw new Error('ui-ace cannot use an object or an array as a model')
             }
-            else if (angular.isObject(value) || angular.isArray(value)) {
-              throw new Error('ui-ace cannot use an object or an array as a model');
-            }
-            return value;
-          });
+            return value
+          })
 
           ngModel.$render = function () {
-            session.setValue(ngModel.$viewValue);
-          };
+            session.setValue(ngModel.$viewValue)
+          }
         }
 
         // Listen for option updates
         var updateOptions = function (current, previous) {
-          if (current === previous) return;
-          opts = angular.extend({}, options, scope.$eval(attrs.uiAce));
+          if (current === previous) return
+          opts = angular.extend({}, options, scope.$eval(attrs.uiAce))
 
-          opts.callbacks = [ opts.onLoad ];
+          opts.callbacks = [ opts.onLoad ]
           if (opts.onLoad !== options.onLoad) {
             // also call the global onLoad handler
-            opts.callbacks.unshift(options.onLoad);
+            opts.callbacks.unshift(options.onLoad)
           }
 
           // EVENTS
 
           // unbind old change listener
-          session.removeListener('change', onChangeListener);
+          session.removeListener('change', onChangeListener)
 
           // bind new change listener
-          onChangeListener = listenerFactory.onChange(opts.onChange);
-          session.on('change', onChangeListener);
+          onChangeListener = listenerFactory.onChange(opts.onChange)
+          session.on('change', onChangeListener)
 
           // unbind old blur listener
-          //session.removeListener('blur', onBlurListener);
-          acee.removeListener('blur', onBlurListener);
+          // session.removeListener('blur', onBlurListener)
+          acee.removeListener('blur', onBlurListener)
 
           // bind new blur listener
-          onBlurListener = listenerFactory.onBlur(opts.onBlur);
-          acee.on('blur', onBlurListener);
+          onBlurListener = listenerFactory.onBlur(opts.onBlur)
+          acee.on('blur', onBlurListener)
 
-          setOptions(acee, session, opts);
-        };
+          setOptions(acee, session, opts)
+        }
 
-        scope.$watch(attrs.uiAce, updateOptions, /* deep watch */ true);
+        scope.$watch(attrs.uiAce, updateOptions, /* deep watch */ true)
 
         // set the options here, even if we try to watch later, if this
         // line is missing things go wrong (and the tests will also fail)
-        updateOptions(options);
+        updateOptions(options)
 
         elm.on('$destroy', function () {
-          acee.session.$stopWorker();
-          acee.destroy();
-        });
+          acee.session.$stopWorker()
+          acee.destroy()
+        })
 
-        scope.$watch(function() {
-          return [elm[0].offsetWidth, elm[0].offsetHeight];
-        }, function() {
-          acee.resize();
-          acee.renderer.updateFull();
-        }, true);
+        scope.$watch(function () {
+          return [elm[0].offsetWidth, elm[0].offsetHeight]
+        }, function () {
+          acee.resize()
+          acee.renderer.updateFull()
+        }, true)
 
         scope.Infinity = -1
 
@@ -343,5 +339,5 @@ angular.module('ui.ace', [])
         })
 
       }
-    };
-  }]);
+    }
+  }])

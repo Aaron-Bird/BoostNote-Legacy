@@ -9,10 +9,10 @@ angular.module('codexen')
         el.on('click', function () {
           Modal.editSnippet(angular.copy(scope.snippet))
             .result.then(function (snippet) {
-              $rootScope.$broadcast('snippetUpdated', snippet)
-            }, function () {
-              console.log('edit snippet modal dismissed')
-            })
+            $rootScope.$broadcast('snippetUpdated', snippet)
+          }, function () {
+            console.log('edit snippet modal dismissed')
+          })
         })
       }
     }

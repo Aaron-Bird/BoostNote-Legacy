@@ -1,5 +1,3 @@
 /* global angular */
 angular.module('codexen')
-  .controller('AppController', function ($scope) {
-    
-  })
+  .controller('AppController', function ($scope) {})

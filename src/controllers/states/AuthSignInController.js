@@ -7,7 +7,7 @@ angular.module('codexen')
       $auth.login({
         email: vm.email,
         password: vm.password
-      }).then(function(data){
+      }).then(function (data) {
         console.log(data)
         $rootScope.$broadcast('userSignIn')
       })
