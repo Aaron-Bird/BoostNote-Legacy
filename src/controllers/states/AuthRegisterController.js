@@ -1,6 +1,6 @@
 /* global angular */
 angular.module('codexen')
-  .controller('AuthRegisterController', function ($auth, $log) {
+  .controller('AuthRegisterController', function ($auth, $log, $state, $rootScope) {
     var vm = this
     vm.isEmpty = function (obj) {
       for (var i in obj) if (obj.hasOwnProperty(i)) return false
@@ -13,7 +13,8 @@ angular.module('codexen')
       name: vm.name,
       profileName: vm.profileName
     }).then(function (data) {
-      console.log(data)
+      $rootScope.$broadcast('userSignIn')
+      $state.go('home')
     })
     }
   })
