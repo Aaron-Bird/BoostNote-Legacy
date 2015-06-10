@@ -20,8 +20,11 @@ angular.module('codexen')
 
     // TODO: keyboard navigating UX
 
-    $scope.$on('$stateChangeStart', function (e, toState, toParams) {
+    $scope.$on('$stateChangeSuccess', function (e, toState, toParams) {
+      if (!toState.name.match(/snippets/)) return null
+
       vm.snippetId = parseInt(toParams.id)
+
       if (!vm.snippetId && vm.filtered[0]) {
         $state.go('snippets.detail', {id: vm.filtered[0].id})
       }
@@ -29,8 +32,17 @@ angular.module('codexen')
 
 
     $scope.$on('snippetUpdated', function (e, snippet) {
+      if (!mySnippets.some(function (_snippet, index) {
+        if (_snippet.id === snippet.id) {
+          mySnippets[index] = snippet
+          return true
+        }
+        return false
+      })) mySnippets.unshift(snippet)
+
+      searchSnippets()
+      vm.snippetId = snippet.id
       $state.go('snippets.detail', {id: snippet.id})
-      loadSnippets()
     })
 
     $scope.$on('snippetDeleted', function () {

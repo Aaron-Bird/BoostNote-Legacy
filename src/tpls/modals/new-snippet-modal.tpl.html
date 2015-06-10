@@ -13,7 +13,7 @@
         <ui-select ng-model="vm.mode" style="display: inline-block;" on-select="vm.log(vm.mode.name.toLowerCase())" theme="bootstrap">
           <ui-select-match placeholder="Select Type">{{$select.selected}}</ui-select-match>
           <ui-select-choices repeat="mode in vm.aceModes | filter: $select.search">
-            <div ng-bind-html="mode | highlight: $select.search"></div>
+            <div ng-bind="::mode"></div>
           </ui-select-choices>
         </ui-select>
     </div>

@@ -3,9 +3,10 @@ angular.module('codexen')
   .directive('tagList', function () {
     return {
       restrict: 'A',
-      template: '<p class="tags" ng-if="tags.length">' +
+      template: '<p class="tags">' +
         '<i class="fa fa-tags"></i> ' +
         '<a tag-item="tag" ng-repeat="tag in tags" href></a>' +
+        '<a ng-if="!tags.length" ng-click="requestTagging($event)" href> Not tagged yet</a>' +
         '</p>',
       scope: {
         tags: '=tagList'
@@ -16,6 +17,12 @@ angular.module('codexen')
             e.stopPropagation()
           })
         })
+
+        scope.requestTagging = function (e) {
+          e.preventDefault()
+          e.stopPropagation()
+          scope.$emit('taggingRequested')
+        }
       }
     }
   })
