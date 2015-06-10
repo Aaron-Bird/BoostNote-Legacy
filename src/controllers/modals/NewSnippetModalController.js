@@ -11,7 +11,7 @@ angular.module('codexen')
         callSign: vm.callSign,
         mode: vm.mode == null ? null : vm.mode.toLowerCase(),
         content: vm.content,
-        tags: angular.isArray(vm.Tags) ? vm.Tags.map(function (tag) { return tag.name }) : []
+        Tags: angular.isArray(vm.Tags) ? vm.Tags.map(function (tag) { return tag.name }) : []
       }
 
       Snippet.create(params)

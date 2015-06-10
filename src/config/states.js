@@ -29,7 +29,7 @@ angular.module('codexen')
 
       /* Snippets */
       .state('snippets', {
-        url: '/snippets',
+        url: '/snippets?search',
         views: {
           'main-view': {
             templateUrl: 'tpls/states/snippets.list.tpl.html',

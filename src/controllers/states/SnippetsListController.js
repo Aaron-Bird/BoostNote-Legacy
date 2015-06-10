@@ -1,9 +1,16 @@
 /* global angular */
 angular.module('codexen')
-  .controller('SnippetsListController', function ($auth, Snippet, $scope, $state) {
+  .controller('SnippetsListController', function ($auth, Snippet, $scope, $state, $scope) {
     var vm = this
 
     vm.isLoaded = false
+
+    vm.search = $state.params.search
+
+    vm.snippetId = parseInt($state.params.id)
+    $scope.$on('$stateChangeStart', function (e, toState, toParams) {
+      vm.snippetId = parseInt(toParams.id)
+    })
 
     var loadSnippets = function () {
       if ($auth.isAuthenticated) {
