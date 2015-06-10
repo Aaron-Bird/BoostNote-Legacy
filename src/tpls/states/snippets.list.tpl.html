@@ -2,31 +2,31 @@
 
   <div class="left-pane">
     <div class="snippet-search">
-      <input ng-model="vm.search" type="text" name="name" class="form-control" placeholder="Search ...">
+      <input ng-model="vm.search" ng-change="vm.searchSnippets()" type="text" name="name" class="form-control" placeholder="Search ..." autocomplete="off">
     </div>
     <ul class="snippet-list">
 
-      <li ng-if="!vm.isLoaded" class="message-item">
+      <li ng-if="vm.isLoading" class="message-item">
         <h4>
           Loading
         </h4>
       </li>
 
-      <li ng-if="vm.isLoaded && vm.snippets==0 && !vm.isGuest" class="message-item">
+      <li ng-if="!vm.isLoading && vm.snippets==0 && !vm.isGuest" class="message-item">
         <h4>
           Empty List
         </h4>
         <button btn-new-snippet class="btn btn-default"><i class="fa fa-plus-square-o"></i> New Snippet</button>
       </li>
 
-      <li ng-if="vm.isLoaded && vm.isGuest" class="message-item">
+      <li ng-if="!vm.isLoading && vm.isGuest" class="message-item">
         <h4>
           Sign In to access
         </h4>
         <a ui-sref="auth.signin" class="btn btn-default"><i class="fa fa-signin"></i> Sign In</a>
       </li>
 
-      <li ng-repeat="snippet in vm.snippets | searchSnippets:vm.search" ui-sref="snippets.detail({id:snippet.id})" ng-class="{active:vm.snippetId===snippet.id}">
+      <li ng-repeat="snippet in vm.filtered" ui-sref="snippets.detail({id:snippet.id})" ng-class="{active:vm.snippetId===snippet.id}">
         <div class="media">
           <div class="media-left">
             <img width="25" height="25" class="img-circle" src="http://www.gravatar.com/avatar/ea0b6ad1c11700120d1af08810caa19d" alt="" />
@@ -41,7 +41,7 @@
             </p>
           </div>
         </div>
-        <div tags="snippet.Tags"></div>
+        <div tag-list="snippet.Tags"></div>
       </li>
     </ul>
   </div>

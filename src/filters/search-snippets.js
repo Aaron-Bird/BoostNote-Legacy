@@ -8,7 +8,7 @@ angular.module('codexen')
 
         return input.filter(function (snippet) {
           return snippet.Tags.some(function (tag) {
-            return tag.name.match(new RegExp(name))
+            return tag.name.match(new RegExp('^'+name))
           })
         })
       }

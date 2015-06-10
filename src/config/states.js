@@ -29,11 +29,20 @@ angular.module('codexen')
 
       /* Snippets */
       .state('snippets', {
-        url: '/snippets?search',
+        url: '/snippets',
         views: {
           'main-view': {
             templateUrl: 'tpls/states/snippets.list.tpl.html',
             controller: 'SnippetsListController as vm'
+          }
+        },
+        resolve: {
+          mySnippets: function (Snippet) {
+            return Snippet.findMine({
+              'include': ['Tag']
+            }).then(function (res) {
+              return res.data
+            })
           }
         }
       })

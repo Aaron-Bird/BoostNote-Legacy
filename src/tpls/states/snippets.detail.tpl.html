@@ -21,7 +21,9 @@
 
     <div ng-if="vm.isLoaded" class="">
       <p ng-bind="vm.snippet.description"></p>
-      <div tags="vm.snippet.Tags"></div>
+
+      <div tag-list="vm.snippet.Tags"></div>
+
       <div ui-ace="{
         showGutter: false,
         useWrapMode : true,

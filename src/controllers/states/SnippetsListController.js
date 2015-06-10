@@ -1,44 +1,32 @@
 /* global angular */
 angular.module('codexen')
-  .controller('SnippetsListController', function ($auth, Snippet, $scope, $state, $scope) {
+  .controller('SnippetsListController', function ($auth, Snippet, $scope, $state, $scope, $filter, mySnippets) {
     var vm = this
 
-    vm.isLoaded = false
-
-    vm.search = $state.params.search
+    vm.isLoading = false
 
     vm.snippetId = parseInt($state.params.id)
+
+    vm.snippets = mySnippets
+
+    vm.searchSnippets = searchSnippets
+    vm.searchSnippets()
+
+    // TODO: add Navigation methods
+    // vm.nextSnippet()
+    // vm.priorSnippet()
+    // vm.firstSnippet()
+    // vm.lastSnippet()
+
+    // TODO: keyboard navigating UX
+
     $scope.$on('$stateChangeStart', function (e, toState, toParams) {
       vm.snippetId = parseInt(toParams.id)
-    })
-
-    var loadSnippets = function () {
-      if ($auth.isAuthenticated) {
-        Snippet.findMine({
-          'include': ['Tag']
-        })
-          .success(function (data) {
-            console.log('snippets fetched', data)
-            vm.isLoaded = true
-            vm.snippets = data
-            vm.isGuest = false
-          })
-      } else {
-        vm.isLoaded = true
-        vm.isGuest = true
-        vm.snippets = void 0
+      if (!vm.snippetId && vm.filtered[0]) {
+        $state.go('snippets.detail', {id: vm.filtered[0].id})
       }
-    }
-
-    loadSnippets()
-
-    $scope.$on('userSignIn', function () {
-      loadSnippets()
     })
 
-    $scope.$on('userSignOut', function () {
-      loadSnippets()
-    })
 
     $scope.$on('snippetUpdated', function (e, snippet) {
       $state.go('snippets.detail', {id: snippet.id})
@@ -63,5 +51,33 @@ angular.module('codexen')
       }
       loadSnippets()
     })
+
+    $scope.$on('tagSelected', function (e, tag) {
+      e.stopPropagation()
+      $scope.$apply(function () {
+        vm.search = '#' + tag.name
+        searchSnippets()
+      })
+    })
+
+    function loadSnippets() {
+      if ($auth.isAuthenticated) {
+        Snippet.findMine({
+          'include': ['Tag']
+        })
+          .success(function (data) {
+            vm.snippets = data
+          })
+      } else {
+        vm.snippets = void 0
+      }
+    }
+
+    function searchSnippets() {
+      vm.filtered = $filter('searchSnippets')(mySnippets, vm.search)
+      if (vm.search && vm.filtered[0] && (!vm.snippetId || vm.snippetId !== vm.filtered[0].id)) {
+        $state.go('snippets.detail', {id: vm.filtered[0].id})
+      }
+    }
 
   })
