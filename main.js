@@ -8,9 +8,9 @@ require('crash-reporter').start()
 // be closed automatically when the javascript object is GCed.
 var mainWindow = null
 
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') app.quit()
-})
+// app.on('window-all-closed', function () {
+//   if (process.platform !== 'darwin') app.quit()
+// })
 
 var clipboard = require('clipboard')
 
@@ -27,19 +27,7 @@ app.on('ready', function () {
     mainWindow.show()
   })
 
-  mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
-    'web-preferences': {
-        'overlay-scrollbars': true
-      }
-    })
-
-  mainWindow.loadUrl('file://' + __dirname + '/electron_build/index.html')
-
   makeNewMainWindow()
-  // mainWindow.openDevTools()
-
 
   var globalShortcut = require('global-shortcut')
 
