@@ -12,8 +12,6 @@ app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit()
 })
 
-var robot = require('robotjs')
-
 var clipboard = require('clipboard')
 
 var Tray = require('tray')
@@ -22,6 +20,12 @@ var appIcon = null
 app.on('ready', function () {
   appIcon = new Tray('./icon.png')
   appIcon.setToolTip('This is my application.')
+  appIcon.on('clicked', function () {
+    if (mainWindow == null) {
+      makeNewMainWindow()
+    }
+    mainWindow.show()
+  })
 
   mainWindow = new BrowserWindow({
     width: 800,
@@ -33,12 +37,9 @@ app.on('ready', function () {
 
   mainWindow.loadUrl('file://' + __dirname + '/electron_build/index.html')
 
+  makeNewMainWindow()
   // mainWindow.openDevTools()
 
-  mainWindow.on('closed', function () {
-    console.log('main closed')
-    mainWindow = null
-  })
 
   var globalShortcut = require('global-shortcut')
 
@@ -56,14 +57,7 @@ app.on('ready', function () {
 
   app.on('activate-with-no-open-windows', function () {
     if (mainWindow == null) {
-      console.log('new WIndow!')
-      mainWindow = new BrowserWindow({width: 800, height: 600})
-
-      mainWindow.loadUrl('file://' + __dirname + '/electron_build/index.html')
-
-      mainWindow.on('closed', function () {
-        mainWindow = null
-      })
+      makeNewMainWindow()
     }
     mainWindow.show()
   })
@@ -73,11 +67,11 @@ app.on('ready', function () {
   })
 
   var hidePopUp = function () {
-    if(fromMain){
+    if (fromMain) {
 
     } else {
-      mainWindow.hide()
-      Menu.sendActionToFirstResponder('hide:');
+      mainWindow ? mainWindow.hide() : null
+      Menu.sendActionToFirstResponder('hide:')
     }
 
     popUpWindow.hide()
@@ -89,26 +83,21 @@ app.on('ready', function () {
   })
   ipc.on('writeCode', function (e, code) {
     clipboard.writeText(code)
-    // setTimeout(function () {
-    //   robot.typeString(code)
-    // }, 200)
     hidePopUp()
   })
 
   var fromMain
   // Register a 'ctrl+x' shortcut listener.
   var ret = globalShortcut.register('ctrl+tab+shift', function () {
-
     if (popUpWindow.isVisible()) {
       hidePopUp()
       return
     }
-    fromMain = mainWindow.isFocused()
+    fromMain = mainWindow ? mainWindow.isFocused() : false
     popUpWindow.show()
 
   })
   if (!ret) console.log('registerion fails')
-
 
   // MENU
   var Menu = require('menu')
@@ -150,8 +139,8 @@ app.on('ready', function () {
         {
           label: 'Quit',
           accelerator: 'Command+Q',
-          click: function() { app.quit(); }
-        },
+          click: function () { app.quit() }
+        }
       ]
     },
     {
@@ -189,7 +178,7 @@ app.on('ready', function () {
           label: 'Select All',
           accelerator: 'Command+A',
           selector: 'selectAll:'
-        },
+        }
       ]
     },
     {
@@ -198,13 +187,13 @@ app.on('ready', function () {
         {
           label: 'Reload',
           accelerator: 'Command+R',
-          click: function() { BrowserWindow.getFocusedWindow().reloadIgnoringCache(); }
+          click: function () { BrowserWindow.getFocusedWindow().reloadIgnoringCache() }
         },
         {
           label: 'Toggle DevTools',
           accelerator: 'Alt+Command+I',
-          click: function() { BrowserWindow.getFocusedWindow().toggleDevTools(); }
-        },
+          click: function () { BrowserWindow.getFocusedWindow().toggleDevTools() }
+        }
       ]
     },
     {
@@ -226,16 +215,36 @@ app.on('ready', function () {
         {
           label: 'Bring All to Front',
           selector: 'arrangeInFront:'
-        },
+        }
       ]
     },
     {
       label: 'Help',
       submenu: []
-    },
-  ];
+    }
+  ]
 
-  menu = Menu.buildFromTemplate(template);
+  var menu = Menu.buildFromTemplate(template)
 
-  Menu.setApplicationMenu(menu);
+  Menu.setApplicationMenu(menu)
+
+  function makeNewMainWindow () {
+    console.log('new Window!')
+    mainWindow = new BrowserWindow({
+      width: 800,
+      height: 600,
+      'web-preferences': {
+          'overlay-scrollbars': true
+        }
+      })
+
+    mainWindow.loadUrl('file://' + __dirname + '/electron_build/index.html')
+
+    mainWindow.on('closed', function () {
+      console.log('main closed')
+      mainWindow = null
+      app.dock.hide()
+    })
+    app.dock.show()
+  }
 })

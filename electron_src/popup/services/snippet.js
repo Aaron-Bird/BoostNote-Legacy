@@ -10,7 +10,7 @@ angular.module('codexen.popup')
 
 
 angular.module('codexen.popup')
-  .factory('Snippet', function ($http, apiUrl) {
+  .factory('Snippet', function ($http, $auth, apiUrl) {
     var findByUser = function (user) {
       var url = apiUrl + 'snippets/search'
 
@@ -21,16 +21,22 @@ angular.module('codexen.popup')
       })
     }
 
+    var findMine = function (params) {
+      var url = apiUrl + 'snippets/my'
+
+      return $http.get(url, {params: params})
+    }
+
     var create = function (params) {
       var url = apiUrl + 'snippets/create'
 
       return $http.post(url, params)
     }
 
-    var show = function (id) {
+    var show = function (id, params) {
       var url = apiUrl + 'snippets/id/' + id
 
-      return $http.get(url)
+      return $http.get(url, {params: params})
     }
 
     var update = function (id, params) {
@@ -47,6 +53,7 @@ angular.module('codexen.popup')
 
     return {
       findByUser: findByUser,
+      findMine: findMine,
       create: create,
       show: show,
       delete: destroy,

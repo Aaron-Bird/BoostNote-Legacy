@@ -125,4 +125,4 @@ gulp.task('default', function (cb) {
   runSequence('del', 'build', 'watch', cb)
 })
 
-// require('./gulp-electron')(gulp)
+require('./gulp-electron')(gulp)

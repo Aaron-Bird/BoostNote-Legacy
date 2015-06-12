@@ -10,34 +10,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
     <meta name="description" content="CodeXen - Short code storage service">
 
-    <link rel="stylesheet" href="../../all.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="../../vendor/css/font-awesome.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="../../main.css" media="screen" title="no title" charset="utf-8">
   </head>
   <body class="popup-body" ng-controller="PopUpController">
 
-    <!-- Dev!!-->
-    <button style="position:fixed;bottom:0;right:0;padding:5px;z-index:1000;" type="button" name="button" ng-click="toggleDev()">DEV!</button>
-
-    <div ng-click="focusSearchInput()" class="search-block">
+    <div class="search-block">
       <input ng-change="filterList(searchNeedle)" search-input id="search-input" type="text" class="form-control" ng-model="searchNeedle" ng-change="refreshResult">
     </div>
 
     <div class="result-block row-fluid">
-      <ul ng-click="focusList()" class="result-list left-pane" ng-class="{focused:isFocusing == 2}">
-        <li ng-click="selectItem($index)" ng-repeat="snippet in filteredSnippets"><a ng-class="{selected:$index == selectIndex}" href="#">{{snippet.description}}</a></li>
+      <ul class="result-list left-pane" ng-class="{focused:isFocusing == 2}">
+        <li ng-click="selectSnippet($index)" ng-repeat="snippet in filteredSnippets" ng-class="{active:$index == selectIndex}"><a href="#">{{snippet.description}}</a></li>
       </ul>
 
       <div class="right-pane">
-        <div ng-click="focusControl()" class="result-detail-control">
-          <button ng-class="{focus: controlIndex == 1}" id="btnClipboard" type="button" name="button" class="btn btn-default"><i class="fa fa-clipboard"></i></button>
-          <button ng-class="{focus: controlIndex == 2}" id="btnEdit" type="button" name="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
-          <button ng-class="{focus: controlIndex == 3}" id="btnShare" type="button" name="button" class="btn btn-default"><i class="fa fa-share"></i></button>
+        <div class="result-detail-control">
+          <button id="btnClipboard" type="button" name="button" class="btn btn-default"><i class="fa fa-clipboard"></i></button>
+          <button id="btnEdit" type="button" name="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
+          <button id="btnShare" type="button" name="button" class="btn btn-default"><i class="fa fa-share"></i></button>
         </div>
-        <div ng-click="focusContent()" id="aceView" class="result-detail-content"
+        <div id="aceView" class="result-detail-content"
           ui-ace="{
             showGutter: false,
             useWrapMode: true,
             mode:selectedItem.mode.toLowerCase(),
-            onLoad : aceLoaded
+            onLoad: aceLoaded,
+            theme: 'solarized_dark'
           }"
 
           readonly
