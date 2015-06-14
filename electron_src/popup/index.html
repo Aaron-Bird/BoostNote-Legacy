@@ -20,7 +20,7 @@
     </div>
 
     <div class="result-block row-fluid">
-      <ul class="result-list left-pane" ng-class="{focused:isFocusing == 2}">
+      <ul id="result-list" class="result-list left-pane" ng-class="{focused:isFocusing == 2}">
         <li ng-click="selectSnippet($index)" ng-repeat="snippet in filteredSnippets" ng-class="{active:$index == selectIndex}"><a href="#">{{snippet.description}}</a></li>
       </ul>
 

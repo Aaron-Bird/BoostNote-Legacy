@@ -53,6 +53,7 @@ app.on('ready', function () {
   popUpWindow.on('blur', function () {
     popUpWindow.hide()
   })
+  popUpWindow.setVisibleOnAllWorkspaces(true)
 
   var hidePopUp = function () {
     if (fromMain) {

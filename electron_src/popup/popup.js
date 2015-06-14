@@ -3,6 +3,8 @@
 var remote = require('remote')
 var ipc = require('ipc')
 
+var resultList = document.getElementById('result-list')
+
 angular.module('codexen.popup', [
   'ui.ace',
   'satellizer',
@@ -31,8 +33,10 @@ angular.module('codexen.popup', [
       e.preventDefault()
     })
     .add('right', function (e) {
+      e.preventDefault()
     })
     .add('left', function (e) {
+      e.preventDefault()
     })
     .add('esc', function (e) {
       hidePopUp()
@@ -41,6 +45,7 @@ angular.module('codexen.popup', [
       e.preventDefault()
     })
     .add('tab', function (e) {
+      e.preventDefault()
     })
     .add('enter', function (e) {
       console.log($scope.selectedItem.content)
@@ -118,6 +123,11 @@ angular.module('codexen.popup', [
 
   function priorSnippet () {
     if ($scope.selectIndex > 0) $scope.selectIndex -= 1
+
+    if (resultList.children[$scope.selectIndex].offsetTop < resultList.scrollTop) {
+      resultList.scrollTop -= 33
+    }
+
     selectSnippet()
   }
 
@@ -125,6 +135,11 @@ angular.module('codexen.popup', [
     if ($scope.selectIndex < $scope.filteredSnippets.length - 1) {
       $scope.selectIndex += 1
     }
+
+    if (resultList.clientHeight - 33 < resultList.children[$scope.selectIndex].offsetTop - resultList.scrollTop) {
+      resultList.scrollTop += 33
+    }
+
     selectSnippet()
   }
 
