@@ -26,9 +26,9 @@
 
       <div class="right-pane">
         <div class="result-detail-control">
-          <button id="btnClipboard" type="button" name="button" class="btn btn-default"><i class="fa fa-clipboard"></i></button>
-          <button id="btnEdit" type="button" name="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
-          <button id="btnShare" type="button" name="button" class="btn btn-default"><i class="fa fa-share"></i></button>
+          <button ng-click="writeCode(selectedItem.content)" id="btnClipboard" type="button" name="button" class="btn btn-default"><i class="fa fa-clipboard"></i></button>
+          <!-- <button ng-click="editSnippet(selectedItem.id)" id="btnEdit" type="button" name="button" class="btn btn-default"><i class="fa fa-edit"></i></button> -->
+          <!-- <button id="btnShare" type="button" name="button" class="btn btn-default"><i class="fa fa-share"></i></button> -->
         </div>
         <div id="aceView" class="result-detail-content"
           ui-ace="{

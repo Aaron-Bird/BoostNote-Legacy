@@ -11,14 +11,9 @@ angular.module('codexen.popup', [
   'cfp.hotkeys'
 ])
 .controller('PopUpController', function ($scope, Snippet, $auth, $window, hotkeys, $document, $filter) {
-
-  // For Dev
-  $scope.toggleDev = function () {
-    remote.getCurrentWindow().toggleDevTools()
-  }
-
   // Setup Events
   remote.getCurrentWindow().on('focus', function () {
+    if (!$auth.isAuthenticated()) return hidePopUp()
     $scope.$apply(focusSearchInput)
     loadSnippets()
   })
@@ -48,8 +43,7 @@ angular.module('codexen.popup', [
       e.preventDefault()
     })
     .add('enter', function (e) {
-      console.log($scope.selectedItem.content)
-      ipc.send('writeCode', $scope.selectedItem.content)
+      writeCode($scope.selectedItem.content)
       e.preventDefault()
     })
 
@@ -95,6 +89,7 @@ angular.module('codexen.popup', [
 
   $scope.selectSnippet = selectSnippet
   $scope.filterList = filterList
+  $scope.writeCode = writeCode
   $scope.focusSearchInput = focusSearchInput
 
   // Search Filter
@@ -141,6 +136,10 @@ angular.module('codexen.popup', [
     }
 
     selectSnippet()
+  }
+
+  function writeCode (code) {
+    ipc.send('writeCode', code)
   }
 
   // Focusing Search Input

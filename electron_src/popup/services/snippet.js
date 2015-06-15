@@ -1,8 +1,8 @@
 /* global angular */
 angular.module('codexen.popup')
   .constant('apiUrl', 'http://localhost:8000/')
-  .config(function ($authProvider, $httpProvider) {
-    $authProvider.baseUrl = 'http://localhost:8000/'
+  .config(function ($authProvider, $httpProvider, apiUrl) {
+    $authProvider.baseUrl = apiUrl
 
     $httpProvider.defaults.useXDomain = true
     delete $httpProvider.defaults.headers.common['X-Requested-With']

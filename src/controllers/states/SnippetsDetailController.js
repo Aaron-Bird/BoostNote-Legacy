@@ -13,16 +13,6 @@ angular.module('codexen')
         vm.isLoaded = true
       })
 
-    // TODO: When deletion occurs, switch the next snippet
-    // TODO: Add deletion confirmation modal
-    vm.delete = function () {
-      Snippet.delete(vm.snippet.id)
-        .success(function () {
-          $rootScope.$broadcast('snippetDeleted')
-        })
-    }
-
-
     $scope.$on('taggingRequested', function (e) {
       e.stopPropagation()
       e.preventDefault()

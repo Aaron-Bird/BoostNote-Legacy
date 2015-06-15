@@ -13,8 +13,9 @@ var mainWindow = null
 // })
 
 var clipboard = require('clipboard')
-
 var Tray = require('tray')
+var notifier = require('node-notifier')
+
 var appIcon = null
 
 app.on('ready', function () {
@@ -37,7 +38,8 @@ app.on('ready', function () {
     show: false,
     frame: false,
     'web-preferences': {
-        'overlay-scrollbars': true
+        'overlay-scrollbars': true,
+        'skip-taskbar': true
       }
   })
 
@@ -70,8 +72,16 @@ app.on('ready', function () {
   ipc.on('hidePopUp', function () {
     hidePopUp()
   })
+
   ipc.on('writeCode', function (e, code) {
     clipboard.writeText(code)
+    notifier.notify({
+      title: 'Write on clipboard!',
+      message: 'Ready to paste',
+      wait: false
+    }, function (err, res) {
+
+    })
     hidePopUp()
   })
 
