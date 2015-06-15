@@ -3,7 +3,7 @@
     <img width="30" class="img-circle" ng-src="http://www.gravatar.com/avatar/{{ vm.currentUser.email | gravatar }}">
     <a href ng-bind="vm.currentUser.name"></a>
     <span class="nav-control-group pull-right">
-      <a href class="btn btn-sm btn-default"><i class="fa fa-gears fa-fw"></i></a>
+      <a ui-sref="settings" class="btn btn-sm btn-default" ui-sref-active="active"}"><i class="fa fa-gears fa-fw"></i></a>
       <a href class="btn btn-sm btn-default" ng-click="vm.signOut()"><i class="fa fa-sign-out fa-fw"></i></a>
     </span>
 

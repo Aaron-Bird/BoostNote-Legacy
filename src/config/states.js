@@ -27,6 +27,16 @@ angular.module('codexen')
         controller: 'AuthSignInController as vm'
       })
 
+      .state('settings', {
+        url: '/settings',
+        views: {
+          'main-view': {
+            templateUrl: 'tpls/states/settings.tpl.html',
+            controller: 'SettingsController as vm'
+          }
+        }
+      })
+
       /* Snippets */
       .state('snippets', {
         url: '/snippets',
