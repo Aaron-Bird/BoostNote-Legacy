@@ -38,9 +38,7 @@ angular.module('codexen')
         },
         resolve: {
           mySnippets: function (Snippet) {
-            return Snippet.findMine({
-              'include': ['Tag']
-            }).then(function (res) {
+            return Snippet.findMine().then(function (res) {
               return res.data
             })
           }

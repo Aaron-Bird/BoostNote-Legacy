@@ -20,8 +20,21 @@ angular.module('codexen')
       })
     }
 
+    var deleteSnippet = function (snippet) {
+      return $modal.open({
+        resolve: {
+          snippet: function () {
+            return snippet
+          }
+        },
+        templateUrl: 'tpls/modals/delete-snippet-modal.tpl.html',
+        controller: 'DeleteSnippetModalController as vm'
+      })
+    }
+
     return {
       newSnippet: newSnippet,
-      editSnippet: editSnippet
+      editSnippet: editSnippet,
+      deleteSnippet: deleteSnippet
     }
   })

@@ -2,7 +2,7 @@
 angular.module('codexen')
   .filter('searchSnippets', function ($filter) {
     return function (input, needle) {
-      if (!angular.isString(needle) || !angular.isArray(input)) return input
+      if (!angular.isString(needle) || !angular.isArray(input)) return angular.copy(input)
       if (needle.match(/#(.+)|tag:(.+)/)) {
         var name = needle.match(/#(.+)/) ? needle.match(/#(.+)/)[1] : needle.match(/tag:(.+)/)[1]
 

@@ -47,21 +47,28 @@ angular.module('codexen')
 
     $scope.$on('snippetDeleted', function () {
       if ($state.is('snippets.detail')) {
-        var currentSnippetId = $state.params.id
+        var currentSnippetId = parseInt($state.params.id)
+        // Delete snippet from snippet list
         for (var i = 0; i < vm.snippets.length; i++) {
-          if (vm.snippets[i]._id === currentSnippetId) {
-            var targetSnippet = null
-
-            if (i === 0) targetSnippet = vm.snippets[i + 1]
-            else targetSnippet = vm.snippets[i - 1]
-
-            console.log('target', targetSnippet)
-            $state.go('snippets.detail', {id: targetSnippet._id})
+          if (vm.snippets[i].id === currentSnippetId) {
+            vm.snippets.splice(i, 1)
             break
           }
         }
+        // Delete snippet from `filtered list`
+        // And redirect `next filtered snippet`
+        for (var i = 0; i < vm.filtered.length; i++) {
+          if (vm.filtered[i].id === currentSnippetId) {
+            if (vm.filtered[i+1] != null) $state.go('snippets.detail', {id: vm.filtered[i+1].id})
+            else if (vm.filtered[i-1] != null) $state.go('snippets.detail', {id: vm.filtered[i-1].id})
+            else $state.go('snippets')
+
+            vm.filtered.splice(i, 1)
+            break
+          }
+        }
+
       }
-      loadSnippets()
     })
 
     $scope.$on('tagSelected', function (e, tag) {
