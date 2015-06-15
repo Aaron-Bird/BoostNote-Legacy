@@ -7,9 +7,7 @@ angular.module('codexen')
 
     var snippetId = $state.params.id
 
-    Snippet.show(snippetId, {
-      'include': ['Tag']
-    })
+    Snippet.show(snippetId)
       .success(function (data) {
         vm.snippet = data
         vm.isLoaded = true

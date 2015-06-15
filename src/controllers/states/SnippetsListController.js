@@ -74,9 +74,7 @@ angular.module('codexen')
 
     function loadSnippets() {
       if ($auth.isAuthenticated) {
-        Snippet.findMine({
-          'include': ['Tag']
-        })
+        Snippet.findMine()
           .success(function (data) {
             vm.snippets = data
           })

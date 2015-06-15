@@ -220,8 +220,8 @@ app.on('ready', function () {
   function makeNewMainWindow () {
     console.log('new Window!')
     mainWindow = new BrowserWindow({
-      width: 800,
-      height: 600,
+      width: 920,
+      height: 640,
       'web-preferences': {
           'overlay-scrollbars': true
         }

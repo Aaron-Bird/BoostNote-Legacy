@@ -88,32 +88,43 @@ $snippet-list-active-bg= $brand-primary
 
 
 .snippets-detail-state
+  position absolute
+  top 0
+  width 100%
+  bottom 0
+  overflow hidden
   .detail-header
+    position absolute
+    top 0
+    width 100%
     background-color lighten($baseBackgroundColor, 5%)
-    padding: 5px 10px
-    height: 50px
-    border-bottom: solid 1px $baseBorderColor
+    padding 5px 10px
+    height 50px
+    border-bottom solid 1px $baseBorderColor
     .detail-header-title
-      color: $textColorHighlight
+      color $textColorHighlight
+      line-height 40px
+      font-size 1.2em
       small
         font-size: 0.6em
-        color: $textColor
+        color $textColor
 
-      line-height: 40px
-      font-size: 1.2em
 
     .detail-header-control
-      padding:3px
-
+      padding 3px
 
   .detail-body
-    padding: 5px 10px
+    position absolute
+    top 50px
+    width 100%
+    bottom 0
+    padding 5px 10px
+    overflow-y auto
     .ace_editor
-      min-height: 300px
-      border: solid 1px $border-color
-      border-radius: 5px
-
-
+      min-height 300px
+      border solid 1px $border-color
+      border-radius 5px
+      margin-bottom 5px
 
 .tags
   word-break: break-all
