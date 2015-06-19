@@ -2,3 +2,4 @@
 /node_modules
 /electron_build
 .env
+dist/

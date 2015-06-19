@@ -20,21 +20,56 @@ var ngAnnotate = require('gulp-ng-annotate')
 var uglify = require('gulp-uglify')
 var minifyCss = require('gulp-minify-css')
 var merge = require('merge-stream')
+var concat = require('gulp-concat')
+var streamqueue = require('streamqueue')
+var minifyHtml = require('gulp-minify-html')
 
 var config = require('./build.config.js')
 
-gulp.task('env', function () {
-  return gulp.src('tpls/env.js')
-    .pipe(template({
-      apiUrl: env.BUILD_API_URL
-    }))
-    .pipe(gulp.dest('build/config'))
+gulp.task('js', function () {
+  return streamqueue({objectMode: true},
+    gulp.src('tpls/env.js')
+      .pipe(template({
+        apiUrl: env.BUILD_API_URL
+      })),
+    gulp.src(['src/**/*.js'])
+  )
+  .pipe(changed('build'))
+  .pipe(gulp.dest('build'))
 })
 
-gulp.task('js', function () {
-  return gulp.src(['src/**/*.js'])
-    .pipe(changed('build'))
-    .pipe(gulp.dest('build'))
+gulp.task('dist', function () {
+  var js = streamqueue({objectMode: true},
+    gulp.src(['src/**/*.js']),
+    gulp.src('tpls/env.js')
+      .pipe(template({
+        apiUrl: env.DIST_API_URL
+      })),
+    gulp.src('src/**/*.tpl.html')
+      .pipe(templateCache())
+  )
+  .pipe(ngAnnotate())
+  .pipe(uglify())
+  .pipe(concat('app.js'))
+  .pipe(gulp.dest('dist'))
+
+  var css = gulp.src('src/styles/main.styl')
+    .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
+    .pipe(styl())
+    .pipe(autoprefixer())
+    .pipe(minifyCss())
+    .pipe(gulp.dest('dist'))
+
+  var index = gulp.src('src/index.html')
+      .pipe(template({
+        scripts: ['app.js'],
+        styles: ['main.css'],
+        env: 'dist'
+      }))
+      .pipe(minifyHtml())
+      .pipe(gulp.dest('dist'))
+
+  return merge(js, css, index)
 })
 
 gulp.task('styl', function () {
@@ -72,7 +107,7 @@ gulp.task('index', function () {
     .pipe(template({
       scripts: scripts,
       styles: styles,
-      env: env
+      env: 'build'
     }))
     .pipe(gulp.dest('build'))
     .pipe(livereload())
@@ -100,13 +135,11 @@ gulp.task('resources', function () {
 })
 
 gulp.task('build', function (cb) {
-  runSequence(['env', 'js', 'styl', 'tpls', 'vendor', 'resources'], 'index', cb)
+  runSequence(['js', 'styl', 'tpls', 'vendor', 'resources'], 'index', cb)
 })
 
 gulp.task('watch', function (cb) {
-  gulp.watch(['.env', 'tpls/env.js'], ['env'])
-
-  gulp.watch('src/**/*.js', ['js'])
+  gulp.watch(['.env', 'tpls/env.js', 'src/**/*.js'], ['js'])
 
   gulp.watch('src/styles/**/*.styl', ['styl'])
 

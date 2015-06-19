@@ -1,6 +1,6 @@
 /* global angular */
 angular.module('codexen.popup')
-  .constant('apiUrl', 'http://localhost:8000/')
+  .constant('apiUrl', 'http://codexen-server-dev.elasticbeanstalk.com/')
   .config(function ($authProvider, $httpProvider, apiUrl) {
     $authProvider.baseUrl = apiUrl
 

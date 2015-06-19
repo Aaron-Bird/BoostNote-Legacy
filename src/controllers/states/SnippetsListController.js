@@ -1,6 +1,6 @@
 /* global angular */
 angular.module('codexen')
-  .controller('SnippetsListController', function ($auth, Snippet, $scope, $state, $scope, $filter, mySnippets) {
+  .controller('SnippetsListController', function ($auth, Snippet, $scope, $state, $scope, $filter, mySnippets, User) {
     var vm = this
 
     vm.isLoading = false
@@ -11,6 +11,16 @@ angular.module('codexen')
 
     vm.searchSnippets = searchSnippets
     vm.searchSnippets()
+
+    vm.isAuthenticated = $auth.isAuthenticated()
+    var reloadUser = function () {
+      if (vm.isAuthenticated) {
+        User.me().success(function (data) {
+          vm.currentUser = data
+        })
+      }
+    }
+    reloadUser()
 
     // TODO: add Navigation methods
     // vm.nextSnippet()

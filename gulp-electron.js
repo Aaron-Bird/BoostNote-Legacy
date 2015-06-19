@@ -21,7 +21,7 @@ module.exports = function (gulp) {
   gulp.task('elec-env', function () {
     return gulp.src('tpls/env.js')
       .pipe(template({
-        apiUrl: env.BUILD_API_URL
+        apiUrl: env.ELEC_API_URL
       }))
       .pipe(gulp.dest('electron_build/config'))
   })
@@ -78,7 +78,7 @@ module.exports = function (gulp) {
       .pipe(template({
         scripts: scripts,
         styles: styles,
-        env: env
+        env: 'build'
       }))
       .pipe(gulp.dest('electron_build'))
       .pipe(livereload())

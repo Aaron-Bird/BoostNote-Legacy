@@ -68,5 +68,9 @@
     "satellizer": "^0.10.1",
     "ui-select": "^0.11.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "gulp-concat": "^2.5.2",
+    "gulp-minify-html": "^1.0.3",
+    "streamqueue": "^1.1.0"
+  }
 }
