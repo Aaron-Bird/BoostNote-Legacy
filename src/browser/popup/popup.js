@@ -6,10 +6,12 @@ var ipc = require('ipc')
 var resultList = document.getElementById('result-list')
 
 angular.module('codexen.popup', [
+  'codexen.shared',
   'ui.ace',
   'satellizer',
   'cfp.hotkeys'
 ])
+.constant('appName', 'popup')
 .controller('PopUpController', function ($scope, Snippet, $auth, $window, hotkeys, $document, $filter) {
   // Setup Events
   remote.getCurrentWindow().on('focus', function () {

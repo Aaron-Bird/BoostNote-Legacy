@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html ng-app="codexen">
+  <head>
+    <title>
+      CodeXen App
+    </title>
+
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <meta name="description" content="CodeXen - Short code storage service">
+
+    <title>Codexen!</title>
+
+    <link rel="stylesheet" href="../vendor/css/font-awesome.css" media="screen" title="no title" charset="utf-8">
+
+    <!-- inject:css -->
+    <!-- endinject -->
+
+  </head>
+  <body ng-controller="AppController as app">
+    <div side-nav id="side-view"></div>
+    <div ui-view name="main-view" id="main-view"></div>
+
+    <script src="../vendor/ace.js"></script>
+    <script src="../vendor/angular.js"></script>
+    <script src="../vendor/angular-sanitize.js"></script>
+    <script src="../vendor/angular-ui-router.js"></script>
+    <script src="../vendor/ui-bootstrap-tpls.js"></script>
+    <script src="../vendor/select.js"></script>
+    <script src="../vendor/satellizer.js"></script>
+    <script src="../vendor/angular-md5.js"></script>
+    <script src="../vendor/moment.js"></script>
+
+    <!-- inject:js -->
+    <!-- endinject -->
+
+  </body>
+</html>

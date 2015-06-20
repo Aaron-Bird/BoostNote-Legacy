@@ -1,6 +1,6 @@
 /* global angular */
-angular.module('codexen')
-  .config(function ($authProvider, $httpProvider, apiUrl) {
+angular.module('codexen.shared')
+  .config(function ($authProvider, $httpProvider, apiUrl, appName) {
     $authProvider.baseUrl = apiUrl
 
     $httpProvider.defaults.useXDomain = true
@@ -10,8 +10,15 @@ angular.module('codexen')
         responseError: function (res) {
           switch (res.status) {
             case 401:
-              var $state = $injector.get('$state')
-              $state.go('auth.signin')
+              switch (appName) {
+                case 'main' :
+                  var $state = $injector.get('$state')
+                  $state.go('auth.signin')
+                  break
+                case 'popup' :
+                  // TODO: hide popup
+                  break
+              }
               break
           }
 

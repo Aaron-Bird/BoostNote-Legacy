@@ -1,5 +1,6 @@
 /* global angular */
 angular.module('codexen', [
+  'codexen.shared',
   'ngSanitize',
   'ui.select',
   'ui.ace',
@@ -8,4 +9,5 @@ angular.module('codexen', [
   'satellizer',
   'angular-md5',
   'templates'])
+  .constant('appName', 'main')
 angular.module('templates', [])

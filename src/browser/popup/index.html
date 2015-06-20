@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html ng-app="codexen.popup">
+  <head>
+    <title>
+      CodeXen App
+    </title>
+
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+    <meta name="description" content="CodeXen - Short code storage service">
+
+    <link rel="stylesheet" href="../vendor/css/font-awesome.css" media="screen" title="no title" charset="utf-8">
+
+    <!-- inject:css -->
+    <link rel="stylesheet" href="../shared/styles/bootstrap.css">
+    <!-- endinject -->
+
+  </head>
+  <body class="popup-body" ng-controller="PopUpController">
+
+    <div class="search-block">
+      <input ng-change="filterList(searchNeedle)" search-input id="search-input" type="text" class="form-control" ng-model="searchNeedle" ng-change="refreshResult">
+    </div>
+
+    <div class="result-block row-fluid">
+      <ul id="result-list" class="result-list left-pane">
+        <li ng-click="selectSnippet($index)" ng-repeat="snippet in filteredSnippets" ng-class="{active:$index == selectIndex}"><a href="#"> <span ng-bind="snippet.callSign"></span> <small ng-bind="snippet.description"></small></a></li>
+      </ul>
+
+      <div class="right-pane">
+        <div class="result-detail-control">
+          <button ng-click="writeCode(selectedItem.content)" id="btnClipboard" type="button" name="button" class="btn btn-default"><i class="fa fa-clipboard"></i></button>
+          <!-- <button ng-click="editSnippet(selectedItem.id)" id="btnEdit" type="button" name="button" class="btn btn-default"><i class="fa fa-edit"></i></button> -->
+          <!-- <button id="btnShare" type="button" name="button" class="btn btn-default"><i class="fa fa-share"></i></button> -->
+        </div>
+        <div id="aceView" class="result-detail-content"
+          ui-ace="{
+            showGutter: false,
+            useWrapMode: true,
+            mode:selectedItem.mode.toLowerCase(),
+            onLoad: aceLoaded,
+            theme: 'solarized_dark'
+          }"
+
+          readonly
+          ng-model="selectedItem.content"
+        ></div>
+      </div>
+    </div>
+    <script src="../vendor/ace.js"></script>
+    <script src="../vendor/angular.js" charset="utf-8"></script>
+    <script src="../vendor/satellizer.js"></script>
+    <script src="../vendor/hotkeys.js" charset="utf-8"></script>
+
+    <!-- inject:js -->
+    <script src="popup.js"></script>
+    <script src="services/snippet.js"></script>
+    <script src="../shared/shared.js"></script>
+    <script src="../shared/config/ace.js"></script>
+    <script src="../shared/config/env.js"></script>
+    <script src="../shared/config/satellizer.js"></script>
+    <script src="../shared/directives/ui-ace.js"></script>
+    <script src="../shared/services/Snippet.js"></script>
+    <!-- endinject -->
+  </body>
+</html>

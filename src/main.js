@@ -19,7 +19,7 @@ var notifier = require('node-notifier')
 var appIcon = null
 
 app.on('ready', function () {
-  appIcon = new Tray('./icon.png')
+  appIcon = new Tray(__dirname + '/tray-icon.png')
   appIcon.setToolTip('This is my application.')
   appIcon.on('clicked', function () {
     if (mainWindow == null) {
@@ -43,7 +43,7 @@ app.on('ready', function () {
       }
   })
 
-  popUpWindow.loadUrl('file://' + __dirname + '/electron_build/electron/popup/index.html')
+  popUpWindow.loadUrl('file://' + __dirname + '/browser/popup/index.html')
 
   app.on('activate-with-no-open-windows', function () {
     if (mainWindow == null) {
@@ -237,7 +237,7 @@ app.on('ready', function () {
         }
       })
 
-    mainWindow.loadUrl('file://' + __dirname + '/electron_build/index.html')
+    mainWindow.loadUrl('file://' + __dirname + '/browser/main/index.html')
 
     mainWindow.on('closed', function () {
       console.log('main closed')
