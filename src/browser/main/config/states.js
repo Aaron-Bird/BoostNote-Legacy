@@ -1,6 +1,21 @@
 /* global angular */
 angular.module('codexen')
-  .config(function ($stateProvider, $urlRouterProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $httpProvider) {
+    $httpProvider.interceptors.push(function ($q, $injector) {
+      return {
+        responseError: function (res) {
+          switch (res.status) {
+            case 401:
+              var $state = $injector.get('$state')
+              $state.go('auth.signin')
+              break
+          }
+
+          return $q.reject(res)
+        }
+      }
+    })
+
     $urlRouterProvider
       .when('/auth', '/auth/register')
       .when('/auth/', '/auth/register')
