@@ -1,18 +1,18 @@
 /* global angular */
 angular.module('codexen')
-  .directive('snippetItem', function (Modal, $rootScope) {
+  .directive('recipeItem', function (Modal, $rootScope) {
     return {
       restrict: 'A',
       transclude: true,
       template: '<div ng-transclude></div>',
       scope: {
-        snippet: '=snippetItem'
+        recipe: '=recipeItem'
       },
       link: function (scope, elem) {
         scope.$on('taggingRequested', function (e) {
           e.stopPropagation()
           e.preventDefault()
-          Modal.editSnippet(angular.copy(scope.snippet))
+          Modal.editRecipe(angular.copy(scope.recipe))
         })
       }
     }

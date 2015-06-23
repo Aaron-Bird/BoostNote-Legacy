@@ -2,10 +2,11 @@
 
   <div class="left-pane">
     <div class="snippet-search">
+
       <div class="input-group">
-        <input ng-model="vm.search" ng-change="vm.searchSnippets()" type="text" name="name" class="form-control" placeholder="Search ..." autocomplete="off">
+        <input ng-model="vm.search" ng-change="vm.searchRecipes()" type="text" name="name" class="form-control" placeholder="Search ..." autocomplete="off">
         <span class="input-group-btn">
-          <button btn-new-snippet class="btn btn-default" type="button">
+          <button btn-new-recipe class="btn btn-default" type="button">
             <i class="fa fa-plus-square-o"></i>
           </button>
         </span>
@@ -33,28 +34,25 @@
         <a ui-sref="auth.signin" class="btn btn-default"><i class="fa fa-signin"></i> Sign In</a>
       </li>
 
-      <li snippet-item="snippet" ng-repeat="snippet in vm.filtered" ui-sref="snippets.detail({id:snippet.id})" ng-class="{active:vm.snippetId===snippet.id}">
+      <li recipe-item="recipe" ng-repeat="recipe in vm.filtered" ui-sref="recipes.detail({id:recipe.id})" ng-class="{active:vm.recipeId===recipe.id}">
         <div class="media">
           <div class="media-left">
             <img width="25" height="25" class="img-circle" ng-src="http://www.gravatar.com/avatar/{{ vm.currentUser.email | gravatar }}" alt="" />
           </div>
           <div class="media-body">
-            <p ng-bind="snippet.callSign" class="call-sign">
-            </p>
-            <p ng-bind="snippet.description">
-            </p>
+            <p ng-bind="recipe.title"></p>
             <p class="created-at">
-              <span ng-bind="snippet.updatedAt|fromNow"></span>
+              <span ng-bind="recipe.updatedAt|fromNow"></span>
             </p>
           </div>
         </div>
-        <div tag-list="snippet.Tags"></div>
+        <div tag-list="recipe.Tags"></div>
       </li>
     </ul>
   </div>
 
   <div class="right-pane">
-    <div ng-if="'snippets'|isState">
+    <div ng-if="'recipes'|isState">
       No snippet selected.
     </div>
     <div ui-view></div>

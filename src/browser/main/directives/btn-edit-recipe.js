@@ -1,13 +1,13 @@
 /* global angular */
 angular.module('codexen')
-  .directive('btnEditSnippet', function (Modal) {
+  .directive('btnEditRecipe', function (Modal) {
     return {
       scope: {
-        snippet: '=btnEditSnippet'
+        recipe: '=btnEditRecipe'
       },
       link: function (scope, el) {
         el.on('click', function () {
-          Modal.editSnippet(angular.copy(scope.snippet))
+          Modal.editRecipe(angular.copy(scope.recipe))
         })
       }
     }

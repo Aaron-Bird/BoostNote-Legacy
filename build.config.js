@@ -39,6 +39,10 @@ module.exports = {
     {
       name: 'angular-hotkeys',
       src: 'node_modules/angular-hotkeys/build/hotkeys.js'
+    },
+    {
+      name: 'marked',
+      src: 'node_modules/marked/lib/marked.js'
     }
   ]
 }

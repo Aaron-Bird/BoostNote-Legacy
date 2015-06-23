@@ -31,6 +31,5 @@ angular.module('codexen')
     $scope.$on('userSignOut', function () {
       vm.isAuthenticated = false
       vm.currentUser = null
-
     })
   })

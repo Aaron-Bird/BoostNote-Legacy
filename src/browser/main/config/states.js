@@ -86,4 +86,26 @@ angular.module('codexen')
         }
       })
 
+      /* Recipes */
+      .state('recipes', {
+        url: '/recipes',
+        views: {
+          'main-view': {
+            templateUrl: 'tpls/states/recipes.list.tpl.html',
+            controller: 'RecipesListController as vm'
+          }
+        },
+        resolve: {
+          myRecipes: function (Recipe) {
+            return Recipe.findMine().then(function (res) {
+              return res.data
+            })
+          }
+        }
+      })
+      .state('recipes.detail', {
+        url: '/:id',
+        templateUrl: 'tpls/states/recipes.detail.html',
+        controller: 'RecipesDetailController as vm'
+      })
   })

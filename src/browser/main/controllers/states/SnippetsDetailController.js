@@ -17,11 +17,11 @@ angular.module('codexen')
       e.stopPropagation()
       e.preventDefault()
       Modal.editSnippet(angular.copy(vm.snippet))
-        .result.then(function (snippet) {
-        $rootScope.$broadcast('snippetUpdated', snippet)
-      }, function () {
-        console.log('edit snippet modal dismissed')
-      })
+        .then(function (snippet) {
+          console.log('edited', snippet)
+        }, function () {
+          console.log('edit snippet modal dismissed')
+        })
     })
 
     $scope.$on('snippetUpdated', function (e, snippet) {

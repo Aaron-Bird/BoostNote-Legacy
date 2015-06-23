@@ -42,8 +42,8 @@ gulp.task('styl', function () {
     .pipe(styl())
     .pipe(autoprefixer())
     .pipe(gulp.dest('src'))
-    .pipe(notify('Stylus!!'))
     .pipe(livereload())
+    .pipe(notify('Stylus!!'))
 })
 
 gulp.task('bs', function () {
@@ -57,7 +57,7 @@ gulp.task('bs', function () {
 })
 
 gulp.task('inject', function (cb) {
-  runSequence('inject-main', 'inject-popup', cb)
+  runSequence(['inject-main', 'inject-popup'], cb)
 })
 
 gulp.task('inject-main', function () {
@@ -71,6 +71,13 @@ gulp.task('inject-main', function () {
     .pipe(gulp.dest('src/browser/main/'))
 })
 
+gulp.task('watch-main', function () {
+  gulp.watch(
+    ['src/browser/main/index.inject.html', 'src/browser/main/**/*.js', 'src/browser/main/**/*.css', 'src/browser/shared/**/*.js', 'src/browser/shared/**/*.css'], ['inject-main'])
+
+  gulp.watch('src/**/*.styl', ['styl'])
+  livereload.listen()
+})
 gulp.task('inject-popup', function () {
   return gulp.src('src/browser/popup/index.inject.html')
     .pipe(inject(gulp.src(['src/browser/popup/**/*.js', 'src/browser/popup/**/*.css', 'src/browser/shared/**/*.js', 'src/browser/shared/**/*.css'], {read: false}), {

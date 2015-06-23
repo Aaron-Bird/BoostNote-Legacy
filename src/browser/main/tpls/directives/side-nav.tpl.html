@@ -3,7 +3,7 @@
     <img width="30" class="img-circle" ng-src="http://www.gravatar.com/avatar/{{ vm.currentUser.email | gravatar }}">
     <a href ng-bind="vm.currentUser.name"></a>
     <span class="nav-control-group pull-right">
-      <a ui-sref="settings" class="btn btn-sm btn-default" ui-sref-active="active"}"><i class="fa fa-gears fa-fw"></i></a>
+      <a ui-sref="settings" class="btn btn-sm btn-default" ui-sref-active="active"><i class="fa fa-gears fa-fw"></i></a>
       <a href class="btn btn-sm btn-default" ng-click="vm.signOut()"><i class="fa fa-sign-out fa-fw"></i></a>
     </span>
 
@@ -19,17 +19,27 @@
   </div>
 </div>
 
+<div class="new-block">
+  <div class="btn-group" dropdown>
+     <button btn-new-snippet type="button" class="btn btn-success"><i class="fa fa-plus-square-o fa-fw"></i> New Snippet</button>
+     <button type="button" class="btn btn-success dropdown-toggle" dropdown-toggle>
+       <span class="caret"></span>
+       <span class="sr-only">Split button!</span>
+     </button>
+     <ul class="dropdown-menu success-menu" role="menu">
+       <li><a href btn-new-recipe><i class="fa fa-bookmark-o fa-fw"></i> New Recipe</a></li>
+     </ul>
+   </div>
+</div>
+
 <ul class="nav nav-pills nav-stacked">
-  <li>
-    <a btn-new-snippet href="#"><i class="fa fa-plus-square-o"></i> New Snippet</a>
-  </li>
-  <li class="divider"><hr></li>
-  <li>
+  <li ui-sref-active="active">
+    <a ui-sref="home"><i class="fa fa-home fa-fw"></i> Home</a>
   </li>
   <li ui-sref-active="active">
-    <a ui-sref="home"><i class="fa fa-home"></i> Home</a>
+    <a ui-sref="snippets"><i class="fa fa-code fa-fw"></i> Snippets</a>
   </li>
   <li ui-sref-active="active">
-    <a ui-sref="snippets"><i class="fa fa-code"></i> Snippets</a>
+    <a ui-sref="recipes"><i class="fa fa-bookmark-o fa-fw"></i> Recipes</a>
   </li>
 </ul>

@@ -1,23 +1,19 @@
 /* global angular */
 angular.module('codexen')
-  .controller('EditSnippetModalController', function ($modalInstance, aceModes, $log, Snippet, $rootScope, Tag, snippet) {
+  .controller('NewRecipeModalController', function (Recipe, Tag, $modalInstance) {
     var vm = this
 
-    vm.aceModes = aceModes
-    vm.snippet = snippet
+    vm.content = ''
 
     vm.submit = function () {
       var params = {
-        description: vm.snippet.description,
-        callSign: vm.snippet.callSign,
-        mode: vm.snippet.mode == null ? null : vm.snippet.mode.toLowerCase(),
-        content: vm.snippet.content,
-        Tags: angular.isArray(vm.snippet.Tags) ? vm.snippet.Tags.map(function (tag) { return tag.name }) : []
+        title: vm.title,
+        content: vm.content,
+        Tags: angular.isArray(vm.Tags) ? vm.Tags.map(function (tag) { return tag.name }) : []
       }
-      Snippet.update(vm.snippet.id, params)
+
+      Recipe.create(params)
         .success(function (data) {
-          console.log('updated res :', data)
-          $rootScope.$broadcast('snippetUpdated', snippet)
           $modalInstance.close(data)
         })
     }
@@ -42,4 +38,5 @@ angular.module('codexen')
     vm.cancel = function () {
       $modalInstance.dismiss()
     }
+
   })

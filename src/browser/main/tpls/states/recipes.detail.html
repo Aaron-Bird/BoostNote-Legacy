@@ -1,0 +1,33 @@
+<div class="snippets-detail-state">
+
+  <div class="detail-header">
+    <span class="detail-header-title">
+      <small>callsign</small>
+      <span ng-bind="vm.recipe.title"></span>
+      <small><span ng-bind="vm.recipe.updatedAt|fromNow"></span> <i class="fa fa-clock-o"></i></small>
+    </span>
+    <span class="detail-header-control pull-right">
+      <!-- <button type="button" name="button" class="btn btn-default"><i class="fa fa-share"></i></button> -->
+      <button btn-edit-recipe="vm.recipe" type="button" name="button" class="btn btn-default"><i class="fa fa-edit"></i></button>
+      <button btn-delete-recipe="vm.recipe" type="button" name="button" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+    </span>
+  </div>
+
+  <div class="detail-body">
+
+    <div ng-if="!vm.isLoaded" class="">
+      Loadding
+    </div>
+
+    <div ng-if="vm.isLoaded" class="">
+
+      <div tag-list="vm.recipe.Tags"></div>
+
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <div ng-bind-html="vm.recipe.content | marked"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
