@@ -25,6 +25,19 @@ angular.module('codexen')
       })
     }
 
+    var expandRecipe = function (recipe) {
+      return $modal.open({
+        size: 'lg',
+        resolve: {
+          recipe: function () {
+            return recipe
+          }
+        },
+        templateUrl: 'tpls/modals/expand-recipe-modal.html',
+        controller: 'ExpandRecipeModalController as vm'
+      })
+    }
+
     var deleteRecipe = function (recipe) {
       return $modal.open({
         resolve: {
@@ -77,12 +90,21 @@ angular.module('codexen')
       })
     }
 
+    var selectSnippet = function (snippet) {
+      return $modal.open({
+        templateUrl: 'tpls/modals/select-snippet-modal.html',
+        controller: 'SelectSnippetModalController as vm'
+      }).result
+    }
+
     return {
       newRecipe: newRecipe,
       editRecipe: editRecipe,
       deleteRecipe: deleteRecipe,
+      expandRecipe: expandRecipe,
       newSnippet: newSnippet,
       editSnippet: editSnippet,
-      deleteSnippet: deleteSnippet
+      deleteSnippet: deleteSnippet,
+      selectSnippet: selectSnippet
     }
   })

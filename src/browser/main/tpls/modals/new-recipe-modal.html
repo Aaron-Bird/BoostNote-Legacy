@@ -5,7 +5,7 @@
 
   <div class="modal-body">
     <div class="form-group">
-      <input ng-model="vm.title" type="text" class="form-control" placeholder="Title">
+      <input ng-model="vm.recipe.title" type="text" class="form-control" placeholder="Title">
     </div>
 
   <tabset>
@@ -15,19 +15,13 @@
       </tab-heading>
 
       <div class="form-group">
-        <span>
-          <button class="btn btn-default">Add Snippet</button>
-        </span>
-      </div>
-
-      <div class="form-group">
         <div
           ui-ace="{
             mode: 'Markdown',
             theme: 'solarized_dark',
             useWrapMode: true
           }"
-          ng-model="vm.content"
+          ng-model="vm.recipe.content"
         ></div>
       </div>
     </tab>
@@ -37,14 +31,19 @@
       </tab-heading>
       <div class="panel panel-default">
         <div class="panel-body">
-          <div ng-bind-html="vm.content | marked"></div>
+          <div ng-bind-html="vm.recipe.content | marked" class="marked"></div>
         </div>
       </div>
     </tab>
   </tabset>
 
+  <div class="form-group">
+      <button ng-click="vm.insertSnippet()" class="btn btn-default">Add Snippet</button>
+      <button btn-expand-recipe="vm.recipe" class="btn btn-default">Expand Editor</button>
+  </div>
+
     <div class="form-group">
-      <ui-select multiple tagging="vm.transform" tagging-tokens="SPACE|,|/" ng-model="vm.Tags" theme="bootstrap">
+      <ui-select multiple tagging="vm.transform" tagging-tokens="SPACE|,|/" ng-model="vm.recipe.Tags" theme="bootstrap">
         <ui-select-match placeholder="Tags...">{{$item.name}}</ui-select-match>
         <ui-select-choices repeat="tag in vm.tagCandidates" refresh="vm.refreshTagCandidates($select.search)"
          refresh-delay="100">

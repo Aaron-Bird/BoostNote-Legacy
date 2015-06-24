@@ -1,0 +1,19 @@
+<div class="select-snippet-modal">
+  <div class="modal-header">
+    Select a snippet
+  </div>
+  <div class="modal-body">
+    <ul class="snippet-list">
+      <li ng-repeat="snippet in vm.snippets" ng-click="vm.select(snippet)">
+        <p ng-bind="snippet.callSign"></p>
+        <p ng-bind="snippet.description"></p>
+        <p class="created-at">
+          <span ng-bind="snippet.updatedAt|fromNow"></span>
+        </p>
+      </li>
+    </ul>
+  </div>
+  <div class="modal-footer">
+    <button ng-click="vm.cancel()" class="btn btn-default">Cancel</button>
+  </div>
+</div>

@@ -1,0 +1,14 @@
+<div
+  ui-ace="{
+    showGutter: false,
+    useWrapMode : true,
+    mode:snippet.mode.toLowerCase(),
+    maxLines: -1,
+    theme:'solarized_dark',
+    rendererOptions: {
+        maxLinks: Infinity
+      }
+    }"
+  readonly
+  ng-model="snippet.content"
+  ></div>

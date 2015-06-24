@@ -1,5 +1,30 @@
+.expand-recipe-modal .expand-editor .editor-pane {
+  height: 500px;
+}
+.expand-recipe-modal .expand-editor .editor-pane .ace_editor {
+  height: 500px;
+}
+.expand-recipe-modal .expand-editor .preview-pane {
+  height: 500px;
+  overflow-y: auto;
+}
 .new-snippet-modal .ace_editor {
   height: 200px;
+}
+.select-snippet-modal .snippet-list {
+  list-style: none;
+  padding: 0;
+}
+.select-snippet-modal .snippet-list li {
+  padding: 10px;
+  border: solid 1px #001a20;
+  background-color: #003b4a;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  cursor: pointer;
+}
+.select-snippet-modal .snippet-list li:hover {
+  background-color: #004b5f;
 }
 #side-view .nav-control-group {
   margin: auto 10px;
@@ -401,4 +426,103 @@ body > .ui-select-bootstrap.open {
   overflow-x: hidden;
   overflow-y: auto;
   background-color: $bgDarker;
+}
+.marked h1,
+.marked h2,
+.marked h3,
+.marked h4,
+.marked h5 {
+  margin: 0.75em 0;
+}
+.marked h1:nth-child(1),
+.marked h2:nth-child(1),
+.marked h3:nth-child(1),
+.marked h4:nth-child(1),
+.marked h5:nth-child(1) {
+  margin-top: 0;
+}
+.marked code {
+  background-color: #003644;
+  color: #fff;
+  border: 1px solid #001a20;
+  border-radius: 5px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+  padding: 5px;
+  line-height: 200%;
+}
+.marked pre {
+  margin-bottom: 10px;
+  background-color: #003644;
+  color: #fff;
+  border: 1px solid #001a20;
+  border-radius: 5px;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.05);
+  padding: 5px;
+}
+.marked pre >code {
+  background-color: transparent;
+  color: inherit;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  line-height: inherit;
+}
+.marked blockquote {
+  font-size: 1em;
+  border-left: 5px solid #6494ed;
+}
+.marked a {
+  text-decoration: underline;
+  color: #6494ed;
+}
+.marked table {
+  width: 100%;
+  max-width: 100%;
+  margin-bottom: $line-height-computed;
+  border: 1px solid #001a20;
+  margin-bottom: 10px;
+}
+.marked table > thead > tr > th,
+.marked table > tbody > tr > th,
+.marked table > tfoot > tr > th,
+.marked table > thead > tr > td,
+.marked table > tbody > tr > td,
+.marked table > tfoot > tr > td {
+  padding: 10px;
+  line-height: $line-height-base;
+  vertical-align: top;
+  border-top: 1px solid #001a20;
+  border-right: 1px solid #001a20;
+}
+.marked table > thead > tr > th:nth-last-child(1),
+.marked table > tbody > tr > th:nth-last-child(1),
+.marked table > tfoot > tr > th:nth-last-child(1),
+.marked table > thead > tr > td:nth-last-child(1),
+.marked table > tbody > tr > td:nth-last-child(1),
+.marked table > tfoot > tr > td:nth-last-child(1) {
+  border-right: none;
+}
+.marked table > thead > tr > th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #001a20;
+}
+.marked table > caption + thead,
+.marked table > colgroup + thead,
+.marked table > thead:first-child {
+  background-color: #004b5f;
+}
+.marked table > caption + thead > tr:first-child > th,
+.marked table > colgroup + thead > tr:first-child > th,
+.marked table > thead:first-child > tr:first-child > th,
+.marked table > caption + thead > tr:first-child > td,
+.marked table > colgroup + thead > tr:first-child > td,
+.marked table > thead:first-child > tr:first-child > td {
+  border-top: 0;
+}
+.marked table > tbody >tr:nth-child(odd) {
+  background-color: #002b36;
+}
+.marked table > tbody >tr:nth-child(even) {
+  background-color: #003644;
 }

@@ -8,8 +8,8 @@ angular.module('codexen')
       link: function (scope, el) {
         el.on('click', function () {
           Modal.deleteSnippet(scope.snippet)
-            .result.then(function (snippet) {
-              $rootScope.$broadcast('snippetDeleted', snippet)
+            .then(function (snippet) {
+              console.log('deleted', snippet)
             }, function () {
               console.log('delete snippet modal dismissed')
             })

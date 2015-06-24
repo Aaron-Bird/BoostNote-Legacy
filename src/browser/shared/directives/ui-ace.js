@@ -338,6 +338,49 @@ angular.module('ui.ace', [])
           acee.focus()
         })
 
+        scope.$on('insertRequested', function (e, req) {
+          var cursor = acee.selection.getCursor()
+          var str = ''
+          if (cursor.column > 0) str += '\n\n'
+
+          switch (req) {
+            case 'h1':
+              acee.insert(str + '# some heading\n\n')
+              break
+            case 'ul':
+              acee.insert(str + '- item1\n- item2\n- item3')
+              break
+            case 'ol':
+              acee.insert(str + '1. item1\n2. item2\n3. item3')
+              break
+            case 'a':
+              acee.insert(str + '[example.com](http://example.com)')
+              break
+            case 'table':
+              acee.insert(str +
+                'First Header  | Second Header\n' +
+                '------------- | -------------\n' +
+                'Content Cell  | Content Cell\n' +
+                'Content Cell  | Content Cell\n')
+          }
+
+          scope.$evalAsync(function () {
+            ngModel.$setViewValue(session.getValue())
+          })
+        })
+
+        scope.$on('insertSnippetRequested', function (e, snippet) {
+          var cursor = acee.selection.getCursor()
+          var str = ''
+          if (cursor.column > 0) str += '\n\n'
+
+          acee.insert(str + '```\n' + snippet.content + '\n```\n[snippet:' + snippet.id + '](#/snippets/' + snippet.id + ')\n')
+
+          scope.$evalAsync(function () {
+            ngModel.$setViewValue(session.getValue())
+          })
+        })
+
       }
     }
   }])

@@ -37,21 +37,21 @@ gulp.task('vendor', function () {
 })
 
 gulp.task('styl', function () {
-  return gulp.src('src/**/app.styl')
+  return gulp.src('src/browser/main/styles/app.styl')
     .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
     .pipe(styl())
     .pipe(autoprefixer())
-    .pipe(gulp.dest('src'))
+    .pipe(gulp.dest('src/browser/main/styles/'))
     .pipe(livereload())
     .pipe(notify('Stylus!!'))
 })
 
 gulp.task('bs', function () {
-  return gulp.src('src/**/bootstrap.styl')
+  return gulp.src('src/browser/shared/styles/bootstrap.styl')
     .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
     .pipe(styl())
     .pipe(autoprefixer())
-    .pipe(gulp.dest('src'))
+    .pipe(gulp.dest('src/browser/shared/styles'))
     .pipe(notify('Bootstrap compiled!!'))
     .pipe(livereload())
 })
@@ -75,7 +75,8 @@ gulp.task('watch-main', function () {
   gulp.watch(
     ['src/browser/main/index.inject.html', 'src/browser/main/**/*.js', 'src/browser/main/**/*.css', 'src/browser/shared/**/*.js', 'src/browser/shared/**/*.css'], ['inject-main'])
 
-  gulp.watch('src/**/*.styl', ['styl'])
+  gulp.watch('src/browser/main/styles/**/*.styl', ['styl'])
+  gulp.watch('src/browser/shared/styles/**/*.styl', ['bs'])
   livereload.listen()
 })
 gulp.task('inject-popup', function () {

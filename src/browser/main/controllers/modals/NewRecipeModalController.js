@@ -3,13 +3,13 @@ angular.module('codexen')
   .controller('NewRecipeModalController', function (Recipe, Tag, $modalInstance) {
     var vm = this
 
-    vm.content = ''
+    vm.recipe = {}
 
     vm.submit = function () {
       var params = {
-        title: vm.title,
-        content: vm.content,
-        Tags: angular.isArray(vm.Tags) ? vm.Tags.map(function (tag) { return tag.name }) : []
+        title: vm.recipe.title,
+        content: vm.recipe.content,
+        Tags: angular.isArray(vm.recipe.Tags) ? vm.recipe.Tags.map(function (tag) { return tag.name }) : []
       }
 
       Recipe.create(params)

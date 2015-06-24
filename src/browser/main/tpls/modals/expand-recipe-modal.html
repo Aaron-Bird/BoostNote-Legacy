@@ -1,0 +1,37 @@
+<div class="expand-recipe-modal">
+  <div class="modal-header">
+    <button ng-click="vm.insert('h1')" class="btn btn-default"><i class="fa fa-header fa-fw"></i></button>
+    <button ng-click="vm.insert('ul')" class="btn btn-default"><i class="fa fa-list-ul fa-fw"></i></button>
+    <button ng-click="vm.insert('ol')" class="btn btn-default"><i class="fa fa-list-ol fa-fw"></i></button>
+    <button ng-click="vm.insert('a')" class="btn btn-default"><i class="fa fa-link fa-fw"></i></button>
+    <button ng-click="vm.insert('table')" class="btn btn-default"><i class="fa fa-table fa-fw"></i></button>
+    <button ng-click="vm.insertSnippet()" class="btn btn-default">Insert Snippet</button>
+  </div>
+  <div class="modal-body">
+    <div class="container-fluid expand-editor">
+      <div class="row">
+        <div class="col-xs-6 editor-pane">
+          <div
+            ui-ace="{
+              mode: 'Markdown',
+              theme: 'solarized_dark',
+              useWrapMode: true
+            }"
+            ng-model="vm.recipe.content"
+          ></div>
+        </div>
+
+        <div class="col-xs-6">
+          <div class="panel panel-default preview-pane">
+            <div class="panel-body">
+              <div ng-bind-html="vm.recipe.content | marked" class="marked"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-default" ng-click="vm.cancel()">Close</button>
+  </div>
+</div>

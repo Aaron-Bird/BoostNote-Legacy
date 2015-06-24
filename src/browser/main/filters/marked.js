@@ -12,7 +12,8 @@ angular.module('codexen')
       smartypants: false
     })
 
-    return function(input) {
+    return function (input) {
+      if (!angular.isString(input)) input = ''
       return marked(input)
     }
   })
