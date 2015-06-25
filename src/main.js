@@ -87,16 +87,14 @@ app.on('ready', function () {
 
   var fromMain
   // Register a 'ctrl+x' shortcut listener.
-  var ret = globalShortcut.register('ctrl+tab+shift', function () {
+  globalShortcut.register('ctrl+tab+shift', function () {
     if (popUpWindow.isVisible()) {
       hidePopUp()
       return
     }
     fromMain = mainWindow ? mainWindow.isFocused() : false
     popUpWindow.show()
-
   })
-  if (!ret) console.log('registerion fails')
 
   // MENU
   var Menu = require('menu')

@@ -46,6 +46,16 @@ gulp.task('styl', function () {
     .pipe(notify('Stylus!!'))
 })
 
+gulp.task('styl-popup', function () {
+  return gulp.src('src/browser/popup/styles/app.styl')
+    .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
+    .pipe(styl())
+    .pipe(autoprefixer())
+    .pipe(gulp.dest('src/browser/popup/styles/'))
+    .pipe(livereload())
+    .pipe(notify('Stylus!! @POPUP'))
+})
+
 gulp.task('bs', function () {
   return gulp.src('src/browser/shared/styles/bootstrap.styl')
     .pipe(plumber({errorHandler: notify.onError('Error: <%= error.message %>')}))
@@ -76,6 +86,7 @@ gulp.task('watch-main', function () {
     ['src/browser/main/index.inject.html', 'src/browser/main/**/*.js', 'src/browser/main/**/*.css', 'src/browser/shared/**/*.js', 'src/browser/shared/**/*.css'], ['inject-main'])
 
   gulp.watch('src/browser/main/styles/**/*.styl', ['styl'])
+  gulp.watch('src/browser/popup/styles/**/*.styl', ['styl-popup'])
   gulp.watch('src/browser/shared/styles/**/*.styl', ['bs'])
   livereload.listen()
 })

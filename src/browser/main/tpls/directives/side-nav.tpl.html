@@ -21,8 +21,8 @@
 
 <div class="new-block">
   <div class="btn-group" dropdown>
-     <button btn-new-snippet type="button" class="btn btn-success"><i class="fa fa-plus-square-o fa-fw"></i> New Snippet</button>
-     <button type="button" class="btn btn-success dropdown-toggle" dropdown-toggle>
+     <button ng-disabled="!vm.isAuthenticated" btn-new-snippet type="button" class="btn btn-success"><i class="fa fa-plus-square-o fa-fw"></i> New Snippet</button>
+     <button ng-disabled="!vm.isAuthenticated" type="button" class="btn btn-success dropdown-toggle" dropdown-toggle>
        <span class="caret"></span>
        <span class="sr-only">Split button!</span>
      </button>

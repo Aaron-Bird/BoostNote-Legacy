@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../vendor/css/font-awesome.css" media="screen" title="no title" charset="utf-8">
 
     <!-- inject:css -->
+    <link rel="stylesheet" href="styles/app.css">
     <link rel="stylesheet" href="../shared/styles/bootstrap.css">
     <!-- endinject -->
 
@@ -25,14 +26,12 @@
 
     <div class="result-block row-fluid">
       <ul id="result-list" class="result-list left-pane">
-        <li ng-click="selectSnippet($index)" ng-repeat="snippet in filteredSnippets" ng-class="{active:$index == selectIndex}"><a href="#"> <span ng-bind="snippet.callSign"></span> <small ng-bind="snippet.description"></small></a></li>
+        <li ng-click="selectSnippet($index)" ng-repeat="snippet in filteredSnippets" ng-class="{active:$index == selectIndex}"><a href="#"> <small ng-bind="snippet.callSign"></small>&nbsp;/&nbsp;<span ng-bind="snippet.description"></span></a></li>
       </ul>
 
       <div class="right-pane">
         <div class="result-detail-control">
           <button ng-click="writeCode(selectedItem.content)" id="btnClipboard" type="button" name="button" class="btn btn-default"><i class="fa fa-clipboard"></i></button>
-          <!-- <button ng-click="editSnippet(selectedItem.id)" id="btnEdit" type="button" name="button" class="btn btn-default"><i class="fa fa-edit"></i></button> -->
-          <!-- <button id="btnShare" type="button" name="button" class="btn btn-default"><i class="fa fa-share"></i></button> -->
         </div>
         <div id="aceView" class="result-detail-content"
           ui-ace="{
