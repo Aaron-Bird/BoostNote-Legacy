@@ -21,6 +21,25 @@ var minifyHtml = require('gulp-minify-html')
 
 var config = require('./build.config.js')
 
+gulp.task('build', function () {
+  var tpls = gulp.src(['src/browser/main/**/*.html','!src/browser/main/index.html','!src/browser/main/index.inject.html'])
+    .pipe(templateCache({}))
+    .pipe(concat('tpls.js'))
+    .pipe(ngAnnotate())
+    .pipe(uglify())
+    .pipe(gulp.dest('build'))
+  var js = gulp.src(['src/browser/main/**/*.js', 'src/browser/shared/**/*.js'])
+    .pipe(concat('app.js'))
+    .pipe(ngAnnotate())
+    .pipe(uglify())
+    .pipe(gulp.dest('build'))
+  var css = gulp.src(['src/browser/main/**/*.css', 'src/browser/shared/**/*.css'])
+    .pipe(concat('all.css'))
+    .pipe(minifyCss())
+    .pipe(gulp.dest('build'))
+  return merge(tpls, js, css)
+})
+
 gulp.task('vendor', function () {
   var vendors = config.vendors
 

@@ -2,7 +2,7 @@
 angular.module('codexen')
   .factory('Recipe', function ($http, $auth, apiUrl) {
     var findByUser = function (user) {
-      var url = apiUrl + 'recipes/search'
+      var url = apiUrl + 'blueprints/search'
 
       return $http.get(url, {
         params: {
@@ -12,31 +12,31 @@ angular.module('codexen')
     }
 
     var findMine = function (params) {
-      var url = apiUrl + 'recipes/my'
+      var url = apiUrl + 'blueprints/my'
 
       return $http.get(url, {params: params})
     }
 
     var create = function (params) {
-      var url = apiUrl + 'recipes/create'
+      var url = apiUrl + 'blueprints/create'
 
       return $http.post(url, params)
     }
 
     var show = function (id, params) {
-      var url = apiUrl + 'recipes/id/' + id
+      var url = apiUrl + 'blueprints/id/' + id
 
       return $http.get(url, {params: params})
     }
 
     var update = function (id, params) {
-      var url = apiUrl + 'recipes/id/' + id
+      var url = apiUrl + 'blueprints/id/' + id
 
       return $http.put(url, params)
     }
 
     var destroy = function (id) {
-      var url = apiUrl + 'recipes/id/' + id
+      var url = apiUrl + 'blueprints/id/' + id
 
       return $http.delete(url)
     }
