@@ -1,6 +1,6 @@
 /* global angular */
 angular.module('codexen')
-  .controller('SideNavController', function ($auth, User, $rootScope, $scope) {
+  .controller('SideNavController', function ($auth, User, $rootScope, $scope, Modal) {
     var vm = this
 
     vm.isAuthenticated = $auth.isAuthenticated()
@@ -16,11 +16,7 @@ angular.module('codexen')
     reloadUser()
 
     vm.signOut = function () {
-      $auth.logout()
-        .then(function () {
-          console.log('Sign Out')
-          $rootScope.$broadcast('userSignOut')
-        })
+      Modal.signOut()
     }
 
     $scope.$on('userSignIn', function () {

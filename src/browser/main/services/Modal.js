@@ -1,6 +1,19 @@
 /* global angular */
 angular.module('codexen')
-  .factory('Modal', function ($modal, $rootScope) {
+  .factory('Modal', function ($modal, $rootScope, $auth) {
+    var signOut = function () {
+      return $modal.open({
+        templateUrl: 'tpls/modals/sign-out-modal.html',
+        controller: 'SignOutModalController as vm'
+      }).result.then(function () {
+        $auth.logout()
+          .then(function () {
+            console.log('Sign Out')
+            $rootScope.$broadcast('userSignOut')
+          })
+      })
+    }
+
     /* Recipe */
     var newRecipe = function () {
       return $modal.open({
@@ -98,6 +111,7 @@ angular.module('codexen')
     }
 
     return {
+      signOut: signOut,
       newRecipe: newRecipe,
       editRecipe: editRecipe,
       deleteRecipe: deleteRecipe,

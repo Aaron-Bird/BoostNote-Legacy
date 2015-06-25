@@ -274,6 +274,15 @@ body > .ui-select-bootstrap.open {
 .home-state {
   padding: 10px;
 }
+.home-state p {
+  margin: 5px auto 15px;
+}
+.home-state ol {
+  margin: 35px auto;
+}
+.home-state li {
+  margin-bottom: 25px;
+}
 .settings-state .panel {
   margin-top: 15px;
 }
