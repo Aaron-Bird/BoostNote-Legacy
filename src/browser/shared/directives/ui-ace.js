@@ -374,7 +374,7 @@ angular.module('ui.ace', [])
           var str = ''
           if (cursor.column > 0) str += '\n\n'
 
-          acee.insert(str + '```\n' + snippet.content + '\n```\n[snippet:' + snippet.id + '](#/snippets/' + snippet.id + ')\n')
+          acee.insert(str + '```\n' + snippet.content + '\n```\n> [snippet#' + snippet.id + '](#/snippets/' + snippet.id + ')\n\n')
 
           scope.$evalAsync(function () {
             ngModel.$setViewValue(session.getValue())

@@ -5,11 +5,17 @@
   <div class="modal-body">
     <ul class="snippet-list">
       <li ng-repeat="snippet in vm.snippets" ng-click="vm.select(snippet)">
-        <p ng-bind="snippet.callSign"></p>
+        <p><small>callsign</small> <span ng-bind="snippet.callSign"></span> <small ng-bind="snippet.updatedAt|fromNow" class="call-sign"></small></p>
         <p ng-bind="snippet.description"></p>
-        <p class="created-at">
-          <span ng-bind="snippet.updatedAt|fromNow"></span>
-        </p>
+
+        <div ui-ace="{
+          showGutter: true,
+          useWrapMode : true,
+          mode:snippet.mode.toLowerCase(),
+          theme:'solarized_dark'
+        }"
+        readonly
+        ng-model="snippet.content"></div>
       </li>
     </ul>
   </div>

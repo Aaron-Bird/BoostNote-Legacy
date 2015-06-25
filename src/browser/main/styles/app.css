@@ -26,6 +26,12 @@
 .select-snippet-modal .snippet-list li:hover {
   background-color: #004b5f;
 }
+.select-snippet-modal .snippet-list li .ace_editor {
+  height: 150px;
+}
+.select-snippet-modal .snippet-list li .call-sign {
+  color: #d5dfe2;
+}
 #side-view .nav-control-group {
   margin: auto 10px;
 }

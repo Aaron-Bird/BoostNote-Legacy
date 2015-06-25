@@ -89,7 +89,7 @@ angular.module('codexen')
     }
 
     function searchRecipes () {
-      vm.filtered = $filter('filter')(myRecipes, vm.search)
+      vm.filtered = $filter('searchSnippets')(myRecipes, vm.search)
       if (vm.search && vm.filtered && vm.filtered[0] && (!vm.recipeId || vm.recipeId !== vm.filtered[0].id)) {
         $state.go('recipes.detail', {id: vm.filtered[0].id})
       }
