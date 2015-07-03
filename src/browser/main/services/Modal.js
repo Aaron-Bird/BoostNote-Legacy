@@ -1,6 +1,27 @@
 /* global angular */
 angular.module('codexen')
   .factory('Modal', function ($modal, $rootScope, $auth) {
+    var showAgreement = function () {
+      return $modal.open({
+        templateUrl: 'tpls/modals/regulation.html',
+        controller: 'AgreementModalController as vm'
+      }).result
+    }
+
+    var showRegulation = function () {
+      return $modal.open({
+        templateUrl: 'tpls/modals/regulation.html',
+        controller: 'PPModalController as vm'
+      })
+    }
+
+    var showPP = function () {
+      return $modal.open({
+        templateUrl: 'tpls/modals/pp.html',
+        controller: 'PPModalController as vm'
+      })
+    }
+
     var signOut = function () {
       return $modal.open({
         templateUrl: 'tpls/modals/sign-out-modal.html',
@@ -111,6 +132,9 @@ angular.module('codexen')
     }
 
     return {
+      showAgreement: showAgreement,
+      showRegulation: showRegulation,
+      showPP: showPP,
       signOut: signOut,
       newRecipe: newRecipe,
       editRecipe: editRecipe,

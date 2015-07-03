@@ -80,6 +80,11 @@
 #side-view ul.nav.nav-pills .nav-pills > li.active > a:focus {
   background-color: #004b5f;
 }
+.botlink {
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+}
 /*
  * ui-select
  * http://github.com/angular-ui/ui-select
@@ -540,4 +545,8 @@ body > .ui-select-bootstrap.open {
 }
 .marked table > tbody >tr:nth-child(even) {
   background-color: #003644;
+}
+.short {
+  height: 500px;
+  overflow-y: auto;
 }

@@ -5,6 +5,9 @@ angular.module('codexen')
 
     vm.isAuthenticated = $auth.isAuthenticated()
 
+    vm.showPP = Modal.showPP
+    vm.showRegulation = Modal.showRegulation
+
     var reloadUser = function () {
       if (vm.isAuthenticated) {
         User.me().success(function (data) {
