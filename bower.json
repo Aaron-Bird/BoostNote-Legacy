@@ -1,0 +1,8 @@
+{
+  "name": "codexen-app",
+  "dependencies": {
+    "react": "~0.13.3",
+    "fontawesome": "~4.3.0",
+    "react-router": "~0.13.3"
+  }
+}

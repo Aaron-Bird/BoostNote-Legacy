@@ -1,0 +1,53 @@
+.SnippetContainer
+  fullsize()
+  .tags
+    a
+      margin 0 2px
+  .SnippetList
+    absolute top bottom left
+    width 250px
+    border-right solid 1px highlightenBorderColor
+    .search
+      border-bottom solid 1px borderColor
+      padding 5px
+      margin 0
+
+    &>ul
+      absolute bottom left right
+      top 44px
+      overflow-y auto
+      li
+        border-bottom solid 1px borderColor
+        padding 10px
+        cursor pointer
+        .callSign
+          margin-bottom 5px
+          font-weight 600
+        .description
+          margin-bottom 5px
+        .updatedAt
+          margin-bottom 5px
+          color lighten(textColor, 25%)
+          font-size 0.8em
+        &:hover, &.hover
+          background-color hoverBackgroundColor
+
+  .SnippetViewer
+    absolute top bottom right
+    left 250px
+    .viewer-header
+      height 44px
+      line-height 44px
+      padding 0 15px
+      border-bottom solid 1px borderColor
+      box-sizing border-box
+      small
+        font-size 0.5em
+    .viewer-body
+      absolute bottom left right
+      top 44px
+      .viewer-detail
+        border-bottom solid 1px borderColor
+        padding 10px
+        .description
+          margin-bottom 15px

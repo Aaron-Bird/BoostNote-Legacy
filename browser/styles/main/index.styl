@@ -1,0 +1,104 @@
+@import '../../../node_modules/nib/lib/nib'
+@import '../vars'
+@import '../mixins/*'
+global-reset()
+@import '../shared/*'
+@import './components/*'
+@import './containers/*'
+
+body
+  font-family "Lato"
+  color textColor
+
+h1
+  font-size 2em
+h2
+  font-size 1.5em
+h3
+  font-size 1.3em
+h4
+  font-size 1.15em
+a
+  color brandColor
+  &:visited{
+    color brandColor
+  }
+
+hr
+  border-top none
+  border-bottom solid 1px borderColor
+  margin 25px 0
+
+.text-center
+  text-align center
+
+.form-group
+  margin-bottom 15px
+  &>label
+    display block
+    margin-bottom 5px
+  &>input[type='text'], &>input[type='password']
+    display block
+    border solid 2px borderColor
+    padding 0 15px
+    font-size 1em
+    height 33px
+    border-radius 16.5px
+    box-sizing border-box
+    width 100%
+
+
+#content
+  fullsize()
+
+.LoginContainer, .RegisterContainer
+  width 400px
+  margin 15px auto
+  padding 25px 15px
+  box-sizing border-box
+  h1, h2
+    margin 5px auto 25px
+
+.PlanetNavigator
+  background-color #032B35
+  color white
+  absolute left top bottom
+  width 50px
+  text-align center
+  box-sizing border-box
+  ul>li
+    padding 10px 3px
+    border-bottom solid 1px invBorderColor
+    &.active
+      background-color brandColor
+      a
+        background-color white
+    a
+      display block
+      width 44px
+      height 44px
+      text-align center
+      background-color #4D4D4D
+      color black
+      line-height 44px
+      font-size 1.1em
+      cursor pointer
+      circle()
+      transition 0.1s
+      &:hover, &:active
+        background-color white
+    img
+      circle()
+      width 44px
+      height 44px
+
+.PlanetContainer
+  fullsize()
+.PlanetMain
+  absolute top bottom right
+  left 50px
+
+
+.Screen
+  absolute top bottom right
+  left 200px
