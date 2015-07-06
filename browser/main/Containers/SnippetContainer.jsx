@@ -1,5 +1,6 @@
 var React = require('react/addons')
 var Snippet = require('../Services/Snippet')
+var CodeViewer = require('../Components/CodeViewer')
 
 var SnippetList = React.createClass({
   propTypes: {
@@ -8,7 +9,6 @@ var SnippetList = React.createClass({
   },
   itemClickHandlerFactory: function (snippet) {
     return function () {
-      console.log(this.props.selectSnippet)
       this.props.selectSnippet(snippet)
     }.bind(this)
   },
@@ -55,13 +55,21 @@ var SnippetViewer = React.createClass({
       })
       content = (
         <div className='SnippetViewer'>
-          <div className='viewer-header'><i className='fa fa-code'></i> {snippet.callSign} <small className='updatedAt'>{snippet.updatedAt}</small></div>
+          <div className='viewer-header'>
+            <i className='fa fa-code'></i> {snippet.callSign} <small className='updatedAt'>{snippet.updatedAt}</small>
+            <span className='control-group'>
+              <button className='btn-default btn-square btn-sm'><i className='fa fa-edit fa-fw'></i></button>
+              <button className='btn-default btn-square btn-sm'><i className='fa fa-trash fa-fw'></i></button>
+            </span>
+          </div>
           <div className='viewer-body'>
             <div className='viewer-detail'>
               <div className='description'>{snippet.description}</div>
               <div className='tags'><i className='fa fa-tags'/>{tags}</div>
             </div>
-            <div>{snippet.content}</div>
+            <div className='content'>
+              <CodeViewer code={snippet.content} mode={snippet.mode}/>
+            </div>
           </div>
         </div>
       )

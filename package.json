@@ -30,8 +30,6 @@
   },
   "homepage": "https://github.com/Rokt33r/codexen-app#readme",
   "dependencies": {
-    "@rokt33r/ace-builds": "^1.1.9",
-    "del": "^1.2.0",
     "dotenv": "^1.1.0",
     "marked": "^0.3.3",
     "moment": "^2.10.3",

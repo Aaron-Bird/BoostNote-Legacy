@@ -17,6 +17,10 @@ module.exports = {
       {
         test: /\.styl$/,
         loader: 'style-loader!css-loader!stylus-loader'
+      },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader'
       }
     ]
   },
@@ -25,7 +29,8 @@ module.exports = {
     //but get it from a global 'React' variable
     'react': 'React',
     'react/addons': 'React',
-    'react-router': 'ReactRouter'
+    'react-router': 'ReactRouter',
+    'ace': 'ace'
   },
   resolve: {
     extensions: ['', '.js', '.jsx']

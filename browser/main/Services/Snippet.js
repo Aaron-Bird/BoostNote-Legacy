@@ -18,7 +18,7 @@ var snippets = {
       callSign: 'log',
       description: 'javascript log',
       content: 'console.log(\'yolo\')',
-      mode: 'js',
+      mode: 'javascript',
       createdAt: '2015-06-26T15:10:59.000Z',
       updatedAt: '2015-06-26T15:10:59.000Z',
       UserId: 1,
