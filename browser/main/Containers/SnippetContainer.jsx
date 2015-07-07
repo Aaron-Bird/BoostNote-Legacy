@@ -5,7 +5,8 @@ var CodeViewer = require('../Components/CodeViewer')
 var SnippetList = React.createClass({
   propTypes: {
     snippets: React.PropTypes.array,
-    selectSnippet: React.PropTypes.func
+    selectSnippet: React.PropTypes.func,
+    currentSnippet: React.PropTypes.object
   },
   itemClickHandlerFactory: function (snippet) {
     return function () {
@@ -20,7 +21,7 @@ var SnippetList = React.createClass({
         )
       })
       return (
-        <li key={snippet.id} onClick={this.itemClickHandlerFactory(snippet)}>
+        <li className={this.props.currentSnippet.id === snippet.id ? 'active' : ''} key={snippet.id} onClick={this.itemClickHandlerFactory(snippet)}>
           <div className='callSign'><i className='fa fa-code'></i> {snippet.callSign}</div>
           <div className='description'>{snippet.description}</div>
           <div className='updatedAt'>{snippet.updatedAt}</div>
