@@ -2,6 +2,8 @@ var React = require('react/addons')
 var RouteHandler = require('react-router').RouteHandler
 var ReactRouter = require('react-router')
 var Link = ReactRouter.Link
+var ModalBase = require('../Components/ModalBase')
+var LaunchModal = require('../Components/LaunchModal')
 
 var userPlanets = [
   {
@@ -62,6 +64,22 @@ var SideNavigator = React.createClass({
       name: React.PropTypes.string
     })
   },
+  getInitialState: function () {
+    return {
+      isLaunchModalOpen: false
+    }
+  },
+  openLaunchModal: function () {
+    console.log('and...OPEN!!')
+    this.setState({isLaunchModalOpen: true})
+  },
+  closeLaunchModal: function () {
+    this.setState({isLaunchModalOpen: false})
+  },
+  submitLaunchModal: function (ret) {
+    console.log(ret)
+    this.setState({isLaunchModalOpen: false})
+  },
   render: function () {
     var currentPlanetName = this.props.currentPlanet.name
 
@@ -73,9 +91,12 @@ var SideNavigator = React.createClass({
             <i className='fa fa-chevron-down'></i>
           </button>
         </div>
-        <button className='btn-primary btn-block'>
+        <button onClick={this.openLaunchModal} className='btn-primary btn-block'>
           <i className='fa fa-rocket fa-fw'/> Launch
         </button>
+        <ModalBase isOpen={this.state.isLaunchModalOpen} close={this.closeLaunchModal}>
+          <LaunchModal submit={this.submitLaunchModal} close={this.closeLaunchModal}/>
+        </ModalBase>
         <nav>
           <Link to='dashboard' params={{planetName: currentPlanetName}}>
             <i className='fa fa-home fa-fw'/> Home

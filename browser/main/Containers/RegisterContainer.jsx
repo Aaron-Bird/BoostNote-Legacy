@@ -30,20 +30,20 @@ module.exports = React.createClass({
         <form onSubmit={this.handleSubmit}>
           <div className='form-group'>
             <label>E-mail</label>
-            <input valueLink={this.linkState('email')} type='text' placeholder='E-mail'/>
+            <input className='block-input' valueLink={this.linkState('email')} type='text' placeholder='E-mail'/>
           </div>
           <div className='form-group'>
             <label>Password</label>
-            <input valueLink={this.linkState('password')} type='password' placeholder='Password'/>
+            <input className='block-input' valueLink={this.linkState('password')} type='password' placeholder='Password'/>
           </div>
           <hr></hr>
           <div className='form-group'>
             <label>User name</label>
-            <input valueLink={this.linkState('name')} type='text' placeholder='name'/>
+            <input className='block-input' valueLink={this.linkState('name')} type='text' placeholder='name'/>
           </div>
           <div className='form-group'>
             <label>Profile name</label>
-            <input valueLink={this.linkState('profileName')} type='text' placeholder='Profile name'/>
+            <input className='block-input' valueLink={this.linkState('profileName')} type='text' placeholder='Profile name'/>
           </div>
           <div className='form-group'>
             <button className='btn-primary btn-block' type='submit'><i className='fa fa-sign-in'></i> Register</button>

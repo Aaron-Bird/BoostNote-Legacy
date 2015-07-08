@@ -1,0 +1,30 @@
+.ModalBase
+  fixed top left right bottom
+  z-index 1000
+  overflow-y auto
+  overflow-x auto
+  background-color transparentify(black, 35%)
+  &.hide
+    display none
+  .modal
+    width 500px
+    margin 25px auto 0
+    absolute top left right
+    background-color white
+    border-radius 10px
+    padding 15px
+    .modal-body
+      .modal-tab
+        text-align center
+    .modal-footer
+      clearfix()
+      border-top solid 1px borderColor
+      padding-top 15px
+      .modal-control
+        float right
+
+  .launch-modal
+    .ace_editor
+      height 300px
+      border-radius 5px
+      border solid 1px borderColor

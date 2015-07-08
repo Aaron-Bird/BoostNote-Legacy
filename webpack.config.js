@@ -30,7 +30,8 @@ module.exports = {
     'react': 'React',
     'react/addons': 'React',
     'react-router': 'ReactRouter',
-    'ace': 'ace'
+    'ace': 'ace',
+    'reflux': 'Reflux'
   },
   resolve: {
     extensions: ['', '.js', '.jsx']

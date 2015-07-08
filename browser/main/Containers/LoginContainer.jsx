@@ -28,11 +28,11 @@ module.exports = React.createClass({
         <form onSubmit={this.handleSubmit}>
           <div className='form-group'>
             <label>E-mail</label>
-            <input valueLink={this.linkState('email')} type='text' placeholder='E-mail'/>
+            <input className='block-input' valueLink={this.linkState('email')} type='text' placeholder='E-mail'/>
           </div>
           <div className='form-group'>
             <label>Password</label>
-            <input valueLink={this.linkState('password')} onChange={this.handleChange} type='password' placeholder='Password'/>
+            <input className='block-input' valueLink={this.linkState('password')} onChange={this.handleChange} type='password' placeholder='Password'/>
           </div>
           <div className='form-group'>
             <button className='btn-primary btn-block' type='submit'><i className='fa fa-sign-in'></i> Login</button>

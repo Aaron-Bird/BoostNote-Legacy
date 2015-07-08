@@ -32,7 +32,7 @@ var SnippetList = React.createClass({
 
     return (
       <div className='SnippetList'>
-        <div className='search form-group'><input type='text' placeholder='Search...'/></div>
+        <div className='search'><input className='block-input' type='text' placeholder='Search...'/></div>
         <ul>
           {snippets}
         </ul>
@@ -106,10 +106,58 @@ var SnippetContainer = React.createClass({
   selectSnippet: function (snippet) {
     this.setState({currentSnippet: snippet})
   },
+  updateSnippet: function (snippet) {
+    var snippets = this.state.snippets.map(function (_snippet) {
+      if (snippet.id === _snippet.id) {
+        return snippet
+      }
+      return _snippet
+    })
+    var currentSnippet = this.state.currentSnippet.id === snippet.id ? snippet : this.state.currentSnippet
+
+    this.setState({snippets: snippets, currentSnippet: currentSnippet})
+  },
+  destroySnippet: function (snippet) {
+    var snippets = this.state.snippets
+    var currentSnippet = this.state.currentSnippet
+    if (currentSnippet.id === snippet.id) {
+      var index
+      snippets.some(function (_snippet, _index) {
+        if (snippet.id === _snippet.id) {
+          index = _index
+          return true
+        }
+        return false
+      })
+
+      if (index == null) {
+        index = 0
+      } else if (index > snippet.length - 1) {
+        index--
+      } else {
+        index++
+      }
+
+      if (snippets.length > 0) {
+        currentSnippet = snippets[index]
+      } else {
+        currentSnippet = {}
+      }
+    }
+
+    snippets = snippets.filter(function (_snippet, index) {
+      if (snippet.id === _snippet.id) {
+        return false
+      }
+      return true
+    })
+
+    this.setState({snippets: snippets, currentSnippet: currentSnippet})
+  },
   render: function () {
     return (
       <div className='SnippetContainer'>
-        <SnippetList selectSnippet={this.selectSnippet} snippets={this.state.snippets}/>
+        <SnippetList selectSnippet={this.selectSnippet} snippets={this.state.snippets} currentSnippet={this.state.currentSnippet}/>
         <SnippetViewer snippet={this.state.currentSnippet}/>
       </div>
     )

@@ -37,7 +37,9 @@
     "node-notifier": "^4.2.1",
     "react": "^0.13.3",
     "react-router": "^0.13.3",
-    "react-tooltip": "^0.3.3"
+    "react-select": "^0.5.4",
+    "react-tooltip": "^0.3.3",
+    "reflux": "^0.2.8"
   },
   "devDependencies": {
     "css-loader": "^0.15.1",

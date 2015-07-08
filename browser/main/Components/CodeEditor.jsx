@@ -1,25 +1,31 @@
 var React = require('react/addons')
 
 var ace = require('ace')
-var CodeViewer = React.createClass({
+var CodeEditor = React.createClass({
   propTypes: {
     code: React.PropTypes.string,
-    mode: React.PropTypes.string
+    mode: React.PropTypes.string,
+    onChange: React.PropTypes.func
   },
   componentDidMount: function () {
     var el = React.findDOMNode(this.refs.target)
     var editor = ace.edit(el)
     editor.setValue(this.props.code)
     editor.$blockScrolling = Infinity
-    editor.renderer.setShowGutter(false)
-    editor.setReadOnly(true)
+    editor.renderer.setShowGutter(true)
     editor.setTheme('ace/theme/xcode')
-    editor.setHighlightActiveLine(false)
 
     var session = editor.getSession()
     session.setMode('ace/mode/' + this.props.mode)
     session.setUseSoftTabs(true)
     session.setOption('useWorker', false)
+
+    session.on('change', function (e) {
+      if (this.props.onChange != null) {
+        var value = editor.getValue()
+        this.props.onChange(e, value)
+      }
+    }.bind(this))
 
     this.setState({editor: editor})
   },
@@ -39,4 +45,4 @@ var CodeViewer = React.createClass({
   }
 })
 
-module.exports = CodeViewer
+module.exports = CodeEditor
