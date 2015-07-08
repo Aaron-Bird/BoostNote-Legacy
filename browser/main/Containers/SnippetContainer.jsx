@@ -100,8 +100,11 @@ var SnippetContainer = React.createClass({
   componentDidMount: function () {
     Snippet.getByPlanet(this.props.params.planetName)
       .then(function (snippets) {
-        this.setState({snippets: snippets, currentSnippet: snippets.length > 0 ? snippets[0] : null})
+        this.setSnippets(snippets, snippets.length > 0 ? snippets[0] : null)
       }.bind(this))
+  },
+  setSnippets: function (snippets, currentSnippet) {
+    this.setState({snippets: snippets, currentSnippet: currentSnippet})
   },
   selectSnippet: function (snippet) {
     this.setState({currentSnippet: snippet})
