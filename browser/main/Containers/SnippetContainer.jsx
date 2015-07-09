@@ -32,7 +32,6 @@ var SnippetList = React.createClass({
 
     return (
       <div className='SnippetList'>
-        <div className='search'><input className='block-input' type='text' placeholder='Search...'/></div>
         <ul>
           {snippets}
         </ul>

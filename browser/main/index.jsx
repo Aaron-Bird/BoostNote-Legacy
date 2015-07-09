@@ -20,7 +20,7 @@ var BlueprintContainer = require('./Containers/BlueprintContainer.jsx')
 
 var routes = (
   <Route path='/' handler={MainContainer}>
-    <Route name='planet' path='planet/:planetName' handler={PlanetContainer}>
+    <Route name='planet' path=':userName/:planetName' handler={PlanetContainer}>
       <DefaultRoute name='dashboard' handler={Dashboard}/>
       <Route name='snippets' handler={SnippetContainer}/>
       <Route name='blueprint' handler={BlueprintContainer}/>

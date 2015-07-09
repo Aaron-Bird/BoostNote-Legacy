@@ -7,7 +7,6 @@
   border-radius 22px
   box-sizing border-box
   font-size 1.1em
-  font-weight 600
   transition 0.1s
   cursor pointer
   margin 0 5px
@@ -21,6 +20,7 @@
   display inline-block
   width 44px
   padding 0
+  border-width 1px
 
 .btn-sm
   height 32px
@@ -32,13 +32,22 @@
   border-color brandBorderColor
   background-color transparent
   color brandColor
-  &:hover, &.hover, &:active, &.active
-    color white
+  &:hover, &.hover, &:focus, &.focus
+    border-color darken(brandBorderColor, 10%)
+    color darken(brandColor, 10%)
+  &:active, &.active
     background-color brandColor
+    color white
 
 .btn-default
   border-color lightButtonColor
   background-color transparent
   color lightButtonColor
-  &:hover, &.hover, &:active, &.active
-    background-color lighten(lightButtonColor, 75%)
+
+  &:hover, &.hover, &:focus, &.focus
+    border-color darken(lightButtonColor, 25%)
+    color darken(lightButtonColor, 25%)
+  &:active, &.active
+    border-color darken(brandBorderColor, 10%)
+    background-color brandColor
+    color white

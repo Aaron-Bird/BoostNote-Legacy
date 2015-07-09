@@ -5,6 +5,12 @@ var Link = ReactRouter.Link
 var ModalBase = require('../Components/ModalBase')
 var LaunchModal = require('../Components/LaunchModal')
 
+var currentUser = {
+  name: 'testcat',
+  email: 'testcat@example.com',
+  profileName: 'Test Cat'
+}
+
 var userPlanets = [
   {
     id: 1,
@@ -25,20 +31,52 @@ var userPlanets = [
 
 var PlanetNavigator = React.createClass({
   propTypes: {
-    currentPlanet: React.PropTypes.object
+    currentPlanet: React.PropTypes.object,
+    currentUser: React.PropTypes.object
   },
   render: function () {
-    var planets = userPlanets.map(function (planet) {
+    var planets = userPlanets.map(function (planet, index) {
       return (
-        <li key={planet.id} className={this.props.currentPlanet.name === planet.name ? 'active' : ''}><a>{planet.profileName[0]}</a></li>
+        <li key={planet.id} className={this.props.currentPlanet.name === planet.name ? 'active' : ''}>
+          <a>{planet.profileName[0]}</a>
+          <div className='shortCut'>⌘{index + 1}</div>
+        </li>
       )
     }.bind(this))
 
     return (
       <div className='PlanetNavigator'>
+        <a className='userConfig'>
+          <img width='50' height='50' src='../vendor/dummy.jpg'/>
+        </a>
         <ul>
           {planets}
         </ul>
+        <button className='newPlanet'><i className='fa fa-plus'/></button>
+      </div>
+    )
+  }
+})
+
+var PlanetHeader = React.createClass({
+  propTypes: {
+    currentPlanet: React.PropTypes.object,
+    currentUser: React.PropTypes.object
+  },
+  render: function () {
+    var currentPlanetName = this.props.currentPlanet.name
+
+    return (
+      <div className='PlanetHeader'>
+        <span className='planetName'>{currentPlanetName}</span>
+        <button className='menuBtn'>
+          <i className='fa fa-chevron-down'></i>
+        </button>
+        <span className='searchInput'>
+          <i className='fa fa-search'/>
+          <input type='text' className='inline-input circleInput' placeholder='Search...'/>
+        </span>
+        <a className='downloadBtn btn-primary'>Download Mac app</a>
       </div>
     )
   }
@@ -46,13 +84,15 @@ var PlanetNavigator = React.createClass({
 
 var PlanetMain = React.createClass({
   propTypes: {
-    currentPlanet: React.PropTypes.object
+    currentPlanet: React.PropTypes.object,
+    currentUser: React.PropTypes.object
   },
   render: function () {
     return (
       <div className='PlanetMain'>
-        <SideNavigator currentPlanet={this.props.currentPlanet}/>
-        <Screen currentPlanet={this.props.currentPlanet}/>
+        <PlanetHeader currentPlanet={this.props.currentPlanet} currentUser={this.props.currentUser}/>
+        <SideNavigator currentPlanet={this.props.currentPlanet} currentUser={this.props.currentUser}/>
+        <PlanetBody currentPlanet={this.props.currentPlanet}/>
       </div>
     )
   }
@@ -61,6 +101,9 @@ var PlanetMain = React.createClass({
 var SideNavigator = React.createClass({
   propTypes: {
     currentPlanet: React.PropTypes.shape({
+      name: React.PropTypes.string
+    }),
+    currentUser: React.PropTypes.shape({
       name: React.PropTypes.string
     })
   },
@@ -82,15 +125,10 @@ var SideNavigator = React.createClass({
   },
   render: function () {
     var currentPlanetName = this.props.currentPlanet.name
+    var currentUserName = this.props.currentUser.name
 
     return (
       <div className='SideNavigator'>
-        <div className='nav-header'>
-          <p className='planet-name'>{currentPlanetName}</p>
-          <button className='menu-btn'>
-            <i className='fa fa-chevron-down'></i>
-          </button>
-        </div>
         <button onClick={this.openLaunchModal} className='btn-primary btn-block'>
           <i className='fa fa-rocket fa-fw'/> Launch
         </button>
@@ -98,13 +136,13 @@ var SideNavigator = React.createClass({
           <LaunchModal submit={this.submitLaunchModal} close={this.closeLaunchModal}/>
         </ModalBase>
         <nav>
-          <Link to='dashboard' params={{planetName: currentPlanetName}}>
+          <Link to='dashboard' params={{userName: currentUserName, planetName: currentPlanetName}}>
             <i className='fa fa-home fa-fw'/> Home
           </Link>
-          <Link to='snippets' params={{planetName: currentPlanetName}}>
+          <Link to='snippets' params={{userName: currentUserName, planetName: currentPlanetName}}>
             <i className='fa fa-code fa-fw'/> Snippets
           </Link>
-          <Link to='blueprint' params={{planetName: currentPlanetName}}>
+          <Link to='blueprint' params={{userName: currentUserName, planetName: currentPlanetName}}>
             <i className='fa fa-wrench fa-fw'/> Blueprints
           </Link>
         </nav>
@@ -113,10 +151,10 @@ var SideNavigator = React.createClass({
   }
 })
 
-var Screen = React.createClass({
+var PlanetBody = React.createClass({
   render: function () {
     return (
-      <div className='Screen'>
+      <div className='PlanetBody'>
         <RouteHandler/>
       </div>
     )
@@ -151,8 +189,8 @@ module.exports = React.createClass({
 
     return (
       <div className='PlanetContainer'>
-        <PlanetNavigator currentPlanet={currentPlanet}/>
-        <PlanetMain currentPlanet={currentPlanet}/>
+        <PlanetNavigator currentPlanet={currentPlanet} currentUser={currentUser}/>
+        <PlanetMain currentPlanet={currentPlanet} currentUser={currentUser}/>
       </div>
     )
   }

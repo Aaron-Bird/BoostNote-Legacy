@@ -17,7 +17,7 @@ module.exports = React.createClass({
     Auth.register()
     // TODO: request user data
       .then(function (user) {
-        this.transitionTo('dashboard', {planetName: user.name})
+        this.transitionTo('dashboard', {userName: user.name, planetName: user.name})
       }.bind(this))
 
     e.preventDefault()

@@ -20,14 +20,19 @@ h4
   font-size 1.15em
 a
   color brandColor
-  &:visited{
+  &:hover
+    color darken(brandColor, 15%)
+  &:visited
     color brandColor
-  }
 
 hr
   border-top none
   border-bottom solid 1px borderColor
   margin 25px 0
+
+button
+  &:focus, &.focus
+    outline none
 
 .text-center
   text-align center
@@ -38,6 +43,7 @@ hr
     display block
     margin-bottom 5px
 
+
 .block-input, .inline-input
   border solid 1px borderColor
   padding 0 15px
@@ -45,6 +51,11 @@ hr
   height 33px
   border-radius 5px
   box-sizing border-box
+  &:focus, &.focus
+    border solid 1px brandBorderColor
+    outline none
+  &.circleInput
+    border-radius 16.5px
 
 .block-input
   display block
@@ -60,7 +71,6 @@ textarea.block-input
   border-radius 5px
   padding 5px
 
-
 #content
   fullsize()
 
@@ -73,26 +83,41 @@ textarea.block-input
     margin 5px auto 25px
 
 .PlanetNavigator
-  background-color #032B35
-  color white
+  background-color planetNavBgColor
   absolute left top bottom
   width 50px
   text-align center
   box-sizing border-box
+  a.userConfig
+    display block
+    width 50px
+    height 50px
+    background-color black
+    img
+      transition 0.1s
+      opacity 0.6
+    box-sizing border-box
+    &.active, &:active, &.focus, &:focus, &.hover, &:hover
+      img
+        opacity 1
+
   ul>li
     padding 10px 3px
-    border-bottom solid 1px invBorderColor
+    .shortCut
+      margin-top 5px
+      color lighten(textColor, 5%)
+      font-size 0.8em
     &.active
-      background-color brandColor
       a
-        background-color white
+        background-color planetAnchorActiveBgColor
+        color planetAnchorActiveColor
     a
       display block
       width 44px
       height 44px
       text-align center
-      background-color #4D4D4D
-      color black
+      background-color planetAnchorBgColor
+      color planetAnchorColor
       line-height 44px
       font-size 1.1em
       cursor pointer
@@ -104,6 +129,28 @@ textarea.block-input
       circle()
       width 44px
       height 44px
+  button.newPlanet
+    display block
+    margin 0 auto
+    width 30px
+    height 30px
+    circle()
+    border solid 2px lightButtonColor
+    color lightButtonColor
+    text-align center
+    font-size 1
+    background-image none
+    background-color transparent
+    box-sizing border-box
+    absolute left bottom right
+    bottom 15px
+    &:hover, &.hover, &:focus, &.focus
+      border-color darken(lightButtonColor, 25%)
+      color darken(lightButtonColor, 25%)
+    &:active, &.active
+      border-color darken(brandBorderColor, 10%)
+      background-color brandColor
+      color white
 
 .PlanetContainer
   fullsize()
@@ -111,7 +158,68 @@ textarea.block-input
   absolute top bottom right
   left 50px
 
+.PlanetHeader
+  absolute left right top
+  overflow-y hidden
+  height 65px
+  background-color white
+  border-bottom solid 1px borderColor
+  box-sizing border-box
+  padding 5px 15px
+  clearfix()
+  .planetName
+    line-height 30px
+    font-size 2em
+    color brandColor
+    line-height 55px
+    padding 0 20px
+  .menuBtn
+    display inline-block
+    position relative
+    top -5px
+    font-size 0.8em
+    color lightButtonColor
+    border solid 1px lightButtonColor
+    box-sizing border-box
+    circle()
+    background-image none
+    background-color transparent
+    width 30px
+    height 30px
+    text-align center
+    cursor pointer
+    transition 0.1s
+    transform scale(0.8)
+    &:focus, &.focus
+      outline none
+    &:hover, &.hover, &:focus, &.focus
+      border-color darken(lightButtonColor, 25%)
+      color darken(lightButtonColor, 25%)
+    &:active, &.active
+      border-color darken(brandBorderColor, 10%)
+      background-color brandColor
+      color white
+  .searchInput
+    display inline-block
+    position relative
+    top -3px
+    margin-left 15px
+    input
+      padding-left 32px
+    .fa
+      position absolute
+      top 7px
+      left 10px
+  .downloadBtn
+    position relative
+    float right
+    top 5px
+    padding 7px 25px
+    box-sizing border-box
+    line-height 30px
 
-.Screen
-  absolute top bottom right
+
+.PlanetBody
+  absolute bottom right
   left 200px
+  top 65px

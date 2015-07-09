@@ -7,14 +7,9 @@
     absolute top bottom left
     width 250px
     border-right solid 1px highlightenBorderColor
-    .search
-      border-bottom solid 1px borderColor
-      padding 5px
-      margin 0
 
     &>ul
-      absolute bottom left right
-      top 44px
+      absolute top bottom left right
       overflow-y auto
       li
         border-bottom solid 1px borderColor
@@ -31,6 +26,8 @@
           font-size 0.8em
         &:hover, &.hover
           background-color hoverBackgroundColor
+          &:active, &.active
+            background-color white
         &:active, &.active
           border solid 2px brandBorderColor
           padding 9px 9px 8px

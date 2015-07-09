@@ -1,50 +1,22 @@
 .SideNavigator
-  absolute top bottom left
+  absolute bottom left
+  top 65px
   width 200px
   border-right solid 1px highlightenBorderColor
   padding 10px
   box-sizing border-box
-  .nav-header
-    clearfix()
-    margin-bottom 15px
-    .planet-name
-      float left
-      line-height 30px
-      font-size 1.1em
-    .menu-btn
-      float right
-      display block
-      font-size 0.8em
-      color lightButtonColor
-      border solid 2px lightButtonColor
-      box-sizing border-box
-      circle()
-      background-image none
-      background-color transparent
-      width 30px
-      height 30px
-      text-align center
-      cursor pointer
-      transform scale(0.8)
-      &:active, &.active, &:hover, &.hover
-        background-color lightButtonColor
-        color white
   nav
     a
       display block
-      position relative
-      right 0px
       box-sizing border-box
-      width 190px
       padding 15px 15px
       margin 10px 0
+      border-radius 10px
       text-decoration none
-      border-radius left 10px
       background-color transparent
       color textColor
       transition 0.1s
       &:hover, &.hover
         background-color hoverBackgroundColor
       &:active, &.active
-        background-color brandColor
-        color white
+        color brandColor
