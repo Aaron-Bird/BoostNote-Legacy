@@ -3,7 +3,7 @@
   z-index 1000
   overflow-y auto
   overflow-x auto
-  background-color transparentify(black, 35%)
+  background-color modalBaseColor
   &.hide
     display none
   .modal
@@ -13,6 +13,7 @@
     background-color white
     border-radius 10px
     padding 15px
+    box-shadow popupShadow
     .modal-body
       .modal-tab
         text-align center

@@ -217,6 +217,34 @@ textarea.block-input
     padding 7px 25px
     box-sizing border-box
     line-height 30px
+  .dropDown
+    z-index 500
+    position fixed
+    background white
+    width 200px
+    border solid 1px borderColor
+    box-sizing border-box
+    margin-top -5px
+    margin-left 125px
+    box-shadow popupShadow
+    &.hide
+      visibility hidden
+    a
+      color textColor
+      display block
+      width 100%
+      padding 15px
+      box-sizing border-box
+      border-bottom solid 1px borderColor
+      text-decoration none
+      &:hover, &.hover
+        background-color hoverBackgroundColor
+      &:focus, &.focus
+        color black
+      &:active, &.active
+        color brandColor
+      &:last-child
+        border-bottom none
 
 
 .PlanetBody
