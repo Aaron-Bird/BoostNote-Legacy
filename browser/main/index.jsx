@@ -12,21 +12,26 @@ var MainContainer = require('./Containers/MainContainer.jsx')
 var LoginContainer = require('./Containers/LoginContainer.jsx')
 var RegisterContainer = require('./Containers/RegisterContainer.jsx')
 
+var UserContainer = require('./Containers/UserContainer.jsx')
+var UserSettingContainer = require('./Containers/UserSettingContainer.jsx')
 var PlanetContainer = require('./Containers/PlanetContainer.jsx')
-
-var Dashboard = require('./Containers/DashboardContainer.jsx')
+var DashboardContainer = require('./Containers/DashboardContainer.jsx')
 var SnippetContainer = require('./Containers/SnippetContainer.jsx')
 var BlueprintContainer = require('./Containers/BlueprintContainer.jsx')
 
 var routes = (
   <Route path='/' handler={MainContainer}>
-    <Route name='planet' path=':userName/:planetName' handler={PlanetContainer}>
-      <DefaultRoute name='dashboard' handler={Dashboard}/>
-      <Route name='snippets' handler={SnippetContainer}/>
-      <Route name='blueprint' handler={BlueprintContainer}/>
-    </Route>
     <Route name='login' path='login' handler={LoginContainer}/>
     <Route name='register' path='register' handler={RegisterContainer}/>
+
+    <Route name='user' path=':userName' handler={UserContainer}>
+      <DefaultRoute name='userHome' handler={UserSettingContainer}/>
+      <Route name='planet' path=':planetName' handler={PlanetContainer}>
+        <DefaultRoute name='dashboard' handler={DashboardContainer}/>
+        <Route name='snippets' handler={SnippetContainer}/>
+        <Route name='blueprint' handler={BlueprintContainer}/>
+      </Route>
+    </Route>
   </Route>
 )
 

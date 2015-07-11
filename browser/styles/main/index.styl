@@ -82,7 +82,7 @@ textarea.block-input
   h1, h2
     margin 5px auto 25px
 
-.PlanetNavigator
+.UserNavigator
   background-color planetNavBgColor
   absolute left top bottom
   width 50px
@@ -100,7 +100,6 @@ textarea.block-input
     &.active, &:active, &.focus, &:focus, &.hover, &:hover
       img
         opacity 1
-
   ul>li
     padding 10px 3px
     .shortCut
@@ -117,6 +116,7 @@ textarea.block-input
       height 44px
       text-align center
       background-color planetAnchorBgColor
+      text-decoration none
       color planetAnchorColor
       line-height 44px
       font-size 1.1em
@@ -153,10 +153,11 @@ textarea.block-input
       color white
 
 .PlanetContainer
-  fullsize()
-.PlanetMain
   absolute top bottom right
   left 50px
+
+.PlanetMain
+  fullsize()
 
 .PlanetHeader
   absolute left right top

@@ -29,49 +29,44 @@ var userPlanets = [
   }
 ]
 
-var PlanetNavigator = React.createClass({
-  propTypes: {
-    currentPlanet: React.PropTypes.object,
-    currentUser: React.PropTypes.object
-  },
-  render: function () {
-    var planets = userPlanets.map(function (planet, index) {
-      return (
-        <li key={planet.id} className={this.props.currentPlanet.name === planet.name ? 'active' : ''}>
-          <a>{planet.profileName[0]}</a>
-          <div className='shortCut'>⌘{index + 1}</div>
-        </li>
-      )
-    }.bind(this))
-
-    return (
-      <div className='PlanetNavigator'>
-        <a className='userConfig'>
-          <img width='50' height='50' src='../vendor/dummy.jpg'/>
-        </a>
-        <ul>
-          {planets}
-        </ul>
-        <button className='newPlanet'><i className='fa fa-plus'/></button>
-      </div>
-    )
-  }
-})
-
 var PlanetHeader = React.createClass({
   propTypes: {
     currentPlanet: React.PropTypes.object,
     currentUser: React.PropTypes.object
   },
+  getInitialState: function () {
+    return {
+      isMenuDropDownOpen: false
+    }
+  },
+  toggleMenuDropDown: function () {
+    this.setState({isMenuDropDownOpen: !this.state.isMenuDropDownOpen}, function () {
+      if (this.state.isMenuDropDownOpen) {
+        document.body.onclick = function () {
+          this.setState({isMenuDropDownOpen: false}, function () {
+            document.body.onclick = null
+          })
+        }.bind(this)
+      }
+    })
+  },
+  interceptClick: function (e) {
+    e.stopPropagation()
+  },
   render: function () {
     var currentPlanetName = this.props.currentPlanet.name
 
     return (
-      <div className='PlanetHeader'>
+      <div onClick={this.interceptClick} className='PlanetHeader'>
         <span className='planetName'>{currentPlanetName}</span>
-        <button className='menuBtn'>
+        <button onClick={this.toggleMenuDropDown} className={this.state.isMenuDropDownOpen ? 'menuBtn active' : 'menuBtn'}>
           <i className='fa fa-chevron-down'></i>
         </button>
+        <div className={this.state.isMenuDropDownOpen ? 'dropDown' : 'dropDown hide'} ref='menuDropDown'>
+          <a href='#'><i className='fa fa-wrench fa-fw'/> Planet Setting</a>
+          <a href='#'><i className='fa fa-group fa-fw'/> Manage member</a>
+          <a href='#'><i className='fa fa-trash fa-fw'/> Delete Planet</a>
+        </div>
         <span className='searchInput'>
           <i className='fa fa-search'/>
           <input type='text' className='inline-input circleInput' placeholder='Search...'/>
@@ -143,7 +138,7 @@ var SideNavigator = React.createClass({
             <i className='fa fa-code fa-fw'/> Snippets
           </Link>
           <Link to='blueprint' params={{userName: currentUserName, planetName: currentPlanetName}}>
-            <i className='fa fa-wrench fa-fw'/> Blueprints
+            <i className='fa fa-file-text-o fa-fw'/> Blueprints
           </Link>
         </nav>
       </div>
@@ -189,7 +184,6 @@ module.exports = React.createClass({
 
     return (
       <div className='PlanetContainer'>
-        <PlanetNavigator currentPlanet={currentPlanet} currentUser={currentUser}/>
         <PlanetMain currentPlanet={currentPlanet} currentUser={currentUser}/>
       </div>
     )
