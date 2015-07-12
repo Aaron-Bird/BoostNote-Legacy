@@ -1,7 +1,7 @@
 var Snippet = {}
 
 var snippets = {
-  testcat: [
+  myplanet: [
     {
       id: 1,
       callSign: 'alert',

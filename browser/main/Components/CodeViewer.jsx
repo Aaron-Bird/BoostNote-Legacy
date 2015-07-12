@@ -9,8 +9,8 @@ var CodeViewer = React.createClass({
   componentDidMount: function () {
     var el = React.findDOMNode(this.refs.target)
     var editor = ace.edit(el)
-    editor.setValue(this.props.code)
     editor.$blockScrolling = Infinity
+    editor.setValue(this.props.code)
     editor.renderer.setShowGutter(false)
     editor.setReadOnly(true)
     editor.setTheme('ace/theme/xcode')

@@ -14,7 +14,7 @@ var currentUser = {
 var userPlanets = [
   {
     id: 1,
-    name: 'testcat',
+    name: 'myplanet',
     profileName: 'TestCat'
   },
   {
