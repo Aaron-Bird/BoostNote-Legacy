@@ -5,8 +5,10 @@ var Link = ReactRouter.Link
 var AuthStore = require('../Stores/AuthStore')
 var register = require('../Actions/register')
 
+var OnlyGuest = require('../Mixins/OnlyGuest')
+
 module.exports = React.createClass({
-  mixins: [React.addons.LinkedStateMixin, ReactRouter.Navigation],
+  mixins: [React.addons.LinkedStateMixin, ReactRouter.Navigation, OnlyGuest],
   getInitialState: function () {
     return {
       email: '',
