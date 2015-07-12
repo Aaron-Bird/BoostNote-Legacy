@@ -4,7 +4,9 @@ var OnlyGuest = {
   componentDidMount: function () {
     if (AuthStore.check()) {
       var user = AuthStore.getUser()
-      console.log(user)
+      if (user == null) {
+        return
+      }
       var planet = user.Planets.length > 0 ? user.Planets[0] : null
       if (planet == null) {
         this.transitionTo('user', {userName: user.name})

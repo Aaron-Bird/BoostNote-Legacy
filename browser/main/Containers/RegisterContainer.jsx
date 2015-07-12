@@ -73,11 +73,11 @@ module.exports = React.createClass({
             <input className='stripInput' valueLink={this.linkState('profileName')} type='text' placeholder='Profile name'/>
           </div>
           <div className='form-group'>
-            <button className='btn-primary' type='submit'><i className='fa fa-sign-in'></i> Sign Up</button>
+            <button className='btn-primary' type='submit'>Sign Up</button>
           </div>
         </form>
 
-        <p>Sign Upをクリックすることで、当サイトの利用規約及びCookieの使用を含むデータに関するポリシーに同意するものとします。</p>
+        <p className='alert'>会員登録することで、当サイトの利用規約及びCookieの使用を含むデータに関するポリシーに同意するものとします。</p>
       </div>
     )
   }
