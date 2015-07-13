@@ -39,7 +39,7 @@ module.exports = React.createClass({
       this.transitionTo('user', {userName: user.name})
       return
     }
-    this.transitionTo('dashboard', {userName: user.name, planetName: planet.name})
+    this.transitionTo('planetHome', {userName: user.name, planetName: planet.name})
   },
   render: function () {
     return (

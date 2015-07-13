@@ -3,30 +3,7 @@ var ReactRouter = require('react-router')
 var Link = ReactRouter.Link
 var RouteHandler = ReactRouter.RouteHandler
 
-// Dummy
-var currentUser = {
-  name: 'testcat',
-  email: 'testcat@example.com',
-  profileName: 'Test Cat'
-}
-
-var userPlanets = [
-  {
-    id: 1,
-    name: 'testcat',
-    profileName: 'TestCat'
-  },
-  {
-    id: 2,
-    name: 'group1',
-    profileName: 'Some Group#1'
-  },
-  {
-    id: 3,
-    name: 'group2',
-    profileName: 'Some Group#1'
-  }
-]
+var AuthStore = require('../Stores/AuthStore')
 
 var UserNavigator = React.createClass({
   propTypes: {
@@ -34,10 +11,10 @@ var UserNavigator = React.createClass({
     currentUser: React.PropTypes.object
   },
   render: function () {
-    var planets = userPlanets.map(function (planet, index) {
+    var planets = this.props.currentUser.Planets.map(function (planet, index) {
       return (
         <li key={planet.id} className={this.props.currentPlanet != null && this.props.currentPlanet.name === planet.name ? 'active' : ''}>
-          <a href>{planet.profileName[0]}</a>
+          <Link to='planet' params={{userName: this.props.currentUser.name, planetName: planet.name}} href>{planet.name[0]}</Link>
           <div className='shortCut'>⌘{index + 1}</div>
         </li>
       )
@@ -65,10 +42,16 @@ var UserNavigator = React.createClass({
 
 module.exports = React.createClass({
   mixins: [React.addons.LinkedStateMixin, ReactRouter.Navigation],
+  propTypes: {
+    params: React.PropTypes.shape({
+      planetName: React.PropTypes.string
+    })
+  },
   render: function () {
     var currentPlanetName = this.props.params.planetName
+    var currentUser = AuthStore.getUser()
     var currentPlanet = null
-    userPlanets.some(function (planet) {
+    currentUser.Planets.some(function (planet) {
       if (planet.name === currentPlanetName) {
         currentPlanet = planet
         return true

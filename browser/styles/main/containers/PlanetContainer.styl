@@ -1,0 +1,179 @@
+
+.PlanetContainer
+  absolute top bottom right
+  left 50px
+
+.PlanetHeader
+  absolute left right top
+  overflow-y hidden
+  height 65px
+  background-color white
+  border-bottom solid 1px borderColor
+  box-sizing border-box
+  padding 5px 15px
+  clearfix()
+  .planetName
+    line-height 30px
+    font-size 2em
+    color brandColor
+    line-height 55px
+    padding 0 20px
+  .menuBtn
+    display inline-block
+    position relative
+    top -5px
+    font-size 0.8em
+    color lightButtonColor
+    border solid 1px lightButtonColor
+    box-sizing border-box
+    circle()
+    background-image none
+    background-color transparent
+    width 30px
+    height 30px
+    text-align center
+    cursor pointer
+    transition 0.1s
+    transform scale(0.8)
+    &:focus, &.focus
+      outline none
+    &:hover, &.hover, &:focus, &.focus
+      border-color darken(lightButtonColor, 25%)
+      color darken(lightButtonColor, 25%)
+    &:active, &.active
+      border-color darken(brandBorderColor, 10%)
+      background-color brandColor
+      color white
+  .searchInput
+    display inline-block
+    position relative
+    top -3px
+    margin-left 15px
+    input
+      padding-left 32px
+    .fa
+      position absolute
+      top 7px
+      left 10px
+  .downloadBtn
+    position relative
+    float right
+    top 5px
+    padding 7px 25px
+    box-sizing border-box
+    line-height 30px
+  .dropDown
+    z-index 500
+    position fixed
+    background white
+    width 200px
+    border solid 1px borderColor
+    box-sizing border-box
+    margin-top -5px
+    margin-left 125px
+    box-shadow popupShadow
+    &.hide
+      visibility hidden
+    a
+      color textColor
+      display block
+      width 100%
+      padding 15px
+      box-sizing border-box
+      border-bottom solid 1px borderColor
+      text-decoration none
+      &:hover, &.hover
+        background-color hoverBackgroundColor
+      &:focus, &.focus
+        color black
+      &:active, &.active
+        color brandColor
+      &:last-child
+        border-bottom none
+
+.PlanetNavigator
+  absolute bottom left
+  top 65px
+  width 200px
+  border-right solid 1px highlightenBorderColor
+  padding 10px
+  box-sizing border-box
+  nav
+    a
+      display block
+      box-sizing border-box
+      padding 15px 15px
+      margin 10px 0
+      border-radius 10px
+      text-decoration none
+      background-color transparent
+      color textColor
+      transition 0.1s
+      &:hover, &.hover
+        background-color hoverBackgroundColor
+      &:active, &.active
+        color brandColor
+
+.PlanetArticleList
+  absolute bottom right
+  left 200px
+  top 65px
+  .tags
+    a
+      margin 0 2px
+  width 250px
+  border-right solid 1px highlightenBorderColor
+
+  &>ul
+    absolute top bottom left right
+    overflow-y auto
+    li
+      border-bottom solid 1px borderColor
+      padding 10px
+      cursor pointer
+      .callSign
+        margin-bottom 5px
+        font-weight 600
+      .description
+        margin-bottom 5px
+      .updatedAt
+        margin-bottom 5px
+        color lighten(textColor, 25%)
+        font-size 0.8em
+      &:hover, &.hover
+        background-color hoverBackgroundColor
+        &:active, &.active
+          background-color white
+      &:active, &.active
+        border solid 2px brandBorderColor
+        padding 9px 9px 8px
+
+.PlanetArticleDetail
+  absolute right bottom
+  top 65px
+  left 450px
+  .viewer-header
+    height 44px
+    line-height 44px
+    padding 0 15px
+    border-bottom solid 1px borderColor
+    box-sizing border-box
+    small
+      font-size 0.5em
+    .control-group
+      float right
+      button
+        margin 0 2px
+  .viewer-body
+    absolute bottom right
+    left 1px
+    top 44px
+    .viewer-detail
+      border-bottom solid 1px borderColor
+      padding 10px
+      .description
+        margin-bottom 15px
+    .content
+      padding 5px 0
+      .ace_editor
+        height 500px

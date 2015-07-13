@@ -1,33 +1,14 @@
 var React = require('react/addons')
 var RouteHandler = require('react-router').RouteHandler
 var ReactRouter = require('react-router')
-var Link = ReactRouter.Link
 var ModalBase = require('../Components/ModalBase')
 var LaunchModal = require('../Components/LaunchModal')
+var CodeViewer = require('../Components/CodeViewer')
 
-var currentUser = {
-  name: 'testcat',
-  email: 'testcat@example.com',
-  profileName: 'Test Cat'
-}
+var AuthStore = require('../Stores/AuthStore')
+var PlanetStore = require('../Stores/PlanetStore')
 
-var userPlanets = [
-  {
-    id: 1,
-    name: 'myplanet',
-    profileName: 'TestCat'
-  },
-  {
-    id: 2,
-    name: 'group1',
-    profileName: 'Some Group#1'
-  },
-  {
-    id: 3,
-    name: 'group2',
-    profileName: 'Some Group#1'
-  }
-]
+var fetchPlanet = require('../Actions/fetchPlanet')
 
 var PlanetHeader = React.createClass({
   propTypes: {
@@ -76,24 +57,7 @@ var PlanetHeader = React.createClass({
     )
   }
 })
-
-var PlanetMain = React.createClass({
-  propTypes: {
-    currentPlanet: React.PropTypes.object,
-    currentUser: React.PropTypes.object
-  },
-  render: function () {
-    return (
-      <div className='PlanetMain'>
-        <PlanetHeader currentPlanet={this.props.currentPlanet} currentUser={this.props.currentUser}/>
-        <SideNavigator currentPlanet={this.props.currentPlanet} currentUser={this.props.currentUser}/>
-        <PlanetBody currentPlanet={this.props.currentPlanet}/>
-      </div>
-    )
-  }
-})
-
-var SideNavigator = React.createClass({
+var PlanetNavigator = React.createClass({
   propTypes: {
     currentPlanet: React.PropTypes.shape({
       name: React.PropTypes.string
@@ -119,11 +83,8 @@ var SideNavigator = React.createClass({
     this.setState({isLaunchModalOpen: false})
   },
   render: function () {
-    var currentPlanetName = this.props.currentPlanet.name
-    var currentUserName = this.props.currentUser.name
-
     return (
-      <div className='SideNavigator'>
+      <div className='PlanetNavigator'>
         <button onClick={this.openLaunchModal} className='btn-primary btn-block'>
           <i className='fa fa-rocket fa-fw'/> Launch
         </button>
@@ -131,60 +92,159 @@ var SideNavigator = React.createClass({
           <LaunchModal submit={this.submitLaunchModal} close={this.closeLaunchModal}/>
         </ModalBase>
         <nav>
-          <Link to='dashboard' params={{userName: currentUserName, planetName: currentPlanetName}}>
+          <a>
             <i className='fa fa-home fa-fw'/> Home
-          </Link>
-          <Link to='snippets' params={{userName: currentUserName, planetName: currentPlanetName}}>
+          </a>
+          <a>
             <i className='fa fa-code fa-fw'/> Snippets
-          </Link>
-          <Link to='blueprint' params={{userName: currentUserName, planetName: currentPlanetName}}>
+          </a>
+          <a>
             <i className='fa fa-file-text-o fa-fw'/> Blueprints
-          </Link>
+          </a>
         </nav>
       </div>
     )
   }
 })
 
-var PlanetBody = React.createClass({
+var PlanetArticleList = React.createClass({
+  mixins: [ReactRouter.Navigation, ReactRouter.State],
+  propTypes: {
+    planet: React.PropTypes.shape({
+      Snippets: React.PropTypes.array,
+      Blueprints: React.PropTypes.array
+    })
+  },
   render: function () {
+    var articles = this.props.planet.Snippets.map(function (snippet) {
+      var tags = snippet.Tags.map(function (tag) {
+        return (
+          <a key={tag.id} href>#{tag.name}</a>
+        )
+      })
+      var params = this.getParams()
+
+      var isActive = parseInt(params.localId, 10) === snippet.localId
+
+      var handleClick = function () {
+        this.transitionTo('snippets', {
+          userName: params.userName,
+          planetName: params.planetName,
+          localId: snippet.localId
+        })
+      }.bind(this)
+
+      return (
+        <li onClick={handleClick} className={isActive ? 'active' : ''} key={snippet.id}>
+          <div className='callSign'><i className='fa fa-code'></i> {snippet.callSign}</div>
+          <div className='description'>{snippet.description}</div>
+          <div className='updatedAt'>{snippet.updatedAt}</div>
+          <div className='tags'><i className='fa fa-tags'/>{tags}</div>
+        </li>
+      )
+    }.bind(this))
+
     return (
-      <div className='PlanetBody'>
-        <RouteHandler/>
+      <div className='PlanetArticleList'>
+        <ul>
+          {articles}
+        </ul>
+      </div>
+    )
+  }
+})
+
+var PlanetArticleDetail = React.createClass({
+  propTypes: {
+    snippet: React.PropTypes.object
+  },
+  render: function () {
+    var snippet = this.props.snippet
+
+    var tags = snippet.Tags.map(function (tag) {
+      return (
+        <a key={tag.id} href>#{tag.name}</a>
+      )
+    })
+
+    return (
+      <div className='PlanetArticleDetail'>
+        <div className='viewer-header'>
+          <i className='fa fa-code'></i> {snippet.callSign} <small className='updatedAt'>{snippet.updatedAt}</small>
+          <span className='control-group'>
+            <button className='btn-default btn-square btn-sm'><i className='fa fa-edit fa-fw'></i></button>
+            <button className='btn-default btn-square btn-sm'><i className='fa fa-trash fa-fw'></i></button>
+          </span>
+        </div>
+        <div className='viewer-body'>
+          <div className='viewer-detail'>
+            <div className='description'>{snippet.description}</div>
+            <div className='tags'><i className='fa fa-tags'/>{tags}</div>
+          </div>
+          <div className='content'>
+            <CodeViewer code={snippet.content} mode={snippet.mode}/>
+          </div>
+        </div>
       </div>
     )
   }
 })
 
 module.exports = React.createClass({
-  mixins: [ReactRouter.Navigation],
+  mixins: [ReactRouter.Navigation, ReactRouter.State],
   propTypes: {
     params: React.PropTypes.object,
     planetName: React.PropTypes.string
   },
-  render: function () {
-    var currentPlanetName = this.props.params.planetName
-    var currentPlanet = null
-    userPlanets.some(function (planet) {
-      if (planet.name === currentPlanetName) {
-        currentPlanet = planet
-        return true
+  getInitialState: function () {
+    return {
+      currentPlanet: null
+    }
+  },
+  componentDidMount: function () {
+    this.unsubscribe = PlanetStore.listen(this.onFetched)
+
+    fetchPlanet(this.props.params.userName + '/' + this.props.params.planetName)
+  },
+  componentWillUnmount: function () {
+    this.unsubscribe()
+  },
+  onFetched: function (planet) {
+    this.setState({currentPlanet: planet}, function () {
+      if (planet.Snippets.length > 0) {
+        this.transitionTo('snippets', {
+          userName: this.props.params.userName,
+          planetName: this.props.params.planetName,
+          localId: planet.Snippets[0].localId})
       }
-      return false
     })
-    if (currentPlanet == null) {
-      var redirectTo = userPlanets[0].name
-      this.transitionTo('planet', {planetName: redirectTo})
-      return (
-        <div className='PlanetContainer'>
-          Redirecting...
-        </div>
-      )
+  },
+  render: function () {
+    var user = AuthStore.getUser()
+    if (user == null) return (<div/>)
+    if (this.state.currentPlanet == null) return (<div/>)
+
+    var content = (<div>No selected</div>)
+    if (this.isActive('snippets')) {
+      var localId = parseInt(this.props.params.localId, 10)
+
+      this.state.currentPlanet.Snippets.some(function (_snippet) {
+        if (localId === _snippet.localId) {
+          content = (
+            <PlanetArticleDetail snippet={_snippet}/>
+          )
+          return true
+        }
+        return false
+      })
     }
 
     return (
       <div className='PlanetContainer'>
-        <PlanetMain currentPlanet={currentPlanet} currentUser={currentUser}/>
+        <PlanetHeader currentPlanet={this.state.currentPlanet} currentUser={user}/>
+        <PlanetNavigator currentPlanet={this.state.currentPlanet} currentUser={user}/>
+        <PlanetArticleList planet={this.state.currentPlanet}/>
+        {content}
       </div>
     )
   }
