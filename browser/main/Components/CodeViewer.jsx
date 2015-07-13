@@ -15,11 +15,13 @@ var CodeViewer = React.createClass({
     editor.setReadOnly(true)
     editor.setTheme('ace/theme/xcode')
     editor.setHighlightActiveLine(false)
+    editor.clearSelection()
 
     var session = editor.getSession()
     session.setMode('ace/mode/' + this.props.mode)
     session.setUseSoftTabs(true)
     session.setOption('useWorker', false)
+    session.setUseWrapMode(true)
 
     this.setState({editor: editor})
   },

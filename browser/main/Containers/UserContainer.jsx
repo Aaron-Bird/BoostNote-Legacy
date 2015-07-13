@@ -6,9 +6,19 @@ var RouteHandler = ReactRouter.RouteHandler
 var AuthStore = require('../Stores/AuthStore')
 
 var UserNavigator = React.createClass({
+  mixins: [ReactRouter.Navigation],
   propTypes: {
     currentPlanet: React.PropTypes.object,
     currentUser: React.PropTypes.object
+  },
+  componentDidMount: function () {
+    this.unsubscribe = AuthStore.listen(this.onLogout)
+  },
+  componentWillUnmount: function () {
+    this.unsubscribe()
+  },
+  onLogout: function () {
+    this.transitionTo('login')
   },
   render: function () {
     var planets = this.props.currentUser.Planets.map(function (planet, index) {
@@ -50,6 +60,10 @@ module.exports = React.createClass({
   render: function () {
     var currentPlanetName = this.props.params.planetName
     var currentUser = AuthStore.getUser()
+
+    // user must be logged in
+    if (currentUser == null) return (<div></div>)
+
     var currentPlanet = null
     currentUser.Planets.some(function (planet) {
       if (planet.name === currentPlanetName) {
@@ -58,6 +72,7 @@ module.exports = React.createClass({
       }
       return false
     })
+
     return (
       <div className='UserContainer'>
         <UserNavigator currentPlanet={currentPlanet} currentUser={currentUser}/>

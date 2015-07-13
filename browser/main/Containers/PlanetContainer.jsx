@@ -1,5 +1,4 @@
 var React = require('react/addons')
-var RouteHandler = require('react-router').RouteHandler
 var ReactRouter = require('react-router')
 var ModalBase = require('../Components/ModalBase')
 var LaunchModal = require('../Components/LaunchModal')
@@ -8,7 +7,7 @@ var CodeViewer = require('../Components/CodeViewer')
 var AuthStore = require('../Stores/AuthStore')
 var PlanetStore = require('../Stores/PlanetStore')
 
-var fetchPlanet = require('../Actions/fetchPlanet')
+var PlanetActions = require('../Actions/PlanetActions')
 
 var PlanetHeader = React.createClass({
   propTypes: {
@@ -204,7 +203,7 @@ module.exports = React.createClass({
   componentDidMount: function () {
     this.unsubscribe = PlanetStore.listen(this.onFetched)
 
-    fetchPlanet(this.props.params.userName + '/' + this.props.params.planetName)
+    PlanetActions.fetchPlanet(this.props.params.userName + '/' + this.props.params.planetName)
   },
   componentWillUnmount: function () {
     this.unsubscribe()

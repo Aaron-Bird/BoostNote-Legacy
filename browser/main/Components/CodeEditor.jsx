@@ -19,6 +19,7 @@ var CodeEditor = React.createClass({
     session.setMode('ace/mode/' + this.props.mode)
     session.setUseSoftTabs(true)
     session.setOption('useWorker', false)
+    session.setUseWrapMode(true)
 
     session.on('change', function (e) {
       if (this.props.onChange != null) {

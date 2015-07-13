@@ -2,6 +2,8 @@ var React = require('react/addons')
 var ReactRouter = require('react-router')
 var Link = ReactRouter.Link
 
+var AuthActions = require('../Actions/AuthActions')
+
 var currentUser = {
   name: 'testcat',
   email: 'testcat@example.com',
@@ -12,12 +14,17 @@ var UserSettingNavigation = React.createClass({
   propTypes: {
     currentUser: React.PropTypes.shape({
       name: React.PropTypes.string
-    })
+    }),
+    current: React.PropTypes.string,
+    changeCurrent: React.PropTypes.func
   },
   changeFactory: function (current) {
     return function () {
       this.props.changeCurrent(current)
     }.bind(this)
+  },
+  logOut: function () {
+    AuthActions.logout()
   },
   render: function () {
     return (
@@ -39,7 +46,8 @@ var UserSettingMain = React.createClass({
   propTypes: {
     currentUser: React.PropTypes.shape({
       name: React.PropTypes.string
-    })
+    }),
+    current: React.PropTypes.string
   },
   render: function () {
     var view

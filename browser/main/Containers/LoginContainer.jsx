@@ -3,7 +3,7 @@ var ReactRouter = require('react-router')
 var Link = ReactRouter.Link
 
 var AuthStore = require('../Stores/AuthStore')
-var login = require('../Actions/login')
+var AuthActions = require('../Actions/AuthActions')
 
 var OnlyGuest = require('../Mixins/OnlyGuest')
 
@@ -22,7 +22,7 @@ module.exports = React.createClass({
     this.unsubscribe()
   },
   handleSubmit: function (e) {
-    login({
+    AuthActions.login({
       email: this.state.email,
       password: this.state.password
     })

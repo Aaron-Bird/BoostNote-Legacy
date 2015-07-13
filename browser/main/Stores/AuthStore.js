@@ -2,13 +2,13 @@
 var Reflux = require('reflux')
 var request = require('superagent')
 
-var login = require('../Actions/login')
-var register = require('../Actions/register')
+var AuthActions = require('../Actions/AuthActions')
 
 var AuthStore = Reflux.createStore({
     init: function () {
-      this.listenTo(login, this.login)
-      this.listenTo(register, this.register)
+      this.listenTo(AuthActions.login, this.login)
+      this.listenTo(AuthActions.register, this.register)
+      this.listenTo(AuthActions.logout, this.logout)
     },
     // Reflux Store
     login: function (input) {
@@ -48,6 +48,12 @@ var AuthStore = Reflux.createStore({
 
           this.trigger(user)
         }.bind(this))
+    },
+    logout: function () {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+
+      this.trigger()
     },
     // Methods
     check: function () {
