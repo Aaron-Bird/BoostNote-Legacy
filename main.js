@@ -12,7 +12,6 @@ var mainWindow = null
 //   if (process.platform !== 'darwin') app.quit()
 // })
 
-
 app.on('ready', function () {
   makeNewMainWindow()
 

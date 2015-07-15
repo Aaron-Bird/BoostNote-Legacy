@@ -134,11 +134,14 @@ var PlanetArticleList = React.createClass({
       }.bind(this)
 
       return (
-        <li onClick={handleClick} className={isActive ? 'active' : ''} key={snippet.id}>
-          <div className='callSign'><i className='fa fa-code'></i> {snippet.callSign}</div>
-          <div className='description'>{snippet.description}</div>
-          <div className='updatedAt'>{snippet.updatedAt}</div>
-          <div className='tags'><i className='fa fa-tags'/>{tags}</div>
+        <li onClick={handleClick} key={snippet.id}>
+          <div className={isActive ? 'snippetItem active' : 'snippetItem'}>
+            <div className='callSign'><i className='fa fa-code'></i> {snippet.callSign}</div>
+            <div className='description'>{snippet.description}</div>
+            <div className='updatedAt'>{snippet.updatedAt}</div>
+            <div className='tags'><i className='fa fa-tags'/>{tags}</div>
+          </div>
+          <div className='divider'></div>
         </li>
       )
     }.bind(this))

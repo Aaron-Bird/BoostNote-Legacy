@@ -128,25 +128,28 @@
     absolute top bottom left right
     overflow-y auto
     li
-      border-bottom solid 1px borderColor
-      padding 10px
-      cursor pointer
-      .callSign
-        margin-bottom 5px
-        font-weight 600
-      .description
-        margin-bottom 5px
-      .updatedAt
-        margin-bottom 5px
-        color lighten(textColor, 25%)
-        font-size 0.8em
-      &:hover, &.hover
-        background-color hoverBackgroundColor
+      .snippetItem
+        border solid 2px transparent
+        padding 10px
+        cursor pointer
+        transition 0.1s
+        .callSign
+          margin-bottom 5px
+          font-weight 600
+        .description
+          margin-bottom 5px
+        .updatedAt
+          margin-bottom 5px
+          color lighten(textColor, 25%)
+          font-size 0.8em
+        &:hover, &.hover
+          background-color hoverBackgroundColor
+          &:active, &.active
+            background-color white
         &:active, &.active
-          background-color white
-      &:active, &.active
-        border solid 2px brandBorderColor
-        padding 9px 9px 8px
+          border-color brandBorderColor
+      .divider
+        border-bottom solid 1px borderColor
 
 .PlanetArticleDetail
   absolute right bottom
