@@ -14,9 +14,6 @@
     border-radius 10px
     padding 15px
     box-shadow popupShadow
-    .modal-body
-      .modal-tab
-        text-align center
     .modal-footer
       clearfix()
       border-top solid 1px borderColor
@@ -26,6 +23,7 @@
 
   .launch-modal
     .modal-tab
+      text-align center
       .btn-primary, .btn-default
         margin 0
         border-radius 0
@@ -38,7 +36,16 @@
           border-left none
           border-top-right-radius 10px
           border-bottom-right-radius 10px
-
+    textarea.snippetDescription
+      height 75px
+    .Select
+      .Select-control
+        border-color borderColor
+      &.is-focused
+        .Select-control
+          border-color brandBorderColor
+      .Select-menu-outer
+        border-color borderColor
     .ace_editor
       height 250px
       border-radius 5px

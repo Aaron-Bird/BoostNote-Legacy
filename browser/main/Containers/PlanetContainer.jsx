@@ -208,15 +208,34 @@ module.exports = React.createClass({
   componentWillUnmount: function () {
     this.unsubscribe()
   },
-  onFetched: function (planet) {
-    this.setState({currentPlanet: planet}, function () {
-      if (planet.Snippets.length > 0) {
-        this.transitionTo('snippets', {
-          userName: this.props.params.userName,
-          planetName: this.props.params.planetName,
-          localId: planet.Snippets[0].localId})
-      }
-    })
+  onFetched: function (res) {
+    switch (res.status) {
+      case 'planetFetched':
+        var planet = res.data
+        this.setState({currentPlanet: planet}, function () {
+          if (planet.Snippets.length > 0) {
+            this.transitionTo('snippets', {
+              userName: this.props.params.userName,
+              planetName: this.props.params.planetName,
+              localId: planet.Snippets[0].localId})
+          }
+        })
+        break
+      case 'snippetCreated':
+        var snippet = res.data
+
+        if (snippet.PlanetId === this.state.currentPlanet.id) {
+          var snippets = this.state.currentPlanet.Snippets
+          snippets.unshift(snippet)
+          this.setState({planet: this.state.currentPlanet}, function () {
+            var params = this.getParams()
+            params.localId = snippet.localId
+            this.transitionTo('snippets', params)
+          })
+        }
+
+    }
+
   },
   render: function () {
     var user = AuthStore.getUser()
