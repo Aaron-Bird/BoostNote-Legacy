@@ -2,15 +2,31 @@ var React = require('react/addons')
 var ReactRouter = require('react-router')
 var CodeEditor = require('./CodeEditor')
 var Catalyst = require('../Mixins/Catalyst')
-
 var Select = require('react-select')
-
+var request = require('superagent')
 var PlanetActions = require('../Actions/PlanetActions')
 
-var options = [
-  { value: 'one', label: 'One' },
-  { value: 'two', label: 'Two' }
-]
+var getOptions = function (input, callback) {
+  request
+    .get('http://localhost:8000/tags/search')
+    .query({name: input})
+    .send()
+    .end(function (err, res) {
+      if (err) {
+        callback(err)
+        return
+      }
+      callback(null, {
+          options: res.body.map(function (tag) {
+            return {
+              label: tag.name,
+              value: tag.name
+            }
+          }),
+          complete: false
+      })
+    })
+}
 
 var SnippetForm = React.createClass({
   mixins: [Catalyst.LinkedStateMixin, ReactRouter.State],
@@ -31,12 +47,12 @@ var SnippetForm = React.createClass({
   componentDidMount: function () {
     React.findDOMNode(this.refs.description).focus()
   },
-  handleSnippetTagsChange: function (selected, all) {
+  handleTagsChange: function (selected, all) {
     var snippet = this.state.snippet
     snippet.Tags = all
     this.setState({snippet: snippet})
   },
-  handleSnippetContentChange: function (e, value) {
+  handleContentChange: function (e, value) {
     var snippet = this.state.snippet
     snippet.content = value
     this.setState({snippet: snippet})
@@ -67,7 +83,7 @@ var SnippetForm = React.createClass({
             </select>
           </div>
           <div className='form-group'>
-            <CodeEditor onChange={this.handleSnippetContentChange} code={this.state.snippet.content} mode={this.state.snippet.mode}/>
+            <CodeEditor onChange={this.handleContentChange} code={this.state.snippet.content} mode={this.state.snippet.mode}/>
           </div>
           <div className='form-group'>
             <Select
@@ -76,8 +92,8 @@ var SnippetForm = React.createClass({
               allowCreate={true}
               value={this.state.snippet.Tags}
               placeholder='Tags...'
-              options={options}
-              onChange={this.handleSnippetTagsChange}
+              asyncOptions={getOptions}
+              onChange={this.handleTagsChange}
             />
           </div>
         </div>
