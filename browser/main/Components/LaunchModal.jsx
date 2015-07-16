@@ -30,7 +30,7 @@ var LaunchModal = React.createClass({
         break
     }
   },
-  handleClick: function (e) {
+  stopPropagation: function (e) {
     e.stopPropagation()
   },
   selectSnippetTab: function () {
@@ -60,9 +60,9 @@ var LaunchModal = React.createClass({
     }
 
     return (
-      <div onClick={this.handleClick} className='modal launch-modal'>
+      <div onClick={this.stopPropagation} className='modal launch-modal'>
         <div className='modal-header'>
-          <div className='modal-tab form-group'>
+          <div className='modal-tab'>
             <button className={this.state.currentTab === 'snippet' ? 'btn-primary active' : 'btn-default'} onClick={this.selectSnippetTab}>Snippet</button><button className={this.state.currentTab === 'blueprint' ? 'btn-primary active' : 'btn-default'} onClick={this.selectBlueprintTab}>Blueprint</button>
           </div>
         </div>

@@ -3,6 +3,7 @@ var ReactRouter = require('react-router')
 var ModalBase = require('../Components/ModalBase')
 var LaunchModal = require('../Components/LaunchModal')
 var CodeViewer = require('../Components/CodeViewer')
+var SnippetEditModal = require('../Components/SnippetEditModal')
 
 var AuthStore = require('../Stores/AuthStore')
 var PlanetStore = require('../Stores/PlanetStore')
@@ -160,6 +161,20 @@ var PlanetArticleDetail = React.createClass({
   propTypes: {
     snippet: React.PropTypes.object
   },
+  getInitialState: function () {
+    return {
+      isEditModalOpen: false
+    }
+  },
+  openEditModal: function () {
+    this.setState({isEditModalOpen: true})
+  },
+  closeEditModal: function () {
+    this.setState({isEditModalOpen: false})
+  },
+  submitEditModal: function () {
+    this.setState({isEditModalOpen: false})
+  },
   render: function () {
     var snippet = this.props.snippet
 
@@ -174,9 +189,13 @@ var PlanetArticleDetail = React.createClass({
         <div className='viewer-header'>
           <i className='fa fa-code'></i> {snippet.callSign} <small className='updatedAt'>{snippet.updatedAt}</small>
           <span className='control-group'>
-            <button className='btn-default btn-square btn-sm'><i className='fa fa-edit fa-fw'></i></button>
+            <button onClick={this.openEditModal} className='btn-default btn-square btn-sm'><i className='fa fa-edit fa-fw'></i></button>
             <button className='btn-default btn-square btn-sm'><i className='fa fa-trash fa-fw'></i></button>
           </span>
+
+          <ModalBase isOpen={this.state.isEditModalOpen} close={this.closeEditModal}>
+            <SnippetEditModal snippet={snippet} submit={this.submitEditModal} close={this.closeEditModal}/>
+          </ModalBase>
         </div>
         <div className='viewer-body'>
           <div className='viewer-detail'>
@@ -212,6 +231,9 @@ module.exports = React.createClass({
     this.unsubscribe()
   },
   onFetched: function (res) {
+    var snippets = this.state.currentPlanet == null ? null : this.state.currentPlanet.Snippets
+    var snippet = res.data
+
     switch (res.status) {
       case 'planetFetched':
         var planet = res.data
@@ -225,10 +247,7 @@ module.exports = React.createClass({
         })
         break
       case 'snippetCreated':
-        var snippet = res.data
-
         if (snippet.PlanetId === this.state.currentPlanet.id) {
-          var snippets = this.state.currentPlanet.Snippets
           snippets.unshift(snippet)
           this.setState({planet: this.state.currentPlanet}, function () {
             var params = this.getParams()
@@ -236,7 +255,18 @@ module.exports = React.createClass({
             this.transitionTo('snippets', params)
           })
         }
-
+        break
+      case 'snippetUpdated':
+        if (snippet.PlanetId === this.state.currentPlanet.id) {
+          snippets.some(function (_snippet, index) {
+            if (_snippet.id === snippet.id) {
+              snippets[index] = snippet
+              this.setState({snippets: snippets})
+              return true
+            }
+            return false
+          }.bind(this))
+        }
     }
 
   },

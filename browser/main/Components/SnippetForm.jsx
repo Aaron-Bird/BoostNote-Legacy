@@ -31,17 +31,19 @@ var getOptions = function (input, callback) {
 var SnippetForm = React.createClass({
   mixins: [Catalyst.LinkedStateMixin, ReactRouter.State],
   propTypes: {
-    close: React.PropTypes.func
+    close: React.PropTypes.func,
+    snippet: React.PropTypes.object
   },
   getInitialState: function () {
+    var snippet = Object.assign({
+      description: '',
+      mode: 'javascript',
+      content: '',
+      callSign: '',
+      Tags: []
+    }, this.props.snippet)
     return {
-      snippet: {
-        description: '',
-        mode: 'javascript',
-        content: '',
-        callSign: '',
-        Tags: []
-      }
+      snippet: snippet
     }
   },
   componentDidMount: function () {
@@ -58,14 +60,22 @@ var SnippetForm = React.createClass({
     this.setState({snippet: snippet})
   },
   submit: function () {
-    var params = this.getParams()
-    var userName = params.userName
-    var planetName = params.planetName
     var snippet = Object.assign({}, this.state.snippet)
     snippet.Tags = snippet.Tags.map(function (tag) {
       return tag.value
     })
-    PlanetActions.createSnippet(userName + '/' + planetName, snippet)
+    if (this.props.snippet == null) {
+      var params = this.getParams()
+      var userName = params.userName
+      var planetName = params.planetName
+
+      PlanetActions.createSnippet(userName + '/' + planetName, snippet)
+    } else {
+      var snippetId = snippet.id
+      delete snippet.id
+
+      PlanetActions.updateSnippet(snippetId, snippet)
+    }
   },
   render: function () {
     return (
