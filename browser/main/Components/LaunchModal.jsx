@@ -60,7 +60,7 @@ var LaunchModal = React.createClass({
     }
 
     return (
-      <div onClick={this.stopPropagation} className='modal launch-modal'>
+      <div onClick={this.stopPropagation} className='LaunchModal modal'>
         <div className='modal-header'>
           <div className='modal-tab'>
             <button className={this.state.currentTab === 'snippet' ? 'btn-primary active' : 'btn-default'} onClick={this.selectSnippetTab}>Snippet</button><button className={this.state.currentTab === 'blueprint' ? 'btn-primary active' : 'btn-default'} onClick={this.selectBlueprintTab}>Blueprint</button>

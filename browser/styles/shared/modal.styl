@@ -31,7 +31,7 @@
       .modal-control
         float right
 
-  .launch-modal
+  .LaunchModal
     .modal-tab
       text-align center
       margin-bottom 15px
@@ -40,14 +40,15 @@
         border-radius 0
         border-width 1px
         width 150px
+        border-radius 0
         &:nth-child(1)
-          border-top-left-radius 10px
-          border-bottom-left-radius 10px
           border-right solid 1px borderColor
+          border-top-left-radius 5px
+          border-bottom-left-radius 5px
         &:nth-child(2)
           border-left none
-          border-top-right-radius 10px
-          border-bottom-right-radius 10px
+          border-top-right-radius 5px
+          border-bottom-right-radius 5px
   textarea.snippetDescription
     height 75px
     font-size 0.9em
@@ -60,6 +61,30 @@
     .Select-menu-outer
       border-color borderColor
   .ace_editor
-    height 250px
     border-radius 5px
     border solid 1px borderColor
+  .SnippetForm
+    .ace_editor
+      height 258px
+  .BlueprintForm
+    .ace_editor
+      height 358px
+    .previewMode
+      position absolute
+      right 15px
+      font-size 0.8em
+      line-height 24px
+      padding 0 10px
+      top 139px
+      background-color transparentify(invBackgroundColor, 0.2)
+      color invTextColor
+      border-top-right-radius 5px
+  .marked
+    height 360px
+    overflow-x hidden
+    overflow-y auto
+    box-sizing border-box
+    padding 5px
+    border solid 1px borderColor
+    border-radius 5px
+    marked()

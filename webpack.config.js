@@ -29,7 +29,8 @@ module.exports = {
     'react-router': 'ReactRouter',
     'ace': 'ace',
     'reflux': 'Reflux',
-    'moment': 'moment'
+    'moment': 'moment',
+    'markdown-it': 'markdownit'
   },
   resolve: {
     extensions: ['', '.js', '.jsx']
