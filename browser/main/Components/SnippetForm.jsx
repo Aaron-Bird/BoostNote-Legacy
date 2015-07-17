@@ -42,6 +42,12 @@ var SnippetForm = React.createClass({
       callSign: '',
       Tags: []
     }, this.props.snippet)
+    snippet.Tags = snippet.Tags.map(function (tag) {
+      return {
+        label: tag.name,
+        value: tag.name
+      }
+    })
     return {
       snippet: snippet
     }
@@ -110,7 +116,7 @@ var SnippetForm = React.createClass({
         <div className='modal-footer'>
           <div className='modal-control'>
             <button onClick={this.props.close} className='btn-default'>Cancle</button>
-            <button onClick={this.submit} className='btn-primary'>Launch</button>
+            <button onClick={this.submit} className='btn-primary'>{this.props.snippet == null ? 'Launch' : 'Relaunch'}</button>
           </div>
         </div>
       </div>

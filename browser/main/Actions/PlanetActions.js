@@ -5,9 +5,9 @@ module.exports = Reflux.createActions([
 
   'createSnippet',
   'updateSnippet',
-  'destroySnippet',
+  'deleteSnippet',
 
   'createBlueprint',
   'updateBlueprint',
-  'destroyBlueprint'
+  'deleteBlueprint'
 ])

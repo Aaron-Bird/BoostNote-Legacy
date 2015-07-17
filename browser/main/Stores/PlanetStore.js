@@ -9,6 +9,7 @@ var PlanetStore = Reflux.createStore({
     this.listenTo(PlanetActions.fetchPlanet, this.fetchPlanet)
     this.listenTo(PlanetActions.createSnippet, this.createSnippet)
     this.listenTo(PlanetActions.updateSnippet, this.updateSnippet)
+    this.listenTo(PlanetActions.deleteSnippet, this.deleteSnippet)
   },
   fetchPlanet: function (planetName) {
     request
@@ -66,6 +67,27 @@ var PlanetStore = Reflux.createStore({
         var snippet = res.body
         this.trigger({
           status: 'snippetUpdated',
+          data: snippet
+        })
+      }.bind(this))
+  },
+  deleteSnippet: function (id) {
+    request
+      .del('http://localhost:8000/snippets/id/' + id)
+      .set({
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      })
+      .send()
+      .end(function (err, res) {
+        if (err) {
+          console.error(err)
+          this.trigger(null)
+          return
+        }
+
+        var snippet = res.body
+        this.trigger({
+          status: 'snippetDeleted',
           data: snippet
         })
       }.bind(this))

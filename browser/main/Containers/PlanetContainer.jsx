@@ -4,6 +4,7 @@ var ModalBase = require('../Components/ModalBase')
 var LaunchModal = require('../Components/LaunchModal')
 var CodeViewer = require('../Components/CodeViewer')
 var SnippetEditModal = require('../Components/SnippetEditModal')
+var SnippetDeleteModal = require('../Components/SnippetDeleteModal')
 
 var AuthStore = require('../Stores/AuthStore')
 var PlanetStore = require('../Stores/PlanetStore')
@@ -175,6 +176,15 @@ var PlanetArticleDetail = React.createClass({
   submitEditModal: function () {
     this.setState({isEditModalOpen: false})
   },
+  openDeleteModal: function () {
+    this.setState({isDeleteModalOpen: true})
+  },
+  closeDeleteModal: function () {
+    this.setState({isDeleteModalOpen: false})
+  },
+  submitDeleteModal: function () {
+    this.setState({isDeleteModalOpen: false})
+  },
   render: function () {
     var snippet = this.props.snippet
 
@@ -190,11 +200,15 @@ var PlanetArticleDetail = React.createClass({
           <i className='fa fa-code'></i> {snippet.callSign} <small className='updatedAt'>{snippet.updatedAt}</small>
           <span className='control-group'>
             <button onClick={this.openEditModal} className='btn-default btn-square btn-sm'><i className='fa fa-edit fa-fw'></i></button>
-            <button className='btn-default btn-square btn-sm'><i className='fa fa-trash fa-fw'></i></button>
+            <button onClick={this.openDeleteModal} className='btn-default btn-square btn-sm'><i className='fa fa-trash fa-fw'></i></button>
           </span>
 
           <ModalBase isOpen={this.state.isEditModalOpen} close={this.closeEditModal}>
             <SnippetEditModal snippet={snippet} submit={this.submitEditModal} close={this.closeEditModal}/>
+          </ModalBase>
+
+          <ModalBase isOpen={this.state.isDeleteModalOpen} close={this.closeDeleteModal}>
+            <SnippetDeleteModal snippet={snippet} submit={this.submitDeleteModal} close={this.closeDeleteModal}/>
           </ModalBase>
         </div>
         <div className='viewer-body'>
@@ -242,7 +256,7 @@ module.exports = React.createClass({
             this.transitionTo('snippets', {
               userName: this.props.params.userName,
               planetName: this.props.params.planetName,
-              localId: planet.Snippets[0].localId})
+              localId: this.props.params.localId == null ? planet.Snippets[0].localId : this.props.params.localId})
           }
         })
         break
@@ -260,8 +274,36 @@ module.exports = React.createClass({
         if (snippet.PlanetId === this.state.currentPlanet.id) {
           snippets.some(function (_snippet, index) {
             if (_snippet.id === snippet.id) {
-              snippets[index] = snippet
+              snippets.splice(index, 1)
+              snippets.unshift(snippet)
               this.setState({snippets: snippets})
+              return true
+            }
+            return false
+          }.bind(this))
+        }
+        break
+      case 'snippetDeleted':
+        if (snippet.PlanetId === this.state.currentPlanet.id) {
+          snippets.some(function (_snippet, index) {
+            if (_snippet.id === snippet.id) {
+              snippets.splice(index, 1)
+              this.setState({snippets: snippets}, function () {
+                var params = this.getParams()
+                if (parseInt(params.localId, 10) === snippet.localId) {
+                  if (snippets.length === 0) {
+                    delete params.localId
+                    this.transitionTo('planet', params)
+                    return
+                  }
+                  if (index > 0) {
+                    params.localId = snippets[index - 1].localId
+                  } else {
+                    params.localId = snippets[0].localId
+                  }
+                  this.transitionTo('snippets', params)
+                }
+              })
               return true
             }
             return false

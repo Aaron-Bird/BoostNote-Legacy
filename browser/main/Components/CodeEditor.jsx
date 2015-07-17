@@ -14,6 +14,7 @@ var CodeEditor = React.createClass({
     editor.setValue(this.props.code)
     editor.renderer.setShowGutter(true)
     editor.setTheme('ace/theme/xcode')
+    editor.clearSelection()
 
     var session = editor.getSession()
     session.setMode('ace/mode/' + this.props.mode)
