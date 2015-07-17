@@ -3,14 +3,13 @@ module.exports = {
     main: './browser/main/index.jsx'
   },
   output: {
-    filename: '[name].js', //this is the default name, so you can skip it
+    filename: '[name].js',
     publicPath: 'http://localhost:8090/assets'
   },
-  devtool: "#inline-source-map", // Sourcemap
+  devtool: '#inline-source-map',
   module: {
     loaders: [
       {
-        //tell webpack to use jsx-loader for all *.jsx files
         test: /\.jsx$/,
         loader: 'jsx-loader?insertPragma=React.DOM&harmony'
       },
@@ -25,13 +24,12 @@ module.exports = {
     ]
   },
   externals: {
-    //don't bundle the 'react' npm package with our bundle.js
-    //but get it from a global 'React' variable
     'react': 'React',
     'react/addons': 'React',
     'react-router': 'ReactRouter',
     'ace': 'ace',
-    'reflux': 'Reflux'
+    'reflux': 'Reflux',
+    'moment': 'moment'
   },
   resolve: {
     extensions: ['', '.js', '.jsx']

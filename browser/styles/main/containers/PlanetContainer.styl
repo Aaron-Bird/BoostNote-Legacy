@@ -3,8 +3,13 @@
   absolute top bottom right
   left 50px
   .tags
+    white-space: nowrap;
+    overflow-x: auto;
     a
       margin 0 2px
+      &.noTag
+        color inactiveTextColor
+        font-size 0.8em
 
 .PlanetHeader
   absolute left right top
@@ -134,15 +139,20 @@
         padding 10px
         cursor pointer
         transition 0.1s
+        .itemHeader
+          clearfix()
+          margin-bottom 5px
         .callSign
-          margin-bottom 5px
+          float left
           font-weight 600
-        .description
-          margin-bottom 5px
+          font-size 1.1em
         .updatedAt
-          margin-bottom 5px
+          float right
+          line-height 16px
           color lighten(textColor, 25%)
           font-size 0.8em
+        .description
+          margin 10px 0 15px
         &:hover, &.hover
           background-color hoverBackgroundColor
           &:active, &.active
@@ -160,24 +170,35 @@
     height 44px
     line-height 44px
     padding 0 15px
-    border-bottom solid 1px borderColor
     box-sizing border-box
+    font-size 1.2em
     small
-      font-size 0.5em
+      font-size 0.8em
+      color lighten(textColor, 25%)
     .control-group
       float right
       button
-        margin 0 2px
+        margin 10px 3px
   .viewer-body
     absolute bottom right
     left 1px
     top 44px
     .viewer-detail
       border-bottom solid 1px borderColor
+      height 150px
+      box-sizing border-box
       padding 10px
       .description
-        margin-bottom 15px
+        height 100px
+        line-height 1.4em
+        overflow-y auto
+      .tags
+        position absolute
+        left 15px
+        right 15px
+        top 120px
     .content
-      padding 5px 0
       .ace_editor
-        height 500px
+        absolute left right
+        top 155px
+        bottom 5px

@@ -36,6 +36,7 @@ var PlanetStore = Reflux.createStore({
       }.bind(this))
   },
   createSnippet: function (planetName, input) {
+    input.description = input.description.substring(0, 255)
     request
       .post('http://localhost:8000/' + planetName + '/snippets')
       .set({
@@ -51,6 +52,7 @@ var PlanetStore = Reflux.createStore({
       }.bind(this))
   },
   updateSnippet: function (id, input) {
+    input.description = input.description.substring(0, 255)
     request
       .put('http://localhost:8000/snippets/id/' + id)
       .set({

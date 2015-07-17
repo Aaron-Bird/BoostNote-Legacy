@@ -1,5 +1,7 @@
 var React = require('react/addons')
 var ReactRouter = require('react-router')
+var moment = require('moment')
+var ForceUpdate = require('../Mixins/ForceUpdate')
 var ModalBase = require('../Components/ModalBase')
 var LaunchModal = require('../Components/LaunchModal')
 var CodeViewer = require('../Components/CodeViewer')
@@ -109,7 +111,7 @@ var PlanetNavigator = React.createClass({
 })
 
 var PlanetArticleList = React.createClass({
-  mixins: [ReactRouter.Navigation, ReactRouter.State],
+  mixins: [ReactRouter.Navigation, ReactRouter.State, ForceUpdate(60000)],
   propTypes: {
     planet: React.PropTypes.shape({
       Snippets: React.PropTypes.array,
@@ -118,11 +120,13 @@ var PlanetArticleList = React.createClass({
   },
   render: function () {
     var articles = this.props.planet.Snippets.map(function (snippet) {
-      var tags = snippet.Tags.map(function (tag) {
+      var tags = snippet.Tags.length > 0 ? snippet.Tags.map(function (tag) {
         return (
           <a key={tag.id} href>#{tag.name}</a>
         )
-      })
+      }) : (
+        <a className='noTag'>Not tagged yet</a>
+      )
       var params = this.getParams()
 
       var isActive = parseInt(params.localId, 10) === snippet.localId
@@ -138,9 +142,11 @@ var PlanetArticleList = React.createClass({
       return (
         <li onClick={handleClick} key={snippet.id}>
           <div className={isActive ? 'snippetItem active' : 'snippetItem'}>
-            <div className='callSign'><i className='fa fa-code'></i> {snippet.callSign}</div>
-            <div className='description'>{snippet.description}</div>
-            <div className='updatedAt'>{snippet.updatedAt}</div>
+            <div className='itemHeader'>
+              <div className='callSign'><i className='fa fa-code'></i> {snippet.callSign}</div>
+              <div className='updatedAt'>{moment(snippet.updatedAt).fromNow()}</div>
+            </div>
+            <div className='description'>{snippet.description.length > 50 ? snippet.description.substring(0, 50) + ' …' : snippet.description}</div>
             <div className='tags'><i className='fa fa-tags'/>{tags}</div>
           </div>
           <div className='divider'></div>
@@ -159,6 +165,7 @@ var PlanetArticleList = React.createClass({
 })
 
 var PlanetArticleDetail = React.createClass({
+  mixins: [ForceUpdate(60000)],
   propTypes: {
     snippet: React.PropTypes.object
   },
@@ -188,16 +195,18 @@ var PlanetArticleDetail = React.createClass({
   render: function () {
     var snippet = this.props.snippet
 
-    var tags = snippet.Tags.map(function (tag) {
+    var tags = snippet.Tags.length > 0 ? snippet.Tags.map(function (tag) {
       return (
         <a key={tag.id} href>#{tag.name}</a>
       )
-    })
+    }) : (
+      <a className='noTag'>Not tagged yet</a>
+    )
 
     return (
       <div className='PlanetArticleDetail'>
         <div className='viewer-header'>
-          <i className='fa fa-code'></i> {snippet.callSign} <small className='updatedAt'>{snippet.updatedAt}</small>
+          <i className='fa fa-code'></i> {snippet.callSign} <small className='updatedAt'>{moment(snippet.updatedAt).fromNow()}</small>
           <span className='control-group'>
             <button onClick={this.openEditModal} className='btn-default btn-square btn-sm'><i className='fa fa-edit fa-fw'></i></button>
             <button onClick={this.openDeleteModal} className='btn-default btn-square btn-sm'><i className='fa fa-trash fa-fw'></i></button>

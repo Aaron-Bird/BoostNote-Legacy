@@ -4,6 +4,7 @@
     "react": "~0.13.3",
     "fontawesome": "~4.3.0",
     "react-router": "~0.13.3",
-    "reflux": "~0.2.8"
+    "reflux": "~0.2.8",
+    "moment": "~2.10.3"
   }
 }
