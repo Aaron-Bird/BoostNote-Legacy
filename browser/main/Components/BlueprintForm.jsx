@@ -91,6 +91,11 @@ var BlueprintForm = React.createClass({
       PlanetActions.updateBlueprint(blueprintId, blueprint)
     }
   },
+  handleKeyDown: function (e) {
+    if (e.keyCode === 13 && e.metaKey) {
+      this.submit()
+    }
+  },
   render: function () {
     var content = this.state.mode === BlueprintForm.EDIT_MODE ? (
       <div className='form-group'>
@@ -104,7 +109,7 @@ var BlueprintForm = React.createClass({
     )
 
     return (
-      <div className='BlueprintForm'>
+      <div onKeyDown={this.handleKeyDown} className='BlueprintForm'>
         <div className='modal-body'>
           <div className='form-group'>
             <input ref='title' className='block-input' valueLink={this.linkState('blueprint.title')} placeholder='Title'/>

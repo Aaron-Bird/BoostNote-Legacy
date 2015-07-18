@@ -78,7 +78,7 @@ module.exports = React.createClass({
 
     var index = this.getIndexOfCurrentArticle()
 
-    if (index < this.state.filteredArticles.length) {
+    if (index < this.state.filteredArticles.length - 1) {
       this.selectArticleByIndex(index + 1)
     }
   },

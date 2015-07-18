@@ -83,9 +83,14 @@ var SnippetForm = React.createClass({
       PlanetActions.updateSnippet(snippetId, snippet)
     }
   },
+  handleKeyDown: function (e) {
+    if (e.keyCode === 13 && e.metaKey) {
+      this.submit()
+    }
+  },
   render: function () {
     return (
-      <div className='SnippetForm'>
+      <div onKeyDown={this.handleKeyDown} className='SnippetForm'>
         <div className='modal-body'>
           <div className='form-group'>
             <textarea ref='description' className='snippetDescription block-input' valueLink={this.linkState('snippet.description')} placeholder='Description'/>

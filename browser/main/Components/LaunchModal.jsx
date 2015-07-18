@@ -40,11 +40,18 @@ var LaunchModal = React.createClass({
     this.setState({currentTab: 'blueprint'})
   },
   submit: function () {
-    // this.props.submit('yolo')
     if (this.state.currentTab === 'snippet') {
       console.log(this.state.snippet)
     } else {
       console.log(this.state.blueprint)
+    }
+  },
+  handleKeyDown: function (e) {
+    if (e.keyCode === 37 && e.metaKey) {
+      this.selectSnippetTab()
+    }
+    if (e.keyCode === 39 && e.metaKey) {
+      this.selectBlueprintTab()
     }
   },
   render: function () {
@@ -60,7 +67,7 @@ var LaunchModal = React.createClass({
     }
 
     return (
-      <div onClick={this.stopPropagation} className='LaunchModal modal'>
+      <div onKeyDown={this.handleKeyDown} onClick={this.stopPropagation} className='LaunchModal modal'>
         <div className='modal-header'>
           <div className='modal-tab'>
             <button className={this.state.currentTab === 'snippet' ? 'btn-primary active' : 'btn-default'} onClick={this.selectSnippetTab}>Snippet</button><button className={this.state.currentTab === 'blueprint' ? 'btn-primary active' : 'btn-default'} onClick={this.selectBlueprintTab}>Blueprint</button>

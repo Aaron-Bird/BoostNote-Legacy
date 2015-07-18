@@ -17,8 +17,19 @@ var PlanetNavigator = React.createClass({
       isLaunchModalOpen: false
     }
   },
+  handleKeyDown: function (e) {
+    if (e.keyCode === 13 && e.metaKey) {
+      e.preventDefault()
+      this.openLaunchModal()
+    }
+  },
+  componentDidMount: function () {
+    document.addEventListener('keydown', this.handleKeyDown, false)
+  },
+  componentWillUnmount: function () {
+    document.removeEventListener('keydown', this.handleKeyDown, false)
+  },
   openLaunchModal: function () {
-    console.log('and...OPEN!!')
     this.setState({isLaunchModalOpen: true})
   },
   closeLaunchModal: function () {
