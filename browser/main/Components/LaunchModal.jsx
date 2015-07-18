@@ -28,6 +28,9 @@ var LaunchModal = React.createClass({
       case 'snippetCreated':
         this.props.close()
         break
+      case 'blueprintCreated':
+        this.props.close()
+        break
     }
   },
   stopPropagation: function (e) {

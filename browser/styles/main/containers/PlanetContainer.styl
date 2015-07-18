@@ -133,7 +133,7 @@
     absolute top bottom left right
     overflow-y auto
     li
-      .snippetItem
+      .articleItem
         user-select none
         border solid 2px transparent
         padding 10px
@@ -142,7 +142,7 @@
         .itemHeader
           clearfix()
           margin-bottom 5px
-        .callSign
+        .callSign, .title
           float left
           font-weight 600
           font-size 1.1em
@@ -151,7 +151,7 @@
           line-height 16px
           color lighten(textColor, 25%)
           font-size 0.8em
-        .description
+        .description, .content
           margin 10px 0 15px
         &:hover, &.hover
           background-color hoverBackgroundColor
@@ -183,6 +183,7 @@
     absolute bottom right
     left 1px
     top 44px
+  &.snippetDetail>.viewer-body
     .viewer-detail
       border-bottom solid 1px borderColor
       height 150px
@@ -202,3 +203,20 @@
         absolute left right
         top 155px
         bottom 5px
+  &.blueprintDetail>.viewer-body
+    .tags
+      absolute top
+      left 15px
+      right 15px
+      height 24px
+      line-height 24px
+    .content
+      absolute left right bottom
+      top 30px
+      box-sizing border-box
+      padding 5px
+      border-top solid 1px borderColor
+      padding 10px
+      overflow-x hidden
+      overflow-y auto
+      marked()

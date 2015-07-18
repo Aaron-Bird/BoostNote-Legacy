@@ -1,6 +1,7 @@
 var markdownit = require('markdown-it')
 var md = markdownit({
-  typographer: true
+  typographer: true,
+  linkify: true
 })
 
 var Markdown = {

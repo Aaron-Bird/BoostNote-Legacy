@@ -5,6 +5,7 @@ var Catalyst = require('../Mixins/Catalyst')
 var Markdown = require('../Mixins/Markdown')
 var Select = require('react-select')
 var request = require('superagent')
+var PlanetActions = require('../Actions/PlanetActions')
 
 var getOptions = function (input, callback) {
   request
@@ -30,12 +31,13 @@ var getOptions = function (input, callback) {
 
 var BlueprintForm = React.createClass({
   mixins: [Catalyst.LinkedStateMixin, ReactRouter.State, Markdown],
+  propTypes: {
+    close: React.PropTypes.func,
+    blueprint: React.PropTypes.object
+  },
   statics: {
     EDIT_MODE: 0,
     PREVIEW_MODE: 1
-  },
-  propTypes: {
-    close: React.PropTypes.func
   },
   getInitialState: function () {
     return {
@@ -65,6 +67,22 @@ var BlueprintForm = React.createClass({
   },
   submit: function () {
     console.log(this.state.blueprint)
+    var blueprint = Object.assign({}, this.state.blueprint)
+    blueprint.Tags = blueprint.Tags.map(function (tag) {
+      return tag.value
+    })
+    if (this.props.blueprint == null) {
+      var params = this.getParams()
+      var userName = params.userName
+      var planetName = params.planetName
+
+      PlanetActions.createBlueprint(userName + '/' + planetName, blueprint)
+    } else {
+      var blueprintId = blueprint.id
+      delete blueprint.id
+
+      PlanetActions.updateBlueprint(blueprintId, blueprint)
+    }
   },
   render: function () {
     var content = this.state.mode === BlueprintForm.EDIT_MODE ? (
