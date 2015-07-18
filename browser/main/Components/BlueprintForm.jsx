@@ -97,7 +97,7 @@ var BlueprintForm = React.createClass({
         <CodeEditor onChange={this.handleContentChange} code={this.state.blueprint.content} mode={'markdown'}/>
       </div>
     ) : (
-      <div className='form-group'>
+      <div className='form-group relative'>
         <div className='previewMode'>Preview mode</div>
         <div className='marked' dangerouslySetInnerHTML={{__html: ' ' + this.markdown(this.state.blueprint.content)}}></div>
       </div>
