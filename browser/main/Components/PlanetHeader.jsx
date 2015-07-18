@@ -3,12 +3,16 @@ var React = require('react/addons')
 var PlanetHeader = React.createClass({
   propTypes: {
     currentPlanet: React.PropTypes.object,
-    currentUser: React.PropTypes.object
+    currentUser: React.PropTypes.object,
+    onSearchChange: React.PropTypes.func
   },
   getInitialState: function () {
     return {
       isMenuDropDownOpen: false
     }
+  },
+  componentDidMount: function () {
+    React.findDOMNode(this.refs.search).focus()
   },
   toggleMenuDropDown: function () {
     this.setState({isMenuDropDownOpen: !this.state.isMenuDropDownOpen}, function () {
@@ -23,6 +27,10 @@ var PlanetHeader = React.createClass({
   },
   interceptClick: function (e) {
     e.stopPropagation()
+  },
+  handleChange: function (e) {
+    this.setState({search: e.target.value})
+    this.props.onSearchChange(e.target.value)
   },
   render: function () {
     var currentPlanetName = this.props.currentPlanet.name
@@ -40,7 +48,7 @@ var PlanetHeader = React.createClass({
         </div>
         <span className='searchInput'>
           <i className='fa fa-search'/>
-          <input type='text' className='inline-input circleInput' placeholder='Search...'/>
+          <input onChange={this.handleChange} value={this.state.search} ref='search' tabIndex='1' type='text' className='inline-input circleInput' placeholder='Search...'/>
         </span>
         <a className='downloadBtn btn-primary'>Download Mac app</a>
       </div>

@@ -19,7 +19,8 @@ module.exports = React.createClass({
   },
   getInitialState: function () {
     return {
-      currentPlanet: null
+      currentPlanet: null,
+      filteredArticles: []
     }
   },
   componentDidMount: function () {
@@ -35,13 +36,13 @@ module.exports = React.createClass({
     var index = 0
 
     if (this.isActive('snippets')) {
-      this.state.currentPlanet.Articles.some(function (_article, _index) {
+      this.state.filteredArticles.some(function (_article, _index) {
         if (_article.type === 'snippet' && _article.localId === parseInt(params.localId, 10)) {
           index = _index
         }
       })
     } else if (this.isActive('blueprints')) {
-      this.state.currentPlanet.Articles.some(function (_article, _index) {
+      this.state.filteredArticles.some(function (_article, _index) {
         if (_article.type === 'blueprint' && _article.localId === parseInt(params.localId, 10)) {
           index = _index
           return true
@@ -53,7 +54,7 @@ module.exports = React.createClass({
     return index
   },
   selectArticleByIndex: function (index) {
-    var article = this.state.currentPlanet.Articles[index]
+    var article = this.state.filteredArticles[index]
     var params = this.props.params
 
     if (article == null) {
@@ -73,16 +74,16 @@ module.exports = React.createClass({
     }
   },
   selectNextArticle: function () {
-    if (this.state.currentPlanet == null || this.state.currentPlanet.Articles.length === 0) return
+    if (this.state.currentPlanet == null || this.state.filteredArticles.length === 0) return
 
     var index = this.getIndexOfCurrentArticle()
 
-    if (index < this.state.currentPlanet.Articles.length) {
+    if (index < this.state.filteredArticles.length) {
       this.selectArticleByIndex(index + 1)
     }
   },
   selectPriorArticle: function () {
-    if (this.state.currentPlanet == null || this.state.currentPlanet.Articles.length === 0) return
+    if (this.state.currentPlanet == null || this.state.filteredArticles.length === 0) return
 
     var index = this.getIndexOfCurrentArticle()
 
@@ -95,7 +96,7 @@ module.exports = React.createClass({
 
     if (res.status === 'planetFetched') {
       var planet = res.data
-      this.setState({currentPlanet: planet}, function () {
+      this.setState({currentPlanet: planet, filteredArticles: planet.Articles}, function () {
         if (planet.Articles.length > 0) {
           if (this.isActive('snippets')) {
             this.transitionTo('snippets', {
@@ -146,6 +147,37 @@ module.exports = React.createClass({
       }
     }
   },
+  handleSearchChange: function (search) {
+    var firstFiltered = this.state.currentPlanet.Articles.filter(function (article) {
+      if (search === '' || search == null) return true
+
+      var first = article.type === 'snippet' ? article.callSign : article.title
+      if (first.match(new RegExp(search, 'i'))) return true
+
+      return false
+    })
+
+    var secondFiltered = this.state.currentPlanet.Articles.filter(function (article) {
+      var second = article.type === 'snippet' ? article.description : article.content
+      if (second.match(new RegExp(search, 'i'))) return true
+
+      return false
+    })
+
+    var thirdFiltered = this.state.currentPlanet.Articles.filter(function (article) {
+      if (article.type === 'snippet') {
+        if (article.content.match(new RegExp(search, 'i'))) return true
+      }
+      return false
+    })
+
+    var filteredArticles = firstFiltered.concat(secondFiltered, thirdFiltered).filter(function (value, index, self) {
+      return self.indexOf(value) === index
+    })
+    this.setState({filteredArticles: filteredArticles}, function () {
+      this.selectArticleByIndex(0)
+    })
+  },
   render: function () {
     var user = AuthStore.getUser()
     if (user == null) return (<div/>)
@@ -177,9 +209,9 @@ module.exports = React.createClass({
 
     return (
       <div className='PlanetContainer'>
-        <PlanetHeader currentPlanet={this.state.currentPlanet} currentUser={user}/>
+        <PlanetHeader onSearchChange={this.handleSearchChange} currentPlanet={this.state.currentPlanet} currentUser={user}/>
         <PlanetNavigator currentPlanet={this.state.currentPlanet} currentUser={user}/>
-        <PlanetArticleList onPressUp={this.selectPriorArticle} onPressDown={this.selectNextArticle} planet={this.state.currentPlanet}/>
+        <PlanetArticleList onPressUp={this.selectPriorArticle} onPressDown={this.selectNextArticle} articles={this.state.filteredArticles}/>
         {content}
       </div>
     )

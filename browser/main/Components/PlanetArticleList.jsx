@@ -8,11 +8,7 @@ var Markdown = require('../Mixins/Markdown')
 var PlanetArticleList = React.createClass({
   mixins: [ReactRouter.Navigation, ReactRouter.State, ForceUpdate(60000), Markdown],
   propTypes: {
-    planet: React.PropTypes.shape({
-      Snippets: React.PropTypes.array,
-      Blueprints: React.PropTypes.array,
-      Articles: React.PropTypes.array
-    }),
+    articles: React.PropTypes.array,
     onPressDown: React.PropTypes.func,
     onPressUp: React.PropTypes.func
   },
@@ -28,7 +24,7 @@ var PlanetArticleList = React.createClass({
     }
   },
   render: function () {
-    var articles = this.props.planet.Articles.map(function (article) {
+    var articles = this.props.articles.map(function (article) {
       var tags = article.Tags.length > 0 ? article.Tags.map(function (tag) {
         return (
           <a key={tag.id} href>#{tag.name}</a>
@@ -92,7 +88,7 @@ var PlanetArticleList = React.createClass({
 
     return (
       <div className='PlanetArticleList'>
-        <ul onKeyDown={this.handleKeyDown} tabIndex='1'>
+        <ul onKeyDown={this.handleKeyDown} tabIndex='2'>
           {articles}
         </ul>
       </div>
