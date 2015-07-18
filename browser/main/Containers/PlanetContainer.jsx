@@ -7,6 +7,8 @@ var LaunchModal = require('../Components/LaunchModal')
 var CodeViewer = require('../Components/CodeViewer')
 var SnippetEditModal = require('../Components/SnippetEditModal')
 var SnippetDeleteModal = require('../Components/SnippetDeleteModal')
+var BlueprintEditModal = require('../Components/BlueprintEditModal')
+var BlueprintDeleteModal = require('../Components/BlueprintDeleteModal')
 
 var AuthStore = require('../Stores/AuthStore')
 var PlanetStore = require('../Stores/PlanetStore')
@@ -119,7 +121,20 @@ var PlanetArticleList = React.createClass({
       Snippets: React.PropTypes.array,
       Blueprints: React.PropTypes.array,
       Articles: React.PropTypes.array
-    })
+    }),
+    onPressDown: React.PropTypes.func,
+    onPressUp: React.PropTypes.func
+  },
+  handleKeyDown: function (e) {
+    switch (e.keyCode) {
+      case 38:
+        e.preventDefault()
+        this.props.onPressUp()
+        break
+      case 40:
+        e.preventDefault()
+        this.props.onPressDown()
+    }
   },
   render: function () {
     var articles = this.props.planet.Articles.map(function (article) {
@@ -186,7 +201,7 @@ var PlanetArticleList = React.createClass({
 
     return (
       <div className='PlanetArticleList'>
-        <ul>
+        <ul onKeyDown={this.handleKeyDown} tabIndex='1'>
           {articles}
         </ul>
       </div>
@@ -272,11 +287,11 @@ var PlanetArticleDetail = React.createClass({
           </span>
 
           <ModalBase isOpen={this.state.isEditModalOpen} close={this.closeEditModal}>
-            <SnippetEditModal snippet={article} submit={this.submitEditModal} close={this.closeEditModal}/>
+            <BlueprintEditModal blueprint={article} submit={this.submitEditModal} close={this.closeEditModal}/>
           </ModalBase>
 
           <ModalBase isOpen={this.state.isDeleteModalOpen} close={this.closeDeleteModal}>
-            <SnippetDeleteModal snippet={article} submit={this.submitDeleteModal} close={this.closeDeleteModal}/>
+            <BlueprintDeleteModal blueprint={article} submit={this.submitDeleteModal} close={this.closeDeleteModal}/>
           </ModalBase>
         </div>
         <div className='viewer-body'>
@@ -308,82 +323,121 @@ module.exports = React.createClass({
   componentWillUnmount: function () {
     this.unsubscribe()
   },
-  onFetched: function (res) {
-    var snippets = this.state.currentPlanet == null ? null : this.state.currentPlanet.Snippets
-    var snippet = res.data
+  getIndexOfCurrentArticle: function () {
+    var params = this.props.params
+    var index = 0
 
-    switch (res.status) {
-      case 'planetFetched':
-        var planet = res.data
-        this.setState({currentPlanet: planet}, function () {
-          if (planet.Articles.length > 0) {
-            if (this.isActive('snippets')) {
-              this.transitionTo('snippets', {
-                userName: this.props.params.userName,
-                planetName: this.props.params.planetName,
-                localId: this.props.params.localId == null ? planet.Articles[0].localId : this.props.params.localId
-              })
-            } else if (this.isActive('blueprints')) {
-              this.transitionTo('blueprints', {
-                userName: this.props.params.userName,
-                planetName: this.props.params.planetName,
-                localId: this.props.params.localId == null ? planet.Articles[0].localId : this.props.params.localId
-              })
-            }
-          }
-        })
-        break
-      case 'snippetCreated':
-        if (snippet.PlanetId === this.state.currentPlanet.id) {
-          snippets.unshift(snippet)
-          this.setState({planet: this.state.currentPlanet}, function () {
-            var params = this.getParams()
-            params.localId = snippet.localId
-            this.transitionTo('snippets', params)
-          })
+    if (this.isActive('snippets')) {
+      this.state.currentPlanet.Articles.some(function (_article, _index) {
+        if (_article.type === 'snippet' && _article.localId === parseInt(params.localId, 10)) {
+          index = _index
         }
-        break
-      case 'snippetUpdated':
-        if (snippet.PlanetId === this.state.currentPlanet.id) {
-          snippets.some(function (_snippet, index) {
-            if (_snippet.id === snippet.id) {
-              snippets.splice(index, 1)
-              snippets.unshift(snippet)
-              this.setState({snippets: snippets})
-              return true
-            }
-            return false
-          }.bind(this))
+      })
+    } else if (this.isActive('blueprints')) {
+      this.state.currentPlanet.Articles.some(function (_article, _index) {
+        if (_article.type === 'blueprint' && _article.localId === parseInt(params.localId, 10)) {
+          index = _index
+          return true
         }
-        break
-      case 'snippetDeleted':
-        if (snippet.PlanetId === this.state.currentPlanet.id) {
-          snippets.some(function (_snippet, index) {
-            if (_snippet.id === snippet.id) {
-              snippets.splice(index, 1)
-              this.setState({snippets: snippets}, function () {
-                var params = this.getParams()
-                if (parseInt(params.localId, 10) === snippet.localId) {
-                  if (snippets.length === 0) {
-                    delete params.localId
-                    this.transitionTo('planet', params)
-                    return
-                  }
-                  if (index > 0) {
-                    params.localId = snippets[index - 1].localId
-                  } else {
-                    params.localId = snippets[0].localId
-                  }
-                  this.transitionTo('snippets', params)
-                }
-              })
-              return true
-            }
-            return false
-          }.bind(this))
-        }
+        return false
+      })
     }
 
+    return index
+  },
+  selectArticleByIndex: function (index) {
+    var article = this.state.currentPlanet.Articles[index]
+    var params = this.props.params
+
+    if (article == null) {
+      this.transitionTo('planetHome', params)
+    }
+
+    if (article.type === 'snippet') {
+      params.localId = article.localId
+      this.transitionTo('snippets', params)
+      return
+    }
+
+    if (article.type === 'blueprint') {
+      params.localId = article.localId
+      this.transitionTo('blueprints', params)
+      return
+    }
+  },
+  selectNextArticle: function () {
+    if (this.state.currentPlanet == null || this.state.currentPlanet.Articles.length === 0) return
+
+    var index = this.getIndexOfCurrentArticle()
+
+    if (index < this.state.currentPlanet.Articles.length) {
+      this.selectArticleByIndex(index + 1)
+    }
+  },
+  selectPriorArticle: function () {
+    if (this.state.currentPlanet == null || this.state.currentPlanet.Articles.length === 0) return
+
+    var index = this.getIndexOfCurrentArticle()
+
+    if (index > 0) {
+      this.selectArticleByIndex(index - 1)
+    }
+  },
+  onFetched: function (res) {
+    var articles = this.state.currentPlanet == null ? null : this.state.currentPlanet.Articles
+
+    if (res.status === 'planetFetched') {
+      var planet = res.data
+      this.setState({currentPlanet: planet}, function () {
+        if (planet.Articles.length > 0) {
+          if (this.isActive('snippets')) {
+            this.transitionTo('snippets', {
+              userName: this.props.params.userName,
+              planetName: this.props.params.planetName,
+              localId: this.props.params.localId == null ? planet.Articles[0].localId : this.props.params.localId
+            })
+          } else if (this.isActive('blueprints')) {
+            this.transitionTo('blueprints', {
+              userName: this.props.params.userName,
+              planetName: this.props.params.planetName,
+              localId: this.props.params.localId == null ? planet.Articles[0].localId : this.props.params.localId
+            })
+          }
+        }
+      })
+      return
+    }
+
+    var article = res.data
+    var index = this.getIndexOfCurrentArticle()
+
+    if (article.PlanetId === this.state.currentPlanet.id) {
+      switch (res.status) {
+        case 'articleCreated':
+          articles.unshift(article)
+
+          this.setState({planet: this.state.currentPlanet}, function () {
+            this.selectArticleByIndex(0)
+          })
+          break
+        case 'articleUpdated':
+          articles.splice(index, 1)
+          articles.unshift(article)
+
+          this.setState({planet: this.state.currentPlanet})
+          break
+        case 'articleDeleted':
+          articles.splice(index, 1)
+
+          this.setState({planet: this.state.currentPlanet}, function () {
+            if (index > 0) {
+              this.selectArticleByIndex(index - 1)
+            } else {
+              this.selectArticleByIndex(index)
+            }
+          })
+      }
+    }
   },
   render: function () {
     var user = AuthStore.getUser()
@@ -391,9 +445,8 @@ module.exports = React.createClass({
     if (this.state.currentPlanet == null) return (<div/>)
 
     var content = (<div>Nothing selected</div>)
+    var localId = parseInt(this.props.params.localId, 10)
     if (this.isActive('snippets')) {
-      var localId = parseInt(this.props.params.localId, 10)
-
       this.state.currentPlanet.Articles.some(function (article) {
         if (article.type === 'snippet' && localId === article.localId) {
           content = (
@@ -404,8 +457,6 @@ module.exports = React.createClass({
         return false
       })
     } else if (this.isActive('blueprints')) {
-      var localId = parseInt(this.props.params.localId, 10)
-
       this.state.currentPlanet.Articles.some(function (article) {
         if (article.type === 'blueprint' && localId === article.localId) {
           content = (
@@ -421,7 +472,7 @@ module.exports = React.createClass({
       <div className='PlanetContainer'>
         <PlanetHeader currentPlanet={this.state.currentPlanet} currentUser={user}/>
         <PlanetNavigator currentPlanet={this.state.currentPlanet} currentUser={user}/>
-        <PlanetArticleList planet={this.state.currentPlanet}/>
+        <PlanetArticleList onPressUp={this.selectPriorArticle} onPressDown={this.selectNextArticle} planet={this.state.currentPlanet}/>
         {content}
       </div>
     )

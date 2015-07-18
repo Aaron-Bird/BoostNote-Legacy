@@ -2,10 +2,10 @@ var React = require('react')
 var PlanetStore = require('../Stores/PlanetStore')
 var PlanetActions = require('../Actions/PlanetActions')
 
-var SnippetDeleteModal = React.createClass({
+var BlueprintDeleteModal = React.createClass({
   propTypes: {
     close: React.PropTypes.func,
-    snippet: React.PropTypes.object
+    blueprint: React.PropTypes.object
   },
   componentDidMount: function () {
     this.unsubscribe = PlanetStore.listen(this.onListen)
@@ -24,13 +24,13 @@ var SnippetDeleteModal = React.createClass({
     e.stopPropagation()
   },
   submit: function () {
-    PlanetActions.deleteSnippet(this.props.snippet.id)
+    PlanetActions.deleteBlueprint(this.props.blueprint.id)
   },
   render: function () {
     return (
-      <div onClick={this.stopPropagation} className='SnippetDeleteModal modal'>
+      <div onClick={this.stopPropagation} className='BlueprintDeleteModal modal'>
         <div className='modal-header'>
-          <h1>Delete Snippet</h1>
+          <h1>Delete Blueprint</h1>
         </div>
         <div className='modal-body'>
           <p>Are you sure to delete it?</p>
@@ -46,4 +46,4 @@ var SnippetDeleteModal = React.createClass({
   }
 })
 
-module.exports = SnippetDeleteModal
+module.exports = BlueprintDeleteModal

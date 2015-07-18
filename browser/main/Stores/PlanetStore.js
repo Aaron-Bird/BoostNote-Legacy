@@ -59,9 +59,11 @@ var PlanetStore = Reflux.createStore({
       })
       .send(input)
       .end(function (req, res) {
+        var snippet = res.body
+        snippet.type = 'snippet'
         this.trigger({
-          status: 'snippetCreated',
-          data: res.body
+          status: 'articleCreated',
+          data: snippet
         })
       }.bind(this))
   },
@@ -81,8 +83,9 @@ var PlanetStore = Reflux.createStore({
         }
 
         var snippet = res.body
+        snippet.type = 'snippet'
         this.trigger({
-          status: 'snippetUpdated',
+          status: 'articleUpdated',
           data: snippet
         })
       }.bind(this))
@@ -103,7 +106,7 @@ var PlanetStore = Reflux.createStore({
 
         var snippet = res.body
         this.trigger({
-          status: 'snippetDeleted',
+          status: 'articleDeleted',
           data: snippet
         })
       }.bind(this))
@@ -117,14 +120,16 @@ var PlanetStore = Reflux.createStore({
       })
       .send(input)
       .end(function (req, res) {
+        var blueprint = res.body
+        blueprint.type = 'blueprint'
         this.trigger({
-          status: 'blueprintCreated',
-          data: res.body
+          status: 'articleCreated',
+          data: blueprint
         })
       }.bind(this))
   },
   updateBlueprint: function (id, input) {
-    input.description = input.description.substring(0, 255)
+    input.title = input.title.substring(0, 255)
     request
       .put(apiUrl + 'blueprints/id/' + id)
       .set({
@@ -139,8 +144,9 @@ var PlanetStore = Reflux.createStore({
         }
 
         var blueprint = res.body
+        blueprint.type = 'blueprint'
         this.trigger({
-          status: 'blueprintUpdated',
+          status: 'articleUpdated',
           data: blueprint
         })
       }.bind(this))
@@ -161,7 +167,7 @@ var PlanetStore = Reflux.createStore({
 
         var blueprint = res.body
         this.trigger({
-          status: 'blueprintDeleted',
+          status: 'articleDeleted',
           data: blueprint
         })
       }.bind(this))

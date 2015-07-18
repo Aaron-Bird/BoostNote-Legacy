@@ -1,11 +1,11 @@
 var React = require('react')
-var SnippetForm = require('./SnippetForm')
+var BlueprintForm = require('./BlueprintForm')
 var PlanetStore = require('../Stores/PlanetStore')
 
-var SnippetEditModal = React.createClass({
+var BlueprintEditModal = React.createClass({
   propTypes: {
     close: React.PropTypes.func,
-    snippet: React.PropTypes.object
+    blueprint: React.PropTypes.object
   },
   componentDidMount: function () {
     this.unsubscribe = PlanetStore.listen(this.onListen)
@@ -25,14 +25,14 @@ var SnippetEditModal = React.createClass({
   },
   render: function () {
     return (
-      <div onClick={this.stopPropagation} className='SnippetEditModal modal'>
+      <div onClick={this.stopPropagation} className='BlueprintEditModal modal'>
         <div className='modal-header'>
-          <h1>Edit Snippet</h1>
+          <h1>Edit Blueprint</h1>
         </div>
-        <SnippetForm snippet={this.props.snippet} close={this.props.close}/>
+        <BlueprintForm blueprint={this.props.blueprint} close={this.props.close}/>
       </div>
     )
   }
 })
 
-module.exports = SnippetEditModal
+module.exports = BlueprintEditModal

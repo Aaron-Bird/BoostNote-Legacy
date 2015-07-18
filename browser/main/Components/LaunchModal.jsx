@@ -25,10 +25,7 @@ var LaunchModal = React.createClass({
   },
   onListen: function (res) {
     switch (res.status) {
-      case 'snippetCreated':
-        this.props.close()
-        break
-      case 'blueprintCreated':
+      case 'articleCreated':
         this.props.close()
         break
     }

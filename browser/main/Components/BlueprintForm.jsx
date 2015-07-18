@@ -40,12 +40,19 @@ var BlueprintForm = React.createClass({
     PREVIEW_MODE: 1
   },
   getInitialState: function () {
+    var blueprint = Object.assign({
+      title: '',
+      content: '',
+      Tags: []
+    }, this.props.blueprint)
+    blueprint.Tags = blueprint.Tags.map(function (tag) {
+      return {
+        label: tag.name,
+        value: tag.name
+      }
+    })
     return {
-      blueprint: {
-        title: '',
-        content: '',
-        Tags: []
-      },
+      blueprint: blueprint,
       mode: BlueprintForm.EDIT_MODE
     }
   },
