@@ -33,9 +33,8 @@ var PlanetHeader = React.createClass({
     return (
       <div onClick={this.interceptClick} className='PlanetHeader'>
         <div className='headerLabel'>
-          <span className='userName'>{currentUserName}</span><br/>
-          <span className='divider'>/</span>
           <span className='planetName'>{currentPlanetName}</span>
+          <span className='userName'>{currentUserName}</span><br/>
           <button className={'menuBtn'}>
             <i className='fa fa-gears'></i>
           </button>
