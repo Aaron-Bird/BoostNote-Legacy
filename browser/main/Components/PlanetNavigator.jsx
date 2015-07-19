@@ -1,8 +1,5 @@
 var React = require('react/addons')
 
-var ModalBase = require('../Components/ModalBase')
-var LaunchModal = require('../Components/LaunchModal')
-
 var PlanetNavigator = React.createClass({
   propTypes: {
     currentPlanet: React.PropTypes.shape({
@@ -10,30 +7,13 @@ var PlanetNavigator = React.createClass({
     }),
     currentUser: React.PropTypes.shape({
       name: React.PropTypes.string
-    })
+    }),
+    onOpenLaunchModal: React.PropTypes.func
   },
   getInitialState: function () {
     return {
       isLaunchModalOpen: false
     }
-  },
-  handleKeyDown: function (e) {
-    if (e.keyCode === 13 && e.metaKey) {
-      e.preventDefault()
-      this.openLaunchModal()
-    }
-  },
-  componentDidMount: function () {
-    document.addEventListener('keydown', this.handleKeyDown, false)
-  },
-  componentWillUnmount: function () {
-    document.removeEventListener('keydown', this.handleKeyDown, false)
-  },
-  openLaunchModal: function () {
-    this.setState({isLaunchModalOpen: true})
-  },
-  closeLaunchModal: function () {
-    this.setState({isLaunchModalOpen: false})
   },
   submitLaunchModal: function (ret) {
     console.log(ret)
@@ -42,12 +22,9 @@ var PlanetNavigator = React.createClass({
   render: function () {
     return (
       <div className='PlanetNavigator'>
-        <button onClick={this.openLaunchModal} className='btn-primary btn-block'>
+        <button onClick={this.props.onOpenLaunchModal} className='btn-primary btn-block'>
           <i className='fa fa-rocket fa-fw'/> Launch
         </button>
-        <ModalBase isOpen={this.state.isLaunchModalOpen} close={this.closeLaunchModal}>
-          <LaunchModal submit={this.submitLaunchModal} close={this.closeLaunchModal}/>
-        </ModalBase>
         <nav>
           <a>
             <i className='fa fa-home fa-fw'/> Home

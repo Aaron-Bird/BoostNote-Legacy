@@ -86,6 +86,7 @@ var SnippetForm = React.createClass({
   handleKeyDown: function (e) {
     if (e.keyCode === 13 && e.metaKey) {
       this.submit()
+      e.stopPropagation()
     }
   },
   render: function () {

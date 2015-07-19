@@ -9,6 +9,7 @@ var SnippetDeleteModal = React.createClass({
   },
   componentDidMount: function () {
     this.unsubscribe = PlanetStore.listen(this.onListen)
+    React.findDOMNode(this.refs.submit).focus()
   },
   componentWillUnmount: function () {
     this.unsubscribe()
@@ -23,12 +24,18 @@ var SnippetDeleteModal = React.createClass({
   stopPropagation: function (e) {
     e.stopPropagation()
   },
+  handleKeyDown: function (e) {
+    if ((e.keyCode === 13 && e.metaKey)) {
+      e.preventDefault()
+      this.submit()
+    }
+  },
   submit: function () {
     PlanetActions.deleteSnippet(this.props.snippet.id)
   },
   render: function () {
     return (
-      <div onClick={this.stopPropagation} className='SnippetDeleteModal modal'>
+      <div onKeyDown={this.handleKeyDown} onClick={this.stopPropagation} className='SnippetDeleteModal modal'>
         <div className='modal-header'>
           <h1>Delete Snippet</h1>
         </div>
@@ -37,8 +44,8 @@ var SnippetDeleteModal = React.createClass({
         </div>
         <div className='modal-footer'>
           <div className='modal-control'>
-            <button onClick={this.props.close} className='btn-default'>Cancle</button>
-            <button onClick={this.submit} className='btn-primary'>Delete</button>
+            <button onClick={this.props.close} className='btn-default'>Cancel</button>
+            <button ref='submit' onClick={this.submit} className='btn-primary'>Delete</button>
           </div>
         </div>
       </div>

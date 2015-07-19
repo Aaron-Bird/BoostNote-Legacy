@@ -8,20 +8,10 @@ var Markdown = require('../Mixins/Markdown')
 var PlanetArticleList = React.createClass({
   mixins: [ReactRouter.Navigation, ReactRouter.State, ForceUpdate(60000), Markdown],
   propTypes: {
-    articles: React.PropTypes.array,
-    onPressDown: React.PropTypes.func,
-    onPressUp: React.PropTypes.func
+    articles: React.PropTypes.array
   },
   handleKeyDown: function (e) {
-    switch (e.keyCode) {
-      case 38:
-        e.preventDefault()
-        this.props.onPressUp()
-        break
-      case 40:
-        e.preventDefault()
-        this.props.onPressDown()
-    }
+    e.preventDefault()
   },
   render: function () {
     var articles = this.props.articles.map(function (article) {

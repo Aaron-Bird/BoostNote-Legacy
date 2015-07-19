@@ -8,7 +8,8 @@ var PlanetHeader = React.createClass({
   },
   getInitialState: function () {
     return {
-      isMenuDropDownOpen: false
+      isMenuDropDownOpen: false,
+      search: ''
     }
   },
   componentDidMount: function () {
@@ -32,6 +33,11 @@ var PlanetHeader = React.createClass({
     this.setState({search: e.target.value})
     this.props.onSearchChange(e.target.value)
   },
+  handleKeyDown: function (e) {
+    if (e.keyCode === 27) {
+      React.findDOMNode(this.refs.search).blur()
+    }
+  },
   render: function () {
     var currentPlanetName = this.props.currentPlanet.name
 
@@ -48,7 +54,7 @@ var PlanetHeader = React.createClass({
         </div>
         <span className='searchInput'>
           <i className='fa fa-search'/>
-          <input onChange={this.handleChange} value={this.state.search} ref='search' tabIndex='1' type='text' className='inline-input circleInput' placeholder='Search...'/>
+          <input onKeyDown={this.handleKeyDown} onChange={this.handleChange} value={this.state.search} ref='search' tabIndex='1' type='text' className='inline-input circleInput' placeholder='Search...'/>
         </span>
         <a className='downloadBtn btn-primary'>Download Mac app</a>
       </div>

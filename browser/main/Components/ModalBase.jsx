@@ -9,7 +9,7 @@ var ModalBase = React.createClass({
   render: function () {
     if (this.props.isOpen) {
       return (
-        <div onClick={this.props.close} className='ModalBase'>
+        <div ref='modal' onClick={this.props.close} className='ModalBase'>
           {this.props.children}
         </div>
       )
