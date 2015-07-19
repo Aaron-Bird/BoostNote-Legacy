@@ -273,13 +273,14 @@ module.exports = React.createClass({
     if (document.activeElement === searchInput) {
       switch (e.keyCode) {
         case 38:
-          e.preventDefault()
+          searchInput.blur()
           break
         case 40:
           e.preventDefault()
           searchInput.blur()
           break
         case 27:
+          e.preventDefault()
           searchInput.blur()
           break
       }
