@@ -250,7 +250,7 @@ module.exports = React.createClass({
     this.setState({isDeleteModalOpen: false})
   },
   handleKeyDown: function (e) {
-    console.log(e.keyCode)
+    // Bypath for modal open state
     if (this.state.isLaunchModalOpen) {
       if (e.keyCode === 27) this.closeLaunchModal()
       return
@@ -264,10 +264,13 @@ module.exports = React.createClass({
       return
     }
 
+    // LaunchModal
     if ((e.keyCode === 13 && e.metaKey)) {
       e.preventDefault()
       this.openLaunchModal()
     }
+
+    // Focus(blur) search input
     var searchInput = React.findDOMNode(this).querySelector('.PlanetHeader .searchInput input')
 
     if (document.activeElement === searchInput) {
@@ -287,6 +290,7 @@ module.exports = React.createClass({
       return
     }
 
+    // Article indexing
     if (document.activeElement !== searchInput) {
       switch (e.keyCode) {
         case 38:
@@ -302,6 +306,7 @@ module.exports = React.createClass({
           break
       }
 
+      // Other hotkeys
       switch (e.keyCode) {
         case 65:
           e.preventDefault()

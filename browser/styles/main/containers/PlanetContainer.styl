@@ -20,86 +20,81 @@
   box-sizing border-box
   padding 5px 15px
   clearfix()
-  .planetName
-    line-height 30px
-    font-size 2em
-    color brandColor
-    line-height 55px
-    padding 0 20px
-  .menuBtn
+  .headerLabel
+    absolute top left bottom
+    overflow hidden
     display inline-block
-    position relative
-    top -5px
-    font-size 0.8em
-    color lightButtonColor
-    border solid 1px lightButtonColor
-    box-sizing border-box
-    circle()
-    background-image none
-    background-color transparent
-    width 30px
-    height 30px
-    text-align center
-    cursor pointer
-    transition 0.1s
-    transform scale(0.8)
-    &:focus, &.focus
-      outline none
-    &:hover, &.hover, &:focus, &.focus
-      border-color darken(lightButtonColor, 50%)
-      color darken(lightButtonColor, 50%)
-    &:active, &.active
-      border-color darken(brandBorderColor, 10%)
-      background-color brandColor
-      color white
-  .searchInput
-    display inline-block
-    position relative
-    top -3px
-    margin-left 15px
-    input
-      padding-left 32px
-    .fa
-      position absolute
-      top 7px
-      left 10px
-  .downloadButtton
-    position relative
-    float right
-    top 5px
-    padding 7px 25px
-    box-sizing border-box
-    line-height 30px
-    font-size 1em
-    border-radius 22px
-  .dropDown
-    z-index 500
-    position fixed
-    background white
     width 200px
-    border solid 1px borderColor
-    box-sizing border-box
-    margin-top -5px
-    margin-left 125px
-    box-shadow popupShadow
-    &.hide
-      visibility hidden
-    a
-      color textColor
-      display block
-      width 100%
-      padding 15px
+    .userName
+      position absolute
+      left 15px
+      top 5px
+      font-size 1.2em
+      color brandColor
+    .divider
+      position absolute
+      top 25px
+      left 15px
+      font-size 2em
+    .planetName
+      position absolute
+      top 28px
+      left 30px
+      width 130px
+      font-size 1.5em
+      color brandColor
+      overflow-x hidden
+      text-overflow ellipsis
+      white-space nowrap
+    .menuBtn
+      position absolute
+      top 10px
+      right 0
+      font-size 1em
+      color lightButtonColor
+      border none
       box-sizing border-box
-      border-bottom solid 1px borderColor
-      text-decoration none
-      &:hover, &.hover
-        background-color hoverBackgroundColor
+      circle()
+      background-image none
+      background-color transparent
+      width 44px
+      height 44px
+      text-align center
+      cursor pointer
+      transition 0.1s
+      transform scale(0.8)
       &:focus, &.focus
-        color black
+        outline none
+      &:hover, &.hover, &:focus, &.focus
+        border-color darken(lightButtonColor, 50%)
+        color darken(lightButtonColor, 50%)
       &:active, &.active
-        color brandColor
-      &:last-child
-        border-bottom none
+        border-color darken(brandBorderColor, 10%)
+        background-color brandColor
+        color white
+  .headerControl
+    absolute top bottom right
+    left 200px
+    .searchInput
+      display block
+      position absolute
+      top 14px
+      left 0
+      input
+        padding-left 32px
+      .fa
+        position absolute
+        top 8px
+        left 12px
+    .downloadButtton
+      position absolute
+      right 5px
+      top 10px
+      padding 7px 25px
+      box-sizing border-box
+      line-height 25px
+      font-size 1em
+      border-radius 22px
 
 .PlanetNavigator
   absolute bottom left
