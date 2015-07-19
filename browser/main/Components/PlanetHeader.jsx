@@ -56,7 +56,7 @@ var PlanetHeader = React.createClass({
           <i className='fa fa-search'/>
           <input onKeyDown={this.handleKeyDown} onChange={this.handleChange} value={this.state.search} ref='search' tabIndex='1' type='text' className='inline-input circleInput' placeholder='Search...'/>
         </span>
-        <a className='downloadBtn btn-primary'>Download Mac app</a>
+        <a className='downloadButtton btn-primary'>Download Mac app</a>
       </div>
     )
   }

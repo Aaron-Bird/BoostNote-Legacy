@@ -46,8 +46,8 @@
     &:focus, &.focus
       outline none
     &:hover, &.hover, &:focus, &.focus
-      border-color darken(lightButtonColor, 25%)
-      color darken(lightButtonColor, 25%)
+      border-color darken(lightButtonColor, 50%)
+      color darken(lightButtonColor, 50%)
     &:active, &.active
       border-color darken(brandBorderColor, 10%)
       background-color brandColor
@@ -63,13 +63,15 @@
       position absolute
       top 7px
       left 10px
-  .downloadBtn
+  .downloadButtton
     position relative
     float right
     top 5px
     padding 7px 25px
     box-sizing border-box
     line-height 30px
+    font-size 1em
+    border-radius 22px
   .dropDown
     z-index 500
     position fixed
@@ -106,6 +108,9 @@
   border-right solid 1px highlightenBorderColor
   padding 10px
   box-sizing border-box
+  .launchButton
+    border-radius 22px
+    font-size 1.1em
   nav
     a
       display block

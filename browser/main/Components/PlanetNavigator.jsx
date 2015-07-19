@@ -22,7 +22,7 @@ var PlanetNavigator = React.createClass({
   render: function () {
     return (
       <div className='PlanetNavigator'>
-        <button onClick={this.props.onOpenLaunchModal} className='btn-primary btn-block'>
+        <button onClick={this.props.onOpenLaunchModal} className='launchButton btn-primary btn-block'>
           <i className='fa fa-rocket fa-fw'/> Launch
         </button>
         <nav>
