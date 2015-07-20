@@ -17,6 +17,35 @@ var PlanetActions = require('../Actions/PlanetActions')
 var AuthStore = require('../Stores/AuthStore')
 var PlanetStore = require('../Stores/PlanetStore')
 
+var searchArticle = function (search, articles) {
+  if (search === '' || search == null) return articles
+  var firstFiltered = articles.filter(function (article) {
+
+    var first = article.type === 'snippet' ? article.callSign : article.title
+    if (first.match(new RegExp(search, 'i'))) return true
+
+    return false
+  })
+
+  var secondFiltered = articles.filter(function (article) {
+    var second = article.type === 'snippet' ? article.description : article.content
+    if (second.match(new RegExp(search, 'i'))) return true
+
+    return false
+  })
+
+  var thirdFiltered = articles.filter(function (article) {
+    if (article.type === 'snippet') {
+      if (article.content.match(new RegExp(search, 'i'))) return true
+    }
+    return false
+  })
+
+  return firstFiltered.concat(secondFiltered, thirdFiltered).filter(function (value, index, self) {
+    return self.indexOf(value) === index
+  })
+}
+
 module.exports = React.createClass({
   mixins: [ReactRouter.Navigation, ReactRouter.State],
   propTypes: {
@@ -26,7 +55,9 @@ module.exports = React.createClass({
   getInitialState: function () {
     return {
       currentPlanet: null,
-      filteredArticles: []
+      filteredArticles: [],
+      search: '',
+      isFetched: false
     }
   },
   componentDidMount: function () {
@@ -44,13 +75,13 @@ module.exports = React.createClass({
     var index = 0
 
     if (this.isActive('snippets')) {
-      this.state.filteredArticles.some(function (_article, _index) {
+      this.refs.list.props.articles.some(function (_article, _index) {
         if (_article.type === 'snippet' && _article.localId === parseInt(params.localId, 10)) {
           index = _index
         }
       })
     } else if (this.isActive('blueprints')) {
-      this.state.filteredArticles.some(function (_article, _index) {
+      this.refs.list.props.articles.some(function (_article, _index) {
         if (_article.type === 'blueprint' && _article.localId === parseInt(params.localId, 10)) {
           index = _index
           return true
@@ -84,7 +115,7 @@ module.exports = React.createClass({
     return index
   },
   selectArticleByIndex: function (index) {
-    var article = this.state.filteredArticles[index]
+    var article = this.refs.list.props.articles[index]
     var params = this.props.params
 
     if (article == null) {
@@ -127,11 +158,10 @@ module.exports = React.createClass({
   },
   onFetched: function (res) {
     var articles = this.state.currentPlanet == null ? null : this.state.currentPlanet.Articles
-    var filteredArticles = this.state.filteredArticles
 
     if (res.status === 'planetFetched') {
       var planet = res.data
-      this.setState({currentPlanet: planet, filteredArticles: planet.Articles}, function () {
+      this.setState({isFetched: true, currentPlanet: planet, filteredArticles: planet.Articles}, function () {
         if (this.state.filteredArticles.length > 0) {
           if (this.props.params.localId == null) {
             var article = this.state.filteredArticles[0]
@@ -170,7 +200,7 @@ module.exports = React.createClass({
         case 'articleCreated':
           articles.unshift(article)
 
-          this.setState({planet: this.state.currentPlanet, filteredArticles: filteredArticles}, function () {
+          this.setState({planet: this.state.currentPlanet, search: ''}, function () {
             this.selectArticleByIndex(0)
           })
           break
@@ -178,12 +208,12 @@ module.exports = React.createClass({
           articles.splice(index, 1)
           articles.unshift(article)
 
-          this.setState({planet: this.state.currentPlanet, filteredArticles: filteredArticles})
+          this.setState({planet: this.state.currentPlanet})
           break
         case 'articleDeleted':
           articles.splice(index, 1)
 
-          this.setState({planet: this.state.currentPlanet, filteredArticles: filteredArticles}, function () {
+          this.setState({planet: this.state.currentPlanet}, function () {
             this.closeDeleteModal()
             if (index > 0) {
               this.selectArticleByIndex(filteredIndex - 1)
@@ -194,34 +224,8 @@ module.exports = React.createClass({
       }
     }
   },
-  handleSearchChange: function (search) {
-    var firstFiltered = this.state.currentPlanet.Articles.filter(function (article) {
-      if (search === '' || search == null) return true
-
-      var first = article.type === 'snippet' ? article.callSign : article.title
-      if (first.match(new RegExp(search, 'i'))) return true
-
-      return false
-    })
-
-    var secondFiltered = this.state.currentPlanet.Articles.filter(function (article) {
-      var second = article.type === 'snippet' ? article.description : article.content
-      if (second.match(new RegExp(search, 'i'))) return true
-
-      return false
-    })
-
-    var thirdFiltered = this.state.currentPlanet.Articles.filter(function (article) {
-      if (article.type === 'snippet') {
-        if (article.content.match(new RegExp(search, 'i'))) return true
-      }
-      return false
-    })
-
-    var filteredArticles = firstFiltered.concat(secondFiltered, thirdFiltered).filter(function (value, index, self) {
-      return self.indexOf(value) === index
-    })
-    this.setState({filteredArticles: filteredArticles}, function () {
+  handleSearchChange: function (e) {
+    this.setState({search: e.target.value}, function () {
       this.selectArticleByIndex(0)
     })
   },
@@ -349,10 +353,12 @@ module.exports = React.createClass({
       })
     }
 
+    var filteredArticles = this.state.isFetched ? searchArticle(this.state.search, this.state.currentPlanet.Articles) : []
+
     var content = article != null ? (
       <PlanetArticleDetail article={article} onOpenEditModal={this.openEditModal} onOpenDeleteModal={this.openDeleteModal}/>
     ) : (
-      <div>Nothing selected</div>
+      <div className='PlanetArticleDetail'>Nothing selected</div>
     )
 
     var editModal = article != null ? (article.type === 'snippet' ? (
@@ -381,9 +387,11 @@ module.exports = React.createClass({
           {deleteModal}
         </ModalBase>
 
-        <PlanetHeader onSearchChange={this.handleSearchChange} currentPlanet={this.state.currentPlanet} currentUser={user}/>
+        <PlanetHeader search={this.state.search} onSearchChange={this.handleSearchChange} currentPlanet={this.state.currentPlanet} currentUser={user}/>
+
         <PlanetNavigator onOpenLaunchModal={this.openLaunchModal} currentPlanet={this.state.currentPlanet} currentUser={user}/>
-        <PlanetArticleList articles={this.state.filteredArticles}/>
+
+        <PlanetArticleList ref='list' articles={filteredArticles}/>
         {content}
       </div>
     )

@@ -4,7 +4,8 @@ var PlanetHeader = React.createClass({
   propTypes: {
     currentPlanet: React.PropTypes.object,
     currentUser: React.PropTypes.object,
-    onSearchChange: React.PropTypes.func
+    onSearchChange: React.PropTypes.func,
+    search: React.PropTypes.string
   },
   getInitialState: function () {
     return {
@@ -16,10 +17,6 @@ var PlanetHeader = React.createClass({
   },
   interceptClick: function (e) {
     e.stopPropagation()
-  },
-  handleChange: function (e) {
-    this.setState({search: e.target.value})
-    this.props.onSearchChange(e.target.value)
   },
   handleKeyDown: function (e) {
     if (e.keyCode === 27) {
@@ -33,8 +30,8 @@ var PlanetHeader = React.createClass({
     return (
       <div onClick={this.interceptClick} className='PlanetHeader'>
         <div className='headerLabel'>
-          <span className='planetName'>{currentPlanetName}</span>
           <span className='userName'>{currentUserName}</span><br/>
+          <span className='planetName'>{currentPlanetName}</span>
           <button className={'menuBtn'}>
             <i className='fa fa-gears'></i>
           </button>
@@ -42,7 +39,7 @@ var PlanetHeader = React.createClass({
         <div className='headerControl'>
           <span className='searchInput'>
             <i className='fa fa-search'/>
-            <input onKeyDown={this.handleKeyDown} onChange={this.handleChange} value={this.state.search} ref='search' tabIndex='1' type='text' className='inline-input circleInput' placeholder='Search...'/>
+            <input onKeyDown={this.handleKeyDown} onChange={this.props.onSearchChange} value={this.props.search} ref='search' tabIndex='1' type='text' className='inline-input circleInput' placeholder='Search...'/>
           </span>
           <a className='downloadButtton btn-primary'>Download Mac app</a>
         </div>
