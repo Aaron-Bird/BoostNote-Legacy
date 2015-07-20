@@ -20,7 +20,13 @@ var PlanetArticleDetail = React.createClass({
   },
   render: function () {
     var article = this.props.article
-
+    if (article == null) {
+      return (
+        <div className='PlanetArticleDetail'>
+          Nothing selected
+        </div>
+      )
+    }
     var tags = article.Tags.length > 0 ? article.Tags.map(function (tag) {
       return (
         <a key={tag.id} href>#{tag.name}</a>

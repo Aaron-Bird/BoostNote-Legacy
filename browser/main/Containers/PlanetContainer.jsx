@@ -55,7 +55,6 @@ module.exports = React.createClass({
   getInitialState: function () {
     return {
       currentPlanet: null,
-      filteredArticles: [],
       search: '',
       isFetched: false
     }
@@ -136,16 +135,16 @@ module.exports = React.createClass({
     }
   },
   selectNextArticle: function () {
-    if (this.state.currentPlanet == null || this.state.filteredArticles.length === 0) return
+    if (this.state.currentPlanet == null) return
 
     var index = this.getFilteredIndexOfCurrentArticle()
 
-    if (index < this.state.filteredArticles.length - 1) {
+    if (index < this.refs.list.props.articles.length - 1) {
       this.selectArticleByIndex(index + 1)
     }
   },
   selectPriorArticle: function () {
-    if (this.state.currentPlanet == null || this.state.filteredArticles.length === 0) {
+    if (this.state.currentPlanet == null) {
       return
     }
     var index = this.getFilteredIndexOfCurrentArticle()
@@ -162,30 +161,10 @@ module.exports = React.createClass({
     if (res.status === 'planetFetched') {
       var planet = res.data
       this.setState({isFetched: true, currentPlanet: planet, filteredArticles: planet.Articles}, function () {
-        if (this.state.filteredArticles.length > 0) {
-          if (this.props.params.localId == null) {
-            var article = this.state.filteredArticles[0]
-            if (article == null) return
-            this.transitionTo(article.type === 'snippet' ? 'snippets' : 'blueprints', {
-              userName: this.props.params.userName,
-              planetName: this.props.params.planetName,
-              localId: planet.Articles[0].localId
-            })
-            return
-          }
-          if (this.isActive('snippets')) {
-            this.transitionTo('snippets', {
-              userName: this.props.params.userName,
-              planetName: this.props.params.planetName,
-              localId: this.props.params.localId == null ? planet.Articles[0].localId : this.props.params.localId
-            })
-          } else if (this.isActive('blueprints')) {
-            this.transitionTo('blueprints', {
-              userName: this.props.params.userName,
-              planetName: this.props.params.planetName,
-              localId: this.props.params.localId == null ? planet.Articles[0].localId : this.props.params.localId
-            })
-          }
+        if (this.refs.detail.props.article == null) {
+          var params = this.props.params
+          delete params.localId
+          this.transitionTo('planetHome', params)
         }
       })
       return
@@ -236,6 +215,7 @@ module.exports = React.createClass({
     this.setState({isLaunchModalOpen: false})
   },
   openEditModal: function () {
+    if (this.refs.detail.props.article == null) {return}
     this.setState({isEditModalOpen: true})
   },
   closeEditModal: function () {
@@ -245,6 +225,7 @@ module.exports = React.createClass({
     this.setState({isEditModalOpen: false})
   },
   openDeleteModal: function () {
+    if (this.refs.detail.props.article == null) {return}
     this.setState({isDeleteModalOpen: true})
   },
   closeDeleteModal: function () {
@@ -355,12 +336,6 @@ module.exports = React.createClass({
 
     var filteredArticles = this.state.isFetched ? searchArticle(this.state.search, this.state.currentPlanet.Articles) : []
 
-    var content = article != null ? (
-      <PlanetArticleDetail article={article} onOpenEditModal={this.openEditModal} onOpenDeleteModal={this.openDeleteModal}/>
-    ) : (
-      <div className='PlanetArticleDetail'>Nothing selected</div>
-    )
-
     var editModal = article != null ? (article.type === 'snippet' ? (
       <SnippetEditModal snippet={article} submit={this.submitEditModal} close={this.closeEditModal}/>
     ) : (
@@ -392,7 +367,8 @@ module.exports = React.createClass({
         <PlanetNavigator onOpenLaunchModal={this.openLaunchModal} currentPlanet={this.state.currentPlanet} currentUser={user}/>
 
         <PlanetArticleList ref='list' articles={filteredArticles}/>
-        {content}
+
+        <PlanetArticleDetail ref='detail' article={article} onOpenEditModal={this.openEditModal} onOpenDeleteModal={this.openDeleteModal}/>
       </div>
     )
   }
