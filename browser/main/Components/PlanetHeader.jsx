@@ -18,11 +18,6 @@ var PlanetHeader = React.createClass({
   interceptClick: function (e) {
     e.stopPropagation()
   },
-  handleKeyDown: function (e) {
-    if (e.keyCode === 27) {
-      React.findDOMNode(this.refs.search).blur()
-    }
-  },
   render: function () {
     var currentPlanetName = this.props.currentPlanet.name
     var currentUserName = this.props.currentUser.name
@@ -39,7 +34,7 @@ var PlanetHeader = React.createClass({
         <div className='headerControl'>
           <span className='searchInput'>
             <i className='fa fa-search'/>
-            <input onKeyDown={this.handleKeyDown} onChange={this.props.onSearchChange} value={this.props.search} ref='search' tabIndex='1' type='text' className='inline-input circleInput' placeholder='Search...'/>
+            <input onChange={this.props.onSearchChange} value={this.props.search} ref='search' tabIndex='1' type='text' className='inline-input circleInput' placeholder='Search...'/>
           </span>
           <a className='downloadButtton btn-primary'>Download Mac app</a>
         </div>

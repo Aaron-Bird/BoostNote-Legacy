@@ -1,0 +1,95 @@
+.UserContainer
+  .UserNavigator
+    background-color planetNavBgColor
+    absolute left top bottom
+    width 50px
+    text-align center
+    box-sizing border-box
+    a.userConfig
+      display block
+      width 50px
+      height 50px
+      background-color black
+      img
+        transition 0.1s
+        opacity 0.6
+      box-sizing border-box
+      &.active, &:active, &.focus, &:focus, &.hover, &:hover
+        img
+          opacity 1
+    ul>li
+      padding 10px 3px
+      .shortCut
+        margin-top 5px
+        color lighten(textColor, 5%)
+        font-size 0.8em
+      &.active
+        a
+          background-color planetAnchorActiveBgColor
+          color planetAnchorActiveColor
+      a
+        display block
+        width 44px
+        height 44px
+        text-align center
+        background-color planetAnchorBgColor
+        text-decoration none
+        color planetAnchorColor
+        line-height 44px
+        font-size 1.1em
+        cursor pointer
+        circle()
+        transition 0.1s
+        &:hover, &:active
+          background-color white
+      img
+        circle()
+        width 44px
+        height 44px
+    button.newPlanet
+      display block
+      margin 0 auto
+      width 30px
+      height 30px
+      circle()
+      border solid 1px lightButtonColor
+      color lightButtonColor
+      text-align center
+      font-size 1
+      background-image none
+      background-color transparent
+      box-sizing border-box
+      absolute left bottom right
+      bottom 15px
+      &:hover, &.hover, &:focus, &.focus
+        border-color darken(lightButtonColor, 50%)
+        color darken(lightButtonColor, 50%)
+      &:active, &.active
+        border-color darken(brandBorderColor, 10%)
+        background-color brandColor
+        color white
+.PlanetCreateModal.modal
+  padding 60px 0
+  .nameInput
+    width 80%
+    font-size 1.3em
+    margin 35px auto
+    text-align center
+  .submitButton
+    display block
+    margin 0 auto
+    box-sizing border-box
+    width 55px
+    height 55px
+    border-style solid
+    border-width 1px
+    circle()
+    border-color brandBorderColor
+    background-color transparent
+    color brandColor
+    &:hover, &.hover, &:focus, &.focus
+      border-color darken(brandBorderColor, 30%)
+      color darken(brandColor, 30%)
+    &:active, &.active
+      background-color brandColor
+      color white

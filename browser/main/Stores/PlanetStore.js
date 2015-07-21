@@ -8,6 +8,7 @@ var apiUrl = 'http://localhost:8000/'
 
 var PlanetStore = Reflux.createStore({
   init: function () {
+    this.listenTo(PlanetActions.createPlanet, this.createPlanet)
     this.listenTo(PlanetActions.fetchPlanet, this.fetchPlanet)
     this.listenTo(PlanetActions.createSnippet, this.createSnippet)
     this.listenTo(PlanetActions.updateSnippet, this.updateSnippet)
@@ -15,6 +16,31 @@ var PlanetStore = Reflux.createStore({
     this.listenTo(PlanetActions.createBlueprint, this.createBlueprint)
     this.listenTo(PlanetActions.updateBlueprint, this.updateBlueprint)
     this.listenTo(PlanetActions.deleteBlueprint, this.deleteBlueprint)
+  },
+  createPlanet: function (input) {
+    request
+      .post(apiUrl + 'planets/create')
+      .set({
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      })
+      .send(input)
+      .end(function (err, res) {
+        if (err) {
+          console.error(err)
+          this.trigger(null)
+          return
+        }
+
+        var planet = res.body
+        planet.Snippets = []
+        planet.Blueprints = []
+        planet.Articles = []
+
+        this.trigger({
+          status: 'planetCreated',
+          data: planet
+        })
+      }.bind(this))
   },
   fetchPlanet: function (planetName) {
     request

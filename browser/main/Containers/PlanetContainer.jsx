@@ -63,11 +63,14 @@ module.exports = React.createClass({
     this.unsubscribe = PlanetStore.listen(this.onFetched)
 
     PlanetActions.fetchPlanet(this.props.params.userName + '/' + this.props.params.planetName)
-    document.addEventListener('keydown', this.handleKeyDown)
   },
   componentWillUnmount: function () {
     this.unsubscribe()
-    document.removeEventListener('keydown', this.handleKeyDown)
+  },
+  componentDidUpdate: function () {
+    if (this.state.currentPlanet.planetName !== this.props.params.planetName) {
+      PlanetActions.fetchPlanet(this.props.params.userName + '/' + this.props.params.planetName)
+    }
   },
   getFilteredIndexOfCurrentArticle: function () {
     var params = this.props.params
@@ -164,7 +167,19 @@ module.exports = React.createClass({
         if (this.refs.detail.props.article == null) {
           var params = this.props.params
           delete params.localId
-          this.transitionTo('planetHome', params)
+
+          var articles = this.refs.list.props.articles
+          if (articles.length > 0) {
+            console.log('need to redirect', this.refs.list.props.articles)
+            var article = articles[0]
+            params.localId = article.localId
+
+            if (article.type === 'snippet') {
+              this.transitionTo('snippets', params)
+            } else {
+              this.transitionTo('blueprints', params)
+            }
+          }
         }
       })
       return
@@ -234,18 +249,31 @@ module.exports = React.createClass({
   submitDeleteModal: function () {
     this.setState({isDeleteModalOpen: false})
   },
+  focus: function () {
+    React.findDOMNode(this).focus()
+    console.log('focus this')
+  },
   handleKeyDown: function (e) {
     // Bypath for modal open state
     if (this.state.isLaunchModalOpen) {
-      if (e.keyCode === 27) this.closeLaunchModal()
+      if (e.keyCode === 27) {
+        this.closeLaunchModal()
+        this.focus()
+      }
       return
     }
     if (this.state.isEditModalOpen) {
-      if (e.keyCode === 27) this.closeEditModal()
+      if (e.keyCode === 27) {
+        this.closeEditModal()
+        this.focus()
+      }
       return
     }
     if (this.state.isDeleteModalOpen) {
-      if (e.keyCode === 27) this.closeDeleteModal()
+      if (e.keyCode === 27) {
+        this.closeDeleteModal()
+        this.focus()
+      }
       return
     }
 
@@ -259,17 +287,18 @@ module.exports = React.createClass({
     var searchInput = React.findDOMNode(this).querySelector('.PlanetHeader .searchInput input')
 
     if (document.activeElement === searchInput) {
+      console.log('fff', e.keyCode)
       switch (e.keyCode) {
         case 38:
-          searchInput.blur()
+          this.focus()
           break
         case 40:
           e.preventDefault()
-          searchInput.blur()
+          this.focus()
           break
         case 27:
           e.preventDefault()
-          searchInput.blur()
+          this.focus()
           break
       }
       return
@@ -349,7 +378,7 @@ module.exports = React.createClass({
     )) : null
 
     return (
-      <div className='PlanetContainer'>
+      <div tabIndex='1' onKeyDown={this.handleKeyDown} className='PlanetContainer'>
         <ModalBase isOpen={this.state.isLaunchModalOpen} close={this.closeLaunchModal}>
           <LaunchModal submit={this.submitLaunchModal} close={this.closeLaunchModal}/>
         </ModalBase>
