@@ -20,7 +20,7 @@ var PlanetHeader = React.createClass({
   },
   render: function () {
     var currentPlanetName = this.props.currentPlanet.name
-    var currentUserName = this.props.currentUser.name
+    var currentUserName = this.props.currentPlanet.userName
 
     return (
       <div onClick={this.interceptClick} className='PlanetHeader'>

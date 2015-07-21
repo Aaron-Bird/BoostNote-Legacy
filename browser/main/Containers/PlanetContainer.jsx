@@ -62,14 +62,14 @@ module.exports = React.createClass({
   componentDidMount: function () {
     this.unsubscribe = PlanetStore.listen(this.onFetched)
 
-    PlanetActions.fetchPlanet(this.props.params.userName + '/' + this.props.params.planetName)
+    PlanetActions.fetchPlanet(this.props.params.userName, this.props.params.planetName)
   },
   componentWillUnmount: function () {
     this.unsubscribe()
   },
   componentDidUpdate: function () {
-    if (this.state.currentPlanet.planetName !== this.props.params.planetName) {
-      PlanetActions.fetchPlanet(this.props.params.userName + '/' + this.props.params.planetName)
+    if (this.state.currentPlanet.name !== this.props.params.planetName || this.state.currentPlanet.userName !== this.props.params.userName) {
+      PlanetActions.fetchPlanet(this.props.params.userName, this.props.params.planetName)
     }
   },
   getFilteredIndexOfCurrentArticle: function () {
@@ -287,7 +287,6 @@ module.exports = React.createClass({
     var searchInput = React.findDOMNode(this).querySelector('.PlanetHeader .searchInput input')
 
     if (document.activeElement === searchInput) {
-      console.log('fff', e.keyCode)
       switch (e.keyCode) {
         case 38:
           this.focus()

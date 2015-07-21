@@ -42,9 +42,9 @@ var PlanetStore = Reflux.createStore({
         })
       }.bind(this))
   },
-  fetchPlanet: function (planetName) {
+  fetchPlanet: function (userName, planetName) {
     request
-      .get(apiUrl + planetName)
+      .get(apiUrl + userName + '/' + planetName)
       .send()
       .end(function (err, res) {
         if (err) {
@@ -54,6 +54,8 @@ var PlanetStore = Reflux.createStore({
         }
 
         var planet = res.body
+        planet.userName = userName
+
         planet.Snippets = planet.Snippets.map(function (snippet) {
           snippet.type = 'snippet'
           return snippet
