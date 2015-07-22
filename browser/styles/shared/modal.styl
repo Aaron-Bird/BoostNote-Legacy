@@ -105,15 +105,116 @@
       box-sizing border-box
       width 55px
       height 55px
-      border-style solid
-      border-width 1px
       circle()
-      border-color brandBorderColor
-      background-color transparent
-      color brandColor
-      &:hover, &.hover, &:focus, &.focus
-        border-color darken(brandBorderColor, 30%)
-        color darken(brandColor, 30%)
-      &:active, &.active
-        background-color brandColor
-        color white
+      btnPrimary()
+  .PlanetSettingModal.modal
+    width 720px
+    height 500px
+    .settingNav
+      absolute top bottom left
+      width 200px
+      box-sizing border-box
+      padding 10px
+      border-right solid 1px borderColor
+      h1
+        margin 40px 15px
+        font-size 1.5em
+        color brandColor
+      nav
+        button
+          font-size 1em
+          display block
+          box-sizing border-box
+          padding 15px 15px
+          margin 10px 0
+          border none
+          border-radius 10px
+          width 100%
+          text-align left
+          background-color transparent
+          color textColor
+          cursor pointer
+          transition 0.1s
+          &:hover, &.hover
+            background-color hoverBackgroundColor
+          &:active, &.active
+            color brandColor
+
+    .settingBody
+      absolute top bottom right
+      left 200px
+      padding 15px
+      .planetProfile
+        height 500px
+        padding-top 50px
+        .planetProfileForm
+          height 275px
+          box-sizing border-box
+          border-bottom solid 1px borderColor
+        .planetDeleteForm
+          height 225px
+          .planetDeleteControl
+            margin-top 15px
+            clearfix()
+            .toggle
+              float left
+              transition width 0.3s, color 0.1s, border-color 0.1s
+              overflow hidden
+              white-space nowrap
+              width 345px
+              height 44px
+              &.hide
+                width 0
+              .planetDeleteLabel
+                display inline-block
+                line-height 44px
+              .cancelButton
+                display inline-block
+                margin-left 15px
+                margin-right 0
+            .deleteButton
+              float left
+      .manageMember
+        height 500px
+        box-sizing border-box
+        padding-top 50px
+        .userList
+          height 275px
+          box-sizing border-box
+          border-bottom solid 1px borderColor
+          li
+            clearfix()
+            margin-bottom 10px
+            img.userPhoto
+              float left
+              width 44px
+              height 44px
+              circle()
+            .userName
+              float left
+              height 44px
+              font-size 1.3em
+              line-height 44px
+              margin-left 15px
+            .userControl
+              float right
+              height 44px
+              .ownerLabel
+                height 44px
+                padding 0 15px
+                line-height 44px
+        .addUserForm
+          height 225px
+          .addUserLabel
+            margin-top 15px
+            font-size 1.3em
+          .addUserControl
+            clearfix()
+            margin-top 15px
+            .addUserSelect
+              float left
+              height 44px
+              width 350px
+              margin-top 5px
+            .addUserSubmit
+              float right

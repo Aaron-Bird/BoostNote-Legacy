@@ -1,0 +1,25 @@
+btnDefault()
+  border-style solid
+  border-width 1px
+  border-color brandBorderColor
+  background-color transparent
+  color brandColor
+  &:hover, &.hover, &:focus, &.focus
+    border-color darken(brandBorderColor, 30%)
+    color darken(brandColor, 30%)
+  &:active, &.active
+    background-color brandColor
+    color white
+    
+btnPrimary()
+  border-style solid
+  border-width 1px
+  border-color brandBorderColor
+  background-color transparent
+  color brandColor
+  &:hover, &.hover, &:focus, &.focus
+    border-color darken(brandBorderColor, 30%)
+    color darken(brandColor, 30%)
+  &:active, &.active
+    background-color brandColor
+    color white

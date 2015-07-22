@@ -6,9 +6,6 @@ var PlanetNavigator = React.createClass({
       name: React.PropTypes.string,
       Users: React.PropTypes.array
     }),
-    currentUser: React.PropTypes.shape({
-      name: React.PropTypes.string
-    }),
     openLaunchModal: React.PropTypes.func,
     openAddUserModal: React.PropTypes.func
   },

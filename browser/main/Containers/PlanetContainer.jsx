@@ -12,6 +12,7 @@ var SnippetDeleteModal = require('../Components/SnippetDeleteModal')
 var BlueprintEditModal = require('../Components/BlueprintEditModal')
 var BlueprintDeleteModal = require('../Components/BlueprintDeleteModal')
 var PlanetAddUserModal = require('../Components/PlanetAddUserModal')
+var PlanetSettingModal = require('../Components/PlanetSettingModal')
 
 var PlanetActions = require('../Actions/PlanetActions')
 
@@ -248,9 +249,6 @@ module.exports = React.createClass({
   closeAddUserModal: function () {
     this.setState({isAddUserModalOpen: false})
   },
-  submitAddUserModal: function () {
-    this.setState({isAddUserModalOpen: false})
-  },
   openEditModal: function () {
     if (this.refs.detail.props.article == null) {return}
     this.setState({isEditModalOpen: true})
@@ -270,6 +268,12 @@ module.exports = React.createClass({
   },
   submitDeleteModal: function () {
     this.setState({isDeleteModalOpen: false})
+  },
+  openSettingModal: function () {
+    this.setState({isSettingModalOpen: true})
+  },
+  closeSettingModal: function () {
+    this.setState({isSettingModalOpen: false})
   },
   focus: function () {
     React.findDOMNode(this).focus()
@@ -407,7 +411,7 @@ module.exports = React.createClass({
     return (
       <div tabIndex='1' onKeyDown={this.handleKeyDown} className='PlanetContainer'>
         <ModalBase isOpen={this.state.isLaunchModalOpen} close={this.closeLaunchModal}>
-          <LaunchModal submit={this.submitLaunchModal} close={this.closeLaunchModal}/>
+          <LaunchModal close={this.closeLaunchModal}/>
         </ModalBase>
 
         <ModalBase isOpen={this.state.isEditModalOpen} close={this.closeEditModal}>
@@ -419,12 +423,17 @@ module.exports = React.createClass({
         </ModalBase>
 
         <ModalBase isOpen={this.state.isAddUserModalOpen} close={this.closeAddUserModal}>
-          <PlanetAddUserModal submit={this.submitAddUserModal} close={this.closeAddUserModal}/>
+          <PlanetAddUserModal close={this.closeAddUserModal}/>
         </ModalBase>
 
-        <PlanetHeader search={this.state.search} onSearchChange={this.handleSearchChange} currentPlanet={this.state.currentPlanet} currentUser={user}/>
+        <ModalBase isOpen={this.state.isSettingModalOpen} close={this.closeSettingModal}>
+          <PlanetSettingModal currentPlanet={this.state.currentPlanet} close={this.closeSettingModal}/>
+        </ModalBase>
 
-        <PlanetNavigator openLaunchModal={this.openLaunchModal} openAddUserModal={this.openAddUserModal} currentPlanet={this.state.currentPlanet} currentUser={user}/>
+        <PlanetHeader search={this.state.search}
+          openSettingModal={this.openSettingModal} onSearchChange={this.handleSearchChange} currentPlanet={this.state.currentPlanet}/>
+
+        <PlanetNavigator openLaunchModal={this.openLaunchModal} openAddUserModal={this.openAddUserModal} currentPlanet={this.state.currentPlanet}/>
 
         <PlanetArticleList ref='list' articles={filteredArticles}/>
 

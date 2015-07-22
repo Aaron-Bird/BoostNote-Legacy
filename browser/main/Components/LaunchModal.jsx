@@ -9,7 +9,6 @@ var BlueprintForm = require('./BlueprintForm')
 var LaunchModal = React.createClass({
   mixins: [Catalyst.LinkedStateMixin, ReactRouter.State],
   propTypes: {
-    submit: React.PropTypes.func,
     close: React.PropTypes.func
   },
   getInitialState: function () {
@@ -38,13 +37,6 @@ var LaunchModal = React.createClass({
   },
   selectBlueprintTab: function () {
     this.setState({currentTab: 'blueprint'})
-  },
-  submit: function () {
-    if (this.state.currentTab === 'snippet') {
-      console.log(this.state.snippet)
-    } else {
-      console.log(this.state.blueprint)
-    }
   },
   handleKeyDown: function (e) {
     if (e.keyCode === 37 && e.metaKey) {

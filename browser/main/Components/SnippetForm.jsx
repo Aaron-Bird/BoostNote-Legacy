@@ -121,7 +121,7 @@ var SnippetForm = React.createClass({
         </div>
         <div className='modal-footer'>
           <div className='modal-control'>
-            <button onClick={this.props.close} className='btn-default'>Cancle</button>
+            <button onClick={this.props.close} className='btn-default'>Cancel</button>
             <button onClick={this.submit} className='btn-primary'>{this.props.snippet == null ? 'Launch' : 'Relaunch'}</button>
           </div>
         </div>

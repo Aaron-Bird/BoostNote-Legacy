@@ -2,8 +2,8 @@ var React = require('react/addons')
 
 var PlanetHeader = React.createClass({
   propTypes: {
+    openSettingModal: React.PropTypes.func,
     currentPlanet: React.PropTypes.object,
-    currentUser: React.PropTypes.object,
     onSearchChange: React.PropTypes.func,
     search: React.PropTypes.string
   },
@@ -27,7 +27,7 @@ var PlanetHeader = React.createClass({
         <div className='headerLabel'>
           <span className='userName'>{currentUserName}</span><br/>
           <span className='planetName'>{currentPlanetName}</span>
-          <button className={'menuBtn'}>
+          <button onClick={this.props.openSettingModal} className={'menuBtn'}>
             <i className='fa fa-gears'></i>
           </button>
         </div>
