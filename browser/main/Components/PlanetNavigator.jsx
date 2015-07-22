@@ -3,12 +3,14 @@ var React = require('react/addons')
 var PlanetNavigator = React.createClass({
   propTypes: {
     currentPlanet: React.PropTypes.shape({
-      name: React.PropTypes.string
+      name: React.PropTypes.string,
+      Users: React.PropTypes.array
     }),
     currentUser: React.PropTypes.shape({
       name: React.PropTypes.string
     }),
-    onOpenLaunchModal: React.PropTypes.func
+    openLaunchModal: React.PropTypes.func,
+    openAddUserModal: React.PropTypes.func
   },
   getInitialState: function () {
     return {
@@ -20,9 +22,15 @@ var PlanetNavigator = React.createClass({
     this.setState({isLaunchModalOpen: false})
   },
   render: function () {
+    var users = this.props.currentPlanet.Users.map(function (user) {
+      return (
+        <li key={'user-' + user.id}><img width='44' height='44' src='../vendor/dummy.jpg'/></li>
+      )
+    })
+
     return (
       <div className='PlanetNavigator'>
-        <button onClick={this.props.onOpenLaunchModal} className='launchButton btn-primary btn-block'>
+        <button onClick={this.props.openLaunchModal} className='launchButton btn-primary btn-block'>
           <i className='fa fa-rocket fa-fw'/> Launch
         </button>
         <nav>
@@ -36,6 +44,11 @@ var PlanetNavigator = React.createClass({
             <i className='fa fa-file-text-o fa-fw'/> Blueprints
           </a>
         </nav>
+        <div className='usersLabel'>Users</div>
+        <ul className='users'>
+          {users}
+          <li onClick={this.props.openAddUserModal} className='btn-default'><i className='fa fa-plus'/></li>
+        </ul>
       </div>
     )
   }

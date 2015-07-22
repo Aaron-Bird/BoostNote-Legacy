@@ -11,6 +11,7 @@ var SnippetEditModal = require('../Components/SnippetEditModal')
 var SnippetDeleteModal = require('../Components/SnippetDeleteModal')
 var BlueprintEditModal = require('../Components/BlueprintEditModal')
 var BlueprintDeleteModal = require('../Components/BlueprintDeleteModal')
+var PlanetAddUserModal = require('../Components/PlanetAddUserModal')
 
 var PlanetActions = require('../Actions/PlanetActions')
 
@@ -70,6 +71,7 @@ module.exports = React.createClass({
   componentDidUpdate: function () {
     if (this.state.currentPlanet.name !== this.props.params.planetName || this.state.currentPlanet.userName !== this.props.params.userName) {
       PlanetActions.fetchPlanet(this.props.params.userName, this.props.params.planetName)
+      this.focus()
     }
   },
   getFilteredIndexOfCurrentArticle: function () {
@@ -185,6 +187,17 @@ module.exports = React.createClass({
       return
     }
 
+    if (res.status === 'userAdded') {
+      var user = res.data
+      if (user == null) {
+        return null
+      }
+      this.state.currentPlanet.Users.push(user)
+      this.setState({currentPlanet: this.state.currentPlanet}, function () {
+        this.closeAddUserModal()
+      })
+    }
+
     var article = res.data
     var filteredIndex = this.getFilteredIndexOfCurrentArticle()
     var index = this.getIndexOfCurrentArticle()
@@ -229,6 +242,15 @@ module.exports = React.createClass({
   closeLaunchModal: function () {
     this.setState({isLaunchModalOpen: false})
   },
+  openAddUserModal: function () {
+    this.setState({isAddUserModalOpen: true})
+  },
+  closeAddUserModal: function () {
+    this.setState({isAddUserModalOpen: false})
+  },
+  submitAddUserModal: function () {
+    this.setState({isAddUserModalOpen: false})
+  },
   openEditModal: function () {
     if (this.refs.detail.props.article == null) {return}
     this.setState({isEditModalOpen: true})
@@ -251,7 +273,6 @@ module.exports = React.createClass({
   },
   focus: function () {
     React.findDOMNode(this).focus()
-    console.log('focus this')
   },
   handleKeyDown: function (e) {
     // Bypath for modal open state
@@ -272,6 +293,13 @@ module.exports = React.createClass({
     if (this.state.isDeleteModalOpen) {
       if (e.keyCode === 27) {
         this.closeDeleteModal()
+        this.focus()
+      }
+      return
+    }
+    if (this.state.isAddUserModalOpen) {
+      if (e.keyCode === 27) {
+        this.closeAddUserModal()
         this.focus()
       }
       return
@@ -390,9 +418,13 @@ module.exports = React.createClass({
           {deleteModal}
         </ModalBase>
 
+        <ModalBase isOpen={this.state.isAddUserModalOpen} close={this.closeAddUserModal}>
+          <PlanetAddUserModal submit={this.submitAddUserModal} close={this.closeAddUserModal}/>
+        </ModalBase>
+
         <PlanetHeader search={this.state.search} onSearchChange={this.handleSearchChange} currentPlanet={this.state.currentPlanet} currentUser={user}/>
 
-        <PlanetNavigator onOpenLaunchModal={this.openLaunchModal} currentPlanet={this.state.currentPlanet} currentUser={user}/>
+        <PlanetNavigator openLaunchModal={this.openLaunchModal} openAddUserModal={this.openAddUserModal} currentPlanet={this.state.currentPlanet} currentUser={user}/>
 
         <PlanetArticleList ref='list' articles={filteredArticles}/>
 
