@@ -10,6 +10,7 @@ var PlanetStore = Reflux.createStore({
   init: function () {
     this.listenTo(PlanetActions.createPlanet, this.createPlanet)
     this.listenTo(PlanetActions.fetchPlanet, this.fetchPlanet)
+    this.listenTo(PlanetActions.changeName, this.changeName)
     this.listenTo(PlanetActions.addUser, this.addUser)
     this.listenTo(PlanetActions.createSnippet, this.createSnippet)
     this.listenTo(PlanetActions.updateSnippet, this.updateSnippet)
@@ -75,6 +76,38 @@ var PlanetStore = Reflux.createStore({
 
         this.trigger({
           status: 'planetFetched',
+          data: planet
+        })
+      }.bind(this))
+  },
+  changeName: function (userName, planetName, name) {
+    request
+      .put(apiUrl + userName + '/' + planetName)
+      .set({
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      })
+      .send({name: name})
+      .end(function (err, res) {
+        if (err) {
+          console.error(err)
+          this.trigger(null)
+          return
+        }
+
+        var planet = res.body
+
+        var user = JSON.parse(localStorage.getItem('user'))
+        user.Planets.some(function (_planet, index) {
+          if (planet.id === _planet.id) {
+            user.Planets[index].name = planet.name
+            return true
+          }
+          return false
+        })
+        localStorage.setItem('user', JSON.stringify(user))
+
+        this.trigger({
+          status: 'nameChanged',
           data: planet
         })
       }.bind(this))

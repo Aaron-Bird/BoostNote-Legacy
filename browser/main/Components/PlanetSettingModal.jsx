@@ -1,6 +1,9 @@
 var React = require('react/addons')
 var Select = require('react-select')
+
 var Catalyst = require('../Mixins/Catalyst')
+
+var PlanetActions = require('../Actions/PlanetActions')
 
 module.exports = React.createClass({
   mixins: [Catalyst.LinkedStateMixin],
@@ -21,6 +24,10 @@ module.exports = React.createClass({
   },
   activeManageMember: function () {
     this.setState({currentTab: 'manageMember'})
+  },
+  saveProfile: function () {
+    var currentPlanet = this.props.currentPlanet
+    PlanetActions.changeName(currentPlanet.userName, currentPlanet.name, this.state.planetName)
   },
   doubleCheckDeletePlanet: function () {
     if (this.state.isDeletePlanetChecked) {
@@ -44,7 +51,7 @@ module.exports = React.createClass({
           <div className='planetProfileForm'>
             <label>Planet name </label>
             <input valueLink={this.linkState('planetName')} className='inline-input'/>
-            <button className='saveButton btn-primary'>Save</button>
+            <button onClick={this.saveProfile} className='saveButton btn-primary'>Save</button>
           </div>
 
           <div className='planetDeleteForm'>

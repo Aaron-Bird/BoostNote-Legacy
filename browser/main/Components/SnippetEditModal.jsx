@@ -1,24 +1,10 @@
 var React = require('react')
 var SnippetForm = require('./SnippetForm')
-var PlanetStore = require('../Stores/PlanetStore')
 
 var SnippetEditModal = React.createClass({
   propTypes: {
     close: React.PropTypes.func,
     snippet: React.PropTypes.object
-  },
-  componentDidMount: function () {
-    this.unsubscribe = PlanetStore.listen(this.onListen)
-  },
-  componentWillUnmount: function () {
-    this.unsubscribe()
-  },
-  onListen: function (res) {
-    switch (res.status) {
-      case 'articleUpdated':
-        this.props.close()
-        break
-    }
   },
   stopPropagation: function (e) {
     e.stopPropagation()

@@ -4,6 +4,7 @@ module.exports = Reflux.createActions([
   'createPlanet',
   'fetchPlanet',
 
+  'changeName',
   'addUser',
 
   'createSnippet',

@@ -1,25 +1,11 @@
 var React = require('react')
-var PlanetStore = require('../Stores/PlanetStore')
+
 var PlanetActions = require('../Actions/PlanetActions')
 
 var BlueprintDeleteModal = React.createClass({
   propTypes: {
     close: React.PropTypes.func,
     blueprint: React.PropTypes.object
-  },
-  componentDidMount: function () {
-    this.unsubscribe = PlanetStore.listen(this.onListen)
-    React.findDOMNode(this.refs.submit).focus()
-  },
-  componentWillUnmount: function () {
-    this.unsubscribe()
-  },
-  onListen: function (res) {
-    switch (res.status) {
-      case 'articleDeleted':
-        this.props.close()
-        break
-    }
   },
   stopPropagation: function (e) {
     e.stopPropagation()

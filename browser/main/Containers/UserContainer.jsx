@@ -27,12 +27,18 @@ module.exports = React.createClass({
     this.unsubscribe()
   },
   onListen: function (res) {
+    if (res.status == null) return
+
     if (res.status === 'planetCreated') {
       var currentUser = this.state.currentUser
       currentUser.Planets.push(res.data)
 
       localStorage.setItem('user', JSON.stringify(currentUser))
       this.setState({currentUser: currentUser})
+    }
+
+    if (res.status === 'nameChanged') {
+      this.setState({currentUser: AuthStore.getUser()})
     }
   },
   render: function () {

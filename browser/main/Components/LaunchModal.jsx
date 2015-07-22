@@ -1,7 +1,6 @@
 var React = require('react/addons')
 var ReactRouter = require('react-router')
 var Catalyst = require('../Mixins/Catalyst')
-var PlanetStore = require('../Stores/PlanetStore')
 
 var SnippetForm = require('./SnippetForm')
 var BlueprintForm = require('./BlueprintForm')
@@ -14,19 +13,6 @@ var LaunchModal = React.createClass({
   getInitialState: function () {
     return {
       currentTab: 'snippet'
-    }
-  },
-  componentDidMount: function () {
-    this.unsubscribe = PlanetStore.listen(this.onListen)
-  },
-  componentWillUnmount: function () {
-    this.unsubscribe()
-  },
-  onListen: function (res) {
-    switch (res.status) {
-      case 'articleCreated':
-        this.props.close()
-        break
     }
   },
   stopPropagation: function (e) {

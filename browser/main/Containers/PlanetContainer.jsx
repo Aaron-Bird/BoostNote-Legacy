@@ -70,7 +70,7 @@ module.exports = React.createClass({
     this.unsubscribe()
   },
   componentDidUpdate: function () {
-    if (this.state.currentPlanet.name !== this.props.params.planetName || this.state.currentPlanet.userName !== this.props.params.userName) {
+    if (this.state.currentPlanet == null || this.state.currentPlanet.name !== this.props.params.planetName || this.state.currentPlanet.userName !== this.props.params.userName) {
       PlanetActions.fetchPlanet(this.props.params.userName, this.props.params.planetName)
       this.focus()
     }
@@ -162,6 +162,10 @@ module.exports = React.createClass({
     }
   },
   onFetched: function (res) {
+    if (res == null) {
+      return
+    }
+
     var articles = this.state.currentPlanet == null ? null : this.state.currentPlanet.Articles
 
     if (res.status === 'planetFetched') {
@@ -195,8 +199,16 @@ module.exports = React.createClass({
       }
       this.state.currentPlanet.Users.push(user)
       this.setState({currentPlanet: this.state.currentPlanet}, function () {
-        this.closeAddUserModal()
+        if (this.state.isAddUserModalOpen) {this.closeAddUserModal()}
       })
+      return
+    }
+
+    if (res.status === 'nameChanged') {
+      var params = Object.assign({}, this.props.params)
+      params.planetName = res.data.name
+      this.transitionTo('planet', params)
+      return
     }
 
     var article = res.data
@@ -209,6 +221,7 @@ module.exports = React.createClass({
           articles.unshift(article)
 
           this.setState({planet: this.state.currentPlanet, search: ''}, function () {
+            this.closeLaunchModal()
             this.selectArticleByIndex(0)
           })
           break
@@ -216,7 +229,9 @@ module.exports = React.createClass({
           articles.splice(index, 1)
           articles.unshift(article)
 
-          this.setState({planet: this.state.currentPlanet})
+          this.setState({planet: this.state.currentPlanet}, function () {
+            this.closeEditModal()
+          })
           break
         case 'articleDeleted':
           articles.splice(index, 1)
@@ -241,20 +256,26 @@ module.exports = React.createClass({
     this.setState({isLaunchModalOpen: true})
   },
   closeLaunchModal: function () {
-    this.setState({isLaunchModalOpen: false})
+    this.setState({isLaunchModalOpen: false}, function () {
+      this.focus()
+    })
   },
   openAddUserModal: function () {
     this.setState({isAddUserModalOpen: true})
   },
   closeAddUserModal: function () {
-    this.setState({isAddUserModalOpen: false})
+    this.setState({isAddUserModalOpen: false}, function () {
+      this.focus()
+    })
   },
   openEditModal: function () {
     if (this.refs.detail.props.article == null) {return}
     this.setState({isEditModalOpen: true})
   },
   closeEditModal: function () {
-    this.setState({isEditModalOpen: false})
+    this.setState({isEditModalOpen: false}, function () {
+      this.focus()
+    })
   },
   submitEditModal: function () {
     this.setState({isEditModalOpen: false})
@@ -264,7 +285,9 @@ module.exports = React.createClass({
     this.setState({isDeleteModalOpen: true})
   },
   closeDeleteModal: function () {
-    this.setState({isDeleteModalOpen: false})
+    this.setState({isDeleteModalOpen: false}, function () {
+      this.focus()
+    })
   },
   submitDeleteModal: function () {
     this.setState({isDeleteModalOpen: false})
@@ -273,7 +296,9 @@ module.exports = React.createClass({
     this.setState({isSettingModalOpen: true})
   },
   closeSettingModal: function () {
-    this.setState({isSettingModalOpen: false})
+    this.setState({isSettingModalOpen: false}, function () {
+      this.focus()
+    })
   },
   focus: function () {
     React.findDOMNode(this).focus()
@@ -283,28 +308,30 @@ module.exports = React.createClass({
     if (this.state.isLaunchModalOpen) {
       if (e.keyCode === 27) {
         this.closeLaunchModal()
-        this.focus()
       }
       return
     }
     if (this.state.isEditModalOpen) {
       if (e.keyCode === 27) {
         this.closeEditModal()
-        this.focus()
       }
       return
     }
     if (this.state.isDeleteModalOpen) {
       if (e.keyCode === 27) {
         this.closeDeleteModal()
-        this.focus()
       }
       return
     }
     if (this.state.isAddUserModalOpen) {
       if (e.keyCode === 27) {
         this.closeAddUserModal()
-        this.focus()
+      }
+      return
+    }
+    if (this.state.isSettingModalOpen) {
+      if (e.keyCode === 27) {
+        this.closeSettingModal()
       }
       return
     }
