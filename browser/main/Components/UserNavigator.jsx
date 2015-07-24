@@ -21,9 +21,11 @@ module.exports = React.createClass({
   },
   componentDidMount: function () {
     this.unsubscribe = AuthStore.listen(this.onLogout)
+    document.addEventListener('keydown', this.handleKeyDown)
   },
   componentWillUnmount: function () {
     this.unsubscribe()
+    document.removeEventListener('keydown', this.handleKeyDown)
   },
   onLogout: function () {
     this.transitionTo('login')
@@ -40,11 +42,20 @@ module.exports = React.createClass({
   closePlanetCreateModal: function () {
     this.setState({isPlanetCreateModalOpen: false})
   },
+  handleKeyDown: function (e) {
+    if (e.metaKey && e.keyCode > 48 && e.keyCode < 58) {
+      var planet = this.props.currentUser.Planets[e.keyCode - 49]
+      if (planet != null) {
+        this.transitionTo('planet', {userName: planet.userName, planetName: planet.name})
+      }
+    }
+    e.preventDefault()
+  },
   render: function () {
     var planets = this.props.currentUser.Planets.map(function (planet, index) {
       return (
         <li key={planet.id} className={this.props.currentPlanet != null && this.props.currentPlanet.name === planet.name ? 'active' : ''}>
-          <Link to='planet' params={{userName: planet.userName, planetName: planet.name}} href>
+          <Link to='planet' params={{userName: planet.userName, planetName: planet.name}}>
             {planet.name[0]}
             <div className='planetTooltip'>{planet.userName}/{planet.name}</div>
           </Link>
