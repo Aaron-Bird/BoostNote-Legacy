@@ -19,26 +19,26 @@ var PlanetActions = require('../Actions/PlanetActions')
 var AuthStore = require('../Stores/AuthStore')
 var PlanetStore = require('../Stores/PlanetStore')
 
-var searchArticle = function (search, articles) {
-  if (search === '' || search == null) return articles
+function basicFilter (keyword, articles) {
+  if (keyword === '' || keyword == null) return articles
   var firstFiltered = articles.filter(function (article) {
 
     var first = article.type === 'snippet' ? article.callSign : article.title
-    if (first.match(new RegExp(search, 'i'))) return true
+    if (first.match(new RegExp(keyword, 'i'))) return true
 
     return false
   })
 
   var secondFiltered = articles.filter(function (article) {
     var second = article.type === 'snippet' ? article.description : article.content
-    if (second.match(new RegExp(search, 'i'))) return true
+    if (second.match(new RegExp(keyword, 'i'))) return true
 
     return false
   })
 
   var thirdFiltered = articles.filter(function (article) {
     if (article.type === 'snippet') {
-      if (article.content.match(new RegExp(search, 'i'))) return true
+      if (article.content.match(new RegExp(keyword, 'i'))) return true
     }
     return false
   })
@@ -46,6 +46,46 @@ var searchArticle = function (search, articles) {
   return firstFiltered.concat(secondFiltered, thirdFiltered).filter(function (value, index, self) {
     return self.indexOf(value) === index
   })
+}
+
+function snippetFilter (articles) {
+  return articles.filter(function (article) {
+    return article.type === 'snippet'
+  })
+}
+
+function blueprintFilter (articles) {
+  return articles.filter(function (article) {
+    return article.type === 'blueprint'
+  })
+}
+
+function tagFilter (keyword, articles) {
+  return articles.filter(function (article) {
+    return article.Tags.some(function (tag) {
+      return tag.name.match(new RegExp(keyword, 'i'))
+    })
+  })
+}
+
+function searchArticle (search, articles) {
+  var keywords = search.split(' ')
+
+  for (var keyword of keywords) {
+    if (keyword.match(/^\$s/, 'i')) {
+      articles = snippetFilter(articles)
+      continue
+    } else if (keyword.match(/^\$b/, 'i')) {
+      articles = blueprintFilter(articles)
+      continue
+    } else if (keyword.match(/^#[A-Za-z0-9]+/)) {
+      articles = tagFilter(keyword.substring(1, keyword.length), articles)
+      continue
+    }
+    articles = basicFilter(keyword, articles)
+  }
+
+  return articles
 }
 
 module.exports = React.createClass({
@@ -208,8 +248,9 @@ module.exports = React.createClass({
       return
     }
 
+    var user
     if (res.status === 'userAdded') {
-      var user = res.data
+      user = res.data
       if (user == null) {
         return null
       }
@@ -221,7 +262,7 @@ module.exports = React.createClass({
     }
 
     if (res.status === 'userRemoved') {
-      var user = res.data
+      user = res.data
       if (user == null) {
         return null
       }
@@ -285,6 +326,15 @@ module.exports = React.createClass({
     this.setState({search: e.target.value}, function () {
       this.selectArticleByIndex(0)
     })
+  },
+  showAll: function () {
+    this.setState({search: ''})
+  },
+  showOnlySnippets: function () {
+    this.setState({search: '$s'})
+  },
+  showOnlyBlueprints: function () {
+    this.setState({search: '$b'})
   },
   openLaunchModal: function () {
     this.setState({isLaunchModalOpen: true})
@@ -493,7 +543,9 @@ module.exports = React.createClass({
         <PlanetHeader search={this.state.search}
           openSettingModal={this.openSettingModal} onSearchChange={this.handleSearchChange} currentPlanet={this.state.currentPlanet}/>
 
-        <PlanetNavigator openLaunchModal={this.openLaunchModal} openAddUserModal={this.openAddUserModal} currentPlanet={this.state.currentPlanet}/>
+        <PlanetNavigator openLaunchModal={this.openLaunchModal} openAddUserModal={this.openAddUserModal}
+          showAll={this.showAll}
+          showOnlySnippets={this.showOnlySnippets} showOnlyBlueprints={this.showOnlyBlueprints} currentPlanet={this.state.currentPlanet}/>
 
         <PlanetArticleList ref='list' articles={filteredArticles}/>
 

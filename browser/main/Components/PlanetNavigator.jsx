@@ -7,7 +7,10 @@ var PlanetNavigator = React.createClass({
       Users: React.PropTypes.array
     }),
     openLaunchModal: React.PropTypes.func,
-    openAddUserModal: React.PropTypes.func
+    openAddUserModal: React.PropTypes.func,
+    showAll: React.PropTypes.func,
+    showOnlySnippets: React.PropTypes.func,
+    showOnlyBlueprints: React.PropTypes.func
   },
   getInitialState: function () {
     return {
@@ -15,7 +18,6 @@ var PlanetNavigator = React.createClass({
     }
   },
   submitLaunchModal: function (ret) {
-    console.log(ret)
     this.setState({isLaunchModalOpen: false})
   },
   render: function () {
@@ -31,13 +33,13 @@ var PlanetNavigator = React.createClass({
           <i className='fa fa-rocket fa-fw'/> Launch
         </button>
         <nav>
-          <a>
+          <a onClick={this.props.showAll}>
             <i className='fa fa-home fa-fw'/> Home
           </a>
-          <a>
+          <a onClick={this.props.showOnlySnippets}>
             <i className='fa fa-code fa-fw'/> Snippets
           </a>
-          <a>
+          <a onClick={this.props.showOnlyBlueprints}>
             <i className='fa fa-file-text-o fa-fw'/> Blueprints
           </a>
         </nav>
