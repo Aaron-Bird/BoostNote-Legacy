@@ -220,6 +220,24 @@ module.exports = React.createClass({
       return
     }
 
+    if (res.status === 'userRemoved') {
+      var user = res.data
+      if (user == null) {
+        return null
+      }
+      this.state.currentPlanet.Users.some(function (_user, index) {
+        if (user.id === _user.id) {
+          this.state.currentPlanet.Users.splice(index, 1)
+          return true
+        }
+        return false
+      }.bind(this))
+      this.setState({currentPlanet: this.state.currentPlanet}, function () {
+        if (this.state.isAddUserModalOpen) {this.closeAddUserModal()}
+      })
+      return
+    }
+
     if (res.status === 'nameChanged') {
       var params = Object.assign({}, this.props.params)
       params.planetName = res.data.name

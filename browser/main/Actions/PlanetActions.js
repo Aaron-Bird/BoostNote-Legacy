@@ -6,6 +6,7 @@ module.exports = Reflux.createActions([
 
   'changeName',
   'addUser',
+  'removeUser',
 
   'createSnippet',
   'updateSnippet',

@@ -12,6 +12,7 @@ var PlanetStore = Reflux.createStore({
     this.listenTo(PlanetActions.fetchPlanet, this.fetchPlanet)
     this.listenTo(PlanetActions.changeName, this.changeName)
     this.listenTo(PlanetActions.addUser, this.addUser)
+    this.listenTo(PlanetActions.removeUser, this.removeUser)
     this.listenTo(PlanetActions.createSnippet, this.createSnippet)
     this.listenTo(PlanetActions.updateSnippet, this.updateSnippet)
     this.listenTo(PlanetActions.deleteSnippet, this.deleteSnippet)
@@ -129,6 +130,27 @@ var PlanetStore = Reflux.createStore({
 
         this.trigger({
           status: 'userAdded',
+          data: user
+        })
+      }.bind(this))
+  },
+  removeUser: function (planetName, userName) {
+    request
+      .del(apiUrl + planetName + '/users')
+      .set({
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      })
+      .send({name: userName})
+      .end(function (err, res) {
+        if (err) {
+          console.error(err)
+          this.trigger(null)
+          return
+        }
+        var user = res.body
+
+        this.trigger({
+          status: 'userRemoved',
           data: user
         })
       }.bind(this))

@@ -1,9 +1,32 @@
 var React = require('react/addons')
+var request = require('superagent')
 var Select = require('react-select')
 
 var Catalyst = require('../Mixins/Catalyst')
 
 var PlanetActions = require('../Actions/PlanetActions')
+
+var getOptions = function (input, callback) {
+  request
+    .get('http://localhost:8000/users/search')
+    .query({name: input})
+    .send()
+    .end(function (err, res) {
+      if (err) {
+        callback(err)
+        return
+      }
+      callback(null, {
+          options: res.body.map(function (user) {
+            return {
+              label: user.name,
+              value: user.name
+            }
+          }),
+          complete: false
+      })
+    })
+}
 
 module.exports = React.createClass({
   mixins: [Catalyst.LinkedStateMixin],
@@ -15,7 +38,8 @@ module.exports = React.createClass({
     return {
       currentTab: 'planetProfile',
       planetName: this.props.currentPlanet.name,
-      isDeletePlanetChecked: false
+      isDeletePlanetChecked: false,
+      userName: ''
     }
   },
   activePlanetProfile: function () {
@@ -28,6 +52,17 @@ module.exports = React.createClass({
   saveProfile: function () {
     var currentPlanet = this.props.currentPlanet
     PlanetActions.changeName(currentPlanet.userName, currentPlanet.name, this.state.planetName)
+  },
+  handleChange: function (value) {
+    this.setState({userName: value})
+  },
+  addUser: function () {
+    PlanetActions.addUser(this.props.currentPlanet.userName + '/' + this.props.currentPlanet.name, this.state.userName)
+  },
+  removeUser: function (userName) {
+    return function () {
+      PlanetActions.removeUser(this.props.currentPlanet.userName + '/' + this.props.currentPlanet.name, userName)
+    }.bind(this)
   },
   doubleCheckDeletePlanet: function () {
     if (this.state.isDeletePlanetChecked) {
@@ -72,7 +107,7 @@ module.exports = React.createClass({
             <img className='userPhoto' width='44' height='44' src='../vendor/dummy.jpg'/>
             <div className='userName'>{user.name}</div>
             <div className='userControl'>
-              {this.props.currentPlanet.OwnerId !== user.id ? <button className='btn-default'>Delete</button> : <span className='ownerLabel'>Owner</span>}
+              {this.props.currentPlanet.OwnerId !== user.id ? <button onClick={this.removeUser(user.name)} className='btn-default'>Delete</button> : <span className='ownerLabel'>Owner</span>}
             </div>
           </li>
         )
@@ -86,8 +121,15 @@ module.exports = React.createClass({
           <div className='addUserForm'>
             <div className='addUserLabel'>Invite user</div>
             <div className='addUserControl'>
-              <Select className='addUserSelect'/>
-              <button className='addUserSubmit btn-primary'>Invite</button>
+              <Select
+                name='userName'
+                value={this.state.userName}
+                placeholder='Username'
+                asyncOptions={getOptions}
+                onChange={this.handleChange}
+                className='addUserSelect'
+              />
+            <button onClick={this.addUser} className='addUserSubmit btn-primary'>Invite</button>
             </div>
           </div>
         </div>
