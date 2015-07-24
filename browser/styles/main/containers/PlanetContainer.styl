@@ -135,6 +135,20 @@
       circle()
       margin 3px
       line-height 44px
+      .userTooltip
+        position absolute
+        z-index 500
+        background-color transparentify(invBackgroundColor, 80%)
+        color invTextColor
+        padding 10px
+        line-height 1em
+        border-radius 5px
+        margin-top -15px
+        opacity 0
+        transition 0.1s
+        pointer-events none
+      &:hover .userTooltip
+        opacity 1
 
 
 .PlanetArticleList

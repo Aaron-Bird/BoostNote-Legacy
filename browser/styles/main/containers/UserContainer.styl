@@ -46,6 +46,21 @@
         transition 0.1s
         &:hover, &:active
           background-color white
+        .planetTooltip
+          position absolute
+          z-index 500
+          background-color transparentify(invBackgroundColor, 80%)
+          color invTextColor
+          padding 10px
+          line-height 1em
+          border-radius 5px
+          margin-top -41px
+          margin-left 52px
+          opacity 0
+          transition 0.1s
+          pointer-events none
+        &:hover .planetTooltip
+          opacity 1
       img
         circle()
         width 44px

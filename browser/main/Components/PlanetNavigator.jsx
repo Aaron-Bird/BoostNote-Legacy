@@ -23,7 +23,10 @@ var PlanetNavigator = React.createClass({
   render: function () {
     var users = this.props.currentPlanet.Users.map(function (user) {
       return (
-        <li key={'user-' + user.id}><img width='44' height='44' src='../vendor/dummy.jpg'/></li>
+        <li key={'user-' + user.id}>
+          <img width='44' height='44' src='../vendor/dummy.jpg'/>
+          <div className='userTooltip'>{user.profileName}</div>
+        </li>
       )
     })
 
