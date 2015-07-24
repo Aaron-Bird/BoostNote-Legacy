@@ -8,7 +8,8 @@ var Markdown = require('../Mixins/Markdown')
 var PlanetArticleList = React.createClass({
   mixins: [ReactRouter.Navigation, ReactRouter.State, ForceUpdate(60000), Markdown],
   propTypes: {
-    articles: React.PropTypes.array
+    articles: React.PropTypes.array,
+    showOnlyWithTag: React.PropTypes.func
   },
   handleKeyDown: function (e) {
     e.preventDefault()
@@ -17,9 +18,9 @@ var PlanetArticleList = React.createClass({
     var articles = this.props.articles.map(function (article) {
       var tags = article.Tags.length > 0 ? article.Tags.map(function (tag) {
         return (
-          <a key={tag.id} href>#{tag.name}</a>
+          <a onClick={this.props.showOnlyWithTag(tag.name)} key={tag.id}>#{tag.name}</a>
         )
-      }) : (
+      }.bind(this)) : (
         <a className='noTag'>Not tagged yet</a>
       )
       var params = this.getParams()

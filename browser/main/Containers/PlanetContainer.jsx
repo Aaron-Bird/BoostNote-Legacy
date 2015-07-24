@@ -63,7 +63,7 @@ function blueprintFilter (articles) {
 function tagFilter (keyword, articles) {
   return articles.filter(function (article) {
     return article.Tags.some(function (tag) {
-      return tag.name.match(new RegExp(keyword, 'i'))
+      return tag.name.match(new RegExp('^' + keyword, 'i'))
     })
   })
 }
@@ -336,6 +336,11 @@ module.exports = React.createClass({
   showOnlyBlueprints: function () {
     this.setState({search: '$b'})
   },
+  showOnlyWithTag: function (tag) {
+    return function () {
+      this.setState({search: '#' + tag})
+    }.bind(this)
+  },
   openLaunchModal: function () {
     this.setState({isLaunchModalOpen: true})
   },
@@ -547,9 +552,9 @@ module.exports = React.createClass({
           showAll={this.showAll}
           showOnlySnippets={this.showOnlySnippets} showOnlyBlueprints={this.showOnlyBlueprints} currentPlanet={this.state.currentPlanet}/>
 
-        <PlanetArticleList ref='list' articles={filteredArticles}/>
+        <PlanetArticleList showOnlyWithTag={this.showOnlyWithTag} ref='list' articles={filteredArticles}/>
 
-        <PlanetArticleDetail ref='detail' article={article} onOpenEditModal={this.openEditModal} onOpenDeleteModal={this.openDeleteModal}/>
+        <PlanetArticleDetail ref='detail' article={article} onOpenEditModal={this.openEditModal} onOpenDeleteModal={this.openDeleteModal} showOnlyWithTag={this.showOnlyWithTag}/>
       </div>
     )
   }
