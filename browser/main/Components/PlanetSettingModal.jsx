@@ -22,8 +22,8 @@ module.exports = React.createClass({
     this.setState({currentTab: 'planetProfile'})
 
   },
-  activeManageMember: function () {
-    this.setState({currentTab: 'manageMember'})
+  activeMembers: function () {
+    this.setState({currentTab: 'members'})
   },
   saveProfile: function () {
     var currentPlanet = this.props.currentPlanet
@@ -79,7 +79,7 @@ module.exports = React.createClass({
       }.bind(this))
 
       content = (
-        <div className='manageMember'>
+        <div className='members'>
           <ul className='userList'>
             {members}
           </ul>
@@ -99,8 +99,8 @@ module.exports = React.createClass({
         <div className='settingNav'>
           <h1>Planet setting</h1>
           <nav>
-            <button className={this.state.currentTab === 'planetProfile' ? 'active' : ''} onClick={this.activePlanetProfile}><i className='fa fa-globe'/> Planet profile</button>
-            <button className={this.state.currentTab === 'manageMember' ? 'active' : ''} onClick={this.activeManageMember}><i className='fa fa-group'/> Manage member</button>
+            <button className={this.state.currentTab === 'planetProfile' ? 'active' : ''} onClick={this.activePlanetProfile}><i className='fa fa-globe fa-fw'/> Planet profile</button>
+            <button className={this.state.currentTab === 'members' ? 'active' : ''} onClick={this.activeMembers}><i className='fa fa-group fa-fw'/> Members</button>
           </nav>
         </div>
 

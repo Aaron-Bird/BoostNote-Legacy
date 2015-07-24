@@ -13,7 +13,7 @@ var LoginContainer = require('./Containers/LoginContainer.jsx')
 var RegisterContainer = require('./Containers/RegisterContainer.jsx')
 
 var UserContainer = require('./Containers/UserContainer.jsx')
-var UserSettingContainer = require('./Containers/UserSettingContainer.jsx')
+
 var PlanetContainer = require('./Containers/PlanetContainer.jsx')
 
 var routes = (
@@ -22,7 +22,7 @@ var routes = (
     <Route name='register' path='register' handler={RegisterContainer}/>
 
     <Route name='user' path=':userName' handler={UserContainer}>
-      <DefaultRoute name='userHome' handler={UserSettingContainer}/>
+      <DefaultRoute name='userHome'/>
       <Route name='planet' path=':planetName' handler={PlanetContainer}>
         <DefaultRoute name='planetHome'/>
         <Route name='snippets' path='snippets/:localId'/>

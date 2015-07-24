@@ -56,18 +56,21 @@ module.exports = React.createClass({
   },
   getInitialState: function () {
     return {
+      currentUser: AuthStore.getUser(),
       currentPlanet: null,
       search: '',
       isFetched: false
     }
   },
   componentDidMount: function () {
-    this.unsubscribe = PlanetStore.listen(this.onFetched)
+    this.unsubscribePlanet = PlanetStore.listen(this.onFetched)
+    this.unsubscribeAuth = AuthStore.listen(this.onListenAuth)
 
     PlanetActions.fetchPlanet(this.props.params.userName, this.props.params.planetName)
   },
   componentWillUnmount: function () {
-    this.unsubscribe()
+    this.unsubscribePlanet()
+    this.unsubscribeAuth()
   },
   componentDidUpdate: function () {
     if (this.state.currentPlanet == null || this.state.currentPlanet.name !== this.props.params.planetName || this.state.currentPlanet.userName !== this.props.params.userName) {
@@ -159,6 +162,19 @@ module.exports = React.createClass({
       this.selectArticleByIndex(index - 1)
     } else {
       React.findDOMNode(this).querySelector('.PlanetHeader .searchInput input').focus()
+    }
+  },
+  onListenAuth: function (res) {
+    if (res.status === 'userProfileUpdated') {
+      if (this.state.currentPlanet != null) {
+        res.data.Planets.some(function (planet) {
+          if (planet.id === this.state.currentPlanet.id) {
+            this.transitionTo('planet', {userName: planet.userName, planetName: planet.name})
+            return true
+          }
+          return false
+        }.bind(this))
+      }
     }
   },
   onFetched: function (res) {
@@ -396,8 +412,7 @@ module.exports = React.createClass({
 
   },
   render: function () {
-    var user = AuthStore.getUser()
-    if (user == null) return (<div/>)
+    if (this.state.currentUser == null) return (<div/>)
     if (this.state.currentPlanet == null) return (<div/>)
 
     var localId = parseInt(this.props.params.localId, 10)

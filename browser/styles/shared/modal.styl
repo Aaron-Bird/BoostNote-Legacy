@@ -107,7 +107,7 @@
       height 55px
       circle()
       btnPrimary()
-  .PlanetSettingModal.modal
+  .PlanetSettingModal.modal, .PersonalSettingModal.modal
     width 720px
     height 500px
     .settingNav
@@ -117,7 +117,7 @@
       padding 10px
       border-right solid 1px borderColor
       h1
-        margin 40px 15px
+        margin 40px auto
         font-size 1.5em
         color brandColor
       nav
@@ -139,11 +139,70 @@
             background-color hoverBackgroundColor
           &:active, &.active
             color brandColor
-
     .settingBody
       absolute top bottom right
       left 200px
       padding 15px
+  .PersonalSettingModal.modal
+    .settingBody
+      .profile
+        height 500px
+        padding-top 50px
+        .profileTop
+          box-sizing border-box
+          height 200px
+          border-bottom solid 1px borderColor
+        .profileBottom
+          margin-top 25px
+          height 200px
+        .profileFormRow
+          clearfix()
+          margin-bottom 15px
+          label
+            display block
+            float left
+            width 150px
+            line-height 33px
+            text-align left
+          input
+            float left
+            width 250px
+          .saveButton
+            float right
+      .contact
+        height 500px
+        padding-top 50px
+        p
+          text-align left
+          margin-bottom 15px
+          line-height 140%
+        input
+          margin-bottom 15px
+        textarea
+          margin-bottom 15px
+          max-height 250px
+        .contactFormRow
+          clearfix()
+          .saveButton
+            float right
+      .info
+        text-align left
+        .infoLabel
+          margin 75px 0 25px
+        .externalList
+          padding-left 10px
+          li
+            margin 15px
+      .logout
+        .logoutLabel
+          margin 100px 0 25px
+          font-size 1.4em
+        .userPhoto
+          margin-bottom 25px
+          circle()
+
+  .PlanetSettingModal.modal
+    .settingBody
       .planetProfile
         height 500px
         padding-top 50px
@@ -174,7 +233,7 @@
                 margin-right 0
             .deleteButton
               float left
-      .manageMember
+      .members
         height 500px
         box-sizing border-box
         padding-top 50px

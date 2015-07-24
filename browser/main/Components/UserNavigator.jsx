@@ -3,6 +3,7 @@ var ReactRouter = require('react-router')
 var Link = ReactRouter.Link
 
 var ModalBase = require('./ModalBase')
+var PersonalSettingModal = require('./PersonalSettingModal')
 var PlanetCreateModal = require('./PlanetCreateModal')
 
 var AuthStore = require('../Stores/AuthStore')
@@ -26,6 +27,12 @@ module.exports = React.createClass({
   },
   onLogout: function () {
     this.transitionTo('login')
+  },
+  openPersonalSettingModal: function () {
+    this.setState({isPersonalSettingModalOpen: true})
+  },
+  closePersonalSettingModal: function () {
+    this.setState({isPersonalSettingModalOpen: false})
   },
   openPlanetCreateModal: function () {
     this.setState({isPlanetCreateModalOpen: true})
@@ -51,13 +58,18 @@ module.exports = React.createClass({
 
     return (
       <div tabIndex='2' className='UserNavigator'>
-        <Link to='userHome' params={{userName: this.props.currentUser.name}} className='userConfig'>
+        <button onClick={this.openPersonalSettingModal} className='userButton'>
           <img width='50' height='50' src='../vendor/dummy.jpg'/>
-        </Link>
-        <ul>
+        </button>
+        <ul className='planetList'>
           {planets}
         </ul>
         <button onClick={this.openPlanetCreateModal} className='newPlanet'><i className='fa fa-plus'/></button>
+
+        <ModalBase isOpen={this.state.isPersonalSettingModalOpen} close={this.closePersonalSettingModal}>
+          <PersonalSettingModal currentUser={this.props.currentUser} close={this.closePersonalSettingModal}/>
+        </ModalBase>
+
         <ModalBase isOpen={this.state.isPlanetCreateModalOpen} close={this.closePlanetCreateModal}>
           <PlanetCreateModal close={this.closePlanetCreateModal}/>
         </ModalBase>

@@ -1,16 +1,19 @@
 btnDefault()
   border-style solid
   border-width 1px
-  border-color brandBorderColor
+  border-color lightButtonColor
   background-color transparent
-  color brandColor
+  color lightButtonColor
+
   &:hover, &.hover, &:focus, &.focus
-    border-color darken(brandBorderColor, 30%)
-    color darken(brandColor, 30%)
+    border-color darken(lightButtonColor, 50%)
+    color darken(lightButtonColor, 50%)
   &:active, &.active
+    border-color darken(brandBorderColor, 10%)
     background-color brandColor
     color white
-    
+
+
 btnPrimary()
   border-style solid
   border-width 1px

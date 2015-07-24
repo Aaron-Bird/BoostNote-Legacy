@@ -5,19 +5,23 @@
     width 50px
     text-align center
     box-sizing border-box
-    a.userConfig
+    .userButton
       display block
       width 50px
       height 50px
       background-color black
+      margin 0
+      padding 0
+      border none
+      cursor pointer
       img
         transition 0.1s
-        opacity 0.6
+        opacity 0.8
       box-sizing border-box
       &.active, &:active, &.focus, &:focus, &.hover, &:hover
         img
           opacity 1
-    ul>li
+    ul.planetList>li
       padding 10px 3px
       .shortCut
         margin-top 5px
@@ -68,3 +72,29 @@
         border-color darken(brandBorderColor, 10%)
         background-color brandColor
         color white
+  .UserHome
+    absolute top bottom right
+    left 50px
+    box-sizing border-box
+    padding 15px
+    h1
+      margin 15px 0
+    .userProfile
+      clearfix()
+      .userPhoto
+        circle()
+        float left
+        margin 25px
+      .userIntro
+        float left
+        margin-top 25px
+        .userProfileName
+          font-size 2em
+          margin-bottom 15px
+        .userName
+          font-size 1.5em
+    .userPlanetList
+      padding-left 20px
+      li
+        font-size 1.3em
+        margin 10px

@@ -2,7 +2,6 @@ var React = require('react/addons')
 var ReactRouter = require('react-router')
 var Link = ReactRouter.Link
 
-var AuthStore = require('../Stores/AuthStore')
 var AuthActions = require('../Actions/AuthActions')
 
 var OnlyGuest = require('../Mixins/OnlyGuest')
@@ -17,12 +16,6 @@ module.exports = React.createClass({
       profileName: ''
     }
   },
-  componentDidMount: function () {
-    this.unsubscribe = AuthStore.listen(this.onRegister)
-  },
-  componentWillUnmount: function () {
-    this.unsubscribe()
-  },
   handleSubmit: function (e) {
     AuthActions.register({
       email: this.state.email,
@@ -32,14 +25,6 @@ module.exports = React.createClass({
     })
 
     e.preventDefault()
-  },
-  onRegister: function (user) {
-    var planet = user.Planets.length > 0 ? user.Planets[0] : null
-    if (planet == null) {
-      this.transitionTo('user', {userName: user.name})
-      return
-    }
-    this.transitionTo('planetHome', {userName: user.name, planetName: planet.name})
   },
   render: function () {
     return (
