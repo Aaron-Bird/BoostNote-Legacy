@@ -224,8 +224,9 @@ module.exports = React.createClass({
 
     var articles = this.state.currentPlanet == null ? null : this.state.currentPlanet.Articles
 
+    var planet
     if (res.status === 'planetFetched') {
-      var planet = res.data
+      planet = res.data
       this.setState({isFetched: true, currentPlanet: planet, filteredArticles: planet.Articles}, function () {
         if (this.refs.detail.props.article == null) {
           var params = this.props.params
@@ -244,6 +245,14 @@ module.exports = React.createClass({
             }
           }
         }
+      })
+      return
+    }
+
+    if (res.status === 'planetDeleted') {
+      planet = res.data
+      this.transitionTo('user', {
+        userName: this.props.params.userName
       })
       return
     }

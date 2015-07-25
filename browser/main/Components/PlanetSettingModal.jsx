@@ -66,7 +66,7 @@ module.exports = React.createClass({
   },
   doubleCheckDeletePlanet: function () {
     if (this.state.isDeletePlanetChecked) {
-      console.log('delete it')
+      PlanetActions.deletePlanet(this.props.currentPlanet.userName, this.props.currentPlanet.name)
       return
     }
     this.setState({isDeletePlanetChecked: true})

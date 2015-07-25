@@ -58,20 +58,38 @@ module.exports = React.createClass({
   onListen: function (res) {
     if (res == null || res.status == null) return
 
+    var currentUser = this.state.currentUser
+
     if (res.status === 'planetCreated') {
-      var currentUser = this.state.currentUser
       currentUser.Planets.push(res.data)
 
       localStorage.setItem('user', JSON.stringify(currentUser))
       this.setState({currentUser: currentUser})
+      return
+    }
+
+    if (res.status === 'planetDeleted') {
+      currentUser.Planets.some(function (_planet, index) {
+        if (res.data.id === _planet.id) {
+          currentUser.Planets.splice(index, 1)
+          return true
+        }
+        return false
+      })
+
+      localStorage.setItem('user', JSON.stringify(currentUser))
+      this.setState({currentUser: currentUser})
+      return
     }
 
     if (res.status === 'nameChanged') {
       this.setState({currentUser: AuthStore.getUser()})
+      return
     }
 
     if (res.status === 'userProfileUpdated') {
       this.setState({currentUser: AuthStore.getUser()})
+      return
     }
   },
   render: function () {
