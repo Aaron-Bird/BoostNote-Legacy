@@ -48,8 +48,8 @@ module.exports = React.createClass({
       if (planet != null) {
         this.transitionTo('planet', {userName: planet.userName, planetName: planet.name})
       }
+      e.preventDefault()
     }
-    e.preventDefault()
   },
   render: function () {
     var planets = this.props.currentUser.Planets.map(function (planet, index) {

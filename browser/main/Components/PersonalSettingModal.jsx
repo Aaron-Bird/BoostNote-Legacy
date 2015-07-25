@@ -6,6 +6,8 @@ var Catalyst = require('../Mixins/Catalyst')
 
 var AuthActions = require('../Actions/AuthActions')
 
+var AuthStore = require('../Stores/AuthStore')
+
 var apiUrl = 'http://localhost:8000/'
 
 module.exports = React.createClass({
@@ -17,6 +19,7 @@ module.exports = React.createClass({
   getInitialState: function () {
     return {
       currentTab: 'profile',
+      profileName: this.props.currentUser.profileName,
       userName: this.props.currentUser.name,
       email: this.props.currentUser.email,
       currentPassword: '',
@@ -24,6 +27,32 @@ module.exports = React.createClass({
       confirmation: '',
       contactTitle: '',
       contactContent: ''
+    }
+  },
+  componentDidMount: function () {
+    this.unsubscribe = AuthStore.listen(this.onListen)
+  },
+  componentWillUnmount: function () {
+    this.unsubscribe()
+  },
+  onListen: function (res) {
+    console.log(res)
+    if (res.status === 'userProfileUpdated') {
+      this.setState({
+        isUpdatingProfile: false,
+        isUpdatingProfileDone: true,
+        isUpdatingProfileFailed: false
+      })
+      return
+    }
+
+    if (res.status === 'userProfileUpdatingFailed') {
+      this.setState({
+        isUpdatingProfile: false,
+        isUpdatingProfileDone: false,
+        isUpdatingProfileFailed: true
+      })
+      return
     }
   },
   activeProfile: function () {
@@ -39,12 +68,24 @@ module.exports = React.createClass({
     this.setState({currentTab: 'logout'})
   },
   saveProfile: function () {
-    AuthActions.updateProfile({
-      name: this.state.userName,
-      email: this.state.email
+    this.setState({
+      isUpdatingProfile: true,
+      isUpdatingProfileDone: false,
+      isUpdatingProfileFailed: false
+    }, function () {
+      AuthActions.updateProfile({
+        profileName: this.state.profileName,
+        name: this.state.userName,
+        email: this.state.email
+      })
     })
   },
   savePassword: function () {
+    this.setState({
+      isChangingPassword: true,
+      isChangingPasswordDone: false,
+      isChangingPasswordFailed: false
+    })
     if (this.state.newPassword === this.state.confirmation) {
       request
         .put(apiUrl + 'auth/password')
@@ -56,21 +97,65 @@ module.exports = React.createClass({
           newPassword: this.state.newPassword
         })
         .end(function (err, res) {
+          if (err) {
+            console.error(err)
+            this.setState({
+              currentPassword: '',
+              newPassword: '',
+              confirmation: '',
+              isChangingPassword: false,
+              isChangingPasswordDone: false,
+              isChangingPasswordFailed: true
+            })
+            return
+          }
+
           this.setState({
             currentPassword: '',
             newPassword: '',
-            confirmation: ''
+            confirmation: '',
+            isChangingPassword: false,
+            isChangingPasswordDone: true,
+            isChangingPasswordFailed: false
           })
-          if (err) {
-            console.error(err)
-            return
-          }
 
         }.bind(this))
     }
   },
   sendEmail: function () {
-
+    this.setState({
+      isSending: true,
+      isSendingDone: false,
+      isSendingFailed: false
+    }, function () {
+      request
+        .post(apiUrl + 'mail')
+        .set({
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        })
+        .send({
+          title: this.state.contactTitle,
+          content: this.state.contactContent
+        })
+        .end(function (err, res) {
+          if (err) {
+            console.error(err)
+            this.setState({
+              isSending: false,
+              isSendingDone: false,
+              isSendingFailed: true
+            })
+            return
+          }
+          this.setState({
+            isSending: false,
+            isSendingDone: true,
+            isSendingFailed: false,
+            contactTitle: '',
+            contactContent: ''
+          })
+        }.bind(this))
+    })
   },
   logOut: function () {
     AuthActions.logout()
@@ -85,6 +170,10 @@ module.exports = React.createClass({
         <div className='profile'>
           <div className='profileTop'>
             <div className='profileFormRow'>
+              <label>Profile Name</label>
+              <input valueLink={this.linkState('profileName')} className='block-input' type='text' placeholder='Name'/>
+            </div>
+            <div className='profileFormRow'>
               <label>Name</label>
               <input valueLink={this.linkState('userName')} className='block-input' type='text' placeholder='Name'/>
             </div>
@@ -94,6 +183,9 @@ module.exports = React.createClass({
             </div>
             <div className='profileFormRow'>
               <button onClick={this.saveProfile} className='saveButton btn-primary'>Save</button>
+              <p className={'alertInfo' + (this.state.isUpdatingProfile ? '' : ' hide')}>Updating profile...</p>
+              <p className={'alertSuccess' + (this.state.isUpdatingProfileDone ? '' : ' hide')}>Successfully updated</p>
+              <p className={'alertError' + (this.state.isUpdatingProfileFailed ? '' : ' hide')}>An Error occurred</p>
             </div>
           </div>
 
@@ -112,6 +204,9 @@ module.exports = React.createClass({
             </div>
             <div className='profileFormRow'>
               <button onClick={this.savePassword} className='saveButton btn-primary'>Save</button>
+              <p className={'alertInfo' + (this.state.isChangingPassword ? '' : ' hide')}>Changing password...</p>
+              <p className={'alertSuccess' + (this.state.isChangingPasswordDone ? '' : ' hide')}>Successfully changed</p>
+              <p className={'alertError' + (this.state.isChangingPasswordFailed ? '' : ' hide')}>An Error occurred</p>
             </div>
           </div>
         </div>
@@ -126,7 +221,10 @@ module.exports = React.createClass({
           <input valueLink={this.linkState('contactTitle')} className='block-input' type='text' placeholder='title'/>
           <textarea valueLink={this.linkState('contactContent')} className='block-input' placeholder='message content'/>
           <div className='contactFormRow'>
-            <button onClick={this.sendEmail} className='saveButton btn-primary'>Send</button>
+            <button disabled={this.state.isSending} onClick={this.sendEmail} className='saveButton btn-primary'>Send</button>
+            <p className={'alertInfo' + (this.state.isSending ? '' : ' hide')}>Sending...</p>
+            <p className={'alertSuccess' + (this.state.isSendingDone ? '' : ' hide')}>Successfully sent</p>
+            <p className={'alertError' + (this.state.isSendingFailed ? '' : ' hide')}>An Error occurred</p>
           </div>
         </div>
       )

@@ -76,7 +76,10 @@ var AuthStore = Reflux.createStore({
         .end(function (err, res) {
           if (err) {
             console.error(err)
-            this.trigger(null)
+            this.trigger({
+              status: 'userProfileUpdatingFailed',
+              data: err
+            })
             return
           }
 

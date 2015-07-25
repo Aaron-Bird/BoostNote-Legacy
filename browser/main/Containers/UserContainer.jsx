@@ -56,7 +56,7 @@ module.exports = React.createClass({
       }.bind(this))
   },
   onListen: function (res) {
-    if (res.status == null) return
+    if (res == null || res.status == null) return
 
     if (res.status === 'planetCreated') {
       var currentUser = this.state.currentUser
