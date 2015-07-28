@@ -12,6 +12,7 @@ var AuthStore = Reflux.createStore({
       this.listenTo(AuthActions.register, this.register)
       this.listenTo(AuthActions.logout, this.logout)
       this.listenTo(AuthActions.updateProfile, this.updateProfile)
+      this.listenTo(AuthActions.refreshUser, this.refreshUser)
     },
     // Reflux Store
     login: function (input) {
@@ -54,6 +55,30 @@ var AuthStore = Reflux.createStore({
 
           this.trigger({
             status: 'registered',
+            data: user
+          })
+        }.bind(this))
+    },
+    refreshUser: function () {
+      request
+        .get(apiUrl + 'auth/user')
+        .set({
+          Authorization: 'Bearer ' + localStorage.getItem('token')
+        })
+        .end(function (err, res) {
+          if (err) {
+            console.error(err)
+            if (res.status === 401 || res.status === 403) {
+              AuthActions.logout()
+            }
+            return
+          }
+
+          var user = res.body
+          localStorage.setItem('user', JSON.stringify(user))
+
+          this.trigger({
+            status: 'userRefreshed',
             data: user
           })
         }.bind(this))

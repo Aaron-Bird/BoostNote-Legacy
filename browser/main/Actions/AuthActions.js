@@ -4,5 +4,6 @@ module.exports = Reflux.createActions([
   'login',
   'register',
   'logout',
-  'updateProfile'
+  'updateProfile',
+  'refreshUser'
 ])

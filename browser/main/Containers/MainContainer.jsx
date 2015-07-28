@@ -4,6 +4,8 @@ var ReactRouter = require('react-router')
 var RouteHandler = ReactRouter.RouteHandler
 var request = require('superagent')
 
+var AuthActions = require('../Actions/AuthActions')
+
 var AuthStore = require('../Stores/AuthStore')
 
 var apiUrl = require('../../../config').apiUrl
@@ -43,7 +45,7 @@ module.exports = React.createClass({
 
     var user = JSON.parse(localStorage.getItem('user'))
     if (user != null) {
-      user.Planets.forEach(fetchPlanet)
+      AuthActions.refreshUser()
       return
     }
     this.transitionTo('login')
@@ -55,9 +57,9 @@ module.exports = React.createClass({
     if (res == null || res.status == null) {
       return
     }
-
+    var user
     if (res.status === 'loggedIn' || res.status === 'registered') {
-      var user = res.data
+      user = res.data
       var planet = user.Planets.length > 0 ? user.Planets[0] : null
       if (planet == null) {
         this.transitionTo('user', {userName: user.name})
@@ -70,6 +72,13 @@ module.exports = React.createClass({
 
     if (res.status === 'loggedOut') {
       this.transitionTo('login')
+      return
+    }
+
+    if (res.status === 'userRefreshed') {
+      console.log('refreshed')
+      user = res.data
+      user.Planets.forEach(fetchPlanet)
       return
     }
   },
