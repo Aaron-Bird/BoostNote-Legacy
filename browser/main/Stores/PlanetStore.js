@@ -96,7 +96,7 @@ var PlanetStore = Reflux.createStore({
         }
 
         var planet = res.body
-        localStorage.remove('planet-' + planet.id)
+        localStorage.removeItem('planet-' + planet.id)
 
         this.trigger({
           status: 'planetDeleted',
