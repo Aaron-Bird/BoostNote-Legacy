@@ -8,6 +8,8 @@ var PlanetActions = require('../Actions/PlanetActions')
 
 var apiUrl = require('../../../config').apiUrl
 
+var aceModes = require('../../../modules/ace-modes')
+
 var getOptions = function (input, callback) {
   request
     .get(apiUrl + 'tags/search')
@@ -39,7 +41,7 @@ var SnippetForm = React.createClass({
   getInitialState: function () {
     var snippet = Object.assign({
       description: '',
-      mode: 'javascript',
+      mode: '',
       content: '',
       callSign: '',
       Tags: []
@@ -56,6 +58,12 @@ var SnippetForm = React.createClass({
   },
   componentDidMount: function () {
     React.findDOMNode(this.refs.description).focus()
+  },
+  handleModeChange: function (selected) {
+    var snippet = this.state.snippet
+    snippet.mode = selected
+    console.log(selected, 'selected')
+    this.setState({snippet: snippet})
   },
   handleTagsChange: function (selected, all) {
     var snippet = this.state.snippet
@@ -92,6 +100,12 @@ var SnippetForm = React.createClass({
     }
   },
   render: function () {
+    var modeOptions = aceModes.map(function (mode) {
+      return {
+        label: mode,
+        value: mode
+      }
+    })
     return (
       <div onKeyDown={this.handleKeyDown} className='SnippetForm'>
         <div className='modal-body'>
@@ -100,11 +114,13 @@ var SnippetForm = React.createClass({
           </div>
           <div className='form-group'>
             <input className='inline-input' valueLink={this.linkState('snippet.callSign')} type='text' placeholder='Callsign'/>
-            <select className='inline-input' valueLink={this.linkState('snippet.mode')}>
-              <option value='javascript'>Javascript</option>
-              <option value='html'>HTML</option>
-              <option value='css'>CSS</option>
-            </select>
+            <Select
+              name='mode'
+              className='modeSelect'
+              value={this.state.snippet.mode}
+              placeholder='Select Language'
+              options={modeOptions}
+              onChange={this.handleModeChange}/>
           </div>
           <div className='form-group'>
             <CodeEditor onChange={this.handleContentChange} code={this.state.snippet.content} mode={this.state.snippet.mode}/>

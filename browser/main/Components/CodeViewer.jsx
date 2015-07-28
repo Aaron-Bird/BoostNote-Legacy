@@ -18,7 +18,9 @@ var CodeViewer = React.createClass({
     editor.clearSelection()
 
     var session = editor.getSession()
-    session.setMode('ace/mode/' + this.props.mode)
+    if (this.props.mode != null && this.props.mode.length > 0) {
+      session.setMode('ace/mode/' + this.props.mode)
+    }
     session.setUseSoftTabs(true)
     session.setOption('useWorker', false)
     session.setUseWrapMode(true)
