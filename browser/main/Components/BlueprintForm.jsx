@@ -7,9 +7,11 @@ var Select = require('react-select')
 var request = require('superagent')
 var PlanetActions = require('../Actions/PlanetActions')
 
+var apiUrl = require('../../../config').apiUrl
+
 var getOptions = function (input, callback) {
   request
-    .get('http://localhost:8000/tags/search')
+    .get(apiUrl + 'tags/search')
     .query({name: input})
     .send()
     .end(function (err, res) {

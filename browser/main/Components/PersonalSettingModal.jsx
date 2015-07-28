@@ -8,7 +8,7 @@ var AuthActions = require('../Actions/AuthActions')
 
 var AuthStore = require('../Stores/AuthStore')
 
-var apiUrl = 'http://localhost:8000/'
+var apiUrl = require('../../../config').apiUrl
 
 module.exports = React.createClass({
   mixins: [Catalyst.LinkedStateMixin],

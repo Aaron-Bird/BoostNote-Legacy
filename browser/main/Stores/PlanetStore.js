@@ -4,7 +4,7 @@ var request = require('superagent')
 
 var PlanetActions = require('../Actions/PlanetActions')
 
-var apiUrl = 'http://localhost:8000/'
+var apiUrl = require('../../../config').apiUrl
 
 var PlanetStore = Reflux.createStore({
   init: function () {
@@ -70,6 +70,8 @@ var PlanetStore = Reflux.createStore({
           return blueprint
         })
 
+        localStorage.setItem('planet-' + planet.id, JSON.stringify(planet))
+
         planet.Articles = planet.Snippets.concat(planet.Blueprints).sort(function (a, b) {
           a = new Date(a.updatedAt)
           b = new Date(b.updatedAt)
@@ -94,6 +96,7 @@ var PlanetStore = Reflux.createStore({
         }
 
         var planet = res.body
+        localStorage.remove('planet-' + planet.id)
 
         this.trigger({
           status: 'planetDeleted',
@@ -186,6 +189,11 @@ var PlanetStore = Reflux.createStore({
       .end(function (req, res) {
         var snippet = res.body
         snippet.type = 'snippet'
+
+        var planet = JSON.parse(localStorage.getItem('planet-' + snippet.PlanetId))
+        planet.Snippets.unshift(snippet)
+        localStorage.setItem('planet-' + snippet.PlanetId, JSON.stringify(planet))
+
         this.trigger({
           status: 'articleCreated',
           data: snippet
@@ -209,6 +217,17 @@ var PlanetStore = Reflux.createStore({
 
         var snippet = res.body
         snippet.type = 'snippet'
+
+        var planet = JSON.parse(localStorage.getItem('planet-' + snippet.PlanetId))
+        planet.Snippets.some(function (_snippet, index) {
+          if (snippet.id === _snippet) {
+            planet.Snippets[index] = snippet
+            return true
+          }
+          return false
+        })
+        localStorage.setItem('planet-' + snippet.PlanetId, JSON.stringify(planet))
+
         this.trigger({
           status: 'articleUpdated',
           data: snippet
@@ -230,6 +249,17 @@ var PlanetStore = Reflux.createStore({
         }
 
         var snippet = res.body
+
+        var planet = JSON.parse(localStorage.getItem('planet-' + snippet.PlanetId))
+        planet.Snippets.some(function (_snippet, index) {
+          if (snippet.id === _snippet) {
+            planet.splice(index, 1)
+            return true
+          }
+          return false
+        })
+        localStorage.setItem('planet-' + snippet.PlanetId, JSON.stringify(planet))
+
         this.trigger({
           status: 'articleDeleted',
           data: snippet
@@ -247,6 +277,11 @@ var PlanetStore = Reflux.createStore({
       .end(function (req, res) {
         var blueprint = res.body
         blueprint.type = 'blueprint'
+
+        var planet = JSON.parse(localStorage.getItem('planet-' + blueprint.PlanetId))
+        planet.Blueprints.unshift(blueprint)
+        localStorage.setItem('planet-' + blueprint.PlanetId, JSON.stringify(planet))
+
         this.trigger({
           status: 'articleCreated',
           data: blueprint
@@ -270,6 +305,17 @@ var PlanetStore = Reflux.createStore({
 
         var blueprint = res.body
         blueprint.type = 'blueprint'
+
+        var planet = JSON.parse(localStorage.getItem('planet-' + blueprint.PlanetId))
+        planet.Blueprints.some(function (_blueprint, index) {
+          if (blueprint.id === _blueprint) {
+            planet.Blueprints[index] = blueprint
+            return true
+          }
+          return false
+        })
+        localStorage.setItem('planet-' + blueprint.PlanetId, JSON.stringify(blueprint))
+
         this.trigger({
           status: 'articleUpdated',
           data: blueprint
@@ -291,6 +337,17 @@ var PlanetStore = Reflux.createStore({
         }
 
         var blueprint = res.body
+
+        var planet = JSON.parse(localStorage.getItem('planet-' + blueprint.PlanetId))
+        planet.Blueprints.some(function (_blueprint, index) {
+          if (blueprint.id === _blueprint) {
+            planet.splice(index, 1)
+            return true
+          }
+          return false
+        })
+        localStorage.setItem('planet-' + blueprint.PlanetId, JSON.stringify(planet))
+
         this.trigger({
           status: 'articleDeleted',
           data: blueprint

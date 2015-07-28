@@ -1,0 +1,77 @@
+@import '../../../node_modules/nib/lib/nib'
+@import '../vars'
+@import '../mixins/*'
+global-reset()
+@import '../shared/*'
+
+body
+  font-family "Lato"
+  color textColor
+  font-size fontSize
+
+.Finder
+  absolute top bottom left right
+  .FinderInput
+    position absolute
+    top 11px
+    left 11px
+    right 11px
+    margin 0 auto
+    height 44px
+    box-sizing border-box
+    border-bottom solid 1px borderColor
+    input
+      display block
+      width 100%
+      border solid 1px borderColor
+      padding 0 10px
+      font-size 1em
+      height 33px
+      border-radius 5px
+      box-sizing border-box
+      border-radius 16.5px
+      &:focus, &.focus
+        border-color brandBorderColor
+        outline none
+  .FinderList
+    absolute left bottom
+    top 55px
+    border-right solid 1px borderColor
+    box-sizing border-box
+    width 250px
+    overflow-y auto
+    &>ul>li
+      .articleItem
+        padding 10px
+        border solid 2px transparent
+        box-sizing border-box
+      .divider
+        box-sizing border-box
+        border-bottom solid 1px borderColor
+      &.active
+        .articleItem
+          border-color brandColor
+
+  .FinderDetail
+    absolute right bottom
+    top 55px
+    left 250px
+    .header
+      absolute top left right
+      height 44px
+      box-sizing border-box
+      padding 0 10px
+      border-bottom solid 1px borderColor
+      line-height 44px
+      font-size 1.3em
+    .content
+      .ace_editor, .marked
+        position absolute
+        top 49px
+        left 5px
+        right 5px
+        bottom 5px
+        box-sizing border-box
+      .marked
+        marked()
+        overflow-y auto

@@ -10,6 +10,8 @@ var UserNavigator = require('../Components/UserNavigator')
 var AuthStore = require('../Stores/AuthStore')
 var PlanetStore = require('../Stores/PlanetStore')
 
+var apiUrl = require('../../../config').apiUrl
+
 module.exports = React.createClass({
   mixins: [React.addons.LinkedStateMixin, ReactRouter.Navigation, ReactRouter.State],
   propTypes: {
@@ -44,7 +46,7 @@ module.exports = React.createClass({
   },
   fetchUser: function (userName) {
     request
-      .get('http://localhost:8000/' + userName)
+      .get(apiUrl + userName)
       .send()
       .end(function (err, res) {
         if (err) {

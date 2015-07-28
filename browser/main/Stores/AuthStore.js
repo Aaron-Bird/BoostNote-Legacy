@@ -4,7 +4,7 @@ var request = require('superagent')
 
 var AuthActions = require('../Actions/AuthActions')
 
-var apiUrl = 'http://localhost:8000/'
+var apiUrl = require('../../../config').apiUrl
 
 var AuthStore = Reflux.createStore({
     init: function () {

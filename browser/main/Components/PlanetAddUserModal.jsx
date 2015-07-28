@@ -7,9 +7,11 @@ var Catalyst = require('../Mixins/Catalyst')
 
 var PlanetActions = require('../Actions/PlanetActions')
 
+var apiUrl = require('../../../config').apiUrl
+
 var getOptions = function (input, callback) {
   request
-    .get('http://localhost:8000/users/search')
+    .get(apiUrl + 'users/search')
     .query({name: input})
     .send()
     .end(function (err, res) {

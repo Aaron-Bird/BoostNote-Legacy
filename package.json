@@ -1,7 +1,8 @@
 {
-  "name": "codexen-app-builder",
+  "name": "codexen-app",
   "version": "0.2.0",
-  "description": "CodeXen App Builder",
+  "description": "CodeXen App",
+  "main": "main.js",
   "scripts": {
     "start": "npm run serve | npm run dev",
     "serve": "./node_modules/.bin/http-server ./browser -p 8080",
@@ -31,6 +32,7 @@
   "homepage": "https://github.com/Rokt33r/codexen-app#readme",
   "dependencies": {
     "dotenv": "^1.1.0",
+    "electron-stylus": "^0.1.0",
     "halogen": "^0.1.10",
     "markdown-it": "^4.3.1",
     "moment": "^2.10.3",
