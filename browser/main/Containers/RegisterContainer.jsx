@@ -58,7 +58,7 @@ module.exports = React.createClass({
             <input className='stripInput' valueLink={this.linkState('profileName')} type='text' placeholder='Profile name'/>
           </div>
           <div className='form-group'>
-            <button className='btn-primary' type='submit'>Sign Up</button>
+            <button className='logInButton' type='submit'>Sign Up</button>
           </div>
         </form>
 

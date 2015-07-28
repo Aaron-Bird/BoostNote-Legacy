@@ -47,7 +47,7 @@ module.exports = React.createClass({
             <input className='stripInput' valueLink={this.linkState('password')} onChange={this.handleChange} type='password' placeholder='Password'/>
           </div>
           <div className='form-group'>
-            <button className='btn-primary' type='submit'>Log In</button>
+            <button className='logInButton' type='submit'>Log In</button>
           </div>
         </form>
       </div>
