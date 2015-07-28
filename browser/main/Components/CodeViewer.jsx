@@ -1,6 +1,6 @@
 var React = require('react/addons')
 
-var ace = require('ace')
+var ace = window.ace
 var CodeViewer = React.createClass({
   propTypes: {
     code: React.PropTypes.string,

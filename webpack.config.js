@@ -1,6 +1,7 @@
 module.exports = {
   entry: {
-    main: './browser/main/index.jsx'
+    main: './browser/main/index.jsx',
+    'main-style': './browser/main/style.js'
   },
   output: {
     filename: '[name].js',

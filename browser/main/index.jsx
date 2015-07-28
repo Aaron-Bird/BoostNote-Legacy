@@ -1,6 +1,3 @@
-require('../styles/main/index.styl')
-require('react-select/dist/default.css')
-
 var React = require('react/addons')
 
 var ReactRouter = require('react-router')

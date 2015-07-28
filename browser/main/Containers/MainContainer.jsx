@@ -13,6 +13,10 @@ module.exports = React.createClass({
       this.unsubscribe()
     },
     onListen: function (res) {
+      if (res == null || res.status == null) {
+        return
+      }
+
       if (res.status === 'loggedIn' || res.status === 'registered') {
         var user = res.data
         var planet = user.Planets.length > 0 ? user.Planets[0] : null
