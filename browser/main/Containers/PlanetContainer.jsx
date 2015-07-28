@@ -558,6 +558,7 @@ module.exports = React.createClass({
           openSettingModal={this.openSettingModal} onSearchChange={this.handleSearchChange} currentPlanet={this.state.currentPlanet}/>
 
         <PlanetNavigator openLaunchModal={this.openLaunchModal} openAddUserModal={this.openAddUserModal}
+          search={this.state.search}
           showAll={this.showAll}
           showOnlySnippets={this.showOnlySnippets} showOnlyBlueprints={this.showOnlyBlueprints} currentPlanet={this.state.currentPlanet}/>
 

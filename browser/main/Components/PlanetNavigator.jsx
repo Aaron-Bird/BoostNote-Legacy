@@ -6,6 +6,7 @@ var PlanetNavigator = React.createClass({
       name: React.PropTypes.string,
       Users: React.PropTypes.array
     }),
+    search: React.PropTypes.string,
     openLaunchModal: React.PropTypes.func,
     openAddUserModal: React.PropTypes.func,
     showAll: React.PropTypes.func,
@@ -30,19 +31,29 @@ var PlanetNavigator = React.createClass({
       )
     })
 
+    var keywords = this.props.search.split(' ')
+    var usingSnippetFilter = keywords.some(function (keyword) {
+      if (keyword === '$s') return true
+      return false
+    })
+    var usingBlueprintFilter = keywords.some(function (keyword) {
+      if (keyword === '$b') return true
+      return false
+    })
+
     return (
       <div className='PlanetNavigator'>
         <button onClick={this.props.openLaunchModal} className='launchButton btn-primary btn-block'>
           <i className='fa fa-rocket fa-fw'/> Launch
         </button>
         <nav>
-          <a onClick={this.props.showAll}>
+          <a className={usingSnippetFilter === usingBlueprintFilter ? 'active' : ''} onClick={this.props.showAll}>
             <i className='fa fa-home fa-fw'/> Home
           </a>
-          <a onClick={this.props.showOnlySnippets}>
+          <a className={usingSnippetFilter && !usingBlueprintFilter ? 'active' : ''} onClick={this.props.showOnlySnippets}>
             <i className='fa fa-code fa-fw'/> Snippets
           </a>
-          <a onClick={this.props.showOnlyBlueprints}>
+          <a className={!usingSnippetFilter && usingBlueprintFilter ? 'active' : ''} onClick={this.props.showOnlyBlueprints}>
             <i className='fa fa-file-text-o fa-fw'/> Blueprints
           </a>
         </nav>
