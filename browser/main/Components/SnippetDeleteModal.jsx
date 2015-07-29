@@ -7,11 +7,15 @@ var SnippetDeleteModal = React.createClass({
     close: React.PropTypes.func,
     snippet: React.PropTypes.object
   },
+  componentDidMount: function () {
+    React.findDOMNode(this).focus()
+  },
   stopPropagation: function (e) {
     e.stopPropagation()
   },
   handleKeyDown: function (e) {
-    if ((e.keyCode === 13 && e.metaKey)) {
+    console.log(e)
+    if (e.keyCode === 13 && e.metaKey) {
       e.preventDefault()
       this.submit()
     }
@@ -21,7 +25,7 @@ var SnippetDeleteModal = React.createClass({
   },
   render: function () {
     return (
-      <div onKeyDown={this.handleKeyDown} onClick={this.stopPropagation} className='SnippetDeleteModal modal'>
+      <div tabIndex='3' onKeyDown={this.handleKeyDown} onClick={this.stopPropagation} className='SnippetDeleteModal modal'>
         <div className='modal-header'>
           <h1>Delete Snippet</h1>
         </div>

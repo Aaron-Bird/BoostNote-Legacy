@@ -27,15 +27,15 @@ var PlanetHeader = React.createClass({
         <div className='headerLabel'>
           <span className='userName'>{currentUserName}</span><br/>
           <span className='planetName'>{currentPlanetName}</span>
-          <button onClick={this.props.openSettingModal} className={'menuBtn'}>
-            <i className='fa fa-gears'></i>
+          <button onClick={this.props.openSettingModal} className='menuBtn'>
+            <i className='fa fa-chevron-down'></i>
           </button>
         </div>
         <div className='headerControl'>
-          <span className='searchInput'>
+          <div className='searchInput'>
             <i className='fa fa-search'/>
             <input onChange={this.props.onSearchChange} value={this.props.search} ref='search' tabIndex='1' type='text' className='inline-input circleInput' placeholder='Search...'/>
-          </span>
+          </div>
           <a className='downloadButtton btn-primary'>Download Mac app</a>
         </div>
       </div>

@@ -7,6 +7,9 @@ var BlueprintDeleteModal = React.createClass({
     close: React.PropTypes.func,
     blueprint: React.PropTypes.object
   },
+  componentDidMount: function () {
+    React.findDOMNode(this).focus()
+  },
   stopPropagation: function (e) {
     e.stopPropagation()
   },
@@ -21,7 +24,7 @@ var BlueprintDeleteModal = React.createClass({
   },
   render: function () {
     return (
-      <div onKeyDown={this.handleKeyDown} onClick={this.stopPropagation} className='BlueprintDeleteModal modal'>
+      <div tabIndex='3' onKeyDown={this.handleKeyDown} onClick={this.stopPropagation} className='BlueprintDeleteModal modal'>
         <div className='modal-header'>
           <h1>Delete Blueprint</h1>
         </div>
