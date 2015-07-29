@@ -339,11 +339,57 @@ module.exports = React.createClass({
   showAll: function () {
     this.setState({search: ''})
   },
-  showOnlySnippets: function () {
-    this.setState({search: '$s'})
+  toggleSnippetFilter: function () {
+    var keywords = typeof this.state.search === 'string' ? this.state.search.split(' ') : []
+
+    var usingSnippetFilter = false
+    var usingBlueprintFilter = false
+    keywords = keywords.filter(function (keyword) {
+      if (keyword === '$b') {
+        usingBlueprintFilter = true
+        return false
+      }
+      if (keyword === '$s') usingSnippetFilter = true
+      return true
+    })
+
+    if (usingSnippetFilter && !usingBlueprintFilter) {
+      keywords = keywords.filter(function (keyword) {
+        return keyword !== '$s'
+      })
+    }
+
+    if (!usingSnippetFilter) {
+      keywords.unshift('$s')
+    }
+
+    this.setState({search: keywords.join(' ')})
   },
-  showOnlyBlueprints: function () {
-    this.setState({search: '$b'})
+  toggleBlueprintFilter: function () {
+    var keywords = typeof this.state.search === 'string' ? this.state.search.split(' ') : []
+
+    var usingSnippetFilter = false
+    var usingBlueprintFilter = false
+    keywords = keywords.filter(function (keyword) {
+      if (keyword === '$s') {
+        usingSnippetFilter = true
+        return false
+      }
+      if (keyword === '$b') usingBlueprintFilter = true
+      return true
+    })
+
+    if (usingBlueprintFilter && !usingSnippetFilter) {
+      keywords = keywords.filter(function (keyword) {
+        return keyword !== '$b'
+      })
+    }
+
+    if (!usingBlueprintFilter) {
+      keywords.unshift('$b')
+    }
+
+    this.setState({search: keywords.join(' ')})
   },
   showOnlyWithTag: function (tag) {
     return function () {
@@ -560,7 +606,7 @@ module.exports = React.createClass({
         <PlanetNavigator openLaunchModal={this.openLaunchModal} openAddUserModal={this.openAddUserModal}
           search={this.state.search}
           showAll={this.showAll}
-          showOnlySnippets={this.showOnlySnippets} showOnlyBlueprints={this.showOnlyBlueprints} currentPlanet={this.state.currentPlanet}/>
+          toggleSnippetFilter={this.toggleSnippetFilter} toggleBlueprintFilter={this.toggleBlueprintFilter} currentPlanet={this.state.currentPlanet}/>
 
         <PlanetArticleList showOnlyWithTag={this.showOnlyWithTag} ref='list' articles={filteredArticles}/>
 

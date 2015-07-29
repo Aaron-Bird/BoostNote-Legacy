@@ -13,9 +13,8 @@ var PlanetNavigator = React.createClass({
     search: React.PropTypes.string,
     openLaunchModal: React.PropTypes.func,
     openAddUserModal: React.PropTypes.func,
-    showAll: React.PropTypes.func,
-    showOnlySnippets: React.PropTypes.func,
-    showOnlyBlueprints: React.PropTypes.func
+    toggleSnippetFilter: React.PropTypes.func,
+    toggleBlueprintFilter: React.PropTypes.func
   },
   getInitialState: function () {
     return {
@@ -53,13 +52,10 @@ var PlanetNavigator = React.createClass({
           <i className='fa fa-rocket fa-fw'/> Launch
         </button>
         <nav>
-          <a className={usingSnippetFilter === usingBlueprintFilter ? 'active' : ''} onClick={this.props.showAll}>
-            <i className='fa fa-home fa-fw'/> Home
-          </a>
-          <a className={usingSnippetFilter && !usingBlueprintFilter ? 'active' : ''} onClick={this.props.showOnlySnippets}>
+          <a className={usingSnippetFilter && !usingBlueprintFilter ? 'active' : ''} onClick={this.props.toggleSnippetFilter}>
             <i className='fa fa-code fa-fw'/> Snippets
           </a>
-          <a className={!usingSnippetFilter && usingBlueprintFilter ? 'active' : ''} onClick={this.props.showOnlyBlueprints}>
+          <a className={!usingSnippetFilter && usingBlueprintFilter ? 'active' : ''} onClick={this.props.toggleBlueprintFilter}>
             <i className='fa fa-file-text-o fa-fw'/> Blueprints
           </a>
         </nav>
