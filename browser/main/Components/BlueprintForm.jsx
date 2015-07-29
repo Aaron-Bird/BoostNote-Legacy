@@ -132,7 +132,7 @@ var BlueprintForm = React.createClass({
         </div>
 
         <div className='modal-footer'>
-            <button onClick={this.togglePreview} className='btn-default'>Toggle Preview</button>
+          <button onClick={this.togglePreview} className={'btn-default' + (this.state.mode === BlueprintForm.PREVIEW_MODE ? ' active' : '')}>Preview mode</button>
           <div className='modal-control'>
             <button onClick={this.props.close} className='btn-default'>Cancel</button>
             <button onClick={this.submit} className='btn-primary'>Launch</button>

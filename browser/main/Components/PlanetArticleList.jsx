@@ -68,7 +68,6 @@ var PlanetArticleList = React.createClass({
               <div className='callSign'><i className='fa fa-file-text-o fa-fw'></i> {article.title}</div>
               <div className='updatedAt'>{moment(article.updatedAt).fromNow()}</div>
             </div>
-            <div className='content'>{this.markdown(article.content.substring(0, 150)).replace(/(<([^>]+)>)/ig, '').substring(0, 75)}</div>
             <div className='tags'><i className='fa fa-tags'/>{tags}</div>
           </div>
           <div className='divider'></div>
