@@ -95,7 +95,6 @@ module.exports = React.createClass({
     }
   },
   render: function () {
-    var currentPlanetName = this.props.params.planetName
     var currentUser = this.state.currentUser
     var user = this.state.user
 
@@ -104,12 +103,12 @@ module.exports = React.createClass({
 
     var currentPlanet = null
     currentUser.Planets.some(function (planet) {
-      if (planet.name === currentPlanetName) {
+      if (planet.userName === this.props.params.userName && planet.name === this.props.params.planetName) {
         currentPlanet = planet
         return true
       }
       return false
-    })
+    }.bind(this))
 
     var content
     if (this.isActive('userHome')) {

@@ -52,9 +52,11 @@ module.exports = React.createClass({
     }
   },
   render: function () {
+    console.log(this.props.currentUser)
+    console.log(this.props.currentPlanet)
     var planets = this.props.currentUser.Planets.map(function (planet, index) {
       return (
-        <li key={planet.id} className={this.props.currentPlanet != null && this.props.currentPlanet.name === planet.name ? 'active' : ''}>
+        <li key={planet.id} className={this.props.currentPlanet != null && this.props.currentPlanet.userName === planet.userName && this.props.currentPlanet.name === planet.name ? 'active' : ''}>
           <Link to='planet' params={{userName: planet.userName, planetName: planet.name}}>
             {planet.name[0]}
             <div className='planetTooltip'>{planet.userName}/{planet.name}</div>
