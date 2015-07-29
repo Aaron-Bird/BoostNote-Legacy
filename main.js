@@ -23,7 +23,7 @@ app.on('ready', function () {
   Menu.setApplicationMenu(menu)
   // menu end
   appIcon = new Tray(__dirname + '/tray-icon.png')
-  appIcon.setToolTip('This is my application.')
+  appIcon.setToolTip('Codexen')
   appIcon.on('clicked', function () {
     if (mainWindow == null) {
       makeNewMainWindow()
@@ -46,6 +46,7 @@ app.on('ready', function () {
     height: 400,
     show: false,
     frame: false,
+    'zoom-factor': 1.0,
     'always-on-top': true,
     'web-preferences': {
         'overlay-scrollbars': true,
@@ -82,6 +83,7 @@ function makeNewMainWindow () {
   mainWindow = new BrowserWindow({
     width: 1080,
     height: 720,
+    'zoom-factor': 1.0,
     'web-preferences': {
         'overlay-scrollbars': true
       }

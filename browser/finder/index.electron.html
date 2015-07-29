@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
+
   <title>CodeXen Popup</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 
   <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css" media="screen" title="no title" charset="utf-8">
   <link rel="shortcut icon" href="favicon.ico">
   <script>
+  document.addEventListener('mousewheel', function(e) {
+    if(e.deltaY % 1 !== 0) {
+      e.preventDefault()
+    }
+  })
+
   if (!Object.assign) {
     Object.defineProperty(Object, 'assign', {
       enumerable: false,
