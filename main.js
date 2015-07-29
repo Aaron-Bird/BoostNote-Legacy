@@ -6,6 +6,9 @@ var Tray = require('tray')
 require('crash-reporter').start()
 
 var mainWindow = null
+var appIcon = null
+var menu = null
+var popUpWindow = null
 
 // app.on('window-all-closed', function () {
 //   if (process.platform !== 'darwin') app.quit()
@@ -15,11 +18,11 @@ app.on('ready', function () {
   // menu start
   var template = require('./modules/menu-template')
 
-  var menu = Menu.buildFromTemplate(template)
+  menu = Menu.buildFromTemplate(template)
 
   Menu.setApplicationMenu(menu)
   // menu end
-  var appIcon = new Tray(__dirname + '/tray-icon.png')
+  appIcon = new Tray(__dirname + '/tray-icon.png')
   appIcon.setToolTip('This is my application.')
   appIcon.on('clicked', function () {
     if (mainWindow == null) {
@@ -38,7 +41,7 @@ app.on('ready', function () {
     mainWindow.show()
   })
 
-  var popUpWindow = new BrowserWindow({
+  popUpWindow = new BrowserWindow({
     width: 600,
     height: 400,
     show: false,

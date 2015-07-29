@@ -12,7 +12,7 @@ module.exports = React.createClass({
     var index = this.props.articles.indexOf(this.props.currentArticle)
     var el = React.findDOMNode(this)
     var li = el.querySelectorAll('li')[index]
-    
+
     if (li == null) {
       return
     }

@@ -23,7 +23,10 @@ var AuthStore = Reflux.createStore({
         .end(function (err, res) {
           if (err) {
             console.error(err)
-            this.trigger(null)
+            this.trigger({
+              status: 'failedToLogIn',
+              data: res
+            })
             return
           }
 
@@ -44,8 +47,11 @@ var AuthStore = Reflux.createStore({
         .set('Accept', 'application/json')
         .end(function (err, res) {
           if (err) {
-            console.error(err)
-            this.trigger(null)
+            console.error(res)
+            this.trigger({
+              status: 'failedToRegister',
+              data: res
+            })
             return
           }
 
