@@ -4,6 +4,8 @@ var request = require('superagent')
 
 var Catalyst = require('../Mixins/Catalyst')
 
+var ProfileImage = require('./ProfileImage')
+
 var AuthActions = require('../Actions/AuthActions')
 
 var AuthStore = require('../Stores/AuthStore')
@@ -243,7 +245,8 @@ module.exports = React.createClass({
       content = (
         <div className='logout'>
           <p className='logoutLabel'>Are you sure to logout?</p>
-          <img className='userPhoto' width='150' height='150' src='../vendor/dummy.jpg'/><br/>
+
+          <ProfileImage className='userPhoto' size='150' email={this.props.currentUser.email}/><br/>
           <button onClick={this.logOut} className='logoutButton btn-default'>Logout</button>
         </div>
       )

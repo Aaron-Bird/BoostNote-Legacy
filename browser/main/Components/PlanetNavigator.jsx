@@ -1,5 +1,7 @@
 var React = require('react/addons')
 
+var ProfileImage = require('./ProfileImage')
+
 var PlanetNavigator = React.createClass({
   propTypes: {
     currentPlanet: React.PropTypes.shape({
@@ -25,7 +27,7 @@ var PlanetNavigator = React.createClass({
     var users = this.props.currentPlanet.Users.map(function (user) {
       return (
         <li key={'user-' + user.id}>
-          <img width='44' height='44' src='../vendor/dummy.jpg'/>
+          <ProfileImage size='44' email={user.email}/>
           <div className='userTooltip'>{user.profileName}</div>
         </li>
       )

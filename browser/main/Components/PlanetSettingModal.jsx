@@ -4,6 +4,8 @@ var Select = require('react-select')
 
 var Catalyst = require('../Mixins/Catalyst')
 
+var ProfileImage = require('./ProfileImage')
+
 var PlanetActions = require('../Actions/PlanetActions')
 
 var apiUrl = require('../../../config').apiUrl
@@ -106,7 +108,7 @@ module.exports = React.createClass({
       var members = this.props.currentPlanet.Users.map(function (user) {
         return (
           <li key={'user-' + user.id}>
-            <img className='userPhoto' width='44' height='44' src='../vendor/dummy.jpg'/>
+            <ProfileImage className='userPhoto' size='44' email={user.email}/>
             <div className='userName'>{user.name}</div>
             <div className='userControl'>
               {this.props.currentPlanet.OwnerId !== user.id ? <button onClick={this.removeUser(user.name)} className='btn-default'>Delete</button> : <span className='ownerLabel'>Owner</span>}

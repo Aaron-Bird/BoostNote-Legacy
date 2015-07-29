@@ -5,6 +5,7 @@ var Link = ReactRouter.Link
 var ModalBase = require('./ModalBase')
 var PersonalSettingModal = require('./PersonalSettingModal')
 var PlanetCreateModal = require('./PlanetCreateModal')
+var ProfileImage = require('./ProfileImage')
 
 var AuthStore = require('../Stores/AuthStore')
 
@@ -52,8 +53,6 @@ module.exports = React.createClass({
     }
   },
   render: function () {
-    console.log(this.props.currentUser)
-    console.log(this.props.currentPlanet)
     var planets = this.props.currentUser.Planets.map(function (planet, index) {
       return (
         <li key={planet.id} className={this.props.currentPlanet != null && this.props.currentPlanet.userName === planet.userName && this.props.currentPlanet.name === planet.name ? 'active' : ''}>
@@ -75,7 +74,7 @@ module.exports = React.createClass({
     return (
       <div tabIndex='2' className='UserNavigator'>
         <button onClick={this.openPersonalSettingModal} className='userButton'>
-          <img width='50' height='50' src='../vendor/dummy.jpg'/>
+          <ProfileImage size='50' email={this.props.currentUser.email}/>
         </button>
         <ul className='planetList'>
           {planets}
