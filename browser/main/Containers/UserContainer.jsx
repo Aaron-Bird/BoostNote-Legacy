@@ -6,6 +6,7 @@ var Link = ReactRouter.Link
 var request = require('superagent')
 
 var UserNavigator = require('../Components/UserNavigator')
+var ProfileImage = require('../Components/ProfileImage')
 
 var AuthStore = require('../Stores/AuthStore')
 var PlanetStore = require('../Stores/PlanetStore')
@@ -130,7 +131,7 @@ module.exports = React.createClass({
           <div className='UserHome'>
             <h1>User Profile</h1>
             <div className='userProfile'>
-              <img className='userPhoto' width='150' height='150' src='../vendor/dummy.jpg'/>
+              <ProfileImage className='userPhoto' size='150' email={user.email}/>
               <div className='userIntro'>
                 <div className='userProfileName'>{user.profileName}</div>
                 <Link className='userName' to='user' params={{userName: user.name}}>{user.name}</Link>

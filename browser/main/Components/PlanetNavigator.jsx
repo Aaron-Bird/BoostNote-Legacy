@@ -1,4 +1,6 @@
 var React = require('react/addons')
+var ReactRouter = require('react-router')
+var Link = ReactRouter.Link
 
 var ProfileImage = require('./ProfileImage')
 
@@ -27,8 +29,10 @@ var PlanetNavigator = React.createClass({
     var users = this.props.currentPlanet.Users.map(function (user) {
       return (
         <li key={'user-' + user.id}>
-          <ProfileImage size='44' email={user.email}/>
-          <div className='userTooltip'>{user.profileName}</div>
+          <Link to='user' params={{userName: user.name}}>
+            <ProfileImage className='userPhoto' size='44' email={user.email}/>
+            <div className='userTooltip'>{user.profileName}</div>
+          </Link>
         </li>
       )
     })
@@ -62,7 +66,7 @@ var PlanetNavigator = React.createClass({
         <div className='usersLabel'>Users</div>
         <ul className='users'>
           {users}
-          <li onClick={this.props.openAddUserModal} className='btn-default'><i className='fa fa-plus'/></li>
+          <li onClick={this.props.openAddUserModal} className='addUserButton btn-default'><i className='fa fa-plus'/></li>
         </ul>
       </div>
     )
