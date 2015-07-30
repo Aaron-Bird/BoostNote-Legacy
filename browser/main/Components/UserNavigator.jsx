@@ -3,14 +3,13 @@ var ReactRouter = require('react-router')
 var Link = ReactRouter.Link
 
 var ModalBase = require('./ModalBase')
-var PersonalSettingModal = require('./PersonalSettingModal')
 var PlanetCreateModal = require('./PlanetCreateModal')
 var ProfileImage = require('./ProfileImage')
 
 var AuthStore = require('../Stores/AuthStore')
 
 module.exports = React.createClass({
-  mixins: [ReactRouter.Navigation],
+  mixins: [ReactRouter.Navigation, ReactRouter.State],
   propTypes: {
     currentPlanet: React.PropTypes.object,
     currentUser: React.PropTypes.object
@@ -73,17 +72,13 @@ module.exports = React.createClass({
 
     return (
       <div tabIndex='2' className='UserNavigator'>
-        <button onClick={this.openPersonalSettingModal} className='userButton'>
+        <Link to='userHome' params={{userName: this.props.currentUser.name}} className='userProfile'>
           <ProfileImage size='55' email={this.props.currentUser.email}/>
-        </button>
+        </Link>
         <ul className='planetList'>
           {planets}
         </ul>
         <button onClick={this.openPlanetCreateModal} className='newPlanet'><i className='fa fa-plus'/></button>
-
-        <ModalBase isOpen={this.state.isPersonalSettingModalOpen} close={this.closePersonalSettingModal}>
-          <PersonalSettingModal currentUser={this.props.currentUser} close={this.closePersonalSettingModal}/>
-        </ModalBase>
 
         <ModalBase isOpen={this.state.isPlanetCreateModalOpen} close={this.closePlanetCreateModal}>
           <PlanetCreateModal close={this.closePlanetCreateModal}/>

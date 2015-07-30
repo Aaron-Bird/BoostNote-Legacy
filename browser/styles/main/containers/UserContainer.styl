@@ -5,20 +5,22 @@
     width 55px
     text-align center
     box-sizing border-box
-    .userButton
+    border-right solid 1px borderColor
+    .userProfile
       display block
       width 55px
       height 55px
+      border-bottom solid 1px borderColor
+      overflow hidden
       background-color black
       margin 0
       padding 0
-      border none
       cursor pointer
       box-sizing border-box
       img
         transition 0.1s
         opacity 0.9
-      &.active, &:active, &.focus, &:focus, &.hover, &:hover
+      &.vivid.active, &.focus, &:focus, &.hover, &:hover
         img
           opacity 1
     ul.planetList>li

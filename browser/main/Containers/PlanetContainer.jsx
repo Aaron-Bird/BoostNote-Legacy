@@ -13,6 +13,7 @@ var BlueprintEditModal = require('../Components/BlueprintEditModal')
 var BlueprintDeleteModal = require('../Components/BlueprintDeleteModal')
 var PlanetAddUserModal = require('../Components/PlanetAddUserModal')
 var PlanetSettingModal = require('../Components/PlanetSettingModal')
+var PersonalSettingModal = require('../Components/PersonalSettingModal')
 
 var PlanetActions = require('../Actions/PlanetActions')
 
@@ -99,7 +100,13 @@ module.exports = React.createClass({
       currentUser: AuthStore.getUser(),
       currentPlanet: null,
       search: '',
-      isFetched: false
+      isFetched: false,
+      isLaunchModalOpen: false,
+      isEditModalOpen: false,
+      isDeleteModalOpen: false,
+      isAddUserModalOpen: false,
+      isSettingModalOpen: false,
+      isPersonalSettingModalOpen: false
     }
   },
   componentDidMount: function () {
@@ -448,6 +455,14 @@ module.exports = React.createClass({
       this.focus()
     })
   },
+  openPersonalSettingModal: function () {
+    this.setState({isPersonalSettingModalOpen: true})
+  },
+  closePersonalSettingModal: function () {
+    this.setState({isPersonalSettingModalOpen: false}, function () {
+      this.focus()
+    })
+  },
   focus: function () {
     React.findDOMNode(this).focus()
   },
@@ -480,6 +495,13 @@ module.exports = React.createClass({
     if (this.state.isSettingModalOpen) {
       if (e.keyCode === 27) {
         this.closeSettingModal()
+      }
+      return
+    }
+
+    if (this.state.isPersonalSettingModalOpen) {
+      if (e.keyCode === 27) {
+        this.closePersonalSettingModal()
       }
       return
     }
@@ -604,8 +626,13 @@ module.exports = React.createClass({
           <PlanetSettingModal currentPlanet={this.state.currentPlanet} close={this.closeSettingModal}/>
         </ModalBase>
 
+        <ModalBase isOpen={this.state.isPersonalSettingModalOpen} close={this.closePersonalSettingModal}>
+          <PersonalSettingModal currentUser={this.state.currentUser} close={this.closePersonalSettingModal}/>
+        </ModalBase>
+
         <PlanetHeader search={this.state.search}
-          openSettingModal={this.openSettingModal} onSearchChange={this.handleSearchChange} currentPlanet={this.state.currentPlanet}/>
+          openSettingModal={this.openSettingModal}
+          openPersonalSettingModal={this.openPersonalSettingModal} onSearchChange={this.handleSearchChange} currentPlanet={this.state.currentPlanet}/>
 
         <PlanetNavigator openLaunchModal={this.openLaunchModal} openAddUserModal={this.openAddUserModal}
           search={this.state.search}
