@@ -74,7 +74,7 @@ module.exports = React.createClass({
     return (
       <div tabIndex='2' className='UserNavigator'>
         <button onClick={this.openPersonalSettingModal} className='userButton'>
-          <ProfileImage size='50' email={this.props.currentUser.email}/>
+          <ProfileImage size='55' email={this.props.currentUser.email}/>
         </button>
         <ul className='planetList'>
           {planets}
