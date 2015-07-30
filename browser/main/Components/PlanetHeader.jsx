@@ -1,6 +1,10 @@
 var React = require('react/addons')
+var ReactRouter = require('react-router')
+
+var PlanetActions = require('../Actions/PlanetActions')
 
 var PlanetHeader = React.createClass({
+  mixins: [ReactRouter.State],
   propTypes: {
     openSettingModal: React.PropTypes.func,
     currentPlanet: React.PropTypes.object,
@@ -17,6 +21,10 @@ var PlanetHeader = React.createClass({
   },
   interceptClick: function (e) {
     e.stopPropagation()
+  },
+  refreshPlanet: function () {
+    var params = this.getParams()
+    PlanetActions.fetchPlanet(params.userName, params.planetName)
   },
   render: function () {
     var currentPlanetName = this.props.currentPlanet.name
@@ -36,6 +44,8 @@ var PlanetHeader = React.createClass({
             <i className='fa fa-search'/>
             <input onChange={this.props.onSearchChange} value={this.props.search} ref='search' tabIndex='1' type='text' className='inline-input circleInput' placeholder='Search...'/>
           </div>
+          <button onClick={this.refreshPlanet} className='refreshButton'><i className='fa fa-refresh'/></button>
+          <button className='settingButton'><i className='fa fa-gears'/></button>
         </div>
       </div>
     )

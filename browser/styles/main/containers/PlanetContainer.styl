@@ -81,6 +81,26 @@
         top 8px
         left 12px
         color inactiveTextColor
+    .refreshButton, .settingButton
+      display block
+      position absolute
+      top 12px
+      font-size em
+      btnDefault()
+      box-sizing border-box
+      circle()
+      width 28px
+      height 28px
+      text-align center
+      cursor pointer
+      transition 0.1s
+      &:focus, &.focus
+        outline none
+    .refreshButton
+      right 45px
+    .settingButton
+      right 10px
+
 
 .PlanetNavigator
   absolute bottom left

@@ -363,7 +363,9 @@ module.exports = React.createClass({
       keywords.unshift('$s')
     }
 
-    this.setState({search: keywords.join(' ')})
+    this.setState({search: keywords.join(' ')}, function () {
+      this.selectArticleByIndex(0)
+    })
   },
   toggleBlueprintFilter: function () {
     var keywords = typeof this.state.search === 'string' ? this.state.search.split(' ') : []
@@ -389,7 +391,9 @@ module.exports = React.createClass({
       keywords.unshift('$b')
     }
 
-    this.setState({search: keywords.join(' ')})
+    this.setState({search: keywords.join(' ')}, function () {
+      this.selectArticleByIndex(0)
+    })
   },
   showOnlyWithTag: function (tag) {
     return function () {
