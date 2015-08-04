@@ -4,7 +4,8 @@
   "description": "CodeXen App",
   "main": "main.js",
   "scripts": {
-    "start": "npm run serve | npm run dev",
+    "start": "electron ./main.js",
+    "web": "npm run serve | npm run dev",
     "serve": "./node_modules/.bin/http-server ./browser -p 8080",
     "dev": "webpack-dev-server --progress --colors --port 8090"
   },
@@ -39,6 +40,7 @@
     "moment": "^2.10.3",
     "nib": "^1.1.0",
     "node-jsx": "^0.13.3",
+    "node-notifier": "^4.2.3",
     "react": "^0.13.3",
     "react-router": "^0.13.3",
     "react-select": "^0.5.4",
@@ -58,6 +60,9 @@
   "standard": {
     "ignore": [
       "/browser/ace/"
+    ],
+    "global": [
+      "localStorage"
     ]
   }
 }

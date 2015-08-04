@@ -1,4 +1,4 @@
-# CodeXen app
+# CodeXen app 0.2.0
 ![CodeXen](app-logo.png)
 
 Short code(Snippet/Templatefile/Command) storage + boosting service
