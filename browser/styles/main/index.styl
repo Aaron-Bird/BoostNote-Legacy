@@ -6,10 +6,19 @@ global-reset()
 @import './components/*'
 @import './containers/*'
 
+html, body
+    width 100%
+    height 100%
+    overflow hidden
+
 body
   font-family "Lato"
   color textColor
   font-size fontSize
+  font-weight 400
+
+div, span, a, button, input
+  box-sizing border-box
 
 h1
   font-size 2em
@@ -33,9 +42,11 @@ a
 hr
   border-top none
   border-bottom solid 1px borderColor
-  margin 25px 0
+  margin 15px 0
 
 button
+  font-weight 400
+  cursor pointer
   &:focus, &.focus
     outline none
 

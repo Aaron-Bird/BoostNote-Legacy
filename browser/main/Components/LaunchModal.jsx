@@ -1,54 +1,56 @@
 var React = require('react/addons')
-var ReactRouter = require('react-router')
-var Catalyst = require('../Mixins/Catalyst')
 
-var SnippetForm = require('./SnippetForm')
-var BlueprintForm = require('./BlueprintForm')
+var CodeForm = require('./CodeForm')
+var NoteForm = require('./NoteForm')
 
-var LaunchModal = React.createClass({
-  mixins: [Catalyst.LinkedStateMixin, ReactRouter.State],
+module.exports = React.createClass({
   propTypes: {
+    planet: React.PropTypes.object,
+    transitionTo: React.PropTypes.func,
     close: React.PropTypes.func
   },
   getInitialState: function () {
     return {
-      currentTab: 'snippet'
+      currentTab: 'code'
     }
+  },
+  componentDidMount: function () {
+
   },
   stopPropagation: function (e) {
     e.stopPropagation()
   },
-  selectSnippetTab: function () {
-    this.setState({currentTab: 'snippet'})
+  selectCodeTab: function () {
+    this.setState({currentTab: 'code'})
   },
-  selectBlueprintTab: function () {
-    this.setState({currentTab: 'blueprint'})
+  selectNoteTab: function () {
+    this.setState({currentTab: 'note'})
   },
   handleKeyDown: function (e) {
     if (e.keyCode === 37 && e.metaKey) {
-      this.selectSnippetTab()
+      this.selectCodeTab()
     }
     if (e.keyCode === 39 && e.metaKey) {
-      this.selectBlueprintTab()
+      this.selectNoteTab()
     }
   },
   render: function () {
     var modalBody
-    if (this.state.currentTab === 'snippet') {
+    if (this.state.currentTab === 'code') {
       modalBody = (
-        <SnippetForm close={this.props.close}/>
+        <CodeForm planet={this.props.planet} transitionTo={this.props.transitionTo} close={this.props.close}/>
       )
     } else {
       modalBody = (
-        <BlueprintForm close={this.props.close}/>
+        <NoteForm planet={this.props.planet} transitionTo={this.props.transitionTo} close={this.props.close}/>
       )
     }
 
     return (
-      <div onKeyDown={this.handleKeyDown} onClick={this.stopPropagation} className='LaunchModal modal'>
+      <div className='LaunchModal modal'>
         <div className='modal-header'>
           <div className='modal-tab'>
-            <button className={this.state.currentTab === 'snippet' ? 'btn-primary active' : 'btn-default'} onClick={this.selectSnippetTab}>Snippet</button><button className={this.state.currentTab === 'blueprint' ? 'btn-primary active' : 'btn-default'} onClick={this.selectBlueprintTab}>Blueprint</button>
+            <button className={this.state.currentTab === 'code' ? 'btn-primary active' : 'btn-default'} onClick={this.selectCodeTab}>Code</button><button className={this.state.currentTab === 'note' ? 'btn-primary active' : 'btn-default'} onClick={this.selectNoteTab}>Note</button>
           </div>
         </div>
         {modalBody}
@@ -56,5 +58,3 @@ var LaunchModal = React.createClass({
     )
   }
 })
-
-module.exports = LaunchModal

@@ -5,14 +5,13 @@ var moment = require('moment')
 var ForceUpdate = require('../Mixins/ForceUpdate')
 var Markdown = require('../Mixins/Markdown')
 
-var PlanetArticleList = React.createClass({
+var ProfileImage = require('../Components/ProfileImage')
+
+module.exports = React.createClass({
   mixins: [ReactRouter.Navigation, ReactRouter.State, ForceUpdate(60000), Markdown],
   propTypes: {
     articles: React.PropTypes.array,
     showOnlyWithTag: React.PropTypes.func
-  },
-  handleKeyDown: function (e) {
-    e.preventDefault()
   },
   render: function () {
     var articles = this.props.articles.map(function (article) {
@@ -24,14 +23,14 @@ var PlanetArticleList = React.createClass({
         <a className='noTag'>Not tagged yet</a>
       )
       var params = this.getParams()
-      var isActive = article.type === 'snippet' ? this.isActive('snippets') && parseInt(params.localId, 10) === article.localId : this.isActive('blueprints') && parseInt(params.localId, 10) === article.localId
+      var isActive = article.type === 'code' ? this.isActive('codes') && parseInt(params.localId, 10) === article.localId : this.isActive('notes') && parseInt(params.localId, 10) === article.localId
 
       var handleClick
 
-      if (article.type === 'snippet') {
+      if (article.type === 'code') {
 
         handleClick = function () {
-          this.transitionTo('snippets', {
+          this.transitionTo('codes', {
             userName: params.userName,
             planetName: params.planetName,
             localId: article.localId
@@ -39,14 +38,17 @@ var PlanetArticleList = React.createClass({
         }.bind(this)
 
         return (
-          <li onClick={handleClick} key={'snippet-' + article.id}>
-            <div className={'articleItem snippetItem' + (isActive ? ' active' : '')}>
-              <div className='itemHeader'>
-                <div className='callSign'><i className='fa fa-code fa-fw'></i> {article.callSign}</div>
-                <div className='updatedAt'>{moment(article.updatedAt).fromNow()}</div>
+          <li onClick={handleClick} key={'code-' + article.id}>
+            <div className={'articleItem' + (isActive ? ' active' : '')}>
+              <div className='itemLeft'>
+                <ProfileImage className='profileImage' size='25' email={article.User.email}/>
+                <i className='fa fa-code fa-fw'></i>
               </div>
-              <div className='description'>{article.description.length > 50 ? article.description.substring(0, 50) + ' …' : article.description}</div>
-              <div className='tags'><i className='fa fa-tags'/>{tags}</div>
+              <div className='itemRight'>
+                <div className='updatedAt'>{moment(article.updatedAt).fromNow()}</div>
+                <div className='description'>{article.description.length > 50 ? article.description.substring(0, 50) + ' …' : article.description}</div>
+                <div className='tags'><i className='fa fa-tags'/>{tags}</div>
+              </div>
             </div>
             <div className='divider'></div>
           </li>
@@ -54,7 +56,7 @@ var PlanetArticleList = React.createClass({
       }
 
       handleClick = function () {
-        this.transitionTo('blueprints', {
+        this.transitionTo('notes', {
           userName: params.userName,
           planetName: params.planetName,
           localId: article.localId
@@ -62,13 +64,18 @@ var PlanetArticleList = React.createClass({
       }.bind(this)
 
       return (
-        <li onClick={handleClick} key={'blueprint-' + article.id}>
+        <li onClick={handleClick} key={'note-' + article.id}>
           <div className={'articleItem blueprintItem' + (isActive ? ' active' : '')}>
-            <div className='itemHeader'>
-              <div className='callSign'><i className='fa fa-file-text-o fa-fw'></i> {article.title}</div>
-              <div className='updatedAt'>{moment(article.updatedAt).fromNow()}</div>
+            <div className='itemLeft'>
+              <ProfileImage className='profileImage' size='25' email={article.User.email}/>
+              <i className='fa fa-file-text-o fa-fw'></i>
             </div>
-            <div className='tags'><i className='fa fa-tags'/>{tags}</div>
+
+            <div className='itemRight'>
+              <div className='updatedAt'>{moment(article.updatedAt).fromNow()}</div>
+              <div className='description'>{article.title}</div>
+              <div className='tags'><i className='fa fa-tags'/>{tags}</div>
+            </div>
           </div>
           <div className='divider'></div>
         </li>
@@ -78,12 +85,10 @@ var PlanetArticleList = React.createClass({
 
     return (
       <div className='PlanetArticleList'>
-        <ul onKeyDown={this.handleKeyDown} tabIndex='2'>
+        <ul>
           {articles}
         </ul>
       </div>
     )
   }
 })
-
-module.exports = PlanetArticleList

@@ -1,36 +1,9 @@
 var React = require('react/addons')
-var request = require('superagent')
 var Select = require('react-select')
 
 var Catalyst = require('../Mixins/Catalyst')
 
 var ProfileImage = require('./ProfileImage')
-
-var PlanetActions = require('../Actions/PlanetActions')
-
-var apiUrl = require('../../../config').apiUrl
-
-var getOptions = function (input, callback) {
-  request
-    .get(apiUrl + 'users/search')
-    .query({name: input})
-    .send()
-    .end(function (err, res) {
-      if (err) {
-        callback(err)
-        return
-      }
-      callback(null, {
-          options: res.body.map(function (user) {
-            return {
-              label: user.name,
-              value: user.name
-            }
-          }),
-          complete: false
-      })
-    })
-}
 
 module.exports = React.createClass({
   mixins: [Catalyst.LinkedStateMixin],
@@ -48,10 +21,6 @@ module.exports = React.createClass({
   },
   activePlanetProfile: function () {
     this.setState({currentTab: 'planetProfile'})
-
-  },
-  activeMembers: function () {
-    this.setState({currentTab: 'members'})
   },
   saveProfile: function () {
     var currentPlanet = this.props.currentPlanet
@@ -59,14 +28,6 @@ module.exports = React.createClass({
   },
   handleChange: function (value) {
     this.setState({userName: value})
-  },
-  addUser: function () {
-    PlanetActions.addUser(this.props.currentPlanet.userName + '/' + this.props.currentPlanet.name, this.state.userName)
-  },
-  removeUser: function (userName) {
-    return function () {
-      PlanetActions.removeUser(this.props.currentPlanet.userName + '/' + this.props.currentPlanet.name, userName)
-    }.bind(this)
   },
   doubleCheckDeletePlanet: function () {
     if (this.state.isDeletePlanetChecked) {
@@ -84,61 +45,26 @@ module.exports = React.createClass({
   },
   render: function () {
     var content
-    if (this.state.currentTab === 'planetProfile') {
-      content = (
-        <div className='planetProfile'>
-          <div className='planetProfileForm'>
-            <label>Planet name </label>
-            <input valueLink={this.linkState('planetName')} className='inline-input'/>
-            <button onClick={this.saveProfile} className='saveButton btn-primary'>Save</button>
-          </div>
 
-          <div className='planetDeleteForm'>
-            <div className='planetDeleteControl'>
-              <div className={'toggle' + (this.state.isDeletePlanetChecked ? '' : ' hide')}>
-                <div className='planetDeleteLabel'>Are you sure to delete this planet?</div>
-                <button ref='deleteCancelButton' onClick={this.cancelDeletePlanet} className='cancelButton btn-default'>Cancel</button>
-              </div>
-              <button onClick={this.doubleCheckDeletePlanet} className='deleteButton btn-primary'>{!this.state.isDeletePlanetChecked ? 'Delete Planet' : 'Confirm'}</button>
+    content = (
+      <div className='planetProfile'>
+        <div className='planetProfileForm'>
+          <label>Planet name </label>
+          <input valueLink={this.linkState('planetName')} className='inline-input'/>
+          <button onClick={this.saveProfile} className='saveButton btn-primary'>Save</button>
+        </div>
+
+        <div className='planetDeleteForm'>
+          <div className='planetDeleteControl'>
+            <div className={'toggle' + (this.state.isDeletePlanetChecked ? '' : ' hide')}>
+              <div className='planetDeleteLabel'>Are you sure to delete this planet?</div>
+              <button ref='deleteCancelButton' onClick={this.cancelDeletePlanet} className='cancelButton btn-default'>Cancel</button>
             </div>
+            <button onClick={this.doubleCheckDeletePlanet} className='deleteButton btn-primary'>{!this.state.isDeletePlanetChecked ? 'Delete Planet' : 'Confirm'}</button>
           </div>
         </div>
-      )
-    } else {
-      var members = this.props.currentPlanet.Users.map(function (user) {
-        return (
-          <li key={'user-' + user.id}>
-            <ProfileImage className='userPhoto' size='44' email={user.email}/>
-            <div className='userName'>{user.name}</div>
-            <div className='userControl'>
-              {this.props.currentPlanet.OwnerId !== user.id ? <button onClick={this.removeUser(user.name)} className='btn-default'>Delete</button> : <span className='ownerLabel'>Owner</span>}
-            </div>
-          </li>
-        )
-      }.bind(this))
-
-      content = (
-        <div className='members'>
-          <ul className='userList'>
-            {members}
-          </ul>
-          <div className='addUserForm'>
-            <div className='addUserLabel'>Invite user</div>
-            <div className='addUserControl'>
-              <Select
-                name='userName'
-                value={this.state.userName}
-                placeholder='Username'
-                asyncOptions={getOptions}
-                onChange={this.handleChange}
-                className='addUserSelect'
-              />
-            <button onClick={this.addUser} className='addUserSubmit btn-primary'>Invite</button>
-            </div>
-          </div>
-        </div>
-      )
-    }
+      </div>
+    )
 
     return (
       <div onClick={this.interceptClick} className='PlanetSettingModal modal'>
@@ -146,7 +72,6 @@ module.exports = React.createClass({
           <h1>Planet setting</h1>
           <nav>
             <button className={this.state.currentTab === 'planetProfile' ? 'active' : ''} onClick={this.activePlanetProfile}><i className='fa fa-globe fa-fw'/> Planet profile</button>
-            <button className={this.state.currentTab === 'members' ? 'active' : ''} onClick={this.activeMembers}><i className='fa fa-group fa-fw'/> Members</button>
           </nav>
         </div>
 

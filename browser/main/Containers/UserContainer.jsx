@@ -1,20 +1,24 @@
 /* global localStorage */
+
 var React = require('react/addons')
 var ReactRouter = require('react-router')
 var RouteHandler = ReactRouter.RouteHandler
 var Link = ReactRouter.Link
-var request = require('superagent')
+var Reflux = require('reflux')
 
-var UserNavigator = require('../Components/UserNavigator')
+var LinkedState = require('../Mixins/LinkedState')
+var Modal = require('../Mixins/Modal')
+
+var Hq = require('../Services/Hq')
+
 var ProfileImage = require('../Components/ProfileImage')
+var EditProfileModal = require('../Components/EditProfileModal')
 
-var AuthStore = require('../Stores/AuthStore')
+var UserStore = require('../Stores/UserStore')
 var PlanetStore = require('../Stores/PlanetStore')
 
-var apiUrl = require('../../../config').apiUrl
-
 module.exports = React.createClass({
-  mixins: [React.addons.LinkedStateMixin, ReactRouter.Navigation, ReactRouter.State],
+  mixins: [LinkedState, ReactRouter.State, Modal, Reflux.listenTo(UserStore, 'onUserChange')],
   propTypes: {
     params: React.PropTypes.shape({
       userName: React.PropTypes.string,
@@ -23,42 +27,50 @@ module.exports = React.createClass({
   },
   getInitialState: function () {
     return {
-      currentUser: AuthStore.getUser(),
-      isUserFetched: false,
       user: null
     }
   },
   componentDidMount: function () {
-    this.unsubscribePlanet = PlanetStore.listen(this.onListen)
-    this.unsubscribeAuth = AuthStore.listen(this.onListen)
+    this.fetchUser()
+  },
+  componentWillReceiveProps: function (nextProps) {
+    if (this.state.user == null) {
+      this.fetchUser(nextProps.params.userName)
+      return
+    }
 
-    if (this.isActive('userHome')) {
-      this.fetchUser(this.props.params.userName)
+    if (nextProps.params.userName !== this.state.user.name) {
+      this.setState({
+        user: null
+      }, function () {
+        this.fetchUser(nextProps.params.userName)
+      })
     }
   },
-  componentWillUnmount: function () {
-    this.unsubscribePlanet()
-    this.unsubscribeAuth()
-  },
-  componentDidUpdate: function () {
-    if (this.isActive('userHome') && (this.state.user == null || this.state.user.name !== this.props.params.userName)) {
-      this.fetchUser(this.props.params.userName)
+  onUserChange: function (res) {
+    if (this.state.user == null) return
+
+    switch (res.status) {
+      case 'userUpdated':
+        if (this.state.user.id === res.data.id) {
+          this.setState({user: res.data})
+        }
+        break
     }
   },
   fetchUser: function (userName) {
-    request
-      .get(apiUrl + userName)
-      .send()
-      .end(function (err, res) {
-        if (err) {
-          console.error(err)
-          return
-        }
+    if (userName == null) userName = this.props.params.userName
 
-        this.setState({user: res.body, isUserFetched: true})
+    Hq.fetchUser(userName)
+      .then(function (res) {
+        this.setState({user: res.body})
       }.bind(this))
+      .catch(function (err) {
+        console.error(err)
+      })
   },
   onListen: function (res) {
+    console.log('on Listen')
     if (res == null || res.status == null) return
 
     var currentUser = this.state.currentUser
@@ -66,7 +78,7 @@ module.exports = React.createClass({
     if (res.status === 'planetCreated') {
       currentUser.Planets.push(res.data)
 
-      localStorage.setItem('user', JSON.stringify(currentUser))
+      localStorage.setItem('currentUser', JSON.stringify(currentUser))
       this.setState({currentUser: currentUser})
       return
     }
@@ -80,81 +92,75 @@ module.exports = React.createClass({
         return false
       })
 
-      localStorage.setItem('user', JSON.stringify(currentUser))
+      localStorage.setItem('currentUser', JSON.stringify(currentUser))
       this.setState({currentUser: currentUser})
       return
     }
-
-    if (res.status === 'nameChanged') {
-      this.setState({currentUser: AuthStore.getUser()})
-      return
-    }
-
-    if (res.status === 'userProfileUpdated') {
-      this.setState({currentUser: AuthStore.getUser()})
-      return
-    }
+  },
+  openEditProfileModal: function () {
+    this.openModal(EditProfileModal, {targetUser: this.state.user})
   },
   render: function () {
-    var currentUser = this.state.currentUser
     var user = this.state.user
 
-    // user must be logged in
-    if (currentUser == null) return (<div></div>)
-
-    var currentPlanet = null
-    currentUser.Planets.some(function (planet) {
-      if (planet.userName === this.props.params.userName && planet.name === this.props.params.planetName) {
-        currentPlanet = planet
-        return true
-      }
-      return false
-    }.bind(this))
-
-    var content
     if (this.isActive('userHome')) {
-      if (this.state.isUserFetched === false) {
-        content = (
-          <div className='UserHome'>
+      if (user == null) {
+        return (
+          <div className='UserContainer'>
             User Loading...
           </div>
         )
       } else {
-        var planets = user.Planets.map(function (planet) {
+        var userPlanets = user.Planets.map(function (planet) {
           return (
             <li key={'planet-' + planet.id}>
               <Link to='planet' params={{userName: planet.userName, planetName: planet.name}}>{planet.userName}/{planet.name}</Link>
             </li>
           )
         })
-        content = (
-          <div className='UserHome'>
-            <h1>User Profile</h1>
+
+        var teams = user.Teams == null ? [] : user.Teams.map(function (team) {
+          return (
+            <li>
+              Some team
+            </li>
+          )
+        })
+        return (
+          <div className='UserContainer'>
             <div className='userProfile'>
-              <ProfileImage className='userPhoto' size='150' email={user.email}/>
-              <div className='userIntro'>
+              <ProfileImage className='userPhoto' size='75' email={user.email}/>
+              <div className='userInfo'>
                 <div className='userProfileName'>{user.profileName}</div>
-                <Link className='userName' to='user' params={{userName: user.name}}>{user.name}</Link>
+                <div className='userName'>{user.name}</div>
+              </div>
+
+              <button onClick={this.openEditProfileModal} className='editProfileButton'>Edit profile</button>
+            </div>
+            <div className='teamList'>
+              <div className='teamLabel'>{teams.length} {teams.length > 0 ? 'Teams' : 'Team'}</div>
+              <ul className='teams'>
+                {teams}
+              </ul>
+            </div>
+            <div className='planetList'>
+              <div className='planetLabel'>{userPlanets.length} {userPlanets.length > 0 ? 'Planets' : 'Planet'}</div>
+              <div className='planetGroup'>
+                <div className='planetGroupLabel'>{user.profileName}</div>
+                <ul className='planets'>
+                  {userPlanets}
+                </ul>
               </div>
             </div>
-            <h2>Planets</h2>
-            <ul className='userPlanetList'>
-              {planets}
-            </ul>
           </div>
         )
       }
     } else {
-      content = (
-        <RouteHandler/>
+      return (
+        <div className='UserContainer'>
+          <RouteHandler/>
+        </div>
       )
     }
-
-    return (
-      <div className='UserContainer'>
-        <UserNavigator currentPlanet={currentPlanet} currentUser={currentUser}/>
-        {content}
-      </div>
-    )
   }
 })

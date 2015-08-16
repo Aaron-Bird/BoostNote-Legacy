@@ -12,6 +12,8 @@ btnDefault()
     border-color darken(brandBorderColor, 10%)
     background-color brandColor
     color white
+  &:disabled, &.disabled
+    opacity 0.6
 
 btnPrimary()
   border-style solid
@@ -25,3 +27,14 @@ btnPrimary()
   &:active, &.active
     background-color brandColor
     color white
+  &:disabled, &.disabled
+    opacity 0.6
+
+btnStripDefault()
+  border none
+  background-color transparent
+  color lightButtonColor
+  &:hover, &.hover, &:focus, &.focus
+    color darken(lightButtonColor, 50%)
+  &:active, &.active
+    color brandColor

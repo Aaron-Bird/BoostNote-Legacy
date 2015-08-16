@@ -17,43 +17,42 @@ var update = null
 //   if (process.platform !== 'darwin') app.quit()
 // })
 
-var version = '0.2.0'
+var version = app.getVersion()
 var nn = require('node-notifier')
 var autoUpdater = require('auto-updater')
 
 autoUpdater
   .on('error', function (err, message) {
     nn.notify({
-      title: 'Boost Update Center Ver. ' + version,
+      title: 'Error! Ver.' + version,
       message: message
     })
   })
   .on('checking-for-update', function () {
     nn.notify({
-      title: 'Boost Update Center Ver. ' + version,
-      message: 'Hello from Main processor, Mr. User!'
+      title: 'Boost launched!! Ver. ' + version,
+      message: 'Checking update is available....'
     })
   })
   .on('update-available', function () {
     nn.notify({
-      title: 'Boost Update Center Ver. ' + version,
-      message: 'Update is available. Starting download latest build...'
+      title: 'Update is available!! Ver. ' + version,
+      message: 'Download started.. wait for the update ready.'
     })
   })
   .on('update-not-available', function () {
     nn.notify({
-      title: 'Boost Update Center Ver. ' + version,
-      message: 'Latest Build :D'
+      title: 'Latest Build!! Ver. ' + version,
+      message: 'Hope you to enjoy our app :D'
     })
   })
   .on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
     nn.notify({
-      title: 'Boost Update Center Ver. ' + version,
-      message: 'Ready to Update: ' + releaseName
+      title: 'Ready to Update!! v' + version,
+      message: 'Click tray icon to update app: ' + releaseName
     })
     update = quitAndUpdate
   })
-
 
 app.on('ready', function () {
   console.log('Version ' + version)

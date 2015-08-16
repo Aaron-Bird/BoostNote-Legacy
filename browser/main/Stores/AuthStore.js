@@ -2,17 +2,10 @@
 var Reflux = require('reflux')
 var request = require('superagent')
 
-var AuthActions = require('../Actions/AuthActions')
-
 var apiUrl = require('../../../config').apiUrl
 
 var AuthStore = Reflux.createStore({
     init: function () {
-      this.listenTo(AuthActions.login, this.login)
-      this.listenTo(AuthActions.register, this.register)
-      this.listenTo(AuthActions.logout, this.logout)
-      this.listenTo(AuthActions.updateProfile, this.updateProfile)
-      this.listenTo(AuthActions.refreshUser, this.refreshUser)
     },
     // Reflux Store
     login: function (input) {
@@ -91,7 +84,7 @@ var AuthStore = Reflux.createStore({
     },
     logout: function () {
       localStorage.removeItem('token')
-      localStorage.removeItem('user')
+      localStorage.removeItem('currentUser')
 
       this.trigger({
         status: 'loggedOut'
@@ -129,7 +122,7 @@ var AuthStore = Reflux.createStore({
       return false
     },
     getUser: function () {
-      var userJSON = localStorage.getItem('user')
+      var userJSON = localStorage.getItem('currentUser')
       if (userJSON == null) return null
       return JSON.parse(userJSON)
     }

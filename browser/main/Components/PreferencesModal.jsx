@@ -1,19 +1,17 @@
 /* global localStorage */
 var React = require('react/addons')
+var ReactRouter = require('react-router')
+var Navigation = ReactRouter.Navigation
 var request = require('superagent')
 
-var Catalyst = require('../Mixins/Catalyst')
+var LinkedState = require('../Mixins/LinkedState')
 
 var ProfileImage = require('./ProfileImage')
-
-var AuthActions = require('../Actions/AuthActions')
-
-var AuthStore = require('../Stores/AuthStore')
 
 var apiUrl = require('../../../config').apiUrl
 
 module.exports = React.createClass({
-  mixins: [Catalyst.LinkedStateMixin],
+  mixins: [LinkedState, Navigation],
   propTypes: {
     close: React.PropTypes.func,
     currentUser: React.PropTypes.object
@@ -32,10 +30,8 @@ module.exports = React.createClass({
     }
   },
   componentDidMount: function () {
-    this.unsubscribe = AuthStore.listen(this.onListen)
   },
   componentWillUnmount: function () {
-    this.unsubscribe()
   },
   onListen: function (res) {
     console.log(res)
@@ -70,17 +66,6 @@ module.exports = React.createClass({
     this.setState({currentTab: 'logout'})
   },
   saveProfile: function () {
-    this.setState({
-      isUpdatingProfile: true,
-      isUpdatingProfileDone: false,
-      isUpdatingProfileFailed: false
-    }, function () {
-      AuthActions.updateProfile({
-        profileName: this.state.profileName,
-        name: this.state.userName,
-        email: this.state.email
-      })
-    })
   },
   savePassword: function () {
     this.setState({
@@ -160,7 +145,8 @@ module.exports = React.createClass({
     })
   },
   logOut: function () {
-    AuthActions.logout()
+    localStorage.removeItem('currentUser')
+    localStorage.removeItem('token')
   },
   interceptClick: function (e) {
     e.stopPropagation()

@@ -81,7 +81,7 @@ function searchArticle (search, articles) {
 // Filter end
 
 function fetchArticles () {
-  var user = JSON.parse(localStorage.getItem('user'))
+  var user = JSON.parse(localStorage.getItem('currentUser'))
   if (user == null) {
     console.log('need to login')
     return []

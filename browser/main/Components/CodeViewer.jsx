@@ -1,7 +1,8 @@
 var React = require('react/addons')
 
 var ace = window.ace
-var CodeViewer = React.createClass({
+
+module.exports = React.createClass({
   propTypes: {
     code: React.PropTypes.string,
     mode: React.PropTypes.string
@@ -42,5 +43,3 @@ var CodeViewer = React.createClass({
     )
   }
 })
-
-module.exports = CodeViewer

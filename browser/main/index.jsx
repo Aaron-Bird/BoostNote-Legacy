@@ -4,26 +4,32 @@ var ReactRouter = require('react-router')
 var Route = ReactRouter.Route
 var DefaultRoute = ReactRouter.DefaultRoute
 
-var MainContainer = require('./Containers/MainContainer.jsx')
+var MainContainer = require('./Containers/MainContainer')
 
-var LoginContainer = require('./Containers/LoginContainer.jsx')
-var RegisterContainer = require('./Containers/RegisterContainer.jsx')
+var LoginContainer = require('./Containers/LoginContainer')
+var SignupContainer = require('./Containers/SignupContainer')
 
-var UserContainer = require('./Containers/UserContainer.jsx')
+var HomeContainer = require('./Containers/HomeContainer')
+var UserContainer = require('./Containers/UserContainer')
 
-var PlanetContainer = require('./Containers/PlanetContainer.jsx')
+var PlanetContainer = require('./Containers/PlanetContainer')
 
 var routes = (
   <Route path='/' handler={MainContainer}>
-    <Route name='login' path='login' handler={LoginContainer}/>
-    <Route name='register' path='register' handler={RegisterContainer}/>
+    <DefaultRoute name='root'/>
 
-    <Route name='user' path=':userName' handler={UserContainer}>
-      <DefaultRoute name='userHome'/>
-      <Route name='planet' path=':planetName' handler={PlanetContainer}>
-        <DefaultRoute name='planetHome'/>
-        <Route name='snippets' path='snippets/:localId'/>
-        <Route name='blueprints' path='blueprints/:localId'/>
+    <Route name='login' path='login' handler={LoginContainer}/>
+    <Route name='signup' path='signup' handler={SignupContainer}/>
+
+    <Route name='home' path='home' handler={HomeContainer}>
+      <DefaultRoute name='homeEmpty'/>
+      <Route name='user' path=':userName' handler={UserContainer}>
+        <DefaultRoute name='userHome'/>
+        <Route name='planet' path=':planetName' handler={PlanetContainer}>
+          <DefaultRoute name='planetHome'/>
+          <Route name='codes' path='codes/:localId'/>
+          <Route name='notes' path='notes/:localId'/>
+        </Route>
       </Route>
     </Route>
   </Route>

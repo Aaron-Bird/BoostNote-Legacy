@@ -1,29 +1,21 @@
+/* global localStorage */
 var React = require('react/addons')
 var ReactRouter = require('react-router')
 var Link = ReactRouter.Link
 
-var AuthActions = require('../Actions/AuthActions')
-
-var AuthStore = require('../Stores/AuthStore')
-
-var OnlyGuest = require('../Mixins/OnlyGuest')
+var AuthFilter = require('../Mixins/AuthFilter')
+var LinkedState = require('../Mixins/LinkedState')
+var Hq = require('../Services/Hq')
 
 module.exports = React.createClass({
-  mixins: [React.addons.LinkedStateMixin, ReactRouter.Navigation, OnlyGuest],
+  mixins: [LinkedState, ReactRouter.Navigation, AuthFilter.OnlyGuest],
   getInitialState: function () {
     return {
-      email: '',
-      password: '',
+      user: {},
       authenticationFailed: false,
       connectionFailed: false,
       isSending: false
     }
-  },
-  componentDidMount: function () {
-    this.unsubscribe = AuthStore.listen(this.onListen)
-  },
-  componentWillUnmount: function () {
-    this.unsubscribe()
   },
   onListen: function (res) {
     if (res.status === 'failedToLogIn') {
@@ -51,10 +43,28 @@ module.exports = React.createClass({
       connectionFailed: false,
       isSending: true
     }, function () {
-      AuthActions.login({
-        email: this.state.email,
-        password: this.state.password
-      })
+      Hq.login(this.state.user)
+        .then(function (res) {
+          localStorage.setItem('token', res.body.token)
+          localStorage.setItem('currentUser', JSON.stringify(res.body.user))
+
+          this.transitionTo('userHome', {userName: res.body.user.name})
+        }.bind(this))
+        .catch(function (err) {
+          if (err.status === 401) {
+            this.setState({
+              authenticationFailed: true,
+              connectionFailed: false,
+              isSending: false
+            })
+            return
+          }
+          this.setState({
+            authenticationFailed: false,
+            connectionFailed: true,
+            isSending: false
+          })
+        }.bind(this))
     })
 
     e.preventDefault()
@@ -64,7 +74,7 @@ module.exports = React.createClass({
       <div className='LoginContainer'>
         <img className='logo' src='resources/favicon-230x230.png'/>
 
-        <nav className='authNavigator text-center'><Link to='login'>Log In</Link> / <Link to='register'>Sign Up</Link></nav>
+        <nav className='authNavigator text-center'><Link to='login'>Log In</Link> / <Link to='signup'>Sign Up</Link></nav>
 
         <div className='socialControl'>
           <p>Connect with</p>
@@ -79,10 +89,10 @@ module.exports = React.createClass({
 
         <form onSubmit={this.handleSubmit}>
           <div className='form-group'>
-            <input className='stripInput' valueLink={this.linkState('email')} type='text' placeholder='E-mail'/>
+            <input className='stripInput' valueLink={this.linkState('user.email')} type='text' placeholder='E-mail'/>
           </div>
           <div className='form-group'>
-            <input className='stripInput' valueLink={this.linkState('password')} onChange={this.handleChange} type='password' placeholder='Password'/>
+            <input className='stripInput' valueLink={this.linkState('user.password')} onChange={this.handleChange} type='password' placeholder='Password'/>
           </div>
 
           {this.state.isSending ? (

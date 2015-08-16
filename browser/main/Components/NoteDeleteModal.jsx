@@ -1,32 +1,34 @@
 var React = require('react')
 
-var PlanetActions = require('../Actions/PlanetActions')
+var Hq = require('../Services/Hq')
 
-var BlueprintDeleteModal = React.createClass({
+var PlanetStore = require('../Stores/PlanetStore')
+
+module.exports = React.createClass({
   propTypes: {
-    close: React.PropTypes.func,
-    blueprint: React.PropTypes.object
+    planet: React.PropTypes.object,
+    note: React.PropTypes.object,
+    close: React.PropTypes.func
   },
   componentDidMount: function () {
     React.findDOMNode(this).focus()
   },
-  stopPropagation: function (e) {
-    e.stopPropagation()
-  },
-  handleKeyDown: function (e) {
-    if ((e.keyCode === 13 && e.metaKey)) {
-      e.preventDefault()
-      this.submit()
-    }
-  },
   submit: function () {
-    PlanetActions.deleteBlueprint(this.props.blueprint.id)
+    var planet = this.props.planet
+    Hq.destroyNote(planet.userName, planet.name, this.props.note.localId)
+      .then(function (res) {
+        PlanetStore.Actions.destroyNote(res.body)
+        this.props.close()
+      }.bind(this))
+      .catch(function (err) {
+        console.error(err)
+      })
   },
   render: function () {
     return (
-      <div tabIndex='3' onKeyDown={this.handleKeyDown} onClick={this.stopPropagation} className='BlueprintDeleteModal modal'>
+      <div className='NoteDeleteModal modal'>
         <div className='modal-header'>
-          <h1>Delete Blueprint</h1>
+          <h1>Delete Note</h1>
         </div>
         <div className='modal-body'>
           <p>Are you sure to delete it?</p>
@@ -41,5 +43,3 @@ var BlueprintDeleteModal = React.createClass({
     )
   }
 })
-
-module.exports = BlueprintDeleteModal

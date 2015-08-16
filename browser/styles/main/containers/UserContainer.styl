@@ -1,12 +1,12 @@
-.UserContainer
-  .UserNavigator
+.HomeContainer
+  .HomeNavigator
     background-color planetNavBgColor
     absolute left top bottom
     width 55px
     text-align center
     box-sizing border-box
     border-right solid 1px borderColor
-    .userProfile
+    .profileButton
       display block
       width 55px
       height 55px
@@ -17,12 +17,87 @@
       padding 0
       cursor pointer
       box-sizing border-box
+      border none
       img
         transition 0.1s
         opacity 0.9
       &.vivid.active, &.focus, &:focus, &.hover, &:hover
         img
           opacity 1
+    .profilePopup
+      position fixed
+      left 35px
+      top 35px
+      z-index popupZIndex
+      width 200px
+      background-color backgroundColor
+      box-shadow popupShadow
+      border-radius 10px
+      padding 10px 0 0px
+      &.close
+        display none
+      .profileGroup
+        margin-bottom 10px
+        .profileGroupLabel
+          text-align left
+          height 1em
+          padding 0 15px
+          span
+            position absolute
+            z-index 2
+            background-color backgroundColor
+            padding-right 5px
+            color inactiveTextColor
+            font-size 0.8em
+          &::before
+            content ''
+            position absolute
+            display block
+            z-index 1
+            height 0.5em
+            width 175px
+            border-bottom solid 1px borderColor
+        .profileGroupList
+          li
+            clearfix()
+            &:hover
+              background-color hoverBackgroundColor
+            .userName
+              float left
+              width 155px
+              padding 10px 15px
+              text-align left
+              display block
+              text-decoration none
+              cursor pointer
+            .userSetting
+              float right
+              display block
+              padding 10px 0
+              width 45px
+              cursor pointer
+            .createNewTeam
+              btnStripDefault()
+              width 100%
+              padding 10px 20px
+              font-size 1em
+              cursor pointer
+              text-align left
+      .controlGroup
+        list-style none
+        border-top solid 1px borderColor
+        padding 10px 0
+        li
+          &:hover
+            background-color hoverBackgroundColor
+          button
+            btnStripDefault()
+            width 100%
+            padding 10px 20px
+            font-size 1em
+            cursor pointer
+            text-align left
+
     ul.planetList>li
       margin 15px 0
       .shortCut
@@ -91,29 +166,57 @@
         border-color darken(brandBorderColor, 10%)
         background-color brandColor
         color white
-  .UserHome
+  .UserContainer
     absolute top bottom right
     left 55px
-    box-sizing border-box
-    padding 15px
-    h1
-      margin 15px 0
     .userProfile
+      absolute top left right
+      padding 15px
+      border-bottom solid 1px borderColor
+      height 125px
       clearfix()
       .userPhoto
         circle()
         float left
-        margin 25px
-      .userIntro
+        margin 5px 15px 15px
+      .userInfo
         float left
-        margin-top 25px
+        margin-top 15px
         .userProfileName
-          font-size 2em
-          margin-bottom 15px
-        .userName
           font-size 1.5em
-    .userPlanetList
-      padding-left 20px
-      li
-        font-size 1.3em
-        margin 10px
+          color brandColor
+          margin-bottom 10px
+        .userName
+          font-size 1.1em
+      .editProfileButton
+        float right
+        btnDefault()
+        margin-top 25px
+        padding 10px 15px
+        border-radius 5px
+    .teamList
+      absolute left bottom
+      top 125px
+      width 200px
+      padding 15px
+      border-right solid 1px borderColor
+      overflow-y auto
+      .teamLabel
+        font-size 1.2em
+        margin-bottom 15px
+    .planetList
+      absolute right bottom
+      top 125px
+      left 200px
+      padding 15px
+      overflow-y auto
+      .planetLabel
+        font-size 1.2em
+        margin-bottom 25px
+      .planetGroup
+        margin-left 15px
+        .planetGroupLabel
+          font-size 1.1em
+          margin-bottom 15px
+        .planets
+          margin-left 15px

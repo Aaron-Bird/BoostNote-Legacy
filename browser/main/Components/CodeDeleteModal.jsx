@@ -1,11 +1,14 @@
 var React = require('react')
 
-var PlanetActions = require('../Actions/PlanetActions')
+var Hq = require('../Services/Hq')
 
-var SnippetDeleteModal = React.createClass({
+var PlanetStore = require('../Stores/PlanetStore')
+
+module.exports = React.createClass({
   propTypes: {
-    close: React.PropTypes.func,
-    snippet: React.PropTypes.object
+    planet: React.PropTypes.object,
+    code: React.PropTypes.object,
+    close: React.PropTypes.func
   },
   componentDidMount: function () {
     React.findDOMNode(this).focus()
@@ -13,21 +16,22 @@ var SnippetDeleteModal = React.createClass({
   stopPropagation: function (e) {
     e.stopPropagation()
   },
-  handleKeyDown: function (e) {
-    console.log(e)
-    if (e.keyCode === 13 && e.metaKey) {
-      e.preventDefault()
-      this.submit()
-    }
-  },
   submit: function () {
-    PlanetActions.deleteSnippet(this.props.snippet.id)
+    var planet = this.props.planet
+    Hq.destroyCode(planet.userName, planet.name, this.props.code.localId)
+      .then(function (res) {
+        PlanetStore.Actions.destroyCode(res.body)
+        this.props.close()
+      }.bind(this))
+      .catch(function (err) {
+        console.error(err)
+      })
   },
   render: function () {
     return (
-      <div tabIndex='3' onKeyDown={this.handleKeyDown} onClick={this.stopPropagation} className='SnippetDeleteModal modal'>
+      <div className='CodeDeleteModal modal'>
         <div className='modal-header'>
-          <h1>Delete Snippet</h1>
+          <h1>Delete Code</h1>
         </div>
         <div className='modal-body'>
           <p>Are you sure to delete it?</p>
@@ -42,5 +46,3 @@ var SnippetDeleteModal = React.createClass({
     )
   }
 })
-
-module.exports = SnippetDeleteModal

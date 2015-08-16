@@ -1,143 +1,204 @@
+/* global localStorage*/
+'strict'
 var React = require('react/addons')
 var ReactRouter = require('react-router')
+var Reflux = require('reflux')
 
 var PlanetHeader = require('../Components/PlanetHeader')
 var PlanetNavigator = require('../Components/PlanetNavigator')
 var PlanetArticleList = require('../Components/PlanetArticleList')
 var PlanetArticleDetail = require('../Components/PlanetArticleDetail')
-var ModalBase = require('../Components/ModalBase')
-var LaunchModal = require('../Components/LaunchModal')
-var SnippetEditModal = require('../Components/SnippetEditModal')
-var SnippetDeleteModal = require('../Components/SnippetDeleteModal')
-var BlueprintEditModal = require('../Components/BlueprintEditModal')
-var BlueprintDeleteModal = require('../Components/BlueprintDeleteModal')
-var PlanetAddUserModal = require('../Components/PlanetAddUserModal')
-var PlanetSettingModal = require('../Components/PlanetSettingModal')
-var PersonalSettingModal = require('../Components/PersonalSettingModal')
 
-var PlanetActions = require('../Actions/PlanetActions')
+var Modal = require('../Mixins/Modal')
+var ArticleFilter = require('../Mixins/ArticleFilter')
 
-var AuthStore = require('../Stores/AuthStore')
+var Hq = require('../Services/Hq')
+
+var UserStore = require('../Stores/UserStore')
 var PlanetStore = require('../Stores/PlanetStore')
 
-function basicFilter (keyword, articles) {
-  if (keyword === '' || keyword == null) return articles
-  var firstFiltered = articles.filter(function (article) {
-
-    var first = article.type === 'snippet' ? article.callSign : article.title
-    if (first.match(new RegExp(keyword, 'i'))) return true
-
-    return false
-  })
-
-  var secondFiltered = articles.filter(function (article) {
-    var second = article.type === 'snippet' ? article.description : article.content
-    if (second.match(new RegExp(keyword, 'i'))) return true
-
-    return false
-  })
-
-  var thirdFiltered = articles.filter(function (article) {
-    if (article.type === 'snippet') {
-      if (article.content.match(new RegExp(keyword, 'i'))) return true
-    }
-    return false
-  })
-
-  return firstFiltered.concat(secondFiltered, thirdFiltered).filter(function (value, index, self) {
-    return self.indexOf(value) === index
-  })
-}
-
-function snippetFilter (articles) {
-  return articles.filter(function (article) {
-    return article.type === 'snippet'
-  })
-}
-
-function blueprintFilter (articles) {
-  return articles.filter(function (article) {
-    return article.type === 'blueprint'
-  })
-}
-
-function tagFilter (keyword, articles) {
-  return articles.filter(function (article) {
-    return article.Tags.some(function (tag) {
-      return tag.name.match(new RegExp('^' + keyword, 'i'))
-    })
-  })
-}
-
-function searchArticle (search, articles) {
-  var keywords = search.split(' ')
-
-  for (var keyword of keywords) {
-    if (keyword.match(/^\$s/, 'i')) {
-      articles = snippetFilter(articles)
-      continue
-    } else if (keyword.match(/^\$b/, 'i')) {
-      articles = blueprintFilter(articles)
-      continue
-    } else if (keyword.match(/^#[A-Za-z0-9]+/)) {
-      articles = tagFilter(keyword.substring(1, keyword.length), articles)
-      continue
-    }
-    articles = basicFilter(keyword, articles)
-  }
-
-  return articles
-}
-
 module.exports = React.createClass({
-  mixins: [ReactRouter.Navigation, ReactRouter.State],
+  mixins: [ReactRouter.Navigation, ReactRouter.State, Modal, Reflux.listenTo(UserStore, 'onUserChange'), Reflux.listenTo(PlanetStore, 'onPlanetChange'), ArticleFilter],
   propTypes: {
     params: React.PropTypes.object,
     planetName: React.PropTypes.string
   },
   getInitialState: function () {
     return {
-      currentUser: AuthStore.getUser(),
-      currentPlanet: null,
-      search: '',
-      isFetched: false,
-      isLaunchModalOpen: false,
-      isEditModalOpen: false,
-      isDeleteModalOpen: false,
-      isAddUserModalOpen: false,
-      isSettingModalOpen: false,
-      isPersonalSettingModalOpen: false
+      currentUser: JSON.parse(localStorage.getItem('currentUser')),
+      planet: null,
+      search: ''
     }
   },
   componentDidMount: function () {
-    this.unsubscribePlanet = PlanetStore.listen(this.onFetched)
-    this.unsubscribeAuth = AuthStore.listen(this.onListenAuth)
-
-    PlanetActions.fetchPlanet(this.props.params.userName, this.props.params.planetName)
-  },
-  componentWillUnmount: function () {
-    this.unsubscribePlanet()
-    this.unsubscribeAuth()
+    this.fetchPlanet(this.props.params.userName, this.props.params.planetName)
   },
   componentDidUpdate: function () {
-    if (this.state.currentPlanet == null || this.state.currentPlanet.name !== this.props.params.planetName || this.state.currentPlanet.userName !== this.props.params.userName) {
-      PlanetActions.fetchPlanet(this.props.params.userName, this.props.params.planetName)
-      this.focus()
+    if (this.isActive('planetHome') && this.refs.list != null && this.refs.list.props.articles.length > 0) {
+      var article = this.refs.list.props.articles[0]
+      console.log(article)
+      var planet = this.state.planet
+      switch (article.type) {
+        case 'code':
+          this.transitionTo('codes', {userName: planet.userName, planetName: planet.name, localId: article.localId})
+          break
+        case 'note':
+          this.transitionTo('notes', {userName: planet.userName, planetName: planet.name, localId: article.localId})
+          break
+      }
     }
+  },
+  componentWillReceiveProps: function (nextProps) {
+    if (this.state.planet == null) {
+      this.fetchPlanet(nextProps.params.userName, nextProps.params.planetName)
+      return
+    }
+
+    if (nextProps.params.userName !== this.state.planet.userName || nextProps.params.planetName !== this.state.planet.name) {
+      this.setState({
+        planet: null
+      }, function () {
+        this.fetchPlanet(nextProps.params.userName, nextProps.params.planetName)
+      })
+    }
+  },
+  onPlanetChange: function (res) {
+    if (this.state.planet == null) return
+
+    var code, codes, note, notes, isNew, articleIndex, articlesCount
+    switch (res.status) {
+      case 'codeUpdated':
+        code = res.data
+        if (code.PlanetId === this.state.planet.id) {
+          codes = this.state.planet.Codes
+          isNew = !codes.some(function (_code, index) {
+            if (code.localId === _code.localId) {
+              codes.splice(index, 1, code)
+              return true
+            }
+            return false
+          })
+
+          if (isNew) {
+            codes.unshift(code)
+          }
+
+          this.setState({planet: this.state.planet})
+        }
+        break
+      case 'noteUpdated':
+        note = res.data
+        if (note.PlanetId === this.state.planet.id) {
+          notes = this.state.planet.Notes
+          isNew = !notes.some(function (_note, index) {
+            if (note.localId === _note.localId) {
+              notes.splice(index, 1, note)
+              return true
+            }
+            return false
+          })
+
+          if (isNew) {
+            notes.unshift(note)
+          }
+
+          this.setState({planet: this.state.planet})
+        }
+        break
+      case 'codeDestroyed':
+        code = res.data
+        if (code.PlanetId === this.state.planet.id) {
+          codes = this.state.planet.Codes
+          codes.some(function (_code, index) {
+            if (code.localId === _code.localId) {
+              codes.splice(index, 1)
+              return true
+            }
+            return false
+          })
+
+          articleIndex = this.getFilteredIndexOfCurrentArticle()
+          articlesCount = this.refs.list.props.articles.length
+
+          this.setState({planet: this.state.planet}, function () {
+            if (articlesCount > 1) {
+              if (articleIndex > 0) {
+                this.selectArticleByListIndex(articleIndex - 1)
+              } else {
+                this.selectArticleByListIndex(articleIndex)
+              }
+            }
+          })
+        }
+        break
+      case 'noteDestroyed':
+        note = res.data
+        if (note.PlanetId === this.state.planet.id) {
+          notes = this.state.planet.Notes
+          notes.some(function (_note, index) {
+            if (note.localId === _note.localId) {
+              notes.splice(index, 1)
+              return true
+            }
+            return false
+          })
+
+          articleIndex = this.getFilteredIndexOfCurrentArticle()
+          articlesCount = this.refs.list.props.articles.length
+
+          this.setState({planet: this.state.planet}, function () {
+            if (articlesCount > 1) {
+              if (articleIndex > 0) {
+                this.selectArticleByListIndex(articleIndex - 1)
+              } else {
+                this.selectArticleByListIndex(articleIndex)
+              }
+            }
+          })
+        }
+        break
+    }
+  },
+  onUserChange: function () {
+
+  },
+  fetchPlanet: function (userName, planetName) {
+    if (userName == null) userName = this.props.params.userName
+    if (planetName == null) planetName = this.props.params.planetName
+
+    Hq.fetchPlanet(userName, planetName)
+      .then(function (res) {
+        var planet = res.body
+
+        planet.Codes.forEach(function (code) {
+          code.type = 'code'
+        })
+
+        planet.Notes.forEach(function (note) {
+          note.type = 'note'
+        })
+
+        localStorage.setItem('planet-' + planet.id, JSON.stringify(planet))
+
+        this.setState({planet: planet})
+      }.bind(this))
+      .catch(function (err) {
+        console.error(err)
+      })
   },
   getFilteredIndexOfCurrentArticle: function () {
     var params = this.props.params
     var index = 0
 
-    if (this.isActive('snippets')) {
+    if (this.isActive('codes')) {
       this.refs.list.props.articles.some(function (_article, _index) {
-        if (_article.type === 'snippet' && _article.localId === parseInt(params.localId, 10)) {
+        if (_article.type === 'code' && _article.localId === parseInt(params.localId, 10)) {
           index = _index
         }
       })
-    } else if (this.isActive('blueprints')) {
+    } else if (this.isActive('notes')) {
       this.refs.list.props.articles.some(function (_article, _index) {
-        if (_article.type === 'blueprint' && _article.localId === parseInt(params.localId, 10)) {
+        if (_article.type === 'note' && _article.localId === parseInt(params.localId, 10)) {
           index = _index
           return true
         }
@@ -147,29 +208,7 @@ module.exports = React.createClass({
 
     return index
   },
-  getIndexOfCurrentArticle: function () {
-    var params = this.props.params
-    var index = 0
-
-    if (this.isActive('snippets')) {
-      this.state.currentPlanet.Articles.some(function (_article, _index) {
-        if (_article.type === 'snippet' && _article.localId === parseInt(params.localId, 10)) {
-          index = _index
-        }
-      })
-    } else if (this.isActive('blueprints')) {
-      this.state.currentPlanet.Articles.some(function (_article, _index) {
-        if (_article.type === 'blueprint' && _article.localId === parseInt(params.localId, 10)) {
-          index = _index
-          return true
-        }
-        return false
-      })
-    }
-
-    return index
-  },
-  selectArticleByIndex: function (index) {
+  selectArticleByListIndex: function (index) {
     var article = this.refs.list.props.articles[index]
     var params = this.props.params
 
@@ -178,411 +217,131 @@ module.exports = React.createClass({
       return
     }
 
-    if (article.type === 'snippet') {
+    if (article.type === 'code') {
       params.localId = article.localId
-      this.transitionTo('snippets', params)
+      this.transitionTo('codes', params)
       return
     }
 
-    if (article.type === 'blueprint') {
+    if (article.type === 'note') {
       params.localId = article.localId
-      this.transitionTo('blueprints', params)
+      this.transitionTo('notes', params)
       return
     }
   },
   selectNextArticle: function () {
-    if (this.state.currentPlanet == null) return
+    if (this.state.planet == null) return
 
     var index = this.getFilteredIndexOfCurrentArticle()
 
     if (index < this.refs.list.props.articles.length - 1) {
-      this.selectArticleByIndex(index + 1)
+      this.selectArticleByListIndex(index + 1)
     }
   },
   selectPriorArticle: function () {
-    if (this.state.currentPlanet == null) {
+    if (this.state.planet == null) {
       return
     }
     var index = this.getFilteredIndexOfCurrentArticle()
 
     if (index > 0) {
-      this.selectArticleByIndex(index - 1)
+      this.selectArticleByListIndex(index - 1)
     } else {
       React.findDOMNode(this).querySelector('.PlanetHeader .searchInput input').focus()
     }
   },
-  onListenAuth: function (res) {
-    if (res.status === 'userProfileUpdated') {
-      if (this.state.currentPlanet != null) {
-        res.data.Planets.some(function (planet) {
-          if (planet.id === this.state.currentPlanet.id) {
-            this.transitionTo('planet', {userName: planet.userName, planetName: planet.name})
-            return true
-          }
-          return false
-        }.bind(this))
-      }
-    }
-  },
-  onFetched: function (res) {
-    if (res == null) {
-      return
-    }
-
-    var articles = this.state.currentPlanet == null ? null : this.state.currentPlanet.Articles
-
-    var planet
-    if (res.status === 'planetFetched') {
-      planet = res.data
-      this.setState({isFetched: true, currentPlanet: planet, filteredArticles: planet.Articles}, function () {
-        if (this.refs.detail.props.article == null) {
-          var params = this.props.params
-          delete params.localId
-
-          var articles = this.refs.list.props.articles
-          if (articles.length > 0) {
-            console.log('need to redirect', this.refs.list.props.articles)
-            var article = articles[0]
-            params.localId = article.localId
-
-            if (article.type === 'snippet') {
-              this.transitionTo('snippets', params)
-            } else {
-              this.transitionTo('blueprints', params)
-            }
-          }
-        }
-      })
-      return
-    }
-
-    if (res.status === 'planetDeleted') {
-      planet = res.data
-      this.transitionTo('user', {
-        userName: this.props.params.userName
-      })
-      return
-    }
-
-    var user
-    if (res.status === 'userAdded') {
-      user = res.data
-      if (user == null) {
-        return null
-      }
-      this.state.currentPlanet.Users.push(user)
-      this.setState({currentPlanet: this.state.currentPlanet}, function () {
-        if (this.state.isAddUserModalOpen) {this.closeAddUserModal()}
-      })
-      return
-    }
-
-    if (res.status === 'userRemoved') {
-      user = res.data
-      if (user == null) {
-        return null
-      }
-      this.state.currentPlanet.Users.some(function (_user, index) {
-        if (user.id === _user.id) {
-          this.state.currentPlanet.Users.splice(index, 1)
-          return true
-        }
-        return false
-      }.bind(this))
-      this.setState({currentPlanet: this.state.currentPlanet}, function () {
-        if (this.state.isAddUserModalOpen) {this.closeAddUserModal()}
-      })
-      return
-    }
-
-    if (res.status === 'nameChanged') {
-      var params = Object.assign({}, this.props.params)
-      params.planetName = res.data.name
-      this.transitionTo('planet', params)
-      return
-    }
-
-    var article = res.data
-    var filteredIndex = this.getFilteredIndexOfCurrentArticle()
-    var index = this.getIndexOfCurrentArticle()
-
-    if (article.PlanetId === this.state.currentPlanet.id) {
-      switch (res.status) {
-        case 'articleCreated':
-          articles.unshift(article)
-
-          this.setState({planet: this.state.currentPlanet, search: ''}, function () {
-            this.closeLaunchModal()
-            this.selectArticleByIndex(0)
-          })
-          break
-        case 'articleUpdated':
-          articles.splice(index, 1)
-          articles.unshift(article)
-
-          this.setState({planet: this.state.currentPlanet}, function () {
-            this.closeEditModal()
-          })
-          break
-        case 'articleDeleted':
-          articles.splice(index, 1)
-
-          this.setState({planet: this.state.currentPlanet}, function () {
-            this.closeDeleteModal()
-            if (index > 0) {
-              this.selectArticleByIndex(filteredIndex - 1)
-            } else {
-              this.selectArticleByIndex(filteredIndex)
-            }
-          })
-      }
-    }
-  },
   handleSearchChange: function (e) {
     this.setState({search: e.target.value}, function () {
-      this.selectArticleByIndex(0)
+      this.selectArticleByListIndex(0)
     })
   },
   showAll: function () {
     this.setState({search: ''})
   },
-  toggleSnippetFilter: function () {
+  toggleCodeFilter: function () {
     var keywords = typeof this.state.search === 'string' ? this.state.search.split(' ') : []
 
-    var usingSnippetFilter = false
-    var usingBlueprintFilter = false
+    var usingCodeFilter = false
+    var usingNoteFilter = false
     keywords = keywords.filter(function (keyword) {
-      if (keyword === '$b') {
-        usingBlueprintFilter = true
+      if (keyword === '$n') {
+        usingNoteFilter = true
         return false
       }
-      if (keyword === '$s') usingSnippetFilter = true
+      if (keyword === '$c') usingCodeFilter = true
       return true
     })
 
-    if (usingSnippetFilter && !usingBlueprintFilter) {
+    if (usingCodeFilter && !usingNoteFilter) {
       keywords = keywords.filter(function (keyword) {
-        return keyword !== '$s'
+        return keyword !== '$c'
       })
     }
 
-    if (!usingSnippetFilter) {
-      keywords.unshift('$s')
+    if (!usingCodeFilter) {
+      keywords.unshift('$c')
     }
 
     this.setState({search: keywords.join(' ')}, function () {
       this.selectArticleByIndex(0)
     })
   },
-  toggleBlueprintFilter: function () {
+  toggleNoteFilter: function () {
     var keywords = typeof this.state.search === 'string' ? this.state.search.split(' ') : []
 
-    var usingSnippetFilter = false
-    var usingBlueprintFilter = false
+    var usingCodeFilter = false
+    var usingNoteFilter = false
     keywords = keywords.filter(function (keyword) {
-      if (keyword === '$s') {
-        usingSnippetFilter = true
+      if (keyword === '$c') {
+        usingCodeFilter = true
         return false
       }
-      if (keyword === '$b') usingBlueprintFilter = true
+      if (keyword === '$n') usingNoteFilter = true
       return true
     })
 
-    if (usingBlueprintFilter && !usingSnippetFilter) {
+    if (usingNoteFilter && !usingCodeFilter) {
       keywords = keywords.filter(function (keyword) {
-        return keyword !== '$b'
+        return keyword !== '$n'
       })
     }
 
-    if (!usingBlueprintFilter) {
-      keywords.unshift('$b')
+    if (!usingNoteFilter) {
+      keywords.unshift('$n')
     }
 
     this.setState({search: keywords.join(' ')}, function () {
       this.selectArticleByIndex(0)
     })
   },
-  showOnlyWithTag: function (tag) {
+  applyTagFilter: function (tag) {
     return function () {
       this.setState({search: '#' + tag})
     }.bind(this)
   },
-  openLaunchModal: function () {
-    this.setState({isLaunchModalOpen: true})
-  },
-  closeLaunchModal: function () {
-    this.setState({isLaunchModalOpen: false}, function () {
-      this.focus()
-    })
-  },
-  openAddUserModal: function () {
-    this.setState({isAddUserModalOpen: true})
-  },
-  closeAddUserModal: function () {
-    this.setState({isAddUserModalOpen: false}, function () {
-      this.focus()
-    })
-  },
-  openEditModal: function () {
-    if (this.refs.detail.props.article == null) {return}
-    this.setState({isEditModalOpen: true})
-  },
-  closeEditModal: function () {
-    this.setState({isEditModalOpen: false}, function () {
-      this.focus()
-    })
-  },
-  submitEditModal: function () {
-    this.setState({isEditModalOpen: false})
-  },
-  openDeleteModal: function () {
-    if (this.refs.detail.props.article == null) {return}
-    this.setState({isDeleteModalOpen: true})
-  },
-  closeDeleteModal: function () {
-    this.setState({isDeleteModalOpen: false}, function () {
-      this.focus()
-    })
-  },
-  submitDeleteModal: function () {
-    this.setState({isDeleteModalOpen: false})
-  },
-  openSettingModal: function () {
-    this.setState({isSettingModalOpen: true})
-  },
-  closeSettingModal: function () {
-    this.setState({isSettingModalOpen: false}, function () {
-      this.focus()
-    })
-  },
-  openPersonalSettingModal: function () {
-    this.setState({isPersonalSettingModalOpen: true})
-  },
-  closePersonalSettingModal: function () {
-    this.setState({isPersonalSettingModalOpen: false}, function () {
-      this.focus()
-    })
-  },
   focus: function () {
     React.findDOMNode(this).focus()
   },
-  handleKeyDown: function (e) {
-    // Bypath for modal open state
-    if (this.state.isLaunchModalOpen) {
-      if (e.keyCode === 27) {
-        this.closeLaunchModal()
-      }
-      return
-    }
-    if (this.state.isEditModalOpen) {
-      if (e.keyCode === 27) {
-        this.closeEditModal()
-      }
-      return
-    }
-    if (this.state.isDeleteModalOpen) {
-      if (e.keyCode === 27) {
-        this.closeDeleteModal()
-      }
-      return
-    }
-    if (this.state.isAddUserModalOpen) {
-      if (e.keyCode === 27) {
-        this.closeAddUserModal()
-      }
-      return
-    }
-    if (this.state.isSettingModalOpen) {
-      if (e.keyCode === 27) {
-        this.closeSettingModal()
-      }
-      return
-    }
-
-    if (this.state.isPersonalSettingModalOpen) {
-      if (e.keyCode === 27) {
-        this.closePersonalSettingModal()
-      }
-      return
-    }
-
-    // LaunchModal
-    if ((e.keyCode === 13 && e.metaKey)) {
-      e.preventDefault()
-      this.openLaunchModal()
-    }
-
-    // Focus(blur) search input
-    var searchInput = React.findDOMNode(this).querySelector('.PlanetHeader .searchInput input')
-
-    if (document.activeElement === searchInput) {
-      switch (e.keyCode) {
-        case 38:
-          this.focus()
-          break
-        case 40:
-          e.preventDefault()
-          this.focus()
-          break
-        case 27:
-          e.preventDefault()
-          this.focus()
-          break
-      }
-      return
-    }
-
-    // Article indexing
-    if (document.activeElement !== searchInput) {
-      switch (e.keyCode) {
-        case 38:
-          e.preventDefault()
-          this.selectPriorArticle()
-          break
-        case 40:
-          e.preventDefault()
-          this.selectNextArticle()
-          break
-        case 27:
-          searchInput.focus()
-          break
-      }
-
-      // Other hotkeys
-      switch (e.keyCode) {
-        case 65:
-          e.preventDefault()
-          this.openLaunchModal()
-          break
-        case 68:
-          e.preventDefault()
-          this.openDeleteModal()
-          break
-        case 69:
-          e.preventDefault()
-          this.openEditModal()
-      }
-    }
-
-  },
   render: function () {
-    if (this.state.currentUser == null) return (<div/>)
-    if (this.state.currentPlanet == null) return (<div/>)
+    if (this.state.planet == null) return (<div/>)
 
     var localId = parseInt(this.props.params.localId, 10)
 
+    var codes = this.state.planet.Codes
+    var notes = this.state.planet.Notes
+
     var article
-    if (this.isActive('snippets')) {
-      this.state.currentPlanet.Articles.some(function (_article) {
-        if (_article.type === 'snippet' && localId === _article.localId) {
+    if (this.isActive('codes')) {
+      codes.some(function (_article) {
+        if (localId === _article.localId) {
           article = _article
           return true
         }
         return false
       })
-    } else if (this.isActive('blueprints')) {
-      this.state.currentPlanet.Articles.some(function (_article) {
-        if (_article.type === 'blueprint' && localId === _article.localId) {
+    } else if (this.isActive('notes')) {
+      notes.some(function (_article) {
+        if (localId === _article.localId) {
           article = _article
           return true
         }
@@ -590,58 +349,34 @@ module.exports = React.createClass({
       })
     }
 
-    var filteredArticles = this.state.isFetched ? searchArticle(this.state.search, this.state.currentPlanet.Articles) : []
+    var articles = codes.concat(notes)
 
-    var editModal = article != null ? (article.type === 'snippet' ? (
-      <SnippetEditModal snippet={article} submit={this.submitEditModal} close={this.closeEditModal}/>
-    ) : (
-      <BlueprintEditModal blueprint={article} submit={this.submitEditModal} close={this.closeEditModal}/>
-    )) : null
-
-    var deleteModal = article != null ? (article.type === 'snippet' ? (
-      <SnippetDeleteModal snippet={article} close={this.closeDeleteModal}/>
-    ) : (
-      <BlueprintDeleteModal blueprint={article} close={this.closeDeleteModal}/>
-    )) : null
+    var filteredArticles = this.searchArticle(this.state.search, articles)
 
     return (
-      <div tabIndex='1' onKeyDown={this.handleKeyDown} className='PlanetContainer'>
-        <ModalBase isOpen={this.state.isLaunchModalOpen} close={this.closeLaunchModal}>
-          <LaunchModal close={this.closeLaunchModal}/>
-        </ModalBase>
+      <div className='PlanetContainer'>
+        <PlanetHeader
+          search={this.state.search}
+          fetchPlanet={this.fetchPlanet}
+          onSearchChange={this.handleSearchChange}
+          currentPlanet={this.state.planet}
+        />
 
-        <ModalBase isOpen={this.state.isEditModalOpen} close={this.closeEditModal}>
-          {editModal}
-        </ModalBase>
-
-        <ModalBase isOpen={this.state.isDeleteModalOpen} close={this.closeDeleteModal}>
-          {deleteModal}
-        </ModalBase>
-
-        <ModalBase isOpen={this.state.isAddUserModalOpen} close={this.closeAddUserModal}>
-          <PlanetAddUserModal close={this.closeAddUserModal}/>
-        </ModalBase>
-
-        <ModalBase isOpen={this.state.isSettingModalOpen} close={this.closeSettingModal}>
-          <PlanetSettingModal currentPlanet={this.state.currentPlanet} close={this.closeSettingModal}/>
-        </ModalBase>
-
-        <ModalBase isOpen={this.state.isPersonalSettingModalOpen} close={this.closePersonalSettingModal}>
-          <PersonalSettingModal currentUser={this.state.currentUser} close={this.closePersonalSettingModal}/>
-        </ModalBase>
-
-        <PlanetHeader search={this.state.search}
-          openSettingModal={this.openSettingModal}
-          openPersonalSettingModal={this.openPersonalSettingModal} onSearchChange={this.handleSearchChange} currentPlanet={this.state.currentPlanet}/>
-
-        <PlanetNavigator openLaunchModal={this.openLaunchModal} openAddUserModal={this.openAddUserModal}
+        <PlanetNavigator
+          ref='navigator'
           search={this.state.search}
           showAll={this.showAll}
-          toggleSnippetFilter={this.toggleSnippetFilter} toggleBlueprintFilter={this.toggleBlueprintFilter} currentPlanet={this.state.currentPlanet}/>
+          toggleCodeFilter={this.toggleCodeFilter}
+          toggleNoteFilter={this.toggleNoteFilter}
+          planet={this.state.planet}/>
 
-        <PlanetArticleList showOnlyWithTag={this.showOnlyWithTag} ref='list' articles={filteredArticles}/>
+        <PlanetArticleList showOnlyWithTag={this.applyTagFilter} ref='list' articles={filteredArticles}/>
 
-        <PlanetArticleDetail ref='detail' article={article} onOpenEditModal={this.openEditModal} onOpenDeleteModal={this.openDeleteModal} showOnlyWithTag={this.showOnlyWithTag}/>
+        <PlanetArticleDetail
+          ref='detail'
+          article={article}
+          planet={this.state.planet}
+          showOnlyWithTag={this.applyTagFilter}/>
       </div>
     )
   }

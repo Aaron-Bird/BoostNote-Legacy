@@ -1,7 +1,7 @@
 {
-  "name": "codexen-app",
+  "name": "boost",
   "version": "0.2.0",
-  "description": "CodeXen App",
+  "description": "Boost App",
   "main": "main.js",
   "scripts": {
     "start": "electron ./main.js",
@@ -14,13 +14,12 @@
     "url": "git+https://github.com/Rokt33r/codexen-app.git"
   },
   "keywords": [
-    "codexen",
+    "boost",
+    "b00st",
     "snippet",
     "template",
     "task",
     "runner",
-    "remote",
-    "automator",
     "code",
     "storage",
     "short code"
@@ -32,7 +31,6 @@
   },
   "homepage": "https://github.com/Rokt33r/codexen-app#readme",
   "dependencies": {
-    "dotenv": "^1.1.0",
     "electron-stylus": "^0.1.0",
     "font-awesome": "^4.3.0",
     "markdown-it": "^4.3.1",
@@ -45,7 +43,8 @@
     "react-router": "^0.13.3",
     "react-select": "^0.5.4",
     "reflux": "^0.2.8",
-    "superagent": "^1.2.0"
+    "superagent": "^1.2.0",
+    "superagent-promise": "^1.0.3"
   },
   "devDependencies": {
     "css-loader": "^0.15.1",
