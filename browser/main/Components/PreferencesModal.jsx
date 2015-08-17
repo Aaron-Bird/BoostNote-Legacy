@@ -34,24 +34,6 @@ module.exports = React.createClass({
   componentWillUnmount: function () {
   },
   onListen: function (res) {
-    console.log(res)
-    if (res.status === 'userProfileUpdated') {
-      this.setState({
-        isUpdatingProfile: false,
-        isUpdatingProfileDone: true,
-        isUpdatingProfileFailed: false
-      })
-      return
-    }
-
-    if (res.status === 'userProfileUpdatingFailed') {
-      this.setState({
-        isUpdatingProfile: false,
-        isUpdatingProfileDone: false,
-        isUpdatingProfileFailed: true
-      })
-      return
-    }
   },
   activeProfile: function () {
     this.setState({currentTab: 'profile'})

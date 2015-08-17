@@ -22,9 +22,9 @@ module.exports = React.createClass({
       user: currentUser,
       planet: {
         name: '',
-        OwnerId: currentUser.id,
         public: true
-      }
+      },
+      ownerName: currentUser.name
     }
   },
   componentDidMount: function () {
@@ -36,23 +36,12 @@ module.exports = React.createClass({
     }
   },
   handleSubmit: function () {
-    Hq.createPlanet(this.state.user.name, this.state.planet)
+    Hq.createPlanet(this.state.ownerName, this.state.planet)
       .then(function (res) {
         var planet = res.body
 
-        var currentUser = JSON.parse(localStorage.getItem('currentUser'))
+        PlanetStore.Actions.update(planet)
 
-        var isNew = !currentUser.Planets.some(function (_planet, index) {
-          if (planet.id === _planet) {
-            currentUser.Planets.splice(index, 1, planet)
-            return true
-          }
-          return false
-        })
-        if (isNew) currentUser.Planets.push(planet)
-
-        localStorage.setItem('currentUser', JSON.stringify(currentUser))
-        UserStore.Actions.update(currentUser)
         this.props.transitionTo('planetHome', {userName: planet.userName, planetName: planet.name})
         this.props.close()
       }.bind(this))
@@ -61,14 +50,20 @@ module.exports = React.createClass({
       })
   },
   render: function () {
+    var teamOptions = this.state.user.Teams.map(function (team) {
+      return (
+        <option value={team.name}>{team.profileName} ({team.name})</option>
+      )
+    })
     return (
       <div className='PlanetCreateModal modal'>
         <input ref='name' valueLink={this.linkState('planet.name')} className='nameInput stripInput' placeholder='Crate new Planet'/>
 
         <div className='formField'>
           of
-          <select valueLink={this.linkState('planet.OwnerId')}>
-            <option value={this.state.user.id}>Me({this.state.user.name})</option>
+          <select valueLink={this.linkState('ownerName')}>
+            <option value={this.state.user.name}>Me({this.state.user.name})</option>
+            {teamOptions}
           </select>
           as
           <select valueLink={this.linkState('planet.public')}>

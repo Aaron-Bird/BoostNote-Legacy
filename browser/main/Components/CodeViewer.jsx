@@ -21,6 +21,8 @@ module.exports = React.createClass({
     var session = editor.getSession()
     if (this.props.mode != null && this.props.mode.length > 0) {
       session.setMode('ace/mode/' + this.props.mode)
+    } else {
+      session.setMode('ace/mode/text')
     }
     session.setUseSoftTabs(true)
     session.setOption('useWorker', false)
@@ -34,7 +36,12 @@ module.exports = React.createClass({
       this.state.editor.clearSelection()
     }
     if (prevProps.mode !== this.props.mode) {
-      this.state.editor.getSession().setMode('ace/mode/' + this.props.mode)
+      var session = this.state.editor.getSession()
+      if (this.props.mode != null && this.props.mode.length > 0) {
+        session.setMode('ace/mode/' + this.props.mode)
+      } else {
+        session.setMode('ace/mode/text')
+      }
     }
   },
   render: function () {

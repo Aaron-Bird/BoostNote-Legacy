@@ -194,16 +194,20 @@
         margin-top 25px
         padding 10px 15px
         border-radius 5px
-    .teamList
+    .teamList, .memberList
       absolute left bottom
       top 125px
       width 200px
       padding 15px
       border-right solid 1px borderColor
       overflow-y auto
-      .teamLabel
+      .teamLabel, .memberLabel
         font-size 1.2em
         margin-bottom 15px
+      .teams, .members
+        li
+          margin-bottom 10px
+          font-size 1.1em
     .planetList
       absolute right bottom
       top 125px
@@ -212,7 +216,7 @@
       overflow-y auto
       .planetLabel
         font-size 1.2em
-        margin-bottom 25px
+        margin-bottom 15px
       .planetGroup
         margin-left 15px
         .planetGroupLabel
@@ -220,3 +224,5 @@
           margin-bottom 15px
         .planets
           margin-left 15px
+          li
+            margin-bottom 10px

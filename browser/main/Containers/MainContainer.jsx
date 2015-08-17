@@ -40,8 +40,10 @@ module.exports = React.createClass({
     if (this.isActive('root')) {
       if (localStorage.getItem('currentUser') == null) {
         this.transitionTo('login')
+        return
       } else {
         this.transitionTo('home')
+        return
       }
     }
 

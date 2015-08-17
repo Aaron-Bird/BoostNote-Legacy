@@ -37,8 +37,7 @@ module.exports = React.createClass({
         }.bind(this))
         .catch(function (err) {
           var res = err.response
-          console.log(res)
-          console.log(err.status)
+          console.error(res.body)
           if (err.status === 409) {
             // Confliction
             var emailConflicted = res.body.errors[0].path === 'email'

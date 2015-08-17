@@ -29,17 +29,16 @@ var getOptions = function (input, callback) {
     })
 }
 
-var NoteForm = React.createClass({
+var EDIT_MODE = 0
+var PREVIEW_MODE = 1
+
+module.exports = React.createClass({
   mixins: [LinkedState, ReactRouter.State, Markdown],
   propTypes: {
     planet: React.PropTypes.object,
     close: React.PropTypes.func,
     transitionTo: React.PropTypes.func,
     note: React.PropTypes.object
-  },
-  statics: {
-    EDIT_MODE: 0,
-    PREVIEW_MODE: 1
   },
   getInitialState: function () {
     var note = Object.assign({
@@ -55,7 +54,7 @@ var NoteForm = React.createClass({
     })
     return {
       note: note,
-      mode: NoteForm.EDIT_MODE
+      mode: EDIT_MODE
     }
   },
   componentDidMount: function () {
@@ -72,7 +71,7 @@ var NoteForm = React.createClass({
     this.setState({note: note})
   },
   togglePreview: function () {
-    this.setState({mode: this.state.mode === NoteForm.EDIT_MODE ? NoteForm.PREVIEW_MODE : NoteForm.EDIT_MODE})
+    this.setState({mode: this.state.mode === EDIT_MODE ? PREVIEW_MODE : EDIT_MODE})
   },
   submit: function () {
     var planet = this.props.planet
@@ -102,7 +101,7 @@ var NoteForm = React.createClass({
     }
   },
   render: function () {
-    var content = this.state.mode === NoteForm.EDIT_MODE ? (
+    var content = this.state.mode === EDIT_MODE ? (
       <div className='form-group'>
         <CodeEditor onChange={this.handleContentChange} code={this.state.note.content} mode={'markdown'}/>
       </div>
@@ -134,7 +133,7 @@ var NoteForm = React.createClass({
         </div>
 
         <div className='modal-footer'>
-          <button onClick={this.togglePreview} className={'btn-default' + (this.state.mode === NoteForm.PREVIEW_MODE ? ' active' : '')}>Preview mode</button>
+          <button onClick={this.togglePreview} className={'btn-default' + (this.state.mode === PREVIEW_MODE ? ' active' : '')}>Preview mode</button>
           <div className='modal-control'>
             <button onClick={this.props.close} className='btn-default'>Cancel</button>
             <button onClick={this.submit} className='btn-primary'>Launch</button>
@@ -144,5 +143,3 @@ var NoteForm = React.createClass({
     )
   }
 })
-
-module.exports = NoteForm

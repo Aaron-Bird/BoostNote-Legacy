@@ -44,6 +44,14 @@ module.exports = {
       })
       .send(input)
   },
+  createTeam: function (userName, input) {
+    return request
+      .post(apiUrl + 'resources/' + userName + '/teams')
+      .set({
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      })
+      .send(input)
+  },
   createPlanet: function (userName, input) {
     return request
       .post(apiUrl + 'resources/' + userName + '/planets')

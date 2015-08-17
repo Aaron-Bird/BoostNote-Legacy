@@ -13,6 +13,7 @@ var UserStore = require('../Stores/UserStore')
 
 var PreferencesModal = require('./PreferencesModal')
 var PlanetCreateModal = require('./PlanetCreateModal')
+var TeamCreateModal = require('./TeamCreateModal')
 var ProfileImage = require('./ProfileImage')
 
 module.exports = React.createClass({
@@ -32,8 +33,11 @@ module.exports = React.createClass({
         break
     }
   },
+  openTeamCreateModal: function () {
+    this.openModal(TeamCreateModal, {user: this.state.currentUser, transitionTo: this.transitionTo})
+  },
   openPreferencesModal: function () {
-    this.openModal(PreferencesModal)
+    this.openModal(PreferencesModal, {currentUser: this.state.currentUser})
   },
   openPlanetCreateModal: function () {
     this.openModal(PlanetCreateModal, {transitionTo: this.transitionTo})
@@ -75,7 +79,9 @@ module.exports = React.createClass({
       )
     }
 
-    var planets = ((this.state.currentUser == null || this.state.currentUser.Planets == null) ? [] : this.state.currentUser.Planets).map(function (planet, index) {
+    var planets = (this.state.currentUser.Planets.concat(this.state.currentUser.Teams.reduce(function (planets, team) {
+      return planets.concat(team.Planets)
+    }, []))).map(function (planet, index) {
       return (
         <li key={planet.id} className={params.userName === planet.userName && params.planetName === planet.name ? 'active' : ''}>
           <Link to='planet' params={{userName: planet.userName, planetName: planet.name}}>
@@ -103,6 +109,15 @@ module.exports = React.createClass({
     )
   },
   renderPopup: function () {
+    var teams = this.state.currentUser.Teams == null ? [] : this.state.currentUser.Teams.map(function (team) {
+      return (
+        <li key={'user-' + team.id}>
+          <Link to='userHome' params={{userName: team.name}} className='userName'>{team.profileName} ({team.name})</Link>
+          <div className='userSetting'><i className='fa fa-gear'/></div>
+        </li>
+      )
+    })
+
     return (
       <div ref='profilePopup' className={'profilePopup' + (this.state.isProfilePopupOpen ? '' : ' close')}>
         <div className='profileGroup'>
@@ -111,7 +126,7 @@ module.exports = React.createClass({
           </div>
           <ul className='profileGroupList'>
             <li>
-              <Link to='userHome' params={{userName: this.state.currentUser.name}} className='userName'>Profile</Link>
+              <Link to='userHome' params={{userName: this.state.currentUser.name}} className='userName'>Profile ({this.state.currentUser.name})</Link>
               <div className='userSetting'><i className='fa fa-gear'/></div>
             </li>
           </ul>
@@ -122,20 +137,9 @@ module.exports = React.createClass({
             <span>Team</span>
           </div>
           <ul className='profileGroupList'>
+            {teams}
             <li>
-              <div className='userName'>A team</div>
-              <div className='userSetting'><i className='fa fa-gear'/></div>
-            </li>
-            <li>
-              <div className='userName'>B team</div>
-              <div className='userSetting'><i className='fa fa-gear'/></div>
-            </li>
-            <li>
-              <div className='userName'>C team</div>
-              <div className='userSetting'><i className='fa fa-gear'/></div>
-            </li>
-            <li>
-              <button className='createNewTeam'><i className='fa fa-plus-square-o'/> create new team</button>
+              <button onClick={this.openTeamCreateModal} className='createNewTeam'><i className='fa fa-plus-square-o'/> create new team</button>
             </li>
           </ul>
         </div>

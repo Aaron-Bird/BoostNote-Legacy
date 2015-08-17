@@ -1,5 +1,4 @@
 var React = require('react/addons')
-var Select = require('react-select')
 
 var Catalyst = require('../Mixins/Catalyst')
 

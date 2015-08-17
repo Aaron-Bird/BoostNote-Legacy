@@ -17,6 +17,32 @@ var Hq = require('../Services/Hq')
 var UserStore = require('../Stores/UserStore')
 var PlanetStore = require('../Stores/PlanetStore')
 
+function deleteItemFromTargetArray (item, targetArray) {
+  targetArray.some(function (_item, index) {
+    if (_item.id === item.id) {
+      targetArray.splice(index, 1)
+      return true
+    }
+    return false
+  })
+
+  return targetArray
+}
+
+function updateItemToTargetArray (item, targetArray) {
+  var isNew = !targetArray.some(function (_item, index) {
+    if (_item.id === item.id) {
+      targetArray.splice(index, 1, item)
+      return true
+    }
+    return false
+  })
+
+  if (isNew) targetArray.push(item)
+
+  return targetArray
+}
+
 module.exports = React.createClass({
   mixins: [ReactRouter.Navigation, ReactRouter.State, Modal, Reflux.listenTo(UserStore, 'onUserChange'), Reflux.listenTo(PlanetStore, 'onPlanetChange'), ArticleFilter],
   propTypes: {
@@ -36,7 +62,6 @@ module.exports = React.createClass({
   componentDidUpdate: function () {
     if (this.isActive('planetHome') && this.refs.list != null && this.refs.list.props.articles.length > 0) {
       var article = this.refs.list.props.articles[0]
-      console.log(article)
       var planet = this.state.planet
       switch (article.type) {
         case 'code':
@@ -64,24 +89,14 @@ module.exports = React.createClass({
   },
   onPlanetChange: function (res) {
     if (this.state.planet == null) return
+    console.log(res.data)
 
-    var code, codes, note, notes, isNew, articleIndex, articlesCount
+    var code, note, articleIndex, articlesCount
     switch (res.status) {
       case 'codeUpdated':
         code = res.data
         if (code.PlanetId === this.state.planet.id) {
-          codes = this.state.planet.Codes
-          isNew = !codes.some(function (_code, index) {
-            if (code.localId === _code.localId) {
-              codes.splice(index, 1, code)
-              return true
-            }
-            return false
-          })
-
-          if (isNew) {
-            codes.unshift(code)
-          }
+          this.state.planet.Codes = updateItemToTargetArray(code, this.state.planet.Codes)
 
           this.setState({planet: this.state.planet})
         }
@@ -89,18 +104,7 @@ module.exports = React.createClass({
       case 'noteUpdated':
         note = res.data
         if (note.PlanetId === this.state.planet.id) {
-          notes = this.state.planet.Notes
-          isNew = !notes.some(function (_note, index) {
-            if (note.localId === _note.localId) {
-              notes.splice(index, 1, note)
-              return true
-            }
-            return false
-          })
-
-          if (isNew) {
-            notes.unshift(note)
-          }
+          this.state.planet.Notes = updateItemToTargetArray(note, this.state.planet.Notes)
 
           this.setState({planet: this.state.planet})
         }
@@ -108,53 +112,49 @@ module.exports = React.createClass({
       case 'codeDestroyed':
         code = res.data
         if (code.PlanetId === this.state.planet.id) {
-          codes = this.state.planet.Codes
-          codes.some(function (_code, index) {
-            if (code.localId === _code.localId) {
-              codes.splice(index, 1)
-              return true
-            }
-            return false
-          })
+          this.state.planet.Codes = deleteItemFromTargetArray(code, this.state.planet.Codes)
 
-          articleIndex = this.getFilteredIndexOfCurrentArticle()
-          articlesCount = this.refs.list.props.articles.length
+          if (this.refs.detail.props.article != null && this.refs.detail.props.article.type === code.type && this.refs.detail.props.article.localId === code.localId) {
+            articleIndex = this.getFilteredIndexOfCurrentArticle()
+            articlesCount = this.refs.list.props.articles.length
 
-          this.setState({planet: this.state.planet}, function () {
-            if (articlesCount > 1) {
-              if (articleIndex > 0) {
-                this.selectArticleByListIndex(articleIndex - 1)
-              } else {
-                this.selectArticleByListIndex(articleIndex)
+            this.setState({planet: this.state.planet}, function () {
+              if (articlesCount > 1) {
+                if (articleIndex > 0) {
+                  this.selectArticleByListIndex(articleIndex - 1)
+                } else {
+                  this.selectArticleByListIndex(articleIndex)
+                }
               }
-            }
-          })
+            })
+            return
+          }
+
+          this.setState({planet: this.state.planet})
         }
         break
       case 'noteDestroyed':
         note = res.data
         if (note.PlanetId === this.state.planet.id) {
-          notes = this.state.planet.Notes
-          notes.some(function (_note, index) {
-            if (note.localId === _note.localId) {
-              notes.splice(index, 1)
-              return true
-            }
-            return false
-          })
+          this.state.planet.Notes = deleteItemFromTargetArray(note, this.state.planet.Notes)
 
-          articleIndex = this.getFilteredIndexOfCurrentArticle()
-          articlesCount = this.refs.list.props.articles.length
+          if (this.refs.detail.props.article != null && this.refs.detail.props.article.type === note.type && this.refs.detail.props.article.localId === note.localId) {
+            articleIndex = this.getFilteredIndexOfCurrentArticle()
+            articlesCount = this.refs.list.props.articles.length
 
-          this.setState({planet: this.state.planet}, function () {
-            if (articlesCount > 1) {
-              if (articleIndex > 0) {
-                this.selectArticleByListIndex(articleIndex - 1)
-              } else {
-                this.selectArticleByListIndex(articleIndex)
+            this.setState({planet: this.state.planet}, function () {
+              if (articlesCount > 1) {
+                if (articleIndex > 0) {
+                  this.selectArticleByListIndex(articleIndex - 1)
+                } else {
+                  this.selectArticleByListIndex(articleIndex)
+                }
               }
-            }
-          })
+            })
+            return
+          }
+
+          this.setState({planet: this.state.planet})
         }
         break
     }
@@ -283,7 +283,7 @@ module.exports = React.createClass({
     }
 
     this.setState({search: keywords.join(' ')}, function () {
-      this.selectArticleByIndex(0)
+      this.selectArticleByListIndex(0)
     })
   },
   toggleNoteFilter: function () {
@@ -311,7 +311,7 @@ module.exports = React.createClass({
     }
 
     this.setState({search: keywords.join(' ')}, function () {
-      this.selectArticleByIndex(0)
+      this.selectArticleByListIndex(0)
     })
   },
   applyTagFilter: function (tag) {
