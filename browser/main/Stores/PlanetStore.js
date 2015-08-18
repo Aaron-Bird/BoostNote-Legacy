@@ -4,6 +4,8 @@ var Reflux = require('reflux')
 
 var UserStore = require('./UserStore')
 
+var Helper = require('../Mixins/Helper')
+
 var actions = Reflux.createActions([
   'update',
   'destroy',
@@ -13,33 +15,8 @@ var actions = Reflux.createActions([
   'destroyNote'
 ])
 
-function deleteItemFromTargetArray (item, targetArray) {
-  targetArray.some(function (_item, index) {
-    if (_item.id === item.id) {
-      targetArray.splice(index, 1)
-      return true
-    }
-    return false
-  })
-
-  return targetArray
-}
-
-function updateItemToTargetArray (item, targetArray) {
-  var isNew = !targetArray.some(function (_item, index) {
-    if (_item.id === item.id) {
-      targetArray.splice(index, 1, item)
-      return true
-    }
-    return false
-  })
-
-  if (isNew) targetArray.push(item)
-
-  return targetArray
-}
-
 module.exports = Reflux.createStore({
+  mixins: [Helper],
   listenables: [actions],
   Actions: actions,
   onUpdate: function (planet) {
@@ -54,7 +31,7 @@ module.exports = Reflux.createStore({
     var ownedByCurrentUser = currentUser.id === aPlanet.OwnerId
 
     if (ownedByCurrentUser) {
-      currentUser.Planets = updateItemToTargetArray(aPlanet, currentUser.Planets)
+      currentUser.Planets = this.updateItemToTargetArray(aPlanet, currentUser.Planets)
     }
 
     if (!ownedByCurrentUser) {
@@ -68,7 +45,7 @@ module.exports = Reflux.createStore({
       })
 
       if (team) {
-        team.Planets = updateItemToTargetArray(aPlanet, team.Planets)
+        team.Planets = this.updateItemToTargetArray(aPlanet, team.Planets)
       }
     }
 
@@ -91,7 +68,7 @@ module.exports = Reflux.createStore({
     var ownedByCurrentUser = currentUser.id === planet.OwnerId
 
     if (ownedByCurrentUser) {
-      currentUser.Planets = deleteItemFromTargetArray(planet, currentUser.Planets)
+      currentUser.Planets = this.deleteItemFromTargetArray(planet, currentUser.Planets)
     }
 
     if (!ownedByCurrentUser) {
@@ -105,7 +82,7 @@ module.exports = Reflux.createStore({
       })
 
       if (team) {
-        team.Planets = deleteItemFromTargetArray(planet, team.Planets)
+        team.Planets = this.deleteItemFromTargetArray(planet, team.Planets)
       }
     }
 
@@ -126,7 +103,7 @@ module.exports = Reflux.createStore({
 
     var planet = JSON.parse(localStorage.getItem('planet-' + code.PlanetId))
     if (planet != null) {
-      planet.Codes = updateItemToTargetArray(code, planet.Codes)
+      planet.Codes = this.updateItemToTargetArray(code, planet.Codes)
 
       localStorage.setItem('planet-' + code.PlanetId, JSON.stringify(planet))
     }
@@ -139,7 +116,7 @@ module.exports = Reflux.createStore({
   onDestroyCode: function (code) {
     var planet = JSON.parse(localStorage.getItem('planet-' + code.PlanetId))
     if (planet != null) {
-      planet.Codes = deleteItemFromTargetArray(code, planet.Codes)
+      planet.Codes = this.deleteItemFromTargetArray(code, planet.Codes)
 
       localStorage.setItem('planet-' + code.PlanetId, JSON.stringify(planet))
     }
@@ -155,7 +132,7 @@ module.exports = Reflux.createStore({
 
     var planet = JSON.parse(localStorage.getItem('planet-' + note.PlanetId))
     if (planet != null) {
-      planet.Notes = updateItemToTargetArray(note, planet.Notes)
+      planet.Notes = this.updateItemToTargetArray(note, planet.Notes)
 
       localStorage.setItem('planet-' + note.PlanetId, JSON.stringify(planet))
     }
@@ -168,7 +145,7 @@ module.exports = Reflux.createStore({
   onDestroyNote: function (note) {
     var planet = JSON.parse(localStorage.getItem('planet-' + note.PlanetId))
     if (planet != null) {
-      planet.Notes = deleteItemFromTargetArray(note, planet.Notes)
+      planet.Notes = this.deleteItemFromTargetArray(note, planet.Notes)
 
       localStorage.setItem('planet-' + note.PlanetId, JSON.stringify(planet))
     }

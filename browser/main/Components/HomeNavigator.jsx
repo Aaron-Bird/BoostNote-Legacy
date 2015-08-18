@@ -27,8 +27,36 @@ module.exports = React.createClass({
   onUserChange: function (res) {
     switch (res.status) {
       case 'userUpdated':
-        if (this.state.currentUser.id === res.data.id) {
-          this.setState({currentUser: res.data})
+        var user = res.data
+        var currentUser = this.state.currentUser
+        if (currentUser.id === user.id) {
+          this.setState({currentUser: user})
+          return
+        }
+
+        if (user.userType === 'team') {
+          var isMyTeam = user.Members.some(function (member) {
+            if (currentUser.id === member.id) {
+              return true
+            }
+            return false
+          })
+
+          if (isMyTeam) {
+            var isNew = !currentUser.Teams.some(function (team, index) {
+              if (user.id === team.id) {
+                currentUser.Teams.splice(index, 1, user)
+                return true
+              }
+              return false
+            })
+
+            if (isNew) {
+              currentUser.Teams.push(user)
+            }
+
+            this.setState({currentUser: currentUser})
+          }
         }
         break
     }
@@ -104,7 +132,10 @@ module.exports = React.createClass({
         <ul className='planetList'>
           {planets}
         </ul>
-        <button onClick={this.openPlanetCreateModal} className='newPlanet'><i className='fa fa-plus'/></button>
+        <button onClick={this.openPlanetCreateModal} className='newPlanet'>
+          <i className='fa fa-plus'/>
+          <div className='newPlanetTooltip'>Create new planet</div>
+        </button>
       </div>
     )
   },

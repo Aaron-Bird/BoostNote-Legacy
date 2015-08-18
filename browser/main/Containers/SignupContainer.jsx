@@ -30,7 +30,6 @@ module.exports = React.createClass({
     }, function () {
       Hq.signup(this.state.user)
         .then(function (res) {
-          console.log(res.body)
           localStorage.setItem('token', res.body.token)
           localStorage.setItem('currentUser', JSON.stringify(res.body.user))
 
@@ -90,11 +89,6 @@ module.exports = React.createClass({
         <img className='logo' src='resources/favicon-230x230.png'/>
 
         <nav className='authNavigator text-center'><Link to='login'>Log In</Link> / <Link to='signup'>Sign Up</Link></nav>
-
-        <div className='divider'>
-          <hr/>
-          <div className='dividerLabel'>or</div>
-        </div>
 
         <form onSubmit={this.handleSubmit}>
           <div className='form-group'>

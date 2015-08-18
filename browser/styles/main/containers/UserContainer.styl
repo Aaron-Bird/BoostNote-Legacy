@@ -166,6 +166,23 @@
         border-color darken(brandBorderColor, 10%)
         background-color brandColor
         color white
+      .newPlanetTooltip
+        position fixed
+        z-index 500
+        background-color transparentify(invBackgroundColor, 80%)
+        color invTextColor
+        padding 10px
+        line-height 1em
+        border-radius 5px
+        margin-top -23px
+        margin-left 33px
+        white-space nowrap
+        font-size 1.1em
+        opacity 0
+        transition 0.1s
+        pointer-events none
+      &:hover .newPlanetTooltip
+        opacity 1
   .UserContainer
     absolute top bottom right
     left 55px
@@ -208,6 +225,13 @@
         li
           margin-bottom 10px
           font-size 1.1em
+          .createTeamButton, .addMemberButton
+            btnStripDefault()
+      .members .role
+        margin-left 7px
+        margin-top 2px
+        color inactiveTextColor
+        font-size 0.85em
     .planetList
       absolute right bottom
       top 125px
@@ -226,3 +250,5 @@
           margin-left 15px
           li
             margin-bottom 10px
+            .createPlanetButton
+              btnStripDefault()

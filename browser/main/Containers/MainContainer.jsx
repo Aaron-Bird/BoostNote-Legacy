@@ -49,13 +49,16 @@ module.exports = React.createClass({
 
     Hq.getUser()
       .then(function (res) {
+        console.log(res.body)
         localStorage.setItem('currentUser', JSON.stringify(res.body))
         UserStore.Actions.update(res.body)
       })
       .catch(function (err) {
         if (err.status === 401) {
+          console.log('Not logged in yet')
           localStorage.removeItem('currentUser')
           this.transitionTo('login')
+          return
         }
         console.error(err)
       }.bind(this))

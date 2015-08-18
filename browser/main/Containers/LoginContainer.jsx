@@ -76,17 +76,6 @@ module.exports = React.createClass({
 
         <nav className='authNavigator text-center'><Link to='login'>Log In</Link> / <Link to='signup'>Sign Up</Link></nav>
 
-        <div className='socialControl'>
-          <p>Connect with</p>
-          <button className='facebookBtn'><i className='fa fa-facebook fa-fw'/></button>
-          <button className='githubBtn'><i className='fa fa-github fa-fw'/></button>
-        </div>
-
-        <div className='divider'>
-          <hr/>
-          <div className='dividerLabel'>or</div>
-        </div>
-
         <form onSubmit={this.handleSubmit}>
           <div className='form-group'>
             <input className='stripInput' valueLink={this.linkState('user.email')} type='text' placeholder='E-mail'/>

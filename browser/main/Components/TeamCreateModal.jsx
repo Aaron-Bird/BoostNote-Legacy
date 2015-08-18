@@ -33,7 +33,10 @@ module.exports = React.createClass({
         currentUser.Teams.push(team)
         localStorage.setItem('currentUser', JSON.stringify(currentUser))
         UserStore.Actions.update(currentUser)
-        this.props.transitionTo('userHome', {userName: team.name})
+
+        if (this.props.transitionTo != null) {
+          this.props.transitionTo('userHome', {userName: team.name})
+        }
         this.props.close()
       }.bind(this))
       .catch(function (err) {

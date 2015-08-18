@@ -1,30 +1,30 @@
 /* global localStorage */
 
 var React = require('react/addons')
-var Select = require('react-select')
 
 var Hq = require('../Services/Hq')
 
 var LinkedState = require('../Mixins/LinkedState')
 
-var UserStore = require('../Stores/UserStore')
 var PlanetStore = require('../Stores/PlanetStore')
 
 module.exports = React.createClass({
   mixins: [LinkedState],
   propTypes: {
+    ownerName: React.PropTypes.string,
     transitionTo: React.PropTypes.func,
     close: React.PropTypes.func
   },
   getInitialState: function () {
     var currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    var ownerName = this.props.ownerName != null ? this.props.ownerName : currentUser.name
     return {
       user: currentUser,
       planet: {
         name: '',
         public: true
       },
-      ownerName: currentUser.name
+      ownerName: ownerName
     }
   },
   componentDidMount: function () {
@@ -42,7 +42,10 @@ module.exports = React.createClass({
 
         PlanetStore.Actions.update(planet)
 
-        this.props.transitionTo('planetHome', {userName: planet.userName, planetName: planet.name})
+        if (this.props.transitionTo != null) {
+          this.props.transitionTo('planetHome', {userName: planet.userName, planetName: planet.name})
+        }
+
         this.props.close()
       }.bind(this))
       .catch(function (err) {
@@ -52,7 +55,7 @@ module.exports = React.createClass({
   render: function () {
     var teamOptions = this.state.user.Teams.map(function (team) {
       return (
-        <option value={team.name}>{team.profileName} ({team.name})</option>
+        <option key={'user-' + team.id} value={team.name}>{team.profileName} ({team.name})</option>
       )
     })
     return (

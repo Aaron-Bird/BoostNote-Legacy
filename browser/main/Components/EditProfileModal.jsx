@@ -11,20 +11,20 @@ var UserStore = require('../Stores/UserStore')
 module.exports = React.createClass({
   mixins: [LinkedState],
   propTypes: {
-    targetUser: React.PropTypes.shape({
+    user: React.PropTypes.shape({
       name: React.PropTypes.string,
       profileName: React.PropTypes.string,
       email: React.PropTypes.string
     })
   },
   getInitialState: function () {
-    var targetUser = this.props.targetUser
+    var user = this.props.user
     return {
       currentTab: 'userInfo',
       user: {
-        name: targetUser.name,
-        profileName: targetUser.profileName,
-        email: targetUser.email
+        name: user.name,
+        profileName: user.profileName,
+        email: user.email
       },
       userSubmitStatus: null,
       password: {
@@ -44,7 +44,7 @@ module.exports = React.createClass({
     this.setState({
       userSubmitStatus: 'sending'
     }, function () {
-      Hq.updateUser(this.props.targetUser.name, this.state.user)
+      Hq.updateUser(this.props.user.name, this.state.user)
         .then(function (res) {
           this.setState({userSubmitStatus: 'done'}, function () {
             localStorage.setItem('currentUser', JSON.stringify(res.body))
@@ -138,7 +138,7 @@ module.exports = React.createClass({
   },
   renderPasswordTab: function () {
     return (
-      <div className='paswordTab'>
+      <div className='passwordTab'>
         <div className='formField'>
           <label>Current password</label>
           <input valueLink={this.linkState('password.currentPassword')}/>
