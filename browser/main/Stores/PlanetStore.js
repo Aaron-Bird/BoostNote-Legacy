@@ -84,6 +84,43 @@ module.exports = Reflux.createStore({
       data: planet
     })
   },
+  onDestroy: function (planet) {
+    // Check if the planet should be updated to currentUser
+    var currentUser = JSON.parse(localStorage.getItem('currentUser'))
+
+    var ownedByCurrentUser = currentUser.id === planet.OwnerId
+
+    if (ownedByCurrentUser) {
+      currentUser.Planets = deleteItemFromTargetArray(planet, currentUser.Planets)
+    }
+
+    if (!ownedByCurrentUser) {
+      var team = null
+      currentUser.Teams.some(function (_team) {
+        if (_team.id === planet.OwnerId) {
+          team = _team
+          return true
+        }
+        return
+      })
+
+      if (team) {
+        team.Planets = deleteItemFromTargetArray(planet, team.Planets)
+      }
+    }
+
+    // Update currentUser
+    localStorage.setItem('currentUser', JSON.stringify(currentUser))
+    UserStore.Actions.update(currentUser)
+
+    // Update the planet
+    localStorage.setItem('planet-' + planet.id, JSON.stringify(planet))
+
+    this.trigger({
+      status: 'destroyed',
+      data: planet
+    })
+  },
   onUpdateCode: function (code) {
     code.type = 'code'
 

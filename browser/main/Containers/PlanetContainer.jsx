@@ -89,10 +89,25 @@ module.exports = React.createClass({
   },
   onPlanetChange: function (res) {
     if (this.state.planet == null) return
-    console.log(res.data)
 
-    var code, note, articleIndex, articlesCount
+    var planet, code, note, articleIndex, articlesCount
     switch (res.status) {
+      case 'updated':
+        planet = res.data
+        if (this.state.planet.id === planet.id) {
+          if (this.state.planet.name === planet.name) {
+            this.setState({planet: planet})
+          } else {
+            this.transitionTo('planetHome', {userName: planet.userName, planetName: planet.name})
+          }
+        }
+        break
+      case 'destroyed':
+        planet = res.data
+        if (this.state.planet.id === planet.id) {
+          this.transitionTo('userHome', {userName: this.state.planet.userName})
+        }
+        break
       case 'codeUpdated':
         code = res.data
         if (code.PlanetId === this.state.planet.id) {

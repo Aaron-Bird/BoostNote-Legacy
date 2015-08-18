@@ -18,6 +18,7 @@ var update = null
 // })
 
 var version = app.getVersion()
+global.version = version
 var nn = require('node-notifier')
 var autoUpdater = require('auto-updater')
 

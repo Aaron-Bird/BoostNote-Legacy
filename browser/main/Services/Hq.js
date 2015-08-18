@@ -64,6 +64,21 @@ module.exports = {
     return request
       .get(apiUrl + 'resources/' + userName + '/planets/' + planetName)
   },
+  updatePlanet: function (userName, planetName, input) {
+    return request
+      .put(apiUrl + 'resources/' + userName + '/planets/' + planetName)
+      .set({
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      })
+      .send(input)
+  },
+  destroyPlanet: function (userName, planetName) {
+    return request
+      .del(apiUrl + 'resources/' + userName + '/planets/' + planetName)
+      .set({
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      })
+  },
   createCode: function (userName, planetName, input) {
     return request
       .post(apiUrl + 'resources/' + userName + '/planets/' + planetName + '/codes')

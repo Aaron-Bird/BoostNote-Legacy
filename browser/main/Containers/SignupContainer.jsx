@@ -30,14 +30,15 @@ module.exports = React.createClass({
     }, function () {
       Hq.signup(this.state.user)
         .then(function (res) {
+          console.log(res.body)
           localStorage.setItem('token', res.body.token)
           localStorage.setItem('currentUser', JSON.stringify(res.body.user))
 
           this.transitionTo('userHome', {userName: res.body.user.name})
         }.bind(this))
         .catch(function (err) {
+          console.error(err)
           var res = err.response
-          console.error(res.body)
           if (err.status === 409) {
             // Confliction
             var emailConflicted = res.body.errors[0].path === 'email'
@@ -89,12 +90,6 @@ module.exports = React.createClass({
         <img className='logo' src='resources/favicon-230x230.png'/>
 
         <nav className='authNavigator text-center'><Link to='login'>Log In</Link> / <Link to='signup'>Sign Up</Link></nav>
-
-        <div className='socialControl'>
-          <p>Connect with</p>
-          <button className='facebookBtn'><i className='fa fa-facebook fa-fw'/></button>
-          <button className='githubBtn'><i className='fa fa-github fa-fw'/></button>
-        </div>
 
         <div className='divider'>
           <hr/>

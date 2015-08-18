@@ -11,7 +11,7 @@ var Modal = require('../Mixins/Modal')
 
 var UserStore = require('../Stores/UserStore')
 
-var PreferencesModal = require('./PreferencesModal')
+var AboutModal = require('./AboutModal')
 var PlanetCreateModal = require('./PlanetCreateModal')
 var TeamCreateModal = require('./TeamCreateModal')
 var ProfileImage = require('./ProfileImage')
@@ -36,8 +36,8 @@ module.exports = React.createClass({
   openTeamCreateModal: function () {
     this.openModal(TeamCreateModal, {user: this.state.currentUser, transitionTo: this.transitionTo})
   },
-  openPreferencesModal: function () {
-    this.openModal(PreferencesModal, {currentUser: this.state.currentUser})
+  openAboutModal: function () {
+    this.openModal(AboutModal)
   },
   openPlanetCreateModal: function () {
     this.openModal(PlanetCreateModal, {transitionTo: this.transitionTo})
@@ -80,7 +80,7 @@ module.exports = React.createClass({
     }
 
     var planets = (this.state.currentUser.Planets.concat(this.state.currentUser.Teams.reduce(function (planets, team) {
-      return planets.concat(team.Planets)
+      return team.Planets == null ? planets : planets.concat(team.Planets)
     }, []))).map(function (planet, index) {
       return (
         <li key={planet.id} className={params.userName === planet.userName && params.planetName === planet.name ? 'active' : ''}>
@@ -146,7 +146,7 @@ module.exports = React.createClass({
 
         <ul className='controlGroup'>
           <li>
-            <button onClick={this.openPreferencesModal}><i className='fa fa-gear fa-fw'/> Preferences</button>
+            <button onClick={this.openAboutModal}><i className='fa fa-info-circle fa-fw'/> About this app</button>
           </li>
           <li>
             <button onClick={this.handleLogoutClick}><i className='fa fa-sign-out fa-fw'/> Logout</button>

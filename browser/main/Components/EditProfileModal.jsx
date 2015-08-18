@@ -95,7 +95,7 @@ module.exports = React.createClass({
     }
 
     return (
-      <div className='EditProfileModal modal'>
+      <div className='EditProfileModal modal tabModal'>
         <div className='leftPane'>
           <div className='tabLabel'>Edit profile</div>
           <div className='tabList'>

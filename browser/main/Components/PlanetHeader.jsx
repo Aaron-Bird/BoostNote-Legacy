@@ -1,10 +1,13 @@
-var shell = require('shell')
-
 var React = require('react/addons')
 var ReactRouter = require('react-router')
 
+var Modal = require('../Mixins/Modal')
+var ExternalLink = require('../Mixins/ExternalLink')
+
+var PlanetSettingModal = require('./PlanetSettingModal')
+
 module.exports = React.createClass({
-  mixins: [ReactRouter.State],
+  mixins: [ReactRouter.State, Modal, ExternalLink],
   propTypes: {
     search: React.PropTypes.string,
     fetchPlanet: React.PropTypes.func,
@@ -19,9 +22,8 @@ module.exports = React.createClass({
   componentDidMount: function () {
     React.findDOMNode(this.refs.search).focus()
   },
-  handleLogoClick: function (e) {
-    shell.openExternal('http://b00st.io')
-    e.preventDefault()
+  openPlanetSettingModal: function () {
+    this.openModal(PlanetSettingModal, {planet: this.props.currentPlanet})
   },
   refresh: function () {
     this.props.fetchPlanet()
@@ -35,7 +37,7 @@ module.exports = React.createClass({
         <div className='headerLabel'>
           <span className='userName'>{currentUserName}</span><br/>
           <span className='planetName'>{currentPlanetName}</span>
-          <button className='menuBtn'>
+          <button onClick={this.openPlanetSettingModal} className='menuBtn'>
             <i className='fa fa-chevron-down'></i>
           </button>
         </div>
@@ -45,7 +47,7 @@ module.exports = React.createClass({
             <input onChange={this.props.onSearchChange} value={this.props.search} ref='search' type='text' className='inline-input circleInput' placeholder='Search...'/>
           </div>
           <button onClick={this.refresh} className='refreshButton'><i className='fa fa-refresh'/></button>
-          <a onClick={this.handleLogoClick} href='http://b00st.io' className='logo'>
+          <a onClick={this.openExternal} href='http://b00st.io' className='logo'>
             <img width='44' height='44' src='resources/favicon-230x230.png'/>
           </a>
         </div>
