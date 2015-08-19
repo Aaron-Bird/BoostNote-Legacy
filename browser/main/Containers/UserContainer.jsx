@@ -18,6 +18,7 @@ var ProfileImage = require('../Components/ProfileImage')
 var EditProfileModal = require('../Components/EditProfileModal')
 var TeamSettingsModal = require('../Components/TeamSettingsModal')
 var PlanetCreateModal = require('../Components/PlanetCreateModal')
+var AddMemberModal = require('../Components/AddMemberModal')
 var TeamCreateModal = require('../Components/TeamCreateModal')
 
 var UserStore = require('../Stores/UserStore')
@@ -56,10 +57,27 @@ module.exports = React.createClass({
   onUserChange: function (res) {
     if (this.state.user == null) return
 
+    var member
     switch (res.status) {
       case 'userUpdated':
         if (this.state.user.id === res.data.id) {
           this.setState({user: res.data})
+        }
+        break
+      case 'memberAdded':
+        member = res.data
+        if (this.state.user.userType === 'team' && member.TeamMember.TeamId === this.state.user.id) {
+          this.state.user.Members = this.updateItemToTargetArray(member, this.state.user.Members)
+
+          this.setState({user: this.state.user})
+        }
+        break
+      case 'memberRemoved':
+        member = res.data
+        if (this.state.user.userType === 'team' && member.TeamMember.TeamId === this.state.user.id) {
+          this.state.user.Members = this.deleteItemFromTargetArray(member, this.state.user.Members)
+
+          this.setState({user: this.state.user})
         }
         break
     }
@@ -123,6 +141,7 @@ module.exports = React.createClass({
           this.setState({user: this.state.user})
           return
         }
+        break
     }
   },
   fetchUser: function (userName) {
@@ -143,7 +162,7 @@ module.exports = React.createClass({
     this.openModal(TeamSettingsModal, {team: this.state.user})
   },
   openAddUserModal: function () {
-
+    this.openModal(AddMemberModal, {team: this.state.user})
   },
   openTeamCreateModal: function () {
     this.openModal(TeamCreateModal, {user: this.state.user})
@@ -212,9 +231,10 @@ module.exports = React.createClass({
           <button onClick={this.openTeamSettingsModal} className='editProfileButton'>Team settings</button>
         </div>
         <div className='memberList'>
-          <div className='memberLabel'>{members.length} {members.length > 0 ? 'Members' : 'Member'}</div>
+          <div className='memberLabel'>{members.length} {members.length > 1 ? 'Members' : 'Member'}</div>
           <ul className='members'>
             {members}
+            {isOwner ? (<li><button onClick={this.openAddUserModal} className='addMemberButton'><i className='fa fa-plus-square-o'/> add Member</button></li>) : null}
           </ul>
         </div>
         <div className='planetList'>
@@ -271,6 +291,10 @@ module.exports = React.createClass({
       )
     }.bind(this))
 
+    var planetCount = userPlanets.length + user.Teams.reduce(function (sum, team) {
+        return sum + (team.Planets != null ? team.Planets.length : 0)
+      }, 0)
+
     return (
       <div className='UserContainer'>
         <div className='userProfile'>
@@ -284,16 +308,14 @@ module.exports = React.createClass({
           <button onClick={this.openEditProfileModal} className='editProfileButton'>Edit profile</button>) : null}
         </div>
         <div className='teamList'>
-          <div className='teamLabel'>{teams.length} {teams.length > 0 ? 'Teams' : 'Team'}</div>
+          <div className='teamLabel'>{teams.length} {teams.length > 1 ? 'Teams' : 'Team'}</div>
           <ul className='teams'>
             {teams}
             {isOwner ? (<li><button onClick={this.openTeamCreateModal} className='createTeamButton'><i className='fa fa-plus-square-o'/> Create new team</button></li>) : null}
           </ul>
         </div>
         <div className='planetList'>
-          <div className='planetLabel'>{userPlanets.length + user.Teams.reduce(function (sum, team) {
-              return sum + (team.Planets != null ? team.Planets.length : 0)
-            }, 0)} {userPlanets.length > 0 ? 'Planets' : 'Planet'}</div>
+          <div className='planetLabel'>{planetCount} {planetCount > 1 ? 'Planets' : 'Planet'}</div>
           <div className='planetGroup'>
             <div className='planetGroupLabel'>{user.profileName}</div>
             <ul className='planets'>

@@ -56,8 +56,9 @@
       absolute top bottom right
       left 175px
       padding 15px
+      overflow-y auto
 
-  .EditProfileModal, .PlanetSettingModal
+  .EditProfileModal, .PlanetSettingModal, .TeamSettingsModal
     .userInfoTab, .passwordTab, .planetProfileTab, .userInfoTab, .membersTab
       padding-top 45px
       .formField
@@ -75,7 +76,7 @@
           borderInput()
           height 33px
           font-size 1em
-          border-radius 10px
+          border-radius 5px
           float left
       .formRadioField
         margin-bottom 15px
@@ -152,6 +153,48 @@
           alertSuccess()
         .alertError
           alertError()
+    .membersTab
+      .memberTable
+        width 100%
+        margin-bottom 25px
+        th
+          border-bottom solid 2px borderColor
+        td
+          border-bottom solid 1px borderColor
+          height 38px
+          button
+            btnDefault()
+            padding 5px
+            border-radius 5px
+          .roleSelect
+            height 33px
+            border solid 1px borderColor
+            background-color backgroundColor
+        th, td
+          padding 5px 0
+      .addMemberForm
+        .formLabel
+          margin-bottom 5px
+        .formGroup
+          clearfix()
+          .userNameSelect
+            display block
+            width 200px
+            margin-right 5px
+            float left
+          .roleSelect
+            display block
+            height 33px
+            border solid 1px borderColor
+            background-color backgroundColor
+            float left
+            margin-right 5px
+          .confirmButton
+            display block
+            height 33px
+            btnDefault()
+            border-radius 5px
+            float left
 
 
   .LaunchModal
@@ -240,8 +283,7 @@
         li
           margin-bottom 15px
 
-
-  .PlanetCreateModal.modal, .TeamCreateModal.modal
+  .PlanetCreateModal.modal, .TeamCreateModal.modal, .AddMemberModal.modal
     padding 60px 0
     .nameInput
       width 80%
@@ -264,7 +306,6 @@
         background-color white
         padding 0 10px
         margin 0 15px
-
     .submitButton
       display block
       margin 0 auto
@@ -273,3 +314,44 @@
       height 55px
       circle()
       btnPrimary()
+
+  .ContactModal
+    padding 15px
+    .contactForm
+      .formField
+        width 100%
+        margin-bottom 10px
+        input, textarea
+          display block
+          width 100%
+          borderInput()
+          border-radius 5px
+        input
+          height 33px
+          font-size 1em
+        textarea
+          height 175px
+          font-size 1em
+      .formControl
+        clearfix()
+        button
+          float right
+          btnDefault()
+          height 44px
+          padding 0 15px
+          border-radius 5px
+          margin-left 5px
+        button.sendButton
+          btnPrimary()
+    .confirmation
+      .confirmationMessage
+        padding 35px 0
+        text-align center
+        font-size 1.1em
+      .doneButton
+        btnDefault()
+        height 44px
+        padding 0 35px
+        border-radius 5px
+        display block
+        margin 0 auto 25px

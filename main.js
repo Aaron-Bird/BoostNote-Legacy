@@ -3,6 +3,7 @@ var BrowserWindow = require('browser-window')
 var Menu = require('menu')
 var MenuItem = require('menu-item')
 var Tray = require('tray')
+var ipc = require('ipc')
 
 require('crash-reporter').start()
 
@@ -19,48 +20,65 @@ var update = null
 
 var version = app.getVersion()
 global.version = version
+var versionText = (version == null || version.length === 0) ? 'DEV version' : 'v' + version
 var nn = require('node-notifier')
 var autoUpdater = require('auto-updater')
+var path = require('path')
 
 autoUpdater
   .on('error', function (err, message) {
     nn.notify({
-      title: 'Error! Ver.' + version,
+      title: 'Error! ' + versionText,
+      icon: path.join(__dirname, 'browser/main/resources/favicon-230x230.png'),
       message: message
     })
   })
   .on('checking-for-update', function () {
     nn.notify({
-      title: 'Boost launched!! Ver. ' + version,
+      title: 'Boost launched!! ' + versionText,
+      icon: path.join(__dirname, 'browser/main/resources/favicon-230x230.png'),
       message: 'Checking update is available....'
     })
   })
   .on('update-available', function () {
     nn.notify({
-      title: 'Update is available!! Ver. ' + version,
+      title: 'Update is available!! ' + versionText,
+      icon: path.join(__dirname, 'browser/main/resources/favicon-230x230.png'),
       message: 'Download started.. wait for the update ready.'
     })
   })
   .on('update-not-available', function () {
     nn.notify({
-      title: 'Latest Build!! Ver. ' + version,
+      title: 'Latest Build!! ' + versionText,
+      icon: path.join(__dirname, 'browser/main/resources/favicon-230x230.png'),
       message: 'Hope you to enjoy our app :D'
     })
   })
   .on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
     nn.notify({
-      title: 'Ready to Update!! v' + version,
+      title: 'Ready to Update!! ' + versionText,
+      icon: path.join(__dirname, 'browser/main/resources/favicon-230x230.png'),
       message: 'Click tray icon to update app: ' + releaseName
     })
     update = quitAndUpdate
+
+    if (mainWindow != null && !mainWindow.webContents.isLoading()) {
+      mainWindow.webContents.send('update-available', 'Update available!')
+    }
   })
 
 app.on('ready', function () {
   console.log('Version ' + version)
-  autoUpdater.setFeedUrl('http://localhost:8000/testcat/test/latest?version=' + version)
+  autoUpdater.setFeedUrl('http://orbital.b00st.io/rokt33r/boost/latest?version=' + version)
   autoUpdater.checkForUpdates()
   // menu start
   var template = require('./modules/menu-template')
+
+  ipc.on('update-app', function (event, msg) {
+    if (update != null) {
+      update()
+    }
+  })
 
   menu = Menu.buildFromTemplate(template)
 
@@ -152,6 +170,11 @@ function makeNewMainWindow () {
         'overlay-scrollbars': true
       }
   })
+  if (update != null) {
+    mainWindow.webContents.on('did-finish-load', function () {
+      mainWindow.webContents.send('update-available', 'whoooooooh!')
+    })
+  }
 
   mainWindow.loadUrl('file://' + __dirname + '/browser/main/index.electron.html')
 

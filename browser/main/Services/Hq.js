@@ -52,6 +52,22 @@ module.exports = {
       })
       .send(input)
   },
+  addMember: function (userName, input) {
+    return request
+      .post(apiUrl + 'resources/' + userName + '/members')
+      .set({
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      })
+      .send(input)
+  },
+  removeMember: function (userName, input) {
+    return request
+      .del(apiUrl + 'resources/' + userName + '/members')
+      .set({
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      })
+      .send(input)
+  },
   createPlanet: function (userName, input) {
     return request
       .post(apiUrl + 'resources/' + userName + '/planets')
@@ -131,5 +147,20 @@ module.exports = {
     return request
       .get(apiUrl + 'search/tags')
       .query({name: tagName})
+  },
+  searchUser: function (userName) {
+    return request
+      .get(apiUrl + 'search/users')
+      .query({name: userName})
+  },
+
+  // Mail
+  sendEmail: function (input) {
+    return request
+      .post(apiUrl + 'mail')
+      .set({
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      })
+      .send(input)
   }
 }

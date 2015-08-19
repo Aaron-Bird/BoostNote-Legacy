@@ -15,7 +15,7 @@ module.exports = React.createClass({
       <div className='AboutModal modal'>
         <div className='about1'>
           <img className='logo' src='resources/favicon-230x230.png'/>
-          <div className='appInfo'>Boost {version == null ? 'DEV version' : 'v' + version}</div>
+          <div className='appInfo'>Boost {version == null || version.length === 0 ? 'DEV version' : 'v' + version}</div>
         </div>
 
         <div className='about2'>

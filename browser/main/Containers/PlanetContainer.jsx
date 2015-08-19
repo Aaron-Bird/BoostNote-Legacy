@@ -9,42 +9,17 @@ var PlanetNavigator = require('../Components/PlanetNavigator')
 var PlanetArticleList = require('../Components/PlanetArticleList')
 var PlanetArticleDetail = require('../Components/PlanetArticleDetail')
 
+var Hq = require('../Services/Hq')
+
 var Modal = require('../Mixins/Modal')
 var ArticleFilter = require('../Mixins/ArticleFilter')
-
-var Hq = require('../Services/Hq')
+var Helper = require('../Mixins/Helper')
 
 var UserStore = require('../Stores/UserStore')
 var PlanetStore = require('../Stores/PlanetStore')
 
-function deleteItemFromTargetArray (item, targetArray) {
-  targetArray.some(function (_item, index) {
-    if (_item.id === item.id) {
-      targetArray.splice(index, 1)
-      return true
-    }
-    return false
-  })
-
-  return targetArray
-}
-
-function updateItemToTargetArray (item, targetArray) {
-  var isNew = !targetArray.some(function (_item, index) {
-    if (_item.id === item.id) {
-      targetArray.splice(index, 1, item)
-      return true
-    }
-    return false
-  })
-
-  if (isNew) targetArray.push(item)
-
-  return targetArray
-}
-
 module.exports = React.createClass({
-  mixins: [ReactRouter.Navigation, ReactRouter.State, Modal, Reflux.listenTo(UserStore, 'onUserChange'), Reflux.listenTo(PlanetStore, 'onPlanetChange'), ArticleFilter],
+  mixins: [ReactRouter.Navigation, ReactRouter.State, Modal, Reflux.listenTo(UserStore, 'onUserChange'), Reflux.listenTo(PlanetStore, 'onPlanetChange'), ArticleFilter, Helper],
   propTypes: {
     params: React.PropTypes.object,
     planetName: React.PropTypes.string
@@ -111,7 +86,7 @@ module.exports = React.createClass({
       case 'codeUpdated':
         code = res.data
         if (code.PlanetId === this.state.planet.id) {
-          this.state.planet.Codes = updateItemToTargetArray(code, this.state.planet.Codes)
+          this.state.planet.Codes = this.updateItemToTargetArray(code, this.state.planet.Codes)
 
           this.setState({planet: this.state.planet})
         }
@@ -119,7 +94,7 @@ module.exports = React.createClass({
       case 'noteUpdated':
         note = res.data
         if (note.PlanetId === this.state.planet.id) {
-          this.state.planet.Notes = updateItemToTargetArray(note, this.state.planet.Notes)
+          this.state.planet.Notes = this.updateItemToTargetArray(note, this.state.planet.Notes)
 
           this.setState({planet: this.state.planet})
         }
@@ -127,7 +102,7 @@ module.exports = React.createClass({
       case 'codeDestroyed':
         code = res.data
         if (code.PlanetId === this.state.planet.id) {
-          this.state.planet.Codes = deleteItemFromTargetArray(code, this.state.planet.Codes)
+          this.state.planet.Codes = this.deleteItemFromTargetArray(code, this.state.planet.Codes)
 
           if (this.refs.detail.props.article != null && this.refs.detail.props.article.type === code.type && this.refs.detail.props.article.localId === code.localId) {
             articleIndex = this.getFilteredIndexOfCurrentArticle()
@@ -151,7 +126,7 @@ module.exports = React.createClass({
       case 'noteDestroyed':
         note = res.data
         if (note.PlanetId === this.state.planet.id) {
-          this.state.planet.Notes = deleteItemFromTargetArray(note, this.state.planet.Notes)
+          this.state.planet.Notes = this.deleteItemFromTargetArray(note, this.state.planet.Notes)
 
           if (this.refs.detail.props.article != null && this.refs.detail.props.article.type === note.type && this.refs.detail.props.article.localId === note.localId) {
             articleIndex = this.getFilteredIndexOfCurrentArticle()

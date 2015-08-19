@@ -4,7 +4,9 @@ var Reflux = require('reflux')
 
 var actions = Reflux.createActions([
   'update',
-  'destroy'
+  'destroy',
+  'addMember',
+  'removeMember'
 ])
 
 module.exports = Reflux.createStore({
@@ -49,6 +51,18 @@ module.exports = Reflux.createStore({
     this.trigger({
       status: 'userDestroyed',
       data: user
+    })
+  },
+  onAddMember: function (member) {
+    this.trigger({
+      status: 'memberAdded',
+      data: member
+    })
+  },
+  onRemoveMember: function (member) {
+    this.trigger({
+      status: 'memberRemoved',
+      data: member
     })
   },
   Actions: actions

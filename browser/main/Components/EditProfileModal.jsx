@@ -22,7 +22,6 @@ module.exports = React.createClass({
     return {
       currentTab: 'userInfo',
       user: {
-        name: user.name,
         profileName: user.profileName,
         email: user.email
       },
@@ -115,10 +114,6 @@ module.exports = React.createClass({
         <div className='formField'>
           <label>Profile Name</label>
           <input valueLink={this.linkState('user.profileName')}/>
-        </div>
-        <div className='formField'>
-          <label>Name</label>
-          <input valueLink={this.linkState('user.name')}/>
         </div>
         <div className='formField'>
           <label>E-mail</label>

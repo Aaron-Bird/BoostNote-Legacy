@@ -6,7 +6,8 @@ module.exports = React.createClass({
     currentArticle: React.PropTypes.shape({
       id: React.PropTypes.number,
       type: React.PropTypes.string
-    })
+    }),
+    selectArticle: React.PropTypes.func
   },
   componentDidUpdate: function () {
     var index = this.props.articles.indexOf(this.props.currentArticle)
@@ -26,6 +27,11 @@ module.exports = React.createClass({
       el.scrollTop = li.offsetTop
     }
   },
+  handleArticleClick: function (article) {
+    return function () {
+      this.props.selectArticle(article)
+    }.bind(this)
+  },
   render: function () {
     var list = this.props.articles.map(function (article) {
       if (article == null) {
@@ -38,17 +44,17 @@ module.exports = React.createClass({
       }
 
       var isActive = this.props.currentArticle != null && (article.type === this.props.currentArticle.type && article.id === this.props.currentArticle.id)
-      if (article.type === 'snippet') {
+      if (article.type === 'code') {
         return (
-          <li className={isActive ? 'active' : ''}>
-            <div className='articleItem'><i className='fa fa-code fa-fw'/> {article.callSign} / {article.description.substring(0, 10)}</div>
+          <li onClick={this.handleArticleClick(article)} className={isActive ? 'active' : ''}>
+            <div className='articleItem'><i className='fa fa-code fa-fw'/> {article.description}</div>
             <div className='divider'/>
           </li>
         )
       }
-      if (article.type === 'blueprint') {
+      if (article.type === 'note') {
         return (
-          <li className={isActive ? 'active' : ''}>
+          <li onClick={this.handleArticleClick(article)} className={isActive ? 'active' : ''}>
             <div className='articleItem'><i className='fa fa-file-text-o fa-fw'/> {article.title}</div>
             <div className='divider'/>
           </li>
