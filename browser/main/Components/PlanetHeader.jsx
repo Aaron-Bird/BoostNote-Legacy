@@ -37,7 +37,15 @@ module.exports = React.createClass({
         <div className='headerLabel'>
           <span className='userName'>{currentUserName}</span><br/>
           <span className='planetName'>{currentPlanetName}</span>
-          <button onClick={this.openPlanetSettingModal} className='menuBtn'>
+
+          {this.props.currentPlanet.public ? null : (
+            <div className='private'>
+              <i className='fa fa-lock'/>
+              <div className='privateTooltip'>Private planet</div>
+            </div>
+          )}
+
+        <button onClick={this.openPlanetSettingModal} className='menuBtn'>
             <i className='fa fa-chevron-down'></i>
           </button>
         </div>

@@ -51,6 +51,35 @@ articleListWidth= 275px
       white-space nowrap
       &:hover
         color darken(brandBorderColor, 30%)
+    .private
+      position absolute
+      top 12px
+      right 38px
+      width 33px
+      height 33px
+      line-height 33px
+      text-align center
+      color inactiveColor
+      &:hover
+        color textColor
+      .privateTooltip
+        position fixed
+        z-index popupZIndex
+        background-color transparentify(invBackgroundColor, 80%)
+        color invTextColor
+        padding 10px
+        font-size 0.9em
+        line-height 0.9em
+        border-radius 5px
+        white-space nowrap
+        opacity 0
+        transition 0.1s
+        pointer-events none
+        margin-left -30px
+      &:hover .privateTooltip
+        opacity 1
+
+
     .menuBtn
       position absolute
       top 12px
