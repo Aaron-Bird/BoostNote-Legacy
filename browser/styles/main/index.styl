@@ -1,0 +1,118 @@
+@import '../../../node_modules/nib/lib/nib'
+@import '../vars'
+@import '../mixins/*'
+global-reset()
+@import '../shared/*'
+@import './components/*'
+@import './containers/*'
+
+html, body
+    width 100%
+    height 100%
+    overflow hidden
+
+body
+  font-family "Lato"
+  color textColor
+  font-size fontSize
+  font-weight 400
+
+div, span, a, button, input, textarea
+  box-sizing border-box
+
+h1
+  font-size 2em
+h2
+  font-size 1.5em
+h3
+  font-size 1.17em
+h4
+  font-size 1em
+h5
+  font-size 0.83em
+h6
+  font-size 0.67em
+a
+  color brandColor
+  &:hover
+    color darken(brandColor, 15%)
+  &:visited
+    color brandColor
+
+hr
+  border-top none
+  border-bottom solid 1px borderColor
+  margin 15px 0
+
+button
+  font-weight 400
+  cursor pointer
+  &:focus, &.focus
+    outline none
+
+.text-center
+  text-align center
+
+.form-group
+  margin-bottom 15px
+  &>label
+    display block
+    margin-bottom 5px
+
+.stripInput
+  stripInput()
+  display block
+  width 100%
+  font-size 1em
+  height 33px
+
+.block-input, .inline-input
+  border solid 1px borderColor
+  padding 0 10px
+  font-size 1em
+  height 33px
+  border-radius 5px
+  box-sizing border-box
+  &:focus, &.focus
+    border solid 1px brandBorderColor
+    outline none
+  &.circleInput
+    border-radius 16.5px
+
+.block-input
+  display block
+  width 100%
+
+.inline-input
+  display inline-block
+  margin-right 5px
+
+.relative
+  position relative
+
+textarea.block-input
+  resize vertical
+  height 125px
+  border-radius 5px
+  padding 5px 10px
+
+#content
+  fullsize()
+
+.Main
+  .appUpdateButton
+    position fixed
+    z-index 2000
+    bottom 5px
+    right 53px
+    btnDefault()
+    padding 10px 15px
+    border-radius 5px
+  .contactButton
+    position fixed
+    z-index 2000
+    bottom 5px
+    right 5px
+    btnDefault()
+    padding 10px 15px
+    border-radius 5px

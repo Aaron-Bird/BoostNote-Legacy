@@ -1,0 +1,375 @@
+.ModalBase
+  fixed top left bottom right
+  z-index modalZIndex
+  &.hide
+    display none
+  .modalBack
+    absolute top left bottom right
+    background-color modalBackColor
+    z-index modalZIndex + 1
+  .modal
+    position relative
+    width 650px
+    margin 50px auto 0
+    z-index modalZIndex + 2
+    box-shadow popupShadow
+    background-color white
+    border-radius 10px
+    padding 15px
+    .modal-header
+      border-bottom solid 1px borderColor
+      margin-bottom 10px
+      h1
+        padding 10px 0 15px
+        font-size 1.5em
+    .modal-body
+      p
+        margin-bottom 10px
+    .modal-footer
+      clearfix()
+      border-top solid 1px borderColor
+      padding-top 10px
+      .modal-control
+        float right
+
+  .tabModal
+    height 500px
+    .leftPane
+      absolute top bottom left
+      width 175px
+      padding 20px
+      border-right solid 1px borderColor
+      .tabLabel
+        font-size 1.5em
+        margin-top 25px
+        margin-bottom 35px
+        color brandColor
+      .tabList button
+        btnStripDefault()
+        display block
+        width 100%
+        font-size 1.1em
+        padding 10px 5px
+        margin-bottom 15px
+        text-align left
+    .rightPane
+      absolute top bottom right
+      left 175px
+      padding 15px
+      overflow-y auto
+
+  .EditProfileModal, .PlanetSettingModal, .TeamSettingsModal
+    .userInfoTab, .passwordTab, .planetProfileTab, .userInfoTab, .membersTab
+      padding-top 45px
+      .formField
+        position relative
+        clearfix()
+        margin-bottom 15px
+        label
+          width 30%
+          display block
+          line-height 33px
+          float left
+        input
+          width 70%
+          display block
+          borderInput()
+          height 33px
+          font-size 1em
+          border-radius 5px
+          float left
+      .formRadioField
+        margin-bottom 15px
+        input
+          margin-left 25px
+      .formConfirm
+        position relative
+        clearfix()
+        margin-bottom 15px
+        button
+          float right
+          btnDefault()
+          padding 10px 15px
+          border-radius 5px
+          font-size 1em
+          margin-left 5px
+        .alertInfo, .alertSuccess, .alertError
+          float right
+          padding 12px 10px
+          border-radius 5px
+          width 200px
+          font-size 1em
+          overflow-x hidden
+          white-space nowrap
+          transition 0.1s
+          &.hide
+            width 0
+            padding 12px 0
+        .alertInfo
+          alertInfo()
+        .alertSuccess
+          alertSuccess()
+        .alertError
+          alertError()
+    .planetDeleteTab
+      padding-top 65px
+      p
+        margin-bottom 25px
+        strong
+          color brandColor
+          font-size 1.1em
+      input
+        borderInput()
+        margin-right 5px
+        height 33px
+        font-size 1em
+        border-radius 10px
+      .formConfirm
+        position relative
+        clearfix()
+        margin-bottom 15px
+        button
+          float right
+          btnDefault()
+          padding 10px 15px
+          border-radius 5px
+          font-size 1em
+          margin-left 5px
+        .alertInfo, .alertSuccess, .alertError
+          float right
+          padding 12px 10px
+          border-radius 5px
+          width 200px
+          font-size 1em
+          overflow-x hidden
+          white-space nowrap
+          transition 0.1s
+          &.hide
+            width 0
+            padding 12px 0
+        .alertInfo
+          alertInfo()
+        .alertSuccess
+          alertSuccess()
+        .alertError
+          alertError()
+    .membersTab
+      .memberTable
+        width 100%
+        margin-bottom 25px
+        th
+          border-bottom solid 2px borderColor
+        td
+          border-bottom solid 1px borderColor
+          height 38px
+          button
+            btnDefault()
+            padding 5px
+            border-radius 5px
+          .roleSelect
+            height 33px
+            border solid 1px borderColor
+            background-color backgroundColor
+        th, td
+          padding 5px 0
+      .addMemberForm
+        .formLabel
+          margin-bottom 5px
+        .formGroup
+          clearfix()
+          .userNameSelect
+            display block
+            width 200px
+            margin-right 5px
+            float left
+          .roleSelect
+            display block
+            height 33px
+            border solid 1px borderColor
+            background-color backgroundColor
+            float left
+            margin-right 5px
+          .confirmButton
+            display block
+            height 33px
+            btnDefault()
+            border-radius 5px
+            float left
+
+
+  .LaunchModal
+    .modal-tab
+      text-align center
+      margin-bottom 10px
+      .btn-primary, .btn-default
+        margin 0
+        border-radius 0
+        border-width 1px
+        width 150px
+        border-radius 0
+        &:nth-child(1)
+          border-right solid 1px borderColor
+          border-top-left-radius 5px
+          border-bottom-left-radius 5px
+        &:nth-child(2)
+          border-left none
+          border-top-right-radius 5px
+          border-bottom-right-radius 5px
+  .Select
+    .Select-control
+      border-color borderColor
+    &.is-focused
+      .Select-control
+        border-color brandBorderColor
+    .Select-menu-outer
+      border-color borderColor
+  .ace_editor
+    border-radius 5px
+    border solid 1px borderColor
+  .CodeForm, .NoteForm
+    .form-group
+      margin-bottom 10px
+  .CodeForm
+    textarea.codeDescription
+      height 75px
+      font-size 0.9em
+      margin-bottom 10px
+    .modeSelect.Select
+      display inline-block
+      width 200px
+      height 37px
+      .Select-control
+        height 37px
+    .ace_editor
+      height 258px
+  .NoteForm
+    .ace_editor
+      height 358px
+    .previewMode
+      absolute top right
+      font-size 0.8em
+      line-height 24px
+      padding 5 15px
+      background-color transparentify(invBackgroundColor, 0.2)
+      color invTextColor
+      border-top-right-radius 5px
+  .marked
+    height 360px
+    overflow-x hidden
+    overflow-y auto
+    box-sizing border-box
+    padding 5px
+    border solid 1px borderColor
+    border-radius 5px
+    marked()
+
+  .AboutModal
+    width 320px
+    .about1
+      margin-bottom 25px
+      .logo
+        display block
+        margin 0 auto
+      .appInfo
+        font-size 1.5em
+        text-align center
+    .about2
+      width 200px
+      margin 0 auto
+      .externalLabel
+        font-size 1.2em
+        margin-bottom 15px
+      .externalList
+        li
+          margin-bottom 15px
+
+  .PlanetCreateModal.modal, .TeamCreateModal.modal, .AddMemberModal.modal
+    padding 60px 0
+    .nameInput
+      width 80%
+      font-size 1.3em
+      margin 25px auto 15px
+      text-align center
+    .userNameSelect
+      width 80%
+      font-size 1.3em
+      margin 35px auto
+      text-align center
+    .formField
+      text-align center
+      margin 0 auto 25px
+      select
+        display inline-block
+        width 150px
+        height 33px
+        border solid 1px borderColor
+        background-color white
+        padding 0 10px
+        margin 0 15px
+    .submitButton
+      display block
+      margin 0 auto
+      box-sizing border-box
+      width 55px
+      height 55px
+      circle()
+      btnPrimary()
+
+  .ContactModal
+    padding 15px
+    .contactForm
+      .formField
+        width 100%
+        margin-bottom 10px
+        input, textarea
+          display block
+          width 100%
+          borderInput()
+          border-radius 5px
+        input
+          height 33px
+          font-size 1em
+        textarea
+          height 175px
+          font-size 1em
+      .formControl
+        clearfix()
+        button
+          float right
+          btnDefault()
+          height 44px
+          padding 0 15px
+          border-radius 5px
+          margin-left 5px
+        button.sendButton
+          btnPrimary()
+    .confirmation
+      .confirmationMessage
+        padding 35px 0
+        text-align center
+        font-size 1.1em
+      .doneButton
+        btnDefault()
+        height 44px
+        padding 0 35px
+        border-radius 5px
+        display block
+        margin 0 auto 25px
+
+  .LogoutModal
+    padding 65px 0 45px
+    width 350px
+    .messageLabel
+      text-align center
+      font-size 1.1em
+      margin-bottom 35px
+    .formControl
+      text-align center
+      button
+        btnDefault()
+        border-radius 5px
+        height 44px
+        margin 15px 5px
+        padding 0 15px
+      button.logoutButton
+        btnPrimary()

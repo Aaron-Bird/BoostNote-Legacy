@@ -1,0 +1,97 @@
+marked()
+  hr
+    border-top none
+    border-bottom solid 1px borderColor
+    margin 15px 0
+  h1
+    font-size 2em
+    margin 0 auto 0.67em
+  h2
+    font-size 1.5em
+    margin 0 auto 0.83em
+  h3
+    font-size 1.17em
+    margin 0 auto 1em
+  h4
+    font-size 1em
+    margin 0 auto 1.33em
+  h5
+    font-size 0.83em
+    margin 0 auto 1.67em
+  h6
+    font-size 0.67em
+    margin 2.33em auto
+  h1, h2, h3, h4, h5, h6
+    font-weight font-weight 400
+    line-height 1.2em
+  p
+    line-height 1.2em
+  img
+    max-width 100%
+  strong
+    font-weight bold
+  em
+    font-style italic
+  s
+    text-decoration line-through
+  blockquote
+    border-left solid 4px brandBorderColor
+    margin 1em 0
+    padding 0 25px
+  ul
+    list-style-type disc
+    padding-left 35px
+    li
+      display list-item
+      margin 0.5em 0
+    &>li>ul
+      list-style-type circle
+      &>li>ul
+        list-style-type square
+  ol
+    list-style-type decimal
+    padding-left 35px
+    li
+      display list-item
+      margin 0.5em 0
+  code
+    font-family monospace
+    padding 2px 4px
+    border solid 1px borderColor
+    border-radius 4px
+    font-size 0.9em
+  pre
+    padding 5px
+    border solid 1px borderColor
+    border-radius 5px
+    margin 0.5em 0
+    overflow-x auto
+    &>code
+      padding 0
+      border none
+      border-radius 0
+  table
+    width 100%
+    margin 15px 0
+    thead
+      tr
+        background-color tableHeadBgColor
+      th
+        border-style: solid;
+        padding: 5px;
+        border-width: 1px 0 2px 1px;
+        border-color borderColor
+        &:last-child
+          border-right solid 1px borderColor
+    tbody
+      tr:nth-child(2n + 1)
+        background-color tableOddBgColor
+      tr:nth-child(2n)
+        background-color tableEvenBgColor
+      td
+        border-style: solid;
+        padding: 5px;
+        border-width: 0 0 1px 1px;
+        border-color borderColor
+        &:last-child
+          border-right solid 1px borderColor

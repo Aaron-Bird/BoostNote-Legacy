@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>CodeXen</title>
+
+  <link rel="stylesheet" href="../vendor/fontawesome/css/font-awesome.min.css" media="screen" title="no title" charset="utf-8">
+  <link rel="shortcut icon" href="favicon.ico">
+  <script>
+  if (!Object.assign) {
+    Object.defineProperty(Object, 'assign', {
+      enumerable: false,
+      configurable: true,
+      writable: true,
+      value: function(target) {
+        'use strict';
+        if (target === undefined || target === null) {
+          throw new TypeError('Cannot convert first argument to object');
+        }
+
+        var to = Object(target);
+        for (var i = 1; i < arguments.length; i++) {
+          var nextSource = arguments[i];
+          if (nextSource === undefined || nextSource === null) {
+            continue;
+          }
+          nextSource = Object(nextSource);
+
+          var keysArray = Object.keys(Object(nextSource));
+          for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
+            var nextKey = keysArray[nextIndex];
+            var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
+            if (desc !== undefined && desc.enumerable) {
+              to[nextKey] = nextSource[nextKey];
+            }
+          }
+        }
+        return to;
+      }
+    });
+  }
+  </script>
+  <script src="../vendor/moment/min/moment.min.js"></script>
+  <script src="../vendor/markdown-it/dist/markdown-it.min.js"></script>
+  <script src="../vendor/react/react-with-addons.js"></script>
+  <script src="../vendor/react-router/build/umd/ReactRouter.js"></script>
+  <script src="../vendor/reflux/dist/reflux.js"></script>
+  <script src="../ace/src-min/ace.js"></script>
+
+</head>
+<body>
+  <div id="content"></div>
+  <script src="http://localhost:8090/webpack-dev-server.js"></script>
+  <script type="text/javascript" src="http://localhost:8090/assets/main.js"></script>
+  <script type="text/javascript" src="http://localhost:8090/assets/main-style.js"></script>
+</body>
+</html>

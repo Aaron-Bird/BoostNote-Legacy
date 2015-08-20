@@ -1,0 +1,82 @@
+.LoginContainer, .SignupContainer
+  margin 0 auto
+  padding 25px 15px
+  box-sizing border-box
+  color inactiveTextColor
+  .logo
+    width 150px
+    height 150px
+    display block
+    margin 0 auto
+  .authNavigator
+    margin 15px 0 25px
+    a
+      font-size 1.5em
+      text-decoration none
+      color inactiveTextColor
+      &:hover, &.hover, &:active, &.active
+        color brandColor
+  .socialControl
+    text-align center
+    margin 25px 0
+    p
+      margin-bottom 25px
+    .facebookBtn, .githubBtn
+      margin 0 45px
+      width 50px
+      height 50px
+      line-height 50px
+      font-size 25px
+      text-align center
+      background-image none
+      color white
+      border none
+      border-radius 25px
+      cursor pointer
+    .facebookBtn
+      background-color facebookColor
+      &:hover, &.hover
+        background-color lighten(facebookColor, 25%)
+    .githubBtn
+      background-color githubBtn
+      font-size 30px
+      line-height 30px
+      &:hover, &.hover
+        background-color lighten(githubBtn, 25%)
+  .divider
+    .dividerLabel
+      text-align center
+      position relative
+      top -27px
+      font-size 1.3em
+      background-color backgroundColor
+      margin 0 auto
+      width 50px
+  form
+    width 400px
+    margin 0 auto 45px
+    .alertInfo, .alertError
+      margin-top 15px
+      margin-bottom 15px
+      height 44px
+      padding 5px
+      border-radius 10px
+      line-height 44px
+      text-align center
+    .alertInfo
+      alertInfo()
+    .alertError
+      alertError()
+    div.form-group:last-child
+      margin-top 15px
+      button.logInButton
+        btnPrimary()
+        height 44px
+        border-radius 22px
+        display block
+        width 200px
+        font-size 1em
+        margin 0 auto
+  p.alert
+    text-align center
+    font-size 0.8em
