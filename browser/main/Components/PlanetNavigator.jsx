@@ -42,7 +42,7 @@ var PlanetNavigator = React.createClass({
         <button onClick={this.openLaunchModal} className='launchButton btn-primary btn-block'>
           <i className='fa fa-rocket fa-fw'/> Launch
         </button>
-        <nav>
+        <nav className='articleFilters'>
           <a className={usingCodeFilter && !usingNoteFilter ? 'active' : ''} onClick={this.props.toggleCodeFilter}>
             <i className='fa fa-code fa-fw'/> Codes
           </a>

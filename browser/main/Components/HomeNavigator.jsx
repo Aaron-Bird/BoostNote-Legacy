@@ -14,6 +14,7 @@ var UserStore = require('../Stores/UserStore')
 var AboutModal = require('./AboutModal')
 var PlanetCreateModal = require('./PlanetCreateModal')
 var TeamCreateModal = require('./TeamCreateModal')
+var LogoutModal = require('./LogoutModal')
 var ProfileImage = require('./ProfileImage')
 
 module.exports = React.createClass({
@@ -93,9 +94,7 @@ module.exports = React.createClass({
     this.setState({isProfilePopupOpen: false})
   },
   handleLogoutClick: function () {
-    localStorage.removeItem('currentUser')
-    localStorage.removeItem('token')
-    this.transitionTo('login')
+    this.openModal(LogoutModal, {transitionTo: this.transitionTo})
   },
   render: function () {
     var params = this.getParams()
@@ -180,7 +179,7 @@ module.exports = React.createClass({
             <button onClick={this.openAboutModal}><i className='fa fa-info-circle fa-fw'/> About this app</button>
           </li>
           <li>
-            <button onClick={this.handleLogoutClick}><i className='fa fa-sign-out fa-fw'/> Logout</button>
+            <button onClick={this.handleLogoutClick}><i className='fa fa-sign-out fa-fw'/> Log out</button>
           </li>
         </ul>
       </div>
