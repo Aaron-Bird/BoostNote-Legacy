@@ -1,5 +1,6 @@
 var React = require('react/addons')
 var ReactRouter = require('react-router')
+var Link = ReactRouter.Link
 
 var Modal = require('../Mixins/Modal')
 var ExternalLink = require('../Mixins/ExternalLink')
@@ -35,7 +36,7 @@ module.exports = React.createClass({
     return (
       <div className='PlanetHeader'>
         <div className='headerLabel'>
-          <span className='userName'>{currentUserName}</span><br/>
+          <Link to='userHome' params={{userName: currentUserName}} className='userName'>{currentUserName}</Link>
           <span className='planetName'>{currentPlanetName}</span>
 
           {this.props.currentPlanet.public ? null : (

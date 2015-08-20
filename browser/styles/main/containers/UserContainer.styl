@@ -186,6 +186,35 @@
   .UserContainer
     absolute top bottom right
     left 55px
+    .memberPopup
+      absolute left
+      top 235px
+      z-index popupZIndex
+      padding 0 15px 10px
+      width 200px
+      .label
+        padding 10px 0
+        font-size 0.9em
+        border-bottom solid 1px borderColor
+        margin-bottom 15px
+      .members
+        li
+          padding 0 10px
+          margin-bottom 15px
+          clearfix()
+          .memberImage
+            float left
+            margin-right 7px
+          .memberInfo
+            float left
+            .memberProfileName
+              margin-bottom 5px
+            .memberName
+              margin-left 5px
+              font-size 0.8em
+              color inactiveTextColor
+          a:hover .memberProfileName, a:hover .memberName
+            text-decoration underline
     .userProfile
       absolute top left right
       padding 15px
@@ -221,11 +250,32 @@
       .teamLabel, .memberLabel
         font-size 1.2em
         margin-bottom 15px
-      .teams, .members
+      .teams
         margin-left 10px
         li
           margin-bottom 10px
           font-size 1.1em
+          .createTeamButton, .addMemberButton
+            btnStripDefault()
+      .members
+        li
+          padding 0 10px
+          margin-bottom 15px
+          clearfix()
+          .memberImage
+            float left
+            margin-right 7px
+          .memberInfo
+            float left
+            .memberProfileName
+              margin-bottom 5px
+              .memberRole
+                font-size 0.8em
+                color inactiveTextColor
+            .memberName
+              margin-left 5px
+              font-size 0.8em
+              color inactiveTextColor
           .createTeamButton, .addMemberButton
             btnStripDefault()
       .members .role

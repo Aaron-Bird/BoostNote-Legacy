@@ -189,6 +189,30 @@ module.exports = React.createClass({
       } else {
         return this.renderUserHome(currentUser)
       }
+    } else if (this.isActive('planet') && user != null && user.userType === 'team') {
+      console.log(user.Members)
+      var members = user.Members.map(function (member) {
+        return (
+          <li key={'user-' + member.id}><Link to='userHome' params={{userName: member.name}}>
+            <ProfileImage className='memberImage' size='22' email={member.email}/>
+            <div className='memberInfo'>
+              <div className='memberProfileName'>{member.profileName}</div>
+              <div className='memberName'>@{member.name}</div>
+            </div>
+          </Link></li>
+        )
+      })
+      return (
+        <div className='UserContainer'>
+          <RouteHandler/>
+          <div className='memberPopup'>
+            <div className='label'>Members</div>
+            <ul className='members'>
+              {members}
+            </ul>
+          </div>
+        </div>
+      )
     } else {
       return (
         <div className='UserContainer'>
@@ -214,8 +238,14 @@ module.exports = React.createClass({
     var members = user.Members == null ? [] : user.Members.map(function (member) {
       return (
         <li key={'user-' + member.id}>
-          <Link to='userHome' params={{userName: member.name}}>{member.profileName} ({member.name})</Link>
-          <div className='role'>{member.TeamMember.role}</div>
+          <Link to='userHome' params={{userName: member.name}}>
+            <ProfileImage size='22' className='memberImage' email={member.email}/>
+            <div className='memberInfo'>
+              <div className='memberProfileName'>{member.profileName} <span className='memberRole'>({member.TeamMember.role})</span></div>
+              <div className='memberName'>@{member.name}</div>
+            </div>
+          </Link>
+          <div className='role'></div>
         </li>
       )
     })
