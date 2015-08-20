@@ -7,13 +7,13 @@ var CodeEditModal = require('../Components/CodeEditModal')
 var CodeDeleteModal = require('../Components/CodeDeleteModal')
 var NoteEditModal = require('../Components/NoteEditModal')
 var NoteDeleteModal = require('../Components/NoteDeleteModal')
+var MarkdownPreview = require('../Components/MarkdownPreview')
 
 var Modal = require('../Mixins/Modal')
 var ForceUpdate = require('../Mixins/ForceUpdate')
-var Markdown = require('../Mixins/Markdown')
 
 module.exports = React.createClass({
-  mixins: [ForceUpdate(60000), Markdown, Modal],
+  mixins: [ForceUpdate(60000), Modal],
   propTypes: {
     article: React.PropTypes.object,
     showOnlyWithTag: React.PropTypes.func,
@@ -91,7 +91,7 @@ module.exports = React.createClass({
         </div>
         <div className='viewer-body'>
           <div className='tags'><i className='fa fa-tags'/>{tags}</div>
-          <div className='content' dangerouslySetInnerHTML={{__html: ' ' + this.markdown(article.content)}}></div>
+          <MarkdownPreview className='content' content={article.content}/>
         </div>
       </div>
     )

@@ -10,6 +10,7 @@ var Markdown = require('../Mixins/Markdown')
 var PlanetStore = require('../Stores/PlanetStore')
 
 var CodeEditor = require('./CodeEditor')
+var MarkdownPreview = require('./MarkdownPreview')
 
 var getOptions = function (input, callback) {
   Hq.searchTag(input)
@@ -33,7 +34,7 @@ var EDIT_MODE = 0
 var PREVIEW_MODE = 1
 
 module.exports = React.createClass({
-  mixins: [LinkedState, ReactRouter.State, Markdown],
+  mixins: [LinkedState, Markdown],
   propTypes: {
     planet: React.PropTypes.object,
     close: React.PropTypes.func,
@@ -108,7 +109,7 @@ module.exports = React.createClass({
     ) : (
       <div className='form-group relative'>
         <div className='previewMode'>Preview mode</div>
-        <div className='marked' dangerouslySetInnerHTML={{__html: ' ' + this.markdown(this.state.note.content)}}></div>
+        <MarkdownPreview className='marked' content={this.state.note.content}/>
       </div>
     )
 
