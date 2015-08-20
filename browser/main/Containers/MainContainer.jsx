@@ -73,7 +73,6 @@ module.exports = React.createClass({
             fetchPlanet(planet.userName, planet.name)
           })
         })
-
       })
       .catch(function (err) {
         if (err.status === 401) {

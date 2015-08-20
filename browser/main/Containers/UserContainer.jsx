@@ -296,7 +296,12 @@ module.exports = React.createClass({
     var teams = user.Teams == null ? [] : user.Teams.map(function (team) {
       return (
         <li key={'user-' + team.id}>
-          <Link to='userHome' params={{userName: team.name}}>{team.profileName} ({team.name})</Link>
+          <Link to='userHome' params={{userName: team.name}}>
+            <div className='teamInfo'>
+              <div className='teamProfileName'>{team.profileName}</div>
+              <div className='teamName'>@{team.name}</div>
+            </div>
+          </Link>
         </li>
       )
     })

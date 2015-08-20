@@ -251,8 +251,20 @@
         font-size 1.2em
         margin-bottom 15px
       .teams
-        margin-left 10px
         li
+          padding 0 10px
+          margin-bottom 15px
+          clearfix()
+          .teamInfo
+            float left
+            .teamProfileName
+              margin-bottom 5px
+            .teamName
+              margin-left 5px
+              font-size 0.8em
+              color inactiveTextColor
+          a:hover .teamProfileName, a:hover .teamName
+            text-decoration underline
           margin-bottom 10px
           font-size 1.1em
           .createTeamButton, .addMemberButton
@@ -278,11 +290,8 @@
               color inactiveTextColor
           .createTeamButton, .addMemberButton
             btnStripDefault()
-      .members .role
-        margin-left 7px
-        margin-top 2px
-        color inactiveTextColor
-        font-size 0.85em
+          a:hover .memberProfileName, a:hover .memberName
+            text-decoration underline
     .planetList
       absolute right bottom
       top 125px
@@ -300,6 +309,11 @@
         .planets
           margin-left 15px
           li
+            a
+              font-size 1.1em
+              text-decoration none
+              &:hover
+                text-decoration underline
             margin-bottom 10px
             .createPlanetButton
               btnStripDefault()
