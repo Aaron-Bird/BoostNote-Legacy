@@ -63,18 +63,11 @@
             &:hover
               background-color hoverBackgroundColor
             .userName
-              float left
               width 155px
               padding 10px 15px
               text-align left
               display block
               text-decoration none
-              cursor pointer
-            .userSetting
-              float right
-              display block
-              padding 10px 0
-              width 45px
               cursor pointer
             .createNewTeam
               btnStripDefault()
@@ -189,7 +182,7 @@
     .memberPopup
       absolute left
       top 235px
-      z-index popupZIndex
+      z-index 1
       padding 0 15px 10px
       width 200px
       .label
@@ -205,13 +198,15 @@
           .memberImage
             float left
             margin-right 7px
+            circle()
           .memberInfo
             float left
             .memberProfileName
               margin-bottom 5px
+              font-size 1.05em
             .memberName
               margin-left 5px
-              font-size 0.8em
+              font-size 0.9em
               color inactiveTextColor
           a:hover .memberProfileName, a:hover .memberName
             text-decoration underline
@@ -259,9 +254,10 @@
             float left
             .teamProfileName
               margin-bottom 5px
+              font-size 1.05em
             .teamName
               margin-left 5px
-              font-size 0.8em
+              font-size 0.9em
               color inactiveTextColor
           a:hover .teamProfileName, a:hover .teamName
             text-decoration underline
@@ -277,16 +273,18 @@
           .memberImage
             float left
             margin-right 7px
+            circle()
           .memberInfo
             float left
             .memberProfileName
               margin-bottom 5px
+              font-size 1.05em
               .memberRole
-                font-size 0.8em
+                font-size 0.9em
                 color inactiveTextColor
             .memberName
               margin-left 5px
-              font-size 0.8em
+              font-size 0.9em
               color inactiveTextColor
           .createTeamButton, .addMemberButton
             btnStripDefault()
