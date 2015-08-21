@@ -1,5 +1,6 @@
 var React = require('react/addons')
 var ReactRouter = require('react-router')
+var Link = ReactRouter.Link
 var moment = require('moment')
 
 var ForceUpdate = require('../Mixins/ForceUpdate')
@@ -12,6 +13,31 @@ module.exports = React.createClass({
   propTypes: {
     articles: React.PropTypes.array,
     showOnlyWithTag: React.PropTypes.func
+  },
+  handleArticleClikck: function (article) {
+    if (article.type === 'code') {
+      return function () {
+        var params = this.getParams()
+
+        this.transitionTo('codes', {
+          userName: params.userName,
+          planetName: params.planetName,
+          localId: article.localId
+        })
+      }.bind(this)
+    }
+
+    if (article.type === 'note') {
+      return function () {
+        var params = this.getParams()
+
+        this.transitionTo('notes', {
+          userName: params.userName,
+          planetName: params.planetName,
+          localId: article.localId
+        })
+      }.bind(this)
+    }
   },
   render: function () {
     var articles = this.props.articles.map(function (article) {
@@ -28,24 +54,15 @@ module.exports = React.createClass({
       var handleClick
 
       if (article.type === 'code') {
-
-        handleClick = function () {
-          this.transitionTo('codes', {
-            userName: params.userName,
-            planetName: params.planetName,
-            localId: article.localId
-          })
-        }.bind(this)
-
         return (
-          <li onClick={handleClick} key={'code-' + article.id}>
+          <li onClick={this.handleArticleClikck(article)} key={'code-' + article.id}>
             <div className={'articleItem' + (isActive ? ' active' : '')}>
               <div className='itemLeft'>
                 <ProfileImage className='profileImage' size='25' email={article.User.email}/>
                 <i className='fa fa-code fa-fw'></i>
               </div>
               <div className='itemRight'>
-                <div className='updatedAt'>{moment(article.updatedAt).fromNow()}</div>
+                <div className='itemInfo'>{moment(article.updatedAt).fromNow()} by <span className='userProfileName'>{article.User.profileName}</span></div>
                 <div className='description'>{article.description.length > 50 ? article.description.substring(0, 50) + ' …' : article.description}</div>
                 <div className='tags'><i className='fa fa-tags'/>{tags}</div>
               </div>
@@ -55,16 +72,8 @@ module.exports = React.createClass({
         )
       }
 
-      handleClick = function () {
-        this.transitionTo('notes', {
-          userName: params.userName,
-          planetName: params.planetName,
-          localId: article.localId
-        })
-      }.bind(this)
-
       return (
-        <li onClick={handleClick} key={'note-' + article.id}>
+        <li onClick={this.handleArticleClikck(article)} key={'note-' + article.id}>
           <div className={'articleItem blueprintItem' + (isActive ? ' active' : '')}>
             <div className='itemLeft'>
               <ProfileImage className='profileImage' size='25' email={article.User.email}/>
@@ -72,7 +81,7 @@ module.exports = React.createClass({
             </div>
 
             <div className='itemRight'>
-              <div className='updatedAt'>{moment(article.updatedAt).fromNow()}</div>
+              <div className='itemInfo'>{moment(article.updatedAt).fromNow()} by <span className='userProfileName'>{article.User.profileName}</span></div>
               <div className='description'>{article.title}</div>
               <div className='tags'><i className='fa fa-tags'/>{tags}</div>
             </div>

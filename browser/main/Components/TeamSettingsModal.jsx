@@ -264,7 +264,7 @@ module.exports = React.createClass({
           </div>
         ) : (
           <div>
-            Maximum numbr of members is 5 on Beta version. Please contact us if you want futher use.
+            Maximum number of members is 5 on Beta version. Please contact us if you want futher use.
           </div>
         )}
       </div>

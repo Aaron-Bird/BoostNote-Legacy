@@ -143,7 +143,6 @@ module.exports = React.createClass({
       return (
         <li key={'user-' + team.id}>
           <Link to='userHome' params={{userName: team.name}} className='userName'>{team.profileName} ({team.name})</Link>
-          <div className='userSetting'><i className='fa fa-gear'/></div>
         </li>
       )
     })
@@ -157,7 +156,6 @@ module.exports = React.createClass({
           <ul className='profileGroupList'>
             <li>
               <Link to='userHome' params={{userName: this.state.currentUser.name}} className='userName'>Profile ({this.state.currentUser.name})</Link>
-              <div className='userSetting'><i className='fa fa-gear'/></div>
             </li>
           </ul>
         </div>
