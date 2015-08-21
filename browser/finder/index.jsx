@@ -49,6 +49,7 @@ var Finder = React.createClass({
     document.addEventListener('keydown', this.handleKeyDown)
     document.addEventListener('click', this.handleClick)
     window.addEventListener('focus', this.handleFinderFocus)
+    this.handleFinderFocus()
   },
   componentWillUnmount: function () {
     document.removeEventListener('keydown', this.handleKeyDown)
