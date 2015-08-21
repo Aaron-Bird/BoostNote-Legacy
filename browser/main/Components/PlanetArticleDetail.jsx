@@ -1,13 +1,13 @@
 var React = require('react/addons')
 var moment = require('moment')
 
-var CodeViewer = require('../Components/CodeViewer')
-
-var CodeEditModal = require('../Components/CodeEditModal')
-var CodeDeleteModal = require('../Components/CodeDeleteModal')
-var NoteEditModal = require('../Components/NoteEditModal')
-var NoteDeleteModal = require('../Components/NoteDeleteModal')
-var MarkdownPreview = require('../Components/MarkdownPreview')
+var CodeViewer = require('./CodeViewer')
+var CodeEditModal = require('./CodeEditModal')
+var CodeDeleteModal = require('./CodeDeleteModal')
+var NoteEditModal = require('./NoteEditModal')
+var NoteDeleteModal = require('./NoteDeleteModal')
+var MarkdownPreview = require('./MarkdownPreview')
+var ProfileImage = require('./ProfileImage')
 
 var Modal = require('../Mixins/Modal')
 var ForceUpdate = require('../Mixins/ForceUpdate')
@@ -61,18 +61,24 @@ module.exports = React.createClass({
     if (article.type === 'code') {
       return (
         <div className='PlanetArticleDetail codeDetail'>
-          <div className='viewer-header'>
-            <i className='fa fa-code fa-fw'></i> {article.callSign} <small className='updatedAt'>{moment(article.updatedAt).fromNow()}</small>
-            <span className='control-group'>
+          <div className='detailHeader'>
+            <div className='itemLeft'>
+              <ProfileImage className='profileImage' size='25' email={article.User.email}/>
+              <i className='fa fa-file-text-o fa-fw'></i>
+            </div>
+
+            <div className='itemRight'>
+              <div className='itemInfo'>{moment(article.updatedAt).fromNow()} by <span className='userProfileName'>{article.User.profileName}</span></div>
+              <div className='description'>{article.description}</div>
+              <div className='tags'><i className='fa fa-tags'/>{tags}</div>
+            </div>
+
+            <span className='itemControl'>
               <button onClick={this.openEditModal} className='btn-default btn-square btn-sm'><i className='fa fa-edit fa-fw'></i></button>
               <button onClick={this.openDeleteModal} className='btn-default btn-square btn-sm'><i className='fa fa-trash fa-fw'></i></button>
             </span>
           </div>
-          <div className='viewer-body'>
-            <div className='viewer-detail'>
-              <div className='description'>{article.description}</div>
-              <div className='tags'><i className='fa fa-tags'/>{tags}</div>
-            </div>
+          <div className='detailBody'>
             <div className='content'>
               <CodeViewer code={article.content} mode={article.mode}/>
             </div>
@@ -82,15 +88,24 @@ module.exports = React.createClass({
     }
     return (
       <div className='PlanetArticleDetail noteDetail'>
-        <div className='viewer-header'>
-          <i className='fa fa-file-text-o fa-fw'></i> {article.title} <small className='updatedAt'>{moment(article.updatedAt).fromNow()}</small>
-          <span className='control-group'>
+        <div className='detailHeader'>
+          <div className='itemLeft'>
+            <ProfileImage className='profileImage' size='25' email={article.User.email}/>
+            <i className='fa fa-file-text-o fa-fw'></i>
+          </div>
+
+          <div className='itemRight'>
+            <div className='itemInfo'>{moment(article.updatedAt).fromNow()} by <span className='userProfileName'>{article.User.profileName}</span></div>
+            <div className='description'>{article.title}</div>
+            <div className='tags'><i className='fa fa-tags'/>{tags}</div>
+          </div>
+
+          <span className='itemControl'>
             <button onClick={this.openEditModal} className='btn-default btn-square btn-sm'><i className='fa fa-edit fa-fw'></i></button>
             <button onClick={this.openDeleteModal} className='btn-default btn-square btn-sm'><i className='fa fa-trash fa-fw'></i></button>
           </span>
         </div>
-        <div className='viewer-body'>
-          <div className='tags'><i className='fa fa-tags'/>{tags}</div>
+        <div className='detailBody'>
           <MarkdownPreview className='content' content={article.content}/>
         </div>
       </div>

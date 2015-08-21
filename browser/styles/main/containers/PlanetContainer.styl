@@ -10,7 +10,7 @@ articleListWidth= 275px
       margin 0 2px
       text-decoration underline
       cursor pointer
-      font-size 0.9em
+      font-size 0.95em
       &.noTag
         color inactiveTextColor
         font-size 0.8em
@@ -178,15 +178,18 @@ articleListWidth= 275px
     overflow-y auto
     li
       .articleItem
-        user-select none
         border solid 2px transparent
-        padding 10px
+        position relative
+        height 94px
+        width 100%
         cursor pointer
         transition 0.1s
-        clearfix()
         .itemLeft
-          float left
-          width 25px
+          position absolute
+          top 4px
+          bottom 4px
+          width 38px
+          padding 3px 0 3px 3px
           text-align center
           .profileImage
             margin-bottom 5px
@@ -194,18 +197,31 @@ articleListWidth= 275px
           .fa
             line-height 25px
         .itemRight
-          float left
-          width 225px
+          position absolute
+          top 4px
+          bottom 4px
+          right 2px
+          left 40px
           overflow-x hidden
-          padding-left 10px
-          .updatedAt
-            margin-bottom 10px
+          padding 3px 10px 3px 3px
+          .itemInfo
+            margin 5px 0 13px
             color lighten(textColor, 25%)
             font-size 0.7em
+            .userProfileName
+              color brandColor
+              font-size 1.2em
           .description
             line-height 120%
-            margin-bottom 15px
+            margin-bottom 10px
             font-size 1em
+            overflow-x hidden
+            white-space nowrap
+            text-overflow ellipsis
+          .tags
+            position absolute
+            bottom 5px
+            font-size 0.9em
         &:hover, &.hover
           background-color hoverBackgroundColor
           &:active, &.active
@@ -219,57 +235,71 @@ articleListWidth= 275px
   absolute right bottom
   top 55px
   left navigationWidth + articleListWidth
-  &>.viewer-header
-    height 44px
-    line-height 44px
-    padding 0 15px
-    box-sizing border-box
-    font-size 1.2em
-    small
-      font-size 0.8em
-      color lighten(textColor, 25%)
-    .control-group
-      float right
-      button
-        margin 10px 3px
-  .viewer-body
-    absolute bottom right
-    left 1px
-    top 44px
-  &.codeDetail>.viewer-body
-    .viewer-detail
-      border-bottom solid 1px borderColor
-      height 150px
-      box-sizing border-box
-      padding 10px
+  .detailHeader
+    border solid 2px transparent
+    position relative
+    height 105px
+    width 100%
+    transition 0.1s
+    .itemLeft
+      position absolute
+      top 7px
+      bottom 4px
+      width 38px
+      padding 3px 0 3px 3px
+      text-align center
+      .profileImage
+        margin-bottom 5px
+        circle()
+      .fa
+        line-height 25px
+    .itemRight
+      position absolute
+      top 7px
+      bottom 4px
+      right 2px
+      left 40px
+      overflow-x hidden
+      padding 3px 10px 3px 3px
+      .itemInfo
+        margin 5px 0 13px
+        color lighten(textColor, 25%)
+        font-size 0.7em
+        .userProfileName
+          color brandColor
+          font-size 1.2em
       .description
-        height 100px
-        line-height 1.4em
-        overflow-y auto
+        line-height 120%
+        margin-bottom 10px
+        font-size 1em
+        overflow-x auto
+        white-space nowrap
       .tags
         position absolute
-        left 15px
-        right 15px
-        top 120px
-    .content
-      .ace_editor
-        absolute left right
-        top 155px
         bottom 5px
-  &.noteDetail>.viewer-body
-    .tags
-      absolute top
-      left 15px
-      right 15px
-      height 24px
-      line-height 24px
+        font-size 0.9em
+    .itemControl
+      position absolute
+      z-index 1
+      top 2px
+      right 2px
+  .detailBody
+    absolute left right bottom
+    top 105px
     .content
-      absolute left right bottom
-      top 30px
       box-sizing border-box
       padding 5px
       border-top solid 1px borderColor
-      padding 10px
       overflow-x hidden
       overflow-y auto
+  &.noteDetail
+    .detailBody .content
       marked()
+  &.codeDetail
+    .detailBody .content
+      .ace_editor
+        position absolute
+        top 5px
+        bottom 5px
+        left 2px
+        right 2px
