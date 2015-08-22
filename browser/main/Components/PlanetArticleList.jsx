@@ -1,6 +1,5 @@
 var React = require('react/addons')
 var ReactRouter = require('react-router')
-var Link = ReactRouter.Link
 var moment = require('moment')
 
 var ForceUpdate = require('../Mixins/ForceUpdate')
@@ -16,9 +15,10 @@ module.exports = React.createClass({
   },
   handleArticleClikck: function (article) {
     if (article.type === 'code') {
-      return function () {
+      return function (e) {
         var params = this.getParams()
 
+        document.getElementById('articleEditButton').focus()
         this.transitionTo('codes', {
           userName: params.userName,
           planetName: params.planetName,
@@ -28,9 +28,10 @@ module.exports = React.createClass({
     }
 
     if (article.type === 'note') {
-      return function () {
+      return function (e) {
         var params = this.getParams()
 
+        document.getElementById('articleEditButton').focus()
         this.transitionTo('notes', {
           userName: params.userName,
           planetName: params.planetName,
@@ -50,8 +51,6 @@ module.exports = React.createClass({
       )
       var params = this.getParams()
       var isActive = article.type === 'code' ? this.isActive('codes') && parseInt(params.localId, 10) === article.localId : this.isActive('notes') && parseInt(params.localId, 10) === article.localId
-
-      var handleClick
 
       if (article.type === 'code') {
         return (
@@ -94,7 +93,7 @@ module.exports = React.createClass({
 
     return (
       <div className='PlanetArticleList'>
-        <ul>
+        <ul ref='articles'>
           {articles}
         </ul>
       </div>

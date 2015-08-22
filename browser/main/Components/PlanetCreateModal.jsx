@@ -5,11 +5,12 @@ var React = require('react/addons')
 var Hq = require('../Services/Hq')
 
 var LinkedState = require('../Mixins/LinkedState')
+var KeyCaster = require('../Mixins/KeyCaster')
 
 var PlanetStore = require('../Stores/PlanetStore')
 
 module.exports = React.createClass({
-  mixins: [LinkedState],
+  mixins: [LinkedState, KeyCaster('planetCreateModal')],
   propTypes: {
     ownerName: React.PropTypes.string,
     transitionTo: React.PropTypes.func,
@@ -30,9 +31,14 @@ module.exports = React.createClass({
   componentDidMount: function () {
     React.findDOMNode(this.refs.name).focus()
   },
-  onListen: function (res) {
-    if (res.status === 'planetCreated') {
-      this.props.close()
+  onKeyCast: function (e) {
+    switch (e.status) {
+      case 'closeModal':
+        this.props.close()
+        break
+      case 'submitPlanetCreateModal':
+        this.handleSubmit()
+        break
     }
   },
   handleSubmit: function () {

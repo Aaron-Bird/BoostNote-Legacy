@@ -25,6 +25,7 @@ module.exports = React.createClass({
     }
   },
   openEditModal: function () {
+    if (this.props.article == null) return
     switch (this.props.article.type) {
       case 'code' :
         this.openModal(CodeEditModal, {code: this.props.article, planet: this.props.planet})
@@ -34,6 +35,7 @@ module.exports = React.createClass({
     }
   },
   openDeleteModal: function () {
+    if (this.props.article == null) return
     switch (this.props.article.type) {
       case 'code' :
         this.openModal(CodeDeleteModal, {code: this.props.article, planet: this.props.planet})
@@ -74,14 +76,18 @@ module.exports = React.createClass({
             </div>
 
             <span className='itemControl'>
-              <button onClick={this.openEditModal} className='btn-default btn-square btn-sm'><i className='fa fa-edit fa-fw'></i></button>
-              <button onClick={this.openDeleteModal} className='btn-default btn-square btn-sm'><i className='fa fa-trash fa-fw'></i></button>
+              <button id='articleEditButton' onClick={this.openEditModal} className='editButton'>
+                <i className='fa fa-edit fa-fw'></i>
+                <div className='tooltip'>Edit</div>
+              </button>
+              <button onClick={this.openDeleteModal} className='deleteButton'>
+                <i className='fa fa-trash fa-fw'></i>
+                <div className='tooltip'>Delete</div>
+              </button>
             </span>
           </div>
           <div className='detailBody'>
-            <div className='content'>
-              <CodeViewer code={article.content} mode={article.mode}/>
-            </div>
+            <CodeViewer className='content' code={article.content} mode={article.mode}/>
           </div>
         </div>
       )
@@ -101,8 +107,14 @@ module.exports = React.createClass({
           </div>
 
           <span className='itemControl'>
-            <button onClick={this.openEditModal} className='btn-default btn-square btn-sm'><i className='fa fa-edit fa-fw'></i></button>
-            <button onClick={this.openDeleteModal} className='btn-default btn-square btn-sm'><i className='fa fa-trash fa-fw'></i></button>
+            <button id='articleEditButton' onClick={this.openEditModal} className='editButton'>
+              <i className='fa fa-edit fa-fw'></i>
+              <div className='tooltip'>Edit</div>
+            </button>
+            <button onClick={this.openDeleteModal} className='deleteButton'>
+              <i className='fa fa-trash fa-fw'></i>
+              <div className='tooltip'>Delete</div>
+            </button>
           </span>
         </div>
         <div className='detailBody'>

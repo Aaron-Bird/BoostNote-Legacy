@@ -3,9 +3,10 @@ var ReactRouter = require('react-router')
 var Navigation = ReactRouter.Navigation
 
 var Modal = require('../Mixins/Modal')
+
 var LaunchModal = require('../Components/LaunchModal')
 
-var PlanetNavigator = React.createClass({
+module.exports = React.createClass({
   mixins: [Modal, Navigation],
   propTypes: {
     planet: React.PropTypes.shape({
@@ -19,9 +20,6 @@ var PlanetNavigator = React.createClass({
     return {
       isLaunchModalOpen: false
     }
-  },
-  submitLaunchModal: function (ret) {
-    this.setState({isLaunchModalOpen: false})
   },
   openLaunchModal: function () {
     this.openModal(LaunchModal, {planet: this.props.planet, transitionTo: this.transitionTo})
@@ -54,5 +52,3 @@ var PlanetNavigator = React.createClass({
     )
   }
 })
-
-module.exports = PlanetNavigator

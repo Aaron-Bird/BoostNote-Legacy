@@ -64,40 +64,35 @@ articleListWidth= 275px
       color inactiveColor
       &:hover
         color textColor
-      .privateTooltip
-        position fixed
-        z-index popupZIndex
-        background-color transparentify(invBackgroundColor, 80%)
-        color invTextColor
-        padding 10px
-        font-size 0.9em
-        line-height 0.9em
-        border-radius 5px
-        white-space nowrap
-        opacity 0
-        transition 0.1s
-        pointer-events none
+      .tooltip
+        tooltip()
         margin-left -30px
-      &:hover .privateTooltip
+      &:hover .tooltip
         opacity 1
 
 
-    .menuBtn
+    .planetSettingButton
       position absolute
-      top 12px
+      top 15px
       right 5px
-      font-size 1em
+      font-size 0.8em
       btnDefault()
       box-sizing border-box
       circle()
-      width 33px
-      height 33px
+      width 26px
+      height 26px
       text-align center
       cursor pointer
       transition 0.1s
-      transform scale(0.8)
       &:focus, &.focus
         outline none
+      .tooltip
+        tooltip()
+        margin-top 11px
+        margin-left -36px
+      &:hover .tooltip
+        opacity 1
+
   .headerControl
     noSelect()
     absolute top bottom right
@@ -118,10 +113,11 @@ articleListWidth= 275px
     .refreshButton
       display block
       position absolute
-      top 12px
+      top 15px
       right 55px
-      width 28px
-      height 28px
+      width 26px
+      height 26px
+      font-size 0.8em
       btnDefault()
       circle()
       text-align center
@@ -129,16 +125,28 @@ articleListWidth= 275px
       transition 0.1s
       &:focus, &.focus
         outline none
+      .tooltip
+        tooltip()
+        margin-top 11px
+        margin-left -39px
+      &:hover .tooltip
+        opacity 1
     .logo
       display block
       position absolute
       top 4px
       right 10px
       cursor pointer
-      transition 0.1s
-      opacity 0.9
-      &:hover, &.hover
+      img
+        transition 0.1s
+        opacity 0.9
+      &:hover img, &:hover .tooltip
         opacity 1
+      .tooltip
+        tooltip()
+        margin-top -5px
+        margin-left -67px
+
 
 .PlanetNavigator
   absolute bottom left
@@ -178,6 +186,7 @@ articleListWidth= 275px
     overflow-y auto
     li
       .articleItem
+        noSelect()
         border solid 2px transparent
         position relative
         height 94px
@@ -283,23 +292,41 @@ articleListWidth= 275px
       z-index 1
       top 2px
       right 2px
+      .deleteButton, .editButton
+        btnDefault()
+        text-align center
+        width 33px
+        height 33px
+        border-radius 16.5px
+        font-size 15px
+        margin 0 3px
+        .tooltip
+          tooltip()
+          margin-top 10px
+        &:hover .tooltip
+          opacity 1
+      .editButton .tooltip
+        margin-left -12px
+      .deleteButton .tooltip
+        margin-left -26px
   .detailBody
     absolute left right bottom
     top 105px
     .content
+      position absolute
+      top 5px
+      bottom 5px
+      left 2px
+      right 2px
       box-sizing border-box
       padding 5px
       border-top solid 1px borderColor
-      overflow-x hidden
-      overflow-y auto
   &.noteDetail
     .detailBody .content
+      overflow-x hidden
+      overflow-y auto
       marked()
   &.codeDetail
     .detailBody .content
       .ace_editor
-        position absolute
-        top 5px
-        bottom 5px
-        left 2px
-        right 2px
+        absolute left right top bottom

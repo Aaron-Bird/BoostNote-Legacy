@@ -96,7 +96,10 @@ module.exports = React.createClass({
         {this.state.updateAvailable ? (
         <button onClick={this.updateApp} className='appUpdateButton'><i className='fa fa-cloud-download'/> Update available!</button>
         ) : null}
-        <button onClick={this.openContactModal} className='contactButton'><i className='fa fa-paper-plane-o'/></button>
+        <button onClick={this.openContactModal} className='contactButton'>
+          <i className='fa fa-paper-plane-o'/>
+          <div className='tooltip'>Contact us</div>
+        </button>
         <RouteHandler/>
       </div>
     )

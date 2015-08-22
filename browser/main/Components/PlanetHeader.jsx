@@ -21,7 +21,21 @@ module.exports = React.createClass({
     }
   },
   componentDidMount: function () {
-    React.findDOMNode(this.refs.search).focus()
+    var search = React.findDOMNode(this.refs.search)
+    search.addEventListener('keydown', this.handleSearchKeyDown)
+  },
+  componentWillUnmount: function () {
+    var search = React.findDOMNode(this.refs.search)
+    search.removeEventListener('keydown', this.handleSearchKeyDown)
+  },
+  handleSearchKeyDown: function (e) {
+    if (e.keyCode === 38 || e.keyCode === 40) {
+      var search = React.findDOMNode(this.refs.search)
+      search.blur()
+    }
+    if (e.keyCode !== 27 && (e.keyCode !== 13 || !e.metaKey)) {
+      e.stopPropagation()
+    }
   },
   openPlanetSettingModal: function () {
     this.openModal(PlanetSettingModal, {planet: this.props.currentPlanet})
@@ -42,12 +56,13 @@ module.exports = React.createClass({
           {this.props.currentPlanet.public ? null : (
             <div className='private'>
               <i className='fa fa-lock'/>
-              <div className='privateTooltip'>Private planet</div>
+              <div className='tooltip'>Private planet</div>
             </div>
           )}
 
-        <button onClick={this.openPlanetSettingModal} className='menuBtn'>
+          <button onClick={this.openPlanetSettingModal} className='planetSettingButton'>
             <i className='fa fa-chevron-down'></i>
+            <div className='tooltip'>Planet setting</div>
           </button>
         </div>
         <div className='headerControl'>
@@ -55,9 +70,13 @@ module.exports = React.createClass({
             <i className='fa fa-search'/>
             <input onChange={this.props.onSearchChange} value={this.props.search} ref='search' type='text' className='inline-input circleInput' placeholder='Search...'/>
           </div>
-          <button onClick={this.refresh} className='refreshButton'><i className='fa fa-refresh'/></button>
+          <button onClick={this.refresh} className='refreshButton'>
+            <i className='fa fa-refresh'/>
+            <div className='tooltip'>Refresh planet</div>
+          </button>
           <a onClick={this.openExternal} href='http://b00st.io' className='logo'>
             <img width='44' height='44' src='resources/favicon-230x230.png'/>
+            <div className='tooltip'>Boost official page</div>
           </a>
         </div>
       </div>

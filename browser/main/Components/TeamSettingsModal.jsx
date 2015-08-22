@@ -8,6 +8,7 @@ var Hq = require('../Services/Hq')
 
 var LinkedState = require('../Mixins/LinkedState')
 var Helper = require('../Mixins/Helper')
+var KeyCaster = require('../Mixins/KeyCaster')
 
 var UserStore = require('../Stores/UserStore')
 
@@ -30,7 +31,7 @@ var getOptions = function (input, callback) {
 }
 
 module.exports = React.createClass({
-  mixins: [LinkedState, Reflux.listenTo(UserStore, 'onUserChange'), Helper],
+  mixins: [LinkedState, Reflux.listenTo(UserStore, 'onUserChange'), Helper, KeyCaster('teamSettingsModal')],
   propTypes: {
     team: React.PropTypes.shape({
       id: React.PropTypes.number,
@@ -38,7 +39,8 @@ module.exports = React.createClass({
       profileName: React.PropTypes.string,
       email: React.PropTypes.string,
       Members: React.PropTypes.array
-    })
+    }),
+    close: React.PropTypes.func
   },
   getInitialState: function () {
     var team = this.props.team
@@ -53,6 +55,13 @@ module.exports = React.createClass({
         role: 'member'
       },
       updatingMember: false
+    }
+  },
+  onKeyCast: function (e) {
+    switch (e.status) {
+      case 'closeModal':
+        this.props.close()
+        break
     }
   },
   onUserChange: function (res) {

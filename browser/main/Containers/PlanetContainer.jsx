@@ -14,12 +14,13 @@ var Hq = require('../Services/Hq')
 var Modal = require('../Mixins/Modal')
 var ArticleFilter = require('../Mixins/ArticleFilter')
 var Helper = require('../Mixins/Helper')
+var KeyCaster = require('../Mixins/KeyCaster')
 
 var UserStore = require('../Stores/UserStore')
 var PlanetStore = require('../Stores/PlanetStore')
 
 module.exports = React.createClass({
-  mixins: [ReactRouter.Navigation, ReactRouter.State, Modal, Reflux.listenTo(UserStore, 'onUserChange'), Reflux.listenTo(PlanetStore, 'onPlanetChange'), ArticleFilter, Helper],
+  mixins: [ReactRouter.Navigation, ReactRouter.State, Modal, Reflux.listenTo(UserStore, 'onUserChange'), Reflux.listenTo(PlanetStore, 'onPlanetChange'), ArticleFilter, Helper, KeyCaster('planetContainer')],
   propTypes: {
     params: React.PropTypes.object,
     planetName: React.PropTypes.string
@@ -60,6 +61,28 @@ module.exports = React.createClass({
       }, function () {
         this.fetchPlanet(nextProps.params.userName, nextProps.params.planetName)
       })
+    }
+  },
+  onKeyCast: function (e) {
+    switch (e.status) {
+      case 'openLaunchModal':
+        this.refs.navigator.openLaunchModal()
+        break
+      case 'selectNextArticle':
+        this.selectNextArticle()
+        break
+      case 'selectPriorArticle':
+        this.selectPriorArticle()
+        break
+      case 'toggleFocusSearchInput':
+        this.toggleFocusSearchInput()
+        break
+      case 'openEditModal':
+        this.refs.detail.openEditModal()
+        break
+      case 'openDeleteModal':
+        this.refs.detail.openDeleteModal()
+        break
     }
   },
   onPlanetChange: function (res) {
@@ -207,6 +230,18 @@ module.exports = React.createClass({
       return
     }
 
+    var listElement = this.refs.list.refs.articles.getDOMNode()
+    var articleElement = listElement.querySelectorAll('li')[index]
+
+    var overflowBelow = listElement.clientHeight + listElement.scrollTop < articleElement.offsetTop + articleElement.clientHeight
+    if (overflowBelow) {
+      listElement.scrollTop = articleElement.offsetTop + articleElement.clientHeight - listElement.clientHeight
+    }
+    var overflowAbove = listElement.scrollTop > articleElement.offsetTop
+    if (overflowAbove) {
+      listElement.scrollTop = articleElement.offsetTop
+    }
+
     if (article.type === 'code') {
       params.localId = article.localId
       this.transitionTo('codes', params)
@@ -237,8 +272,16 @@ module.exports = React.createClass({
     if (index > 0) {
       this.selectArticleByListIndex(index - 1)
     } else {
-      React.findDOMNode(this).querySelector('.PlanetHeader .searchInput input').focus()
+      React.findDOMNode(this.refs.header.refs.search).focus()
     }
+  },
+  toggleFocusSearchInput: function () {
+    var search = React.findDOMNode(this.refs.header.refs.search)
+    if (document.activeElement === search) {
+      React.findDOMNode(this.refs.header.refs.search).blur()
+      return
+    }
+    React.findDOMNode(this.refs.header.refs.search).focus()
   },
   handleSearchChange: function (e) {
     this.setState({search: e.target.value}, function () {
@@ -309,9 +352,6 @@ module.exports = React.createClass({
       this.setState({search: '#' + tag})
     }.bind(this)
   },
-  focus: function () {
-    React.findDOMNode(this).focus()
-  },
   render: function () {
     if (this.state.planet == null) return (<div/>)
 
@@ -346,6 +386,7 @@ module.exports = React.createClass({
     return (
       <div className='PlanetContainer'>
         <PlanetHeader
+          ref='header'
           search={this.state.search}
           fetchPlanet={this.fetchPlanet}
           onSearchChange={this.handleSearchChange}

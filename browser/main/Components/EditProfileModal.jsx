@@ -5,17 +5,19 @@ var React = require('react/addons')
 var Hq = require('../Services/Hq')
 
 var LinkedState = require('../Mixins/LinkedState')
+var KeyCaster = require('../Mixins/KeyCaster')
 
 var UserStore = require('../Stores/UserStore')
 
 module.exports = React.createClass({
-  mixins: [LinkedState],
+  mixins: [LinkedState, KeyCaster('editProfileModal')],
   propTypes: {
     user: React.PropTypes.shape({
       name: React.PropTypes.string,
       profileName: React.PropTypes.string,
       email: React.PropTypes.string
-    })
+    }),
+    close: React.PropTypes.func
   },
   getInitialState: function () {
     var user = this.props.user
@@ -32,6 +34,13 @@ module.exports = React.createClass({
         passwordConfirmation: ''
       },
       passwordSubmitStatus: null
+    }
+  },
+  onKeyCast: function (e) {
+    switch (e.status) {
+      case 'closeModal':
+        this.props.close()
+        break
     }
   },
   selectTab: function (tabName) {

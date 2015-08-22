@@ -4,11 +4,19 @@ var version = remote.getGlobal('version')
 var React = require('react/addons')
 
 var ExternalLink = require('../Mixins/ExternalLink')
+var KeyCaster = require('../Mixins/KeyCaster')
 
 module.exports = React.createClass({
-  mixins: [ExternalLink],
+  mixins: [ExternalLink, KeyCaster('aboutModal')],
   propTypes: {
     close: React.PropTypes.func
+  },
+  onKeyCast: function (e) {
+    switch (e.status) {
+      case 'closeModal':
+        this.props.close()
+        break
+    }
   },
   render: function () {
     return (

@@ -1,11 +1,12 @@
 var React = require('react')
 
 var LinkedState = require('../Mixins/LinkedState')
+var KeyCaster = require('../Mixins/KeyCaster')
 
 var Hq = require('../Services/Hq')
 
 module.exports = React.createClass({
-  mixins: [LinkedState],
+  mixins: [LinkedState, KeyCaster('contactModal')],
   propTypes: {
     close: React.PropTypes.func
   },
@@ -17,6 +18,23 @@ module.exports = React.createClass({
         content: ''
       }
     }
+  },
+  onKeyCast: function (e) {
+    switch (e.status) {
+      case 'closeModal':
+        this.props.close()
+        break
+      case 'submitContactModal':
+        if (this.state.isSent) {
+          this.props.close()
+          return
+        }
+        this.sendEmail()
+        break
+    }
+  },
+  componentDidMount: function () {
+    React.findDOMNode(this.refs.title).focus()
   },
   sendEmail: function () {
     Hq.sendEmail(this.state.mail)
@@ -36,7 +54,7 @@ module.exports = React.createClass({
           <div className='contactForm'>
             <div className='modal-body'>
               <div className='formField'>
-                <input valueLink={this.linkState('mail.title')} placeholder='Title'/>
+                <input ref='title' valueLink={this.linkState('mail.title')} placeholder='Title'/>
               </div>
               <div className='formField'>
                 <textarea valueLink={this.linkState('mail.content')} placeholder='Content'/>

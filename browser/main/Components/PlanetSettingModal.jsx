@@ -3,11 +3,12 @@ var React = require('react/addons')
 var Hq = require('../Services/Hq')
 
 var LinkedState = require('../Mixins/LinkedState')
+var KeyCaster = require('../Mixins/KeyCaster')
 
 var PlanetStore = require('../Stores/PlanetStore')
 
 module.exports = React.createClass({
-  mixins: [LinkedState],
+  mixins: [LinkedState, KeyCaster('planetSettingModal')],
   propTypes: {
     close: React.PropTypes.func,
     planet: React.PropTypes.shape({
@@ -33,6 +34,13 @@ module.exports = React.createClass({
       },
       randomDeleteText: randomDeleteText,
       deleteConfirmation: ''
+    }
+  },
+  onKeyCast: function (e) {
+    switch (e.status) {
+      case 'closeModal':
+        this.props.close()
+        break
     }
   },
   activePlanetProfile: function () {
