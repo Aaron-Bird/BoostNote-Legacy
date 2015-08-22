@@ -32,6 +32,7 @@ module.exports = React.createClass({
     if (e.keyCode === 38 || e.keyCode === 40) {
       var search = React.findDOMNode(this.refs.search)
       search.blur()
+      e.preventDefault()
     }
     if (e.keyCode !== 27 && (e.keyCode !== 13 || !e.metaKey)) {
       e.stopPropagation()
