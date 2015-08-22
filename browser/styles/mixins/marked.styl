@@ -22,10 +22,11 @@ marked()
     font-size 0.67em
     margin 2.33em auto
   h1, h2, h3, h4, h5, h6
-    font-weight font-weight 400
-    line-height 1.2em
+    font-weight 400
+    line-height 1.4em
   p
-    line-height 1.2em
+    line-height 1.4em
+    margin-bottom 15px
   img
     max-width 100%
   strong
@@ -36,14 +37,14 @@ marked()
     text-decoration line-through
   blockquote
     border-left solid 4px brandBorderColor
-    margin 1em 0
+    margin 15px 0 15px
     padding 0 25px
   ul
     list-style-type disc
     padding-left 35px
     li
       display list-item
-      margin 0.5em 0
+      margin 15px 0
     &>li>ul
       list-style-type circle
       &>li>ul
@@ -53,33 +54,36 @@ marked()
     padding-left 35px
     li
       display list-item
-      margin 0.5em 0
+      margin 15px 0
   code
     font-family monospace
     padding 2px 4px
     border solid 1px borderColor
     border-radius 4px
     font-size 0.9em
+    color black
+    text-decoration none
   pre
     padding 5px
     border solid 1px borderColor
     border-radius 5px
-    margin-bottom 0.5em
     overflow-x auto
+    margin-bottom 15px
     &>code
       padding 0
       border none
       border-radius 0
+      color black
   table
     width 100%
-    margin 15px 0
+    margin 15px 0 25px
     thead
       tr
         background-color tableHeadBgColor
       th
-        border-style: solid;
-        padding: 5px;
-        border-width: 1px 0 2px 1px;
+        border-style solid
+        padding 15px 5px
+        border-width 1px 0 2px 1px
         border-color borderColor
         &:last-child
           border-right solid 1px borderColor
@@ -89,9 +93,9 @@ marked()
       tr:nth-child(2n)
         background-color tableEvenBgColor
       td
-        border-style: solid;
-        padding: 5px;
-        border-width: 0 0 1px 1px;
+        border-style solid
+        padding 15px 5px
+        border-width 0 0 1px 1px
         border-color borderColor
         &:last-child
           border-right solid 1px borderColor

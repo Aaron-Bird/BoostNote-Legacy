@@ -5,7 +5,8 @@ var ace = window.ace
 module.exports = React.createClass({
   propTypes: {
     code: React.PropTypes.string,
-    mode: React.PropTypes.string
+    mode: React.PropTypes.string,
+    className: React.PropTypes.string
   },
   componentDidMount: function () {
     var el = React.findDOMNode(this.refs.target)
@@ -46,7 +47,7 @@ module.exports = React.createClass({
   },
   render: function () {
     return (
-      <div ref='target'></div>
+      <div ref='target' className={this.props.className}></div>
     )
   }
 })

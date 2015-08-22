@@ -16,6 +16,10 @@ module.exports = React.createClass({
   componentDidMount: function () {
     if (this.isActive('homeEmpty')) {
       var user = JSON.parse(localStorage.getItem('currentUser'))
+      if (user.Planets != null && user.Planets.length > 0) {
+        this.transitionTo('planet', {userName: user.name, planetName: user.Planets[0].name})
+        return
+      }
       this.transitionTo('userHome', {userName: user.name})
     }
   },

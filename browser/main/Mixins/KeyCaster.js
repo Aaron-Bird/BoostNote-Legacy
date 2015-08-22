@@ -20,13 +20,9 @@ var KeyStore = Reflux.createStore({
     if (typeof cb === 'function') cb()
   },
   onKeyDown: function (e) {
-    console.log(e.keyCode)
-    console.log(state)
-
     /*
       Modals
     */
-
     if (state.codeForm || state.noteForm || state.noteDeleteModal || state.codeDeleteModal || state.addMemberModal || state.aboutModal || state.editProfileModal || state.contactModal || state.teamCreateModal || state.planetCreateModal || state.planetSettingModal || state.teamSettingsModal || state.logoutModal) {
       // ESC
       if (e.keyCode === 27) this.cast('closeModal')

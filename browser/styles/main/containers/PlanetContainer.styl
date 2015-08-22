@@ -287,19 +287,20 @@ articleListWidth= 275px
     absolute left right bottom
     top 105px
     .content
+      position absolute
+      top 5px
+      bottom 5px
+      left 2px
+      right 2px
       box-sizing border-box
       padding 5px
       border-top solid 1px borderColor
-      overflow-x hidden
-      overflow-y auto
   &.noteDetail
     .detailBody .content
+      overflow-x hidden
+      overflow-y auto
       marked()
   &.codeDetail
     .detailBody .content
       .ace_editor
-        position absolute
-        top 5px
-        bottom 5px
-        left 2px
-        right 2px
+        absolute left right top bottom

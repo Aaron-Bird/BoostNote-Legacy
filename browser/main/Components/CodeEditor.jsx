@@ -6,6 +6,7 @@ module.exports = React.createClass({
   propTypes: {
     code: React.PropTypes.string,
     mode: React.PropTypes.string,
+    className: React.PropTypes.string,
     onChange: React.PropTypes.func
   },
   componentDidMount: function () {
@@ -52,7 +53,7 @@ module.exports = React.createClass({
   },
   render: function () {
     return (
-      <div ref='target'></div>
+      <div ref='target' className={this.props.className}></div>
     )
   }
 })

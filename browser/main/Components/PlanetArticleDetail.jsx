@@ -81,9 +81,7 @@ module.exports = React.createClass({
             </span>
           </div>
           <div className='detailBody'>
-            <div className='content'>
-              <CodeViewer code={article.content} mode={article.mode}/>
-            </div>
+            <CodeViewer className='content' code={article.content} mode={article.mode}/>
           </div>
         </div>
       )
