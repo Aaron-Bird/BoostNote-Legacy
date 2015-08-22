@@ -137,7 +137,7 @@ module.exports = React.createClass({
         </ul>
         <button onClick={this.openPlanetCreateModal} className='newPlanet'>
           <i className='fa fa-plus'/>
-          <div className='newPlanetTooltip'>Create new planet</div>
+          <div className='tooltip'>Create new planet</div>
         </button>
       </div>
     )

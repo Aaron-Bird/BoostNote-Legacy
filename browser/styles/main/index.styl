@@ -16,6 +16,8 @@ body
   color textColor
   font-size fontSize
   font-weight 400
+button
+  font-family "Lato"
 
 div, span, a, button, input, textarea
   box-sizing border-box
@@ -118,3 +120,9 @@ textarea.block-input
     padding 10px 15px
     border-radius 5px
     background-color backgroundColor
+    .tooltip
+      tooltip()
+      margin-top -22px
+      margin-left -97px
+    &:hover .tooltip
+      opacity 1

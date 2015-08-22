@@ -76,8 +76,14 @@ module.exports = React.createClass({
             </div>
 
             <span className='itemControl'>
-              <button onClick={this.openEditModal} className='btn-default btn-square btn-sm'><i className='fa fa-edit fa-fw'></i></button>
-              <button onClick={this.openDeleteModal} className='btn-default btn-square btn-sm'><i className='fa fa-trash fa-fw'></i></button>
+              <button onClick={this.openEditModal} className='editButton'>
+                <i className='fa fa-edit fa-fw'></i>
+                <div className='tooltip'>Edit</div>
+              </button>
+              <button onClick={this.openDeleteModal} className='deleteButton'>
+                <i className='fa fa-trash fa-fw'></i>
+                <div className='tooltip'>Delete</div>
+              </button>
             </span>
           </div>
           <div className='detailBody'>
@@ -101,8 +107,14 @@ module.exports = React.createClass({
           </div>
 
           <span className='itemControl'>
-            <button onClick={this.openEditModal} className='btn-default btn-square btn-sm'><i className='fa fa-edit fa-fw'></i></button>
-            <button onClick={this.openDeleteModal} className='btn-default btn-square btn-sm'><i className='fa fa-trash fa-fw'></i></button>
+            <button onClick={this.openEditModal} className='editButton'>
+              <i className='fa fa-edit fa-fw'></i>
+              <div className='tooltip'>Edit</div>
+            </button>
+            <button onClick={this.openDeleteModal} className='deleteButton'>
+              <i className='fa fa-trash fa-fw'></i>
+              <div className='tooltip'>Delete</div>
+            </button>
           </span>
         </div>
         <div className='detailBody'>

@@ -56,12 +56,13 @@ module.exports = React.createClass({
           {this.props.currentPlanet.public ? null : (
             <div className='private'>
               <i className='fa fa-lock'/>
-              <div className='privateTooltip'>Private planet</div>
+              <div className='tooltip'>Private planet</div>
             </div>
           )}
 
-        <button onClick={this.openPlanetSettingModal} className='menuBtn'>
+          <button onClick={this.openPlanetSettingModal} className='planetSettingButton'>
             <i className='fa fa-chevron-down'></i>
+            <div className='tooltip'>Planet setting</div>
           </button>
         </div>
         <div className='headerControl'>
@@ -69,9 +70,13 @@ module.exports = React.createClass({
             <i className='fa fa-search'/>
             <input onChange={this.props.onSearchChange} value={this.props.search} ref='search' type='text' className='inline-input circleInput' placeholder='Search...'/>
           </div>
-          <button onClick={this.refresh} className='refreshButton'><i className='fa fa-refresh'/></button>
+          <button onClick={this.refresh} className='refreshButton'>
+            <i className='fa fa-refresh'/>
+            <div className='tooltip'>Refresh planet</div>
+          </button>
           <a onClick={this.openExternal} href='http://b00st.io' className='logo'>
             <img width='44' height='44' src='resources/favicon-230x230.png'/>
+            <div className='tooltip'>Boost official page</div>
           </a>
         </div>
       </div>
