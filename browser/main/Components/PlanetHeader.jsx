@@ -21,7 +21,21 @@ module.exports = React.createClass({
     }
   },
   componentDidMount: function () {
-    React.findDOMNode(this.refs.search).focus()
+    var search = React.findDOMNode(this.refs.search)
+    search.addEventListener('keydown', this.handleSearchKeyDown)
+  },
+  componentWillUnmount: function () {
+    var search = React.findDOMNode(this.refs.search)
+    search.removeEventListener('keydown', this.handleSearchKeyDown)
+  },
+  handleSearchKeyDown: function (e) {
+    if (e.keyCode === 38 || e.keyCode === 40) {
+      var search = React.findDOMNode(this.refs.search)
+      search.blur()
+    }
+    if (e.keyCode !== 27 && (e.keyCode !== 13 || !e.metaKey)) {
+      e.stopPropagation()
+    }
   },
   openPlanetSettingModal: function () {
     this.openModal(PlanetSettingModal, {planet: this.props.currentPlanet})

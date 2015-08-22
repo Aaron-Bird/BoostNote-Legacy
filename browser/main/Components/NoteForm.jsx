@@ -1,11 +1,11 @@
 var React = require('react/addons')
-var ReactRouter = require('react-router')
 var Select = require('react-select')
 
 var Hq = require('../Services/Hq')
 
 var LinkedState = require('../Mixins/LinkedState')
 var Markdown = require('../Mixins/Markdown')
+var KeyCaster = require('../Mixins/KeyCaster')
 
 var PlanetStore = require('../Stores/PlanetStore')
 
@@ -34,7 +34,7 @@ var EDIT_MODE = 0
 var PREVIEW_MODE = 1
 
 module.exports = React.createClass({
-  mixins: [LinkedState, Markdown],
+  mixins: [LinkedState, Markdown, KeyCaster('noteForm')],
   propTypes: {
     planet: React.PropTypes.object,
     close: React.PropTypes.func,
@@ -58,8 +58,15 @@ module.exports = React.createClass({
       mode: EDIT_MODE
     }
   },
-  componentDidMount: function () {
-    React.findDOMNode(this.refs.title).focus()
+  onKeyCast: function (e) {
+    switch (e.status) {
+      case 'submitNoteForm':
+        this.submit()
+        break
+      case 'closeModal':
+        this.props.close()
+        break
+    }
   },
   handleTagsChange: function (selected, all) {
     var note = this.state.note

@@ -25,6 +25,7 @@ module.exports = React.createClass({
     }
   },
   openEditModal: function () {
+    if (this.props.article == null) return
     switch (this.props.article.type) {
       case 'code' :
         this.openModal(CodeEditModal, {code: this.props.article, planet: this.props.planet})
@@ -34,6 +35,7 @@ module.exports = React.createClass({
     }
   },
   openDeleteModal: function () {
+    if (this.props.article == null) return
     switch (this.props.article.type) {
       case 'code' :
         this.openModal(CodeDeleteModal, {code: this.props.article, planet: this.props.planet})

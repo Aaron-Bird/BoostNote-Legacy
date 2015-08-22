@@ -96,6 +96,10 @@ module.exports = React.createClass({
   handleLogoutClick: function () {
     this.openModal(LogoutModal, {transitionTo: this.transitionTo})
   },
+  switchPlanetByIndex: function (index) {
+    var planetProps = this.refs.planets.props.children[index - 1].props
+    this.transitionTo('planet', {userName: planetProps.userName, planetName: planetProps.planetName})
+  },
   render: function () {
     var params = this.getParams()
 
@@ -110,12 +114,12 @@ module.exports = React.createClass({
       return team.Planets == null ? planets : planets.concat(team.Planets)
     }, []))).map(function (planet, index) {
       return (
-        <li key={planet.id} className={params.userName === planet.userName && params.planetName === planet.name ? 'active' : ''}>
+        <li userName={planet.userName} planetName={planet.name} key={planet.id} className={params.userName === planet.userName && params.planetName === planet.name ? 'active' : ''}>
           <Link to='planet' params={{userName: planet.userName, planetName: planet.name}}>
             {planet.name[0]}
             <div className='planetTooltip'>{planet.userName}/{planet.name}</div>
           </Link>
-          <div className='shortCut'>⌘{index + 1}</div>
+          {index < 9 ? (<div className='shortCut'>⌘{index + 1}</div>) : null}
         </li>
       )
     })
@@ -128,7 +132,7 @@ module.exports = React.createClass({
           <ProfileImage size='55' email={this.state.currentUser.email}/>
         </button>
         {popup}
-        <ul className='planetList'>
+        <ul ref='planets' className='planetList'>
           {planets}
         </ul>
         <button onClick={this.openPlanetCreateModal} className='newPlanet'>

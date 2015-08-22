@@ -5,6 +5,7 @@ var Select = require('react-select')
 var Hq = require('../Services/Hq')
 
 var LinkedState = require('../Mixins/LinkedState')
+var KeyCaster = require('../Mixins/KeyCaster')
 
 var PlanetStore = require('../Stores/PlanetStore')
 
@@ -29,7 +30,7 @@ var getOptions = function (input, callback) {
 }
 
 module.exports = React.createClass({
-  mixins: [LinkedState],
+  mixins: [LinkedState, KeyCaster('codeForm')],
   propTypes: {
     planet: React.PropTypes.object,
     close: React.PropTypes.func,
@@ -53,6 +54,16 @@ module.exports = React.createClass({
 
     return {
       code: code
+    }
+  },
+  onKeyCast: function (e) {
+    switch (e.status) {
+      case 'submitCodeForm':
+        this.submit()
+        break
+      case 'closeModal':
+        this.props.close()
+        break
     }
   },
   handleModeChange: function (selected) {

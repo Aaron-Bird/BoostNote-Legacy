@@ -5,6 +5,8 @@ var LinkedState = require('../Mixins/LinkedState')
 
 var Hq = require('../Services/Hq')
 
+var KeyCaster = require('../Mixins/KeyCaster')
+
 var UserStore = require('../Stores/UserStore')
 
 var getOptions = function (input, callback) {
@@ -26,7 +28,7 @@ var getOptions = function (input, callback) {
 }
 
 module.exports = React.createClass({
-  mixins: [LinkedState],
+  mixins: [LinkedState, KeyCaster('addMemberModal')],
   propTypes: {
     team: React.PropTypes.object,
     close: React.PropTypes.func
@@ -35,6 +37,16 @@ module.exports = React.createClass({
     return {
       userName: '',
       role: 'member'
+    }
+  },
+  onKeyCast: function (e) {
+    switch (e.status) {
+      case 'closeModal':
+        this.props.close()
+        break
+      case 'submitAddMemberModal':
+        this.handleSubmit()
+        break
     }
   },
   handleSubmit: function () {

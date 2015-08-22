@@ -2,19 +2,26 @@ var React = require('react')
 
 var Hq = require('../Services/Hq')
 
+var KeyCaster = require('../Mixins/KeyCaster')
+
 var PlanetStore = require('../Stores/PlanetStore')
 
 module.exports = React.createClass({
+  mixins: [KeyCaster('codeDeleteModal')],
   propTypes: {
     planet: React.PropTypes.object,
     code: React.PropTypes.object,
     close: React.PropTypes.func
   },
-  componentDidMount: function () {
-    React.findDOMNode(this).focus()
-  },
-  stopPropagation: function (e) {
-    e.stopPropagation()
+  onKeyCast: function (e) {
+    switch (e.status) {
+      case 'submitCodeDeleteModal':
+        this.submit()
+        break
+      case 'closeModal':
+        this.props.close()
+        break
+    }
   },
   submit: function () {
     var planet = this.props.planet

@@ -1,6 +1,5 @@
 var React = require('react/addons')
 var ReactRouter = require('react-router')
-var Link = ReactRouter.Link
 var moment = require('moment')
 
 var ForceUpdate = require('../Mixins/ForceUpdate')
@@ -50,8 +49,6 @@ module.exports = React.createClass({
       )
       var params = this.getParams()
       var isActive = article.type === 'code' ? this.isActive('codes') && parseInt(params.localId, 10) === article.localId : this.isActive('notes') && parseInt(params.localId, 10) === article.localId
-
-      var handleClick
 
       if (article.type === 'code') {
         return (

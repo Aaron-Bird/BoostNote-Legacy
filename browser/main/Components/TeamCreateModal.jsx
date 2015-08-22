@@ -5,11 +5,12 @@ var React = require('react/addons')
 var Hq = require('../Services/Hq')
 
 var LinkedState = require('../Mixins/LinkedState')
+var KeyCaster = require('../Mixins/KeyCaster')
 
 var UserStore = require('../Stores/UserStore')
 
 module.exports = React.createClass({
-  mixins: [LinkedState],
+  mixins: [LinkedState, KeyCaster('teamCreateModal')],
   propTypes: {
     user: React.PropTypes.shape({
       name: React.PropTypes.string
@@ -22,6 +23,19 @@ module.exports = React.createClass({
       team: {
         name: ''
       }
+    }
+  },
+  componentDidMount: function () {
+    React.findDOMNode(this.refs.teamName).focus()
+  },
+  onKeyCast: function (e) {
+    switch (e.status) {
+      case 'closeModal':
+        this.props.close()
+        break
+      case 'submitTeamCreateModal':
+        this.handleSubmit()
+        break
     }
   },
   handleSubmit: function () {
@@ -46,7 +60,7 @@ module.exports = React.createClass({
   render: function () {
     return (
       <div className='TeamCreateModal modal'>
-        <input valueLink={this.linkState('team.name')} className='nameInput stripInput' placeholder='Create new team'/>
+        <input ref='teamName' valueLink={this.linkState('team.name')} className='nameInput stripInput' placeholder='Create new team'/>
 
         <button onClick={this.handleSubmit} className='submitButton'>
           <i className='fa fa-check'/>

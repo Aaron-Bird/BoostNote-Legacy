@@ -2,10 +2,23 @@
 
 var React = require('react')
 
+var KeyCaster = require('../Mixins/KeyCaster')
+
 module.exports = React.createClass({
+  mixins: [KeyCaster('logoutModal')],
   propTypes: {
     transitionTo: React.PropTypes.func,
     close: React.PropTypes.func
+  },
+  onKeyCast: function (e) {
+    switch (e.status) {
+      case 'closeModal':
+        this.props.close()
+        break
+      case 'submitLogoutModal':
+        this.logout()
+        break
+    }
   },
   logout: function () {
     localStorage.removeItem('currentUser')
