@@ -76,7 +76,7 @@ module.exports = React.createClass({
             </div>
 
             <span className='itemControl'>
-              <button onClick={this.openEditModal} className='editButton'>
+              <button id='articleEditButton' onClick={this.openEditModal} className='editButton'>
                 <i className='fa fa-edit fa-fw'></i>
                 <div className='tooltip'>Edit</div>
               </button>
@@ -107,7 +107,7 @@ module.exports = React.createClass({
           </div>
 
           <span className='itemControl'>
-            <button onClick={this.openEditModal} className='editButton'>
+            <button id='articleEditButton' onClick={this.openEditModal} className='editButton'>
               <i className='fa fa-edit fa-fw'></i>
               <div className='tooltip'>Edit</div>
             </button>

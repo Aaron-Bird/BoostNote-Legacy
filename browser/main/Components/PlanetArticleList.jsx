@@ -15,9 +15,10 @@ module.exports = React.createClass({
   },
   handleArticleClikck: function (article) {
     if (article.type === 'code') {
-      return function () {
+      return function (e) {
         var params = this.getParams()
 
+        document.getElementById('articleEditButton').focus()
         this.transitionTo('codes', {
           userName: params.userName,
           planetName: params.planetName,
@@ -27,9 +28,10 @@ module.exports = React.createClass({
     }
 
     if (article.type === 'note') {
-      return function () {
+      return function (e) {
         var params = this.getParams()
 
+        document.getElementById('articleEditButton').focus()
         this.transitionTo('notes', {
           userName: params.userName,
           planetName: params.planetName,
@@ -91,7 +93,7 @@ module.exports = React.createClass({
 
     return (
       <div className='PlanetArticleList'>
-        <ul>
+        <ul ref='articles'>
           {articles}
         </ul>
       </div>

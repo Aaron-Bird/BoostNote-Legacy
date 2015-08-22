@@ -230,6 +230,18 @@ module.exports = React.createClass({
       return
     }
 
+    var listElement = this.refs.list.refs.articles.getDOMNode()
+    var articleElement = listElement.querySelectorAll('li')[index]
+
+    var overflowBelow = listElement.clientHeight + listElement.scrollTop < articleElement.offsetTop + articleElement.clientHeight
+    if (overflowBelow) {
+      listElement.scrollTop = articleElement.offsetTop + articleElement.clientHeight - listElement.clientHeight
+    }
+    var overflowAbove = listElement.scrollTop > articleElement.offsetTop
+    if (overflowAbove) {
+      listElement.scrollTop = articleElement.offsetTop
+    }
+
     if (article.type === 'code') {
       params.localId = article.localId
       this.transitionTo('codes', params)

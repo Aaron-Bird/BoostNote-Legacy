@@ -190,7 +190,6 @@ module.exports = React.createClass({
         return this.renderUserHome(currentUser)
       }
     } else if (this.isActive('planet') && user != null && user.userType === 'team') {
-      console.log(user.Members)
       var members = user.Members.map(function (member) {
         return (
           <li key={'user-' + member.id}><Link to='userHome' params={{userName: member.name}}>
