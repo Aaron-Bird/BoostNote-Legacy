@@ -35,6 +35,9 @@ module.exports = {
   fetchUser: function (userName) {
     return request
       .get(apiUrl + 'resources/' + userName)
+      .set({
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      })
   },
   updateUser: function (userName, input) {
     return request
@@ -79,6 +82,9 @@ module.exports = {
   fetchPlanet: function (userName, planetName) {
     return request
       .get(apiUrl + 'resources/' + userName + '/planets/' + planetName)
+      .set({
+        Authorization: 'Bearer ' + localStorage.getItem('token')
+      })
   },
   updatePlanet: function (userName, planetName, input) {
     return request
