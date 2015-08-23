@@ -1,4 +1,5 @@
 function deleteItemFromTargetArray (item, targetArray) {
+  if (targetArray == null) targetArray = []
   targetArray.some(function (_item, index) {
     if (_item.id === item.id) {
       targetArray.splice(index, 1)
@@ -11,6 +12,8 @@ function deleteItemFromTargetArray (item, targetArray) {
 }
 
 function updateItemToTargetArray (item, targetArray) {
+  if (targetArray == null) targetArray = []
+
   var isNew = !targetArray.some(function (_item, index) {
     if (_item.id === item.id) {
       targetArray.splice(index, 1, item)

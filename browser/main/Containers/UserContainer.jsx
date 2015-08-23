@@ -223,7 +223,9 @@ module.exports = React.createClass({
   renderTeamHome: function (currentUser) {
     var user = this.state.user
 
-    var isOwner = true
+    var isOwner = user.Members == null ? false : user.Members.some(function (member) {
+      return member.id === currentUser.id && member.TeamMember.role === 'owner'
+    })
 
     var userPlanets = user.Planets.map(function (planet) {
       return (
@@ -257,7 +259,7 @@ module.exports = React.createClass({
             <div className='userName'>{user.name}</div>
           </div>
 
-          <button onClick={this.openTeamSettingsModal} className='editProfileButton'>Team settings</button>
+          {isOwner ? (<button onClick={this.openTeamSettingsModal} className='editProfileButton'>Team settings</button>) : null}
         </div>
         <div className='memberList'>
           <div className='memberLabel'>{members.length} {members.length > 1 ? 'Members' : 'Member'}</div>
