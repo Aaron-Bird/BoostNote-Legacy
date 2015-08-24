@@ -62,7 +62,7 @@ module.exports = React.createClass({
               </div>
               <div className='itemRight'>
                 <div className='itemInfo'>{moment(article.updatedAt).fromNow()} by <span className='userProfileName'>{article.User.profileName}</span></div>
-                <div className='description'>{article.description.length > 50 ? article.description.substring(0, 50) + ' …' : article.description}</div>
+                <div className='description'>{article.description}</div>
                 <div className='tags'><i className='fa fa-tags'/>{tags}</div>
               </div>
             </div>
