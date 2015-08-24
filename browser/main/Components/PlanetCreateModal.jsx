@@ -42,21 +42,26 @@ module.exports = React.createClass({
     }
   },
   handleSubmit: function () {
-    Hq.createPlanet(this.state.ownerName, this.state.planet)
-      .then(function (res) {
-        var planet = res.body
+    this.setState({errorMessage: null}, function () {
+      Hq.createPlanet(this.state.ownerName, this.state.planet)
+        .then(function (res) {
+          var planet = res.body
 
-        PlanetStore.Actions.update(planet)
+          PlanetStore.Actions.update(planet)
 
-        if (this.props.transitionTo != null) {
-          this.props.transitionTo('planetHome', {userName: planet.userName, planetName: planet.name})
-        }
+          if (this.props.transitionTo != null) {
+            this.props.transitionTo('planetHome', {userName: planet.userName, planetName: planet.name})
+          }
 
-        this.props.close()
-      }.bind(this))
-      .catch(function (err) {
-        console.error(err)
-      })
+          this.props.close()
+        }.bind(this))
+        .catch(function (err) {
+          console.error(err)
+          if (err.status === 403) {
+            this.setState({errorMessage: err.response.body.message})
+          }
+        }.bind(this))
+    })
   },
   render: function () {
     var teamOptions = this.state.user.Teams.map(function (team) {
@@ -80,6 +85,8 @@ module.exports = React.createClass({
             <option value={false}>Private</option>
           </select>
         </div>
+
+        {this.state.errorMessage != null ? (<p className='errorAlert'>{this.state.errorMessage}</p>) : null}
 
         <button onClick={this.handleSubmit} className='submitButton'>
           <i className='fa fa-check'/>

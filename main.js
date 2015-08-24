@@ -178,6 +178,10 @@ function makeNewMainWindow () {
 
   mainWindow.loadUrl('file://' + __dirname + '/browser/main/index.electron.html')
 
+  mainWindow.webContents.on('new-window', function (e) {
+    e.preventDefault()
+  })
+
   mainWindow.on('closed', function () {
     console.log('main closed')
     mainWindow = null

@@ -50,19 +50,24 @@ module.exports = React.createClass({
     }
   },
   handleSubmit: function () {
-    Hq
-      .addMember(this.props.team.name, {
-        userName: this.state.userName,
-        role: this.state.role
-      })
-      .then(function (res) {
-        console.log(res.body)
-        UserStore.Actions.addMember(res.body)
-        this.props.close()
-      }.bind(this))
-      .catch(function (err) {
-        console.error(err)
-      })
+    this.setState({errorMessage: null}, function () {
+      Hq
+        .addMember(this.props.team.name, {
+          userName: this.state.userName,
+          role: this.state.role
+        })
+        .then(function (res) {
+          console.log(res.body)
+          UserStore.Actions.addMember(res.body)
+          this.props.close()
+        }.bind(this))
+        .catch(function (err) {
+          console.error(err)
+          if (err.status === 403) {
+            this.setState({errorMessage: err.response.body.message})
+          }
+        }.bind(this))
+    })
   },
   handleChange: function (value) {
     this.setState({userName: value})
@@ -87,6 +92,8 @@ module.exports = React.createClass({
           </select>
           role
         </div>
+
+        {this.state.errorMessage != null ? (<p className='errorAlert'>{this.state.errorMessage}</p>) : null}
 
         <button onClick={this.handleSubmit} className='submitButton'><i className='fa fa-check'/></button>
       </div>

@@ -71,16 +71,6 @@ module.exports = React.createClass({
   openPlanetCreateModal: function () {
     this.openModal(PlanetCreateModal, {transitionTo: this.transitionTo})
   },
-  handleKeyDown: function (e) {
-    if (this.state.currentUser == null) return
-    if (e.metaKey && e.keyCode > 48 && e.keyCode < 58) {
-      var planet = this.state.currentUser.Planets[e.keyCode - 49]
-      if (planet != null) {
-        this.transitionTo('planet', {userName: planet.userName, planetName: planet.name})
-      }
-      e.preventDefault()
-    }
-  },
   toggleProfilePopup: function () {
     this.openProfilePopup()
   },
