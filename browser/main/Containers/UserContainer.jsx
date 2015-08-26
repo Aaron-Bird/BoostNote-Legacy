@@ -318,7 +318,7 @@ module.exports = React.createClass({
       })
       return (
       <div key={'user-' + team.id} className='planetGroup'>
-        <div className='planetGroupLabel'>{team.name}</div>
+        <div className='planetGroupLabel'>{team.profileName} <small>@{team.name}</small></div>
         <ul className='planets'>
           {planets}
           {isOwner ? (<li><button onClick={this.openPlanetCreateModalWithOwnerName(team.name)} className='createPlanetButton'><i className='fa fa-plus-square-o'/> Create new planet</button></li>) : null}
@@ -353,7 +353,7 @@ module.exports = React.createClass({
         <div className='planetList'>
           <div className='planetLabel'>{planetCount} {planetCount > 1 ? 'Planets' : 'Planet'}</div>
           <div className='planetGroup'>
-            <div className='planetGroupLabel'>{user.profileName}</div>
+            <div className='planetGroupLabel'>{user.profileName} <small>@{user.name}</small></div>
             <ul className='planets'>
               {userPlanets}
               {isOwner ? (<li><button onClick={this.openPlanetCreateModalWithOwnerName(user.name)} className='createPlanetButton'><i className='fa fa-plus-square-o'/> Create new planet</button></li>) : null}

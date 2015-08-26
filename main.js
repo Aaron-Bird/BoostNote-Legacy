@@ -85,7 +85,7 @@ app.on('ready', function () {
   Menu.setApplicationMenu(menu)
   // menu end
   appIcon = new Tray(__dirname + '/tray-icon.png')
-  appIcon.setToolTip('Codexen')
+  appIcon.setToolTip('Boost')
 
   var trayMenu = new Menu()
   trayMenu.append(new MenuItem({
