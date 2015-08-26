@@ -25,7 +25,8 @@ module.exports = React.createClass({
         name: '',
         public: true
       },
-      ownerName: ownerName
+      ownerName: ownerName,
+      error: null
     }
   },
   componentDidMount: function () {
@@ -42,7 +43,7 @@ module.exports = React.createClass({
     }
   },
   handleSubmit: function () {
-    this.setState({errorMessage: null}, function () {
+    this.setState({error: null}, function () {
       Hq.createPlanet(this.state.ownerName, this.state.planet)
         .then(function (res) {
           var planet = res.body
@@ -57,8 +58,21 @@ module.exports = React.createClass({
         }.bind(this))
         .catch(function (err) {
           console.error(err)
-          if (err.status === 403) {
-            this.setState({errorMessage: err.response.body.message})
+
+          if (err.status == null) return this.setState({error: {message: 'Check your network connection'}})
+
+          switch (err.status) {
+            case 403:
+              this.setState({error: err.response.body})
+              break
+            case 422:
+              this.setState({error: {message: 'Planet name should be Alphanumeric with _, -'}})
+              break
+            case 409:
+              this.setState({error: {message: 'The entered name already in use'}})
+              break
+            default:
+              this.setState({error: {message: 'Undefined error please try again'}})
           }
         }.bind(this))
     })
@@ -86,7 +100,7 @@ module.exports = React.createClass({
           </select>
         </div>
 
-        {this.state.errorMessage != null ? (<p className='errorAlert'>{this.state.errorMessage}</p>) : null}
+        {this.state.error != null ? (<p className='errorAlert'>{this.state.error.message != null ? this.state.error.message : 'Error message undefined'}</p>) : null}
 
         <button onClick={this.handleSubmit} className='submitButton'>
           <i className='fa fa-check'/>

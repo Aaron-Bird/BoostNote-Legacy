@@ -1,15 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script>
-  var version = require('remote').getGlobal('version')
-  document.title = 'Boost ' + ((version == null || version.length === 0) ? 'DEV version' : 'v' + version)
-  </script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 
   <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css" media="screen" title="no title" charset="utf-8">
   <link rel="shortcut icon" href="favicon.ico">
+
+  <style>
+  @font-face {
+    font-family: 'Lato';
+    src: url('../../Lato-Regular.woff2') format('woff2'), /* Modern Browsers */
+         url('../../Lato-Regular.woff') format('woff'), /* Modern Browsers */
+         url('../../Lato-Regular.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 400;
+    text-rendering: optimizeLegibility;
+  }
+  #loadingCover{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+    padding: 65px 0;
+    font-family: sans-serif;
+  }
+  #loadingCover img{
+    display: block;
+    margin: 0 auto;
+  }
+  #loadingCover .message{
+    font-size: 2.5em;
+    text-align: center;
+    font-weight: 200;
+    color: #404849;
+  }
+  </style>
+</head>
+<body>
+  <div id="loadingCover">
+    <img src="resources/favicon-230x230.png">
+    <div class='message'>Loading...</div>
+  </div>
+
+  <div id="content"></div>
 
   <script>
   if (!Object.assign) {
@@ -45,13 +81,13 @@
     });
   }
 
-  require('electron-stylus')(__dirname + '/../styles/main/index.styl')
   </script>
-</head>
-<body>
-  <div id="content"></div>
   <script src="../ace/src-min/ace.js"></script>
   <script>
+
+    var version = require('remote').getGlobal('version')
+    document.title = 'Boost ' + ((version == null || version.length === 0) ? 'DEV version' : 'v' + version)
+    require('electron-stylus')(__dirname + '/../styles/main/index.styl')
     require('node-jsx').install({ harmony: true, extension: '.jsx' })
     require('./index.jsx')
   </script>

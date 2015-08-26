@@ -399,7 +399,8 @@ module.exports = React.createClass({
           showAll={this.showAll}
           toggleCodeFilter={this.toggleCodeFilter}
           toggleNoteFilter={this.toggleNoteFilter}
-          planet={this.state.planet}/>
+          planet={this.state.planet}
+          currentUser={this.state.currentUser}/>
 
         <PlanetArticleList showOnlyWithTag={this.applyTagFilter} ref='list' articles={filteredArticles}/>
 

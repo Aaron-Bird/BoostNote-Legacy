@@ -6,10 +6,11 @@ var Link = ReactRouter.Link
 
 var AuthFilter = require('../Mixins/AuthFilter')
 var LinkedState = require('../Mixins/LinkedState')
+var ExternalLink = require('../Mixins/ExternalLink')
 var Hq = require('../Services/Hq')
 
 module.exports = React.createClass({
-  mixins: [LinkedState, ReactRouter.Navigation, AuthFilter.OnlyGuest],
+  mixins: [LinkedState, ReactRouter.Navigation, AuthFilter.OnlyGuest, ExternalLink],
   getInitialState: function () {
     return {
       user: {},
@@ -129,7 +130,7 @@ module.exports = React.createClass({
           </div>
         </form>
 
-        <p className='alert'>会員登録することで、当サイトの利用規約及びCookieの使用を含むデータに関するポリシーに同意するものとします。</p>
+        <p className='alert'>会員登録することで、<a onClick={this.openExternal} href='http://boostio.github.io/regulations.html'>当サイトの利用規約</a>及び<a onClick={this.openExternal} href='http://boostio.github.io/privacypolicies.html'>Cookieの使用を含むデータに関するポリシー</a>に同意するものとします。</p>
       </div>
     )
   }

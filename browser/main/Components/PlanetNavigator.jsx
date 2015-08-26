@@ -10,11 +10,20 @@ module.exports = React.createClass({
   mixins: [Modal, Navigation],
   propTypes: {
     planet: React.PropTypes.shape({
-      name: React.PropTypes.string
+      name: React.PropTypes.string,
+      Owner: React.PropTypes.shape({
+        id: React.PropTypes.number,
+        userType: React.PropTypes.string
+      })
     }),
     search: React.PropTypes.string,
     toggleCodeFilter: React.PropTypes.func,
-    toggleNoteFilter: React.PropTypes.func
+    toggleNoteFilter: React.PropTypes.func,
+    currentUser: React.PropTypes.shape({
+      id: React.PropTypes.number,
+      userType: React.PropTypes.string,
+      Teams: React.PropTypes.array
+    })
   },
   getInitialState: function () {
     return {
@@ -23,6 +32,17 @@ module.exports = React.createClass({
   },
   openLaunchModal: function () {
     this.openModal(LaunchModal, {planet: this.props.planet, transitionTo: this.transitionTo})
+  },
+  isMyPlanet: function () {
+    if (this.props.currentUser == null) return false
+    if (this.props.planet.Owner.userType === 'person' && this.props.planet.Owner.id !== this.props.currentUser.id) return false
+    if (this.props.planet.Owner.userType === 'team' && !this.props.currentUser.Teams.some(function (team) {
+      if (team.id === this.props.planet.Owner.id) return true
+      return false
+    }.bind(this))) return false
+
+    return true
+
   },
   render: function () {
     var keywords = this.props.search.split(' ')
@@ -37,9 +57,11 @@ module.exports = React.createClass({
 
     return (
       <div className='PlanetNavigator'>
-        <button onClick={this.openLaunchModal} className='launchButton btn-primary btn-block'>
-          <i className='fa fa-rocket fa-fw'/> Launch
-        </button>
+        {this.isMyPlanet() ? (
+          <button onClick={this.openLaunchModal} className='launchButton btn-primary btn-block'>
+            <i className='fa fa-rocket fa-fw'/> Launch
+          </button>
+        ) : null}
         <nav className='articleFilters'>
           <a className={usingCodeFilter && !usingNoteFilter ? 'active' : ''} onClick={this.props.toggleCodeFilter}>
             <i className='fa fa-code fa-fw'/> Codes

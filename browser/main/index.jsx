@@ -34,7 +34,13 @@ var routes = (
     </Route>
   </Route>
 )
+var loadingCover = document.getElementById('loadingCover')
 
 ReactRouter.run(routes, ReactRouter.HashLocation, function (Root) {
   React.render(<Root/>, document.getElementById('content'))
+
+  if (loadingCover != null) {
+    loadingCover.parentNode.removeChild(loadingCover)
+    loadingCover = null
+  }
 })
