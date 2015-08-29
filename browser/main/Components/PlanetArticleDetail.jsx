@@ -66,7 +66,7 @@ module.exports = React.createClass({
           <div className='detailHeader'>
             <div className='itemLeft'>
               <ProfileImage className='profileImage' size='25' email={article.User.email}/>
-              <i className='fa fa-file-text-o fa-fw'></i>
+              <i className='fa fa-code fa-fw'></i>
             </div>
 
             <div className='itemRight'>

@@ -5,7 +5,7 @@ module.exports = [
     label: 'Electron',
     submenu: [
       {
-        label: 'About Electron',
+        label: 'About Boost',
         selector: 'orderFrontStandardAboutPanel:'
       },
       {

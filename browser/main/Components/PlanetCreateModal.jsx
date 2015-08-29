@@ -72,7 +72,7 @@ module.exports = React.createClass({
               this.setState({error: {message: 'The entered name already in use'}})
               break
             default:
-              this.setState({error: {message: 'Undefined error please try again'}})
+              this.setState({error: {message: 'Unexpected error occured! please try again'}})
           }
         }.bind(this))
     })

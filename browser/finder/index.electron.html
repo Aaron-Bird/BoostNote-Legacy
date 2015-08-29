@@ -64,7 +64,7 @@
   <div id="content"></div>
   <script src="../ace/src-min/ace.js"></script>
   <script>
-    require('electron-stylus')(__dirname + '/../styles/finder/index.styl')
+    require('../electron-stylus')(__dirname + '/../styles/finder/index.styl', 'finderCss')
     require('node-jsx').install({ harmony: true, extension: '.jsx' })
     require('./index.jsx')
   </script>

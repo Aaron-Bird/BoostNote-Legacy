@@ -58,18 +58,44 @@ module.exports = React.createClass({
   handleSavePlanetProfile: function (e) {
     var planet = this.props.planet
 
-    this.setState({profileSubmitStatus: 'sending'}, function () {
+    this.setState({profileFormStatus: 'sending', profileFormError: null}, function () {
       Hq.updatePlanet(planet.userName, planet.name, this.state.planet)
         .then(function (res) {
           var planet = res.body
-
-          this.setState({profileSubmitStatus: 'done'})
+          console.log(planet)
+          this.setState({profileFormStatus: 'done'})
 
           PlanetStore.Actions.update(planet)
+          this.props.close()
         }.bind(this))
         .catch(function (err) {
-          this.setState({profileSubmitStatus: 'error'})
           console.error(err)
+          var newState = {
+            profileFormStatus: 'error'
+          }
+
+          if (err.status == null) {
+            newState.profileFormError = {message: 'Check your network connection'}
+            return this.setState(newState)
+          }
+
+          switch (err.status) {
+            case 403:
+              newState.profileFormError = err.response.body
+              this.setState(newState)
+              break
+            case 422:
+              newState.profileFormError = {message: 'Planet name should be Alphanumeric with _, -'}
+              this.setState(newState)
+              break
+            case 409:
+              newState.profileFormError = {message: 'The entered name already in use'}
+              this.setState(newState)
+              break
+            default:
+              newState.profileFormError = {message: 'Undefined error please try again'}
+              this.setState(newState)
+          }
         }.bind(this))
     })
   },
@@ -130,11 +156,11 @@ module.exports = React.createClass({
         <div className='formConfirm'>
           <button onClick={this.handleSavePlanetProfile} className='saveButton btn-primary'>Save</button>
 
-          <div className={'alertInfo' + (this.state.profileSubmitStatus === 'sending' ? '' : ' hide')}>on Sending...</div>
+          <div className={'alertInfo' + (this.state.profileFormStatus === 'sending' ? '' : ' hide')}>on Sending...</div>
 
-          <div className={'alertError' + (this.state.profileSubmitStatus === 'error' ? '' : ' hide')}>Connection failed.. Try again.</div>
+          <div className={'alertError' + (this.state.profileFormStatus === 'error' ? '' : ' hide')}>{this.state.profileFormError != null ? this.state.profileFormError.message : 'Unexpected error occured! please try again'}</div>
 
-          <div className={'alertSuccess' + (this.state.profileSubmitStatus === 'done' ? '' : ' hide')}>Successfully done!!</div>
+          <div className={'alertSuccess' + (this.state.profileFormStatus === 'done' ? '' : ' hide')}>Successfully done!!</div>
         </div>
       </div>
     )

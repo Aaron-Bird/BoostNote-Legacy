@@ -29,14 +29,16 @@
   }
   #loadingCover img{
     display: block;
-    margin: 0 auto;
+    margin: 75px auto 5px;
+    width: 160px;
+    height: 160px;
   }
   #loadingCover .message{
-    font-size: 45px;
+    font-size: 30px;
     text-align: center;
     line-height: 1.6;
-    font-weight: 200;
-    color: #404849;
+    font-weight: 100;
+    color: #888;
   }
   </style>
 </head>
@@ -88,7 +90,7 @@
 
     var version = require('remote').getGlobal('version')
     document.title = 'Boost ' + ((version == null || version.length === 0) ? 'DEV version' : 'v' + version)
-    require('electron-stylus')(__dirname + '/../styles/main/index.styl')
+    require('../electron-stylus')(__dirname + '/../styles/main/index.styl', 'mainCss')
     require('node-jsx').install({ harmony: true, extension: '.jsx' })
     require('./index.jsx')
   </script>

@@ -27,6 +27,7 @@ var path = require('path')
 
 autoUpdater
   .on('error', function (err, message) {
+    console.error(message)
     nn.notify({
       title: 'Error! ' + versionText,
       icon: path.join(__dirname, 'browser/main/resources/favicon-230x230.png'),
@@ -34,11 +35,7 @@ autoUpdater
     })
   })
   .on('checking-for-update', function () {
-    nn.notify({
-      title: 'Boost launched!! ' + versionText,
-      icon: path.join(__dirname, 'browser/main/resources/favicon-230x230.png'),
-      message: 'Checking update is available....'
-    })
+    // Connecting
   })
   .on('update-available', function () {
     nn.notify({
@@ -131,9 +128,10 @@ app.on('ready', function () {
     'zoom-factor': 1.0,
     'always-on-top': true,
     'web-preferences': {
-        'overlay-scrollbars': true,
-        'skip-taskbar': true
-      }
+      'overlay-scrollbars': true,
+      'skip-taskbar': true
+    },
+    'standard-window': false
   })
 
   popUpWindow.loadUrl('file://' + __dirname + '/browser/finder/index.electron.html')
@@ -141,6 +139,7 @@ app.on('ready', function () {
   popUpWindow.on('blur', function () {
     popUpWindow.hide()
   })
+
   popUpWindow.setVisibleOnAllWorkspaces(true)
 
   var globalShortcut = require('global-shortcut')
@@ -167,8 +166,9 @@ function makeNewMainWindow () {
     height: 720,
     'zoom-factor': 1.0,
     'web-preferences': {
-        'overlay-scrollbars': true
-      }
+      'overlay-scrollbars': true
+    },
+    'standard-window': false
   })
   if (update != null) {
     mainWindow.webContents.on('did-finish-load', function () {
