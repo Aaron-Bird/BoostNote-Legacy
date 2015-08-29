@@ -53,6 +53,14 @@ module.exports = Reflux.createStore({
     localStorage.setItem('currentUser', JSON.stringify(currentUser))
     UserStore.Actions.update(currentUser)
 
+    planet.Codes.forEach(function (code) {
+      code.type = 'code'
+    })
+
+    planet.Notes.forEach(function (note) {
+      note.type = 'note'
+    })
+
     // Update the planet
     localStorage.setItem('planet-' + planet.id, JSON.stringify(planet))
 

@@ -2,10 +2,9 @@ var React = require('react/addons')
 
 var CodeViewer = require('../../main/Components/CodeViewer')
 
-var Markdown = require('../../main/Mixins/Markdown')
+var MarkdownPreview = require('../../main/Components/MarkdownPreview')
 
 module.exports = React.createClass({
-  mixins: [Markdown],
   propTypes: {
     currentArticle: React.PropTypes.object
   },
@@ -28,7 +27,7 @@ module.exports = React.createClass({
           <div className='FinderDetail'>
             <div className='header'><i className='fa fa-file-text-o fa-fw'/> {article.title}</div>
             <div className='content'>
-              <div className='marked' dangerouslySetInnerHTML={{__html: ' ' + this.markdown(article.content)}}></div>
+              <MarkdownPreview className='marked' content={article.content}/>
             </div>
           </div>
         )
