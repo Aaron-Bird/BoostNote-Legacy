@@ -1,4 +1,4 @@
 module.exports = {
-  apiUrl: 'http://codexen-server-dev2.elasticbeanstalk.com/'
+  apiUrl: 'https://api.b00st.io/'
   // apiUrl: 'http://localhost:8000/'
 }
