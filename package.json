@@ -1,6 +1,6 @@
 {
   "name": "boost",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Boost App",
   "main": "main.js",
   "scripts": {
