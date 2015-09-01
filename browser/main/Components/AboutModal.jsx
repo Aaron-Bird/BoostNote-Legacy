@@ -1,6 +1,3 @@
-var remote = require('remote')
-var version = remote.getGlobal('version')
-
 var React = require('react/addons')
 
 var ExternalLink = require('../Mixins/ExternalLink')
@@ -19,8 +16,9 @@ module.exports = React.createClass({
     }
   },
   render: function () {
+    var version = global.version
     return (
-      <div className='AboutModal modal'>
+      <div className='PreferencesModal sideNavModal modal'>
         <div className='about1'>
           <img className='logo' src='resources/favicon-230x230.png'/>
           <div className='appInfo'>Boost {version == null || version.length === 0 ? 'DEV version' : 'v' + version}</div>

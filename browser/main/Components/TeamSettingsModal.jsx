@@ -176,9 +176,9 @@ module.exports = React.createClass({
     }
 
     return (
-      <div className='TeamSettingsModal modal tabModal'>
+      <div className='TeamSettingsModal sideNavModal modal'>
         <div className='leftPane'>
-          <div className='tabLabel'>Team settings</div>
+          <div className='modalLabel'>Team settings</div>
           <div className='tabList'>
             <button className={this.state.currentTab === 'teamInfo' ? 'active' : ''} onClick={this.selectTab('teamInfo')}><i className='fa fa-info-circle fa-fw'/> Team Info</button>
             <button className={this.state.currentTab === 'members' ? 'active' : ''} onClick={this.selectTab('members')}><i className='fa fa-users fa-fw'/> Members</button>
@@ -192,7 +192,7 @@ module.exports = React.createClass({
   },
   renderTeamInfoTab: function () {
     return (
-      <div className='userInfoTab'>
+      <div className='userInfoTab tab'>
         <div className='formField'>
           <label>Profile Name</label>
           <input valueLink={this.linkState('team.profileName')}/>
@@ -239,7 +239,7 @@ module.exports = React.createClass({
     var belowLimit = members.length < 5
 
     return (
-      <div className='membersTab'>
+      <div className='membersTab tab'>
         <table className='memberTable'>
           <thead>
             <tr>

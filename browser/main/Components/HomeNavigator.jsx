@@ -11,7 +11,7 @@ var Modal = require('../Mixins/Modal')
 
 var UserStore = require('../Stores/UserStore')
 
-var AboutModal = require('./AboutModal')
+var PreferencesModal = require('./PreferencesModal')
 var PlanetCreateModal = require('./PlanetCreateModal')
 var TeamCreateModal = require('./TeamCreateModal')
 var LogoutModal = require('./LogoutModal')
@@ -65,8 +65,8 @@ module.exports = React.createClass({
   openTeamCreateModal: function () {
     this.openModal(TeamCreateModal, {user: this.state.currentUser, transitionTo: this.transitionTo})
   },
-  openAboutModal: function () {
-    this.openModal(AboutModal)
+  openPreferencesModal: function () {
+    this.openModal(PreferencesModal)
   },
   openPlanetCreateModal: function () {
     this.openModal(PlanetCreateModal, {transitionTo: this.transitionTo})
@@ -168,7 +168,7 @@ module.exports = React.createClass({
 
         <ul className='controlGroup'>
           <li>
-            <button onClick={this.openAboutModal}><i className='fa fa-info-circle fa-fw'/> About this app</button>
+            <button onClick={this.openPreferencesModal}><i className='fa fa-gears fa-fw'/> Preferences</button>
           </li>
           <li>
             <button onClick={this.handleLogoutClick}><i className='fa fa-sign-out fa-fw'/> Log out</button>

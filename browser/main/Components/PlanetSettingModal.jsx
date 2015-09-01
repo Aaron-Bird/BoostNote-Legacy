@@ -125,9 +125,9 @@ module.exports = React.createClass({
     content = this.state.currentTab === 'profile' ? this.renderPlanetProfileTab() : this.renderPlanetDeleteTab()
 
     return (
-      <div className='PlanetSettingModal modal tabModal'>
+      <div className='PlanetSettingModal sideNavModal modal'>
         <div className='leftPane'>
-          <h1 className='tabLabel'>Planet setting</h1>
+          <h1 className='modalLabel'>Planet setting</h1>
           <nav className='tabList'>
             <button onClick={this.activePlanetProfile} className={this.state.currentTab === 'profile' ? 'active' : ''}><i className='fa fa-globe fa-fw'/> Planet profile</button>
             <button onClick={this.activePlanetDelete} className={this.state.currentTab === 'delete' ? 'active' : ''}><i className='fa fa-trash fa-fw'/> Delete Planet</button>
@@ -142,7 +142,7 @@ module.exports = React.createClass({
   },
   renderPlanetProfileTab: function () {
     return (
-      <div className='planetProfileTab'>
+      <div className='planetProfileTab tab'>
         <div className='formField'>
           <label>Planet name </label>
           <input valueLink={this.linkState('planet.name')}/>
@@ -169,7 +169,7 @@ module.exports = React.createClass({
     var disabled = !this.state.deleteConfirmation.match(new RegExp('^' + this.props.planet.userName + '/' + this.props.planet.name + '$'))
 
     return (
-      <div className='planetDeleteTab'>
+      <div className='planetDeleteTab tab'>
         <p>Are you sure to destroy <strong>'{this.props.planet.userName + '/' + this.props.planet.name}'</strong>?</p>
         <p>If you are sure, write <strong>'{this.props.planet.userName + '/' + this.props.planet.name}'</strong> to input below and click <strong>'{this.state.randomDeleteText}'</strong> button.</p>
         <input valueLink={this.linkState('deleteConfirmation')} placeholder='userName/planetName'/>

@@ -4,6 +4,7 @@ var Menu = require('menu')
 var MenuItem = require('menu-item')
 var Tray = require('tray')
 var ipc = require('ipc')
+var jetpack = require('fs-jetpack')
 
 require('crash-reporter').start()
 
@@ -19,7 +20,6 @@ var update = null
 // })
 
 var version = app.getVersion()
-global.version = version
 var versionText = (version == null || version.length === 0) ? 'DEV version' : 'v' + version
 var nn = require('node-notifier')
 var autoUpdater = require('auto-updater')
@@ -143,12 +143,49 @@ app.on('ready', function () {
   popUpWindow.setVisibleOnAllWorkspaces(true)
 
   var globalShortcut = require('global-shortcut')
+  console.log('jetpack launch')
+  var userDataPath = app.getPath('userData')
+  if (!jetpack.cwd(userDataPath).exists('keymap.json')) {
+    jetpack.cwd(userDataPath).file('keymap.json', {content: '{}'})
+  }
+  try {
+    global.keymap = JSON.parse(jetpack.cwd(userDataPath).read('keymap.json', 'utf-8'))
+  } catch (err) {
+    jetpack.cwd(userDataPath).file('keymap.json', {content: '{}'})
+    global.keymap = {}
+  }
+  if (global.keymap.toggleFinder == null) global.keymap.toggleFinder = 'ctrl+tab+shift'
+  var toggleFinderKey = global.keymap.toggleFinder
 
-  globalShortcut.register('ctrl+tab+shift', function () {
-    if (mainWindow != null && !mainWindow.isFocused()) {
-      mainWindow.hide()
+  try {
+    globalShortcut.register(toggleFinderKey, function () {
+      if (mainWindow != null && !mainWindow.isFocused()) {
+        mainWindow.hide()
+      }
+      popUpWindow.show()
+    })
+  } catch (err) {
+    console.log(err.name)
+  }
+
+  ipc.on('hotkeyUpdated', function (event, newKeymap) {
+    console.log('got new keymap')
+    console.log(newKeymap)
+    globalShortcut.unregisterAll()
+    global.keymap = JSON.parse(newKeymap)
+    jetpack.cwd(userDataPath).file('keymap.json', {content: JSON.stringify(global.keymap)})
+
+    var toggleFinderKey = global.keymap.toggleFinder != null ? global.keymap.toggleFinder : 'ctrl+tab+shift'
+    try {
+      globalShortcut.register(toggleFinderKey, function () {
+        if (mainWindow != null && !mainWindow.isFocused()) {
+          mainWindow.hide()
+        }
+        popUpWindow.show()
+      })
+    } catch (err) {
+      console.log(err.name)
     }
-    popUpWindow.show()
   })
 
   global.hideFinder = function () {

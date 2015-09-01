@@ -55,7 +55,6 @@ module.exports = React.createClass({
         return
       } else {
         this.transitionTo('home')
-        return
       }
     }
 

@@ -69,7 +69,6 @@ module.exports = React.createClass({
     this.setState({
       passwordSubmitStatus: 'sending'
     }, function () {
-      console.log(this.state.password)
       Hq.changePassword(this.state.password)
         .then(function (res) {
           this.setState({
@@ -103,9 +102,9 @@ module.exports = React.createClass({
     }
 
     return (
-      <div className='EditProfileModal modal tabModal'>
+      <div className='EditProfileModal sideNavModal modal'>
         <div className='leftPane'>
-          <div className='tabLabel'>Edit profile</div>
+          <div className='modalLabel'>Edit profile</div>
           <div className='tabList'>
             <button className={this.state.currentTab === 'userInfo' ? 'active' : ''} onClick={this.selectTab('userInfo')}><i className='fa fa-user fa-fw'/> User Info</button>
             <button className={this.state.currentTab === 'password' ? 'active' : ''} onClick={this.selectTab('password')}><i className='fa fa-lock fa-fw'/> Password</button>
@@ -119,7 +118,7 @@ module.exports = React.createClass({
   },
   renderUserInfoTab: function () {
     return (
-      <div className='userInfoTab'>
+      <div className='userInfoTab tab'>
         <div className='formField'>
           <label>Profile Name</label>
           <input valueLink={this.linkState('user.profileName')}/>
@@ -142,18 +141,18 @@ module.exports = React.createClass({
   },
   renderPasswordTab: function () {
     return (
-      <div className='passwordTab'>
+      <div className='passwordTab tab'>
         <div className='formField'>
           <label>Current password</label>
-          <input valueLink={this.linkState('password.currentPassword')}/>
+          <input type='password' valueLink={this.linkState('password.currentPassword')}/>
         </div>
         <div className='formField'>
           <label>New password</label>
-          <input valueLink={this.linkState('password.newPassword')}/>
+          <input type='password' valueLink={this.linkState('password.newPassword')}/>
         </div>
         <div className='formField'>
           <label>Confirmation</label>
-          <input valueLink={this.linkState('password.passwordConfirmation')}/>
+          <input type='password' valueLink={this.linkState('password.passwordConfirmation')}/>
         </div>
 
         <div className='formConfirm'>

@@ -87,10 +87,11 @@
   </script>
   <script src="../ace/src-min/ace.js"></script>
   <script>
-
-    var version = require('remote').getGlobal('version')
+    var version = require('remote').require('app').getVersion()
+    global.version = version
     document.title = 'Boost ' + ((version == null || version.length === 0) ? 'DEV version' : 'v' + version)
     require('../electron-stylus')(__dirname + '/../styles/main/index.styl', 'mainCss')
+    // require('../electron-stylus')(__dirname + '/../styles/main/index.styl')
     require('node-jsx').install({ harmony: true, extension: '.jsx' })
     require('./index.jsx')
   </script>

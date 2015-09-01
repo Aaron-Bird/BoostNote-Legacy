@@ -32,14 +32,14 @@
       .modal-control
         float right
 
-  .tabModal
+  .sideNavModal
     height 500px
     .leftPane
       absolute top bottom left
       width 175px
       padding 20px
       border-right solid 1px borderColor
-      .tabLabel
+      .modalLabel
         font-size 1.5em
         margin-top 25px
         margin-bottom 35px
@@ -57,9 +57,7 @@
       left 175px
       padding 15px
       overflow-y auto
-
-  .EditProfileModal, .PlanetSettingModal, .TeamSettingsModal
-    .userInfoTab, .passwordTab, .planetProfileTab, .userInfoTab, .membersTab
+    .tab
       padding-top 45px
       .formField
         position relative
@@ -111,6 +109,33 @@
           alertSuccess()
         .alertError
           alertError()
+  .PreferencesModal
+    .settingsTab
+      .categoryLabel
+        font-size 1.5em
+        margin-bottom 25px
+      .example
+        marked()
+    .aboutTab
+      padding-top 30px
+      .about1
+        margin-bottom 25px
+        .logo
+          display block
+          margin 0 auto
+        .appInfo
+          font-size 1.5em
+          text-align center
+      .about2
+        width 200px
+        margin 0 auto
+        .externalLabel
+          font-size 1.2em
+          margin-bottom 15px
+        .externalList
+          li
+            margin-bottom 15px
+  .PlanetSettingModal
     .planetDeleteTab
       padding-top 65px
       p
@@ -153,6 +178,7 @@
           alertSuccess()
         .alertError
           alertError()
+  .TeamSettingsModal
     .membersTab
       .memberTable
         width 100%
@@ -262,25 +288,6 @@
     border-radius 5px
     marked()
 
-  .AboutModal
-    width 320px
-    .about1
-      margin-bottom 25px
-      .logo
-        display block
-        margin 0 auto
-      .appInfo
-        font-size 1.5em
-        text-align center
-    .about2
-      width 200px
-      margin 0 auto
-      .externalLabel
-        font-size 1.2em
-        margin-bottom 15px
-      .externalList
-        li
-          margin-bottom 15px
 
   .PlanetCreateModal.modal, .TeamCreateModal.modal, .AddMemberModal.modal
     padding 60px 0
