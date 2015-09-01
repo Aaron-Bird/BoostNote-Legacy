@@ -1,6 +1,6 @@
 {
   "name": "boost",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "Boost App",
   "main": "main.js",
   "scripts": {
@@ -32,6 +32,7 @@
   "homepage": "https://github.com/Rokt33r/codexen-app#readme",
   "dependencies": {
     "font-awesome": "^4.3.0",
+    "fs-jetpack": "^0.7.0",
     "markdown-it": "^4.3.1",
     "md5": "^2.0.0",
     "moment": "^2.10.3",

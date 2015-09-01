@@ -19,7 +19,7 @@ module.exports = [
         type: 'separator'
       },
       {
-        label: 'Hide Electron',
+        label: 'Hide Boost',
         accelerator: 'Command+H',
         selector: 'hide:'
       },
@@ -89,13 +89,13 @@ module.exports = [
         click: function () {
           BrowserWindow.getFocusedWindow().reload()
         }
-      // },
-      // {
-      //   label: 'Toggle DevTools',
-      //   accelerator: 'Alt+Command+I',
-      //   click: function () {
-      //     BrowserWindow.getFocusedWindow().toggleDevTools()
-      //   }
+      },
+      {
+        label: 'Toggle DevTools',
+        accelerator: 'Alt+Command+I',
+        click: function () {
+          BrowserWindow.getFocusedWindow().toggleDevTools()
+        }
       }
     ]
   },
