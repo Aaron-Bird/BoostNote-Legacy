@@ -9,6 +9,7 @@ var Navigation = ReactRouter.Navigation
 var State = ReactRouter.State
 
 var Hq = require('../Services/Hq')
+var socket = require('../Services/socket')
 
 var Modal = require('../Mixins/Modal')
 
@@ -17,7 +18,7 @@ var UserStore = require('../Stores/UserStore')
 var ContactModal = require('../Components/ContactModal')
 
 function fetchPlanet (userName, planetName) {
-  Hq.fetchPlanet(userName, planetName)
+  return Hq.fetchPlanet(userName, planetName)
     .then(function (res) {
       var planet = res.body
 
@@ -29,8 +30,9 @@ function fetchPlanet (userName, planetName) {
         note.type = 'note'
       })
 
-      console.log('planet-' + planet.id + ' fetched!')
       localStorage.setItem('planet-' + planet.id, JSON.stringify(planet))
+
+      return planet
     })
     .catch(function (err) {
       console.error(err)
@@ -61,15 +63,14 @@ module.exports = React.createClass({
     Hq.getUser()
       .then(function (res) {
         var user = res.body
-        localStorage.setItem('currentUser', JSON.stringify(user))
         UserStore.Actions.update(user)
 
         user.Planets.forEach(function (planet) {
-          fetchPlanet(planet.userName, planet.name)
+          fetchPlanet(user.name, planet.name)
         })
         user.Teams.forEach(function (team) {
           team.Planets.forEach(function (planet) {
-            fetchPlanet(planet.userName, planet.name)
+            fetchPlanet(team.name, planet.name)
           })
         })
       })

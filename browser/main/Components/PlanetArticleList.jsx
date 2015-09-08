@@ -18,7 +18,6 @@ module.exports = React.createClass({
       return function (e) {
         var params = this.getParams()
 
-        document.getElementById('articleEditButton').focus()
         this.transitionTo('codes', {
           userName: params.userName,
           planetName: params.planetName,
@@ -31,7 +30,6 @@ module.exports = React.createClass({
       return function (e) {
         var params = this.getParams()
 
-        document.getElementById('articleEditButton').focus()
         this.transitionTo('notes', {
           userName: params.userName,
           planetName: params.planetName,

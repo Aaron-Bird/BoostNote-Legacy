@@ -7,8 +7,6 @@ var Hq = require('../Services/Hq')
 
 var KeyCaster = require('../Mixins/KeyCaster')
 
-var UserStore = require('../Stores/UserStore')
-
 var getOptions = function (input, callback) {
   Hq.searchUser(input)
     .then(function (res) {
@@ -58,7 +56,6 @@ module.exports = React.createClass({
         })
         .then(function (res) {
           console.log(res.body)
-          UserStore.Actions.addMember(res.body)
           this.props.close()
         }.bind(this))
         .catch(function (err) {

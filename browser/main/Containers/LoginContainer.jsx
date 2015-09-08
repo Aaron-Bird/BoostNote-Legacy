@@ -6,6 +6,7 @@ var Link = ReactRouter.Link
 var AuthFilter = require('../Mixins/AuthFilter')
 var LinkedState = require('../Mixins/LinkedState')
 var Hq = require('../Services/Hq')
+var socket = require('../Services/socket')
 
 module.exports = React.createClass({
   mixins: [LinkedState, ReactRouter.Navigation, AuthFilter.OnlyGuest],
@@ -47,6 +48,7 @@ module.exports = React.createClass({
         .then(function (res) {
           localStorage.setItem('token', res.body.token)
           localStorage.setItem('currentUser', JSON.stringify(res.body.user))
+          socket.reconnect()
 
           this.transitionTo('userHome', {userName: res.body.user.name})
         }.bind(this))

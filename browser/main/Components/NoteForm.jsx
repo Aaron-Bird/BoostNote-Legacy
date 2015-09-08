@@ -16,14 +16,14 @@ var getOptions = function (input, callback) {
   Hq.searchTag(input)
     .then(function (res) {
       callback(null, {
-          options: res.body.map(function (tag) {
-            return {
-              label: tag.name,
-              value: tag.name
-            }
-          }),
-          complete: false
-        })
+        options: res.body.map(function (tag) {
+          return {
+            label: tag.name,
+            value: tag.name
+          }
+        }),
+        complete: false
+      })
     })
     .catch(function (err) {
       console.log(err)
@@ -89,18 +89,18 @@ module.exports = React.createClass({
     })
 
     if (this.props.note == null) {
-      Hq.createNote(planet.userName, planet.name, this.state.note)
+      Hq.createNote(planet.Owner.name, planet.name, this.state.note)
         .then(function (res) {
           var note = res.body
           PlanetStore.Actions.updateNote(note)
           this.props.close()
-          this.props.transitionTo('notes', {userName: planet.userName, planetName: planet.name, localId: note.localId})
+          this.props.transitionTo('notes', {userName: planet.Owner.name, planetName: planet.name, localId: note.localId})
         }.bind(this))
         .catch(function (err) {
           console.error(err)
         })
     } else {
-      Hq.updateNote(planet.userName, planet.name, this.props.note.localId, this.state.note)
+      Hq.updateNote(planet.Owner.name, planet.name, this.props.note.localId, this.state.note)
         .then(function (res) {
           var note = res.body
           PlanetStore.Actions.updateNote(note)

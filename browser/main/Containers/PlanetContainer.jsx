@@ -41,10 +41,10 @@ module.exports = React.createClass({
       var planet = this.state.planet
       switch (article.type) {
         case 'code':
-          this.transitionTo('codes', {userName: planet.userName, planetName: planet.name, localId: article.localId})
+          this.transitionTo('codes', {userName: planet.Owner.name, planetName: planet.name, localId: article.localId})
           break
         case 'note':
-          this.transitionTo('notes', {userName: planet.userName, planetName: planet.name, localId: article.localId})
+          this.transitionTo('notes', {userName: planet.Owner.name, planetName: planet.name, localId: article.localId})
           break
       }
     }
@@ -55,7 +55,7 @@ module.exports = React.createClass({
       return
     }
 
-    if (nextProps.params.userName !== this.state.planet.userName || nextProps.params.planetName !== this.state.planet.name) {
+    if (nextProps.params.userName !== this.state.planet.Owner.name || nextProps.params.planetName !== this.state.planet.name) {
       this.setState({
         planet: null
       }, function () {
@@ -96,14 +96,14 @@ module.exports = React.createClass({
           if (this.state.planet.name === planet.name) {
             this.setState({planet: planet})
           } else {
-            this.transitionTo('planetHome', {userName: planet.userName, planetName: planet.name})
+            this.transitionTo('planetHome', {userName: planet.Owner.name, planetName: planet.name})
           }
         }
         break
       case 'destroyed':
         planet = res.data
         if (this.state.planet.id === planet.id) {
-          this.transitionTo('userHome', {userName: this.state.planet.userName})
+          this.transitionTo('userHome', {userName: this.state.planet.Owner.name})
         }
         break
       case 'codeUpdated':

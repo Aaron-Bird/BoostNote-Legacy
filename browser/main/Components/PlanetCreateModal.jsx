@@ -51,7 +51,7 @@ module.exports = React.createClass({
           PlanetStore.Actions.update(planet)
 
           if (this.props.transitionTo != null) {
-            this.props.transitionTo('planetHome', {userName: planet.userName, planetName: planet.name})
+            this.props.transitionTo('planetHome', {userName: planet.Owner.name, planetName: planet.name})
           }
 
           this.props.close()

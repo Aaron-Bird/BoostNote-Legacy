@@ -25,7 +25,7 @@ module.exports = React.createClass({
   },
   submit: function () {
     var planet = this.props.planet
-    Hq.destroyNote(planet.userName, planet.name, this.props.note.localId)
+    Hq.destroyNote(planet.Owner.name, planet.name, this.props.note.localId)
       .then(function (res) {
         PlanetStore.Actions.destroyNote(res.body)
         this.props.close()

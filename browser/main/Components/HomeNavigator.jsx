@@ -94,15 +94,18 @@ module.exports = React.createClass({
     var params = this.getParams()
 
     if (this.state.currentUser == null) {
-      return (
-        <div className='HomeNavigator'>
-        </div>
-      )
+      return null
     }
 
-    var planets = (this.state.currentUser.Planets.concat(this.state.currentUser.Teams.reduce(function (planets, team) {
-      return team.Planets == null ? planets : planets.concat(team.Planets)
-    }, []))).map(function (planet, index) {
+    var planets = this.state.currentUser.Planets.map(function (planet) {
+      planet.userName = this.state.currentUser.name
+      return planet
+    }.bind(this)).concat(this.state.currentUser.Teams.reduce(function (_planets, team) {
+      return _planets.concat(team.Planets == null ? [] : team.Planets.map(function (planet) {
+        planet.userName = team.name
+        return planet
+      }))
+    }, [])).map(function (planet, index) {
       return (
         <li userName={planet.userName} planetName={planet.name} key={planet.id} className={params.userName === planet.userName && params.planetName === planet.name ? 'active' : ''}>
           <Link to='planet' params={{userName: planet.userName, planetName: planet.name}}>

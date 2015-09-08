@@ -25,7 +25,7 @@ module.exports = React.createClass({
   },
   submit: function () {
     var planet = this.props.planet
-    Hq.destroyCode(planet.userName, planet.name, this.props.code.localId)
+    Hq.destroyCode(planet.Owner.name, planet.name, this.props.code.localId)
       .then(function (res) {
         PlanetStore.Actions.destroyCode(res.body)
         this.props.close()

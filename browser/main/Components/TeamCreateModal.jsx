@@ -3,6 +3,7 @@
 var React = require('react/addons')
 
 var Hq = require('../Services/Hq')
+var socket = require('../Services/socket')
 
 var LinkedState = require('../Mixins/LinkedState')
 var KeyCaster = require('../Mixins/KeyCaster')
@@ -48,6 +49,7 @@ module.exports = React.createClass({
 
           currentUser.Teams.push(team)
           localStorage.setItem('currentUser', JSON.stringify(currentUser))
+          socket.reconnect(currentUser)
           UserStore.Actions.update(currentUser)
 
           if (this.props.transitionTo != null) {
