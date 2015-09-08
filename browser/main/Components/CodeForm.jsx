@@ -15,14 +15,14 @@ var getOptions = function (input, callback) {
   Hq.searchTag(input)
     .then(function (res) {
       callback(null, {
-          options: res.body.map(function (tag) {
-            return {
-              label: tag.name,
-              value: tag.name
-            }
-          }),
-          complete: false
-        })
+        options: res.body.map(function (tag) {
+          return {
+            label: tag.name,
+            value: tag.name
+          }
+        }),
+        complete: false
+      })
     })
     .catch(function (err) {
       console.log(err)
@@ -88,18 +88,18 @@ module.exports = React.createClass({
       return tag.value
     })
     if (this.props.code == null) {
-      Hq.createCode(planet.userName, planet.name, this.state.code)
+      Hq.createCode(planet.Owner.name, planet.name, this.state.code)
         .then(function (res) {
           var code = res.body
           PlanetStore.Actions.updateCode(code)
           this.props.close()
-          this.props.transitionTo('codes', {userName: planet.userName, planetName: planet.name, localId: code.localId})
+          this.props.transitionTo('codes', {userName: planet.Owner.name, planetName: planet.name, localId: code.localId})
         }.bind(this))
         .catch(function (err) {
           console.error(err)
         })
     } else {
-      Hq.updateCode(planet.userName, planet.name, this.props.code.localId, this.state.code)
+      Hq.updateCode(planet.Owner.name, planet.name, this.props.code.localId, this.state.code)
         .then(function (res) {
           var code = res.body
           PlanetStore.Actions.updateCode(code)

@@ -4,18 +4,19 @@ var Reflux = require('reflux')
 
 var actions = Reflux.createActions([
   'update',
-  'destroy',
-  'addMember',
-  'removeMember'
+  'destroy'
 ])
 
 module.exports = Reflux.createStore({
   listenables: [actions],
   onUpdate: function (user) {
-    var currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    if (this.socket == null) this.socket = require('../Services/socket')
 
+    var currentUser = JSON.parse(localStorage.getItem('currentUser'))
     if (currentUser.id === user.id) {
       localStorage.setItem('currentUser', JSON.stringify(user))
+
+      this.socket.reconnect(user)
     }
 
     if (user.userType === 'team') {
@@ -51,18 +52,6 @@ module.exports = Reflux.createStore({
     this.trigger({
       status: 'userDestroyed',
       data: user
-    })
-  },
-  onAddMember: function (member) {
-    this.trigger({
-      status: 'memberAdded',
-      data: member
-    })
-  },
-  onRemoveMember: function (member) {
-    this.trigger({
-      status: 'memberRemoved',
-      data: member
     })
   },
   Actions: actions

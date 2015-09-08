@@ -2,6 +2,8 @@
 
 var React = require('react')
 
+var socket = require('../Services/socket')
+
 var KeyCaster = require('../Mixins/KeyCaster')
 
 module.exports = React.createClass({
@@ -23,6 +25,8 @@ module.exports = React.createClass({
   logout: function () {
     localStorage.removeItem('currentUser')
     localStorage.removeItem('token')
+    socket.reconnect()
+
     this.props.transitionTo('login')
     this.props.close()
   },

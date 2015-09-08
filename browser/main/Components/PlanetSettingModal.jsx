@@ -14,7 +14,9 @@ module.exports = React.createClass({
     planet: React.PropTypes.shape({
       name: React.PropTypes.string,
       public: React.PropTypes.bool,
-      userName: React.PropTypes.string
+      Owner: React.PropTypes.shape({
+        name: React.PropTypes.string
+      })
     })
   },
   getInitialState: function () {
@@ -59,7 +61,7 @@ module.exports = React.createClass({
     var planet = this.props.planet
 
     this.setState({profileFormStatus: 'sending', profileFormError: null}, function () {
-      Hq.updatePlanet(planet.userName, planet.name, this.state.planet)
+      Hq.updatePlanet(planet.Owner.name, planet.name, this.state.planet)
         .then(function (res) {
           var planet = res.body
           console.log(planet)
@@ -103,7 +105,7 @@ module.exports = React.createClass({
     var planet = this.props.planet
 
     this.setState({deleteSubmitStatus: 'sending'}, function () {
-      Hq.destroyPlanet(planet.userName, planet.name)
+      Hq.destroyPlanet(planet.Owner.name, planet.name)
         .then(function (res) {
           var planet = res.body
 
@@ -166,12 +168,12 @@ module.exports = React.createClass({
     )
   },
   renderPlanetDeleteTab: function () {
-    var disabled = !this.state.deleteConfirmation.match(new RegExp('^' + this.props.planet.userName + '/' + this.props.planet.name + '$'))
+    var disabled = !this.state.deleteConfirmation.match(new RegExp('^' + this.props.planet.Owner.name + '/' + this.props.planet.name + '$'))
 
     return (
       <div className='planetDeleteTab tab'>
-        <p>Are you sure to destroy <strong>'{this.props.planet.userName + '/' + this.props.planet.name}'</strong>?</p>
-        <p>If you are sure, write <strong>'{this.props.planet.userName + '/' + this.props.planet.name}'</strong> to input below and click <strong>'{this.state.randomDeleteText}'</strong> button.</p>
+        <p>Are you sure to destroy <strong>'{this.props.planet.Owner.name + '/' + this.props.planet.name}'</strong>?</p>
+        <p>If you are sure, write <strong>'{this.props.planet.Owner.name + '/' + this.props.planet.name}'</strong> to input below and click <strong>'{this.state.randomDeleteText}'</strong> button.</p>
         <input valueLink={this.linkState('deleteConfirmation')} placeholder='userName/planetName'/>
         <div className='formConfirm'>
           <button disabled={disabled} onClick={this.handleDeletePlanetClick}>{this.state.randomDeleteText}</button>

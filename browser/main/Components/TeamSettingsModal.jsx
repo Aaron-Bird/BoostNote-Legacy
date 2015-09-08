@@ -43,12 +43,9 @@ module.exports = React.createClass({
     close: React.PropTypes.func
   },
   getInitialState: function () {
-    var team = this.props.team
     return {
       currentTab: 'teamInfo',
-      team: {
-        profileName: team.profileName
-      },
+      team: this.props.team,
       userSubmitStatus: null,
       member: {
         name: '',
@@ -65,17 +62,10 @@ module.exports = React.createClass({
     }
   },
   onUserChange: function (res) {
-    var member
     switch (res.status) {
-      case 'memberAdded':
-        member = res.data
-        if (member.TeamMember.TeamId === this.props.team.id) {
-          this.forceUpdate()
-        }
-        break
-      case 'memberRemoved':
-        member = res.data
-        if (member.TeamMember.TeamId === this.props.team.id) {
+      case 'userUpdated':
+        var user = res.data
+        if (user.id === this.props.team.id) {
           this.forceUpdate()
         }
         break
@@ -116,8 +106,7 @@ module.exports = React.createClass({
           role: this.state.member.role
         })
         .then(function (res) {
-          UserStore.Actions.addMember(res.body)
-          this.setState({updatingMember: false})
+          this.setState({updatingMember: false, team: res.body})
         }.bind(this))
         .catch(function (err) {
           console.error(err)
@@ -135,8 +124,7 @@ module.exports = React.createClass({
             role: role
           })
           .then(function (res) {
-            UserStore.Actions.addMember(res.body)
-            this.setState({updatingMember: false})
+            this.setState({updatingMember: false, team: res.body})
           }.bind(this))
           .catch(function (err) {
             console.error(err)
@@ -153,8 +141,7 @@ module.exports = React.createClass({
             userName: memberName
           })
           .then(function (res) {
-            UserStore.Actions.removeMember(res.body)
-            this.setState({updatingMember: false})
+            this.setState({updatingMember: false, team: res.body})
           }.bind(this))
           .catch(function (err) {
             console.error(err)
@@ -212,7 +199,7 @@ module.exports = React.createClass({
   renderMembersTab: function () {
     var currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
-    var members = this.props.team.Members.map(function (member) {
+    var members = this.state.team.Members.map(function (member) {
       var isCurrentUser = currentUser.id === member.id
       return (
         <tr>

@@ -230,7 +230,7 @@ module.exports = React.createClass({
     var userPlanets = user.Planets.map(function (planet) {
       return (
         <li key={'planet-' + planet.id}>
-          <Link to='planet' params={{userName: planet.userName, planetName: planet.name}}>{planet.userName}/{planet.name}</Link>
+          <Link to='planet' params={{userName: user.name, planetName: planet.name}}>{user.name}/{planet.name}</Link>
           &nbsp;{!planet.public ? (<i className='fa fa-lock'/>) : null}
         </li>
       )
@@ -288,7 +288,7 @@ module.exports = React.createClass({
     var userPlanets = user.Planets.map(function (planet) {
       return (
         <li key={'planet-' + planet.id}>
-          <Link to='planet' params={{userName: planet.userName, planetName: planet.name}}>{planet.userName}/{planet.name}</Link>
+          <Link to='planet' params={{userName: user.name, planetName: planet.name}}>{user.name}/{planet.name}</Link>
           &nbsp;{!planet.public ? (<i className='fa fa-lock'/>) : null}
         </li>
       )
@@ -311,7 +311,7 @@ module.exports = React.createClass({
       var planets = (team.Planets == null ? [] : team.Planets).map(function (planet) {
         return (
           <li key={'planet-' + planet.id}>
-            <Link to='planet' params={{userName: planet.userName, planetName: planet.name}}>{planet.userName}/{planet.name}</Link>
+            <Link to='planet' params={{userName: team.name, planetName: planet.name}}>{team.name}/{planet.name}</Link>
             &nbsp;{!planet.public ? (<i className='fa fa-lock'/>) : null}
           </li>
         )

@@ -19,39 +19,51 @@ module.exports = Reflux.createStore({
   mixins: [Helper],
   listenables: [actions],
   Actions: actions,
+  /*
+    Planet must be updated like below
+    Planet
+      Codes
+        Tags
+        User
+      Notes
+        Tags
+        User
+      Owner
+  */
   onUpdate: function (planet) {
     // Copy the planet object
     var aPlanet = Object.assign({}, planet)
     delete aPlanet.Codes
     delete aPlanet.Notes
+    delete aPlanet.Owner
 
     // Check if the planet should be updated to currentUser
     var currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
-    var ownedByCurrentUser = currentUser.id === aPlanet.OwnerId
+    var currentUserMustBeUpdated = false
 
+    var ownedByCurrentUser = currentUser.id === aPlanet.OwnerId
     if (ownedByCurrentUser) {
       currentUser.Planets = this.updateItemToTargetArray(aPlanet, currentUser.Planets)
-    }
-
-    if (!ownedByCurrentUser) {
+      currentUserMustBeUpdated = true
+    } else {
       var team = null
-      currentUser.Teams.some(function (_team) {
+      if (currentUser.Teams.some(function (_team) {
         if (_team.id === aPlanet.OwnerId) {
           team = _team
           return true
         }
-        return
-      })
-
-      if (team) {
+        return false
+      })) {
         team.Planets = this.updateItemToTargetArray(aPlanet, team.Planets)
+        currentUserMustBeUpdated = true
       }
     }
 
     // Update currentUser
-    localStorage.setItem('currentUser', JSON.stringify(currentUser))
-    UserStore.Actions.update(currentUser)
+    if (currentUserMustBeUpdated) {
+      UserStore.Actions.update(currentUser)
+    }
 
     planet.Codes.forEach(function (code) {
       code.type = 'code'

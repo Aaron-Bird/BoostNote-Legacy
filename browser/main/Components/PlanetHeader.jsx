@@ -46,7 +46,7 @@ module.exports = React.createClass({
   },
   render: function () {
     var currentPlanetName = this.props.currentPlanet.name
-    var currentUserName = this.props.currentPlanet.userName
+    var currentUserName = this.props.currentPlanet.Owner.name
 
     return (
       <div className='PlanetHeader'>
