@@ -1,5 +1,4 @@
 var app = require('app')
-var BrowserWindow = require('browser-window')
 var Menu = require('menu')
 var MenuItem = require('menu-item')
 var Tray = require('tray')
@@ -11,7 +10,7 @@ require('crash-reporter').start()
 var mainWindow = null
 var appIcon = null
 var menu = null
-var popUpWindow = null
+var finderWindow = null
 
 var update = null
 
@@ -22,35 +21,12 @@ var update = null
 var version = app.getVersion()
 var versionText = (version == null || version.length === 0) ? 'DEV version' : 'v' + version
 var nn = require('node-notifier')
-var autoUpdater = require('auto-updater')
+var updater = require('./updater')
 var path = require('path')
 
-autoUpdater
-  .on('error', function (err, message) {
-    console.error(message)
-    nn.notify({
-      title: 'Error! ' + versionText,
-      icon: path.join(__dirname, 'browser/main/resources/favicon-230x230.png'),
-      message: message
-    })
-  })
-  .on('checking-for-update', function () {
-    // Connecting
-  })
-  .on('update-available', function () {
-    nn.notify({
-      title: 'Update is available!! ' + versionText,
-      icon: path.join(__dirname, 'browser/main/resources/favicon-230x230.png'),
-      message: 'Download started.. wait for the update ready.'
-    })
-  })
-  .on('update-not-available', function () {
-    nn.notify({
-      title: 'Latest Build!! ' + versionText,
-      icon: path.join(__dirname, 'browser/main/resources/favicon-230x230.png'),
-      message: 'Hope you to enjoy our app :D'
-    })
-  })
+var appQuit = false
+
+updater
   .on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
     nn.notify({
       title: 'Ready to Update!! ' + versionText,
@@ -65,9 +41,12 @@ autoUpdater
   })
 
 app.on('ready', function () {
+  app.on('before-quit', function () {
+    appQuit = true
+  })
   console.log('Version ' + version)
-  autoUpdater.setFeedUrl('http://orbital.b00st.io/rokt33r/boost/latest?version=' + version)
-  autoUpdater.checkForUpdates()
+  updater.setFeedUrl('http://orbital.b00st.io/rokt33r/boost/latest?version=' + version)
+  updater.checkForUpdates()
   // menu start
   var template = require('./modules/menu-template')
 
@@ -81,25 +60,14 @@ app.on('ready', function () {
 
   Menu.setApplicationMenu(menu)
   // menu end
-  appIcon = new Tray(__dirname + '/tray-icon.png')
+  appIcon = new Tray(__dirname + '/resources/tray-icon.png')
   appIcon.setToolTip('Boost')
 
   var trayMenu = new Menu()
   trayMenu.append(new MenuItem({
     label: 'Open main window',
     click: function () {
-      if (mainWindow == null) {
-        makeNewMainWindow()
-      }
-      mainWindow.show()
-    }
-  }))
-  trayMenu.append(new MenuItem({
-    label: 'Update App',
-    click: function () {
-      if (update != null) {
-        update()
-      }
+      if (mainWindow != null) mainWindow.show()
     }
   }))
   trayMenu.append(new MenuItem({
@@ -110,37 +78,24 @@ app.on('ready', function () {
   }))
   appIcon.setContextMenu(trayMenu)
 
-  makeNewMainWindow()
+  mainWindow = require('./main-window')
+  mainWindow.on('close', function (e) {
+    if (appQuit) return true
+    e.preventDefault()
+    mainWindow.hide()
+  })
+  if (update != null) {
+    mainWindow.webContents.on('did-finish-load', function () {
+      mainWindow.webContents.send('update-available', 'whoooooooh!')
+    })
+  }
 
   app.on('activate-with-no-open-windows', function () {
-    if (mainWindow == null) {
-      makeNewMainWindow()
-      return
-    }
+    if (mainWindow == null) return null
     mainWindow.show()
   })
 
-  popUpWindow = new BrowserWindow({
-    width: 600,
-    height: 400,
-    show: false,
-    frame: false,
-    'zoom-factor': 1.0,
-    'always-on-top': true,
-    'web-preferences': {
-      'overlay-scrollbars': true,
-      'skip-taskbar': true
-    },
-    'standard-window': false
-  })
-
-  popUpWindow.loadUrl('file://' + __dirname + '/browser/finder/index.electron.html')
-
-  popUpWindow.on('blur', function () {
-    popUpWindow.hide()
-  })
-
-  popUpWindow.setVisibleOnAllWorkspaces(true)
+  finderWindow = require('./finder-window')
 
   var globalShortcut = require('global-shortcut')
   console.log('jetpack launch')
@@ -162,7 +117,7 @@ app.on('ready', function () {
       if (mainWindow != null && !mainWindow.isFocused()) {
         mainWindow.hide()
       }
-      popUpWindow.show()
+      finderWindow.show()
     })
   } catch (err) {
     console.log(err.name)
@@ -181,7 +136,7 @@ app.on('ready', function () {
         if (mainWindow != null && !mainWindow.isFocused()) {
           mainWindow.hide()
         }
-        popUpWindow.show()
+        finderWindow.show()
       })
     } catch (err) {
       console.log(err.name)
@@ -189,40 +144,10 @@ app.on('ready', function () {
   })
 
   global.hideFinder = function () {
-    if (mainWindow == null || !mainWindow.isVisible()) {
+    if (!mainWindow.isVisible()) {
       Menu.sendActionToFirstResponder('hide:')
+    } else {
+      mainWindow.focus()
     }
-    popUpWindow.hide()
   }
 })
-
-function makeNewMainWindow () {
-  console.log('new Window!')
-  mainWindow = new BrowserWindow({
-    width: 1080,
-    height: 720,
-    'zoom-factor': 1.0,
-    'web-preferences': {
-      'overlay-scrollbars': true
-    },
-    'standard-window': false
-  })
-  if (update != null) {
-    mainWindow.webContents.on('did-finish-load', function () {
-      mainWindow.webContents.send('update-available', 'whoooooooh!')
-    })
-  }
-
-  mainWindow.loadUrl('file://' + __dirname + '/browser/main/index.electron.html')
-
-  mainWindow.webContents.on('new-window', function (e) {
-    e.preventDefault()
-  })
-
-  mainWindow.on('closed', function () {
-    console.log('main closed')
-    mainWindow = null
-    app.dock.hide()
-  })
-  app.dock.show()
-}
