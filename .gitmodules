@@ -1,6 +1,3 @@
 [submodule "browser/ace"]
 	path = browser/ace
 	url = https://github.com/ajaxorg/ace-builds.git
-[submodule "browser/electron-stylus"]
-	path = browser/electron-stylus
-	url = https://github.com/Rokt33r/electron-stylus.git
