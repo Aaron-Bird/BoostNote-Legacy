@@ -1,4 +1,4 @@
-var React = require('react/addons')
+var React = require('react')
 var md5 = require('md5')
 
 module.exports = React.createClass({

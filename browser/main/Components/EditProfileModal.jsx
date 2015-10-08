@@ -1,6 +1,4 @@
-/* global localStorage */
-
-var React = require('react/addons')
+var React = require('react')
 
 var Hq = require('../Services/Hq')
 

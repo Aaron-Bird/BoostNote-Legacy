@@ -3,7 +3,7 @@ var remote = require('remote')
 var hideFinder = remote.getGlobal('hideFinder')
 var clipboard = require('clipboard')
 
-var React = require('react/addons')
+var React = require('react')
 
 var ArticleFilter = require('../main/Mixins/ArticleFilter')
 

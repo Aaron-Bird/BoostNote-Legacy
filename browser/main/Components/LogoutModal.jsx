@@ -1,5 +1,3 @@
-/* global localStorage */
-
 var React = require('react')
 
 var socket = require('../Services/socket')

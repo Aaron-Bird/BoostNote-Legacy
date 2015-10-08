@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <title>CodeXen Popup</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+
+  <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css" media="screen" title="no title" charset="utf-8">
+  <link rel="shortcut icon" href="favicon.ico">
+  <style>
+  @font-face {
+    font-family: 'Lato';
+    src: url('../../resources/Lato-Regular.woff2') format('woff2'), /* Modern Browsers */
+         url('../../resources/Lato-Regular.woff') format('woff'), /* Modern Browsers */
+         url('../../resources/Lato-Regular.ttf') format('truetype');
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
+  }
+  </style>
+  <script>
+  document.addEventListener('mousewheel', function(e) {
+    if(e.deltaY % 1 !== 0) {
+      e.preventDefault()
+    }
+  })
+  </script>
+</head>
+<body>
+  <div id="content"></div>
+  <script src="../ace/src-min/ace.js"></script>
+  <script>
+
+  require("babel-core/register")
+  require('./index.jsx')
+  </script>
+</body>
+</html>

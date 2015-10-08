@@ -1,25 +1,23 @@
-var React = require('react')
-
-var LinkedState = require('../Mixins/LinkedState')
-var KeyCaster = require('../Mixins/KeyCaster')
-
+import React, { PropTypes, findDOMNode } from 'react'
+import linkState from '../helpers/linkState'
 var Hq = require('../Services/Hq')
 
-module.exports = React.createClass({
-  mixins: [LinkedState, KeyCaster('contactModal')],
-  propTypes: {
-    close: React.PropTypes.func
-  },
-  getInitialState: function () {
-    return {
+export default class ContactModal extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.linkState = linkState
+
+    this.state = {
       isSent: false,
       mail: {
         title: '',
         content: ''
       }
     }
-  },
-  onKeyCast: function (e) {
+  }
+
+  onKeyCast (e) {
     switch (e.status) {
       case 'closeModal':
         this.props.close()
@@ -32,11 +30,13 @@ module.exports = React.createClass({
         this.sendEmail()
         break
     }
-  },
-  componentDidMount: function () {
-    React.findDOMNode(this.refs.title).focus()
-  },
-  sendEmail: function () {
+  }
+
+  componentDidMount () {
+    findDOMNode(this.refs.title).focus()
+  }
+
+  sendEmail () {
     Hq.sendEmail(this.state.mail)
       .then(function (res) {
         this.setState({isSent: !this.state.isSent})
@@ -44,8 +44,9 @@ module.exports = React.createClass({
       .catch(function (err) {
         console.error(err)
       })
-  },
-  render: function () {
+  }
+
+  render () {
     return (
       <div className='ContactModal modal'>
         <div className='modal-header'><h1>Contact form</h1></div>
@@ -77,4 +78,8 @@ module.exports = React.createClass({
       </div>
     )
   }
-})
+}
+
+ContactModal.propTypes = {
+  close: PropTypes.func
+}

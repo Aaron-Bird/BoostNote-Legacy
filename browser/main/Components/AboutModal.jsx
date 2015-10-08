@@ -1,4 +1,4 @@
-var React = require('react/addons')
+var React = require('react')
 
 var ExternalLink = require('../Mixins/ExternalLink')
 var KeyCaster = require('../Mixins/KeyCaster')

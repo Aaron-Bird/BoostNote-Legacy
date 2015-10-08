@@ -6,16 +6,16 @@ var finderWindow = new BrowserWindow({
   show: false,
   frame: false,
   resizable: false,
+  'zoom-factor': 1.0,
   'always-on-top': true,
   'web-preferences': {
-    'zoom-factor': 1.0,
     'overlay-scrollbars': true,
     'skip-taskbar': true
   },
   'standard-window': false
 })
 
-finderWindow.loadUrl('file://' + __dirname + '/browser/finder/index.electron.html')
+finderWindow.loadUrl('file://' + __dirname + '/browser/finder/index.html')
 
 finderWindow.on('blur', function () {
   finderWindow.hide()

@@ -21,11 +21,9 @@ function setPartialState (component, path, value) {
     updateIn(component.state, path, value))
 }
 
-module.exports = {
-  linkState: function (path) {
-    return {
-      value: getIn(this.state, path),
-      requestChange: setPartialState.bind(null, this, path)
-    }
+export default function linkState (path) {
+  return {
+    value: getIn(this.state, path),
+    requestChange: setPartialState.bind(null, this, path)
   }
 }

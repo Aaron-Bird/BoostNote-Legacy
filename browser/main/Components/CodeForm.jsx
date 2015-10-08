@@ -1,4 +1,4 @@
-var React = require('react/addons')
+var React = require('react')
 var CodeEditor = require('./CodeEditor')
 var Select = require('react-select')
 

@@ -7,12 +7,12 @@ module.exports = {
   // Auth
   login: function (input) {
     return request
-      .post(apiUrl + 'auth')
+      .post(apiUrl + 'auth/login')
       .send(input)
   },
   signup: function (input) {
     return request
-      .post(apiUrl + 'auth/signup')
+      .post(apiUrl + 'auth/register')
       .send(input)
   },
   getUser: function () {
@@ -30,124 +30,36 @@ module.exports = {
       })
       .send(input)
   },
-
-  // Resources
-  fetchUser: function (userName) {
+  fetchArticles: function (userId) {
     return request
-      .get(apiUrl + 'resources/' + userName)
+      .get(apiUrl + 'teams/' + userId +'/articles')
       .set({
         Authorization: 'Bearer ' + localStorage.getItem('token')
       })
   },
-  updateUser: function (userName, input) {
+  fetchArticlesByFolderId: function (folderId) {
     return request
-      .put(apiUrl + 'resources/' + userName)
+      .get(apiUrl + 'folders/' + folderId +'/articles')
       .set({
         Authorization: 'Bearer ' + localStorage.getItem('token')
       })
-      .send(input)
   },
-  createTeam: function (userName, input) {
+  createArticle: function (input) {
     return request
-      .post(apiUrl + 'resources/' + userName + '/teams')
-      .set({
-        Authorization: 'Bearer ' + localStorage.getItem('token')
-      })
-      .send(input)
-  },
-  addMember: function (userName, input) {
-    return request
-      .post(apiUrl + 'resources/' + userName + '/members')
+      .post(apiUrl + 'folders/' + input.FolderId + '/articles')
       .set({
         Authorization: 'Bearer ' + localStorage.getItem('token')
       })
       .send(input)
   },
-  removeMember: function (userName, input) {
+  updateArticle: function (articleId, input) {
     return request
-      .del(apiUrl + 'resources/' + userName + '/members')
+      .put(apiUrl + 'articles/' + articleId)
       .set({
         Authorization: 'Bearer ' + localStorage.getItem('token')
       })
       .send(input)
   },
-  createPlanet: function (userName, input) {
-    return request
-      .post(apiUrl + 'resources/' + userName + '/planets')
-      .set({
-        Authorization: 'Bearer ' + localStorage.getItem('token')
-      })
-      .send(input)
-  },
-  fetchPlanet: function (userName, planetName) {
-    return request
-      .get(apiUrl + 'resources/' + userName + '/planets/' + planetName)
-      .set({
-        Authorization: 'Bearer ' + localStorage.getItem('token')
-      })
-  },
-  updatePlanet: function (userName, planetName, input) {
-    return request
-      .put(apiUrl + 'resources/' + userName + '/planets/' + planetName)
-      .set({
-        Authorization: 'Bearer ' + localStorage.getItem('token')
-      })
-      .send(input)
-  },
-  destroyPlanet: function (userName, planetName) {
-    return request
-      .del(apiUrl + 'resources/' + userName + '/planets/' + planetName)
-      .set({
-        Authorization: 'Bearer ' + localStorage.getItem('token')
-      })
-  },
-  createCode: function (userName, planetName, input) {
-    return request
-      .post(apiUrl + 'resources/' + userName + '/planets/' + planetName + '/codes')
-      .set({
-        Authorization: 'Bearer ' + localStorage.getItem('token')
-      })
-      .send(input)
-  },
-  updateCode: function (userName, planetName, localId, input) {
-    return request
-      .put(apiUrl + 'resources/' + userName + '/planets/' + planetName + '/codes/' + localId)
-      .set({
-        Authorization: 'Bearer ' + localStorage.getItem('token')
-      })
-      .send(input)
-  },
-  destroyCode: function (userName, planetName, localId) {
-    return request
-      .del(apiUrl + 'resources/' + userName + '/planets/' + planetName + '/codes/' + localId)
-      .set({
-        Authorization: 'Bearer ' + localStorage.getItem('token')
-      })
-  },
-  createNote: function (userName, planetName, input) {
-    return request
-      .post(apiUrl + 'resources/' + userName + '/planets/' + planetName + '/notes')
-      .set({
-        Authorization: 'Bearer ' + localStorage.getItem('token')
-      })
-      .send(input)
-  },
-  updateNote: function (userName, planetName, localId, input) {
-    return request
-      .put(apiUrl + 'resources/' + userName + '/planets/' + planetName + '/notes/' + localId)
-      .set({
-        Authorization: 'Bearer ' + localStorage.getItem('token')
-      })
-      .send(input)
-  },
-  destroyNote: function (userName, planetName, localId) {
-    return request
-      .del(apiUrl + 'resources/' + userName + '/planets/' + planetName + '/notes/' + localId)
-      .set({
-        Authorization: 'Bearer ' + localStorage.getItem('token')
-      })
-  },
-
   // Search
   searchTag: function (tagName) {
     return request

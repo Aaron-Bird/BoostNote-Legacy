@@ -1,0 +1,69 @@
+articleItemHoverBgColor = darken(white, 5%)
+articleItemColor = #777
+
+.ArticleList
+  absolute left bottom
+  top 60px
+  width 250px
+  border-right solid 1px highlightenBorderColor
+  &>ul
+    absolute top bottom left right
+    overflow-y auto
+    noSelect()
+    li
+      .articleItem
+        border solid 2px transparent
+        position relative
+        height 88px
+        width 100%
+        cursor pointer
+        transition 0.1s
+        background-color white
+        padding 0 10px
+        font-size 12px
+        .top
+          clearfix()
+          line-height 20px
+          padding 5px 0
+          color articleItemColor
+          .profileImage
+            vertical-align middle
+          .updatedAt
+            float right
+            line-height 20px
+        .middle
+          clearfix()
+          padding 3px 0 7px
+          font-size 16px
+          .mode
+            float left
+            font-size 12px
+            line-height 16px
+          .title
+            float left
+            overflow ellipsis
+            padding 0 5px
+        .bottom
+          padding 5px 0
+          overflow-x auto
+          white-space nowrap
+          .tags
+            color articleItemColor
+            a
+              background-color brandColor
+              color white
+              border-radius 2px
+              padding 1.5px 5px
+              margin 2px
+              font-size 10px
+              opacity 0.8
+              &:hover
+                opacity 1
+        &:hover, &.hover
+          background-color articleItemHoverBgColor
+          &:active, &.active
+            background-color white
+        &:active, &.active
+          border-color brandBorderColor
+      .divider
+        border-bottom solid 1px borderColor

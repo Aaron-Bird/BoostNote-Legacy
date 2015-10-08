@@ -1,7 +1,7 @@
 var ipc = require('ipc')
 var remote = require('remote')
 
-var React = require('react/addons')
+var React = require('react')
 
 var LinkedState = require('../Mixins/LinkedState')
 var ExternalLink = require('../Mixins/ExternalLink')

@@ -1,11 +1,10 @@
-/* global localStorage */
-
-var React = require('react/addons')
+var React = require('react')
 var ReactRouter = require('react-router')
 var Navigation = ReactRouter.Navigation
 var State = ReactRouter.State
 var Link = ReactRouter.Link
 var Reflux = require('reflux')
+var _ = require('lodash')
 
 var Modal = require('../Mixins/Modal')
 
@@ -65,30 +64,12 @@ module.exports = React.createClass({
   openTeamCreateModal: function () {
     this.openModal(TeamCreateModal, {user: this.state.currentUser, transitionTo: this.transitionTo})
   },
-  openPreferencesModal: function () {
-    this.openModal(PreferencesModal)
-  },
-  openPlanetCreateModal: function () {
-    this.openModal(PlanetCreateModal, {transitionTo: this.transitionTo})
-  },
-  toggleProfilePopup: function () {
-    this.openProfilePopup()
-  },
-  openProfilePopup: function () {
-    this.setState({isProfilePopupOpen: true}, function () {
-      document.addEventListener('click', this.closeProfilePopup)
-    })
-  },
-  closeProfilePopup: function () {
-    document.removeEventListener('click', this.closeProfilePopup)
-    this.setState({isProfilePopupOpen: false})
-  },
   handleLogoutClick: function () {
     this.openModal(LogoutModal, {transitionTo: this.transitionTo})
   },
-  switchPlanetByIndex: function (index) {
-    var planetProps = this.refs.planets.props.children[index - 1].props
-    this.transitionTo('planet', {userName: planetProps.userName, planetName: planetProps.planetName})
+  switchUserByIndex: function (index) {
+    var userProp = this.refs.users.props.children[index - 1].props
+    this.transitionTo('user', {userId: userProp.id})
   },
   render: function () {
     var params = this.getParams()
@@ -96,87 +77,32 @@ module.exports = React.createClass({
     if (this.state.currentUser == null) {
       return null
     }
+    console.log(this.state.currentUser.Teams)
 
-    var planets = this.state.currentUser.Planets.map(function (planet) {
-      planet.userName = this.state.currentUser.name
-      return planet
-    }.bind(this)).concat(this.state.currentUser.Teams.reduce(function (_planets, team) {
-      return _planets.concat(team.Planets == null ? [] : team.Planets.map(function (planet) {
-        planet.userName = team.name
-        return planet
-      }))
-    }, [])).map(function (planet, index) {
+    var users = [this.state.currentUser]
+    if (_.isArray(this.state.currentUser.Teams)) users = users.concat(this.state.currentUser.Teams)
+
+    var userButtons = users.map(function (user, index) {
       return (
-        <li userName={planet.userName} planetName={planet.name} key={planet.id} className={params.userName === planet.userName && params.planetName === planet.name ? 'active' : ''}>
-          <Link to='planet' params={{userName: planet.userName, planetName: planet.name}}>
-            {planet.name[0]}
-            <div className='planetTooltip'>{planet.userName}/{planet.name}</div>
+        <li key={'user-' + user.id}>
+          <Link to='user' params={{userId: user.id}}>
+            {user.userType === 'person' ? (<ProfileImage email={user.email} size='44'/>): user.name[0]}
+            <div className='userTooltip'>{user.name}</div>
           </Link>
           {index < 9 ? (<div className='shortCut'>⌘{index + 1}</div>) : null}
         </li>
       )
     })
 
-    var popup = this.renderPopup()
-
     return (
       <div className='HomeNavigator'>
-        <button onClick={this.toggleProfilePopup} className='profileButton'>
-          <ProfileImage size='55' email={this.state.currentUser.email}/>
-        </button>
-        {popup}
-        <ul ref='planets' className='planetList'>
-          {planets}
+        <ul ref='users' className='userList'>
+          {userButtons}
         </ul>
-        <button onClick={this.openPlanetCreateModal} className='newPlanet'>
+        <button onClick={this.openTeamCreateModal} className='newTeamButton'>
           <i className='fa fa-plus'/>
-          <div className='tooltip'>Create new planet</div>
+          <div className='tooltip'>Create new team</div>
         </button>
-      </div>
-    )
-  },
-  renderPopup: function () {
-    var teams = this.state.currentUser.Teams == null ? [] : this.state.currentUser.Teams.map(function (team) {
-      return (
-        <li key={'user-' + team.id}>
-          <Link to='userHome' params={{userName: team.name}} className='userName'>{team.profileName} ({team.name})</Link>
-        </li>
-      )
-    })
-
-    return (
-      <div ref='profilePopup' className={'profilePopup' + (this.state.isProfilePopupOpen ? '' : ' close')}>
-        <div className='profileGroup'>
-          <div className='profileGroupLabel'>
-            <span>You</span>
-          </div>
-          <ul className='profileGroupList'>
-            <li>
-              <Link to='userHome' params={{userName: this.state.currentUser.name}} className='userName'>Profile ({this.state.currentUser.name})</Link>
-            </li>
-          </ul>
-        </div>
-
-        <div className='profileGroup'>
-          <div className='profileGroupLabel'>
-            <span>Team</span>
-          </div>
-          <ul className='profileGroupList'>
-            {teams}
-            <li>
-              <button onClick={this.openTeamCreateModal} className='createNewTeam'><i className='fa fa-plus-square-o'/> create new team</button>
-            </li>
-          </ul>
-        </div>
-
-        <ul className='controlGroup'>
-          <li>
-            <button onClick={this.openPreferencesModal}><i className='fa fa-gears fa-fw'/> Preferences</button>
-          </li>
-          <li>
-            <button onClick={this.handleLogoutClick}><i className='fa fa-sign-out fa-fw'/> Log out</button>
-          </li>
-        </ul>
       </div>
     )
   }

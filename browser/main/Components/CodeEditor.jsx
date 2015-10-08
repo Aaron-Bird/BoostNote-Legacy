@@ -1,4 +1,4 @@
-var React = require('react/addons')
+var React = require('react')
 
 var ace = window.ace
 
@@ -7,7 +7,13 @@ module.exports = React.createClass({
     code: React.PropTypes.string,
     mode: React.PropTypes.string,
     className: React.PropTypes.string,
-    onChange: React.PropTypes.func
+    onChange: React.PropTypes.func,
+    readOnly: React.PropTypes.bool
+  },
+  getDefaultProps: function () {
+    return {
+      readOnly: false
+    }
   },
   componentDidMount: function () {
     var el = React.findDOMNode(this.refs.target)
@@ -17,6 +23,9 @@ module.exports = React.createClass({
     editor.renderer.setShowGutter(true)
     editor.setTheme('ace/theme/xcode')
     editor.clearSelection()
+    if (this.props.readOnly) {
+      editor.setReadOnly(true)
+    }
 
     var session = editor.getSession()
     if (this.props.mode != null && this.props.mode.length > 0) {
@@ -53,7 +62,7 @@ module.exports = React.createClass({
   },
   render: function () {
     return (
-      <div ref='target' className={this.props.className}></div>
+      <div ref='target' className={this.props.className == null ? 'CodeEditor' : 'CodeEditor ' + this.props.className}></div>
     )
   }
 })

@@ -1,6 +1,5 @@
 /* global localStorage*/
-'strict'
-var React = require('react/addons')
+var React = require('react')
 var ReactRouter = require('react-router')
 var Reflux = require('reflux')
 

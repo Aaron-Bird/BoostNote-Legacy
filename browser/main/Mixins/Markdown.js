@@ -6,6 +6,7 @@ var md = markdownit({
 
 var Markdown = {
   markdown: function (content) {
+    if (content == null) content = ''
     return md.render(content)
   }
 }

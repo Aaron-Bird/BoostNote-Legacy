@@ -4,3 +4,4 @@ electron_build/
 .env
 dist/
 vendor/
+Boost-darwin-x64/
