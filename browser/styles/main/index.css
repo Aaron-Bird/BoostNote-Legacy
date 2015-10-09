@@ -1823,6 +1823,162 @@ a img {
 .ArticleList>ul li .divider {
   border-bottom: solid 1px #d0d0d0;
 }
+.ArticleNavigator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: userNavigatorWidth;
+  background-color: userNavigatorBgColor;
+  color: userNavigatorColor;
+  -webkit-user-select: none;
+  cursor: default;
+}
+.ArticleNavigator>.profile {
+  height: 60px;
+  padding: 10px 15px 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+  border-bottom: solid 1px userNavigatorBorderColor;
+  cursor: pointer;
+}
+.ArticleNavigator>.profile>.profileName {
+  color: userNavigatorProfileNameColor;
+  font-size: 22px;
+  cursor: pointer;
+  -webkit-transition: 0.1s;
+  -moz-transition: 0.1s;
+  -o-transition: 0.1s;
+  -ms-transition: 0.1s;
+  transition: 0.1s;
+}
+.ArticleNavigator>.profile>.name {
+  padding: 5px 10px;
+  font-size: 14px;
+  color: userNavigatorColor;
+  cursor: pointer;
+  -webkit-transition: 0.1s;
+  -moz-transition: 0.1s;
+  -o-transition: 0.1s;
+  -ms-transition: 0.1s;
+  transition: 0.1s;
+}
+.ArticleNavigator>.profile>.dropdownIcon {
+  position: absolute;
+  top: 20px;
+  right: 25px;
+  float: right;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  font-size: 8px;
+  border: solid 1px userNavigatorColor;
+  -webkit-border-radius: 12.5px;
+  border-radius: 12.5px;
+  text-align: center;
+  -webkit-transition: 0.1s;
+  -moz-transition: 0.1s;
+  -o-transition: 0.1s;
+  -ms-transition: 0.1s;
+  transition: 0.1s;
+}
+.ArticleNavigator>.profile:hover>.profileName {
+  color: #31c4a3;
+}
+.ArticleNavigator>.profile:hover>.name {
+  color: #fff;
+}
+.ArticleNavigator>.profile:hover>.dropdownIcon {
+  border-color: #fff;
+}
+.ArticleNavigator>.profile:hover:active>.dropdownIcon {
+  background-color: #2bac8f;
+  border-color: #2bac8f;
+}
+.ArticleNavigator>.control {
+  padding: 15px 15px;
+}
+.ArticleNavigator>.control>.newPostButton {
+  background-color: #2bac8f;
+  color: #fff;
+  height: 44px;
+  width: 100%;
+  border: none;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  -webkit-transition: 0.1s;
+  -moz-transition: 0.1s;
+  -o-transition: 0.1s;
+  -ms-transition: 0.1s;
+  transition: 0.1s;
+}
+.ArticleNavigator>.control>.newPostButton:hover {
+  background-color: #31c4a3;
+}
+.ArticleNavigator>.menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 134px;
+  padding: 15px 0;
+  overflow: auto;
+}
+.ArticleNavigator>.menu>.menuGruop>.label {
+  border-bottom: 1px solid userNavigatorBorderColor;
+  padding: 10px 15px;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+.ArticleNavigator>.menu>.menuGruop>.label>.plusButton {
+  float: right;
+  width: 20px;
+  height: 20px;
+  margin-top: -2.5px;
+  margin-right: -5px;
+  line-height: 15px;
+  font-size: 8px;
+  border: solid 1px userNavigatorColor;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  background-color: transparent;
+  text-align: center;
+  color: userNavigatorColor;
+}
+.ArticleNavigator>.menu>.menuGruop>.label>.plusButton:hover {
+  border-color: #fff;
+  color: #fff;
+}
+.ArticleNavigator>.menu>.menuGruop>.label>.plusButton:hover:active {
+  background-color: #2bac8f;
+  border-color: #2bac8f;
+}
+.ArticleNavigator>.menu>.folders .folderButton {
+  padding: 10px 25px;
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  font-size: 14px;
+  color: userNavigatorColor;
+  -webkit-transition: 0.1s;
+  -moz-transition: 0.1s;
+  -o-transition: 0.1s;
+  -ms-transition: 0.1s;
+  transition: 0.1s;
+  text-align: left;
+}
+.ArticleNavigator>.menu>.folders .folderButton:hover {
+  background-color: rgba(255,255,255,0.2);
+  color: #fff;
+}
+.ArticleNavigator>.menu>.folders .folderButton.active {
+  background-color: #2bac8f;
+  color: #fff;
+}
 .Select {
   position: relative;
 }
@@ -2211,7 +2367,7 @@ a img {
   -ms-filter: none;
   filter: none;
 }
-.HomeContainer .HomeNavigator {
+.HomeContainer .UserNavigator {
   -webkit-user-select: none;
   cursor: default;
   background-color: #1b1c1c;
@@ -2225,49 +2381,52 @@ a img {
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.HomeContainer .HomeNavigator ul.userList {
+.HomeContainer .UserNavigator ul.userList {
   margin-top: 25px;
 }
-.HomeContainer .HomeNavigator ul.userList>li .shortCut {
-  margin-top: 5px;
-  font-size: 0.8em;
-  color: #ddd;
-}
-.HomeContainer .HomeNavigator ul.userList>li a {
+.HomeContainer .UserNavigator ul.userList>li a {
   display: block;
   width: 44px;
-  height: 44px;
-  margin: 0 auto;
+  height: 64px;
+  margin: 0 auto 20px;
   text-align: center;
-  background-color: #bebebe;
   text-decoration: none;
   color: #979797;
   line-height: 44px;
   font-size: 1.1em;
   cursor: pointer;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
-  overflow: hidden;
   -webkit-transition: 0.1s;
   -moz-transition: 0.1s;
   -o-transition: 0.1s;
   -ms-transition: 0.1s;
   transition: 0.1s;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
 }
-.HomeContainer .HomeNavigator ul.userList>li a img {
+.HomeContainer .UserNavigator ul.userList>li a img.ProfileImage {
   width: 44px;
   height: 44px;
+  -webkit-border-radius: 22px;
+  border-radius: 22px;
 }
-.HomeContainer .HomeNavigator ul.userList>li a:hover,
-.HomeContainer .HomeNavigator ul.userList>li a.active {
-  background-color: #fff;
-  color: #4d4d4d;
+.HomeContainer .UserNavigator ul.userList>li a:hover,
+.HomeContainer .UserNavigator ul.userList>li a.active {
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
 }
-.HomeContainer .HomeNavigator ul.userList>li a .userTooltip {
+.HomeContainer .UserNavigator ul.userList>li a:hover .userTooltip,
+.HomeContainer .UserNavigator ul.userList>li a.active .userTooltip {
+  opacity: 1;
+  -ms-filter: none;
+  filter: none;
+}
+.HomeContainer .UserNavigator ul.userList>li a .userTooltip {
   position: absolute;
   z-index: 500;
   background-color: rgba(31,31,31,0.8);
-  color: #fff;
+  color: invTextColorq;
   padding: 10px;
   line-height: 1em;
   -webkit-border-radius: 5px;
@@ -2285,12 +2444,12 @@ a img {
   transition: 0.1s;
   pointer-events: none;
 }
-.HomeContainer .HomeNavigator ul.userList>li a:hover .userTooltip {
-  opacity: 1;
-  -ms-filter: none;
-  filter: none;
+.HomeContainer .UserNavigator ul.userList>li a .keyLabel {
+  margin-top: -25px;
+  font-size: 0.8em;
+  color: #ddd;
 }
-.HomeContainer .HomeNavigator button.newTeamButton {
+.HomeContainer .UserNavigator button.newTeamButton {
   display: block;
   margin: 0 auto;
   width: 30px;
@@ -2312,20 +2471,20 @@ a img {
   right: 0;
   bottom: 15px;
 }
-.HomeContainer .HomeNavigator button.newTeamButton:hover,
-.HomeContainer .HomeNavigator button.newTeamButton.hover,
-.HomeContainer .HomeNavigator button.newTeamButton:focus,
-.HomeContainer .HomeNavigator button.newTeamButton.focus {
+.HomeContainer .UserNavigator button.newTeamButton:hover,
+.HomeContainer .UserNavigator button.newTeamButton.hover,
+.HomeContainer .UserNavigator button.newTeamButton:focus,
+.HomeContainer .UserNavigator button.newTeamButton.focus {
   border-color: #454545;
   color: #454545;
 }
-.HomeContainer .HomeNavigator button.newTeamButton:active,
-.HomeContainer .HomeNavigator button.newTeamButton.active {
+.HomeContainer .UserNavigator button.newTeamButton:active,
+.HomeContainer .UserNavigator button.newTeamButton.active {
   border-color: #39a18a;
   background-color: #2bac8f;
   color: #fff;
 }
-.HomeContainer .HomeNavigator button.newTeamButton .tooltip {
+.HomeContainer .UserNavigator button.newTeamButton .tooltip {
   position: fixed;
   z-index: 500;
   background-color: rgba(31,31,31,0.8);
@@ -2349,7 +2508,7 @@ a img {
   margin-left: 33px;
   font-size: 14px;
 }
-.HomeContainer .HomeNavigator button.newTeamButton:hover .tooltip {
+.HomeContainer .UserNavigator button.newTeamButton:hover .tooltip {
   opacity: 1;
   -ms-filter: none;
   filter: none;

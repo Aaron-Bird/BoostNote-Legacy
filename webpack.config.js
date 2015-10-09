@@ -1,39 +1,50 @@
+var webpack = require('webpack')
 module.exports = {
   entry: {
-    main: './browser/main/index.jsx',
-    'main-style': './browser/main/style.js'
+    main: './browser/main/index.js'
   },
   output: {
     filename: '[name].js',
-    publicPath: 'http://localhost:8090/assets'
+    publicPath: 'http://localhost:8090/assets',
+    libraryTarget: 'commonjs2'
   },
   devtool: '#inline-source-map',
   module: {
     loaders: [
       {
-        test: /\.jsx$/,
-        loader: 'jsx-loader?insertPragma=React.DOM&harmony'
+        test: /(\.js|\.jsx)?$/,
+        exclude: /(node_modules|bower_components)/,
+        loader: 'babel'
       },
       {
-        test: /\.styl$/,
+        test: /\.styl?$/,
+        exclude: /(node_modules|bower_components)/,
         loader: 'style-loader!css-loader!stylus-loader'
-      },
-      {
-        test: /\.css$/,
-        loader: 'style-loader!css-loader'
       }
     ]
   },
-  externals: {
-    'react': 'React',
-    'react/addons': 'React',
-    'react-router': 'ReactRouter',
-    'ace': 'ace',
-    'reflux': 'Reflux',
-    'moment': 'moment',
-    'markdown-it': 'markdownit'
-  },
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin()
+  ],
+  externals: [
+    'socket.io-client',
+    'md5',
+    'superagent',
+    'superagent-promise',
+    'react',
+    'redux',
+    'react-redux',
+    'react-router',
+    'lodash',
+    'redbox-react',
+    'react-transform-hmr',
+    'react-transform-catch-errors',
+    'redux-devtools',
+    'redux-devtools/lib/react'
+  ],
   resolve: {
-    extensions: ['', '.js', '.jsx']
-  }
+    extensions: ['', '.js', '.jsx', 'styl']
+  },
+  target: 'atom'
 }

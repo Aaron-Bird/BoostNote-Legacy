@@ -6,7 +6,7 @@
 
   <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css" media="screen" charset="utf-8">
   <link rel="stylesheet" href="../../node_modules/devicon/devicon.min.css">
-  <link rel="stylesheet" href="../styles/main/index.css" media="screen" charset="utf-8">
+  <!-- <link rel="stylesheet" href="../styles/main/index.css" media="screen" charset="utf-8"> -->
   <link rel="shortcut icon" href="favicon.ico">
 
   <style>
@@ -46,7 +46,7 @@
 </head>
 <body>
   <div id="loadingCover">
-    <img src="resources/favicon-230x230.png">
+    <img src="../../resources/favicon-230x230.png">
     <div class='message'>Loading...</div>
   </div>
 
@@ -57,8 +57,9 @@
     var version = require('remote').require('app').getVersion()
     global.version = version
     document.title = 'Boost' + ((version == null || version.length === 0) ? ' DEV' : '')
-    require("babel-core/register")
-    require('./index')
+    // require("babel-core/register")
+    // require('./index')
   </script>
+  <script src="http://localhost:8080/assets/main.js"></script>
 </body>
 </html>

@@ -1,0 +1,85 @@
+userNavigatorBgColor = #1B1C1C
+userNavigatorColor = #DDD
+userAnchorColor = #979797
+userAnchorBgColor = #BEBEBE
+userAnchorActiveColor = textColor
+userAnchorActiveBgColor = white
+
+.UserNavigator
+  noSelect()
+  background-color userNavigatorBgColor
+  absolute left top bottom
+  width 60px
+  text-align center
+  box-sizing border-box
+  ul.userList
+    margin-top 25px
+    &>li
+      a
+        display block
+        width 38px
+        height 64px
+        margin 0 auto 10px
+        text-align center
+        text-decoration none
+        color userAnchorColor
+        line-height 44px
+        font-size 1.1em
+        cursor pointer
+        transition 0.1s
+        opacity 0.8
+
+        img.ProfileImage
+          width 38px
+          height 38px
+          border-radius 22px
+        &:hover, &.active
+          opacity 1
+          .userTooltip
+            opacity 1
+        .userTooltip
+          position absolute
+          z-index popupZIndex
+          background-color transparentify(invBackgroundColor, 80%)
+          color invTextColorq
+          padding 10px
+          line-height 1em
+          border-radius 5px
+          margin-top -52px
+          margin-left 52px
+          white-space nowrap
+          opacity 0
+          transition 0.1s
+          pointer-events none
+        .keyLabel
+          margin-top -25px
+          font-size 0.8em
+          color userNavigatorColor
+  button.newTeamButton
+    display block
+    margin 0 auto
+    width 30px
+    height 30px
+    circle()
+    border solid 1px lightButtonColor
+    color lightButtonColor
+    text-align center
+    background-image none
+    background-color transparent
+    box-sizing border-box
+    absolute left bottom right
+    bottom 15px
+    &:hover, &.hover, &:focus, &.focus
+      border-color darken(lightButtonColor, 50%)
+      color darken(lightButtonColor, 50%)
+    &:active, &.active
+      border-color darken(brandBorderColor, 10%)
+      background-color brandColor
+      color white
+    .tooltip
+      tooltip()
+      margin-top -22px
+      margin-left 33px
+      font-size 14px
+    &:hover .tooltip
+      opacity 1

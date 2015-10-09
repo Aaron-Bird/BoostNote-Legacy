@@ -1,8 +1,9 @@
-import React from 'react'
-// import { connect } from 'react-redux'
+import React, { PropTypes} from 'react'
+import { connect } from 'react-redux'
 // import actionss....
 import UserNavigator from './Components/UserNavigator'
 import ArticleNavigator from './Components/ArticleNavigator'
+import ArticleTopBar from './Components/ArticleTopBar'
 import ArticleList from './Components/ArticleList'
 import ArticleDetail from './Components/ArticleDetail'
 
@@ -10,30 +11,13 @@ import ArticleDetail from './Components/ArticleDetail'
 // var KeyCaster = require('../Mixins/KeyCaster')
 
 class HomeContainer extends React.Component {
-  componentDidMount () {
-    // if (!this.isActive('user')) {
-    //   console.log('redirect to user home')
-    //   var user = JSON.parse(localStorage.getItem('currentUser'))
-    //   this.transitionTo('userHome', {userId: user.id})
-    // }
-  }
   render () {
-    let users = [
-      {
-        id: 1,
-        name: 'me',
-        email: 'fll@eme.com'
-      },
-      {
-        id: 2,
-        name: 'me',
-        email: 'fll@eme.com'
-      }
-    ]
+    const { users } = this.props
     return (
       <div className='HomeContainer'>
         <UserNavigator users={users} />
         <ArticleNavigator/>
+        <ArticleTopBar/>
         <ArticleList/>
         <ArticleDetail/>
       </div>
@@ -41,10 +25,19 @@ class HomeContainer extends React.Component {
   }
 }
 
-// function remap (state) {
-//   console.log('mapped')
-//   console.log(state)
-//   return {}
-// }
+function remap (state) {
+  let currentUser = state.currentUser
+  let teams = Array.isArray(currentUser.Teams) ? currentUser.Teams : []
 
-export default HomeContainer
+  let users = [currentUser, ...teams]
+
+  return {
+    users
+  }
+}
+
+HomeContainer.propTypes = {
+  users: PropTypes.array
+}
+
+export default connect(remap, {})(HomeContainer)
