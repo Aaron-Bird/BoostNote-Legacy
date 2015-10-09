@@ -14,11 +14,11 @@ require('../styles/main/index.styl')
 function onlyUser (state, replaceState) {
   var currentUser = JSON.parse(localStorage.getItem('currentUser'))
   if (currentUser == null) replaceState('login', '/login')
+  if (state.location.pathname === '/') replaceState('user', '/users/' + currentUser.id)
 }
 
 let routes = (
   <Route path='/' component={MainContainer}>
-
     <Route name='login' path='login' component={LoginContainer}/>
     <Route name='signup' path='signup' component={SignupContainer}/>
     <IndexRoute name='home' component={HomeContainer} onEnter={onlyUser}/>
@@ -27,11 +27,11 @@ let routes = (
 )
 
 // with Dev
-import { compose } from 'redux'
-// Redux DevTools store enhancers
-import { devTools, persistState } from 'redux-devtools'
-// React components for Redux DevTools
-import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react'
+// import { compose } from 'redux'
+// // Redux DevTools store enhancers
+// import { devTools, persistState } from 'redux-devtools'
+// // React components for Redux DevTools
+// import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react'
 
 // let finalCreateStore = compose(devTools(), persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)))(createStore)
 // let store = finalCreateStore(reducer)
