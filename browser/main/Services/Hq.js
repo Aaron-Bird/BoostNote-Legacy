@@ -1,5 +1,3 @@
-/* global localStorage */
-
 var request = require('superagent-promise')(require('superagent'), Promise)
 var apiUrl = require('../../../config').apiUrl
 

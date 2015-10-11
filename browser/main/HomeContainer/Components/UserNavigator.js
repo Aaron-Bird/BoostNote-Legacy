@@ -1,8 +1,18 @@
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 import ProfileImage from '../../components/ProfileImage'
+import { openModal } from '../lib/modal'
+import CreateNewTeam from '../lib/modal/CreateNewTeam'
 
 export default class UserNavigator extends Component {
+  handleClick (e) {
+    openModal(CreateNewTeam)
+  }
+
+  // for dev
+  componentDidMount () {
+    openModal(CreateNewTeam)
+  }
 
   renderUserList () {
     var users = this.props.users.map((user, index) => (
@@ -26,7 +36,7 @@ export default class UserNavigator extends Component {
     return (
       <div className='UserNavigator'>
         {this.renderUserList()}
-        <button className='createTeamBtn'>
+        <button className='createTeamBtn' onClick={e => this.handleClick(e)}>
           +
           <div className='tooltip'>Create a new team</div>
         </button>

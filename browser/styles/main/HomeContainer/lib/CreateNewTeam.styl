@@ -1,0 +1,172 @@
+tabNavColor = #999999
+iptFocusBorderColor = #369DCD
+stripHoverBtnColor = #333
+stripBtnColor = lighten(stripHoverBtnColor, 35%)
+
+.CreateNewTeam.modal
+  width 600px
+  height 450px
+  .closeBtn
+    position absolute
+    top 15px
+    right 15px
+    width 33px
+    height 33px
+    font-size 18px
+    line-height 33px
+    padding 0
+    text-align center
+    background-color transparent
+    border none
+    color stripBtnColor
+    &hover
+      color stripHoverBtnColor
+  .title
+    font-size 32px
+    text-align center
+    font-weight bold
+    margin-top 25px
+  .ipt
+    display block
+    width 330px
+    font-size 14px
+    height 44px
+    line-height 44px
+    padding 0 15px
+    border-radius 5px
+    border solid 1px borderColor
+    outline none
+    &focus
+      border-color iptFocusBorderColor
+  .alert
+    padding 0 15px
+    height 44px
+    line-height 44px
+    width 300px
+    margin 0 auto
+    border-radius 5px
+    color infoTextColor
+    background-color infoBackgroundColor
+    &.error
+      color errorTextColor
+      background-color errorBackgroundColor
+  .confirmBtn
+    display block
+    position absolute
+    left 180px
+    bottom 44px
+    width 240px
+    font-size 24px
+    height 44px
+    line-height 24px
+    font-weight bold
+    background-color brandColor
+    color white
+    border none
+    border-radius 5px
+    margin 0 auto
+    transition 0.1s
+    &:hover
+      transform scale(1.1)
+    &:disabled
+      opacity 0.7
+  .tabNav
+    absolute left right
+    bottom 15px
+    height 33px
+    line-height 33px
+    width 150px
+    text-align center
+    font-size 12px
+    color tabNavColor
+    margin 0 auto
+    transition 0.1s
+    i.active
+      color brandColor
+  .createTab
+    .ipt
+      margin 105px auto 15px
+  .selectTab
+    .ipt
+      margin 25px auto 15px
+      clearfix()
+      padding 0
+      input
+        display block
+        margin 0
+        float left
+        width 280px
+        height 42px
+        padding 0 0 0 15px
+        font-size 14px
+        border none
+        line-height 44px
+        background-color transparent
+        outline none
+        &:hover
+          border-color iptFocusBorderColor
+      button
+        font-weight 400
+        height 42px
+        cursor pointer
+        margin 0
+        padding 0
+        width 48px
+        float right
+        border none
+        background-color brandColor
+        border-top-right-radius 5px
+        border-bottom-right-radius 5px
+        color white
+        font-size 14px
+    .memberList
+      width 480px
+      margin 0 auto
+      height 190px
+      overflow scroll
+      border-bottom 1px solid borderColor
+      &>li
+        border-bottom 1px solid borderColor
+        height 44px
+        padding 0 25px
+        clearfix()
+        &nth-last-child(1)
+          border-bottom-color transparent
+        .userPhoto
+          width 30px
+          height 30px
+          float left
+          margin-top 7px
+          margin-right 15px
+          border-radius 15px
+        .userInfo
+          float left
+          margin-top 7px
+          .userName
+            font-size 16px
+            margin-bottom 2px
+          .userEmail
+            font-size 12px
+        .userControl
+          float right
+          .userRole
+            float left
+            height 30px
+            background-color transparent
+            border 1px solid transparent
+            margin-top 7px
+            margin-right 35px
+            outline none
+            cursor pointer
+            &hover
+              border-color borderColor
+            &focus
+              border-color iptFocusBorderColor
+          button
+            border none
+            height 30px
+            margin-top 7px
+            background-color transparent
+            color stripBtnColor
+            &hover
+              color stripHoverBtnColor

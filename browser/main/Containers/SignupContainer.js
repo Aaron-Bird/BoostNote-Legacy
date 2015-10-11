@@ -37,7 +37,7 @@ export default class SignupContainer extends React.Component {
           console.error(err)
           if (err.response == null) {
             return this.setState({
-              error: {name: 'CunnectionRefused', message: 'API server doesn\'t respond. Check your internet connection.'},
+              error: {name: 'CunnectionRefused', message: 'Can\'t connect to API server.'},
               isSending: false
             })
           }
