@@ -1,7 +1,25 @@
 import React, { PropTypes } from 'react'
 import ProfileImage from '../../../components/ProfileImage'
-import { createTeam } from '../api'
+import { searchUser, createTeam, setMember, deleteMember } from '../api'
 import linkState from '../../../helpers/linkState'
+import Select from 'react-select'
+
+function getUsers (input, cb) {
+  searchUser(input)
+    .then(function (res) {
+      let users = res.body
+
+      cb(null, {
+        options: users.map(user => {
+          return { value: user.name, label: user.name }
+        }),
+        complete: false
+      })
+    })
+    .catch(function (err) {
+      console.error(err)
+    })
+}
 
 export default class CreateNewTeam extends React.Component {
   constructor (props) {
@@ -12,16 +30,12 @@ export default class CreateNewTeam extends React.Component {
         alert: null
       },
       select: {
-        team: {"name":"test123",
-          "profileName":"test123",
-          "userType":"team",
-          "updatedAt":"2015-10-11T09:01:01.277Z",
-          "createdAt":"2015-10-11T09:01:01.277Z",
-          "id":220,"Members":[{"id":213,"email":"fluke8259@gmail.com","name":"rokt33r","profileName":"Rokt33r","userType":"person","createdAt":"2015-10-05T09:01:30.000Z","updatedAt":"2015-10-05T09:01:30.000Z","_pivot_TeamId":220,"_pivot_MemberId":213,"_pivot_role":"owner"}]
-        },
+        team: null,
+        newMember: null,
         alert: null
       },
-      currentTab: 'select'
+      currentTab: 'create',
+      currentUser: JSON.parse(localStorage.getItem('currentUser'))
     }
   }
 
@@ -56,13 +70,13 @@ export default class CreateNewTeam extends React.Component {
     }
 
     function onError (err) {
-      let errorMessage = err.response != null ? err.response.body.message : err.message
+      let errorMessage = err.response != null ? err.response.body.message : 'Can\'t connect to API server.'
 
       let createState = this.state.create
       createState.isSending = false
       createState.alert = {
         type: 'error',
-        message: 'Can\'t connect to API server.'
+        message: errorMessage
       }
 
       this.setState({
@@ -91,11 +105,98 @@ export default class CreateNewTeam extends React.Component {
       </div>
     )
   }
+  handleNewMemberChange (value) {
+    let selectState = this.state.select
+    selectState.newMember = value
+    this.setState({select: selectState})
+  }
+
+  handleClickAddMemberButton (e) {
+    let selectState = this.state.select
+    let input = {
+      name: selectState.newMember,
+      role: 'member'
+    }
+
+    setMember(selectState.team.id, input)
+      .then(res => {
+        let selectState = this.state.select
+        let team = res.body
+        team.Members = team.Members.sort((a, b) => {
+          return new Date(a._pivot_createdAt) - new Date(b._pivot_createdAt)
+        })
+        selectState.team = team
+        selectState.newMember = ''
+
+        this.setState({select: selectState})
+      })
+      .catch(err => {
+        if (err.status != null) throw err
+        else console.error(err)
+      })
+  }
+
+  handleMemberDeleteButtonClick (name) {
+    let selectState = this.state.select
+    let input = {
+      name: name,
+      role: 'member'
+    }
+
+    return function (e) {
+      deleteMember(selectState.team.id, input)
+        .then(res => {
+          let selectState = this.state.select
+          let team = res.body
+          team.Members = team.Members.sort((a, b) => {
+            return new Date(a._pivot_createdAt) - new Date(b._pivot_createdAt)
+          })
+          selectState.team = team
+          selectState.newMember = ''
+
+          this.setState({select: selectState})
+        })
+        .catch(err => {
+          console.log(err, err.response)
+          if (err.status != null) throw err
+          else console.error(err)
+        })
+    }.bind(this)
+  }
+
+  handleMemberRoleChange (name) {
+    return function (e) {
+      let selectState = this.state.select
+      let input = {
+        name: name,
+        role: e.target.value
+      }
+
+      setMember(selectState.team.id, input)
+        .then(res => {
+          let selectState = this.state.select
+          let team = res.body
+          team.Members = team.Members.sort((a, b) => {
+            return new Date(a._pivot_createdAt) - new Date(b._pivot_createdAt)
+          })
+          selectState.team = team
+          selectState.newMember = ''
+
+          this.setState({select: selectState})
+        })
+        .catch(err => {
+          if (err.status != null) throw err
+          else console.error(err)
+        })
+    }.bind(this)
+  }
 
   renderSelectTab () {
     let selectState = this.state.select
-    console.log(selectState)
+
     let membersEl = selectState.team.Members.map(member => {
+      let isCurrentUser = this.state.currentUser.id === member.id
+
       return (
         <li key={'user-' + member.id}>
           <ProfileImage className='userPhoto' email={member.email} size='30'/>
@@ -103,12 +204,13 @@ export default class CreateNewTeam extends React.Component {
             <div className='userName'>{`${member.profileName} (${member.name})`}</div>
             <div className='userEmail'>{member.email}</div>
           </div>
+
           <div className='userControl'>
-            <select value={member._pivot_role} className='userRole'>
+            <select onChange={e => this.handleMemberRoleChange(member.name)(e)} disabled={isCurrentUser} value={member._pivot_role} className='userRole'>
               <option value='owner'>Owner</option>
               <option value='member'>Member</option>
             </select>
-            <button><i className='fa fa-times fa-fw'/></button>
+            <button onClick={e => this.handleMemberDeleteButtonClick(member.name)(e)} disabled={isCurrentUser}><i className='fa fa-times fa-fw'/></button>
           </div>
         </li>
       )
@@ -117,9 +219,15 @@ export default class CreateNewTeam extends React.Component {
     return (
       <div className='selectTab'>
         <div className='title'>Select member</div>
-        <div className='ipt'>
-          <input type='text' placeholder='Enter user name or e-mail'/>
-          <button>add</button>
+        <div className='memberForm'>
+          <Select
+            className='memberName'
+            autoload={false}
+            asyncOptions={getUsers}
+            onChange={val => this.handleNewMemberChange(val)}
+            value={selectState.newMember}
+          />
+        <button onClick={e => this.handleClickAddMemberButton(e)} className='addMemberBtn'>add</button>
         </div>
         <ul className='memberList'>
           {membersEl}

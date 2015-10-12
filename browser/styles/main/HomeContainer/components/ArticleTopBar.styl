@@ -1,5 +1,6 @@
 bgColor = #E6E6E6
 inputBgColor = white
+iptFocusBorderColor = #369DCD
 
 refreshBtColor = #B3B3B3
 refreshBtnActiveColor = #3A3A3A
@@ -22,31 +23,32 @@ infoBtnActiveBgColor = #3A3A3A
       margin-top 13.5px
       margin-left 15px
       width 350px
-      border-radius 22px
-      background-color inputBgColor
       padding 5px 15px
       transition 0.1s
       font-size 16px
       border 1px solid transparent
-      border-color transparent
-      &.focus
-        border-color brandBorderColor
       input
-        absolute top right
-        left 35px
-        width 300px
+        absolute top left
+        width 350px
+        border-radius 16.5px
+        background-color inputBgColor
+        border 1px solid transparent
+        padding-left 35px
         outline none
         font-size 14px
-        border none
         height 33px
         line-height 33px
-        background-color transparent
+        z-index 0
+        &:focus
+          border-color iptFocusBorderColor
       i.fa
         position absolute
         display block
         top 0
         left 10px
         line-height 33px
+        z-index 1
+        pointer-events none
     &>.refreshBtn
       float left
       width 33px

@@ -19,7 +19,7 @@ stripBtnColor = lighten(stripHoverBtnColor, 35%)
     background-color transparent
     border none
     color stripBtnColor
-    &hover
+    &:hover
       color stripHoverBtnColor
   .title
     font-size 32px
@@ -36,7 +36,7 @@ stripBtnColor = lighten(stripHoverBtnColor, 35%)
     border-radius 5px
     border solid 1px borderColor
     outline none
-    &focus
+    &:focus
       border-color iptFocusBorderColor
   .alert
     padding 0 15px
@@ -47,6 +47,8 @@ stripBtnColor = lighten(stripHoverBtnColor, 35%)
     border-radius 5px
     color infoTextColor
     background-color infoBackgroundColor
+    white-space nowrap
+    overflow-x auto
     &.error
       color errorTextColor
       background-color errorBackgroundColor
@@ -87,31 +89,56 @@ stripBtnColor = lighten(stripHoverBtnColor, 35%)
     .ipt
       margin 105px auto 15px
   .selectTab
-    .ipt
+    .memberForm
+      display block
       margin 25px auto 15px
+      width 330px
       clearfix()
       padding 0
-      input
+      font-size 14px
+      height 44px
+      line-height 44px
+      outline none
+      .Select.memberName
         display block
         margin 0
         float left
         width 280px
-        height 42px
-        padding 0 0 0 15px
+        height 44px
         font-size 14px
         border none
         line-height 44px
         background-color transparent
         outline none
-        &:hover
+        &.is-focus
+          .Select-control
+            border-color iptFocusBorderColor
+        .Select-control
+          height 44px
+          line-height 44px
+          padding 0 0 0 15px
+          border-radius 5px 0 0 5px
+          border 1px solid borderColor
+          border-right none
+          .Select-placeholder
+            padding 0 0 0 15px
+          .Seleect-arrow
+            top 21px
+          .Select-clear
+            padding 0 10px
+        .Select-noresults, .Select-option
+          line-height 44px
+          padding 0 0 0 15px
+
+        &:focus, &.focus
           border-color iptFocusBorderColor
       button
         font-weight 400
-        height 42px
+        height 44px
         cursor pointer
         margin 0
         padding 0
-        width 48px
+        width 50px
         float right
         border none
         background-color brandColor
@@ -158,9 +185,9 @@ stripBtnColor = lighten(stripHoverBtnColor, 35%)
             margin-right 35px
             outline none
             cursor pointer
-            &hover
+            &:hover
               border-color borderColor
-            &focus
+            &:focus
               border-color iptFocusBorderColor
           button
             border none
@@ -168,5 +195,5 @@ stripBtnColor = lighten(stripHoverBtnColor, 35%)
             margin-top 7px
             background-color transparent
             color stripBtnColor
-            &hover
+            &:hover
               color stripHoverBtnColor

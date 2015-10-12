@@ -20,7 +20,7 @@ export default class UserNavigator extends Component {
         <Link to={'/users/' + user.id} activeClassName='active'>
           <ProfileImage email={user.email} size='44'/>
           <div className='userTooltip'>{user.name}</div>
-          <div className='keyLabel'>{'⌘' + (index + 1)}</div>
+          {index < 9 ? <div className='keyLabel'>{'⌘' + (index + 1)}</div> : null}
         </Link>
       </li>
     ))

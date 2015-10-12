@@ -5,6 +5,7 @@ module.exports = {
   },
   output: {
     filename: '[name].js',
+    sourceMapFilename: '[name].map',
     publicPath: 'http://localhost:8090/assets',
     libraryTarget: 'commonjs2'
   },
@@ -41,7 +42,8 @@ module.exports = {
     'react-transform-hmr',
     'react-transform-catch-errors',
     'redux-devtools',
-    'redux-devtools/lib/react'
+    'redux-devtools/lib/react',
+    'react-select'
   ],
   resolve: {
     extensions: ['', '.js', '.jsx', 'styl']
