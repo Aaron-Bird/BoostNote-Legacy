@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux'
-import { USER_UPDATE } from './actions'
+import { PARAMS_CHANGE, USER_UPDATE } from './actions'
 
 const initialCurrentUser = JSON.parse(localStorage.getItem('currentUser'))
+const initialParams = {}
 
 function currentUser (state, action) {
   switch (action.type) {
@@ -10,10 +11,22 @@ function currentUser (state, action) {
       localStorage.setItem('currentUser', JSON.stringify(user))
       return user
     default:
-      return initialCurrentUser
+      if (state == null) return initialCurrentUser
+      return state
+  }
+}
+
+function params (state, action) {
+  switch (action.type) {
+    case PARAMS_CHANGE:
+      return action.data
+    default:
+      if (state == null) return initialParams
+      return state
   }
 }
 
 export default combineReducers({
-  currentUser
+  currentUser,
+  params
 })

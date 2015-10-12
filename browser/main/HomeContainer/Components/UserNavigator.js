@@ -11,7 +11,7 @@ export default class UserNavigator extends Component {
 
   // for dev
   componentDidMount () {
-    openModal(CreateNewTeam)
+    // openModal(CreateNewTeam)
   }
 
   renderUserList () {

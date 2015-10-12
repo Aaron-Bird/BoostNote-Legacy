@@ -27,22 +27,22 @@ let routes = (
 )
 
 // with Dev
-// import { compose } from 'redux'
-// // Redux DevTools store enhancers
-// import { devTools, persistState } from 'redux-devtools'
-// // React components for Redux DevTools
-// import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react'
+import { compose } from 'redux'
+// Redux DevTools store enhancers
+import { devTools, persistState } from 'redux-devtools'
+// React components for Redux DevTools
+import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react'
 
-// let finalCreateStore = compose(devTools(), persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)))(createStore)
-// let store = finalCreateStore(reducer)
-// let devEl = (
-//   <DebugPanel top right bottom>
-//     <DevTools store={store} monitor={LogMonitor} />
-//   </DebugPanel>
-// )
+let finalCreateStore = compose(devTools(), persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)))(createStore)
+let store = finalCreateStore(reducer)
+let devEl = (
+  <DebugPanel left right bottom>
+    <DevTools store={store} monitor={LogMonitor} />
+  </DebugPanel>
+)
 
 // On production
-let store = createStore(reducer)
+// let store = createStore(reducer)
 
 let el = document.getElementById('content')
 
@@ -51,6 +51,7 @@ React.render((
     <Provider store={store}>
       {() => <Router>{routes}</Router>}
     </Provider>
+    {devEl}
   </div>
 ), el, function () {
   let loadingCover = document.getElementById('loadingCover')
