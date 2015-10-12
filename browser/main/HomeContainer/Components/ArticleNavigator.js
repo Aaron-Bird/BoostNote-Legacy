@@ -1,14 +1,18 @@
 import React, { PropTypes } from 'react'
 import ProfileImage from '../../components/ProfileImage'
+import { findWhere } from 'lodash'
 
 export default class ArticleNavigator extends React.Component {
   render () {
-    let { user } = this.props
+    let { user, status } = this.props
     if (user == null) return (<div className='ArticleNavigator'/>)
-    console.log(user)
+    console.log(user.Folders)
+
+    let activeFolder = findWhere(user.Folders, {id: status.folderId})
+
     let folders = user.Folders.map(folder => {
       return (
-        <button key={'folder-' + folder.id}><i className='fa fa-fw fa-square'/> {folder.name}</button>
+        <button key={'folder-' + folder.id} className={activeFolder != null && activeFolder.id === folder.id ? 'active' : ''}><i className='fa fa-fw fa-square'/> {folder.name}</button>
       )
     })
 
@@ -41,7 +45,7 @@ export default class ArticleNavigator extends React.Component {
             <button className='addBtn'><i className='fa fa-fw fa-plus'/></button>
           </div>
           <div className='folderList'>
-            <button>All folders</button>
+            <button className={activeFolder == null ? 'active' : ''}>All folders</button>
             {folders}
           </div>
         </div>

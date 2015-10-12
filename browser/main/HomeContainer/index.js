@@ -1,6 +1,6 @@
 import React, { PropTypes} from 'react'
 import { connect } from 'react-redux'
-import { switchParams } from './actions'
+import { switchUser } from './actions'
 import UserNavigator from './Components/UserNavigator'
 import ArticleNavigator from './Components/ArticleNavigator'
 import ArticleTopBar from './Components/ArticleTopBar'
@@ -13,26 +13,26 @@ import { findWhere } from 'lodash'
 
 class HomeContainer extends React.Component {
   componentDidMount () {
-    const { dispatch, params } = this.props
-    console.log(params)
-    dispatch(switchParams(params))
+    const { dispatch } = this.props
+
+    dispatch(switchUser(this.props.params.userId))
   }
 
   componentWillReceiveProps (nextProps) {
-    const { dispatch } = this.props
-    if (nextProps.params.userId !== this.props.params.userId) {
-      let params = nextProps.params
-      dispatch(switchParams(params))
+    const { dispatch, status } = this.props
+
+    if (nextProps.params.userId !== status.userId) {
+      dispatch(switchUser(nextProps.params.userId))
     }
   }
 
   render () {
-    const { users, user } = this.props
+    const { users, user, status } = this.props
 
     return (
       <div className='HomeContainer'>
         <UserNavigator users={users} />
-        <ArticleNavigator user={user}/>
+        <ArticleNavigator user={user} status={status}/>
         <ArticleTopBar/>
         <ArticleList/>
         <ArticleDetail/>
@@ -42,15 +42,18 @@ class HomeContainer extends React.Component {
 }
 
 function remap (state) {
+  let status = state.status
+
   let currentUser = state.currentUser
   let teams = Array.isArray(currentUser.Teams) ? currentUser.Teams : []
 
   let users = [currentUser, ...teams]
-  let user = findWhere(users, {id: parseInt(state.params.userId, 10)})
+  let user = findWhere(users, {id: parseInt(status.userId, 10)})
 
   return {
     users,
-    user
+    user,
+    status
   }
 }
 
@@ -59,6 +62,10 @@ HomeContainer.propTypes = {
   user: PropTypes.object,
   params: PropTypes.shape({
     userId: PropTypes.string
+  }),
+  status: PropTypes.shape({
+    userId: PropTypes.string,
+    folderId: PropTypes.number
   }),
   dispatch: PropTypes.func
 }

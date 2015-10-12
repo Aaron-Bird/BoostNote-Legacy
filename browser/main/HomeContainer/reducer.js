@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux'
-import { PARAMS_CHANGE, USER_UPDATE } from './actions'
+import { SWITCH_USER, SWITCH_FOLDER, USER_UPDATE } from './actions'
 
 const initialCurrentUser = JSON.parse(localStorage.getItem('currentUser'))
 const initialParams = {}
@@ -16,10 +16,16 @@ function currentUser (state, action) {
   }
 }
 
-function params (state, action) {
+function status (state, action) {
   switch (action.type) {
-    case PARAMS_CHANGE:
-      return action.data
+    case SWITCH_USER:
+      state.userId = action.data
+      console.log(action)
+      state.folderId = null
+      return state
+    case SWITCH_FOLDER:
+      state.folderId = action.data
+      return state
     default:
       if (state == null) return initialParams
       return state
@@ -28,5 +34,5 @@ function params (state, action) {
 
 export default combineReducers({
   currentUser,
-  params
+  status
 })

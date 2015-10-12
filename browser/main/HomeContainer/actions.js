@@ -1,5 +1,6 @@
-export const PARAMS_CHANGE = 'PARAMS_CHANGE'
 export const USER_UPDATE = 'USER_UPDATE'
+export const SWITCH_USER = 'SWITCH_USER'
+export const SWITCH_FOLDER = 'SWITCH_FOLDER'
 
 export function updateUser (user) {
   return {
@@ -8,9 +9,16 @@ export function updateUser (user) {
   }
 }
 
-export function switchParams (params) {
+export function switchUser (userId) {
   return {
-    type: PARAMS_CHANGE,
-    data: params
+    type: SWITCH_USER,
+    data: userId
+  }
+}
+
+export function switchFolder (folderId) {
+  return {
+    type: SWITCH_FOLDER,
+    data: folderId
   }
 }
