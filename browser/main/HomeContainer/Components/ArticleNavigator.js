@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import ProfileImage from '../../components/ProfileImage'
 
 export default class ArticleNavigator extends React.Component {
   render () {
@@ -11,9 +12,14 @@ export default class ArticleNavigator extends React.Component {
       )
     })
 
-    let members = Array.isArray(user.Members) ? user.Members.map(member => {
+    let members = Array.isArray(user.Members) ? user.Members.sort((a, b) => {
+      return new Date(a._pivot_createdAt) - new Date(b._pivot_createdAt)
+    }).map(member => {
       return (
-        <div>{member.profileName}</div>
+        <div key={'member-' + member.id}>
+          <ProfileImage className='memberImage' email={member.email} size='22'/>
+          <div className='memberProfileName'>{member.profileName}</div>
+        </div>
       )
     }) : null
 
@@ -22,7 +28,7 @@ export default class ArticleNavigator extends React.Component {
         <div className='userInfo'>
           <div className='userProfileName'>{user.profileName}</div>
           <div className='userName'>{user.name}</div>
-          <i className='fa fa-fw fa-chevron-down'/>
+          <button className='settingBtn'><i className='fa fa-fw fa-chevron-down'/></button>
         </div>
 
         <div className='controlSection'>
@@ -30,9 +36,9 @@ export default class ArticleNavigator extends React.Component {
         </div>
 
         <div className='folders'>
-          <div className='foldersHeader'>
-            <div className='folderTitle'>Folders</div>
-            <button className='addFolderBtn'><i className='fa fa-fw fa-plus'/></button>
+          <div className='header'>
+            <div className='title'>Folders</div>
+            <button className='addBtn'><i className='fa fa-fw fa-plus'/></button>
           </div>
           <div className='folderList'>
             <button>All folders</button>
@@ -43,7 +49,8 @@ export default class ArticleNavigator extends React.Component {
         {user.userType === 'team' ? (
           <div className='members'>
             <div className='header'>
-              <div className='title'></div>
+              <div className='title'>Members</div>
+              <button className='addBtn'><i className='fa fa-fw fa-plus'/></button>
             </div>
             <div className='memberList'>
               {members}

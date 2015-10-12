@@ -36,7 +36,7 @@ import { DevTools, DebugPanel, LogMonitor } from 'redux-devtools/lib/react'
 let finalCreateStore = compose(devTools(), persistState(window.location.href.match(/[?&]debug_session=([^&]+)\b/)))(createStore)
 let store = finalCreateStore(reducer)
 let devEl = (
-  <DebugPanel left right bottom>
+  <DebugPanel top right bottom>
     <DevTools store={store} monitor={LogMonitor} />
   </DebugPanel>
 )
