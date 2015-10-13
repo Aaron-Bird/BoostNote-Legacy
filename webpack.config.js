@@ -43,7 +43,9 @@ module.exports = {
     'react-transform-catch-errors',
     'redux-devtools',
     'redux-devtools/lib/react',
-    'react-select'
+    'react-select',
+    'markdown-it',
+    'moment'
   ],
   resolve: {
     extensions: ['', '.js', '.jsx', 'styl']

@@ -1,11 +1,7 @@
-var React = require('react')
+import React, { PropTypes } from 'react'
 
-module.exports = React.createClass({
-  propTypes: {
-    className: React.PropTypes.string,
-    mode: React.PropTypes.string
-  },
-  getClassName: function () {
+export default class ModeIcon extends React.Component {
+  getClassName () {
     var mode = this.props.mode
     switch (mode) {
       // Script
@@ -69,11 +65,17 @@ module.exports = React.createClass({
         return 'fa fa-fw fa-file-text-o'
     }
     return 'fa fa-fw fa-code'
-  },
-  render: function () {
+  }
+
+  render () {
     var className = this.getClassName()
     return (
       <i className={this.props.className + ' ' + className}/>
     )
   }
-})
+}
+
+ModeIcon.propTypes = {
+  className: PropTypes.string,
+  mode: PropTypes.string
+}

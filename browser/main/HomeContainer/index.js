@@ -27,15 +27,15 @@ class HomeContainer extends React.Component {
   }
 
   render () {
-    const { users, user, status } = this.props
+    const { users, user, status, articles, article } = this.props
 
     return (
       <div className='HomeContainer'>
         <UserNavigator users={users} />
         <ArticleNavigator user={user} status={status}/>
         <ArticleTopBar/>
-        <ArticleList/>
-        <ArticleDetail/>
+        <ArticleList articles={articles} status={status}/>
+        <ArticleDetail user={user} article={article} status={status}/>
       </div>
     )
   }
@@ -49,11 +49,17 @@ function remap (state) {
 
   let users = [currentUser, ...teams]
   let user = findWhere(users, {id: parseInt(status.userId, 10)})
+  if (user == null) user = users[0]
+  let articles = state.articles['team-' + user.id]
+  let article = findWhere(users, {id: status.articleId})
+  if (article == null) article = articles[0]
 
   return {
     users,
     user,
-    status
+    status,
+    articles,
+    article
   }
 }
 
@@ -67,6 +73,7 @@ HomeContainer.propTypes = {
     userId: PropTypes.string,
     folderId: PropTypes.number
   }),
+  articles: PropTypes.array,
   dispatch: PropTypes.func
 }
 

@@ -6,7 +6,6 @@ export default class ArticleNavigator extends React.Component {
   render () {
     let { user, status } = this.props
     if (user == null) return (<div className='ArticleNavigator'/>)
-    console.log(user.Folders)
 
     let activeFolder = findWhere(user.Folders, {id: status.folderId})
 
@@ -68,5 +67,8 @@ export default class ArticleNavigator extends React.Component {
 }
 
 ArticleNavigator.propTypes = {
-  user: PropTypes.object
+  user: PropTypes.object,
+  state: PropTypes.shape({
+    folderId: PropTypes.number
+  })
 }

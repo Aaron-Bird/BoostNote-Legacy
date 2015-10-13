@@ -1,9 +1,9 @@
 import React from 'react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import { updateUser } from './HomeContainer/actions'
+import { updateUser, updateArticles } from './HomeContainer/actions'
 import reducer from './HomeContainer/reducer'
-import Hq from './Services/Hq'
+import { fetchCurrentUser, fetchArticles } from './HomeContainer/lib/api'
 import { Router, Route, IndexRoute } from 'react-router'
 import MainContainer from './Containers/MainContainer'
 import LoginContainer from './Containers/LoginContainer'
@@ -58,9 +58,22 @@ React.render((
   loadingCover.parentNode.removeChild(loadingCover)
 
   // Refresh user information
-  Hq.getUser()
+  fetchCurrentUser()
     .then(function (res) {
-      store.dispatch(updateUser(res.body))
+      let user = res.body
+      store.dispatch(updateUser(user))
+
+      let users = [user].concat(user.Teams)
+      users.forEach(user => {
+        fetchArticles(user.id)
+          .then(res => {
+            store.dispatch(updateArticles(user.id, res.body))
+          })
+          .catch(err => {
+            if (err.status == null) throw err
+            console.error(err)
+          })
+      })
     })
     .catch(function (err) {
       console.error(err.message)
