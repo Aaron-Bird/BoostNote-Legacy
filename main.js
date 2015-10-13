@@ -21,7 +21,7 @@ var update = null
 var version = app.getVersion()
 var versionText = (version == null || version.length === 0) ? 'DEV version' : 'v' + version
 var nn = require('node-notifier')
-var updater = require('./updater')
+var updater = require('./atom-lib/updater')
 var path = require('path')
 
 var appQuit = false
@@ -48,7 +48,7 @@ app.on('ready', function () {
   updater.setFeedUrl('http://orbital.b00st.io/rokt33r/boost/latest?version=' + version)
   updater.checkForUpdates()
   // menu start
-  var template = require('./modules/menu-template')
+  var template = require('./atom-lib/menu-template')
 
   ipc.on('update-app', function (event, msg) {
     if (update != null) {
@@ -78,7 +78,7 @@ app.on('ready', function () {
   }))
   appIcon.setContextMenu(trayMenu)
 
-  mainWindow = require('./main-window')
+  mainWindow = require('./atom-lib/main-window')
   mainWindow.on('close', function (e) {
     if (appQuit) return true
     e.preventDefault()
@@ -95,7 +95,7 @@ app.on('ready', function () {
     mainWindow.show()
   })
 
-  finderWindow = require('./finder-window')
+  finderWindow = require('./atom-lib/finder-window')
 
   var globalShortcut = require('global-shortcut')
   console.log('jetpack launch')

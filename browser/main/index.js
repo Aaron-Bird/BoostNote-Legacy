@@ -1,14 +1,14 @@
 import React from 'react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import { updateUser, updateArticles } from './HomeContainer/actions'
-import reducer from './HomeContainer/reducer'
-import { fetchCurrentUser, fetchArticles } from './HomeContainer/lib/api'
+import { updateUser, updateArticles } from './actions'
+import reducer from './reducer'
+import { fetchCurrentUser, fetchArticles } from 'boost/api'
 import { Router, Route, IndexRoute } from 'react-router'
-import MainContainer from './Containers/MainContainer'
-import LoginContainer from './Containers/LoginContainer'
-import SignupContainer from './Containers/SignupContainer'
-import HomeContainer from './HomeContainer'
+import MainPage from './MainPage'
+import LoginPage from './LoginPage'
+import SignupPage from './SignupPage'
+import HomePage from './HomePage'
 require('../styles/main/index.styl')
 
 function onlyUser (state, replaceState) {
@@ -18,11 +18,11 @@ function onlyUser (state, replaceState) {
 }
 
 let routes = (
-  <Route path='/' component={MainContainer}>
-    <Route name='login' path='login' component={LoginContainer}/>
-    <Route name='signup' path='signup' component={SignupContainer}/>
-    <IndexRoute name='home' component={HomeContainer} onEnter={onlyUser}/>
-    <Route name='user' path='/users/:userId' component={HomeContainer} onEnter={onlyUser}/>
+  <Route path='/' component={MainPage}>
+    <Route name='login' path='login' component={LoginPage}/>
+    <Route name='signup' path='signup' component={SignupPage}/>
+    <IndexRoute name='home' component={HomePage} onEnter={onlyUser}/>
+    <Route name='user' path='/users/:userId' component={HomePage} onEnter={onlyUser}/>
   </Route>
 )
 
