@@ -1,21 +1,28 @@
 import React, { PropTypes } from 'react'
 import ProfileImage from 'boost/components/ProfileImage'
 import { findWhere } from 'lodash'
+import { switchMode, CREATE_MODE } from '../actions'
 
 export default class ArticleNavigator extends React.Component {
+  handleNewPostButtonClick (e) {
+    let { dispatch } = this.props
+
+    dispatch(switchMode(CREATE_MODE))
+  }
+
   render () {
-    let { user, status } = this.props
-    if (user == null) return (<div className='ArticleNavigator'/>)
+    let { activeUser, status } = this.props
+    if (activeUser == null) return (<div className='ArticleNavigator'/>)
 
-    let activeFolder = findWhere(user.Folders, {id: status.folderId})
+    let activeFolder = findWhere(activeUser.Folders, {id: status.folderId})
 
-    let folders = user.Folders.map(folder => {
+    let folders = activeUser.Folders.map(folder => {
       return (
         <button key={'folder-' + folder.id} className={activeFolder != null && activeFolder.id === folder.id ? 'active' : ''}><i className='fa fa-fw fa-square'/> {folder.name}</button>
       )
     })
 
-    let members = Array.isArray(user.Members) ? user.Members.sort((a, b) => {
+    let members = Array.isArray(activeUser.Members) ? activeUser.Members.sort((a, b) => {
       return new Date(a._pivot_createdAt) - new Date(b._pivot_createdAt)
     }).map(member => {
       return (
@@ -29,13 +36,13 @@ export default class ArticleNavigator extends React.Component {
     return (
       <div className='ArticleNavigator'>
         <div className='userInfo'>
-          <div className='userProfileName'>{user.profileName}</div>
-          <div className='userName'>{user.name}</div>
+          <div className='userProfileName'>{activeUser.profileName}</div>
+          <div className='userName'>{activeUser.name}</div>
           <button className='settingBtn'><i className='fa fa-fw fa-chevron-down'/></button>
         </div>
 
         <div className='controlSection'>
-          <button className='newPostBtn'>New Post</button>
+          <button onClick={e => this.handleNewPostButtonClick(e)} className='newPostBtn'>New Post</button>
         </div>
 
         <div className='folders'>
@@ -49,7 +56,7 @@ export default class ArticleNavigator extends React.Component {
           </div>
         </div>
 
-        {user.userType === 'team' ? (
+        {activeUser.userType === 'team' ? (
           <div className='members'>
             <div className='header'>
               <div className='title'>Members</div>
@@ -67,8 +74,9 @@ export default class ArticleNavigator extends React.Component {
 }
 
 ArticleNavigator.propTypes = {
-  user: PropTypes.object,
+  activeUser: PropTypes.object,
   state: PropTypes.shape({
     folderId: PropTypes.number
-  })
+  }),
+  dispatch: PropTypes.func
 }

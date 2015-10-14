@@ -8,6 +8,10 @@ export const IDLE_MODE = 'IDLE_MODE'
 export const CREATE_MODE = 'CREATE_MODE'
 export const EDIT_MODE = 'EDIT_MODE'
 
+export const NEW = 'NEW'
+export const SYNCING = 'SYNCING'
+export const UNSYNCED = 'UNSYNCED'
+
 export function updateUser (user) {
   return {
     type: USER_UPDATE,
