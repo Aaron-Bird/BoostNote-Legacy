@@ -10,6 +10,31 @@ noTagsColor = #999
   border-left 1px solid borderColor
   *
     -webkit-user-select all
+  .deleteConfirm
+    width 100%
+    height 70px
+    .right
+      float right
+      button
+        cursor pointer
+        height 33px
+        padding 0 10px
+        margin-left 5px
+        font-size 14px
+        color inactiveTextColor
+        background-color darken(white, 5%)
+        border solid 1px borderColor
+        border-radius 5px
+        &:hover
+          background-color white
+        &.primary
+          border none
+          background-color brandColor
+          color white
+          &:hover
+            color white
+            background-color lighten(brandColor, 10%)
+
   .detailInfo
     height 70px
     width 100%
@@ -116,7 +141,7 @@ noTagsColor = #999
               font-size 32px
               font-weight bold
               outline none
-  &.show
+  &.idle
     .detailInfo
       .left
         right 99px

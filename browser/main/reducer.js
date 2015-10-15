@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
-import { SWITCH_USER, SWITCH_FOLDER, SWITCH_MODE, USER_UPDATE, ARTICLE_UPDATE, IDLE_MODE, CREATE_MODE, EDIT_MODE } from './actions'
+import { findIndex } from 'lodash'
+import { SWITCH_USER, SWITCH_FOLDER, SWITCH_MODE, SWITCH_ARTICLE, USER_UPDATE, ARTICLE_REFRESH, ARTICLE_UPDATE, ARTICLE_DESTROY, IDLE_MODE, CREATE_MODE } from './actions'
 
 const initialCurrentUser = JSON.parse(localStorage.getItem('currentUser'))
 const initialStatus = {
@@ -29,14 +30,20 @@ function status (state, action) {
   switch (action.type) {
     case SWITCH_USER:
       state.userId = action.data
-      console.log(action)
+      state.mode = IDLE_MODE
       state.folderId = null
       return state
     case SWITCH_FOLDER:
       state.folderId = action.data
+      state.mode = IDLE_MODE
       return state
     case SWITCH_MODE:
       state.mode = action.data
+      if (state.mode === CREATE_MODE) state.articleId = null
+      return state
+    case SWITCH_ARTICLE:
+      state.articleId = action.data
+      state.mode = IDLE_MODE
       return state
     default:
       if (state == null) return initialStatus
@@ -44,13 +51,47 @@ function status (state, action) {
   }
 }
 
+function genKey (id) {
+  return 'team-' + id
+}
+
 function articles (state, action) {
   switch (action.type) {
+    case ARTICLE_REFRESH:
+      {
+        let { userId, articles } = action.data
+        let teamKey = genKey(userId)
+        localStorage.setItem(teamKey, JSON.stringify(articles))
+        state[teamKey] = articles
+      }
+
+      return state
     case ARTICLE_UPDATE:
-      let { userId, articles } = action.data
-      let teamKey = 'team-' + userId
-      localStorage.setItem(teamKey, JSON.stringify(articles))
-      state[teamKey] = articles
+      {
+        let { userId, article } = action.data
+        let teamKey = genKey(userId)
+        let articles = JSON.parse(localStorage.getItem(teamKey))
+
+        let targetIndex = findIndex(articles, _article => article.id === _article.id)
+        if (targetIndex < 0) articles.unshift(article)
+        else articles.splice(targetIndex, 1, article)
+
+        localStorage.setItem(teamKey, JSON.stringify(articles))
+        state[teamKey] = articles
+      }
+      return state
+    case ARTICLE_DESTROY:
+      {
+        let { userId, articleId } = action.data
+        let teamKey = genKey(userId)
+        let articles = JSON.parse(localStorage.getItem(teamKey))
+
+        let targetIndex = findIndex(articles, _article => articleId === _article.id)
+        if (targetIndex >= 0) articles.splice(targetIndex, 1)
+
+        localStorage.setItem(teamKey, JSON.stringify(articles))
+        state[teamKey] = articles
+      }
       return state
     default:
       if (state == null) return initialArticles

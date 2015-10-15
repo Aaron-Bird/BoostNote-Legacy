@@ -2,16 +2,23 @@ import React, { PropTypes } from 'react'
 import ProfileImage from 'boost/components/ProfileImage'
 import ModeIcon from 'boost/components/ModeIcon'
 import moment from 'moment'
-import { IDLE_MODE, CREATE_MODE, EDIT_MODE, NEW } from '../actions'
+import { IDLE_MODE, CREATE_MODE, EDIT_MODE, switchArticle, NEW } from '../actions'
 
 export default class ArticleList extends React.Component {
+  handleArticleClick (id) {
+    let { dispatch } = this.props
+    return function (e) {
+      dispatch(switchArticle(id))
+    }
+  }
+
   render () {
     let { status, articles, activeArticle } = this.props
 
     let articlesEl = articles.map(article => {
       let tags = Array.isArray(article.Tags) && article.Tags.length > 0 ? article.Tags.map(tag => {
         return (
-          <a key={tag.id}>#{tag.name}</a>
+          <a key={tag.name}>{tag.name}</a>
         )
       }) : (
         <span>Not tagged yet</span>
@@ -19,7 +26,7 @@ export default class ArticleList extends React.Component {
 
       return (
         <div key={'article-' + article.id}>
-          <div className={'articleItem' + (activeArticle.id === article.id ? ' active' : '')}>
+          <div onClick={e => this.handleArticleClick(article.id)(e)} className={'articleItem' + (activeArticle.id === article.id ? ' active' : '')}>
             <div className='top'>
               <i className='fa fa-fw fa-square'/>
               by <ProfileImage className='profileImage' size='20' email={article.User.email}/> {article.User.profileName}
@@ -48,5 +55,6 @@ export default class ArticleList extends React.Component {
 ArticleList.propTypes = {
   status: PropTypes.shape(),
   articles: PropTypes.array,
-  activeArticle: PropTypes.shape()
+  activeArticle: PropTypes.shape(),
+  dispatch: PropTypes.func
 }

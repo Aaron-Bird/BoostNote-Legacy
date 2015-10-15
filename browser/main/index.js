@@ -1,7 +1,7 @@
 import React from 'react'
 import { createStore } from 'redux'
 import { Provider } from 'react-redux'
-import { updateUser, updateArticles } from './actions'
+import { updateUser, refreshArticles } from './actions'
 import reducer from './reducer'
 import { fetchCurrentUser, fetchArticles } from 'boost/api'
 import { Router, Route, IndexRoute } from 'react-router'
@@ -37,7 +37,7 @@ let finalCreateStore = compose(devTools(), persistState(window.location.href.mat
 let store = finalCreateStore(reducer)
 let devEl = (
   <DebugPanel top right bottom>
-    <DevTools store={store} monitor={LogMonitor} />
+    <DevTools store={store} monitor={LogMonitor} visibleOnLoad={false}/>
   </DebugPanel>
 )
 
@@ -67,7 +67,7 @@ React.render((
       users.forEach(user => {
         fetchArticles(user.id)
           .then(res => {
-            store.dispatch(updateArticles(user.id, res.body))
+            store.dispatch(refreshArticles(user.id, res.body))
           })
           .catch(err => {
             if (err.status == null) throw err

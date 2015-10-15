@@ -6,7 +6,7 @@ import ArticleNavigator from './HomePage/ArticleNavigator'
 import ArticleTopBar from './HomePage/ArticleTopBar'
 import ArticleList from './HomePage/ArticleList'
 import ArticleDetail from './HomePage/ArticleDetail'
-import { findWhere, pick } from 'lodash'
+import { findWhere, findIndex, pick } from 'lodash'
 import keygen from 'boost/keygen'
 import { NEW } from './actions'
 
@@ -50,9 +50,20 @@ function remap (state) {
   let activeUser = findWhere(users, {id: parseInt(status.userId, 10)})
   if (activeUser == null) activeUser = users[0]
   let articles = state.articles['team-' + activeUser.id]
-  let activeArticle = findWhere(users, {id: status.articleId})
+  let activeArticle = findWhere(articles, {id: status.articleId})
   if (activeArticle == null) activeArticle = articles[0]
 
+  // remove Unsaved new article if user is not CREATE_MODE
+  if (status.mode !== CREATE_MODE) {
+    let targetIndex = findIndex(articles, article => article.status === NEW)
+
+    if (targetIndex >= 0) articles.splice(targetIndex, 1)
+  }
+
+  // switching CREATE_MODE
+  // restrict
+  // 1. team have one folder at least
+  // or Change IDLE MODE
   if (status.mode === CREATE_MODE && activeUser.Folders.length > 0) {
     var newArticle = findWhere(articles, {status: 'NEW'})
     if (newArticle == null) {
@@ -71,10 +82,6 @@ function remap (state) {
     activeArticle = newArticle
   } else if (status.mode === CREATE_MODE) {
     status.mode = IDLE_MODE
-  }
-  if (status.mode !== CREATE_MODE && activeArticle != null && activeArticle.status === NEW) {
-    articles.splice(articles.indexOf(activeArticle), 1)
-    activeArticle = articles[0]
   }
 
   return {
