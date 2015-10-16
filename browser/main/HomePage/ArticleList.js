@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import ProfileImage from 'boost/components/ProfileImage'
 import ModeIcon from 'boost/components/ModeIcon'
 import moment from 'moment'
-import { IDLE_MODE, CREATE_MODE, EDIT_MODE, switchArticle, NEW } from '../actions'
+import { switchArticle, NEW } from '../actions'
 
 export default class ArticleList extends React.Component {
   handleArticleClick (key) {
@@ -13,16 +13,14 @@ export default class ArticleList extends React.Component {
   }
 
   render () {
-    let { status, articles, activeArticle } = this.props
+    let { articles, activeArticle } = this.props
 
     let articlesEl = articles.map(article => {
-      let tags = Array.isArray(article.Tags) && article.Tags.length > 0 ? article.Tags.map(tag => {
-        return (
-          <a key={tag.name}>{tag.name}</a>
-        )
-      }) : (
-        <span>Not tagged yet</span>
-      )
+      let tags = Array.isArray(article.Tags) && article.Tags.length > 0
+        ? article.Tags.map(tag => {
+          return (<a key={tag.name}>{tag.name}</a>)
+        })
+        : (<span>Not tagged yet</span>)
 
       return (
         <div key={'article-' + article.key}>
@@ -53,7 +51,6 @@ export default class ArticleList extends React.Component {
 }
 
 ArticleList.propTypes = {
-  status: PropTypes.shape(),
   articles: PropTypes.array,
   activeArticle: PropTypes.shape(),
   dispatch: PropTypes.func

@@ -1,17 +1,14 @@
 import { combineReducers } from 'redux'
 import { findIndex } from 'lodash'
 import { SWITCH_USER, SWITCH_FOLDER, SWITCH_MODE, SWITCH_ARTICLE, USER_UPDATE, ARTICLE_REFRESH, ARTICLE_UPDATE, ARTICLE_DESTROY, IDLE_MODE, CREATE_MODE } from './actions'
+import auth from 'boost/auth'
 
 const initialStatus = {
   mode: IDLE_MODE
 }
 
-function getInitialCurrentUser () {
-  return JSON.parse(localStorage.getItem('currentUser'))
-}
-
 function getInitialArticles () {
-  let initialCurrentUser = getInitialCurrentUser()
+  let initialCurrentUser = auth.user()
   if (initialCurrentUser == null) return []
 
   let teams = Array.isArray(initialCurrentUser.Teams) ? initialCurrentUser.Teams : []
@@ -29,10 +26,10 @@ function currentUser (state, action) {
   switch (action.type) {
     case USER_UPDATE:
       let user = action.data
-      localStorage.setItem('currentUser', JSON.stringify(user))
-      return user
+
+      return auth.user(user)
     default:
-      if (state == null) return getInitialCurrentUser()
+      if (state == null) return auth.user()
       return state
   }
 }
@@ -83,7 +80,7 @@ function articles (state, action) {
         let teamKey = genKey(userId)
         let articles = JSON.parse(localStorage.getItem(teamKey))
 
-        let targetIndex = findIndex(articles, _article => article.id === _article.id)
+        let targetIndex = findIndex(articles, _article => article.key === _article.key)
         if (targetIndex < 0) articles.unshift(article)
         else articles.splice(targetIndex, 1, article)
 
@@ -93,11 +90,12 @@ function articles (state, action) {
       return state
     case ARTICLE_DESTROY:
       {
-        let { userId, articleId } = action.data
+        let { userId, articleKey } = action.data
         let teamKey = genKey(userId)
         let articles = JSON.parse(localStorage.getItem(teamKey))
-
-        let targetIndex = findIndex(articles, _article => articleId === _article.id)
+        console.log(articles)
+        console.log(articleKey)
+        let targetIndex = findIndex(articles, _article => articleKey === _article.key)
         if (targetIndex >= 0) articles.splice(targetIndex, 1)
 
         localStorage.setItem(teamKey, JSON.stringify(articles))

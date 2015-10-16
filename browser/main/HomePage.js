@@ -10,6 +10,8 @@ import { findWhere, findIndex, pick } from 'lodash'
 import keygen from 'boost/keygen'
 import { NEW, refreshArticles } from './actions'
 import api from 'boost/api'
+import auth from 'boost/auth'
+import './socket'
 
 class HomePage extends React.Component {
   componentDidMount () {
@@ -17,18 +19,18 @@ class HomePage extends React.Component {
 
     dispatch(switchUser(this.props.params.userId))
 
-    let currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    let currentUser = auth.user()
     let users = [currentUser].concat(currentUser.Teams)
-      users.forEach(user => {
-        api.fetchArticles(user.id)
-          .then(res => {
-            dispatch(refreshArticles(user.id, res.body))
-          })
-          .catch(err => {
-            if (err.status == null) throw err
-            console.error(err)
-          })
-      })
+    users.forEach(user => {
+      api.fetchArticles(user.id)
+        .then(res => {
+          dispatch(refreshArticles(user.id, res.body))
+        })
+        .catch(err => {
+          if (err.status == null) throw err
+          console.error(err)
+        })
+    })
   }
 
   componentWillReceiveProps (nextProps) {

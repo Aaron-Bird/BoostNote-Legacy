@@ -30,21 +30,21 @@ export function updateUser (user) {
 export function refreshArticles (userId, articles) {
   return {
     type: ARTICLE_REFRESH,
-    data: {userId, articles}
+    data: { userId, articles }
   }
 }
 
 export function updateArticle (userId, article) {
   return {
     type: ARTICLE_UPDATE,
-    data: {userId, article}
+    data: { userId, article }
   }
 }
 
-export function destroyArticle (userId, articleId) {
+export function destroyArticle (userId, articleKey) {
   return {
     type: ARTICLE_DESTROY,
-    data: { userId, articleId }
+    data: { userId, articleKey }
   }
 }
 
@@ -70,9 +70,9 @@ export function switchMode (mode) {
   }
 }
 
-export function switchArticle (articleId) {
+export function switchArticle (articleKey) {
   return {
     type: SWITCH_ARTICLE,
-    data: articleId
+    data: articleKey
   }
 }

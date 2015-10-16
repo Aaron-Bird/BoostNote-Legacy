@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
 import linkState from 'boost/linkState'
 import { login } from 'boost/api'
+import auth from 'boost/auth'
 
 export default class LoginPage extends React.Component {
   constructor (props) {
@@ -23,8 +24,8 @@ export default class LoginPage extends React.Component {
     }, function () {
       login(this.state.user)
         .then(res => {
-          localStorage.setItem('token', res.body.token)
-          localStorage.setItem('currentUser', JSON.stringify(res.body.user))
+          let { user, token } = res.body
+          auth.user(user, token)
 
           this.props.history.pushState('home')
         })
@@ -34,12 +35,11 @@ export default class LoginPage extends React.Component {
             return this.setState({
               error: {
                 name: 'CunnectionRefused',
-                message: 'Can\'t connect to API server.'
+                message: 'Can\'t cznnect to API server.'
               },
               isSending: false
             })
-          }
-          else if (err.status != null) {
+          } else if (err.status != null) {
             return this.setState({
               error: {
                 name: err.response.body.name,
