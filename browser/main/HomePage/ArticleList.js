@@ -5,10 +5,10 @@ import moment from 'moment'
 import { IDLE_MODE, CREATE_MODE, EDIT_MODE, switchArticle, NEW } from '../actions'
 
 export default class ArticleList extends React.Component {
-  handleArticleClick (id) {
+  handleArticleClick (key) {
     let { dispatch } = this.props
     return function (e) {
-      dispatch(switchArticle(id))
+      dispatch(switchArticle(key))
     }
   }
 
@@ -25,8 +25,8 @@ export default class ArticleList extends React.Component {
       )
 
       return (
-        <div key={'article-' + article.id}>
-          <div onClick={e => this.handleArticleClick(article.id)(e)} className={'articleItem' + (activeArticle.id === article.id ? ' active' : '')}>
+        <div key={'article-' + article.key}>
+          <div onClick={e => this.handleArticleClick(article.key)(e)} className={'articleItem' + (activeArticle.key === article.key ? ' active' : '')}>
             <div className='top'>
               <i className='fa fa-fw fa-square'/>
               by <ProfileImage className='profileImage' size='20' email={article.User.email}/> {article.User.profileName}

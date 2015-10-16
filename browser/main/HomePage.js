@@ -8,13 +8,27 @@ import ArticleList from './HomePage/ArticleList'
 import ArticleDetail from './HomePage/ArticleDetail'
 import { findWhere, findIndex, pick } from 'lodash'
 import keygen from 'boost/keygen'
-import { NEW } from './actions'
+import { NEW, refreshArticles } from './actions'
+import api from 'boost/api'
 
-class HomeContainer extends React.Component {
+class HomePage extends React.Component {
   componentDidMount () {
     const { dispatch } = this.props
 
     dispatch(switchUser(this.props.params.userId))
+
+    let currentUser = JSON.parse(localStorage.getItem('currentUser'))
+    let users = [currentUser].concat(currentUser.Teams)
+      users.forEach(user => {
+        api.fetchArticles(user.id)
+          .then(res => {
+            dispatch(refreshArticles(user.id, res.body))
+          })
+          .catch(err => {
+            if (err.status == null) throw err
+            console.error(err)
+          })
+      })
   }
 
   componentWillReceiveProps (nextProps) {
@@ -29,7 +43,7 @@ class HomeContainer extends React.Component {
     const { dispatch, status, users, activeUser, articles, activeArticle } = this.props
 
     return (
-      <div className='HomeContainer'>
+      <div className='HomePage'>
         <UserNavigator users={users} />
         <ArticleNavigator dispatch={dispatch} activeUser={activeUser} status={status}/>
         <ArticleTopBar/>
@@ -44,13 +58,17 @@ function remap (state) {
   let status = state.status
 
   let currentUser = state.currentUser
+  if (currentUser == null) return state
   let teams = Array.isArray(currentUser.Teams) ? currentUser.Teams : []
 
   let users = [currentUser, ...teams]
   let activeUser = findWhere(users, {id: parseInt(status.userId, 10)})
   if (activeUser == null) activeUser = users[0]
+
   let articles = state.articles['team-' + activeUser.id]
-  let activeArticle = findWhere(articles, {id: status.articleId})
+  if (articles == null) articles = []
+
+  let activeArticle = findWhere(articles, {key: status.articleKey})
   if (activeArticle == null) activeArticle = articles[0]
 
   // remove Unsaved new article if user is not CREATE_MODE
@@ -68,7 +86,8 @@ function remap (state) {
     var newArticle = findWhere(articles, {status: 'NEW'})
     if (newArticle == null) {
       newArticle = {
-        id: keygen(),
+        id: null,
+        key: keygen(),
         title: '',
         content: '',
         mode: 'markdown',
@@ -84,16 +103,18 @@ function remap (state) {
     status.mode = IDLE_MODE
   }
 
-  return {
+  let props = {
     users,
     activeUser,
     status,
     articles,
     activeArticle
   }
+  console.log(props)
+  return props
 }
 
-HomeContainer.propTypes = {
+HomePage.propTypes = {
   users: PropTypes.array,
   activeUser: PropTypes.object,
   params: PropTypes.shape({
@@ -108,4 +129,4 @@ HomeContainer.propTypes = {
   dispatch: PropTypes.func
 }
 
-export default connect(remap)(HomeContainer)
+export default connect(remap)(HomePage)

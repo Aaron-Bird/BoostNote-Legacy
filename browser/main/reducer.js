@@ -2,17 +2,28 @@ import { combineReducers } from 'redux'
 import { findIndex } from 'lodash'
 import { SWITCH_USER, SWITCH_FOLDER, SWITCH_MODE, SWITCH_ARTICLE, USER_UPDATE, ARTICLE_REFRESH, ARTICLE_UPDATE, ARTICLE_DESTROY, IDLE_MODE, CREATE_MODE } from './actions'
 
-const initialCurrentUser = JSON.parse(localStorage.getItem('currentUser'))
 const initialStatus = {
   mode: IDLE_MODE
 }
-// init articles
-let teams = Array.isArray(initialCurrentUser.Teams) ? initialCurrentUser.Teams : []
-let users = [initialCurrentUser, ...teams]
-const initialArticles = users.reduce((res, user) => {
-  res['team-' + user.id] = JSON.parse(localStorage.getItem('team-' + user.id))
-  return res
-}, {})
+
+function getInitialCurrentUser () {
+  return JSON.parse(localStorage.getItem('currentUser'))
+}
+
+function getInitialArticles () {
+  let initialCurrentUser = getInitialCurrentUser()
+  if (initialCurrentUser == null) return []
+
+  let teams = Array.isArray(initialCurrentUser.Teams) ? initialCurrentUser.Teams : []
+
+  let users = [initialCurrentUser, ...teams]
+  let initialArticles = users.reduce((res, user) => {
+    res['team-' + user.id] = JSON.parse(localStorage.getItem('team-' + user.id))
+    return res
+  }, {})
+
+  return initialArticles
+}
 
 function currentUser (state, action) {
   switch (action.type) {
@@ -21,7 +32,7 @@ function currentUser (state, action) {
       localStorage.setItem('currentUser', JSON.stringify(user))
       return user
     default:
-      if (state == null) return initialCurrentUser
+      if (state == null) return getInitialCurrentUser()
       return state
   }
 }
@@ -39,10 +50,10 @@ function status (state, action) {
       return state
     case SWITCH_MODE:
       state.mode = action.data
-      if (state.mode === CREATE_MODE) state.articleId = null
+      if (state.mode === CREATE_MODE) state.articleKey = null
       return state
     case SWITCH_ARTICLE:
-      state.articleId = action.data
+      state.articleKey = action.data
       state.mode = IDLE_MODE
       return state
     default:
@@ -94,7 +105,7 @@ function articles (state, action) {
       }
       return state
     default:
-      if (state == null) return initialArticles
+      if (state == null) return getInitialArticles()
       return state
   }
 }

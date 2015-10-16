@@ -22,40 +22,45 @@ export default class LoginPage extends React.Component {
       error: null
     }, function () {
       login(this.state.user)
-        .then(function (res) {
+        .then(res => {
           localStorage.setItem('token', res.body.token)
           localStorage.setItem('currentUser', JSON.stringify(res.body.user))
 
-          try {
-            this.props.history.pushState('home')
-          } catch (e) {
-            console.error(e)
-          }
-        }.bind(this))
-        .catch(function (err) {
+          this.props.history.pushState('home')
+        })
+        .catch(err => {
           console.error(err)
-          if (err.response == null) {
+          if (err.code === 'ECONNREFUSED') {
             return this.setState({
-              error: {name: 'CunnectionRefused', message: 'Can\'t connect to API server.'},
+              error: {
+                name: 'CunnectionRefused',
+                message: 'Can\'t connect to API server.'
+              },
               isSending: false
             })
           }
-
-          // Connection Failed or Whatever
-          this.setState({
-            error: err.response.body,
-            isSending: false
-          })
-        }.bind(this))
+          else if (err.status != null) {
+            return this.setState({
+              error: {
+                name: err.response.body.name,
+                message: err.response.body.message
+              },
+              isSending: false
+            })
+          }
+          else throw err
+        })
     })
   }
 
   render () {
     return (
       <div className='LoginContainer'>
-        <img className='logo' src='resources/favicon-230x230.png'/>
+        <img className='logo' src='../../resources/favicon-230x230.png'/>
 
-        <nav className='authNavigator text-center'><Link to='/login' activeClassName='active'>Log In</Link> / <Link to='/signup' activeClassName='active'>Sign Up</Link></nav>
+        <nav className='authNavigator text-center'>
+          <Link to='/login' activeClassName='active'>Log In</Link> / <Link to='/signup' activeClassName='active'>Sign Up</Link>
+        </nav>
 
         <form onSubmit={e => this.handleSubmit(e)}>
           <div className='formField'>
@@ -65,9 +70,10 @@ export default class LoginPage extends React.Component {
             <input valueLink={this.linkState('user.password')} onChange={this.handleChange} type='password' placeholder='Password'/>
           </div>
 
-          {this.state.isSending ? (
-            <p className='alertInfo'>Logging in...</p>
-          ) : null}
+          {this.state.isSending
+            ? (
+              <p className='alertInfo'>Logging in...</p>
+            ) : null}
 
           {this.state.error != null ? <p className='alertError'>{this.state.error.message}</p> : null}
 

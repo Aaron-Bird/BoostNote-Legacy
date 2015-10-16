@@ -13,8 +13,8 @@ require('../styles/main/index.styl')
 
 function onlyUser (state, replaceState) {
   var currentUser = JSON.parse(localStorage.getItem('currentUser'))
-  if (currentUser == null) replaceState('login', '/login')
-  if (state.location.pathname === '/') replaceState('user', '/users/' + currentUser.id)
+  if (currentUser == null) return replaceState('login', '/login')
+  if (state.location.pathname === '/') return replaceState('user', '/users/' + currentUser.id)
 }
 
 let routes = (
@@ -62,18 +62,6 @@ React.render((
     .then(function (res) {
       let user = res.body
       store.dispatch(updateUser(user))
-
-      let users = [user].concat(user.Teams)
-      users.forEach(user => {
-        fetchArticles(user.id)
-          .then(res => {
-            store.dispatch(refreshArticles(user.id, res.body))
-          })
-          .catch(err => {
-            if (err.status == null) throw err
-            console.error(err)
-          })
-      })
     })
     .catch(function (err) {
       console.error(err.message)

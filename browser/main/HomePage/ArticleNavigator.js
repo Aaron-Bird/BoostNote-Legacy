@@ -2,12 +2,19 @@ import React, { PropTypes } from 'react'
 import ProfileImage from 'boost/components/ProfileImage'
 import { findWhere } from 'lodash'
 import { switchMode, CREATE_MODE } from '../actions'
+import { openModal } from 'boost/modal'
+import CreateNewFolder from 'boost/components/modal/CreateNewFolder'
 
 export default class ArticleNavigator extends React.Component {
   handleNewPostButtonClick (e) {
     let { dispatch } = this.props
 
     dispatch(switchMode(CREATE_MODE))
+  }
+
+  handleNewFolderButton (e) {
+    let { activeUser } = this.props
+    openModal(CreateNewFolder, {user: activeUser})
   }
 
   render () {
@@ -48,7 +55,7 @@ export default class ArticleNavigator extends React.Component {
         <div className='folders'>
           <div className='header'>
             <div className='title'>Folders</div>
-            <button className='addBtn'><i className='fa fa-fw fa-plus'/></button>
+            <button onCLick={e => this.handleNewFolderButton(e)} className='addBtn'><i className='fa fa-fw fa-plus'/></button>
           </div>
           <div className='folderList'>
             <button className={activeFolder == null ? 'active' : ''}>All folders</button>
@@ -75,7 +82,7 @@ export default class ArticleNavigator extends React.Component {
 
 ArticleNavigator.propTypes = {
   activeUser: PropTypes.object,
-  state: PropTypes.shape({
+  status: PropTypes.shape({
     folderId: PropTypes.number
   }),
   dispatch: PropTypes.func

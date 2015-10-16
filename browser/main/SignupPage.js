@@ -30,23 +30,30 @@ export default class SignupContainer extends React.Component {
           localStorage.setItem('token', res.body.token)
           localStorage.setItem('currentUser', JSON.stringify(res.body.user))
 
-          this.props.history.pushState('userHome', {userId: res.body.user.id})
+          this.props.history.pushState('home')
         })
-        .catch(function (err) {
+        .catch(err => {
           console.error(err)
-          if (err.response == null) {
+          if (err.code === 'ECONNREFUSED') {
             return this.setState({
-              error: {name: 'CunnectionRefused', message: 'Can\'t connect to API server.'},
+              error: {
+                name: 'CunnectionRefused',
+                message: 'Can\'t connect to API server.'
+              },
               isSending: false
             })
           }
-
-          // Connection Failed or Whatever
-          this.setState({
-            error: err.response.body,
-            isSending: false
-          })
-        }.bind(this))
+          else if (err.status != null) {
+            return this.setState({
+              error: {
+                name: err.response.body.name,
+                message: err.response.body.message
+              },
+              isSending: false
+            })
+          }
+          else throw err
+        })
     })
 
     e.preventDefault()
@@ -55,7 +62,7 @@ export default class SignupContainer extends React.Component {
   render () {
     return (
       <div className='SignupContainer'>
-        <img className='logo' src='resources/favicon-230x230.png'/>
+        <img className='logo' src='../../resources/favicon-230x230.png'/>
 
         <nav className='authNavigator text-center'><Link to='/login' activeClassName='active'>Log In</Link> / <Link to='/signup' activeClassName='active'>Sign Up</Link></nav>
 

@@ -19,7 +19,7 @@ var modeOptions = aceModes.map(function (mode) {
 
 function makeInstantArticle (article) {
   let instantArticle = Object.assign({}, article)
-  instantArticle.Tags = instantArticle.Tags.map(tag => tag.name)
+  instantArticle.Tags = typeof instantArticle.Tags === 'array' ? instantArticle.Tags.map(tag => tag.name) : []
   return instantArticle
 }
 
@@ -102,8 +102,12 @@ export default class ArticleDetail extends React.Component {
             <div className='deleteConfirm'>
               <div className='right'>
                 Are you sure to delete this article?
-                <button onClick={e => this.handleDeleteConfirmButtonClick(e)} className='primary'><i className='fa fa-fw fa-check'/> Sure</button>
-                <button onClick={e => this.handleDeleteCancleButtonClick(e)}><i className='fa fa-fw fa-times'/> Cancle</button>
+                <button onClick={e => this.handleDeleteConfirmButtonClick(e)} className='primary'>
+                  <i className='fa fa-fw fa-check'/> Sure
+                </button>
+                <button onClick={e => this.handleDeleteCancleButtonClick(e)}>
+                  <i className='fa fa-fw fa-times'/> Cancle
+                </button>
               </div>
             </div>
           )
@@ -133,7 +137,10 @@ export default class ArticleDetail extends React.Component {
               <ModeIcon className='mode' mode={activeArticle.mode}/>
               <div className='title'>{activeArticle.title}</div>
             </div>
-            {activeArticle.mode === 'markdown' ? <MarkdownPreview content={activeArticle.content}/> : <CodeEditor readOnly={true} onChange={this.handleContentChange} mode={activeArticle.mode} code={activeArticle.content}/>}
+            {activeArticle.mode === 'markdown'
+              ? <MarkdownPreview content={activeArticle.content}/>
+              : <CodeEditor readOnly={true} onChange={this.handleContentChange} mode={activeArticle.mode} code={activeArticle.content}/>
+            }
           </div>
         </div>
       </div>
@@ -147,7 +154,7 @@ export default class ArticleDetail extends React.Component {
   handleSaveButtonClick (e) {
     let { activeArticle } = this.props
 
-    if (typeof activeArticle.id === 'string') this.saveAsNew()
+    if (activeArticle.id == null) this.saveAsNew()
     else this.save()
   }
 
@@ -254,7 +261,7 @@ export default class ArticleDetail extends React.Component {
         <div className='detailInfo'>
           <div className='left'>
             <Select ref='folder' onChange={value => this.handleFolderIdChange(value)} clearable={false} placeholder='select folder...' options={folderOptions} value={this.state.article.FolderId} className='folder'/>
-            <Select onChange={(tag, tags) => this.handleTagsChange(tag, tags)} clearable={false} multi={true} placeholder='add some tags...' allowCreate={true} value={this.state.article.Tags} className='tags'/>
+            <Select onChange={(tag, tags) => this.handleTagsChange(tag, tags)} clearable={false} multi placeholder='add some tags...' allowCreate value={this.state.article.Tags} className='tags'/>
           </div>
           <div className='right'>
             <button onClick={e => this.handleCancelButtonClick(e)}>Cancel</button>
