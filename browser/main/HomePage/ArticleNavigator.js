@@ -4,6 +4,7 @@ import { findWhere } from 'lodash'
 import { switchMode, CREATE_MODE } from '../actions'
 import { openModal } from 'boost/modal'
 import CreateNewFolder from 'boost/components/modal/CreateNewFolder'
+import FolderMark from 'boost/components/FolderMark'
 
 export default class ArticleNavigator extends React.Component {
   handleNewPostButtonClick (e) {
@@ -23,9 +24,10 @@ export default class ArticleNavigator extends React.Component {
 
     let activeFolder = findWhere(activeUser.Folders, {id: status.folderId})
 
-    let folders = activeUser.Folders.map(folder => {
+    let folders = activeUser.Folders.map((folder, index) => {
       return (
-        <button key={'folder-' + folder.id} className={activeFolder != null && activeFolder.id === folder.id ? 'active' : ''}><i className='fa fa-fw fa-square'/> {folder.name}</button>
+        <button key={'folder-' + folder.id} className={activeFolder != null && activeFolder.id === folder.id ? 'active' : ''}>
+        <FolderMark id={folder.id}/> {folder.name}</button>
       )
     })
 
@@ -55,7 +57,7 @@ export default class ArticleNavigator extends React.Component {
         <div className='folders'>
           <div className='header'>
             <div className='title'>Folders</div>
-            <button onCLick={e => this.handleNewFolderButton(e)} className='addBtn'><i className='fa fa-fw fa-plus'/></button>
+            <button onClick={e => this.handleNewFolderButton(e)} className='addBtn'><i className='fa fa-fw fa-plus'/></button>
           </div>
           <div className='folderList'>
             <button className={activeFolder == null ? 'active' : ''}>All folders</button>

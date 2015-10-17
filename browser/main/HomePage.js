@@ -69,6 +69,9 @@ function remap (state) {
 
   let articles = state.articles['team-' + activeUser.id]
   if (articles == null) articles = []
+  articles.sort((a, b) => {
+    return new Date(b.updatedAt) - new Date(a.updatedAt)
+  })
 
   let activeArticle = findWhere(articles, {key: status.articleKey})
   if (activeArticle == null) activeArticle = articles[0]

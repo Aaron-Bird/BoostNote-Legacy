@@ -3,6 +3,7 @@ import ProfileImage from 'boost/components/ProfileImage'
 import ModeIcon from 'boost/components/ModeIcon'
 import moment from 'moment'
 import { switchArticle, NEW } from '../actions'
+import FolderMark from 'boost/components/FolderMark'
 
 export default class ArticleList extends React.Component {
   handleArticleClick (key) {
@@ -26,7 +27,7 @@ export default class ArticleList extends React.Component {
         <div key={'article-' + article.key}>
           <div onClick={e => this.handleArticleClick(article.key)(e)} className={'articleItem' + (activeArticle.key === article.key ? ' active' : '')}>
             <div className='top'>
-              <i className='fa fa-fw fa-square'/>
+              <FolderMark id={article.FolderId}/>
               by <ProfileImage className='profileImage' size='20' email={article.User.email}/> {article.User.profileName}
             <span className='updatedAt'>{article.status != null ? article.status : moment(article.updatedAt).fromNow()}</span>
             </div>

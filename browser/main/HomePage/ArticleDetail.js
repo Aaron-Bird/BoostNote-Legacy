@@ -9,6 +9,7 @@ import aceModes from 'boost/ace-modes'
 import Select from 'react-select'
 import linkState from 'boost/linkState'
 import api from 'boost/api'
+import FolderMark from 'boost/components/FolderMark'
 
 var modeOptions = aceModes.map(function (mode) {
   return {
@@ -19,7 +20,7 @@ var modeOptions = aceModes.map(function (mode) {
 
 function makeInstantArticle (article) {
   let instantArticle = Object.assign({}, article)
-  instantArticle.Tags = typeof instantArticle.Tags === 'array' ? instantArticle.Tags.map(tag => tag.name) : []
+  instantArticle.Tags = (typeof instantArticle.Tags === 'array') ? instantArticle.Tags.map(tag => tag.name) : []
   return instantArticle
 }
 
@@ -115,7 +116,7 @@ export default class ArticleDetail extends React.Component {
             <div className='detailInfo'>
               <div className='left'>
                 <div className='info'>
-                  <i className='fa fa-fw fa-square'/> {folderName}&nbsp;
+                  <FolderMark id={folder.id}/> {folderName}&nbsp;
                   by {activeArticle.User.profileName}&nbsp;
                   Created {moment(activeArticle.createdAt).format('YYYY/MM/DD')}&nbsp;
                   Updated {moment(activeArticle.updatedAt).format('YYYY/MM/DD')}
@@ -139,7 +140,7 @@ export default class ArticleDetail extends React.Component {
             </div>
             {activeArticle.mode === 'markdown'
               ? <MarkdownPreview content={activeArticle.content}/>
-              : <CodeEditor readOnly={true} onChange={this.handleContentChange} mode={activeArticle.mode} code={activeArticle.content}/>
+              : <CodeEditor readOnly onChange={this.handleContentChange} mode={activeArticle.mode} code={activeArticle.content}/>
             }
           </div>
         </div>
