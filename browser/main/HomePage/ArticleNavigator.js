@@ -33,12 +33,14 @@ export default class ArticleNavigator extends React.Component {
 
     let activeFolder = findWhere(activeUser.Folders, {id: status.folderId})
 
-    let folders = activeUser.Folders.map((folder, index) => {
-      return (
-        <button key={'folder-' + folder.id} className={activeFolder != null && activeFolder.id === folder.id ? 'active' : ''}>
-        <FolderMark id={folder.id}/> {folder.name} {folder.public ? <i className='fa fa-fw fa-lock'/> : null}</button>
-      )
-    })
+    let folders = activeUser.Folders != null
+      ? activeUser.Folders.map((folder, index) => {
+        return (
+          <button key={'folder-' + folder.id} className={activeFolder != null && activeFolder.id === folder.id ? 'active' : ''}>
+          <FolderMark id={folder.id}/> {folder.name} {folder.public ? <i className='fa fa-fw fa-lock'/> : null}</button>
+        )
+      })
+      : []
 
     let members = Array.isArray(activeUser.Members) ? activeUser.Members.sort((a, b) => {
       return new Date(a._pivot_createdAt) - new Date(b._pivot_createdAt)
