@@ -1,6 +1,6 @@
 import React, { PropTypes} from 'react'
 import { connect } from 'react-redux'
-import { CREATE_MODE, IDLE_MODE, switchUser } from './actions'
+import { CREATE_MODE, IDLE_MODE, switchUser, NEW, refreshArticles } from 'boost/actions'
 import UserNavigator from './HomePage/UserNavigator'
 import ArticleNavigator from './HomePage/ArticleNavigator'
 import ArticleTopBar from './HomePage/ArticleTopBar'
@@ -8,10 +8,9 @@ import ArticleList from './HomePage/ArticleList'
 import ArticleDetail from './HomePage/ArticleDetail'
 import { findWhere, findIndex, pick } from 'lodash'
 import keygen from 'boost/keygen'
-import { NEW, refreshArticles } from './actions'
 import api from 'boost/api'
 import auth from 'boost/auth'
-import './socket'
+import 'boost/socket'
 
 class HomePage extends React.Component {
   componentDidMount () {

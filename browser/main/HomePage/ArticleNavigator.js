@@ -1,12 +1,21 @@
 import React, { PropTypes } from 'react'
 import ProfileImage from 'boost/components/ProfileImage'
 import { findWhere } from 'lodash'
-import { switchMode, CREATE_MODE } from '../actions'
+import { switchMode, CREATE_MODE } from 'boost/actions'
 import { openModal } from 'boost/modal'
-import CreateNewFolder from 'boost/components/modal/CreateNewFolder'
 import FolderMark from 'boost/components/FolderMark'
+import Preferences from 'boost/components/modal/Preferences'
+import CreateNewFolder from 'boost/components/modal/CreateNewFolder'
 
 export default class ArticleNavigator extends React.Component {
+  componentDidMount () {
+    this.handlePreferencesButtonClick()
+  }
+
+  handlePreferencesButtonClick (e) {
+    openModal(Preferences)
+  }
+
   handleNewPostButtonClick (e) {
     let { dispatch } = this.props
 
@@ -27,7 +36,7 @@ export default class ArticleNavigator extends React.Component {
     let folders = activeUser.Folders.map((folder, index) => {
       return (
         <button key={'folder-' + folder.id} className={activeFolder != null && activeFolder.id === folder.id ? 'active' : ''}>
-        <FolderMark id={folder.id}/> {folder.name}</button>
+        <FolderMark id={folder.id}/> {folder.name} {folder.public ? <i className='fa fa-fw fa-lock'/> : null}</button>
       )
     })
 
@@ -47,7 +56,7 @@ export default class ArticleNavigator extends React.Component {
         <div className='userInfo'>
           <div className='userProfileName'>{activeUser.profileName}</div>
           <div className='userName'>{activeUser.name}</div>
-          <button className='settingBtn'><i className='fa fa-fw fa-chevron-down'/></button>
+          <button onClick={e => this.handlePreferencesButtonClick(e)} className='settingBtn'><i className='fa fa-fw fa-chevron-down'/></button>
         </div>
 
         <div className='controlSection'>
@@ -89,3 +98,4 @@ ArticleNavigator.propTypes = {
   }),
   dispatch: PropTypes.func
 }
+

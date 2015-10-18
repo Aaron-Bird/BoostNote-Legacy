@@ -1,0 +1,126 @@
+menuColor = #808080
+menuBgColor = #E6E6E6
+closeBtnBgColor = #1790C6
+iptFocusBorderColor = #369DCD
+
+.Preferences.modal
+  padding 0
+  border-radius 5px
+  overflow hidden
+  width 720px
+  height 450px
+  &>.header
+    absolute top left right
+    height 50px
+    border-bottom 1px solid borderColor
+    background-color menuBgColor
+    &>.title
+      font-size 22px
+      font-weight bold
+      float left
+      padding-left 30px
+      line-height 50px
+    &>.closeBtn
+      float right
+      font-size 14px
+      background-color closeBtnBgColor
+      color white
+      padding 0 15px
+      height 33px
+      margin-top 9px
+      margin-right 15px
+      border none
+      border-radius 5px
+      &:hover
+        background-color lighten(closeBtnBgColor, 10%)
+  &>.nav
+    absolute left bottom
+    top 50px
+    width 180px
+    background-color menuBgColor
+    border-right 1px solid borderColor
+    &>button
+      width 100%
+      height 44px
+      font-size 18px
+      color menuColor
+      border none
+      background-color transparent
+      transition 0.1s
+      text-align left
+      padding-left 15px
+      &:hover
+        background-color darken(menuBgColor, 10%)
+      &.active, &:active
+        background-color brandColor
+        color white
+  &>.content
+    absolute right bottom
+    top 50px
+    left 180px
+    &>.section
+      padding 10px
+      border-bottom 1px solid borderColor
+      overflow-y auto
+      &:nth-last-child(1)
+        border-bottom none
+      &>.sectionTitle
+        font-size 18px
+        margin 10px 0 5px
+        color brandColor
+      &>.sectionInput
+        height 33px
+        margin-bottom 5px
+        clearfix()
+        label
+          width 180px
+          padding-left 15px
+          float left
+          line-height 33px
+        input
+          width 300px
+          float left
+          height 33px
+          border-radius 5px
+          border 1px solid borderColor
+          padding 0 10px
+          font-size 14px
+          outline none
+          &:focus
+            border-color iptFocusBorderColor
+      &>.sectionConfirm
+        clearfix()
+        padding 5px 15px
+        button
+          float right
+          background-color brandColor
+          color white
+          border none
+          border-radius 5px
+          height 33px
+          padding 0 15px
+          font-size 14px
+          &:hover
+            background-color lighten(brandColor, 10%)
+        .alert
+          float right
+          height 33px
+          padding 0 15px
+          border-radius 5px
+          margin-right 5px
+          line-height 33px
+          font-size 14px
+          &.info
+            background-color infoBackgroundColor
+            color infoTextColor
+          &.error
+            background-color errorBackgroundColor
+            color errorTextColor
+          &.success
+            background-color successBackgroundColor
+            color successTextColor
+
+      .description
+        marked()
+
+

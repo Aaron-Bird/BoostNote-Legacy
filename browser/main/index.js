@@ -1,6 +1,6 @@
 import React from 'react'
 import { Provider } from 'react-redux'
-import { updateUser } from './actions'
+import { updateUser } from 'boost/actions'
 import { fetchCurrentUser } from 'boost/api'
 import { Router, Route, IndexRoute } from 'react-router'
 import MainPage from './MainPage'
@@ -8,7 +8,7 @@ import LoginPage from './LoginPage'
 import SignupPage from './SignupPage'
 import HomePage from './HomePage'
 import auth from 'boost/auth'
-import store, { devToolElement } from './store'
+import store, { devToolElement } from 'boost/store'
 require('../styles/main/index.styl')
 
 function onlyUser (state, replaceState) {

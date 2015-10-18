@@ -4,7 +4,7 @@ import { findWhere, uniq } from 'lodash'
 import ModeIcon from 'boost/components/ModeIcon'
 import MarkdownPreview from 'boost/components/MarkdownPreview'
 import CodeEditor from 'boost/components/CodeEditor'
-import { UNSYNCED, IDLE_MODE, CREATE_MODE, EDIT_MODE, switchMode, switchArticle, updateArticle, destroyArticle } from '../actions'
+import { UNSYNCED, IDLE_MODE, CREATE_MODE, EDIT_MODE, switchMode, switchArticle, updateArticle, destroyArticle } from 'boost/actions'
 import aceModes from 'boost/ace-modes'
 import Select from 'react-select'
 import linkState from 'boost/linkState'
@@ -20,7 +20,7 @@ var modeOptions = aceModes.map(function (mode) {
 
 function makeInstantArticle (article) {
   let instantArticle = Object.assign({}, article)
-  instantArticle.Tags = (typeof instantArticle.Tags === 'array') ? instantArticle.Tags.map(tag => tag.name) : []
+  instantArticle.Tags = Array.isArray(instantArticle.Tags) ? instantArticle.Tags.map(tag => tag.name) : []
   return instantArticle
 }
 
@@ -107,7 +107,7 @@ export default class ArticleDetail extends React.Component {
                   <i className='fa fa-fw fa-check'/> Sure
                 </button>
                 <button onClick={e => this.handleDeleteCancleButtonClick(e)}>
-                  <i className='fa fa-fw fa-times'/> Cancle
+                  <i className='fa fa-fw fa-times'/> Cancel
                 </button>
               </div>
             </div>

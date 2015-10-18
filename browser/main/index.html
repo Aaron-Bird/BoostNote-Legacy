@@ -53,12 +53,16 @@
   <div id="content"></div>
 
   <script src="../../submodules/ace/src-min/ace.js"></script>
-  <script>
+  <script type="text/javascript">
     var version = require('remote').require('app').getVersion()
-    global.version = version
     document.title = 'Boost' + ((version == null || version.length === 0) ? ' DEV' : '')
     // require("babel-core/register")
     // require('./index')
+    document.addEventListener('mousewheel', function(e) {
+      if(e.deltaY % 1 !== 0) {
+        e.preventDefault()
+      }
+    })
   </script>
   <script src="http://localhost:8080/assets/main.js"></script>
 </body>

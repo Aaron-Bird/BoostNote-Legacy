@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import ProfileImage from 'boost/components/ProfileImage'
 import ModeIcon from 'boost/components/ModeIcon'
 import moment from 'moment'
-import { switchArticle, NEW } from '../actions'
+import { switchArticle, NEW } from 'boost/actions'
 import FolderMark from 'boost/components/FolderMark'
 
 export default class ArticleList extends React.Component {
