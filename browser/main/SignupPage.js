@@ -3,6 +3,7 @@ import { Link } from 'react-router'
 import linkState from 'boost/linkState'
 import openExternal from 'boost/openExternal'
 import { signup } from 'boost/api'
+import auth from 'boost/auth'
 
 export default class SignupContainer extends React.Component {
   constructor (props) {
@@ -27,8 +28,8 @@ export default class SignupContainer extends React.Component {
     }, function () {
       signup(this.state.user)
         .then(res => {
-          localStorage.setItem('token', res.body.token)
-          localStorage.setItem('currentUser', JSON.stringify(res.body.user))
+          let { user, token } = res.body
+          auth.user(user, token)
 
           this.props.history.pushState('home')
         })
@@ -42,8 +43,7 @@ export default class SignupContainer extends React.Component {
               },
               isSending: false
             })
-          }
-          else if (err.status != null) {
+          } else if (err.status != null) {
             return this.setState({
               error: {
                 name: err.response.body.name,

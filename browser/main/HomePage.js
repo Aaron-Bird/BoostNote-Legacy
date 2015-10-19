@@ -10,7 +10,7 @@ import { findWhere, findIndex, pick } from 'lodash'
 import keygen from 'boost/keygen'
 import api from 'boost/api'
 import auth from 'boost/auth'
-import 'boost/socket'
+import io from 'boost/socket'
 
 class HomePage extends React.Component {
   componentDidMount () {
@@ -19,7 +19,8 @@ class HomePage extends React.Component {
     dispatch(switchUser(this.props.params.userId))
 
     let currentUser = auth.user()
-    let users = [currentUser].concat(currentUser.Teams)
+
+    let users = currentUser.Teams != null ? [currentUser].concat(currentUser.Teams) : [currentUser]
     users.forEach(user => {
       api.fetchArticles(user.id)
         .then(res => {
@@ -30,6 +31,11 @@ class HomePage extends React.Component {
           console.error(err)
         })
     })
+
+    let token = auth.token()
+    if (token != null) {
+      io.emit('JOIN', {token})
+    }
   }
 
   componentWillReceiveProps (nextProps) {

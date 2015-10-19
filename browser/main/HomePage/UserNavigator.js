@@ -15,6 +15,8 @@ export default class UserNavigator extends Component {
   }
 
   renderUserList () {
+    if (this.props.users == null) return null
+
     var users = this.props.users.map((user, index) => (
       <li key={'user-' + user.id}>
         <Link to={'/users/' + user.id} activeClassName='active'>

@@ -6,7 +6,9 @@
   "scripts": {
     "start": "electron ./main.js",
     "webpack": "webpack-dev-server --inline",
-    "build": "electron-packager ./ Boost $npm_package_config_platform  $npm_package_config_version $npm_package_config_ignore --overwrite"
+    "compile": "NODE_ENV=production webpack --config webpack.config.production.js",
+    "build": "electron-packager ./ Boost $npm_package_config_platform  $npm_package_config_version $npm_package_config_ignore --overwrite",
+    "codesign": "codesign --verbose --deep --force --sign \"MAISIN solutions Inc.\" Boost-darwin-x64/Boost.app"
   },
   "config": {
     "version": "--version=0.33.0 --app-version=$npm_package_version --app-bundle-id=com.maisin.boost",

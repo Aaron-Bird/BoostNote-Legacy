@@ -15,6 +15,7 @@ export default class ArticleList extends React.Component {
 
   render () {
     let { articles, activeArticle } = this.props
+    console.log(articles)
 
     let articlesEl = articles.map(article => {
       let tags = Array.isArray(article.Tags) && article.Tags.length > 0

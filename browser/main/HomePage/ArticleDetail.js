@@ -167,6 +167,7 @@ export default class ArticleDetail extends React.Component {
 
     api.createArticle(article)
       .then(res => {
+        console.log('saved as new')
         console.log(res.body)
       })
       .catch(err => {
@@ -196,6 +197,7 @@ export default class ArticleDetail extends React.Component {
 
     api.saveArticle(article)
       .then(res => {
+        console.log('saved')
         console.log(res.body)
       })
       .catch(err => {
