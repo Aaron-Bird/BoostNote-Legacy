@@ -29,8 +29,7 @@ module.exports = {
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('production'),
-        'BABEL_ENV': JSON.stringify('production')
+        'NODE_ENV': JSON.stringify('production')
       }
     })
     // new webpack.optimize.UglifyJsPlugin({
@@ -44,17 +43,12 @@ module.exports = {
     'md5',
     'superagent',
     'superagent-promise',
-    // 'react',
-    // 'redux',
-    // 'react-redux',
-    // 'react-router',
+    'react',
+    'redux',
+    'react-redux',
+    'react-router',
     'lodash',
-    // 'redbox-react',
-    // 'react-transform-hmr',
-    // 'react-transform-catch-errors',
-    // 'redux-devtools',
-    // 'redux-devtools/lib/react',
-    // 'react-select',
+    'react-select',
     'markdown-it',
     'moment',
     'fs',

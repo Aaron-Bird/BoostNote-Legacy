@@ -1,12 +1,12 @@
 {
   "name": "boost",
-  "version": "0.4.0-alpha",
+  "version": "0.4.0-alpha.1",
   "description": "Boost App",
   "main": "main.js",
   "scripts": {
     "start": "electron ./main.js",
-    "webpack": "webpack-dev-server --inline",
-    "compile": "NODE_ENV=production webpack --config webpack.config.production.js",
+    "webpack": "webpack-dev-server --inline --config webpack.config.js",
+    "compile": "NODE_ENV=production webpack --config webpack.config.production.js -p",
     "build": "electron-packager ./ Boost $npm_package_config_platform  $npm_package_config_version $npm_package_config_ignore --overwrite",
     "codesign": "codesign --verbose --deep --force --sign \"MAISIN solutions Inc.\" Boost-darwin-x64/Boost.app"
   },

@@ -41,8 +41,6 @@ module.exports = {
     'redbox-react',
     'react-transform-hmr',
     'react-transform-catch-errors',
-    'redux-devtools',
-    'redux-devtools/lib/react',
     'react-select',
     'markdown-it',
     'moment'
