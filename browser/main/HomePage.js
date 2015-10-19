@@ -12,6 +12,9 @@ import api from 'boost/api'
 import auth from 'boost/auth'
 import io from 'boost/socket'
 
+const TEXT_FILTER = 'TEXT_FILTER'
+const FOLDER_FILTER = 'FOLDER_FILTER'
+
 class HomePage extends React.Component {
   componentDidMount () {
     const { dispatch } = this.props
@@ -53,7 +56,7 @@ class HomePage extends React.Component {
       <div className='HomePage'>
         <UserNavigator users={users} />
         <ArticleNavigator dispatch={dispatch} activeUser={activeUser} status={status}/>
-        <ArticleTopBar/>
+        <ArticleTopBar dispatch={dispatch} status={status}/>
         <ArticleList dispatch={dispatch} articles={articles} status={status} activeArticle={activeArticle}/>
         <ArticleDetail dispatch={dispatch} activeUser={activeUser} activeArticle={activeArticle} status={status}/>
       </div>
@@ -72,12 +75,42 @@ function remap (state) {
   let activeUser = findWhere(users, {id: parseInt(status.userId, 10)})
   if (activeUser == null) activeUser = users[0]
 
+  // Fetch articles
   let articles = state.articles['team-' + activeUser.id]
   if (articles == null) articles = []
   articles.sort((a, b) => {
     return new Date(b.updatedAt) - new Date(a.updatedAt)
   })
 
+  // Filter articles
+  let filters = status.search.split(' ').map(key => key.trim()).filter(key => key.length > 0).map(key => {
+    if (key.match(/^in:.+$/)) {
+      return {type: FOLDER_FILTER, value: key.match(/^in:(.+)$/)[1]}
+    }
+    return {type: TEXT_FILTER, value: key}
+  })
+  let folderFilters = filters.filter(filter => filter.type === FOLDER_FILTER)
+  let textFilters = filters.filter(filter => filter.type === TEXT_FILTER)
+
+  let targetFolders = activeUser.Folders.filter(folder => {
+    return findWhere(folderFilters, {value: folder.name})
+  })
+  status.targetFolders = targetFolders
+
+  if (targetFolders.length > 0) {
+    articles = articles.filter(article => {
+      return findWhere(targetFolders, {id: article.FolderId})
+    })
+  }
+  if (textFilters.length > 0) {
+    articles = textFilters.reduce((articles, textFilter) => {
+      return articles.filter(article => {
+        return article.title.match(new RegExp(textFilter.value, 'i')) || article.content.match(new RegExp(textFilter.value, 'i'))
+      })
+    }, articles)
+  }
+
+  // Grab active article
   let activeArticle = findWhere(articles, {key: status.articleKey})
   if (activeArticle == null) activeArticle = articles[0]
 
@@ -120,7 +153,7 @@ function remap (state) {
     articles,
     activeArticle
   }
-  console.log(props)
+
   return props
 }
 
@@ -131,8 +164,7 @@ HomePage.propTypes = {
     userId: PropTypes.string
   }),
   status: PropTypes.shape({
-    userId: PropTypes.string,
-    folderId: PropTypes.number
+    userId: PropTypes.string
   }),
   articles: PropTypes.array,
   activeArticle: PropTypes.shape(),

@@ -1,14 +1,21 @@
 import React, { PropTypes } from 'react'
 import ExternalLink from 'boost/components/ExternalLink'
+import { setSearchFilter } from 'boost/actions'
 
-const ArticleTopBar = React.createClass({
+export default class ArticleTopBar extends React.Component {
+  handleSearchChange (e) {
+    let { dispatch } = this.props
+
+    dispatch(setSearchFilter(e.target.value))
+  }
+
   render () {
     return (
       <div className='ArticleTopBar'>
         <div className='left'>
           <div className='search'>
             <i className='fa fa-search fa-fw' />
-            <input placeholder='Search' type='text'/>
+            <input value={this.props.status.search} onChange={e => this.handleSearchChange(e)} placeholder='Search' type='text'/>
           </div>
           <button className='refreshBtn'><i className='fa fa-fw fa-refresh'/></button>
         </div>
@@ -22,6 +29,9 @@ const ArticleTopBar = React.createClass({
       </div>
     )
   }
-})
+}
 
-export default ArticleTopBar
+ArticleTopBar.propTypes = {
+  search: PropTypes.string,
+  dispatch: PropTypes.func
+}

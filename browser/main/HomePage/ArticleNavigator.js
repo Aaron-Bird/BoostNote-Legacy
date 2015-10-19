@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import ProfileImage from 'boost/components/ProfileImage'
 import { findWhere } from 'lodash'
-import { switchMode, CREATE_MODE } from 'boost/actions'
+import { setSearchFilter, switchFolder, switchMode, CREATE_MODE } from 'boost/actions'
 import { openModal } from 'boost/modal'
 import FolderMark from 'boost/components/FolderMark'
 import Preferences from 'boost/components/modal/Preferences'
@@ -27,16 +27,30 @@ export default class ArticleNavigator extends React.Component {
     openModal(CreateNewFolder, {user: activeUser})
   }
 
+  handleFolderButtonClick (name) {
+    return e => {
+      let { dispatch } = this.props
+      dispatch(switchFolder(name))
+    }
+  }
+
+  handleAllFoldersButtonClick (e) {
+    let { dispatch } = this.props
+    dispatch(setSearchFilter(''))
+  }
+
   render () {
     let { activeUser, status } = this.props
     if (activeUser == null) return (<div className='ArticleNavigator'/>)
-
-    let activeFolder = findWhere(activeUser.Folders, {id: status.folderId})
+    let { targetFolders } = status
+    if (targetFolders == null) targetFolders = []
 
     let folders = activeUser.Folders != null
       ? activeUser.Folders.map((folder, index) => {
+        let isActive = findWhere(targetFolders, {id: folder.id})
+
         return (
-          <button key={'folder-' + folder.id} className={activeFolder != null && activeFolder.id === folder.id ? 'active' : ''}>
+          <button onClick={e => this.handleFolderButtonClick(folder.name)(e)} key={'folder-' + folder.id} className={isActive ? 'active' : ''}>
           <FolderMark id={folder.id}/> {folder.name} {folder.public ? <i className='fa fa-fw fa-lock'/> : null}</button>
         )
       })
@@ -71,7 +85,7 @@ export default class ArticleNavigator extends React.Component {
             <button onClick={e => this.handleNewFolderButton(e)} className='addBtn'><i className='fa fa-fw fa-plus'/></button>
           </div>
           <div className='folderList'>
-            <button className={activeFolder == null ? 'active' : ''}>All folders</button>
+            <button onClick={e => this.handleAllFoldersButtonClick(e)} className={targetFolders.length === 0 ? 'active' : ''}>All folders</button>
             {folders}
           </div>
         </div>
