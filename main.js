@@ -45,13 +45,14 @@ app.on('ready', function () {
     appQuit = true
   })
   console.log('Version ' + version)
-  updater.setFeedUrl('http://orbital.b00st.io/rokt33r/boost/latest?version=' + version)
+  updater.setFeedUrl('http://orbital.b00st.io/rokt33r/boost-dev/latest?version=' + version)
   updater.checkForUpdates()
   // menu start
   var template = require('./atom-lib/menu-template')
 
   ipc.on('update-app', function (event, msg) {
     if (update != null) {
+      appQuit = true
       update()
     }
   })
