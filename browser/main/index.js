@@ -9,6 +9,7 @@ import SignupPage from './SignupPage'
 import HomePage from './HomePage'
 import auth from 'boost/auth'
 import store, { devToolElement } from 'boost/store'
+let ReactDOM = require('react-dom')
 require('../styles/main/index.styl')
 
 function onlyUser (state, replaceState) {
@@ -28,10 +29,10 @@ let routes = (
 
 let el = document.getElementById('content')
 
-React.render((
+ReactDOM.render((
   <div>
     <Provider store={store}>
-      {() => <Router>{routes}</Router>}
+      <Router>{routes}</Router>
     </Provider>
     {devToolElement}
   </div>

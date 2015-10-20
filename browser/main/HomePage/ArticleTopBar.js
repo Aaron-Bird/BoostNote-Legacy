@@ -33,5 +33,8 @@ export default class ArticleTopBar extends React.Component {
 
 ArticleTopBar.propTypes = {
   search: PropTypes.string,
-  dispatch: PropTypes.func
+  dispatch: PropTypes.func,
+  status: PropTypes.shape({
+    search: PropTypes.string
+  })
 }

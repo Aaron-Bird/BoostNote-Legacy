@@ -92,22 +92,24 @@ function remap (state) {
   let folderFilters = filters.filter(filter => filter.type === FOLDER_FILTER)
   let textFilters = filters.filter(filter => filter.type === TEXT_FILTER)
 
-  let targetFolders = activeUser.Folders.filter(folder => {
-    return findWhere(folderFilters, {value: folder.name})
-  })
-  status.targetFolders = targetFolders
-
-  if (targetFolders.length > 0) {
-    articles = articles.filter(article => {
-      return findWhere(targetFolders, {id: article.FolderId})
+  if (activeUser.Folders != null) {
+    let targetFolders = activeUser.Folders.filter(folder => {
+      return findWhere(folderFilters, {value: folder.name})
     })
-  }
-  if (textFilters.length > 0) {
-    articles = textFilters.reduce((articles, textFilter) => {
-      return articles.filter(article => {
-        return article.title.match(new RegExp(textFilter.value, 'i')) || article.content.match(new RegExp(textFilter.value, 'i'))
+    status.targetFolders = targetFolders
+
+    if (targetFolders.length > 0) {
+      articles = articles.filter(article => {
+        return findWhere(targetFolders, {id: article.FolderId})
       })
-    }, articles)
+    }
+    if (textFilters.length > 0) {
+      articles = textFilters.reduce((articles, textFilter) => {
+        return articles.filter(article => {
+          return article.title.match(new RegExp(textFilter.value, 'i')) || article.content.match(new RegExp(textFilter.value, 'i'))
+        })
+      }, articles)
+    }
   }
 
   // Grab active article

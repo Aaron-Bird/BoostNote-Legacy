@@ -43,16 +43,9 @@ module.exports = {
     'md5',
     'superagent',
     'superagent-promise',
-    // 'react',
-    // 'redux',
-    // 'react-redux',
-    // 'react-router',
-    // 'react-select',
     'lodash',
     'markdown-it',
-    'moment',
-    'fs',
-    'path'
+    'moment'
   ],
   resolve: {
     extensions: ['', '.js', '.jsx', 'styl']

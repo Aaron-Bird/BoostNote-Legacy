@@ -61,10 +61,13 @@
         e.preventDefault()
       }
     })
+    var scriptUrl = process.env.BOOST_ENV === 'development'
+      ? 'http://localhost:8080/assets/bundle.js'
+      : '../../compiled/main.js'
+    var scriptEl=document.createElement('script')
+    scriptEl.setAttribute("type","text/javascript")
+    scriptEl.setAttribute("src", scriptUrl)
+    document.getElementsByTagName("head")[0].appendChild(scriptEl)
   </script>
-  <script type="text/javascript" src='../../compiled/main.js'></script>
-  <!--
-  <script src="http://localhost:8080/assets/main.js"></script>
-  -->
 </body>
 </html>
