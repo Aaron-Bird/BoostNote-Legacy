@@ -8,7 +8,6 @@ module.exports = {
     path: 'compiled',
     filename: '[name].js',
     sourceMapFilename: '[name].map',
-    publicPath: 'http://localhost:8090/assets',
     libraryTarget: 'commonjs2'
   },
   module: {
