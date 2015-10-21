@@ -41,13 +41,19 @@ ReactDOM.render((
   loadingCover.parentNode.removeChild(loadingCover)
 
   // Refresh user information
-  fetchCurrentUser()
-    .then(function (res) {
-      let user = res.body
-      store.dispatch(updateUser(user))
-    })
-    .catch(function (err) {
-      console.error(err.message)
-      console.log('Fetch failed')
-    })
+  if (auth.user() != null) {
+    fetchCurrentUser()
+      .then(function (res) {
+        let user = res.body
+        store.dispatch(updateUser(user))
+      })
+      .catch(function (err) {
+        if (err.status === 401) {
+          auth.clear()
+          if (window != null) window.location.reload()
+        }
+        console.error(err.message)
+        console.log('Fetch failed')
+      })
+  }
 })
