@@ -4,6 +4,7 @@ import ModeIcon from 'boost/components/ModeIcon'
 import moment from 'moment'
 import { switchArticle, NEW } from 'boost/actions'
 import FolderMark from 'boost/components/FolderMark'
+import TagLink from 'boost/components/TagLink'
 
 export default class ArticleList extends React.Component {
   handleArticleClick (key) {
@@ -19,7 +20,7 @@ export default class ArticleList extends React.Component {
     let articlesEl = articles.map(article => {
       let tags = Array.isArray(article.Tags) && article.Tags.length > 0
         ? article.Tags.map(tag => {
-          return (<a key={tag.name}>{tag.name}</a>)
+          return (<TagLink key={tag.name} tag={tag}/>)
         })
         : (<span>Not tagged yet</span>)
 

@@ -10,6 +10,7 @@ import Select from 'react-select'
 import linkState from 'boost/linkState'
 import api from 'boost/api'
 import FolderMark from 'boost/components/FolderMark'
+import TagLink from 'boost/components/TagLink'
 
 var modeOptions = aceModes.map(function (mode) {
   return {
@@ -86,13 +87,13 @@ export default class ArticleDetail extends React.Component {
   renderIdle () {
     let { activeArticle, activeUser } = this.props
 
-    let tags = activeArticle.Tags.length > 0 ? activeArticle.Tags.map(tag => {
-      return (
-        <a key={tag.name}>{tag.name}</a>
+    let tags = activeArticle.Tags.length > 0
+      ? activeArticle.Tags.map(tag => {
+        return (<TagLink key={tag.name} tag={tag}/>)
+      })
+      : (
+        <span className='noTags'>Not tagged yet</span>
       )
-    }) : (
-      <span className='noTags'>Not tagged yet</span>
-    )
     let folder = findWhere(activeUser.Folders, {id: activeArticle.FolderId})
     let folderName = folder != null ? folder.name : '(unknown)'
 

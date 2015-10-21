@@ -6,7 +6,7 @@ import ArticleNavigator from './HomePage/ArticleNavigator'
 import ArticleTopBar from './HomePage/ArticleTopBar'
 import ArticleList from './HomePage/ArticleList'
 import ArticleDetail from './HomePage/ArticleDetail'
-import { findWhere, findIndex, pick } from 'lodash'
+import _, { findWhere, findIndex, pick } from 'lodash'
 import keygen from 'boost/keygen'
 import api from 'boost/api'
 import auth from 'boost/auth'
@@ -14,6 +14,7 @@ import io from 'boost/socket'
 
 const TEXT_FILTER = 'TEXT_FILTER'
 const FOLDER_FILTER = 'FOLDER_FILTER'
+const TAG_FILTER = 'TAG_FILTER'
 
 class HomePage extends React.Component {
   componentDidMount () {
@@ -83,14 +84,18 @@ function remap (state) {
   })
 
   // Filter articles
-  let filters = status.search.split(' ').map(key => key.trim()).filter(key => key.length > 0).map(key => {
+  let filters = status.search.split(' ').map(key => key.trim()).filter(key => key.length > 0 && !key.match(/^#$/)).map(key => {
     if (key.match(/^in:.+$/)) {
       return {type: FOLDER_FILTER, value: key.match(/^in:(.+)$/)[1]}
+    }
+    if (key.match(/^#(.+)/)) {
+      return {type: TAG_FILTER, value: key.match(/^#(.+)$/)[1]}
     }
     return {type: TEXT_FILTER, value: key}
   })
   let folderFilters = filters.filter(filter => filter.type === FOLDER_FILTER)
   let textFilters = filters.filter(filter => filter.type === TEXT_FILTER)
+  let tagFilters = filters.filter(filter => filter.type === TAG_FILTER)
 
   if (activeUser.Folders != null) {
     let targetFolders = activeUser.Folders.filter(folder => {
@@ -107,6 +112,14 @@ function remap (state) {
       articles = textFilters.reduce((articles, textFilter) => {
         return articles.filter(article => {
           return article.title.match(new RegExp(textFilter.value, 'i')) || article.content.match(new RegExp(textFilter.value, 'i'))
+        })
+      }, articles)
+    }
+
+    if (tagFilters.length > 0) {
+      articles = tagFilters.reduce((articles, tagFilter) => {
+        return articles.filter(article => {
+          return _.find(article.Tags, tag => tag.name.match(new RegExp(tagFilter.value, 'i')))
         })
       }, articles)
     }
