@@ -8,9 +8,9 @@ import Preferences from 'boost/components/modal/Preferences'
 import CreateNewFolder from 'boost/components/modal/CreateNewFolder'
 
 export default class ArticleNavigator extends React.Component {
-  // componentDidMount () {
-  //   this.handlePreferencesButtonClick()
-  // }
+  componentDidMount () {
+    this.handlePreferencesButtonClick()
+  }
 
   handlePreferencesButtonClick (e) {
     openModal(Preferences)
@@ -51,7 +51,7 @@ export default class ArticleNavigator extends React.Component {
 
         return (
           <button onClick={e => this.handleFolderButtonClick(folder.name)(e)} key={'folder-' + folder.id} className={isActive ? 'active' : ''}>
-          <FolderMark id={folder.id}/> {folder.name} {folder.public ? <i className='fa fa-fw fa-lock'/> : null}</button>
+          <FolderMark id={folder.id}/> {folder.name} {folder.public ? null : <i className='fa fa-fw fa-lock'/>}</button>
         )
       })
       : []
