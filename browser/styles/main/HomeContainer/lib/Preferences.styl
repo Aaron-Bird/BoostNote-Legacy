@@ -356,6 +356,41 @@ iptFocusBorderColor = #369DCD
               float right
               width 145px
               text-align center
+            &.newFolder
+              .folderName input
+                height 33px
+                border 1px solid transparent
+                border-radius 5px
+                padding 0 10px
+                font-size 14px
+                outline none
+                width 150px
+                &:hover
+                  border-color borderColor
+                &:focus
+                  border-color iptFocusBorderColor
+              .folderPublic select
+                height 33px
+                border 1px solid transparent
+                background-color white
+                outline none
+                display block
+                margin 0 auto
+                font-size 14px
+                &:hover
+                  border-color borderColor
+                &:focus
+                  border-color iptFocusBorderColor
+              .folderControl
+                button
+                  border none
+                  height 30px
+                  margin-top 1.5px
+                  font-size 14px
+                  background-color transparent
+                  color brandColor
+                  &:hover
+                    color lighten(brandColor, 10%)
             &.FolderRow
               .folderName input
                 height 33px
@@ -374,6 +409,7 @@ iptFocusBorderColor = #369DCD
                 outline none
                 display block
                 margin 0 auto
+                font-size 14px
                 &:focus
                   border-color iptFocusBorderColor
               .folderControl
