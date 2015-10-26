@@ -8,10 +8,6 @@ import Preferences from 'boost/components/modal/Preferences'
 import CreateNewFolder from 'boost/components/modal/CreateNewFolder'
 
 export default class ArticleNavigator extends React.Component {
-  componentDidMount () {
-    this.handlePreferencesButtonClick()
-  }
-
   handlePreferencesButtonClick (e) {
     openModal(Preferences)
   }

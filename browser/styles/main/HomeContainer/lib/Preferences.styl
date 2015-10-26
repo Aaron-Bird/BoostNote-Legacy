@@ -250,6 +250,36 @@ iptFocusBorderColor = #369DCD
             &>.control
               float right
           &>li
+            &.edit
+              .colDescription
+                font-size 14px
+                line-height 33px
+                padding-left 15px
+                float left
+                strong
+                  font-size 16px
+                  color brandColor
+              .colDeleteConfirm
+                float right
+                margin-right 15px
+                button
+                  border none
+                  height 30px
+                  width 60px
+                  margin-top 1.5px
+                  font-size 14px
+                  background-color transparent
+                  color stripBtnColor
+                  &:hover
+                    color stripHoverBtnColor
+                  &:disabled
+                    color lighten(stripBtnColor, 10%)
+                    cursor not-allowed
+                  &.primary
+                   color brandColor
+                   &:hover
+                    color lighten(brandColor, 10%)
+
             border-bottom 1px solid borderColor
             height 44px
             padding 0 25px
@@ -272,11 +302,14 @@ iptFocusBorderColor = #369DCD
               .userInfo
                 float left
                 margin-top 7px
+                width 205px
                 .userName
                   font-size 16px
                   margin-bottom 2px
+                  overflow ellipsis
                 .userEmail
                   font-size 12px
+                  overflow ellipsis
             .colRole
               float left
               width 75px
@@ -365,6 +398,7 @@ iptFocusBorderColor = #369DCD
                 font-size 14px
                 outline none
                 width 150px
+                overflow ellipsis
                 &:hover
                   border-color borderColor
                 &:focus
