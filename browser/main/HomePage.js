@@ -1,65 +1,43 @@
 import React, { PropTypes} from 'react'
 import { connect } from 'react-redux'
-import { CREATE_MODE, IDLE_MODE, switchUser, NEW, refreshArticles } from 'boost/actions'
-import UserNavigator from './HomePage/UserNavigator'
+import { CREATE_MODE, IDLE_MODE, NEW } from 'boost/actions'
+// import UserNavigator from './HomePage/UserNavigator'
 import ArticleNavigator from './HomePage/ArticleNavigator'
 import ArticleTopBar from './HomePage/ArticleTopBar'
 import ArticleList from './HomePage/ArticleList'
 import ArticleDetail from './HomePage/ArticleDetail'
-import _, { findWhere, findIndex, pick } from 'lodash'
+import _ from 'lodash'
 import keygen from 'boost/keygen'
-import api from 'boost/api'
-import auth from 'boost/auth'
-import io from 'boost/socket'
 
 const TEXT_FILTER = 'TEXT_FILTER'
 const FOLDER_FILTER = 'FOLDER_FILTER'
 const TAG_FILTER = 'TAG_FILTER'
 
 class HomePage extends React.Component {
-  componentDidMount () {
-    const { dispatch } = this.props
-
-    dispatch(switchUser(this.props.params.userId))
-
-    let currentUser = auth.user()
-
-    let users = currentUser.Teams != null ? [currentUser].concat(currentUser.Teams) : [currentUser]
-    users.forEach(user => {
-      api.fetchArticles(user.id)
-        .then(res => {
-          dispatch(refreshArticles(user.id, res.body))
-        })
-        .catch(err => {
-          if (err.status == null) throw err
-          console.error(err)
-        })
-    })
-
-    let token = auth.token()
-    if (token != null) {
-      io.emit('JOIN', {token})
-    }
-  }
-
-  componentWillReceiveProps (nextProps) {
-    const { dispatch, status } = this.props
-
-    if (nextProps.params.userId !== status.userId) {
-      dispatch(switchUser(nextProps.params.userId))
-    }
-  }
-
   render () {
-    const { dispatch, status, users, activeUser, articles, activeArticle } = this.props
+    let { dispatch, status, articles, activeArticle, folders } = this.props
 
     return (
       <div className='HomePage'>
-        <UserNavigator users={users} />
-        <ArticleNavigator dispatch={dispatch} activeUser={activeUser} status={status}/>
+        <ArticleNavigator
+          dispatch={dispatch}
+          folders={folders}
+          status={status}
+        />
         <ArticleTopBar dispatch={dispatch} status={status}/>
-        <ArticleList dispatch={dispatch} articles={articles} status={status} activeArticle={activeArticle}/>
-        <ArticleDetail dispatch={dispatch} activeUser={activeUser} activeArticle={activeArticle} status={status}/>
+        <ArticleList
+          dispatch={dispatch}
+          folders={folders}
+          articles={articles}
+          status={status}
+          activeArticle={activeArticle}
+        />
+        <ArticleDetail
+          dispatch={dispatch}
+          activeArticle={activeArticle}
+          folders={folders}
+          status={status}
+        />
       </div>
     )
   }
@@ -67,17 +45,9 @@ class HomePage extends React.Component {
 
 function remap (state) {
   let status = state.status
-
-  let currentUser = state.currentUser
-  if (currentUser == null) return state
-  let teams = Array.isArray(currentUser.Teams) ? currentUser.Teams : []
-
-  let users = [currentUser, ...teams]
-  let activeUser = findWhere(users, {id: parseInt(status.userId, 10)})
-  if (activeUser == null) activeUser = users[0]
-
   // Fetch articles
-  let articles = state.articles['team-' + activeUser.id]
+  let data = JSON.parse(localStorage.getItem('local'))
+  let { folders, articles } = data
   if (articles == null) articles = []
   articles.sort((a, b) => {
     return new Date(b.updatedAt) - new Date(a.updatedAt)
@@ -97,17 +67,18 @@ function remap (state) {
   let textFilters = filters.filter(filter => filter.type === TEXT_FILTER)
   let tagFilters = filters.filter(filter => filter.type === TAG_FILTER)
 
-  if (activeUser.Folders != null) {
-    let targetFolders = activeUser.Folders.filter(folder => {
-      return findWhere(folderFilters, {value: folder.name})
+  if (folders != null) {
+    let targetFolders = folders.filter(folder => {
+      return _.findWhere(folderFilters, {value: folder.name})
     })
     status.targetFolders = targetFolders
 
     if (targetFolders.length > 0) {
       articles = articles.filter(article => {
-        return findWhere(targetFolders, {id: article.FolderId})
+        return _.findWhere(targetFolders, {key: article.FolderKey})
       })
     }
+
     if (textFilters.length > 0) {
       articles = textFilters.reduce((articles, textFilter) => {
         return articles.filter(article => {
@@ -119,19 +90,19 @@ function remap (state) {
     if (tagFilters.length > 0) {
       articles = tagFilters.reduce((articles, tagFilter) => {
         return articles.filter(article => {
-          return _.find(article.Tags, tag => tag.name.match(new RegExp(tagFilter.value, 'i')))
+          return _.find(article.tags, tag => tag.match(new RegExp(tagFilter.value, 'i')))
         })
       }, articles)
     }
   }
 
   // Grab active article
-  let activeArticle = findWhere(articles, {key: status.articleKey})
+  let activeArticle = _.findWhere(articles, {key: status.articleKey})
   if (activeArticle == null) activeArticle = articles[0]
 
   // remove Unsaved new article if user is not CREATE_MODE
   if (status.mode !== CREATE_MODE) {
-    let targetIndex = findIndex(articles, article => article.status === NEW)
+    let targetIndex = _.findIndex(articles, article => article.status === NEW)
 
     if (targetIndex >= 0) articles.splice(targetIndex, 1)
   }
@@ -140,8 +111,8 @@ function remap (state) {
   // restrict
   // 1. team have one folder at least
   // or Change IDLE MODE
-  if (status.mode === CREATE_MODE && activeUser.Folders.length > 0) {
-    var newArticle = findWhere(articles, {status: 'NEW'})
+  if (status.mode === CREATE_MODE) {
+    var newArticle = _.findWhere(articles, {status: 'NEW'})
     if (newArticle == null) {
       newArticle = {
         id: null,
@@ -149,9 +120,8 @@ function remap (state) {
         title: '',
         content: '',
         mode: 'markdown',
-        Tags: [],
-        User: pick(currentUser, ['email', 'name', 'profileName']),
-        FolderId: activeUser.Folders[0].id,
+        tags: [],
+        FolderKey: folders[0].key,
         status: NEW
       }
       articles.unshift(newArticle)
@@ -162,8 +132,7 @@ function remap (state) {
   }
 
   let props = {
-    users,
-    activeUser,
+    folders,
     status,
     articles,
     activeArticle
@@ -173,8 +142,6 @@ function remap (state) {
 }
 
 HomePage.propTypes = {
-  users: PropTypes.array,
-  activeUser: PropTypes.object,
   params: PropTypes.shape({
     userId: PropTypes.string
   }),
@@ -183,7 +150,8 @@ HomePage.propTypes = {
   }),
   articles: PropTypes.array,
   activeArticle: PropTypes.shape(),
-  dispatch: PropTypes.func
+  dispatch: PropTypes.func,
+  folders: PropTypes.array
 }
 
 export default connect(remap)(HomePage)

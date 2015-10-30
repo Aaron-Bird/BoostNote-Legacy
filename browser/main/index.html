@@ -6,7 +6,6 @@
 
   <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css" media="screen" charset="utf-8">
   <link rel="stylesheet" href="../../node_modules/devicon/devicon.min.css">
-  <!-- <link rel="stylesheet" href="../styles/main/index.css" media="screen" charset="utf-8"> -->
   <link rel="shortcut icon" href="favicon.ico">
 
   <style>
@@ -53,7 +52,7 @@
   <div id="content"></div>
 
   <script src="../../submodules/ace/src-min/ace.js"></script>
-  <script>
+  <script type='text/javascript'>
     var version = require('remote').require('app').getVersion()
     document.title = 'Boost' + ((version == null || version.length === 0) ? ' DEV' : '')
     document.addEventListener('mousewheel', function(e) {
@@ -62,7 +61,7 @@
       }
     })
     var scriptUrl = process.env.BOOST_ENV === 'development'
-      ? 'http://localhost:8080/assets/bundle.js'
+      ? 'http://localhost:8080/assets/main.js'
       : '../../compiled/main.js'
     var scriptEl=document.createElement('script')
     scriptEl.setAttribute("type","text/javascript")

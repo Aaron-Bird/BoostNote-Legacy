@@ -1,7 +1,8 @@
 var BrowserWindow = require('browser-window')
+var path = require('path')
 
 var finderWindow = new BrowserWindow({
-  width: 600,
+  width: 640,
   height: 400,
   show: false,
   frame: false,
@@ -15,7 +16,9 @@ var finderWindow = new BrowserWindow({
   'standard-window': false
 })
 
-finderWindow.loadUrl('file://' + __dirname + '/browser/finder/index.html')
+var url = path.resolve(__dirname, '../browser/finder/index.html')
+
+finderWindow.loadUrl('file://' + url)
 
 finderWindow.on('blur', function () {
   finderWindow.hide()

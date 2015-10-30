@@ -6,8 +6,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 
-  <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css" media="screen" title="no title" charset="utf-8">
+
+  <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="../../node_modules/devicon/devicon.min.css">
   <link rel="shortcut icon" href="favicon.ico">
+
   <style>
   @font-face {
     font-family: 'Lato';
@@ -19,21 +22,23 @@
     text-rendering: optimizeLegibility;
   }
   </style>
-  <script>
-  document.addEventListener('mousewheel', function(e) {
-    if(e.deltaY % 1 !== 0) {
-      e.preventDefault()
-    }
-  })
-  </script>
 </head>
 <body>
   <div id="content"></div>
-  <script src="../ace/src-min/ace.js"></script>
+  <script src="../../submodules/ace/src-min/ace.js"></script>
   <script>
-
-  require("babel-core/register")
-  require('./index.jsx')
+    document.addEventListener('mousewheel', function(e) {
+      if(e.deltaY % 1 !== 0) {
+        e.preventDefault()
+      }
+    })
+    var scriptUrl = process.env.BOOST_ENV === 'development'
+      ? 'http://localhost:8080/assets/finder.js'
+      : '../../compiled/finder.js'
+    var scriptEl=document.createElement('script')
+    scriptEl.setAttribute("type","text/javascript")
+    scriptEl.setAttribute("src", scriptUrl)
+    document.getElementsByTagName("head")[0].appendChild(scriptEl)
   </script>
 </body>
 </html>

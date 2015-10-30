@@ -36,38 +36,25 @@ export default class ArticleNavigator extends React.Component {
   }
 
   render () {
-    let { activeUser, status } = this.props
-    if (activeUser == null) return (<div className='ArticleNavigator'/>)
+    let { status, folders } = this.props
     let { targetFolders } = status
     if (targetFolders == null) targetFolders = []
 
-    let folders = activeUser.Folders != null
-      ? activeUser.Folders.map((folder, index) => {
-        let isActive = findWhere(targetFolders, {id: folder.id})
+    let folderElememts = folders.map((folder, index) => {
+      let isActive = findWhere(targetFolders, {key: folder.key})
 
-        return (
-          <button onClick={e => this.handleFolderButtonClick(folder.name)(e)} key={'folder-' + folder.id} className={isActive ? 'active' : ''}>
-          <FolderMark id={folder.id}/> {folder.name} {folder.public ? null : <i className='fa fa-fw fa-lock'/>}</button>
-        )
-      })
-      : []
-
-    let members = Array.isArray(activeUser.Members) ? activeUser.Members.sort((a, b) => {
-      return new Date(a._pivot_createdAt) - new Date(b._pivot_createdAt)
-    }).map(member => {
       return (
-        <div key={'member-' + member.id}>
-          <ProfileImage className='memberImage' email={member.email} size='22'/>
-          <div className='memberProfileName'>{member.profileName}</div>
-        </div>
+        <button onClick={e => this.handleFolderButtonClick(folder.name)(e)} key={'folder-' + folder.key} className={isActive ? 'active' : ''}>
+          <FolderMark color={folder.color}/> {folder.name}
+        </button>
       )
-    }) : null
+    })
 
     return (
       <div className='ArticleNavigator'>
         <div className='userInfo'>
-          <div className='userProfileName'>{activeUser.profileName}</div>
-          <div className='userName'>{activeUser.name}</div>
+          <div className='userProfileName'>{process.env.USER}</div>
+          <div className='userName'>local</div>
           <button onClick={e => this.handlePreferencesButtonClick(e)} className='settingBtn'><i className='fa fa-fw fa-chevron-down'/></button>
         </div>
 
@@ -82,22 +69,9 @@ export default class ArticleNavigator extends React.Component {
           </div>
           <div className='folderList'>
             <button onClick={e => this.handleAllFoldersButtonClick(e)} className={targetFolders.length === 0 ? 'active' : ''}>All folders</button>
-            {folders}
+            {folderElememts}
           </div>
         </div>
-
-        {activeUser.userType === 'team' ? (
-          <div className='members'>
-            <div className='header'>
-              <div className='title'>Members</div>
-              <button className='addBtn'><i className='fa fa-fw fa-plus'/></button>
-            </div>
-            <div className='memberList'>
-              {members}
-            </div>
-          </div>
-        ) : null}
-
       </div>
     )
   }
@@ -105,6 +79,7 @@ export default class ArticleNavigator extends React.Component {
 
 ArticleNavigator.propTypes = {
   activeUser: PropTypes.object,
+  folders: PropTypes.array,
   status: PropTypes.shape({
     folderId: PropTypes.number
   }),

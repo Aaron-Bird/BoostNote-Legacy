@@ -1,9 +1,10 @@
 noTagsColor = #999
+iptFocusBorderColor = #369DCD
 
 .ArticleDetail
   absolute right bottom
   top 60px
-  left 510px
+  left 450px
   padding 10px
   background-color #E6E6E6
   border-top 1px solid borderColor
@@ -79,25 +80,52 @@ noTagsColor = #999
   &.edit
     .detailInfo
       .left
-        .Select
-          .Select-control
-            border none
-            background-color transparent
-        .folder.Select
+        .folder
+          border none
           width 150px
-          .Select-control
-            &:hover
-              background-color darken(white, 5%)
-          &.is-focused
-            .Select-control
-              background-color white
-        .tags.Select
-          .Select-control
-            white-space nowrap
-            overflow-x auto
-            position relative
-            .Select-arrow-zone, .Select-arrow
-              display none
+          height 27px
+          outline none
+          background-color darken(white, 5%)
+          &:hover
+            background-color white
+        .TagSelect
+          white-space nowrap
+          overflow-x auto
+          position relative
+          margin-top 5px
+          noSelect()
+          .tagItem
+            background-color brandColor
+            border-radius 2px
+            color white
+            margin 0 2px
+            padding 0
+            button.tagRemoveBtn
+              color white
+              border-radius 2px
+              border none
+              background-color transparent
+              padding 4px 2px
+              border-right 1px solid #E6E6E6
+              font-size 8px
+              line-height 12px
+              transition 0.1s
+              &:hover
+                background-color lighten(brandColor, 10%)
+            .tagLabel
+              padding 4px 4px
+              font-size 12px
+              line-height 12px
+          input.tagInput
+            background-color white
+            outline none
+            border-radius 2px
+            border 1px solid borderColor
+            transition 0.1s
+            &:focus
+              border-color iptFocusBorderColor
+
+
       .right
         button
           cursor pointer

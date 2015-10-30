@@ -6,7 +6,8 @@ var NodeTargetPlugin = require('webpack/lib/node/NodeTargetPlugin')
 var ExternalsPlugin = webpack.ExternalsPlugin
 var opt = {
   path: path.join(__dirname, 'compiled'),
-  filename: 'bundle.js',
+  filename: '[name].js',
+  sourceMapFilename: '[name].map',
   libraryTarget: 'commonjs2',
   publicPath: 'http://localhost:8080/assets/'
 }
@@ -26,10 +27,11 @@ var config = {
     ]
   },
   debug: true,
-  devtool: 'cheap-module-eval-source-map',
-  entry: [
-    './browser/main/index.js'
-  ],
+  devtool: 'eval-source-map',
+  entry: {
+    main: './browser/main/index.js',
+    finder: './browser/finder/index.js'
+  },
   output: opt,
   resolve: {
     extensions: ['', '.js', '.jsx'],

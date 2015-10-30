@@ -1,16 +1,16 @@
 import React, { PropTypes } from 'react'
 import moment from 'moment'
-import { findWhere, uniq } from 'lodash'
+import _ from 'lodash'
 import ModeIcon from 'boost/components/ModeIcon'
 import MarkdownPreview from 'boost/components/MarkdownPreview'
 import CodeEditor from 'boost/components/CodeEditor'
-import { UNSYNCED, IDLE_MODE, CREATE_MODE, EDIT_MODE, switchMode, switchArticle, updateArticle, destroyArticle } from 'boost/actions'
+import { IDLE_MODE, CREATE_MODE, EDIT_MODE, switchMode, updateArticle, destroyArticle } from 'boost/actions'
 import aceModes from 'boost/ace-modes'
 import Select from 'react-select'
 import linkState from 'boost/linkState'
-import api from 'boost/api'
 import FolderMark from 'boost/components/FolderMark'
 import TagLink from 'boost/components/TagLink'
+import TagSelect from 'boost/components/TagSelect'
 
 var modeOptions = aceModes.map(function (mode) {
   return {
@@ -20,9 +20,7 @@ var modeOptions = aceModes.map(function (mode) {
 })
 
 function makeInstantArticle (article) {
-  let instantArticle = Object.assign({}, article)
-  instantArticle.Tags = Array.isArray(instantArticle.Tags) ? instantArticle.Tags.map(tag => tag.name) : []
-  return instantArticle
+  return Object.assign({}, article)
 }
 
 export default class ArticleDetail extends React.Component {
@@ -35,7 +33,7 @@ export default class ArticleDetail extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.activeArticle != null && nextProps.activeArticle.id !== this.state.article.id) {
+    if (nextProps.activeArticle != null && (nextProps.activeArticle.key !== this.state.article.key) || (nextProps.status.mode !== this.props.status.mode)) {
       this.setState({article: makeInstantArticle(nextProps.activeArticle)}, function () {
         console.log('receive props')
       })
@@ -44,8 +42,8 @@ export default class ArticleDetail extends React.Component {
 
   renderEmpty () {
     return (
-      <div className='ArticleDetail'>
-        Empty article
+      <div className='ArticleDetail empty'>
+        Command(⌘) + Enter to create a new post
       </div>
     )
   }
@@ -60,23 +58,9 @@ export default class ArticleDetail extends React.Component {
   }
 
   handleDeleteConfirmButtonClick (e) {
-    let { dispatch, activeUser, activeArticle } = this.props
+    let { dispatch, activeArticle } = this.props
 
-    api.destroyArticle(activeArticle.id)
-      .then(res => {
-        console.log(res.body)
-      })
-      .catch(err => {
-        // connect failed need to queue data
-        if (err.code === 'ECONNREFUSED') {
-          return
-        }
-
-        if (err.status != null) throw err
-        else console.log(err)
-      })
-
-    dispatch(destroyArticle(activeUser.id, activeArticle.id))
+    dispatch(destroyArticle(activeArticle.key))
     this.setState({openDeleteConfirmMenu: false})
   }
 
@@ -85,17 +69,16 @@ export default class ArticleDetail extends React.Component {
   }
 
   renderIdle () {
-    let { activeArticle, activeUser } = this.props
+    let { activeArticle, folders } = this.props
 
-    let tags = activeArticle.Tags.length > 0
-      ? activeArticle.Tags.map(tag => {
-        return (<TagLink key={tag.name} tag={tag}/>)
+    let tags = activeArticle.tags != null ? activeArticle.tags.length > 0
+      ? activeArticle.tags.map(tag => {
+        return (<TagLink key={tag} tag={tag}/>)
       })
       : (
         <span className='noTags'>Not tagged yet</span>
-      )
-    let folder = findWhere(activeUser.Folders, {id: activeArticle.FolderId})
-    let folderName = folder != null ? folder.name : '(unknown)'
+      ) : null
+    let folder = _.findWhere(folders, {key: activeArticle.FolderKey})
 
     return (
       <div className='ArticleDetail idle'>
@@ -117,8 +100,7 @@ export default class ArticleDetail extends React.Component {
             <div className='detailInfo'>
               <div className='left'>
                 <div className='info'>
-                  <FolderMark id={folder.id}/> {folderName}&nbsp;
-                  by {activeArticle.User.profileName}&nbsp;
+                  <FolderMark color={folder.color}/> {folder.name}&nbsp;
                   Created {moment(activeArticle.createdAt).format('YYYY/MM/DD')}&nbsp;
                   Updated {moment(activeArticle.updatedAt).format('YYYY/MM/DD')}
                 </div>
@@ -127,7 +109,6 @@ export default class ArticleDetail extends React.Component {
               <div className='right'>
                 <button onClick={e => this.handleEditButtonClick(e)}><i className='fa fa-fw fa-edit'/></button>
                 <button onClick={e => this.handleDeleteButtonClick(e)}><i className='fa fa-fw fa-trash'/></button>
-                <button><i className='fa fa-fw fa-share-alt'/></button>
               </div>
             </div>
           )
@@ -141,7 +122,7 @@ export default class ArticleDetail extends React.Component {
             </div>
             {activeArticle.mode === 'markdown'
               ? <MarkdownPreview content={activeArticle.content}/>
-              : <CodeEditor readOnly onChange={this.handleContentChange} mode={activeArticle.mode} code={activeArticle.content}/>
+              : <CodeEditor readOnly onChange={(e, value) => this.handleContentChange(e, value)} mode={activeArticle.mode} code={activeArticle.content}/>
             }
           </div>
         </div>
@@ -154,86 +135,30 @@ export default class ArticleDetail extends React.Component {
   }
 
   handleSaveButtonClick (e) {
-    let { activeArticle } = this.props
-
-    if (activeArticle.id == null) this.saveAsNew()
-    else this.save()
-  }
-
-  saveAsNew () {
-    let { dispatch, activeUser } = this.props
-    let article = this.state.article
-    let newArticle = Object.assign({}, article)
-    article.tags = article.Tags
-
-    api.createArticle(article)
-      .then(res => {
-        console.log('saved as new')
-        console.log(res.body)
-      })
-      .catch(err => {
-        // connect failed need to queue data
-        if (err.code === 'ECONNREFUSED') {
-          return
-        }
-
-        if (err.status != null) throw err
-        else console.log(err)
-      })
-
-    newArticle.status = UNSYNCED
-    newArticle.Tags = newArticle.Tags.map(tag => { return {name: tag} })
-
-    dispatch(updateArticle(activeUser.id, newArticle))
-    dispatch(switchMode(IDLE_MODE))
-    dispatch(switchArticle(article.id))
-  }
-
-  save () {
-    let { dispatch, activeUser } = this.props
+    let { dispatch, folders } = this.props
     let article = this.state.article
     let newArticle = Object.assign({}, article)
 
-    article.tags = article.Tags
+    let folder = _.findWhere(folders, {key: article.FolderKey})
+    if (folder == null) return false
 
-    api.saveArticle(article)
-      .then(res => {
-        console.log('saved')
-        console.log(res.body)
-      })
-      .catch(err => {
-        // connect failed need to queue data
-        if (err.code === 'ECONNREFUSED') {
-          return
-        }
+    delete newArticle.status
+    newArticle.updatedAt = new Date()
 
-        if (err.status != null) throw err
-        else console.log(err)
-      })
-
-    newArticle.status = UNSYNCED
-    newArticle.Tags = newArticle.Tags.map(tag => { return {name: tag} })
-
-    dispatch(updateArticle(activeUser.id, newArticle))
+    dispatch(updateArticle(newArticle))
     dispatch(switchMode(IDLE_MODE))
-    dispatch(switchArticle(article.id))
   }
 
-  handleFolderIdChange (value) {
+  handleFolderKeyChange (e) {
     let article = this.state.article
-    article.FolderId = value
+    article.FolderKey = e.target.value
+
     this.setState({article: article})
   }
 
-  handleTagsChange (tag, tags) {
-    tags = uniq(tags, function (tag) {
-      return tag.value
-    })
-
-    var article = this.state.article
-    article.Tags = tags.map(function (tag) {
-      return tag.value
-    })
+  handleTagsChange (newTag, tags) {
+    let article = this.state.article
+    article.tags = tags
 
     this.setState({article: article})
   }
@@ -251,21 +176,31 @@ export default class ArticleDetail extends React.Component {
   }
 
   renderEdit () {
-    let { activeUser } = this.props
+    let { folders } = this.props
 
-    let folderOptions = activeUser.Folders.map(folder => {
-      return {
-        label: folder.name,
-        value: folder.id
-      }
+    let folderOptions = folders.map(folder => {
+      return (
+        <option key={folder.key} value={folder.key}>{folder.name}</option>
+      )
     })
+    console.log('edit rendered')
 
     return (
       <div className='ArticleDetail edit'>
         <div className='detailInfo'>
           <div className='left'>
-            <Select ref='folder' onChange={value => this.handleFolderIdChange(value)} clearable={false} placeholder='select folder...' options={folderOptions} value={this.state.article.FolderId} className='folder'/>
-            <Select onChange={(tag, tags) => this.handleTagsChange(tag, tags)} clearable={false} multi placeholder='add some tags...' allowCreate value={this.state.article.Tags} className='tags'/>
+            <select
+              className='folder'
+              value={this.state.article.FolderKey}
+              onChange={e => this.handleFolderKeyChange(e)}
+            >
+              {folderOptions}
+            </select>
+
+            <TagSelect
+              tags={this.state.article.tags}
+              onChange={(tags, tag) => this.handleTagsChange(tags, tag)}
+            />
           </div>
           <div className='right'>
             <button onClick={e => this.handleCancelButtonClick(e)}>Cancel</button>
@@ -278,9 +213,22 @@ export default class ArticleDetail extends React.Component {
               <div className='title'>
                 <input placeholder='Title' ref='title' valueLink={this.linkState('article.title')}/>
               </div>
-              <Select ref='mode' onChange={value => this.handleModeChange(value)} clearable={false} options={modeOptions}placeholder='select mode...' value={this.state.article.mode} className='mode'/>
+              <Select
+                ref='mode'
+                onChange={value => this.handleModeChange(value)}
+                clearable={false}
+                options={modeOptions}
+                placeholder='select mode...'
+                value={this.state.article.mode}
+                className='mode'
+              />
             </div>
-            <CodeEditor onChange={(e, value) => this.handleContentChange(e, value)} mode={this.state.article.mode} code={this.state.article.content}/>
+            <CodeEditor
+              onChange={(e, value) => this.handleContentChange(e, value)}
+              readOnly={false}
+              mode={this.state.article.mode}
+              code={this.state.article.content}
+            />
           </div>
         </div>
       </div>

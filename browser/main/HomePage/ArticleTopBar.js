@@ -17,11 +17,9 @@ export default class ArticleTopBar extends React.Component {
             <i className='fa fa-search fa-fw' />
             <input value={this.props.status.search} onChange={e => this.handleSearchChange(e)} placeholder='Search' type='text'/>
           </div>
-          <button className='refreshBtn'><i className='fa fa-fw fa-refresh'/></button>
         </div>
         <div className='right'>
           <button>?</button>
-          <button>i</button>
           <ExternalLink className='logo' href='http://b00st.io'>
             <img src='../../resources/favicon-230x230.png' width='44' height='44'/>
           </ExternalLink>

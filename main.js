@@ -96,59 +96,58 @@ app.on('ready', function () {
     mainWindow.show()
   })
 
-  // finderWindow = require('./atom-lib/finder-window')
+  finderWindow = require('./atom-lib/finder-window')
 
-  // var globalShortcut = require('global-shortcut')
-  // console.log('jetpack launch')
-  // var userDataPath = app.getPath('userData')
-  // if (!jetpack.cwd(userDataPath).exists('keymap.json')) {
-  //   jetpack.cwd(userDataPath).file('keymap.json', {content: '{}'})
-  // }
-  // try {
-  //   global.keymap = JSON.parse(jetpack.cwd(userDataPath).read('keymap.json', 'utf-8'))
-  // } catch (err) {
-  //   jetpack.cwd(userDataPath).file('keymap.json', {content: '{}'})
-  //   global.keymap = {}
-  // }
-  // if (global.keymap.toggleFinder == null) global.keymap.toggleFinder = 'ctrl+tab+shift'
-  // var toggleFinderKey = global.keymap.toggleFinder
+  var globalShortcut = require('global-shortcut')
+  var userDataPath = app.getPath('userData')
+  if (!jetpack.cwd(userDataPath).exists('keymap.json')) {
+    jetpack.cwd(userDataPath).file('keymap.json', {content: '{}'})
+  }
+  try {
+    global.keymap = JSON.parse(jetpack.cwd(userDataPath).read('keymap.json', 'utf-8'))
+  } catch (err) {
+    jetpack.cwd(userDataPath).file('keymap.json', {content: '{}'})
+    global.keymap = {}
+  }
+  if (global.keymap.toggleFinder == null) global.keymap.toggleFinder = 'ctrl+tab+shift'
+  var toggleFinderKey = global.keymap.toggleFinder
 
-  // try {
-  //   globalShortcut.register(toggleFinderKey, function () {
-  //     if (mainWindow != null && !mainWindow.isFocused()) {
-  //       mainWindow.hide()
-  //     }
-  //     finderWindow.show()
-  //   })
-  // } catch (err) {
-  //   console.log(err.name)
-  // }
+  try {
+    globalShortcut.register(toggleFinderKey, function () {
+      if (mainWindow != null && !mainWindow.isFocused()) {
+        mainWindow.hide()
+      }
+      finderWindow.show()
+    })
+  } catch (err) {
+    console.log(err.name)
+  }
 
-  // ipc.on('hotkeyUpdated', function (event, newKeymap) {
-  //   console.log('got new keymap')
-  //   console.log(newKeymap)
-  //   globalShortcut.unregisterAll()
-  //   global.keymap = JSON.parse(newKeymap)
-  //   jetpack.cwd(userDataPath).file('keymap.json', {content: JSON.stringify(global.keymap)})
+  ipc.on('hotkeyUpdated', function (event, newKeymap) {
+    console.log('got new keymap')
+    console.log(newKeymap)
+    globalShortcut.unregisterAll()
+    global.keymap = newKeymap
+    jetpack.cwd(userDataPath).file('keymap.json', {content: JSON.stringify(global.keymap)})
 
-  //   var toggleFinderKey = global.keymap.toggleFinder != null ? global.keymap.toggleFinder : 'ctrl+tab+shift'
-  //   try {
-  //     globalShortcut.register(toggleFinderKey, function () {
-  //       if (mainWindow != null && !mainWindow.isFocused()) {
-  //         mainWindow.hide()
-  //       }
-  //       finderWindow.show()
-  //     })
-  //   } catch (err) {
-  //     console.log(err.name)
-  //   }
-  // })
+    var toggleFinderKey = global.keymap.toggleFinder != null ? global.keymap.toggleFinder : 'ctrl+tab+shift'
+    try {
+      globalShortcut.register(toggleFinderKey, function () {
+        if (mainWindow != null && !mainWindow.isFocused()) {
+          mainWindow.hide()
+        }
+        finderWindow.show()
+      })
+    } catch (err) {
+      console.log(err.name)
+    }
+  })
 
-  // global.hideFinder = function () {
-  //   if (!mainWindow.isVisible()) {
-  //     Menu.sendActionToFirstResponder('hide:')
-  //   } else {
-  //     mainWindow.focus()
-  //   }
-  // }
+  global.hideFinder = function () {
+    if (!mainWindow.isVisible()) {
+      Menu.sendActionToFirstResponder('hide:')
+    } else {
+      mainWindow.focus()
+    }
+  }
 })
