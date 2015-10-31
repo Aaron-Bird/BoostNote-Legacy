@@ -54,6 +54,7 @@ class HomePage extends React.Component {
       case IDLE_MODE:
         if (e.keyCode === 69) {
           detail.handleEditButtonClick()
+          e.preventDefault()
         }
         if (e.keyCode === 68) {
           detail.handleDeleteButtonClick()
@@ -62,7 +63,7 @@ class HomePage extends React.Component {
         // `detail`の`openDeleteConfirmMenu`の時。
         if (detail.state.openDeleteConfirmMenu) {
           if (e.keyCode === 27) {
-            detail.handleDeleteCancleButtonClick()
+            detail.handleDeleteCancelButtonClick()
           }
           if (e.keyCode === 13 && e.metaKey) {
             detail.handleDeleteConfirmButtonClick()
@@ -83,8 +84,9 @@ class HomePage extends React.Component {
           list.selectNextArticle()
         }
 
-        if (e.keyCode === 13 && e.metaKey) {
+        if (e.keyCode === 65 || e.keyCode === 13 && e.metaKey) {
           nav.handleNewPostButtonClick()
+          e.preventDefault()
         }
     }
   }

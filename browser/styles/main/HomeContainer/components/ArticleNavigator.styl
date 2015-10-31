@@ -16,7 +16,7 @@ articleNavBgColor = #353535
       padding 6px 0 0 10px
       white-space nowrap
       text-overflow ellipsis
-      overflow-x hidden
+      overflow hidden
     .userName
       color white
       padding-left 20px
@@ -33,6 +33,13 @@ articleNavBgColor = #353535
       padding 0
       background-color transparent
       border 1px solid white
+      .tooltip
+        tooltip()
+        margin-top -5px
+        margin-left 10px
+      &:hover
+        .tooltip
+          opacity 1
       &:active
         background-color brandColor
         border-color brandColor
@@ -49,8 +56,14 @@ articleNavBgColor = #353535
       border-radius 5px
       font-size 20px
       transition 0.1s
+      .tooltip
+        tooltip()
+        margin-left 48px
+        margin-top -3px
       &:hover
         background-color lighten(brandColor, 7%)
+        .tooltip
+          opacity 1
   .folders, .members
     .header
       border-bottom 1px solid borderColor
@@ -76,6 +89,13 @@ articleNavBgColor = #353535
         color white
         padding 0
         font-weight bold
+        .tooltip
+          tooltip()
+          margin-top -6px
+          margin-left 11px
+        &:hover
+          .tooltip
+            opacity 1
         &:active
           background-color brandColor
           border-color brandColor

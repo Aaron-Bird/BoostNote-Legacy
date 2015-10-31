@@ -27,11 +27,7 @@
   <div id="content"></div>
   <script src="../../submodules/ace/src-min/ace.js"></script>
   <script>
-    document.addEventListener('mousewheel', function(e) {
-      if(e.deltaY % 1 !== 0) {
-        e.preventDefault()
-      }
-    })
+    require('web-frame').setZoomLevelLimits(1, 1)
     var scriptUrl = process.env.BOOST_ENV === 'development'
       ? 'http://localhost:8080/assets/finder.js'
       : '../../compiled/finder.js'

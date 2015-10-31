@@ -57,17 +57,26 @@ export default class ArticleNavigator extends React.Component {
         <div className='userInfo'>
           <div className='userProfileName'>{userName}</div>
           <div className='userName'>local</div>
-          <button onClick={e => this.handlePreferencesButtonClick(e)} className='settingBtn'><i className='fa fa-fw fa-chevron-down'/></button>
+          <button onClick={e => this.handlePreferencesButtonClick(e)} className='settingBtn'>
+            <i className='fa fa-fw fa-chevron-down'/>
+            <span className='tooltip'>Preferences 環境設定</span>
+          </button>
         </div>
 
         <div className='controlSection'>
-          <button onClick={e => this.handleNewPostButtonClick(e)} className='newPostBtn'>New Post</button>
+          <button onClick={e => this.handleNewPostButtonClick(e)} className='newPostBtn'>
+            New Post
+            <span className='tooltip'>新しいポスト (⌘ + Enter or a)</span>
+          </button>
         </div>
 
         <div className='folders'>
           <div className='header'>
             <div className='title'>Folders</div>
-            <button onClick={e => this.handleNewFolderButton(e)} className='addBtn'><i className='fa fa-fw fa-plus'/></button>
+            <button onClick={e => this.handleNewFolderButton(e)} className='addBtn'>
+              <i className='fa fa-fw fa-plus'/>
+              <span className='tooltip'>New folder 新しいフォルダー</span>
+            </button>
           </div>
           <div className='folderList'>
             <button onClick={e => this.handleAllFoldersButtonClick(e)} className={targetFolders.length === 0 ? 'active' : ''}>All folders</button>

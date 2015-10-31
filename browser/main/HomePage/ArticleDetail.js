@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import moment from 'moment'
 import _ from 'lodash'
 import ModeIcon from 'boost/components/ModeIcon'
 import MarkdownPreview from 'boost/components/MarkdownPreview'
 import CodeEditor from 'boost/components/CodeEditor'
-import { IDLE_MODE, CREATE_MODE, EDIT_MODE, switchMode, switchArticle, switchFolder, clearSearch, updateArticle, destroyArticle } from 'boost/actions'
+import { IDLE_MODE, CREATE_MODE, EDIT_MODE, switchMode, switchArticle, switchFolder, clearSearch, updateArticle, destroyArticle, NEW } from 'boost/actions'
 import aceModes from 'boost/ace-modes'
 import Select from 'react-select'
 import linkState from 'boost/linkState'
@@ -32,23 +33,33 @@ export default class ArticleDetail extends React.Component {
     }
   }
 
+  componentDidUpdate (prevProps) {
+    let isModeChanged = prevProps.status.mode !== this.props.status.mode
+    if (isModeChanged && this.props.status.mode !== IDLE_MODE) {
+      ReactDOM.findDOMNode(this.refs.title).focus()
+    }
+  }
+
   componentWillReceiveProps (nextProps) {
     let nextState = {}
 
     let isArticleChanged = nextProps.activeArticle != null && (nextProps.activeArticle.key !== this.state.article.key)
     let isModeChanged = nextProps.status.mode !== this.props.status.mode
+    // Reset article input
     if (isArticleChanged || (isModeChanged && nextProps.status.mode !== IDLE_MODE)) {
       Object.assign(nextState, {
         article: makeInstantArticle(nextProps.activeArticle)
       })
     }
 
+    // Clean state
     if (isModeChanged) {
       Object.assign(nextState, {
         openDeleteConfirmMenu: false,
         previewMode: false
       })
     }
+
     this.setState(nextState)
   }
 
@@ -76,7 +87,7 @@ export default class ArticleDetail extends React.Component {
     this.setState({openDeleteConfirmMenu: false})
   }
 
-  handleDeleteCancleButtonClick (e) {
+  handleDeleteCancelButtonClick (e) {
     this.setState({openDeleteConfirmMenu: false})
   }
 
@@ -102,7 +113,7 @@ export default class ArticleDetail extends React.Component {
                 <button onClick={e => this.handleDeleteConfirmButtonClick(e)} className='primary'>
                   <i className='fa fa-fw fa-check'/> Sure
                 </button>
-                <button onClick={e => this.handleDeleteCancleButtonClick(e)}>
+                <button onClick={e => this.handleDeleteCancelButtonClick(e)}>
                   <i className='fa fa-fw fa-times'/> Cancel
                 </button>
               </div>
@@ -119,8 +130,12 @@ export default class ArticleDetail extends React.Component {
                 <div className='tags'><i className='fa fa-fw fa-tags'/>{tags}</div>
               </div>
               <div className='right'>
-                <button onClick={e => this.handleEditButtonClick(e)}><i className='fa fa-fw fa-edit'/></button>
-                <button onClick={e => this.handleDeleteButtonClick(e)}><i className='fa fa-fw fa-trash'/></button>
+                <button onClick={e => this.handleEditButtonClick(e)} className='editBtn'>
+                  <i className='fa fa-fw fa-edit'/><span className='tooltip'>Edit 編集(e)</span>
+                </button>
+                <button onClick={e => this.handleDeleteButtonClick(e)} className='deleteBtn'>
+                  <i className='fa fa-fw fa-trash'/><span className='tooltip'>Delete 削除(d)</span>
+                </button>
               </div>
             </div>
           )
@@ -143,7 +158,9 @@ export default class ArticleDetail extends React.Component {
   }
 
   handleCancelButtonClick (e) {
-    this.props.dispatch(switchMode(IDLE_MODE))
+    let { activeArticle, dispatch } = this.props
+    if (activeArticle.status === NEW) dispatch(switchArticle(null))
+    dispatch(switchMode(IDLE_MODE))
   }
 
   handleSaveButtonClick (e) {

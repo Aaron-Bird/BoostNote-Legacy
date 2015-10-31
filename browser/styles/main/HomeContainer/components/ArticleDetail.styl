@@ -125,8 +125,6 @@ iptFocusBorderColor = #369DCD
             border none
             transition 0.1s
             height 18px
-
-
       .right
         button
           cursor pointer
@@ -203,8 +201,18 @@ iptFocusBorderColor = #369DCD
           color inactiveTextColor
           background-color transparent
           padding 0
+          .tooltip
+            tooltip()
+          &.editBtn .tooltip
+            margin-top 25px
+            margin-left -63px
+          &.deleteBtn .tooltip
+            margin-top 25px
+            margin-left -96px
           &:hover
             color inherit
+            .tooltip
+              opacity 1
     .detailBody
       .detailPanel
         &>.header

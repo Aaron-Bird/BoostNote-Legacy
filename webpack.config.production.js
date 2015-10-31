@@ -2,7 +2,8 @@ var webpack = require('webpack')
 module.exports = {
   devtool: 'source-map',
   entry: {
-    main: './browser/main/index.js'
+    main: './browser/main/index.js',
+    finder: './browser/main/index.js'
   },
   output: {
     path: 'compiled',
