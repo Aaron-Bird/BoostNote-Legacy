@@ -15,6 +15,26 @@ export default class ArticleList extends React.Component {
     clearInterval(this.refreshTimer)
   }
 
+  selectPriorArticle () {
+    let { articles, activeArticle, dispatch } = this.props
+    let targetIndex = articles.indexOf(activeArticle) - 1
+    let targetArticle = articles[targetIndex]
+
+    if (targetArticle != null) {
+      dispatch(switchArticle(targetArticle.key))
+    }
+  }
+
+  selectNextArticle () {
+    let { articles, activeArticle, dispatch } = this.props
+    let targetIndex = articles.indexOf(activeArticle) + 1
+    let targetArticle = articles[targetIndex]
+
+    if (targetArticle != null) {
+      dispatch(switchArticle(targetArticle.key))
+    }
+  }
+
   handleArticleClick (article) {
     let { dispatch } = this.props
     return function (e) {

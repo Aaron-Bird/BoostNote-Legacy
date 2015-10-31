@@ -4,7 +4,7 @@ import _ from 'lodash'
 import ModeIcon from 'boost/components/ModeIcon'
 import MarkdownPreview from 'boost/components/MarkdownPreview'
 import CodeEditor from 'boost/components/CodeEditor'
-import { IDLE_MODE, CREATE_MODE, EDIT_MODE, switchMode, updateArticle, destroyArticle } from 'boost/actions'
+import { IDLE_MODE, CREATE_MODE, EDIT_MODE, switchMode, switchArticle, switchFolder, updateArticle, destroyArticle } from 'boost/actions'
 import aceModes from 'boost/ace-modes'
 import Select from 'react-select'
 import linkState from 'boost/linkState'
@@ -37,6 +37,11 @@ export default class ArticleDetail extends React.Component {
       this.setState({article: makeInstantArticle(nextProps.activeArticle)}, function () {
         console.log('receive props')
       })
+    }
+
+    let isEdit = nextProps.status.mode === EDIT_MODE || nextProps.status.mode === CREATE_MODE
+    if (isEdit && this.state.openDeleteConfirmMenu) {
+      this.setState({openDeleteConfirmMenu: false})
     }
   }
 
@@ -135,7 +140,7 @@ export default class ArticleDetail extends React.Component {
   }
 
   handleSaveButtonClick (e) {
-    let { dispatch, folders } = this.props
+    let { dispatch, folders, filters } = this.props
     let article = this.state.article
     let newArticle = Object.assign({}, article)
 
@@ -147,6 +152,8 @@ export default class ArticleDetail extends React.Component {
 
     dispatch(updateArticle(newArticle))
     dispatch(switchMode(IDLE_MODE))
+    if (filters.folder.length !== 0) dispatch(switchFolder(folder.name))
+    dispatch(switchArticle(newArticle.key))
   }
 
   handleFolderKeyChange (e) {

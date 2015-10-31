@@ -7,6 +7,7 @@ import Preferences from 'boost/components/modal/Preferences'
 import CreateNewFolder from 'boost/components/modal/CreateNewFolder'
 
 import remote from 'remote'
+let userName = remote.getGlobal('process').env.USER
 
 export default class ArticleNavigator extends React.Component {
   handlePreferencesButtonClick (e) {
@@ -50,8 +51,6 @@ export default class ArticleNavigator extends React.Component {
         </button>
       )
     })
-
-    let userName = remote.getGlobal('process').env.USER
 
     return (
       <div className='ArticleNavigator'>

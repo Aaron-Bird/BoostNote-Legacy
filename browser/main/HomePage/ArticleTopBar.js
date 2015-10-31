@@ -4,16 +4,29 @@ import ExternalLink from 'boost/components/ExternalLink'
 import { setSearchFilter } from 'boost/actions'
 
 export default class ArticleTopBar extends React.Component {
+  isInputFocused () {
+    return document.activeElement === ReactDOM.findDOMNode(this.refs.searchInput)
+  }
+
+  focusInput () {
+    ReactDOM.findDOMNode(this.refs.searchInput).focus()
+  }
+
+  blurInput () {
+    ReactDOM.findDOMNode(this.refs.searchInput).blur()
+  }
+
   handleSearchChange (e) {
     let { dispatch } = this.props
 
     dispatch(setSearchFilter(e.target.value))
   }
+
   handleSearchClearButton (e) {
     let { dispatch } = this.props
 
     dispatch(setSearchFilter(''))
-    ReactDOM.findDOMNode(this.refs.searchInput).focus()
+    this.focusInput()
   }
 
   render () {

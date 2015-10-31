@@ -1,6 +1,6 @@
 import React, { PropTypes} from 'react'
 import { connect } from 'react-redux'
-import { CREATE_MODE, IDLE_MODE, NEW } from 'boost/actions'
+import { CREATE_MODE, EDIT_MODE, IDLE_MODE, NEW } from 'boost/actions'
 // import UserNavigator from './HomePage/UserNavigator'
 import ArticleNavigator from './HomePage/ArticleNavigator'
 import ArticleTopBar from './HomePage/ArticleTopBar'
@@ -8,24 +8,102 @@ import ArticleList from './HomePage/ArticleList'
 import ArticleDetail from './HomePage/ArticleDetail'
 import _ from 'lodash'
 import keygen from 'boost/keygen'
+import { isModalOpen, closeModal } from 'boost/modal'
 
 const TEXT_FILTER = 'TEXT_FILTER'
 const FOLDER_FILTER = 'FOLDER_FILTER'
 const TAG_FILTER = 'TAG_FILTER'
 
 class HomePage extends React.Component {
+  componentDidMount () {
+    this.listener = (e) => this.handleKeyDown(e)
+    window.addEventListener('keydown', this.listener)
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('keydown', this.listener)
+  }
+
+  handleKeyDown (e) {
+    if (isModalOpen() && e.keyCode === 27) {
+      closeModal()
+      return
+    }
+
+    let { status } = this.props
+    let { nav, top, list, detail } = this.refs
+
+    if (top.isInputFocused() && !e.metaKey) {
+      if (e.keyCode === 13 || e.keyCode === 27) top.blurInput()
+      return
+    }
+
+    switch (status.mode) {
+      case CREATE_MODE:
+      case EDIT_MODE:
+        if (e.keyCode === 27) {
+          detail.handleCancelButtonClick()
+        }
+        if (e.keyCode === 13 && e.metaKey) {
+          detail.handleSaveButtonClick()
+        }
+        break
+      case IDLE_MODE:
+        if (e.keyCode === 69) {
+          detail.handleEditButtonClick()
+        }
+        if (e.keyCode === 68) {
+          detail.handleDeleteButtonClick()
+        }
+
+        // `detail`の`openDeleteConfirmMenu`の時。
+        if (detail.state.openDeleteConfirmMenu) {
+          if (e.keyCode === 27) {
+            detail.handleDeleteCancleButtonClick()
+          }
+          if (e.keyCode === 13 && e.metaKey) {
+            detail.handleDeleteConfirmButtonClick()
+          }
+          break
+        }
+
+        // `detail`の`openDeleteConfirmMenu`が`true`なら呼ばれない。
+        if (e.keyCode === 27) {
+          top.focusInput()
+        }
+
+        if (e.keyCode === 38) {
+          list.selectPriorArticle()
+        }
+
+        if (e.keyCode === 40) {
+          list.selectNextArticle()
+        }
+
+        if (e.keyCode === 13 && e.metaKey) {
+          nav.handleNewPostButtonClick()
+        }
+    }
+  }
+
   render () {
-    let { dispatch, status, articles, activeArticle, folders } = this.props
+    let { dispatch, status, articles, activeArticle, folders, filters } = this.props
 
     return (
       <div className='HomePage'>
         <ArticleNavigator
+          ref='nav'
           dispatch={dispatch}
           folders={folders}
           status={status}
         />
-        <ArticleTopBar dispatch={dispatch} status={status}/>
+        <ArticleTopBar
+          ref='top'
+          dispatch={dispatch}
+          status={status}
+        />
         <ArticleList
+          ref='list'
           dispatch={dispatch}
           folders={folders}
           articles={articles}
@@ -33,10 +111,12 @@ class HomePage extends React.Component {
           activeArticle={activeArticle}
         />
         <ArticleDetail
+          ref='detail'
           dispatch={dispatch}
           activeArticle={activeArticle}
           folders={folders}
           status={status}
+          filters={filters}
         />
       </div>
     )
@@ -139,7 +219,12 @@ function remap (state) {
     folders,
     status,
     articles,
-    activeArticle
+    activeArticle,
+    filters: {
+      folder: folderFilters,
+      tag: tagFilters,
+      text: textFilters
+    }
   }
 }
 
@@ -153,7 +238,12 @@ HomePage.propTypes = {
   articles: PropTypes.array,
   activeArticle: PropTypes.shape(),
   dispatch: PropTypes.func,
-  folders: PropTypes.array
+  folders: PropTypes.array,
+  filters: PropTypes.shape({
+    folder: PropTypes.array,
+    tag: PropTypes.array,
+    text: PropTypes.array
+  })
 }
 
 export default connect(remap)(HomePage)
