@@ -16,6 +16,8 @@ const TAG_FILTER = 'TAG_FILTER'
 
 class HomePage extends React.Component {
   componentDidMount () {
+    // React自体のKey入力はfocusされていないElementからは動かないため、
+    // `window`に直接かける
     this.listener = (e) => this.handleKeyDown(e)
     window.addEventListener('keydown', this.listener)
   }
@@ -33,6 +35,7 @@ class HomePage extends React.Component {
     let { status } = this.props
     let { nav, top, list, detail } = this.refs
 
+    // Search inputがfocusされていたら大体のキー入力は無視される。
     if (top.isInputFocused() && !e.metaKey) {
       if (e.keyCode === 13 || e.keyCode === 27) top.escape()
       return

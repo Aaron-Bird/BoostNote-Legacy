@@ -4,7 +4,7 @@ import _ from 'lodash'
 import ModeIcon from 'boost/components/ModeIcon'
 import MarkdownPreview from 'boost/components/MarkdownPreview'
 import CodeEditor from 'boost/components/CodeEditor'
-import { IDLE_MODE, CREATE_MODE, EDIT_MODE, switchMode, switchArticle, switchFolder, updateArticle, destroyArticle } from 'boost/actions'
+import { IDLE_MODE, CREATE_MODE, EDIT_MODE, switchMode, switchArticle, switchFolder, clearSearch, updateArticle, destroyArticle } from 'boost/actions'
 import aceModes from 'boost/ace-modes'
 import Select from 'react-select'
 import linkState from 'boost/linkState'
@@ -33,16 +33,23 @@ export default class ArticleDetail extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.activeArticle != null && (nextProps.activeArticle.key !== this.state.article.key) || (nextProps.status.mode !== this.props.status.mode)) {
-      this.setState({article: makeInstantArticle(nextProps.activeArticle)}, function () {
-        console.log('receive props')
+    let nextState = {}
+
+    let isArticleChanged = nextProps.activeArticle != null && (nextProps.activeArticle.key !== this.state.article.key)
+    let isModeChanged = nextProps.status.mode !== this.props.status.mode
+    if (isArticleChanged || (isModeChanged && nextProps.status.mode !== IDLE_MODE)) {
+      Object.assign(nextState, {
+        article: makeInstantArticle(nextProps.activeArticle)
       })
     }
 
-    let isEdit = nextProps.status.mode === EDIT_MODE || nextProps.status.mode === CREATE_MODE
-    if (isEdit && this.state.openDeleteConfirmMenu) {
-      this.setState({openDeleteConfirmMenu: false})
+    if (isModeChanged) {
+      Object.assign(nextState, {
+        openDeleteConfirmMenu: false,
+        previewMode: false
+      })
     }
+    this.setState(nextState)
   }
 
   renderEmpty () {
@@ -152,7 +159,12 @@ export default class ArticleDetail extends React.Component {
 
     dispatch(updateArticle(newArticle))
     dispatch(switchMode(IDLE_MODE))
+    // Folder filterがかかっている時に、
+    // Searchを初期化し、更新先のFolder filterをかける
+    // かかれていない時に
+    // Searchを初期化する
     if (filters.folder.length !== 0) dispatch(switchFolder(folder.name))
+    else dispatch(clearSearch())
     dispatch(switchArticle(newArticle.key))
   }
 
@@ -182,6 +194,10 @@ export default class ArticleDetail extends React.Component {
     this.setState({article: article})
   }
 
+  handleTogglePreviewButtonClick (e) {
+    this.setState({previewMode: !this.state.previewMode})
+  }
+
   renderEdit () {
     let { folders } = this.props
 
@@ -209,6 +225,11 @@ export default class ArticleDetail extends React.Component {
             />
           </div>
           <div className='right'>
+            {
+              this.state.article.mode === 'markdown'
+                ? (<button className='preview' onClick={e => this.handleTogglePreviewButtonClick(e)}>Toggle Preview</button>)
+                : null
+            }
             <button onClick={e => this.handleCancelButtonClick(e)}>Cancel</button>
             <button onClick={e => this.handleSaveButtonClick(e)} className='primary'>Save</button>
           </div>
@@ -229,12 +250,16 @@ export default class ArticleDetail extends React.Component {
                 className='mode'
               />
             </div>
-            <CodeEditor
-              onChange={(e, value) => this.handleContentChange(e, value)}
-              readOnly={false}
-              mode={this.state.article.mode}
-              code={this.state.article.content}
-            />
+
+            {this.state.previewMode
+              ? <MarkdownPreview content={this.state.article.content}/>
+              : (<CodeEditor
+                  onChange={(e, value) => this.handleContentChange(e, value)}
+                  readOnly={false}
+                  mode={this.state.article.mode}
+                  code={this.state.article.content}
+                />)
+            }
           </div>
         </div>
       </div>
