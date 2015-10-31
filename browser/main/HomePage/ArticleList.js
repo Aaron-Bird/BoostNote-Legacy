@@ -15,6 +15,7 @@ export default class ArticleList extends React.Component {
     clearInterval(this.refreshTimer)
   }
 
+  // 移動ができなかったらfalseを返す:
   selectPriorArticle () {
     let { articles, activeArticle, dispatch } = this.props
     let targetIndex = articles.indexOf(activeArticle) - 1
@@ -22,7 +23,9 @@ export default class ArticleList extends React.Component {
 
     if (targetArticle != null) {
       dispatch(switchArticle(targetArticle.key))
+      return true
     }
+    return false
   }
 
   selectNextArticle () {
@@ -32,7 +35,9 @@ export default class ArticleList extends React.Component {
 
     if (targetArticle != null) {
       dispatch(switchArticle(targetArticle.key))
+      return true
     }
+    return false
   }
 
   handleArticleClick (article) {

@@ -34,7 +34,7 @@ class HomePage extends React.Component {
     let { nav, top, list, detail } = this.refs
 
     if (top.isInputFocused() && !e.metaKey) {
-      if (e.keyCode === 13 || e.keyCode === 27) top.blurInput()
+      if (e.keyCode === 13 || e.keyCode === 27) top.escape()
       return
     }
 
@@ -68,7 +68,7 @@ class HomePage extends React.Component {
         }
 
         // `detail`の`openDeleteConfirmMenu`が`true`なら呼ばれない。
-        if (e.keyCode === 27) {
+        if (e.keyCode === 27 || (e.keyCode === 70 && e.metaKey)) {
           top.focusInput()
         }
 

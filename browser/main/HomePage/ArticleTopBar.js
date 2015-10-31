@@ -1,11 +1,20 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import ExternalLink from 'boost/components/ExternalLink'
-import { setSearchFilter } from 'boost/actions'
+import { setSearchFilter, clearSearch } from 'boost/actions'
 
 export default class ArticleTopBar extends React.Component {
   isInputFocused () {
     return document.activeElement === ReactDOM.findDOMNode(this.refs.searchInput)
+  }
+
+  escape () {
+    let { status, dispatch } = this.props
+    if (status.search.length > 0) {
+      dispatch(clearSearch())
+      return
+    }
+    this.blurInput()
   }
 
   focusInput () {
