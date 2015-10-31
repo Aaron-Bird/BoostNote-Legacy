@@ -6,14 +6,8 @@ import MainPage from './MainPage'
 import HomePage from './HomePage'
 // import auth from 'boost/auth'
 import store from 'boost/store'
-let ReactDOM = require('react-dom')
+import ReactDOM from 'react-dom'
 require('../styles/main/index.styl')
-
-function onlyUser (state, replaceState) {
-  // let currentUser = auth.user()
-  // if (currentUser == null) return replaceState('login', '/login')
-  // if (state.location.pathname === '/') return replaceState('user', '/users/' + currentUser.id)
-}
 
 let routes = (
   <Route path='/' component={MainPage}>
@@ -22,7 +16,6 @@ let routes = (
 )
 
 let el = document.getElementById('content')
-
 ReactDOM.render((
   <div>
     <Provider store={store}>

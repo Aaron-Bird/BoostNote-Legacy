@@ -101,8 +101,8 @@ export default class ArticleDetail extends React.Component {
               <div className='left'>
                 <div className='info'>
                   <FolderMark color={folder.color}/> {folder.name}&nbsp;
-                  Created {moment(activeArticle.createdAt).format('YYYY/MM/DD')}&nbsp;
-                  Updated {moment(activeArticle.updatedAt).format('YYYY/MM/DD')}
+                  Created : {moment(activeArticle.createdAt).format('YYYY/MM/DD')}&nbsp;
+                  Updated : {moment(activeArticle.updatedAt).format('YYYY/MM/DD')}
                 </div>
                 <div className='tags'><i className='fa fa-fw fa-tags'/>{tags}</div>
               </div>
@@ -183,7 +183,6 @@ export default class ArticleDetail extends React.Component {
         <option key={folder.key} value={folder.key}>{folder.name}</option>
       )
     })
-    console.log('edit rendered')
 
     return (
       <div className='ArticleDetail edit'>

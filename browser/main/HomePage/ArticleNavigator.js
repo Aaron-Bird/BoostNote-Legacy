@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react'
-import ProfileImage from 'boost/components/ProfileImage'
 import { findWhere } from 'lodash'
 import { setSearchFilter, switchFolder, switchMode, CREATE_MODE } from 'boost/actions'
 import { openModal } from 'boost/modal'
 import FolderMark from 'boost/components/FolderMark'
 import Preferences from 'boost/components/modal/Preferences'
 import CreateNewFolder from 'boost/components/modal/CreateNewFolder'
+
+import remote from 'remote'
 
 export default class ArticleNavigator extends React.Component {
   handlePreferencesButtonClick (e) {
@@ -50,10 +51,12 @@ export default class ArticleNavigator extends React.Component {
       )
     })
 
+    let userName = remote.getGlobal('process').env.USER
+
     return (
       <div className='ArticleNavigator'>
         <div className='userInfo'>
-          <div className='userProfileName'>{process.env.USER}</div>
+          <div className='userProfileName'>{userName}</div>
           <div className='userName'>local</div>
           <button onClick={e => this.handlePreferencesButtonClick(e)} className='settingBtn'><i className='fa fa-fw fa-chevron-down'/></button>
         </div>

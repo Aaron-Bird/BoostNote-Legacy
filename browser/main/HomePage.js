@@ -44,10 +44,8 @@ class HomePage extends React.Component {
 }
 
 function remap (state) {
-  let status = state.status
-  // Fetch articles
-  let data = JSON.parse(localStorage.getItem('local'))
-  let { folders, articles } = data
+  let { folders, articles, status } = state
+
   if (articles == null) articles = []
   articles.sort((a, b) => {
     return new Date(b.updatedAt) - new Date(a.updatedAt)
@@ -112,7 +110,13 @@ function remap (state) {
   // 1. team have one folder at least
   // or Change IDLE MODE
   if (status.mode === CREATE_MODE) {
-    var newArticle = _.findWhere(articles, {status: 'NEW'})
+    let newArticle = _.findWhere(articles, {status: 'NEW'})
+    let FolderKey = folders[0].key
+    if (folderFilters.length > 0) {
+      let targetFolder = _.findWhere(folders, {name: folderFilters[0].value})
+      if (targetFolder != null) FolderKey = targetFolder.key
+    }
+
     if (newArticle == null) {
       newArticle = {
         id: null,
@@ -121,7 +125,7 @@ function remap (state) {
         content: '',
         mode: 'markdown',
         tags: [],
-        FolderKey: folders[0].key,
+        FolderKey: FolderKey,
         status: NEW
       }
       articles.unshift(newArticle)
@@ -131,14 +135,12 @@ function remap (state) {
     status.mode = IDLE_MODE
   }
 
-  let props = {
+  return {
     folders,
     status,
     articles,
     activeArticle
   }
-
-  return props
 }
 
 HomePage.propTypes = {

@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import ExternalLink from 'boost/components/ExternalLink'
 import { setSearchFilter } from 'boost/actions'
 
@@ -8,6 +9,12 @@ export default class ArticleTopBar extends React.Component {
 
     dispatch(setSearchFilter(e.target.value))
   }
+  handleSearchClearButton (e) {
+    let { dispatch } = this.props
+
+    dispatch(setSearchFilter(''))
+    ReactDOM.findDOMNode(this.refs.searchInput).focus()
+  }
 
   render () {
     return (
@@ -15,7 +22,12 @@ export default class ArticleTopBar extends React.Component {
         <div className='left'>
           <div className='search'>
             <i className='fa fa-search fa-fw' />
-            <input value={this.props.status.search} onChange={e => this.handleSearchChange(e)} placeholder='Search' type='text'/>
+            <input ref='searchInput' value={this.props.status.search} onChange={e => this.handleSearchChange(e)} placeholder='Search' type='text'/>
+            {
+              this.props.status.search != null && this.props.status.search.length > 0
+                ? <button onClick={e => this.handleSearchClearButton(e)} className='searchClearBtn'><i className='fa fa-times'/></button>
+                : null
+            }
           </div>
         </div>
         <div className='right'>
