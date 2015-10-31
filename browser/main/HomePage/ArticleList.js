@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import ModeIcon from 'boost/components/ModeIcon'
 import moment from 'moment'
 import { switchArticle, NEW } from 'boost/actions'
@@ -13,6 +14,26 @@ export default class ArticleList extends React.Component {
 
   componentWillUnmount () {
     clearInterval(this.refreshTimer)
+  }
+
+  componentDidUpdate () {
+    let { articles, activeArticle } = this.props
+    var index = articles.indexOf(activeArticle)
+    var el = ReactDOM.findDOMNode(this)
+    var li = el.querySelectorAll('.ArticleList>div')[index]
+
+    if (li == null) {
+      return
+    }
+
+    var overflowBelow = el.clientHeight + el.scrollTop < li.offsetTop + li.clientHeight
+    if (overflowBelow) {
+      el.scrollTop = li.offsetTop + li.clientHeight - el.clientHeight
+    }
+    var overflowAbove = el.scrollTop > li.offsetTop
+    if (overflowAbove) {
+      el.scrollTop = li.offsetTop
+    }
   }
 
   // 移動ができなかったらfalseを返す:

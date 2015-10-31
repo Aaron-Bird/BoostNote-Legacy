@@ -18,12 +18,12 @@ class HomePage extends React.Component {
   componentDidMount () {
     // React自体のKey入力はfocusされていないElementからは動かないため、
     // `window`に直接かける
-    this.listener = (e) => this.handleKeyDown(e)
-    window.addEventListener('keydown', this.listener)
+    this.keyHandler = e => this.handleKeyDown(e)
+    window.addEventListener('keydown', this.keyHandler)
   }
 
   componentWillUnmount () {
-    window.removeEventListener('keydown', this.listener)
+    window.removeEventListener('keydown', this.keyHandler)
   }
 
   handleKeyDown (e) {

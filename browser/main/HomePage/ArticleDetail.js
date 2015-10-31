@@ -33,6 +33,14 @@ export default class ArticleDetail extends React.Component {
     }
   }
 
+  componentDidMount () {
+    this.refreshTimer = setInterval(() => this.forceUpdate(), 60 * 1000)
+  }
+
+  componentWillUnmount () {
+    clearInterval(this.refreshTimer)
+  }
+
   componentDidUpdate (prevProps) {
     let isModeChanged = prevProps.status.mode !== this.props.status.mode
     if (isModeChanged && this.props.status.mode !== IDLE_MODE) {
