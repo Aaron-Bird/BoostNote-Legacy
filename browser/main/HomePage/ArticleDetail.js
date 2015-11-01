@@ -139,10 +139,10 @@ export default class ArticleDetail extends React.Component {
               </div>
               <div className='right'>
                 <button onClick={e => this.handleEditButtonClick(e)} className='editBtn'>
-                  <i className='fa fa-fw fa-edit'/><span className='tooltip'>Edit 編集(e)</span>
+                  <i className='fa fa-fw fa-edit'/><span className='tooltip'>Edit 編集 (e)</span>
                 </button>
                 <button onClick={e => this.handleDeleteButtonClick(e)} className='deleteBtn'>
-                  <i className='fa fa-fw fa-trash'/><span className='tooltip'>Delete 削除(d)</span>
+                  <i className='fa fa-fw fa-trash'/><span className='tooltip'>Delete 削除 (d)</span>
                 </button>
               </div>
             </div>

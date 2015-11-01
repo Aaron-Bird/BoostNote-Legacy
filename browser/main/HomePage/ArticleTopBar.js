@@ -2,6 +2,8 @@ import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import ExternalLink from 'boost/components/ExternalLink'
 import { setSearchFilter, clearSearch } from 'boost/actions'
+import { openModal } from 'boost/modal'
+import Tutorial from 'boost/components/modal/Tutorial'
 
 export default class ArticleTopBar extends React.Component {
   constructor (props) {
@@ -65,6 +67,10 @@ export default class ArticleTopBar extends React.Component {
     this.focusInput()
   }
 
+  handleTutorialButtonClick (e) {
+    openModal(Tutorial)
+  }
+
   render () {
     return (
       <div className='ArticleTopBar'>
@@ -92,7 +98,7 @@ export default class ArticleTopBar extends React.Component {
           </div>
         </div>
         <div className='right'>
-          <button>?<span className='tooltip'>How to use 使い方</span></button>
+          <button onClick={e => this.handleTutorialButtonClick(e)}>?<span className='tooltip'>How to use 使い方</span></button>
           <ExternalLink className='logo' href='http://b00st.io'>
             <img src='../../resources/favicon-230x230.png' width='44' height='44'/>
             <span className='tooltip'>Boost official page 公式サイト</span>
