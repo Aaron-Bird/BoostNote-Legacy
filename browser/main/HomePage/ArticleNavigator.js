@@ -59,14 +59,14 @@ export default class ArticleNavigator extends React.Component {
           <div className='userName'>local</div>
           <button onClick={e => this.handlePreferencesButtonClick(e)} className='settingBtn'>
             <i className='fa fa-fw fa-chevron-down'/>
-            <span className='tooltip'>Preferences 環境設定</span>
+            <span className='tooltip'>Preferences</span>
           </button>
         </div>
 
         <div className='controlSection'>
           <button onClick={e => this.handleNewPostButtonClick(e)} className='newPostBtn'>
             New Post
-            <span className='tooltip'>新しいポスト (⌘ + Enter or a)</span>
+            <span className='tooltip'>Create a new Post (⌘ + Enter or a)</span>
           </button>
         </div>
 
@@ -75,7 +75,7 @@ export default class ArticleNavigator extends React.Component {
             <div className='title'>Folders</div>
             <button onClick={e => this.handleNewFolderButton(e)} className='addBtn'>
               <i className='fa fa-fw fa-plus'/>
-              <span className='tooltip'>New folder 新しいフォルダー</span>
+              <span className='tooltip'>Create a new folder</span>
             </button>
           </div>
           <div className='folderList'>

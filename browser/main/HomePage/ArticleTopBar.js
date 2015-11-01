@@ -92,16 +92,16 @@ export default class ArticleTopBar extends React.Component {
                 : null
             }
             <div className={'tooltip' + (this.state.isTooltipHidden ? ' hide' : '')}>
-              - Search by tag タグで検索 : #{'{string}'}<br/>
-              - Search by folder フォルダーで検索 : in:{'{folder_name}'}
+              - Search by tag : #{'{string}'}<br/>
+              - Search by folder : in:{'{folder_name}'}
             </div>
           </div>
         </div>
         <div className='right'>
-          <button onClick={e => this.handleTutorialButtonClick(e)}>?<span className='tooltip'>How to use 使い方</span></button>
+          <button onClick={e => this.handleTutorialButtonClick(e)}>?<span className='tooltip'>How to use</span></button>
           <ExternalLink className='logo' href='http://b00st.io'>
             <img src='../../resources/favicon-230x230.png' width='44' height='44'/>
-            <span className='tooltip'>Boost official page 公式サイト</span>
+            <span className='tooltip'>Boost official page</span>
           </ExternalLink>
         </div>
       </div>

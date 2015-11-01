@@ -29,7 +29,8 @@ export default class ArticleDetail extends React.Component {
     super(props)
 
     this.state = {
-      article: makeInstantArticle(props.activeArticle)
+      article: makeInstantArticle(props.activeArticle),
+      previewMode: false
     }
   }
 
@@ -139,10 +140,10 @@ export default class ArticleDetail extends React.Component {
               </div>
               <div className='right'>
                 <button onClick={e => this.handleEditButtonClick(e)} className='editBtn'>
-                  <i className='fa fa-fw fa-edit'/><span className='tooltip'>Edit 編集 (e)</span>
+                  <i className='fa fa-fw fa-edit'/><span className='tooltip'>Edit (e)</span>
                 </button>
                 <button onClick={e => this.handleDeleteButtonClick(e)} className='deleteBtn'>
-                  <i className='fa fa-fw fa-trash'/><span className='tooltip'>Delete 削除 (d)</span>
+                  <i className='fa fa-fw fa-trash'/><span className='tooltip'>Delete (d)</span>
                 </button>
               </div>
             </div>
@@ -252,7 +253,7 @@ export default class ArticleDetail extends React.Component {
           <div className='right'>
             {
               this.state.article.mode === 'markdown'
-                ? (<button className='preview' onClick={e => this.handleTogglePreviewButtonClick(e)}>Toggle Preview</button>)
+                ? (<button className='preview' onClick={e => this.handleTogglePreviewButtonClick(e)}>{!this.state.previewMode ? 'Preview' : 'Edit'}</button>)
                 : null
             }
             <button onClick={e => this.handleCancelButtonClick(e)}>Cancel</button>
