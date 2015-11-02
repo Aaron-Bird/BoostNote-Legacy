@@ -1,0 +1,75 @@
+tabNavColor = #999999
+iptFocusBorderColor = #369DCD
+
+.CreateNewFolder.modal
+  width 600px
+  height 450px
+  .closeBtn
+    position absolute
+    top 15px
+    right 15px
+    width 33px
+    height 33px
+    font-size 18px
+    line-height 33px
+    padding 0
+    text-align center
+    background-color transparent
+    border none
+    color stripBtnColor
+    &:hover
+      color stripHoverBtnColor
+  .title
+    font-size 32px
+    text-align center
+    font-weight bold
+    margin-top 25px
+  .ipt
+    display block
+    width 330px
+    font-size 14px
+    height 44px
+    line-height 44px
+    padding 0 15px
+    border-radius 5px
+    border solid 1px borderColor
+    outline none
+    margin 100px auto 25px
+    &:focus
+      border-color iptFocusBorderColor
+  .public
+    margin 0 auto
+    text-align center
+    button
+      border none
+      background-color transparent
+      font-size 18px
+      color inactiveTextColor
+      transition 0.1s
+    button:hover
+      font-size 22px
+    button.active
+      color brandColor
+      font-size 22px
+    .divider
+      margin 0 5px
+  .confirmBtn
+    display block
+    position absolute
+    left 180px
+    bottom 44px
+    width 240px
+    font-size 24px
+    height 44px
+    line-height 24px
+    font-weight bold
+    background-color brandColor
+    color white
+    border none
+    border-radius 5px
+    margin 0 auto
+    transition 0.1s
+    &:hover
+      transform scale(1.1)
+    &:disabled
+      opacity 0.7

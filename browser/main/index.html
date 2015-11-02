@@ -1,56 +1,68 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>CodeXen</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
 
-  <link rel="stylesheet" href="../vendor/fontawesome/css/font-awesome.min.css" media="screen" title="no title" charset="utf-8">
+  <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css" media="screen" charset="utf-8">
+  <link rel="stylesheet" href="../../node_modules/devicon/devicon.min.css">
   <link rel="shortcut icon" href="favicon.ico">
-  <script>
-  if (!Object.assign) {
-    Object.defineProperty(Object, 'assign', {
-      enumerable: false,
-      configurable: true,
-      writable: true,
-      value: function(target) {
-        'use strict';
-        if (target === undefined || target === null) {
-          throw new TypeError('Cannot convert first argument to object');
-        }
 
-        var to = Object(target);
-        for (var i = 1; i < arguments.length; i++) {
-          var nextSource = arguments[i];
-          if (nextSource === undefined || nextSource === null) {
-            continue;
-          }
-          nextSource = Object(nextSource);
-
-          var keysArray = Object.keys(Object(nextSource));
-          for (var nextIndex = 0, len = keysArray.length; nextIndex < len; nextIndex++) {
-            var nextKey = keysArray[nextIndex];
-            var desc = Object.getOwnPropertyDescriptor(nextSource, nextKey);
-            if (desc !== undefined && desc.enumerable) {
-              to[nextKey] = nextSource[nextKey];
-            }
-          }
-        }
-        return to;
-      }
-    });
+  <style>
+  @font-face {
+    font-family: 'Lato';
+    src: url('../../resources/Lato-Regular.woff2') format('woff2'), /* Modern Browsers */
+         url('../../resources/Lato-Regular.woff') format('woff'), /* Modern Browsers */
+         url('../../resources/Lato-Regular.ttf') format('truetype');
+    font-style: normal;
+    font-weight: normal;
+    text-rendering: optimizeLegibility;
   }
-  </script>
-  <script src="../vendor/moment/min/moment.min.js"></script>
-  <script src="../vendor/markdown-it/dist/markdown-it.min.js"></script>
-  <script src="../vendor/react/react-with-addons.js"></script>
-  <script src="../vendor/react-router/build/umd/ReactRouter.js"></script>
-  <script src="../vendor/reflux/dist/reflux.js"></script>
-  <script src="../ace/src-min/ace.js"></script>
-
+  #loadingCover{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    box-sizing: border-box;
+    padding: 65px 0;
+    font-family: sans-serif;
+  }
+  #loadingCover img{
+    display: block;
+    margin: 75px auto 5px;
+    width: 160px;
+    height: 160px;
+  }
+  #loadingCover .message{
+    font-size: 30px;
+    text-align: center;
+    line-height: 1.6;
+    font-weight: 100;
+    color: #888;
+  }
+  </style>
 </head>
 <body>
+  <div id="loadingCover">
+    <img src="../../resources/favicon-230x230.png">
+    <div class='message'>Loading...</div>
+  </div>
+
   <div id="content"></div>
-  <script src="http://localhost:8090/webpack-dev-server.js"></script>
-  <script type="text/javascript" src="http://localhost:8090/assets/main.js"></script>
-  <script type="text/javascript" src="http://localhost:8090/assets/main-style.js"></script>
+
+  <script src="../../submodules/ace/src-min/ace.js"></script>
+  <script type='text/javascript'>
+    require('web-frame').setZoomLevelLimits(1, 1)
+    var version = require('remote').require('app').getVersion()
+    document.title = 'Boost' + ((version == null || version.length === 0) ? ' DEV' : '')
+    var scriptUrl = process.env.BOOST_ENV === 'development'
+      ? 'http://localhost:8080/assets/main.js'
+      : '../../compiled/main.js'
+    var scriptEl=document.createElement('script')
+    scriptEl.setAttribute("type","text/javascript")
+    scriptEl.setAttribute("src", scriptUrl)
+    document.getElementsByTagName("head")[0].appendChild(scriptEl)
+  </script>
 </body>
 </html>

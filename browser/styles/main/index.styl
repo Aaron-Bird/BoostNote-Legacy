@@ -5,6 +5,11 @@ global-reset()
 @import '../shared/*'
 @import './components/*'
 @import './containers/*'
+@import './HomeContainer'
+
+*
+  -webkit-app-region no-drag
+  -webkit-user-select none
 
 html, body
   width 100%
@@ -16,24 +21,13 @@ body
   color textColor
   font-size fontSize
   font-weight 400
-button
+
+button, input, select
   font-family "Lato"
 
 div, span, a, button, input, textarea
   box-sizing border-box
 
-h1
-  font-size 2em
-h2
-  font-size 1.5em
-h3
-  font-size 1.17em
-h4
-  font-size 1em
-h5
-  font-size 0.83em
-h6
-  font-size 0.67em
 a
   color brandColor
   &:hover
@@ -52,6 +46,9 @@ button
   &:focus, &.focus
     outline none
 
+.noSelect
+  noSelect()
+
 .text-center
   text-align center
 
@@ -60,13 +57,6 @@ button
   &>label
     display block
     margin-bottom 5px
-
-.stripInput
-  stripInput()
-  display block
-  width 100%
-  font-size 1em
-  height 33px
 
 .block-input, .inline-input
   border solid 1px borderColor
@@ -107,22 +97,32 @@ textarea.block-input
     z-index 2000
     bottom 5px
     right 53px
-    btnPrimary()
     padding 10px 15px
+    border none
     border-radius 5px
-    background-color backgroundColor
+    background-color brandColor
+    color white
+    opacity 0.7
+    &:hover
+      opacity 1
+      background-color lighten(brandColor, 10%)
   .contactButton
     position fixed
     z-index 2000
     bottom 5px
     right 5px
-    btnPrimary()
     padding 10px 15px
+    border none
     border-radius 5px
-    background-color backgroundColor
+    background-color brandColor
+    color white
+    opacity 0.7
+    &:hover
+      opacity 1
+      background-color lighten(brandColor, 10%)
     .tooltip
       tooltip()
       margin-top -22px
-      margin-left -97px
+      margin-left -107px
     &:hover .tooltip
       opacity 1

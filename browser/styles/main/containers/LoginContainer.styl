@@ -1,6 +1,6 @@
 .LoginContainer, .SignupContainer
   margin 0 auto
-  padding 25px 15px
+  padding 105px 15px
   box-sizing border-box
   color inactiveTextColor
   .logo
@@ -58,17 +58,24 @@
     .alertInfo, .alertError
       margin-top 15px
       margin-bottom 15px
-      height 44px
-      padding 5px
-      border-radius 10px
-      line-height 44px
+      padding 10px
+      border-radius 5px
+      line-height 1.6
       text-align center
     .alertInfo
       alertInfo()
     .alertError
       alertError()
-    div.form-group:last-child
-      margin-top 15px
+    div.formField
+      input
+        stripInput()
+        height 33px
+        width 100%
+        margin-bottom 10px
+        text-align center
+        font-size 1.1em
+      &:last-child
+        margin-top 15px
       button.logInButton
         btnPrimary()
         height 44px

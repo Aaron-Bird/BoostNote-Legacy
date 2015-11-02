@@ -1,6 +1,6 @@
-build/
-node_modules/
-electron_build/
 .env
-dist/
-vendor/
+node_modules/*
+!node_modules/boost
+Boost-darwin-x64/
+backup/
+compiled

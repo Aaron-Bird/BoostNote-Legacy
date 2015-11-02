@@ -1,0 +1,235 @@
+noTagsColor = #999
+iptFocusBorderColor = #369DCD
+
+.ArticleDetail
+  absolute right bottom
+  top 60px
+  left 450px
+  padding 10px
+  background-color #E6E6E6
+  border-top 1px solid borderColor
+  border-left 1px solid borderColor
+  *
+    -webkit-user-select all
+  .deleteConfirm
+    width 100%
+    height 70px
+    .right
+      float right
+      button
+        cursor pointer
+        height 33px
+        padding 0 10px
+        margin-left 5px
+        font-size 14px
+        color inactiveTextColor
+        background-color darken(white, 5%)
+        border solid 1px borderColor
+        border-radius 5px
+        &:hover
+          background-color white
+        &.primary
+          border none
+          background-color brandColor
+          color white
+          &:hover
+            color white
+            background-color lighten(brandColor, 10%)
+
+  .detailInfo
+    height 70px
+    width 100%
+    font-size 12px
+    position relative
+    .left
+      absolute top left bottom
+      right 120px
+    .right
+      absolute top right
+  .detailBody
+    absolute left right bottom
+    top 70px
+    overflow-x hidden
+    overflow-y auto
+    .detailPanel
+      absolute top
+      left 10px
+      right 10px
+      bottom 10px
+      background-color white
+      border-radius 5px
+      border solid 1px borderColor
+      &>.header
+        absolute top left right
+        height 60px
+      .MarkdownPreview
+        absolute left right bottom
+        top 60px
+        marked()
+        box-sizing border-box
+        padding 5px 15px
+        border-top solid 1px borderColor
+        overflow-y auto
+      .CodeEditor
+        absolute left right bottom
+        top 60px
+        border-top solid 1px borderColor
+        min-height 300px
+        border-bottom-left-radius 5px
+        border-bottom-right-radius 5px
+  &.edit
+    .detailInfo
+      .left
+        .folder
+          border none
+          width 150px
+          height 27px
+          outline none
+          background-color darken(white, 5%)
+          &:hover
+            background-color white
+        .TagSelect
+          white-space nowrap
+          overflow-x auto
+          position relative
+          margin-top 5px
+          noSelect()
+          .tagItem
+            background-color brandColor
+            border-radius 2px
+            color white
+            margin 0 2px
+            padding 0
+            border 1px solid darken(brandColor, 10%)
+            button.tagRemoveBtn
+              color white
+              border-radius 2px
+              border none
+              background-color transparent
+              padding 4px 2px
+              border-right 1px solid #E6E6E6
+              font-size 8px
+              line-height 12px
+              transition 0.1s
+              &:hover
+                background-color lighten(brandColor, 10%)
+            .tagLabel
+              padding 4px 4px
+              font-size 12px
+              line-height 12px
+          input.tagInput
+            background-color transparent
+            outline none
+            margin 0 2px
+            border-radius 2px
+            border none
+            transition 0.1s
+            height 18px
+      .right
+        button
+          cursor pointer
+          height 33px
+          width 55px
+          margin-left 5px
+          font-size 14px
+          color inactiveTextColor
+          background-color darken(white, 5%)
+          border solid 1px borderColor
+          border-radius 5px
+          &.preview
+            width inherit
+          &:hover
+            background-color white
+          &.primary
+            border none
+            background-color brandColor
+            color white
+            &:hover
+              color white
+              background-color lighten(brandColor, 10%)
+    .detailBody
+      .detailPanel
+        &>.header
+          .mode
+            absolute top bottom right
+            display block
+            height 33px
+            margin-top 12px
+            width 120px
+            margin-right 15px
+          .title
+            absolute left top bottom
+            right 120px
+            padding 0 15px
+            input
+              width 100%
+              border none
+              background-color transparent
+              line-height 60px
+              font-size 24px
+              outline none
+  &.idle
+    .detailInfo
+      .left
+        right 99px
+        .info
+          padding 5px
+          overflow ellipsis
+        .tags
+          padding 10px 10px 5px
+          color articleItemColor
+          a
+            background-color brandColor
+            color white
+            border-radius 2px
+            padding 1.5px 5px
+            margin 2px
+            font-size 10px
+            opacity 0.8
+            cursor pointer
+            &:hover
+              opacity 1
+          span.noTags
+            color noTagsColor
+      .right
+        button
+          cursor pointer
+          height 33px
+          width 33px
+          border none
+          font-size 18px
+          color inactiveTextColor
+          background-color transparent
+          padding 0
+          .tooltip
+            tooltip()
+          &.editBtn .tooltip
+            margin-top 25px
+            margin-left -45px
+          &.deleteBtn .tooltip
+            margin-top 25px
+            margin-left -73px
+          &:hover
+            color inherit
+            .tooltip
+              opacity 1
+    .detailBody
+      .detailPanel
+        &>.header
+          .mode
+            display block
+            line-height 60px
+            width 45px
+            height 60px
+            font-size 18px
+            text-align center
+          .title
+            absolute top bottom
+            left 45px
+            right 15px
+            font-size 24px
+            line-height 60px
+
+            white-space nowrap
+            overflow-x auto
+            overflow-y hidden

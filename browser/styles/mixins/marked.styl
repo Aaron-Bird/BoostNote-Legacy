@@ -1,4 +1,7 @@
 marked()
+  h1, h2, h3, h4, h5, h6, p
+    &:first-child
+      margin-top 0
   hr
     border-top none
     border-bottom solid 1px borderColor
@@ -6,28 +9,28 @@ marked()
   h1
     font-size 2em
     border-bottom solid 2px borderColor
-    margin 0.67em auto
+    margin 0.33em auto 0.67em
   h2
     font-size 1.5em
-    margin 0.83em auto
+    margin 0.42em auto 0.83em
   h3
     font-size 1.17em
-    margin 1em auto
+    margin 0.5em auto 1em
   h4
     font-size 1em
-    margin 1.33em auto
+    margin 0.67em auto 1.33em
   h5
     font-size 0.83em
-    margin 1.67em auto
+    margin 0.84em auto 1.67em
   h6
     font-size 0.67em
-    margin 2.33em auto
+    margin 1.16em auto 2.33em
   h1, h2, h3, h4, h5, h6
     font-weight 700
     line-height 1.8em
   p
     line-height 1.8em
-    margin-bottom 25px
+    margin 15px 0 25px
   img
     max-width 100%
   strong
@@ -38,15 +41,15 @@ marked()
     text-decoration line-through
   blockquote
     border-left solid 4px brandBorderColor
-    margin 15px 0 15px
+    margin 15px 0 25px
     padding 0 25px
   ul
     list-style-type disc
     padding-left 35px
-    margin-bottom 25px
+    margin-bottom 35px
     li
       display list-item
-      margin 15px 0
+      line-height 1.8em
     &>li>ul
       list-style-type circle
       &>li>ul
@@ -54,10 +57,10 @@ marked()
   ol
     list-style-type decimal
     padding-left 35px
-    margin-bottom 25px
+    margin-bottom 35px
     li
       display list-item
-      margin 15px 0
+      line-height 1.8em
   code
     font-family monospace
     padding 2px 4px
@@ -72,7 +75,7 @@ marked()
     border solid 1px borderColor
     border-radius 5px
     overflow-x auto
-    margin-bottom 25px
+    margin 15px 0 25px
     background-color #F6F6F6
     &>code
       padding 0

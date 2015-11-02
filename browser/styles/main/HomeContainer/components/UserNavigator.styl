@@ -1,0 +1,86 @@
+userNavigatorBgColor = #1B1C1C
+userNavigatorColor = #DDD
+userAnchorColor = #979797
+userAnchorBgColor = #BEBEBE
+userAnchorActiveColor = textColor
+userAnchorActiveBgColor = white
+
+.UserNavigator
+  noSelect()
+  background-color userNavigatorBgColor
+  absolute left top bottom
+  width 60px
+  text-align center
+  box-sizing border-box
+  ul.userList
+    position absolute
+    top 25px
+    left 0
+    right 0
+    bottom 70px
+    // overflow-y auto
+    &>li
+      a
+        display block
+        width 38px
+        height 64px
+        margin 0 auto 10px
+        text-align center
+        text-decoration none
+        color userAnchorColor
+        line-height 44px
+        font-size 1.1em
+        cursor pointer
+        transition 0.1s
+
+        img.ProfileImage
+          width 38px
+          height 38px
+          border-radius 22px
+          opacity 0.7
+        &:hover
+          img.ProfileImage
+            opacity 1
+          .userTooltip
+            opacity 1
+        &.active
+          img.ProfileImage
+            opacity 1
+        .userTooltip
+          tooltip()
+          position absolute
+          margin-top -52px
+          margin-left 44px
+        .keyLabel
+          margin-top -25px
+          font-size 0.8em
+          color userNavigatorColor
+  button.createTeamBtn
+    display block
+    margin 0 auto
+    width 30px
+    height 30px
+    border-radius 15px
+    border 2px solid darken(white, 5%)
+    color darken(white, 5%)
+    text-align center
+    background-image none
+    background-color transparent
+    box-sizing border-box
+    absolute left right
+    bottom 15px
+    font-size 22px
+    line-height 22px
+    transition 0.1s
+    .tooltip
+      tooltip()
+      margin-top -26px
+      margin-left 30px
+    &:hover, &.hover, &:focus, &.focus
+      color white
+      border-color white
+      .tooltip
+        opacity 1
+    &:active
+      background-color brandColor
+      border-color brandColor

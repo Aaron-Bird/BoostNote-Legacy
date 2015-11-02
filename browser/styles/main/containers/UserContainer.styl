@@ -1,310 +1,123 @@
-.HomeContainer
-  .HomeNavigator
-    noSelect()
-    background-color planetNavBgColor
-    absolute left top bottom
-    width 55px
-    text-align center
-    box-sizing border-box
-    border-right solid 1px borderColor
-    .profileButton
-      display block
-      width 55px
-      height 55px
-      border-bottom solid 1px borderColor
-      overflow hidden
-      background-color black
-      margin 0
-      padding 0
-      cursor pointer
-      box-sizing border-box
-      border none
-      img
-        transition 0.1s
-        opacity 0.9
-      &.vivid.active, &.focus, &:focus, &.hover, &:hover
-        img
-          opacity 1
-    .profilePopup
-      position fixed
-      left 35px
-      top 35px
-      z-index popupZIndex
-      width 200px
-      background-color backgroundColor
-      box-shadow popupShadow
-      border-radius 10px
-      padding 10px 0 0px
-      &.close
-        display none
-      .profileGroup
-        margin-bottom 10px
-        .profileGroupLabel
-          text-align left
-          height 1em
-          padding 0 15px
-          span
-            position absolute
-            z-index 2
-            background-color backgroundColor
-            padding-right 5px
-            color inactiveTextColor
-            font-size 0.8em
-          &::before
-            content ''
-            position absolute
-            display block
-            z-index 1
-            height 0.5em
-            width 175px
-            border-bottom solid 1px borderColor
-        .profileGroupList
-          li
-            clearfix()
-            &:hover
-              background-color hoverBackgroundColor
-            .userName
-              width 155px
-              padding 10px 15px
-              text-align left
-              display block
-              text-decoration none
-              cursor pointer
-            .createNewTeam
-              btnStripDefault()
-              width 100%
-              padding 10px 20px
-              font-size 1em
-              cursor pointer
-              text-align left
-      .controlGroup
-        list-style none
-        border-top solid 1px borderColor
-        padding 10px 0
-        li
-          &:hover
-            background-color hoverBackgroundColor
-          button
-            btnStripDefault()
-            width 100%
-            padding 10px 20px
-            font-size 1em
-            cursor pointer
-            text-align left
+userNavigatorWidth = 200px
+userNavigatorBgColor = #333
+userNavigatorColor = #DDD
+userNavigatorProfileNameColor = brandColor
+userNavigatorBorderColor = #666
 
-    ul.planetList>li
-      margin 15px 0
-      .shortCut
-        margin-top 5px
-        color lighten(textColor, 5%)
-        font-size 0.8em
-      &.active
-        a
-          background-color planetAnchorActiveBgColor
-          color planetAnchorActiveColor
-      a
-        display block
-        width 44px
-        height 44px
-        margin 0 auto
-        text-align center
-        background-color planetAnchorBgColor
-        text-decoration none
-        color planetAnchorColor
-        line-height 44px
-        font-size 1.1em
-        cursor pointer
-        circle()
-        transition 0.1s
-        &:hover, &:active
-          background-color white
-        .planetTooltip
-          position absolute
-          z-index popupZIndex
-          background-color transparentify(invBackgroundColor, 80%)
-          color invTextColor
-          padding 10px
-          line-height 1em
-          border-radius 5px
-          margin-top -41px
-          margin-left 52px
-          white-space nowrap
-          opacity 0
-          transition 0.1s
-          pointer-events none
-        &:hover .planetTooltip
-          opacity 1
-      img
-        circle()
-        width 55px
-        height 55px
-    button.newPlanet
-      display block
-      margin 0 auto
-      width 30px
-      height 30px
-      circle()
-      border solid 1px lightButtonColor
-      color lightButtonColor
-      text-align center
-      font-size 1
-      background-image none
-      background-color transparent
+userContentBgColor = #E6E6E6
+
+.UserContainer
+  absolute top bottom right
+  left 60px
+  .content
+    absolute top bottom right
+    left userNavigatorWidth
+    background-color userContentBgColor
+  .UserNavigator
+    absolute left top bottom
+    width userNavigatorWidth
+    background-color userNavigatorBgColor
+    color userNavigatorColor
+    noSelect()
+    &>.profile
+      height 60px
+      padding 10px 15px 0
       box-sizing border-box
-      absolute left bottom right
-      bottom 15px
-      &:hover, &.hover, &:focus, &.focus
-        border-color darken(lightButtonColor, 50%)
-        color darken(lightButtonColor, 50%)
-      &:active, &.active
-        border-color darken(brandBorderColor, 10%)
+      position relative
+      border-bottom solid 1px userNavigatorBorderColor
+      cursor pointer
+      &>.profileName
+        color userNavigatorProfileNameColor
+        font-size 22px
+        cursor pointer
+        transition 0.1s
+      &>.name
+        padding 5px 10px
+        font-size 14px
+        color userNavigatorColor
+        cursor pointer
+        transition 0.1s
+      &>.dropdownIcon
+        position absolute
+        top 20px
+        right 25px
+        float right
+        width 20px
+        height 20px
+        line-height 20px
+        font-size 8px
+        border solid 1px userNavigatorColor
+        border-radius 12.5px
+        text-align center
+        transition 0.1s
+      &:hover
+        &>.profileName
+          color lighten(brandColor, 10%)
+        &>.name
+          color white
+        &>.dropdownIcon
+          border-color white
+        &:active
+          &>.dropdownIcon
+            background-color brandColor
+            border-color brandColor
+    &>.control
+      padding 15px 15px
+      &>.newPostButton
         background-color brandColor
         color white
-      .tooltip
-        tooltip()
-        margin-top -22px
-        margin-left 33px
-      &:hover .tooltip
-        opacity 1
-  .UserContainer
-    absolute top bottom right
-    left 55px
-    .memberPopup
-      absolute left
-      top 235px
-      z-index 1
-      padding 0 15px 10px
-      width 200px
-      .label
-        padding 10px 0
-        font-size 0.9em
-        border-bottom solid 1px borderColor
-        margin-bottom 15px
-      .members
-        li
-          padding 0 10px
-          margin-bottom 15px
-          clearfix()
-          .memberImage
-            float left
-            margin-right 7px
-            circle()
-          .memberInfo
-            float left
-            .memberProfileName
-              margin-bottom 5px
-              font-size 1.05em
-            .memberName
-              margin-left 5px
-              font-size 0.9em
-              color inactiveTextColor
-          a:hover .memberProfileName, a:hover .memberName
-            text-decoration underline
-    .userProfile
-      absolute top left right
-      padding 15px
-      border-bottom solid 1px borderColor
-      height 125px
-      clearfix()
-      .userPhoto
-        circle()
-        float left
-        margin 5px 15px 15px
-      .userInfo
-        float left
-        margin-top 15px
-        .userProfileName
-          font-size 1.5em
-          color brandColor
-          margin-bottom 10px
-        .userName
-          font-size 1.1em
-      .editProfileButton
-        float right
-        btnDefault()
-        margin-top 25px
-        padding 10px 15px
+        height 44px
+        width 100%
+        border none
         border-radius 5px
-    .teamList, .memberList
-      absolute left bottom
-      top 125px
-      width 200px
-      padding 15px
-      border-right solid 1px borderColor
-      overflow-y auto
-      .teamLabel, .memberLabel
-        font-size 1.2em
-        margin-bottom 15px
-      .teams
-        li
-          padding 0 10px
-          margin-bottom 15px
-          clearfix()
-          .teamInfo
-            float left
-            .teamProfileName
-              margin-bottom 5px
-              font-size 1.05em
-            .teamName
-              margin-left 5px
-              font-size 0.9em
-              color inactiveTextColor
-          a:hover .teamProfileName, a:hover .teamName
-            text-decoration underline
+        font-size 16px
+        font-weight 600
+        transition 0.1s
+        &:hover
+          background-color lighten(brandColor, 10%)
+    &>.menu
+      absolute left right bottom
+      top 134px
+      padding 15px 0
+      overflow auto
+      &>.menuGruop
+        &>.label
+          border-bottom 1px solid userNavigatorBorderColor
+          padding 10px 15px
+          font-size 18px
           margin-bottom 10px
-          font-size 1.1em
-          .createTeamButton, .addMemberButton
-            btnStripDefault()
-      .members
-        li
-          padding 0 10px
-          margin-bottom 15px
-          clearfix()
-          .memberImage
-            float left
-            margin-right 7px
-            circle()
-          .memberInfo
-            float left
-            .memberProfileName
-              margin-bottom 5px
-              font-size 1.05em
-              .memberRole
-                font-size 0.9em
-                color inactiveTextColor
-            .memberName
-              margin-left 5px
-              font-size 0.9em
-              color inactiveTextColor
-          .createTeamButton, .addMemberButton
-            btnStripDefault()
-          a:hover .memberProfileName, a:hover .memberName
-            text-decoration underline
-    .planetList
-      absolute right bottom
-      top 125px
-      left 200px
-      padding 15px
-      overflow-y auto
-      .planetLabel
-        font-size 1.2em
-        margin-bottom 15px
-      .planetGroup
-        margin-left 15px
-        .planetGroupLabel
-          font-size 1.1em
-          margin-bottom 15px
-          small
-            font-size 0.8em
-            color inactiveTextColor
-        .planets
-          margin-left 15px
-          li
-            a
-              font-size 1.1em
-              text-decoration none
-              &:hover
-                text-decoration underline
-            margin-bottom 10px
-            .createPlanetButton
-              btnStripDefault()
+          &>.plusButton
+            float right
+            width 20px
+            height 20px
+            margin-top -2.5px
+            margin-right -5px
+            line-height 15px
+            font-size 8px
+            border solid 1px userNavigatorColor
+            border-radius 10px
+            background-color transparent
+            text-align center
+            color userNavigatorColor
+            &:hover
+              border-color white
+              color white
+              &:active
+                background-color brandColor
+                border-color brandColor
+      &>.folders
+        .folderButton
+          padding 10px 25px
+          width 100%
+          background-color transparent
+          border none
+          font-size 14px
+          color userNavigatorColor
+          transition 0.1s
+          text-align left
+          &:hover
+            background-color transparentify(white, 20%)
+            color white
+          &.active
+            background-color brandColor
+            color white
