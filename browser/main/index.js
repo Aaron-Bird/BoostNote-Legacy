@@ -7,9 +7,9 @@ import HomePage from './HomePage'
 // import auth from 'boost/auth'
 import store from 'boost/store'
 import ReactDOM from 'react-dom'
-import { isModalOpen, closeModal } from 'boost/modal'
-import { IDLE_MODE, CREATE_MODE, EDIT_MODE } from 'boost/actions'
 require('../styles/main/index.styl')
+import { openModal } from 'boost/modal'
+import Tutorial from 'boost/components/modal/Tutorial'
 
 let routes = (
   <Route path='/' component={MainPage}>
@@ -27,4 +27,11 @@ ReactDOM.render((
 ), el, function () {
   let loadingCover = document.getElementById('loadingCover')
   loadingCover.parentNode.removeChild(loadingCover)
+  let status = JSON.parse(localStorage.getItem('status'))
+  if (status == null) status = {}
+  if (!status.introWatched) {
+    openModal(Tutorial)
+    status.introWatched = true
+    localStorage.setItem('status', JSON.stringify(status))
+  }
 })

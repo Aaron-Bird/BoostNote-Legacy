@@ -27,8 +27,8 @@ class HomePage extends React.Component {
   }
 
   handleKeyDown (e) {
-    if (isModalOpen() && e.keyCode === 27) {
-      closeModal()
+    if (isModalOpen()) {
+      if (e.keyCode === 27) closeModal()
       return
     }
 
