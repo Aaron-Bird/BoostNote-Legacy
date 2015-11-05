@@ -103,23 +103,17 @@ iptFocusBorderColor = #369DCD
           font-size 14px
           &:hover
             background-color lighten(brandColor, 10%)
-        .alert
-          float right
-          height 33px
-          padding 0 15px
-          border-radius 5px
-          margin-right 5px
-          line-height 33px
-          font-size 14px
-          &.info
-            background-color infoBackgroundColor
-            color infoTextColor
-          &.error
-            background-color errorBackgroundColor
-            color errorTextColor
-          &.success
-            background-color successBackgroundColor
-            color successTextColor
+    .alert
+      color infoTextColor
+      background-color infoBackgroundColor
+      font-size 14px
+      padding 15px 15px
+      width 330px
+      border-radius 5px
+      margin 10px auto
+      &.error
+        color errorTextColor
+        background-color errorBackgroundColor
     &.AppSettingTab
       .description
         marked()
@@ -390,6 +384,18 @@ iptFocusBorderColor = #369DCD
               width 145px
               text-align center
             &.newFolder
+              .alert
+                display block
+                color infoTextColor
+                background-color infoBackgroundColor
+                font-size 14px
+                padding 15px 15px
+                width 330px
+                border-radius 5px
+                margin 0 auto
+                &.error
+                  color errorTextColor
+                  background-color errorBackgroundColor
               .folderName input
                 height 33px
                 border 1px solid transparent

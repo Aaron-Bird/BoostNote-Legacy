@@ -61,9 +61,7 @@ export default class ArticleTopBar extends React.Component {
   }
 
   handleSearchClearButton (e) {
-    let { dispatch } = this.props
-
-    dispatch(setSearchFilter(''))
+    this.searchInput.value = ''
     this.focusInput()
   }
 
