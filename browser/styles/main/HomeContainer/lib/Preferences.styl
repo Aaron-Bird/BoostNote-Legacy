@@ -103,6 +103,11 @@ iptFocusBorderColor = #369DCD
           font-size 14px
           &:hover
             background-color lighten(brandColor, 10%)
+        .alert
+          float right
+          width 250px
+          padding 10px 15px
+          margin 0 10px 0
     .alert
       color infoTextColor
       background-color infoBackgroundColor
@@ -374,6 +379,7 @@ iptFocusBorderColor = #369DCD
             .folderName
               float left
               width 175px
+              overflow ellipsis
               padding-left 15px
             .folderPublic
               float left
@@ -480,6 +486,7 @@ iptFocusBorderColor = #369DCD
                   height 33px
                   width 250px
                   padding-left 15px
+                  overflow ellipsis
                   strong
                     font-size 16px
                     color brandColor

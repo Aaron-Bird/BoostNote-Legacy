@@ -132,7 +132,7 @@ export default class ArticleDetail extends React.Component {
             <div className='detailInfo'>
               <div className='left'>
                 <div className='info'>
-                  <FolderMark color={folder.color}/> {folder.name}&nbsp;
+                  <FolderMark color={folder.color}/> <span className='folderName'>{folder.name}</span>&nbsp;
                   Created : {moment(activeArticle.createdAt).format('YYYY/MM/DD')}&nbsp;
                   Updated : {moment(activeArticle.updatedAt).format('YYYY/MM/DD')}
                 </div>
