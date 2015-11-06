@@ -47,7 +47,7 @@ class HomePage extends React.Component {
         if (e.keyCode === 27) {
           detail.handleCancelButtonClick()
         }
-        if (e.keyCode === 13 && e.metaKey) {
+        if ((e.keyCode === 13 && e.metaKey) || (e.keyCode === 83 && e.metaKey)) {
           detail.handleSaveButtonClick()
         }
         break

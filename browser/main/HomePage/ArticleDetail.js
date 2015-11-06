@@ -182,6 +182,7 @@ export default class ArticleDetail extends React.Component {
 
     delete newArticle.status
     newArticle.updatedAt = new Date()
+    if (newArticle.createdAt == null) newArticle.createdAt = new Date()
 
     dispatch(updateArticle(newArticle))
     dispatch(switchMode(IDLE_MODE))
