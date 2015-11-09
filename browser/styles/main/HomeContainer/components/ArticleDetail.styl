@@ -160,11 +160,62 @@ iptFocusBorderColor = #369DCD
             display block
             height 33px
             margin-top 12px
-            width 120px
+            width 150px
             margin-right 15px
+            border-radius 5px
+            border solid 1px borderColor
+            transition 0.1s
+            &.idle
+              background-color darken(white, 5%)
+              cursor pointer
+              &:hover
+                background-color white
+              .ModeIcon
+                float left
+                width 25px
+                line-height 33px
+                text-align center
+              .modeLabel
+                line-height 30px
+            &.edit
+              background-color white
+              input
+                width 150px
+                line-height 30px
+                padding 0 10px
+                border none
+                outline none
+                background-color transparent
+                font-size 14px
+              .modeOptions
+                position fixed
+                width 150px
+                z-index 10
+                margin-top 5px
+                border 1px solid borderColor
+                border-radius 5px
+                background-color white
+                max-height 250px
+                overflow-y auto
+                .option
+                  height 33px
+                  line-height 33px
+                  cursor pointer
+                  &.active, &:hover.active
+                    background-color brandColor
+                    color white
+                  .ModeIcon
+                    width 30px
+                    text-align center
+                    display inline-block
+                  &:hover
+                    background-color darken(white, 10%)
+
+
+
           .title
             absolute left top bottom
-            right 120px
+            right 150px
             padding 0 15px
             input
               width 100%

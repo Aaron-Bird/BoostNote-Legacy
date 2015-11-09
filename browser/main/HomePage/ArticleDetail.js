@@ -6,20 +6,12 @@ import ModeIcon from 'boost/components/ModeIcon'
 import MarkdownPreview from 'boost/components/MarkdownPreview'
 import CodeEditor from 'boost/components/CodeEditor'
 import { IDLE_MODE, CREATE_MODE, EDIT_MODE, switchMode, switchArticle, switchFolder, clearSearch, updateArticle, destroyArticle, NEW } from 'boost/actions'
-import aceModes from 'boost/ace-modes'
-import Select from 'react-select'
 import linkState from 'boost/linkState'
 import FolderMark from 'boost/components/FolderMark'
 import TagLink from 'boost/components/TagLink'
 import TagSelect from 'boost/components/TagSelect'
+import ModeSelect from 'boost/components/ModeSelect'
 import activityRecord from 'boost/activityRecord'
-
-var modeOptions = aceModes.map(function (mode) {
-  return {
-    label: mode,
-    value: mode
-  }
-})
 
 function makeInstantArticle (article) {
   return Object.assign({}, article)
@@ -219,7 +211,16 @@ export default class ArticleDetail extends React.Component {
   handleModeChange (value) {
     let article = this.state.article
     article.mode = value
-    this.setState({article: article})
+    this.setState({
+      article: article,
+      previewMode: false
+    })
+  }
+
+  handleModeSelectBlur () {
+    if (this.refs.code != null) {
+      this.refs.code.editor.focus()
+    }
   }
 
   handleContentChange (e, value) {
@@ -230,6 +231,14 @@ export default class ArticleDetail extends React.Component {
 
   handleTogglePreviewButtonClick (e) {
     this.setState({previewMode: !this.state.previewMode})
+  }
+
+  handleTitleKeyDown (e) {
+    console.log(e.keyCode)
+    if (e.keyCode === 9) {
+      e.preventDefault()
+      this.refs.mode.handleIdleSelectClick()
+    }
   }
 
   renderEdit () {
@@ -272,22 +281,21 @@ export default class ArticleDetail extends React.Component {
           <div className='detailPanel'>
             <div className='header'>
               <div className='title'>
-                <input placeholder='Title' ref='title' valueLink={this.linkState('article.title')}/>
+                <input onKeyDown={e => this.handleTitleKeyDown(e)} placeholder='Title' ref='title' valueLink={this.linkState('article.title')}/>
               </div>
-              <Select
+              <ModeSelect
                 ref='mode'
-                onChange={value => this.handleModeChange(value)}
-                clearable={false}
-                options={modeOptions}
-                placeholder='select mode...'
+                onChange={e => this.handleModeChange(e)}
                 value={this.state.article.mode}
                 className='mode'
+                onBlur={() => this.handleModeSelectBlur()}
               />
             </div>
 
             {this.state.previewMode
               ? <MarkdownPreview content={this.state.article.content}/>
               : (<CodeEditor
+                  ref='code'
                   onChange={(e, value) => this.handleContentChange(e, value)}
                   readOnly={false}
                   mode={this.state.article.mode}
