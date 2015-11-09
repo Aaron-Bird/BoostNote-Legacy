@@ -12,6 +12,7 @@ import linkState from 'boost/linkState'
 import FolderMark from 'boost/components/FolderMark'
 import TagLink from 'boost/components/TagLink'
 import TagSelect from 'boost/components/TagSelect'
+import activityRecord from 'boost/activityRecord'
 
 var modeOptions = aceModes.map(function (mode) {
   return {
@@ -93,6 +94,7 @@ export default class ArticleDetail extends React.Component {
     let { dispatch, activeArticle } = this.props
 
     dispatch(destroyArticle(activeArticle.key))
+    activityRecord.emit('ARTICLE_DESTROY')
     this.setState({openDeleteConfirmMenu: false})
   }
 
@@ -182,7 +184,12 @@ export default class ArticleDetail extends React.Component {
 
     delete newArticle.status
     newArticle.updatedAt = new Date()
-    if (newArticle.createdAt == null) newArticle.createdAt = new Date()
+    if (newArticle.createdAt == null) {
+      newArticle.createdAt = new Date()
+      activityRecord.emit('ARTICLE_CREATE')
+    } else {
+      activityRecord.emit('ARTICLE_UPDATE')
+    }
 
     dispatch(updateArticle(newArticle))
     dispatch(switchMode(IDLE_MODE))

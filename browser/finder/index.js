@@ -8,6 +8,7 @@ import FinderList from './FinderList'
 import FinderDetail from './FinderDetail'
 import { selectArticle, searchArticle, refreshData } from './actions'
 import _ from 'lodash'
+import activityRecord from 'boost/activityRecord'
 
 import remote from 'remote'
 var hideFinder = remote.getGlobal('hideFinder')
@@ -46,6 +47,7 @@ class FinderMain extends React.Component {
     if (e.keyCode === 13) {
       let { activeArticle } = this.props
       clipboard.writeText(activeArticle.content)
+      activityRecord.emit('FINDER_COPY')
       hideFinder()
       e.preventDefault()
     }
@@ -174,6 +176,7 @@ var store = createStore(reducer)
 
 window.onfocus = e => {
   store.dispatch(refreshData())
+  activityRecord.emit('FINDER_OPEN')
 }
 
 ReactDOM.render((
