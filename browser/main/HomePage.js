@@ -1,6 +1,6 @@
 import React, { PropTypes} from 'react'
 import { connect } from 'react-redux'
-import { CREATE_MODE, EDIT_MODE, IDLE_MODE, NEW } from 'boost/actions'
+import { CREATE_MODE, EDIT_MODE, IDLE_MODE, NEW, toggleTutorial } from 'boost/actions'
 // import UserNavigator from './HomePage/UserNavigator'
 import ArticleNavigator from './HomePage/ArticleNavigator'
 import ArticleTopBar from './HomePage/ArticleTopBar'
@@ -32,8 +32,14 @@ class HomePage extends React.Component {
       return
     }
 
-    let { status } = this.props
+    let { status, dispatch } = this.props
     let { nav, top, list, detail } = this.refs
+
+    if (status.isTutorialOpen) {
+      dispatch(toggleTutorial())
+      e.preventDefault()
+      return
+    }
 
     // Search inputがfocusされていたら大体のキー入力は無視される。
     if (top.isInputFocused() && !e.metaKey) {
@@ -47,7 +53,7 @@ class HomePage extends React.Component {
         if (e.keyCode === 27) {
           detail.handleCancelButtonClick()
         }
-        if (e.keyCode === 13 && e.metaKey) {
+        if ((e.keyCode === 13 && e.metaKey) || (e.keyCode === 83 && e.metaKey)) {
           detail.handleSaveButtonClick()
         }
         break

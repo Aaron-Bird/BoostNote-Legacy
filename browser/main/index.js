@@ -10,6 +10,9 @@ import ReactDOM from 'react-dom'
 require('../styles/main/index.styl')
 import { openModal } from 'boost/modal'
 import Tutorial from 'boost/components/modal/Tutorial'
+import activityRecord from 'boost/activityRecord'
+
+activityRecord.init()
 
 let routes = (
   <Route path='/' component={MainPage}>

@@ -21,6 +21,16 @@ articleNavBgColor = #353535
       color white
       padding-left 20px
       margin-top 3px
+    .tutorial
+      position fixed
+      z-index 35
+      top 0
+      left 0
+      pointer-event none
+      font-style italic
+      transition 0.1s
+      &.hide
+        opacity 0
     .settingBtn
       width 22px
       height 22px
@@ -33,6 +43,7 @@ articleNavBgColor = #353535
       padding 0
       background-color transparent
       border 1px solid white
+      z-index 31
       .tooltip
         tooltip()
         margin-top -5px
@@ -47,7 +58,16 @@ articleNavBgColor = #353535
     height 88px
     padding 22px 15px
     margin-bottom 44px
+    .tutorial
+      fixed top left
+      z-index 35
+      pointer-event none
+      font-style italic
+      transition 0.1s
+      &.hide
+        opacity 0
     .newPostBtn
+      position relative
       border none
       background-color brandColor
       color white
@@ -56,6 +76,7 @@ articleNavBgColor = #353535
       border-radius 5px
       font-size 20px
       transition 0.1s
+      z-index 30
       .tooltip
         tooltip()
         margin-left 48px
@@ -70,6 +91,8 @@ articleNavBgColor = #353535
       padding-bottom 5px
       margin-bottom 10px
       clearfix()
+      position relative
+      z-index 30
       .title
         float left
         padding-left 10px
@@ -100,9 +123,18 @@ articleNavBgColor = #353535
           background-color brandColor
           border-color brandColor
   .folders
-    margin-bottom 15px
+    absolute bottom
+    top 200px
+    width 100%
+    .header
+      .tutorial
+        position fixed
+        z-index 35px
+        top 200px
+        font-style italic
     .folderList
-      height 340px
+      absolute bottom
+      top 38px
       overflow-y auto
     .folderList button
       height 33px

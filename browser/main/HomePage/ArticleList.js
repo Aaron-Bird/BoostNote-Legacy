@@ -85,7 +85,7 @@ export default class ArticleList extends React.Component {
           <div onClick={e => this.handleArticleClick(article)(e)} className={'articleItem' + (activeArticle.key === article.key ? ' active' : '')}>
             <div className='top'>
               {folder != null
-                ? <span><FolderMark color={folder.color}/>{folder.name}</span>
+                ? <span className='folderName'><FolderMark color={folder.color}/>{folder.name}</span>
                 : <span><FolderMark color={-1}/>Unknown</span>
               }
             <span className='updatedAt'>{article.status != null ? article.status : moment(article.updatedAt).fromNow()}</span>

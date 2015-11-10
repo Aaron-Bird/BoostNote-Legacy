@@ -138,8 +138,12 @@ app.on('ready', function () {
         }
         finderWindow.show()
       })
+      mainWindow.webContents.send('APP_SETTING_DONE', {})
     } catch (err) {
-      console.log(err.name)
+      console.error(err)
+      mainWindow.webContents.send('APP_SETTING_ERROR', {
+        message: 'Failed to apply hotkey: Invalid format'
+      })
     }
   })
 
