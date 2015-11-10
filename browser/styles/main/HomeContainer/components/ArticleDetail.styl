@@ -85,6 +85,10 @@ iptFocusBorderColor = #369DCD
   &.edit
     .detailInfo
       .left
+        &>.tutorial
+          position fixed
+          z-index 35
+          font-style italic
         .folder
           border none
           width 150px
@@ -99,6 +103,8 @@ iptFocusBorderColor = #369DCD
           position relative
           margin-top 5px
           noSelect()
+          z-index 30
+          background-color #E6E6E6
           .tagItem
             background-color brandColor
             border-radius 2px
@@ -155,7 +161,13 @@ iptFocusBorderColor = #369DCD
     .detailBody
       .detailPanel
         &>.header
+          &>.tutorial
+            fixed right
+            z-index 35
+            font-style italic
           .mode
+            position relative
+            z-index 30
             absolute top bottom right
             display block
             height 33px
@@ -226,6 +238,10 @@ iptFocusBorderColor = #369DCD
               outline none
   &.idle
     .detailInfo
+      &>.tutorial
+        fixed top right
+        z-index 35
+        font-style italic
       .left
         right 99px
         .info
@@ -248,14 +264,17 @@ iptFocusBorderColor = #369DCD
           span.noTags
             color noTagsColor
       .right
+        z-index 30
         button
+          border-radius 16.5px
           cursor pointer
           height 33px
           width 33px
           border none
+          margin-right 5px
           font-size 18px
           color inactiveTextColor
-          background-color transparent
+          background-color darken(white, 5%)
           padding 0
           .tooltip
             tooltip()
@@ -266,7 +285,7 @@ iptFocusBorderColor = #369DCD
             margin-top 25px
             margin-left -73px
           &:hover
-            color inherit
+            color textColor
             .tooltip
               opacity 1
     .detailBody
