@@ -106,7 +106,7 @@ export default class ArticleNavigator extends React.Component {
       <div className='ArticleNavigator'>
         <div className='userInfo'>
           <div className='userProfileName'>{userName}</div>
-          <div className='userName'>local</div>
+          <div className='userName'>localStorage</div>
           <button onClick={e => this.handlePreferencesButtonClick(e)} className='settingBtn'>
             <i className='fa fa-fw fa-chevron-down'/>
             <span className='tooltip'>Preferences</span>

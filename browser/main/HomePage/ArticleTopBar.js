@@ -137,7 +137,7 @@ export default class ArticleTopBar extends React.Component {
           <div className='tutorial'>
             <div onClick={e => this.handleTutorialButtonClick(e)} className='clickJammer'/>
             <svg width='500' height='250' className='finder'>
-              <text x='100' y='25' fontSize='32' fill={BRAND_COLOR}>Also, you can open Finder</text>
+              <text x='100' y='25' fontSize='32' fill={BRAND_COLOR}>Also, you can open Finder!!</text>
               <text x='120' y='55' fontSize='18' fill={BRAND_COLOR}>with pressing `Control` + `shift` + `tab`</text>
             </svg>
             <svg width='450' className='global'>
