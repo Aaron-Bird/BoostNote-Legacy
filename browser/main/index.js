@@ -11,8 +11,12 @@ require('../styles/main/index.styl')
 import { openModal } from 'boost/modal'
 import Tutorial from 'boost/components/modal/Tutorial'
 import activityRecord from 'boost/activityRecord'
+import ipc from 'ipc'
 
 activityRecord.init()
+window.addEventListener('online', function () {
+  ipc.send('check-update', 'check-update')
+})
 
 let routes = (
   <Route path='/' component={MainPage}>

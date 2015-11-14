@@ -30,8 +30,8 @@ updater
   .on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
     nn.notify({
       title: 'Ready to Update!! ' + versionText,
-      icon: path.join(__dirname, 'browser/main/resources/favicon-230x230.png'),
-      message: 'Click tray icon to update app: ' + releaseName
+      icon: path.join(__dirname, '/resources/favicon-230x230.png'),
+      message: 'Click update button on Main window: ' + releaseName
     })
     update = quitAndUpdate
 
@@ -49,6 +49,14 @@ app.on('ready', function () {
   updater.checkForUpdates()
   // menu start
   var template = require('./atom-lib/menu-template')
+
+  setInterval(function () {
+    updater.checkForUpdates()
+  }, 1000 * 60 * 60 * 24)
+
+  ipc.on('check-update', function (event, msg) {
+    updater.checkForUpdates()
+  })
 
   ipc.on('update-app', function (event, msg) {
     if (update != null) {
