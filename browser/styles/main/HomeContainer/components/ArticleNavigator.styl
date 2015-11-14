@@ -1,4 +1,5 @@
 articleNavBgColor = #353535
+articleCount = #999
 
 .ArticleNavigator
   background-color articleNavBgColor
@@ -150,6 +151,9 @@ articleNavBgColor = #353535
         background-color transparentify(white, 5%)
       &.active, &:active
         background-color brandColor
+      .articleCount
+        color articleCount
+        font-size 12px
   .members
     .memberList>div
       height 33px

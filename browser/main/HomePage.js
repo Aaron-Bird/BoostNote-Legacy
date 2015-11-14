@@ -98,7 +98,7 @@ class HomePage extends React.Component {
   }
 
   render () {
-    let { dispatch, status, articles, activeArticle, folders, filters } = this.props
+    let { dispatch, status, articles, allArticles, activeArticle, folders, filters } = this.props
 
     return (
       <div className='HomePage'>
@@ -107,6 +107,7 @@ class HomePage extends React.Component {
           dispatch={dispatch}
           folders={folders}
           status={status}
+          allArticles={allArticles}
         />
         <ArticleTopBar
           ref='top'
@@ -141,6 +142,7 @@ function remap (state) {
   articles.sort((a, b) => {
     return new Date(b.updatedAt) - new Date(a.updatedAt)
   })
+  let allArticles = articles.slice()
 
   // Filter articles
   let filters = status.search.split(' ').map(key => key.trim()).filter(key => key.length > 0 && !key.match(/^\/$/) && !key.match(/^#$/)).map(key => {
@@ -229,6 +231,7 @@ function remap (state) {
   return {
     folders,
     status,
+    allArticles,
     articles,
     activeArticle,
     filters: {
@@ -247,6 +250,7 @@ HomePage.propTypes = {
     userId: PropTypes.string
   }),
   articles: PropTypes.array,
+  allArticles: PropTypes.array,
   activeArticle: PropTypes.shape(),
   dispatch: PropTypes.func,
   folders: PropTypes.array,
