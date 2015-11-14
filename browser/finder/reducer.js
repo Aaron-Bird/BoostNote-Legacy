@@ -14,10 +14,10 @@ function status (state = initialStatus, action) {
   switch (action.type) {
     case SELECT_ARTICLE:
       state.articleKey = action.data.key
-      return state
+      return Object.assign({}, state)
     case SEARCH_ARTICLE:
       state.search = action.data.input
-      return state
+      return Object.assign({}, state)
     default:
       return state
   }

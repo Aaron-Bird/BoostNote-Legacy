@@ -119,9 +119,9 @@ FinderMain.propTypes = {
 function remap (state) {
   let { articles, folders, status } = state
 
-  let filters = status.search.split(' ').map(key => key.trim()).filter(key => key.length > 0 && !key.match(/^#$/)).map(key => {
-    if (key.match(/^in:.+$/)) {
-      return {type: FOLDER_FILTER, value: key.match(/^in:(.+)$/)[1]}
+  let filters = status.search.split(' ').map(key => key.trim()).filter(key => key.length > 0 && !key.match(/^\/$/) && !key.match(/^#$/)).map(key => {
+    if (key.match(/^\/.+$/)) {
+      return {type: FOLDER_FILTER, value: key.match(/^\/(.+)$/)[1]}
     }
     if (key.match(/^#(.+)/)) {
       return {type: TAG_FILTER, value: key.match(/^#(.+)$/)[1]}
@@ -134,7 +134,7 @@ function remap (state) {
 
   if (folders != null) {
     let targetFolders = folders.filter(folder => {
-      return _.findWhere(folderFilters, {value: folder.name})
+      return _.find(folderFilters, filter => folder.name.match(new RegExp(`^${filter.value}`)))
     })
     status.targetFolders = targetFolders
 
@@ -164,6 +164,7 @@ function remap (state) {
   let activeArticle = _.findWhere(articles, {key: status.articleKey})
   if (activeArticle == null) activeArticle = articles[0]
 
+  console.log(status.search)
   return {
     articles,
     activeArticle,

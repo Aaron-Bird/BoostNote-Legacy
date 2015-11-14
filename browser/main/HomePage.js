@@ -143,9 +143,9 @@ function remap (state) {
   })
 
   // Filter articles
-  let filters = status.search.split(' ').map(key => key.trim()).filter(key => key.length > 0 && !key.match(/^#$/)).map(key => {
-    if (key.match(/^in:.+$/)) {
-      return {type: FOLDER_FILTER, value: key.match(/^in:(.+)$/)[1]}
+  let filters = status.search.split(' ').map(key => key.trim()).filter(key => key.length > 0 && !key.match(/^\/$/) && !key.match(/^#$/)).map(key => {
+    if (key.match(/^\/.+/)) {
+      return {type: FOLDER_FILTER, value: key.match(/^\/(.+)$/)[1]}
     }
     if (key.match(/^#(.+)/)) {
       return {type: TAG_FILTER, value: key.match(/^#(.+)$/)[1]}
@@ -158,7 +158,7 @@ function remap (state) {
 
   if (folders != null) {
     let targetFolders = folders.filter(folder => {
-      return _.findWhere(folderFilters, {value: folder.name})
+      return _.find(folderFilters, filter => folder.name.match(new RegExp(`^${filter.value}`)))
     })
     status.targetFolders = targetFolders
 
@@ -204,7 +204,7 @@ function remap (state) {
     let newArticle = _.findWhere(articles, {status: 'NEW'})
     let FolderKey = folders[0].key
     if (folderFilters.length > 0) {
-      let targetFolder = _.findWhere(folders, {name: folderFilters[0].value})
+      let targetFolder = _.find(folders, folder => folder.name.match(new RegExp(`^${folderFilters[0].value}`)))
       if (targetFolder != null) FolderKey = targetFolder.key
     }
 

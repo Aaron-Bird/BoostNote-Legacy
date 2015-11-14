@@ -10,7 +10,7 @@ const searchTutorialElement = (
     <text x='450' y='33' fill={BRAND_COLOR} fontSize='24'>Search some posts!!</text>
     <text x='450' y='60' fill={BRAND_COLOR} fontSize='18'>{'- Search by tag : #{string}'}</text>
     <text x='450' y='85' fill={BRAND_COLOR} fontSize='18'>
-    {'- Search by folder : in:{folder_name}\n'}</text>
+    {'- Search by folder : /{folder_name}\n'}</text>
 
     <svg width='500' height='300'>
       <path fill='white' d='M54.5,51.5c-12.4,3.3-27.3-1.4-38.4-7C11.2,42,5,38.1,5.6,31.8c0.7-6.9,8.1-11.2,13.8-13.7
@@ -117,7 +117,7 @@ export default class ArticleTopBar extends React.Component {
             }
             <div className={'tooltip' + (this.state.isTooltipHidden ? ' hide' : '')}>
               - Search by tag : #{'{string}'}<br/>
-              - Search by folder : in:{'{folder_name}'}
+              - Search by folder : /{'{folder_name}'}
             </div>
           </div>
 
