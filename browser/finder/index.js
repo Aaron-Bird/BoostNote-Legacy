@@ -14,6 +14,12 @@ import remote from 'remote'
 var hideFinder = remote.getGlobal('hideFinder')
 import clipboard from 'clipboard'
 
+var notifier = require('node-notifier')
+var path = require('path')
+function getIconPath () {
+  return path.resolve(global.__dirname, '../../resources/favicon-230x230.png')
+}
+
 require('../styles/finder/index.styl')
 
 const FOLDER_FILTER = 'FOLDER_FILTER'
@@ -58,6 +64,12 @@ class FinderMain extends React.Component {
     let { activeArticle } = this.props
     clipboard.writeText(activeArticle.content)
     activityRecord.emit('FINDER_COPY')
+
+    notifier.notify({
+      icon: getIconPath(),
+      'title': 'Saved to Clipboard!',
+      'message': 'Paste it wherever you want!'
+    })
     hideFinder()
   }
 

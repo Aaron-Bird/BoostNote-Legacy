@@ -68,7 +68,8 @@ var config = {
     'superagent-promise',
     'lodash',
     'markdown-it',
-    'moment'
+    'moment',
+    'node-notifier'
   ]
 }
 
