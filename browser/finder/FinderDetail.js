@@ -11,7 +11,16 @@ export default class FinderDetail extends React.Component {
       return (
         <div className='FinderDetail'>
           <div className='header'>
-          <ModeIcon mode={activeArticle.mode}/> {activeArticle.title}</div>
+            <div className='left'>
+            <ModeIcon mode={activeArticle.mode}/> {activeArticle.title}
+            </div>
+            <div className='right'>
+              <button onClick={this.props.saveToClipboard} className='clipboardBtn'>
+                <i className='fa fa-clipboard fa-fw'/>
+                <span className='tooltip'>Copy to clipboard (Enter)</span>
+              </button>
+            </div>
+          </div>
           <div className='content'>
             {activeArticle.mode === 'markdown'
               ? <MarkdownPreview content={activeArticle.content}/>
@@ -30,5 +39,6 @@ export default class FinderDetail extends React.Component {
 }
 
 FinderDetail.propTypes = {
-  activeArticle: PropTypes.shape()
+  activeArticle: PropTypes.shape(),
+  saveToClipboard: PropTypes.func
 }

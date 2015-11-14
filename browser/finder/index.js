@@ -45,16 +45,20 @@ class FinderMain extends React.Component {
     }
 
     if (e.keyCode === 13) {
-      let { activeArticle } = this.props
-      clipboard.writeText(activeArticle.content)
-      activityRecord.emit('FINDER_COPY')
-      hideFinder()
+      this.saveToClipboard()
       e.preventDefault()
     }
     if (e.keyCode === 27) {
       hideFinder()
       e.preventDefault()
     }
+  }
+
+  saveToClipboard () {
+    let { activeArticle } = this.props
+    clipboard.writeText(activeArticle.content)
+    activityRecord.emit('FINDER_COPY')
+    hideFinder()
   }
 
   handleSearchChange (e) {
@@ -83,6 +87,7 @@ class FinderMain extends React.Component {
 
   render () {
     let { articles, activeArticle, status, dispatch } = this.props
+    let saveToClipboard = () => this.saveToClipboard()
     return (
       <div onClick={e => this.handleClick(e)} onKeyDown={e => this.handleKeyDown(e)} className='Finder'>
         <FinderInput
@@ -98,7 +103,10 @@ class FinderMain extends React.Component {
           dispatch={dispatch}
           selectArticle={article => this.selectArticle(article)}
         />
-        <FinderDetail activeArticle={activeArticle}/>
+        <FinderDetail
+          activeArticle={activeArticle}
+          saveToClipboard={saveToClipboard}
+        />
       </div>
     )
   }
