@@ -440,15 +440,15 @@ iptFocusBorderColor = #369DCD
             padding 5px 0
             &:last-child
               border-color transparent
+            .folderColor
+              float left
+              margin-left 10px
+              text-align center
+              width 44px
             .folderName
               float left
               width 175px
               overflow ellipsis
-              padding-left 15px
-            .folderPublic
-              float left
-              text-align center
-              width 100px
             .folderControl
               float right
               width 145px
@@ -512,16 +512,52 @@ iptFocusBorderColor = #369DCD
                 width 150px
                 &:focus
                   border-color iptFocusBorderColor
-              .folderPublic select
-                height 33px
-                border 1px solid borderColor
-                background-color white
-                outline none
-                display block
-                margin 0 auto
-                font-size 14px
-                &:focus
-                  border-color iptFocusBorderColor
+              .folderColor
+                .select
+                  height 33px
+                  width 33px
+                  border 1px solid borderColor
+                  background-color white
+                  outline none
+                  display block
+                  margin 0 auto
+                  font-size 14px
+                  border-radius 5px
+                  &:focus
+                    border-color iptFocusBorderColor
+                .options
+                  position absolute
+                  background-color white
+                  text-align left
+                  border 1px solid borderColor
+                  border-radius 5px
+                  padding 0 5px 5px
+                  margin-left 5px
+                  margin-top -34px
+                  clearfix()
+                  .label
+                    margin-left 5px
+                    line-height 22px
+                    font-size 12px
+                  button
+                    float left
+                    border none
+                    width 33px
+                    height 33px
+                    margin-right 5px
+                    border 1px solid transparent
+                    line-height 29px
+                    overflow hidden
+                    border-radius 5px
+                    background-color transparent
+                    outline none
+                    transition 0.1s
+                    &:hover
+                      border-color borderColor
+                    &.active
+                      .FolderMark
+                        transform scale(1.4)
+                      border-color iptFocusBorderColor
               .folderControl
                 button
                   border none
