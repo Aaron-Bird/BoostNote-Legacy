@@ -12,6 +12,7 @@ import { isModalOpen, closeModal } from 'boost/modal'
 
 const TEXT_FILTER = 'TEXT_FILTER'
 const FOLDER_FILTER = 'FOLDER_FILTER'
+const FOLDER_EXACT_FILTER = 'FOLDER_EXACT_FILTER'
 const TAG_FILTER = 'TAG_FILTER'
 
 class HomePage extends React.Component {
@@ -135,6 +136,25 @@ class HomePage extends React.Component {
   }
 }
 
+// Ignore invalid key
+function ignoreInvalidKey (key) {
+  return key.length > 0 && !key.match(/^\/\/$/) && !key.match(/^\/$/) && !key.match(/^#$/)
+}
+
+// Build filter object by key
+function buildFilter (key) {
+  if (key.match(/^\/\/.+/)) {
+    return {type: FOLDER_EXACT_FILTER, value: key.match(/^\/\/(.+)$/)[1]}
+  }
+  if (key.match(/^\/.+/)) {
+    return {type: FOLDER_FILTER, value: key.match(/^\/(.+)$/)[1]}
+  }
+  if (key.match(/^#(.+)/)) {
+    return {type: TAG_FILTER, value: key.match(/^#(.+)$/)[1]}
+  }
+  return {type: TEXT_FILTER, value: key}
+}
+
 function remap (state) {
   let { folders, articles, status } = state
 
@@ -145,24 +165,25 @@ function remap (state) {
   let allArticles = articles.slice()
 
   // Filter articles
-  let filters = status.search.split(' ').map(key => key.trim()).filter(key => key.length > 0 && !key.match(/^\/$/) && !key.match(/^#$/)).map(key => {
-    if (key.match(/^\/.+/)) {
-      return {type: FOLDER_FILTER, value: key.match(/^\/(.+)$/)[1]}
-    }
-    if (key.match(/^#(.+)/)) {
-      return {type: TAG_FILTER, value: key.match(/^#(.+)$/)[1]}
-    }
-    return {type: TEXT_FILTER, value: key}
-  })
+  let filters = status.search.split(' ')
+    .map(key => key.trim())
+    .filter(ignoreInvalidKey)
+    .map(buildFilter)
+
+  let folderExactFilters = filters.filter(filter => filter.type === FOLDER_EXACT_FILTER)
   let folderFilters = filters.filter(filter => filter.type === FOLDER_FILTER)
   let textFilters = filters.filter(filter => filter.type === TEXT_FILTER)
   let tagFilters = filters.filter(filter => filter.type === TAG_FILTER)
 
+  let targetFolders
   if (folders != null) {
-    let targetFolders = folders.filter(folder => {
+    let exactTargetFolders = folders.filter(folder => {
+      return _.find(folderExactFilters, filter => folder.name.match(new RegExp(`^${filter.value}$`)))
+    })
+    let fuzzyTargetFolders = folders.filter(folder => {
       return _.find(folderFilters, filter => folder.name.match(new RegExp(`^${filter.value}`)))
     })
-    status.targetFolders = targetFolders
+    targetFolders = status.targetFolders = exactTargetFolders.concat(fuzzyTargetFolders)
 
     if (targetFolders.length > 0) {
       articles = articles.filter(article => {
@@ -204,11 +225,10 @@ function remap (state) {
   // or Change IDLE MODE
   if (status.mode === CREATE_MODE) {
     let newArticle = _.findWhere(articles, {status: 'NEW'})
-    let FolderKey = folders[0].key
-    if (folderFilters.length > 0) {
-      let targetFolder = _.find(folders, folder => folder.name.match(new RegExp(`^${folderFilters[0].value}`)))
-      if (targetFolder != null) FolderKey = targetFolder.key
-    }
+    console.log('targetFolders')
+    let FolderKey = targetFolders.length > 0
+      ? targetFolders[0].key
+      : folders[0].key
 
     if (newArticle == null) {
       newArticle = {

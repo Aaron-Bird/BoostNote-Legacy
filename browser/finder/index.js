@@ -23,6 +23,7 @@ function getIconPath () {
 require('../styles/finder/index.styl')
 
 const FOLDER_FILTER = 'FOLDER_FILTER'
+const FOLDER_EXACT_FILTER = 'FOLDER_EXACT_FILTER'
 const TEXT_FILTER = 'TEXT_FILTER'
 const TAG_FILTER = 'TAG_FILTER'
 
@@ -136,27 +137,47 @@ FinderMain.propTypes = {
   dispatch: PropTypes.func
 }
 
+// Ignore invalid key
+function ignoreInvalidKey (key) {
+  return key.length > 0 && !key.match(/^\/\/$/) && !key.match(/^\/$/) && !key.match(/^#$/)
+}
+
+// Build filter object by key
+function buildFilter (key) {
+  if (key.match(/^\/\/.+/)) {
+    return {type: FOLDER_EXACT_FILTER, value: key.match(/^\/\/(.+)$/)[1]}
+  }
+  if (key.match(/^\/.+/)) {
+    return {type: FOLDER_FILTER, value: key.match(/^\/(.+)$/)[1]}
+  }
+  if (key.match(/^#(.+)/)) {
+    return {type: TAG_FILTER, value: key.match(/^#(.+)$/)[1]}
+  }
+  return {type: TEXT_FILTER, value: key}
+}
+
 function remap (state) {
   let { articles, folders, status } = state
 
-  let filters = status.search.split(' ').map(key => key.trim()).filter(key => key.length > 0 && !key.match(/^\/$/) && !key.match(/^#$/)).map(key => {
-    if (key.match(/^\/.+$/)) {
-      return {type: FOLDER_FILTER, value: key.match(/^\/(.+)$/)[1]}
-    }
-    if (key.match(/^#(.+)/)) {
-      return {type: TAG_FILTER, value: key.match(/^#(.+)$/)[1]}
-    }
-    return {type: TEXT_FILTER, value: key}
-  })
+  let filters = status.search.split(' ')
+    .map(key => key.trim())
+    .filter(ignoreInvalidKey)
+    .map(buildFilter)
+
+  let folderExactFilters = filters.filter(filter => filter.type === FOLDER_EXACT_FILTER)
   let folderFilters = filters.filter(filter => filter.type === FOLDER_FILTER)
   let textFilters = filters.filter(filter => filter.type === TEXT_FILTER)
   let tagFilters = filters.filter(filter => filter.type === TAG_FILTER)
 
+  let targetFolders
   if (folders != null) {
-    let targetFolders = folders.filter(folder => {
+    let exactTargetFolders = folders.filter(folder => {
+      return _.find(folderExactFilters, filter => folder.name.match(new RegExp(`^${filter.value}$`)))
+    })
+    let fuzzyTargetFolders = folders.filter(folder => {
       return _.find(folderFilters, filter => folder.name.match(new RegExp(`^${filter.value}`)))
     })
-    status.targetFolders = targetFolders
+    targetFolders = status.targetFolders = exactTargetFolders.concat(fuzzyTargetFolders)
 
     if (targetFolders.length > 0) {
       articles = articles.filter(article => {
