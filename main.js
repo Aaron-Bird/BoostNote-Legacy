@@ -51,11 +51,11 @@ app.on('ready', function () {
   var template = require('./atom-lib/menu-template')
 
   setInterval(function () {
-    updater.checkForUpdates()
+    if (update == null) updater.checkForUpdates()
   }, 1000 * 60 * 60 * 24)
 
   ipc.on('check-update', function (event, msg) {
-    updater.checkForUpdates()
+    if (update == null) updater.checkForUpdates()
   })
 
   ipc.on('update-app', function (event, msg) {
