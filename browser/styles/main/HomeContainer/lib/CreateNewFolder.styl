@@ -34,29 +34,30 @@ iptFocusBorderColor = #369DCD
     border-radius 5px
     border solid 1px borderColor
     outline none
-    margin 100px auto 15px
+    margin 75px auto 20px
     &:focus
       border-color iptFocusBorderColor
   .colorSelect
     text-align center
     .option
       cursor pointer
-      .FolderMark
-        padding 5px
-        font-size 22px
-        height 33px
-        width 33px
-        overflow hidden
-        line-height 33px
-        transition 0.1s
-        border 1px solid transparent
-        border-radius 5px
-        margin 0 2px
-        &:hover
-          border-color borderColor
-        &.active
-          font-size 28px
-          border-color iptFocusBorderColor
+      font-size 22px
+      height 48px
+      width 48px
+      margin 0 2px
+      border 1px solid transparent
+      border-radius 5px
+      overflow hidden
+      line-height 45px
+      text-align center
+      transition 0.1s
+      display inline-block
+      &:hover
+        border-color borderColor
+        font-size 28px
+      &.active
+        font-size 28px
+        border-color iptFocusBorderColor
   .alert
     color infoTextColor
     background-color infoBackgroundColor
