@@ -79,6 +79,31 @@ body
       white-space nowrap
       text-overflow ellipsis
       overflow-x hidden
+      clearfix()
+      .left
+        float left
+      .right
+        float right
+        button
+          border-radius 16.5px
+          cursor pointer
+          height 33px
+          width 33px
+          border none
+          margin-right 5px
+          font-size 18px
+          color inactiveTextColor
+          background-color transparent
+          padding 0
+          .tooltip
+            tooltip()
+          &.clipboardBtn .tooltip
+            margin-left -160px
+            margin-top 25px
+          &:hover
+            color textColor
+            .tooltip
+              opacity 1
     .content
       position absolute
       top 55px

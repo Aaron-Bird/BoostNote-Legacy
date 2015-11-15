@@ -1,0 +1,28 @@
+.EditedAlert.modal
+  width 350px
+  top 100px
+  .title
+    font-size 24px
+    margin-bottom 15px
+  .message
+    font-size 14px
+    margin-bottom 15px
+  .control
+    text-align right
+    button
+      border-radius 5px
+      height 33px
+      padding 0 15px
+      font-size 14px
+      background-color white
+      border 1px solid borderColor
+      border-radius 5px
+      margin-left 5px
+      &:hover
+        background-color darken(white, 10%)
+      &.primary
+        border-color brandColor
+        background-color brandColor
+        color white
+        &:hover
+          background-color lighten(brandColor, 10%)

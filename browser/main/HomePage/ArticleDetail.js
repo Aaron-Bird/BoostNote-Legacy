@@ -5,7 +5,20 @@ import _ from 'lodash'
 import ModeIcon from 'boost/components/ModeIcon'
 import MarkdownPreview from 'boost/components/MarkdownPreview'
 import CodeEditor from 'boost/components/CodeEditor'
-import { IDLE_MODE, CREATE_MODE, EDIT_MODE, switchMode, switchArticle, switchFolder, clearSearch, updateArticle, destroyArticle, NEW } from 'boost/actions'
+import {
+  IDLE_MODE,
+  CREATE_MODE,
+  EDIT_MODE,
+  switchMode,
+  switchArticle,
+  switchFolder,
+  clearSearch,
+  lockStatus,
+  unlockStatus,
+  updateArticle,
+  destroyArticle,
+  NEW
+} from 'boost/actions'
 import linkState from 'boost/linkState'
 import FolderMark from 'boost/components/FolderMark'
 import TagLink from 'boost/components/TagLink'
@@ -82,7 +95,12 @@ export default class ArticleDetail extends React.Component {
 
     this.state = {
       article: makeInstantArticle(props.activeArticle),
-      previewMode: false
+      previewMode: false,
+      isArticleEdited: false,
+      isTagChanged: false,
+      isTitleChanged: false,
+      isContentChanged: false,
+      isModeChanged: false
     }
   }
 
@@ -117,7 +135,11 @@ export default class ArticleDetail extends React.Component {
     if (isModeChanged) {
       Object.assign(nextState, {
         openDeleteConfirmMenu: false,
-        previewMode: false
+        previewMode: false,
+        isArticleEdited: false,
+        isTagChanged: false,
+        isTitleChanged: false,
+        isContentChanged: false
       })
     }
 
@@ -224,6 +246,8 @@ export default class ArticleDetail extends React.Component {
 
   handleCancelButtonClick (e) {
     let { activeArticle, dispatch } = this.props
+
+    dispatch(unlockStatus())
     if (activeArticle.status === NEW) dispatch(switchArticle(null))
     dispatch(switchMode(IDLE_MODE))
   }
@@ -235,6 +259,8 @@ export default class ArticleDetail extends React.Component {
 
     let folder = _.findWhere(folders, {key: article.FolderKey})
     if (folder == null) return false
+
+    dispatch(unlockStatus())
 
     delete newArticle.status
     newArticle.updatedAt = new Date()
@@ -263,19 +289,85 @@ export default class ArticleDetail extends React.Component {
     this.setState({article: article})
   }
 
+  handleTitleChange (e) {
+    let { article } = this.state
+    article.title = e.target.value
+    let _isTitleChanged = article.title !== this.props.activeArticle.title
+
+    let { isTagChanged, isContentChanged, isArticleEdited, isModeChanged } = this.state
+    let _isArticleEdited = _isTitleChanged || isTagChanged || isContentChanged || isModeChanged
+
+    this.setState({
+      article,
+      isTitleChanged: _isTitleChanged,
+      isArticleEdited: _isArticleEdited
+    }, () => {
+      if (isArticleEdited !== _isArticleEdited) {
+        let { dispatch } = this.props
+        if (_isArticleEdited) {
+          console.log('lockit')
+          dispatch(lockStatus())
+        } else {
+          console.log('unlockit')
+          dispatch(unlockStatus())
+        }
+      }
+    })
+  }
+
   handleTagsChange (newTag, tags) {
     let article = this.state.article
     article.tags = tags
 
     this.setState({article: article})
+
+    let _isTagChanged = _.difference(article.tags, this.props.activeArticle.tags).length > 0 || _.difference(this.props.activeArticle.tags, article.tags).length > 0
+
+    let { isTitleChanged, isContentChanged, isArticleEdited, isModeChanged } = this.state
+    let _isArticleEdited = _isTagChanged || isTitleChanged || isContentChanged || isModeChanged
+
+    this.setState({
+      article,
+      isTagChanged: _isTagChanged,
+      isArticleEdited: _isArticleEdited
+    }, () => {
+      if (isArticleEdited !== _isArticleEdited) {
+        let { dispatch } = this.props
+        if (_isArticleEdited) {
+          console.log('lockit')
+          dispatch(lockStatus())
+        } else {
+          console.log('unlockit')
+          dispatch(unlockStatus())
+        }
+      }
+    })
   }
 
   handleModeChange (value) {
-    let article = this.state.article
+    let { article } = this.state
     article.mode = value
+    let _isModeChanged = article.mode !== this.props.activeArticle.mode
+
+    let { isTagChanged, isContentChanged, isArticleEdited, isTitleChanged } = this.state
+    let _isArticleEdited = _isModeChanged || isTagChanged || isContentChanged || isTitleChanged
+
     this.setState({
-      article: article,
-      previewMode: false
+      article,
+      previewMode: false,
+      isModeChanged: _isModeChanged,
+      isArticleEdited: _isArticleEdited
+    }, () => {
+      if (isArticleEdited !== _isArticleEdited) {
+        let { dispatch } = this.props
+        if (_isArticleEdited) {
+          console.log('lockit')
+          dispatch(lockStatus())
+        } else {
+          console.log('unlockit')
+          dispatch(unlockStatus())
+        }
+      }
     })
   }
 
@@ -286,9 +378,29 @@ export default class ArticleDetail extends React.Component {
   }
 
   handleContentChange (e, value) {
-    let article = this.state.article
+    let { article } = this.state
     article.content = value
-    this.setState({article: article})
+    let _isContentChanged = article.content !== this.props.activeArticle.content
+
+    let { isTagChanged, isModeChanged, isArticleEdited, isTitleChanged } = this.state
+    let _isArticleEdited = _isContentChanged || isTagChanged || isModeChanged || isTitleChanged
+
+    this.setState({
+      article,
+      isContentChanged: _isContentChanged,
+      isArticleEdited: _isArticleEdited
+    }, () => {
+      if (isArticleEdited !== _isArticleEdited) {
+        let { dispatch } = this.props
+        if (_isArticleEdited) {
+          console.log('lockit')
+          dispatch(lockStatus())
+        } else {
+          console.log('unlockit')
+          dispatch(unlockStatus())
+        }
+      }
+    })
   }
 
   handleTogglePreviewButtonClick (e) {
@@ -303,7 +415,7 @@ export default class ArticleDetail extends React.Component {
   }
 
   renderEdit () {
-    let { folders, status } = this.props
+    let { folders, status, tags } = this.props
 
     let folderOptions = folders.map(folder => {
       return (
@@ -322,10 +434,12 @@ export default class ArticleDetail extends React.Component {
             >
               {folderOptions}
             </select>
+            {this.state.isArticleEdited ? ' (edited)' : ''}
 
             <TagSelect
               tags={this.state.article.tags}
               onChange={(tags, tag) => this.handleTagsChange(tags, tag)}
+              suggestTags={tags}
             />
 
             {status.isTutorialOpen ? tagSelectTutorialElement : null}
@@ -346,7 +460,7 @@ export default class ArticleDetail extends React.Component {
           <div className='detailPanel'>
             <div className='header'>
               <div className='title'>
-                <input onKeyDown={e => this.handleTitleKeyDown(e)} placeholder='Title' ref='title' valueLink={this.linkState('article.title')}/>
+                <input onKeyDown={e => this.handleTitleKeyDown(e)} placeholder='Title' ref='title' value={this.state.article.title} onChange={e => this.handleTitleChange(e)}/>
               </div>
               <ModeSelect
                 ref='mode'
@@ -395,6 +509,7 @@ export default class ArticleDetail extends React.Component {
 ArticleDetail.propTypes = {
   status: PropTypes.shape(),
   activeArticle: PropTypes.shape(),
-  activeUser: PropTypes.shape()
+  activeUser: PropTypes.shape(),
+  dispatch: PropTypes.func
 }
 ArticleDetail.prototype.linkState = linkState

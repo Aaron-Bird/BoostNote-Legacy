@@ -45,7 +45,8 @@ module.exports = {
     'superagent-promise',
     'lodash',
     'markdown-it',
-    'moment'
+    'moment',
+    'node-notifier'
   ],
   resolve: {
     extensions: ['', '.js', '.jsx', 'styl']

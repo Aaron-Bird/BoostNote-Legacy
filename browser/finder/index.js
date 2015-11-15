@@ -14,9 +14,16 @@ import remote from 'remote'
 var hideFinder = remote.getGlobal('hideFinder')
 import clipboard from 'clipboard'
 
+var notifier = require('node-notifier')
+var path = require('path')
+function getIconPath () {
+  return path.resolve(global.__dirname, '../../resources/favicon-230x230.png')
+}
+
 require('../styles/finder/index.styl')
 
 const FOLDER_FILTER = 'FOLDER_FILTER'
+const FOLDER_EXACT_FILTER = 'FOLDER_EXACT_FILTER'
 const TEXT_FILTER = 'TEXT_FILTER'
 const TAG_FILTER = 'TAG_FILTER'
 
@@ -45,16 +52,26 @@ class FinderMain extends React.Component {
     }
 
     if (e.keyCode === 13) {
-      let { activeArticle } = this.props
-      clipboard.writeText(activeArticle.content)
-      activityRecord.emit('FINDER_COPY')
-      hideFinder()
+      this.saveToClipboard()
       e.preventDefault()
     }
     if (e.keyCode === 27) {
       hideFinder()
       e.preventDefault()
     }
+  }
+
+  saveToClipboard () {
+    let { activeArticle } = this.props
+    clipboard.writeText(activeArticle.content)
+    activityRecord.emit('FINDER_COPY')
+
+    notifier.notify({
+      icon: getIconPath(),
+      'title': 'Saved to Clipboard!',
+      'message': 'Paste it wherever you want!'
+    })
+    hideFinder()
   }
 
   handleSearchChange (e) {
@@ -83,6 +100,7 @@ class FinderMain extends React.Component {
 
   render () {
     let { articles, activeArticle, status, dispatch } = this.props
+    let saveToClipboard = () => this.saveToClipboard()
     return (
       <div onClick={e => this.handleClick(e)} onKeyDown={e => this.handleKeyDown(e)} className='Finder'>
         <FinderInput
@@ -98,7 +116,10 @@ class FinderMain extends React.Component {
           dispatch={dispatch}
           selectArticle={article => this.selectArticle(article)}
         />
-        <FinderDetail activeArticle={activeArticle}/>
+        <FinderDetail
+          activeArticle={activeArticle}
+          saveToClipboard={saveToClipboard}
+        />
       </div>
     )
   }
@@ -116,27 +137,47 @@ FinderMain.propTypes = {
   dispatch: PropTypes.func
 }
 
+// Ignore invalid key
+function ignoreInvalidKey (key) {
+  return key.length > 0 && !key.match(/^\/\/$/) && !key.match(/^\/$/) && !key.match(/^#$/)
+}
+
+// Build filter object by key
+function buildFilter (key) {
+  if (key.match(/^\/\/.+/)) {
+    return {type: FOLDER_EXACT_FILTER, value: key.match(/^\/\/(.+)$/)[1]}
+  }
+  if (key.match(/^\/.+/)) {
+    return {type: FOLDER_FILTER, value: key.match(/^\/(.+)$/)[1]}
+  }
+  if (key.match(/^#(.+)/)) {
+    return {type: TAG_FILTER, value: key.match(/^#(.+)$/)[1]}
+  }
+  return {type: TEXT_FILTER, value: key}
+}
+
 function remap (state) {
   let { articles, folders, status } = state
 
-  let filters = status.search.split(' ').map(key => key.trim()).filter(key => key.length > 0 && !key.match(/^#$/)).map(key => {
-    if (key.match(/^in:.+$/)) {
-      return {type: FOLDER_FILTER, value: key.match(/^in:(.+)$/)[1]}
-    }
-    if (key.match(/^#(.+)/)) {
-      return {type: TAG_FILTER, value: key.match(/^#(.+)$/)[1]}
-    }
-    return {type: TEXT_FILTER, value: key}
-  })
+  let filters = status.search.split(' ')
+    .map(key => key.trim())
+    .filter(ignoreInvalidKey)
+    .map(buildFilter)
+
+  let folderExactFilters = filters.filter(filter => filter.type === FOLDER_EXACT_FILTER)
   let folderFilters = filters.filter(filter => filter.type === FOLDER_FILTER)
   let textFilters = filters.filter(filter => filter.type === TEXT_FILTER)
   let tagFilters = filters.filter(filter => filter.type === TAG_FILTER)
 
+  let targetFolders
   if (folders != null) {
-    let targetFolders = folders.filter(folder => {
-      return _.findWhere(folderFilters, {value: folder.name})
+    let exactTargetFolders = folders.filter(folder => {
+      return _.find(folderExactFilters, filter => folder.name.match(new RegExp(`^${filter.value}$`)))
     })
-    status.targetFolders = targetFolders
+    let fuzzyTargetFolders = folders.filter(folder => {
+      return _.find(folderFilters, filter => folder.name.match(new RegExp(`^${filter.value}`)))
+    })
+    targetFolders = status.targetFolders = exactTargetFolders.concat(fuzzyTargetFolders)
 
     if (targetFolders.length > 0) {
       articles = articles.filter(article => {
@@ -164,6 +205,7 @@ function remap (state) {
   let activeArticle = _.findWhere(articles, {key: status.articleKey})
   if (activeArticle == null) activeArticle = articles[0]
 
+  console.log(status.search)
   return {
     articles,
     activeArticle,

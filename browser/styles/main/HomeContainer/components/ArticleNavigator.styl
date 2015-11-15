@@ -1,4 +1,5 @@
 articleNavBgColor = #353535
+articleCount = #999
 
 .ArticleNavigator
   background-color articleNavBgColor
@@ -149,7 +150,10 @@ articleNavBgColor = #353535
       &:hover
         background-color transparentify(white, 5%)
       &.active, &:active
-        background-color brandColor
+        background-color transparentify(lighten(brandColor, 25%), 70%)
+      .articleCount
+        color articleCount
+        font-size 12px
   .members
     .memberList>div
       height 33px

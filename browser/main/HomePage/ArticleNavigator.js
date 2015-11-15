@@ -88,16 +88,17 @@ export default class ArticleNavigator extends React.Component {
   }
 
   render () {
-    let { status, folders } = this.props
+    let { status, folders, allArticles } = this.props
     let { targetFolders } = status
     if (targetFolders == null) targetFolders = []
 
     let folderElememts = folders.map((folder, index) => {
       let isActive = findWhere(targetFolders, {key: folder.key})
+      let articleCount = allArticles.filter(article => article.FolderKey === folder.key).length
 
       return (
         <button onClick={e => this.handleFolderButtonClick(folder.name)(e)} key={'folder-' + folder.key} className={isActive ? 'active' : ''}>
-          <FolderMark color={folder.color}/> {folder.name}
+          <FolderMark color={folder.color}/> {folder.name} <span className='articleCount'>{articleCount}</span>
         </button>
       )
     })
@@ -150,6 +151,7 @@ export default class ArticleNavigator extends React.Component {
 ArticleNavigator.propTypes = {
   activeUser: PropTypes.object,
   folders: PropTypes.array,
+  allArticles: PropTypes.array,
   status: PropTypes.shape({
     folderId: PropTypes.number
   }),
