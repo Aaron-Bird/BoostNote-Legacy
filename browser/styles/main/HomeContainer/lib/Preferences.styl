@@ -451,8 +451,11 @@ iptFocusBorderColor = #369DCD
               overflow ellipsis
             .folderControl
               float right
-              width 145px
+              width 125px
               text-align center
+            &.folderHeader
+              .folderName
+                padding-left 25px
             &.newFolder
               .alert
                 display block
@@ -502,6 +505,30 @@ iptFocusBorderColor = #369DCD
                   &:hover
                     color lighten(brandColor, 10%)
             &.FolderRow
+              .sortBtns
+                float left
+                display block
+                height 30px
+                width 30px
+                margin-top 1.5px
+                position absolute
+                button
+                  absolute left
+                  background-color transparent
+                  border none
+                  height 15px
+                  padding 0
+                  margin 0
+                  color stripBtnColor
+                  &:first-child
+                    top 0
+                  &:last-child
+                    top 15px
+                  &:hover
+                    color stripHoverBtnColor
+                  &:disabled
+                    color lighten(stripBtnColor, 10%)
+                    cursor not-allowed
               .folderName input
                 height 33px
                 border 1px solid borderColor
@@ -555,9 +582,9 @@ iptFocusBorderColor = #369DCD
                     &:hover
                       border-color borderColor
                     &.active
+                      border-color iptFocusBorderColor
                       .FolderMark
                         transform scale(1.4)
-                      border-color iptFocusBorderColor
               .folderControl
                 button
                   border none
