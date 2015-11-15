@@ -303,7 +303,7 @@ export default class ArticleDetail extends React.Component {
   }
 
   renderEdit () {
-    let { folders, status } = this.props
+    let { folders, status, tags } = this.props
 
     let folderOptions = folders.map(folder => {
       return (
@@ -326,6 +326,7 @@ export default class ArticleDetail extends React.Component {
             <TagSelect
               tags={this.state.article.tags}
               onChange={(tags, tag) => this.handleTagsChange(tags, tag)}
+              suggestTags={tags}
             />
 
             {status.isTutorialOpen ? tagSelectTutorialElement : null}

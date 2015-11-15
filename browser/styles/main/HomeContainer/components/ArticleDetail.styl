@@ -98,44 +98,66 @@ iptFocusBorderColor = #369DCD
           &:hover
             background-color white
         .TagSelect
-          white-space nowrap
-          overflow-x auto
-          position relative
-          margin-top 5px
-          noSelect()
-          z-index 30
-          background-color #E6E6E6
-          .tagItem
-            background-color brandColor
-            border-radius 2px
-            color white
-            margin 0 2px
-            padding 0
-            border 1px solid darken(brandColor, 10%)
-            button.tagRemoveBtn
+          .tags
+            white-space nowrap
+            overflow-x auto
+            position relative
+            max-width 350px
+            margin-top 5px
+            noSelect()
+            z-index 30
+            background-color #E6E6E6
+            .tagItem
+              background-color brandColor
+              border-radius 2px
               color white
+              margin 0 2px
+              padding 0
+              border 1px solid darken(brandColor, 10%)
+              button.tagRemoveBtn
+                color white
+                border-radius 2px
+                border none
+                background-color transparent
+                padding 4px 2px
+                border-right 1px solid #E6E6E6
+                font-size 8px
+                line-height 12px
+                transition 0.1s
+                &:hover
+                  background-color lighten(brandColor, 10%)
+              .tagLabel
+                padding 4px 4px
+                font-size 12px
+                line-height 12px
+            input.tagInput
+              background-color transparent
+              outline none
+              margin 0 2px
               border-radius 2px
               border none
-              background-color transparent
-              padding 4px 2px
-              border-right 1px solid #E6E6E6
-              font-size 8px
-              line-height 12px
               transition 0.1s
+              height 18px
+          .suggestTags
+            position fixed
+            width 150px
+            max-height 150px
+            background-color white
+            z-index 5
+            border 1px solid borderColor
+            border-radius 5px
+            button
+              width 100%
+              display block
+              padding 0 15px
+              height 33px
+              line-height 33px
+              background-color transparent
+              border none
+              text-align left
+              font-size 14px
               &:hover
-                background-color lighten(brandColor, 10%)
-            .tagLabel
-              padding 4px 4px
-              font-size 12px
-              line-height 12px
-          input.tagInput
-            background-color transparent
-            outline none
-            margin 0 2px
-            border-radius 2px
-            border none
-            transition 0.1s
-            height 18px
+                background-color darken(white, 10%)
       .right
         button
           cursor pointer
@@ -222,9 +244,6 @@ iptFocusBorderColor = #369DCD
                     display inline-block
                   &:hover
                     background-color darken(white, 10%)
-
-
-
           .title
             absolute left top bottom
             right 150px

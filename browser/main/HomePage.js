@@ -99,7 +99,7 @@ class HomePage extends React.Component {
   }
 
   render () {
-    let { dispatch, status, articles, allArticles, activeArticle, folders, filters } = this.props
+    let { dispatch, status, articles, allArticles, activeArticle, folders, tags, filters } = this.props
 
     return (
       <div className='HomePage'>
@@ -129,6 +129,7 @@ class HomePage extends React.Component {
           activeArticle={activeArticle}
           folders={folders}
           status={status}
+          tags={tags}
           filters={filters}
         />
       </div>
@@ -163,6 +164,11 @@ function remap (state) {
     return new Date(b.updatedAt) - new Date(a.updatedAt)
   })
   let allArticles = articles.slice()
+
+  let tags = _.uniq(allArticles.reduce((sum, article) => {
+    if (!_.isArray(article.tags)) return sum
+    return sum.concat(article.tags)
+  }, []))
 
   // Filter articles
   let filters = status.search.split(' ')
@@ -254,6 +260,7 @@ function remap (state) {
     allArticles,
     articles,
     activeArticle,
+    tags,
     filters: {
       folder: folderFilters,
       tag: tagFilters,
