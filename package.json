@@ -38,7 +38,6 @@
   "homepage": "https://github.com/Rokt33r/codexen-app#readme",
   "dependencies": {
     "devicon": "^2.0.0",
-    "electron-packager": "^5.1.1",
     "font-awesome": "^4.3.0",
     "fs-jetpack": "^0.7.0",
     "lodash": "^3.10.1",
