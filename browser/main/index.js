@@ -1,4 +1,3 @@
-import React from 'react'
 import { Provider } from 'react-redux'
 // import { updateUser } from 'boost/actions'
 import { Router, Route, IndexRoute } from 'react-router'
@@ -6,6 +5,7 @@ import MainPage from './MainPage'
 import HomePage from './HomePage'
 // import auth from 'boost/auth'
 import store from 'boost/store'
+import React from 'react'
 import ReactDOM from 'react-dom'
 require('../styles/main/index.styl')
 import { openModal } from 'boost/modal'

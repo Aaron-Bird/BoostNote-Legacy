@@ -4,6 +4,7 @@ var JsonpTemplatePlugin = webpack.JsonpTemplatePlugin
 var FunctionModulePlugin = require('webpack/lib/FunctionModulePlugin')
 var NodeTargetPlugin = require('webpack/lib/node/NodeTargetPlugin')
 var ExternalsPlugin = webpack.ExternalsPlugin
+
 var opt = {
   path: path.join(__dirname, 'compiled'),
   filename: '[name].js',
@@ -11,6 +12,7 @@ var opt = {
   libraryTarget: 'commonjs2',
   publicPath: 'http://localhost:8080/assets/'
 }
+
 var config = {
   module: {
     loaders: [
@@ -35,7 +37,10 @@ var config = {
   output: opt,
   resolve: {
     extensions: ['', '.js', '.jsx'],
-    packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main']
+    packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main'],
+    alias: {
+      'boost': path.resolve(__dirname, 'lib')
+    }
   },
   plugins: [
     new webpack.NoErrorsPlugin(),
