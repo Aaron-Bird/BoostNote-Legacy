@@ -7,6 +7,8 @@ global-reset()
 @import './containers/*'
 @import './HomeContainer'
 
+DEFAULT_FONTS = 'Lato', 'MS Gothic', 'Malgun Gothic', 'Sans-serif'
+
 *
   -webkit-app-region no-drag
   -webkit-user-select none
@@ -17,13 +19,13 @@ html, body
   overflow hidden
 
 body
-  font-family "Lato"
+  font-family DEFAULT_FONTS
   color textColor
   font-size fontSize
   font-weight 400
 
 button, input, select
-  font-family "Lato"
+  font-family DEFAULT_FONTS
 
 div, span, a, button, input, textarea
   box-sizing border-box

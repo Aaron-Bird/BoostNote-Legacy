@@ -43,7 +43,7 @@ class HomePage extends React.Component {
     }
 
     // Search inputがfocusされていたら大体のキー入力は無視される。
-    if (top.isInputFocused() && !e.metaKey) {
+    if (top.isInputFocused() && !(e.metaKey || e.ctrlKey)) {
       if (e.keyCode === 13 || e.keyCode === 27) top.escape()
       return
     }
@@ -54,7 +54,7 @@ class HomePage extends React.Component {
         if (e.keyCode === 27) {
           detail.handleCancelButtonClick()
         }
-        if ((e.keyCode === 13 && e.metaKey) || (e.keyCode === 83 && e.metaKey)) {
+        if ((e.keyCode === 13 && (e.metaKey || e.ctrlKey)) || (e.keyCode === 83 && (e.metaKey || e.ctrlKey))) {
           detail.handleSaveButtonClick()
         }
         break
@@ -72,14 +72,14 @@ class HomePage extends React.Component {
           if (e.keyCode === 27) {
             detail.handleDeleteCancelButtonClick()
           }
-          if (e.keyCode === 13 && e.metaKey) {
+          if (e.keyCode === 13 && (e.metaKey || e.ctrlKey)) {
             detail.handleDeleteConfirmButtonClick()
           }
           break
         }
 
         // `detail`の`openDeleteConfirmMenu`が`true`なら呼ばれない。
-        if (e.keyCode === 27 || (e.keyCode === 70 && e.metaKey)) {
+        if (e.keyCode === 27 || (e.keyCode === 70 && (e.metaKey || e.ctrlKey))) {
           top.focusInput()
         }
 
@@ -91,7 +91,7 @@ class HomePage extends React.Component {
           list.selectNextArticle()
         }
 
-        if (e.keyCode === 65 || e.keyCode === 13 && e.metaKey) {
+        if (e.keyCode === 65 || e.keyCode === 13 && (e.metaKey || e.ctrlKey)) {
           nav.handleNewPostButtonClick()
           e.preventDefault()
         }

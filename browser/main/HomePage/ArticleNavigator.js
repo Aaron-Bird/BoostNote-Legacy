@@ -7,7 +7,10 @@ import Preferences from 'boost/components/modal/Preferences'
 import CreateNewFolder from 'boost/components/modal/CreateNewFolder'
 
 import remote from 'remote'
-let userName = remote.getGlobal('process').env.USER
+let mainEnv = remote.getGlobal('process').env
+let userName = mainEnv.USER != null
+  ? mainEnv.USER
+  : mainEnv.USERNAME
 
 const BRAND_COLOR = '#18AF90'
 
