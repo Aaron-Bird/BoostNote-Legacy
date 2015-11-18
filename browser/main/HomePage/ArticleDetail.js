@@ -378,6 +378,11 @@ export default class ArticleDetail extends React.Component {
   }
 
   handleContentChange (e, value) {
+    let { status } = this.props
+    if (status.mode === IDLE_MODE) {
+      return
+    }
+
     let { article } = this.state
     article.content = value
     let _isContentChanged = article.content !== this.props.activeArticle.content
