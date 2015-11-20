@@ -89,13 +89,6 @@ module.exports = [
         click: function () {
           BrowserWindow.getFocusedWindow().reload()
         }
-      },
-      {
-        label: 'Toggle DevTools',
-        accelerator: 'Alt+Command+I',
-        click: function () {
-          BrowserWindow.getFocusedWindow().toggleDevTools()
-        }
       }
     ]
   },

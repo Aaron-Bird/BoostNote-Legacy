@@ -1,6 +1,5 @@
 var webpack = require('webpack')
 module.exports = {
-  devtool: 'source-map',
   entry: {
     main: './browser/main/index.js',
     finder: './browser/finder/index.js'
@@ -8,7 +7,7 @@ module.exports = {
   output: {
     path: 'compiled',
     filename: '[name].js',
-    sourceMapFilename: '[name].map',
+    // sourceMapFilename: '[name].map',
     libraryTarget: 'commonjs2'
   },
   module: {
@@ -31,12 +30,12 @@ module.exports = {
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
       }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compressor: {
+        warnings: false
+      }
     })
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compressor: {
-    //     warnings: false
-    //   }
-    // })
   ],
   externals: [
     'socket.io-client',
