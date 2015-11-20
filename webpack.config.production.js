@@ -8,7 +8,7 @@ module.exports = {
   output: {
     path: 'compiled',
     filename: '[name].js',
-    sourceMapFilename: '[name].map',
+    // sourceMapFilename: '[name].map',
     libraryTarget: 'commonjs2'
   },
   module: {
@@ -31,12 +31,12 @@ module.exports = {
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
       }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compressor: {
+        warnings: false
+      }
     })
-    // new webpack.optimize.UglifyJsPlugin({
-    //   compressor: {
-    //     warnings: false
-    //   }
-    // })
   ],
   externals: [
     'socket.io-client',

@@ -7,7 +7,7 @@
     "start": "BOOST_ENV=development electron ./main.js",
     "webpack": "webpack-dev-server --hot --inline --config webpack.config.js",
     "compile": "NODE_ENV=production webpack --config webpack.config.production.js",
-    "build": "electron-packager ./ Boost --app-version=$npm_package_version $npm_package_config_platform  $npm_package_config_version $npm_package_config_ignore --overwrite",
+    "build": "electron-packager ./ Boost --app-version=$npm_package_version $npm_package_config_platform  $npm_package_config_version $npm_package_config_ignore --overwrite --asar",
     "codesign": "codesign --verbose --deep --force --sign \"MAISIN solutions Inc.\" Boost-darwin-x64/Boost.app"
   },
   "config": {
