@@ -28,6 +28,13 @@ class HomePage extends React.Component {
   }
 
   handleKeyDown (e) {
+    if (process.env.BOOST_ENV === 'development' && e.keyCode === 73 && e.metaKey && e.altKey) {
+      e.preventDefault()
+      e.stopPropagation()
+      require('remote').require('browser-window').getFocusedWindow().toggleDevTools()
+      return
+    }
+
     if (isModalOpen()) {
       if (e.keyCode === 27) closeModal()
       return
@@ -226,12 +233,8 @@ function remap (state) {
   }
 
   // switching CREATE_MODE
-  // restrict
-  // 1. team have one folder at least
-  // or Change IDLE MODE
   if (status.mode === CREATE_MODE) {
     let newArticle = _.findWhere(articles, {status: 'NEW'})
-    console.log('targetFolders')
     let FolderKey = targetFolders.length > 0
       ? targetFolders[0].key
       : folders[0].key
@@ -250,8 +253,6 @@ function remap (state) {
       articles.unshift(newArticle)
     }
     activeArticle = newArticle
-  } else if (status.mode === CREATE_MODE) {
-    status.mode = IDLE_MODE
   }
 
   return {
