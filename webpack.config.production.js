@@ -1,6 +1,5 @@
 var webpack = require('webpack')
 module.exports = {
-  devtool: 'source-map',
   entry: {
     main: './browser/main/index.js',
     finder: './browser/finder/index.js'
