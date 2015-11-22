@@ -28,6 +28,13 @@ class HomePage extends React.Component {
   }
 
   handleKeyDown (e) {
+    if (process.env.BOOST_ENV === 'development' && e.keyCode === 73 && e.metaKey && e.altKey) {
+      e.preventDefault()
+      e.stopPropagation()
+      require('remote').require('browser-window').getFocusedWindow().toggleDevTools()
+      return
+    }
+
     if (isModalOpen()) {
       if (e.keyCode === 27) closeModal()
       return
@@ -217,42 +224,6 @@ function remap (state) {
   // Grab active article
   let activeArticle = _.findWhere(articles, {key: status.articleKey})
   if (activeArticle == null) activeArticle = articles[0]
-
-  // remove Unsaved new article if user is not CREATE_MODE
-  if (status.mode !== CREATE_MODE) {
-    let targetIndex = _.findIndex(articles, article => article.status === NEW)
-
-    if (targetIndex >= 0) articles.splice(targetIndex, 1)
-  }
-
-  // switching CREATE_MODE
-  // restrict
-  // 1. team have one folder at least
-  // or Change IDLE MODE
-  if (status.mode === CREATE_MODE) {
-    let newArticle = _.findWhere(articles, {status: 'NEW'})
-    console.log('targetFolders')
-    let FolderKey = targetFolders.length > 0
-      ? targetFolders[0].key
-      : folders[0].key
-
-    if (newArticle == null) {
-      newArticle = {
-        id: null,
-        key: keygen(),
-        title: '',
-        content: '',
-        mode: 'markdown',
-        tags: [],
-        FolderKey: FolderKey,
-        status: NEW
-      }
-      articles.unshift(newArticle)
-    }
-    activeArticle = newArticle
-  } else if (status.mode === CREATE_MODE) {
-    status.mode = IDLE_MODE
-  }
 
   return {
     folders,

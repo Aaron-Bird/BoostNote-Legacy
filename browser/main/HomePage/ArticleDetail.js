@@ -7,7 +7,6 @@ import MarkdownPreview from 'boost/components/MarkdownPreview'
 import CodeEditor from 'boost/components/CodeEditor'
 import {
   IDLE_MODE,
-  CREATE_MODE,
   EDIT_MODE,
   switchMode,
   switchArticle,
@@ -15,6 +14,7 @@ import {
   clearSearch,
   lockStatus,
   unlockStatus,
+  clearNewArticle,
   updateArticle,
   destroyArticle,
   NEW
@@ -114,7 +114,7 @@ export default class ArticleDetail extends React.Component {
 
   componentDidUpdate (prevProps) {
     let isModeChanged = prevProps.status.mode !== this.props.status.mode
-    if (isModeChanged && this.props.status.mode !== IDLE_MODE) {
+    if (isModeChanged && this.props.status.mode === EDIT_MODE) {
       ReactDOM.findDOMNode(this.refs.title).focus()
     }
   }
@@ -124,6 +124,7 @@ export default class ArticleDetail extends React.Component {
 
     let isArticleChanged = nextProps.activeArticle != null && (nextProps.activeArticle.key !== this.state.article.key)
     let isModeChanged = nextProps.status.mode !== this.props.status.mode
+
     // Reset article input
     if (isArticleChanged || (isModeChanged && nextProps.status.mode !== IDLE_MODE)) {
       Object.assign(nextState, {
@@ -248,12 +249,15 @@ export default class ArticleDetail extends React.Component {
     let { activeArticle, dispatch } = this.props
 
     dispatch(unlockStatus())
-    if (activeArticle.status === NEW) dispatch(switchArticle(null))
+    if (activeArticle.status === NEW) {
+      dispatch(clearNewArticle())
+      dispatch(switchArticle(null))
+    }
     dispatch(switchMode(IDLE_MODE))
   }
 
   handleSaveButtonClick (e) {
-    let { dispatch, folders, filters } = this.props
+    let { dispatch, folders, status } = this.props
     let article = this.state.article
     let newArticle = Object.assign({}, article)
 
@@ -277,7 +281,7 @@ export default class ArticleDetail extends React.Component {
     // Searchを初期化し、更新先のFolder filterをかける
     // かかれていない時に
     // Searchを初期化する
-    if (filters.folder.length !== 0) dispatch(switchFolder(folder.name))
+    if (status.targetFolders.length > 0) dispatch(switchFolder(folder.name))
     else dispatch(clearSearch())
     dispatch(switchArticle(newArticle.key))
   }
@@ -318,8 +322,6 @@ export default class ArticleDetail extends React.Component {
   handleTagsChange (newTag, tags) {
     let article = this.state.article
     article.tags = tags
-
-    this.setState({article: article})
 
     let _isTagChanged = _.difference(article.tags, this.props.activeArticle.tags).length > 0 || _.difference(this.props.activeArticle.tags, article.tags).length > 0
 
@@ -500,7 +502,6 @@ export default class ArticleDetail extends React.Component {
     if (activeArticle == null) return this.renderEmpty()
 
     switch (status.mode) {
-      case CREATE_MODE:
       case EDIT_MODE:
         return this.renderEdit()
       case IDLE_MODE:

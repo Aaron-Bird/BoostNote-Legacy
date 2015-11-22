@@ -18,25 +18,41 @@ var update = null
 //   if (process.platform !== 'darwin') app.quit()
 // })
 
-var version = app.getVersion()
-var versionText = (version == null || version.length === 0) ? 'DEV version' : 'v' + version
-var nn = require('node-notifier')
-var updater = require('./atom-lib/updater')
-var path = require('path')
+var autoUpdater = require('auto-updater')
 
 var appQuit = false
 
-updater
+var version = app.getVersion()
+var versionText = (version == null || version.length === 0) ? 'DEV version' : 'v' + version
+var versionNotified = false
+autoUpdater
   .on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
-    nn.notify({
-      title: 'Ready to Update!! ' + versionText,
-      icon: path.join(__dirname, '/resources/favicon-230x230.png'),
-      message: 'Click update button on Main window: ' + releaseName
-    })
     update = quitAndUpdate
 
-    if (mainWindow != null && !mainWindow.webContents.isLoading()) {
+    if (mainWindow != null) {
+      mainWindow.webContents.send('notify', 'Ready to Update! ' + releaseName, 'Click update button on Main window.')
       mainWindow.webContents.send('update-available', 'Update available!')
+    }
+  })
+  .on('error', function (err, message) {
+    console.error(err)
+    if (mainWindow != null && !versionNotified) {
+      mainWindow.webContents.send('notify', 'Updater error!', message)
+    }
+  })
+  // .on('checking-for-update', function () {
+  //   // Connecting
+  //   console.log('checking...')
+  // })
+  .on('update-available', function () {
+    if (mainWindow != null) {
+      mainWindow.webContents.send('notify', 'Update is available!', 'Download started.. wait for the update ready.')
+    }
+  })
+  .on('update-not-available', function () {
+    if (mainWindow != null && !versionNotified) {
+      versionNotified = true
+      mainWindow.webContents.send('notify', 'Latest Build!! ' + versionText, 'Hope you to enjoy our app :D')
     }
   })
 
@@ -45,17 +61,18 @@ app.on('ready', function () {
     appQuit = true
   })
   console.log('Version ' + version)
-  updater.setFeedUrl('http://orbital.b00st.io/rokt33r/boost-app/latest?version=' + version)
-  updater.checkForUpdates()
+  autoUpdater.setFeedUrl('http://orbital.b00st.io/rokt33r/boost-app/latest?version=' + version)
+  autoUpdater.checkForUpdates()
+
   // menu start
   var template = require('./atom-lib/menu-template')
 
   setInterval(function () {
-    if (update == null) updater.checkForUpdates()
+    if (update == null) autoUpdater.checkForUpdates()
   }, 1000 * 60 * 60 * 24)
 
   ipc.on('check-update', function (event, msg) {
-    if (update == null) updater.checkForUpdates()
+    if (update == null) autoUpdater.checkForUpdates()
   })
 
   ipc.on('update-app', function (event, msg) {
@@ -93,11 +110,13 @@ app.on('ready', function () {
     e.preventDefault()
     mainWindow.hide()
   })
-  if (update != null) {
-    mainWindow.webContents.on('did-finish-load', function () {
+  mainWindow.webContents.on('did-finish-load', function () {
+    if (update != null) {
       mainWindow.webContents.send('update-available', 'whoooooooh!')
-    })
-  }
+    } else {
+      autoUpdater.checkForUpdates()
+    }
+  })
 
   app.on('activate-with-no-open-windows', function () {
     if (mainWindow == null) return null
