@@ -225,36 +225,6 @@ function remap (state) {
   let activeArticle = _.findWhere(articles, {key: status.articleKey})
   if (activeArticle == null) activeArticle = articles[0]
 
-  // remove Unsaved new article if user is not CREATE_MODE
-  if (status.mode !== CREATE_MODE) {
-    let targetIndex = _.findIndex(articles, article => article.status === NEW)
-
-    if (targetIndex >= 0) articles.splice(targetIndex, 1)
-  }
-
-  // switching CREATE_MODE
-  if (status.mode === CREATE_MODE) {
-    let newArticle = _.findWhere(articles, {status: 'NEW'})
-    let FolderKey = targetFolders.length > 0
-      ? targetFolders[0].key
-      : folders[0].key
-
-    if (newArticle == null) {
-      newArticle = {
-        id: null,
-        key: keygen(),
-        title: '',
-        content: '',
-        mode: 'markdown',
-        tags: [],
-        FolderKey: FolderKey,
-        status: NEW
-      }
-      articles.unshift(newArticle)
-    }
-    activeArticle = newArticle
-  }
-
   return {
     folders,
     status,
