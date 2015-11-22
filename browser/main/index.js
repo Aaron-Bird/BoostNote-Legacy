@@ -18,6 +18,16 @@ window.addEventListener('online', function () {
   ipc.send('check-update', 'check-update')
 })
 
+function notify (...args) {
+  return new window.Notification(...args)
+}
+
+ipc.on('notify', function (title, message) {
+  notify(title, {
+    body: message
+  })
+})
+
 let routes = (
   <Route path='/' component={MainPage}>
     <IndexRoute name='home' component={HomePage}/>
