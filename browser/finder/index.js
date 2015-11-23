@@ -8,10 +8,10 @@ import FinderList from './FinderList'
 import FinderDetail from './FinderDetail'
 import { selectArticle, searchArticle, refreshData } from './actions'
 import _ from 'lodash'
-import activityRecord from 'boost/activityRecord'
 
 const electron = require('electron')
 const { remote, clipboard } = electron
+const ipc = electron.ipcRenderer
 
 var hideFinder = remote.getGlobal('hideFinder')
 
@@ -63,7 +63,6 @@ class FinderMain extends React.Component {
   saveToClipboard () {
     let { activeArticle } = this.props
     clipboard.writeText(activeArticle.content)
-    activityRecord.emit('FINDER_COPY')
 
     notify('Saved to Clipboard!', {
       body: 'Paste it wherever you want!'
@@ -214,9 +213,12 @@ var Finder = connect(remap)(FinderMain)
 var store = createStore(reducer)
 
 window.onfocus = e => {
-  store.dispatch(refreshData())
-  activityRecord.emit('FINDER_OPEN')
+  ipc.send('request-data')
 }
+
+ipc.on('refresh-data', function (e, data) {
+  store.dispatch(refreshData(data))
+})
 
 ReactDOM.render((
   <Provider store={store}>

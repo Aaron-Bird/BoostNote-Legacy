@@ -1,19 +1,16 @@
 const electron = require('electron')
 const app = electron.app
 const Menu = electron.Menu
-const MenuItem = electron.MenuItem
-const Tray = electron.Tray
 const ipc = electron.ipcMain
 const globalShortcut = electron.globalShortcut
 const autoUpdater = electron.autoUpdater
 const jetpack = require('fs-jetpack')
+const path = require('path')
+const ChildProcess = require('child_process')
 electron.crashReporter.start()
 
 var mainWindow = null
-var appIcon = null
-var menu = null
-var finderWindow = null
-
+var finderProcess
 var update = null
 
 // app.on('window-all-closed', function () {
@@ -58,12 +55,15 @@ autoUpdater
 
 app.on('ready', function () {
   app.on('before-quit', function () {
+    if (finderProcess) finderProcess.kill()
     appQuit = true
   })
-  console.log('Version ' + version)
-  autoUpdater.setFeedUrl('http://orbital.b00st.io/rokt33r/boost-dev/latest?version=' + version)
-  // menu start
+
+  autoUpdater.setFeedURL('http://orbital.b00st.io/rokt33r/boost-dev/latest?version=' + version)
+
   var template = require('./atom-lib/menu-template')
+  var menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
 
   setInterval(function () {
     if (update == null) autoUpdater.checkForUpdates()
@@ -80,28 +80,6 @@ app.on('ready', function () {
     }
   })
 
-  menu = Menu.buildFromTemplate(template)
-
-  Menu.setApplicationMenu(menu)
-  // menu end
-  appIcon = new Tray(__dirname + '/resources/tray-icon.png')
-  appIcon.setToolTip('Boost')
-
-  var trayMenu = new Menu()
-  trayMenu.append(new MenuItem({
-    label: 'Open main window',
-    click: function () {
-      if (mainWindow != null) mainWindow.show()
-    }
-  }))
-  trayMenu.append(new MenuItem({
-    label: 'Quit',
-    click: function () {
-      app.quit()
-    }
-  }))
-  appIcon.setContextMenu(trayMenu)
-
   mainWindow = require('./atom-lib/main-window')
   mainWindow.on('close', function (e) {
     if (appQuit) return true
@@ -109,6 +87,13 @@ app.on('ready', function () {
     mainWindow.hide()
   })
   mainWindow.webContents.on('did-finish-load', function () {
+    finderProcess = ChildProcess
+      .execFile(process.execPath, [path.resolve(__dirname, 'finder.js')], {
+        stdio: 'pipe'
+      })
+    finderProcess.stdout.on('data', format)
+    finderProcess.stderr.on('data', errorFormat)
+
     if (update != null) {
       mainWindow.webContents.send('update-available', 'whoooooooh!')
     } else {
@@ -116,12 +101,56 @@ app.on('ready', function () {
     }
   })
 
-  app.on('activate-with-no-open-windows', function () {
+  app.on('activate', function () {
     if (mainWindow == null) return null
     mainWindow.show()
   })
 
-  finderWindow = require('./atom-lib/finder-window')
+  function format (payload) {
+    // console.log('from finder >> ', payload)
+    try {
+      payload = JSON.parse(payload)
+    } catch (e) {
+      console.log('Not parsable payload : ', payload)
+      return
+    }
+    switch (payload.type) {
+      case 'log':
+        console.log('FINDER(stdout): ' + payload.data)
+        break
+      case 'show-main-window':
+        if (mainWindow != null) {
+          mainWindow.show()
+        }
+        break
+      case 'request-data':
+        mainWindow.webContents.send('request-data')
+        break
+      case 'quit-app':
+        appQuit = true
+        app.quit()
+        break
+    }
+  }
+  function errorFormat (output) {
+    console.error('FINDER(stderr):' + output)
+  }
+
+  function emitToFinder (type, data) {
+    if (!finderProcess) {
+      console.log('finder process is not ready')
+      return
+    }
+    var payload = {
+      type: type,
+      data: data
+    }
+    finderProcess.stdin.write(JSON.stringify(payload))
+  }
+
+  ipc.on('refresh-data', function (e, data) {
+    emitToFinder('refresh-data', data)
+  })
 
   var userDataPath = app.getPath('userData')
   if (!jetpack.cwd(userDataPath).exists('keymap.json')) {
@@ -138,10 +167,7 @@ app.on('ready', function () {
 
   try {
     globalShortcut.register(toggleFinderKey, function () {
-      if (mainWindow != null && !mainWindow.isFocused()) {
-        mainWindow.hide()
-      }
-      finderWindow.show()
+      emitToFinder('open-finder')
     })
   } catch (err) {
     console.log(err.name)
@@ -157,10 +183,7 @@ app.on('ready', function () {
     var toggleFinderKey = global.keymap.toggleFinder != null ? global.keymap.toggleFinder : 'ctrl+tab+shift'
     try {
       globalShortcut.register(toggleFinderKey, function () {
-        if (mainWindow != null && !mainWindow.isFocused()) {
-          mainWindow.hide()
-        }
-        finderWindow.show()
+        emitToFinder('open-finder')
       })
       mainWindow.webContents.send('APP_SETTING_DONE', {})
     } catch (err) {
@@ -170,12 +193,4 @@ app.on('ready', function () {
       })
     }
   })
-
-  global.hideFinder = function () {
-    if (!mainWindow.isVisible()) {
-      Menu.sendActionToFirstResponder('hide:')
-    } else {
-      mainWindow.focus()
-    }
-  }
 })
