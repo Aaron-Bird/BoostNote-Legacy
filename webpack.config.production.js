@@ -45,7 +45,7 @@ module.exports = {
     'lodash',
     'markdown-it',
     'moment',
-    'node-notifier'
+    'highlight.js'
   ],
   resolve: {
     extensions: ['', '.js', '.jsx', 'styl']

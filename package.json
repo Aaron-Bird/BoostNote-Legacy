@@ -1,6 +1,6 @@
 {
   "name": "boost",
-  "version": "0.4.1-beta.3",
+  "version": "0.4.1-beta.4",
   "description": "Boost App",
   "main": "main.js",
   "scripts": {
@@ -40,6 +40,7 @@
     "devicon": "^2.0.0",
     "font-awesome": "^4.3.0",
     "fs-jetpack": "^0.7.0",
+    "highlight.js": "^8.9.1",
     "lodash": "^3.10.1",
     "markdown-it": "^4.3.1",
     "md5": "^2.0.0",
@@ -59,10 +60,9 @@
     "react-dom": "^0.14.0",
     "react-redux": "^4.0.0",
     "react-router": "^1.0.0-rc1",
-    "react-select": "^0.8.1",
     "react-transform-catch-errors": "^1.0.0",
     "react-transform-hmr": "^1.0.1",
-    "redbox-react": "^1.1.1",
+    "redbox-react": "^1.2.0",
     "redux": "^3.0.2",
     "standard": "^5.3.1",
     "style-loader": "^0.12.4",

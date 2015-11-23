@@ -69,7 +69,7 @@ var config = {
     'lodash',
     'markdown-it',
     'moment',
-    'node-notifier'
+    'highlight.js'
   ]
 }
 
