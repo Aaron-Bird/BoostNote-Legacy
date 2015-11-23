@@ -10,9 +10,10 @@ import { selectArticle, searchArticle, refreshData } from './actions'
 import _ from 'lodash'
 import activityRecord from 'boost/activityRecord'
 
-import remote from 'remote'
+const electron = require('electron')
+const { remote, clipboard } = electron
+
 var hideFinder = remote.getGlobal('hideFinder')
-import clipboard from 'clipboard'
 
 function notify (...args) {
   return new window.Notification(...args)

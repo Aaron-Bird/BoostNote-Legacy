@@ -1,11 +1,13 @@
-var app = require('app')
-var Menu = require('menu')
-var MenuItem = require('menu-item')
-var Tray = require('tray')
-var ipc = require('ipc')
-var jetpack = require('fs-jetpack')
-
-require('crash-reporter').start()
+const electron = require('electron')
+const app = electron.app
+const Menu = electron.Menu
+const MenuItem = electron.MenuItem
+const Tray = electron.Tray
+const ipc = electron.ipcMain
+const globalShortcut = electron.globalShortcut
+const autoUpdater = electron.autoUpdater
+const jetpack = require('fs-jetpack')
+electron.crashReporter.start()
 
 var mainWindow = null
 var appIcon = null
@@ -17,8 +19,6 @@ var update = null
 // app.on('window-all-closed', function () {
 //   if (process.platform !== 'darwin') app.quit()
 // })
-
-var autoUpdater = require('auto-updater')
 
 var appQuit = false
 
@@ -123,7 +123,6 @@ app.on('ready', function () {
 
   finderWindow = require('./atom-lib/finder-window')
 
-  var globalShortcut = require('global-shortcut')
   var userDataPath = app.getPath('userData')
   if (!jetpack.cwd(userDataPath).exists('keymap.json')) {
     jetpack.cwd(userDataPath).file('keymap.json', {content: '{}'})

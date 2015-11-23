@@ -1,4 +1,5 @@
-import ipc from 'ipc'
+const electron = require('electron')
+const ipc = electron.ipcRenderer
 import React, { PropTypes } from 'react'
 
 var ContactModal = require('boost/components/modal/ContactModal')

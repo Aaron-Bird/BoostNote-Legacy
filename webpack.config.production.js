@@ -38,6 +38,7 @@ module.exports = {
     })
   ],
   externals: [
+    'electron',
     'socket.io-client',
     'md5',
     'superagent',
@@ -50,6 +51,5 @@ module.exports = {
   ],
   resolve: {
     extensions: ['', '.js', '.jsx', 'styl']
-  },
-  target: 'atom'
+  }
 }

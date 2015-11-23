@@ -11,7 +11,7 @@
     "codesign": "codesign --verbose --deep --force --sign \"MAISIN solutions Inc.\" Boost-darwin-x64/Boost.app"
   },
   "config": {
-    "version": "--version=0.34.0 --app-bundle-id=com.maisin.boost",
+    "version": "--version=0.35.1 --app-bundle-id=com.maisin.boost",
     "platform": "--platform=darwin --arch=x64 --prune --icon=resources/app.icns",
     "ignore": "--ignore=Boost-darwin-x64 --ignore=node_modules/devicon/icons --ignore=submodules/ace/(?!src-min)|submodules/ace/(?=src-min-noconflict)"
   },
@@ -55,7 +55,7 @@
     "babel-plugin-react-transform": "^1.1.1",
     "css-loader": "^0.19.0",
     "electron-packager": "^5.1.0",
-    "electron-prebuilt": "^0.33.6",
+    "electron-prebuilt": "^0.35.1",
     "nib": "^1.1.0",
     "react": "^0.14.0",
     "react-dom": "^0.14.0",

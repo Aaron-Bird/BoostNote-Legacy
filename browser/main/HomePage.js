@@ -7,8 +7,9 @@ import ArticleTopBar from './HomePage/ArticleTopBar'
 import ArticleList from './HomePage/ArticleList'
 import ArticleDetail from './HomePage/ArticleDetail'
 import _ from 'lodash'
-import keygen from 'boost/keygen'
 import { isModalOpen, closeModal } from 'boost/modal'
+const electron = require('electron')
+const BrowserWindow = electron.remote.BrowserWindow
 
 const TEXT_FILTER = 'TEXT_FILTER'
 const FOLDER_FILTER = 'FOLDER_FILTER'
@@ -31,7 +32,7 @@ class HomePage extends React.Component {
     if (process.env.BOOST_ENV === 'development' && e.keyCode === 73 && e.metaKey && e.altKey) {
       e.preventDefault()
       e.stopPropagation()
-      require('remote').require('browser-window').getFocusedWindow().toggleDevTools()
+      BrowserWindow.getFocusedWindow().toggleDevTools()
       return
     }
 

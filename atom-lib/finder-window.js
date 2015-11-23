@@ -1,5 +1,6 @@
-var BrowserWindow = require('browser-window')
-var path = require('path')
+const electron = require('electron')
+const BrowserWindow = electron.BrowserWindow
+const path = require('path')
 
 var finderWindow = new BrowserWindow({
   width: 640,
@@ -18,7 +19,7 @@ var finderWindow = new BrowserWindow({
 
 var url = path.resolve(__dirname, '../browser/finder/index.html')
 
-finderWindow.loadUrl('file://' + url)
+finderWindow.loadURL('file://' + url)
 
 finderWindow.on('blur', function () {
   finderWindow.hide()
