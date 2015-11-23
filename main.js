@@ -22,34 +22,40 @@ var appQuit = false
 var version = app.getVersion()
 var versionText = (version == null || version.length === 0) ? 'DEV version' : 'v' + version
 var versionNotified = false
+
+function notify (title, body) {
+  if (mainWindow != null) {
+    mainWindow.webContents.send('notify', {
+      title: title,
+      body: body
+    })
+  }
+}
+
 autoUpdater
   .on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
     update = quitAndUpdate
 
     if (mainWindow != null) {
-      mainWindow.webContents.send('notify', 'Ready to Update! ' + releaseName, 'Click update button on Main window.')
+      notify('Ready to Update! ' + releaseName, 'Click update button on Main window.')
       mainWindow.webContents.send('update-available', 'Update available!')
     }
   })
   .on('error', function (err, message) {
     console.error(err)
-    if (mainWindow != null && !versionNotified) {
-      mainWindow.webContents.send('notify', 'Updater error!', message)
-    }
+    notify('Updater error!', message)
   })
   // .on('checking-for-update', function () {
   //   // Connecting
   //   console.log('checking...')
   // })
   .on('update-available', function () {
-    if (mainWindow != null) {
-      mainWindow.webContents.send('notify', 'Update is available!', 'Download started.. wait for the update ready.')
-    }
+    notify('Update is available!', 'Download started.. wait for the update ready.')
   })
   .on('update-not-available', function () {
     if (mainWindow != null && !versionNotified) {
       versionNotified = true
-      mainWindow.webContents.send('notify', 'Latest Build!! ' + versionText, 'Hope you to enjoy our app :D')
+      notify('Latest Build!! ' + versionText, 'Hope you to enjoy our app :D')
     }
   })
 
@@ -59,7 +65,7 @@ app.on('ready', function () {
     appQuit = true
   })
 
-  autoUpdater.setFeedURL('http://orbital.b00st.io/rokt33r/boost-dev/latest?version=' + version)
+  autoUpdater.setFeedURL('https://orbital.b00st.io/rokt33r/boost-dev/latest?version=' + version)
 
   var template = require('./atom-lib/menu-template')
   var menu = Menu.buildFromTemplate(template)

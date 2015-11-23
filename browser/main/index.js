@@ -24,9 +24,9 @@ function notify (...args) {
   return new window.Notification(...args)
 }
 
-ipc.on('notify', function (title, message) {
-  notify(title, {
-    body: message
+ipc.on('notify', function (e, payload) {
+  notify(payload.title, {
+    body: payload.body
   })
 })
 
