@@ -45,7 +45,8 @@ module.exports = {
     'lodash',
     'markdown-it',
     'moment',
-    'highlight.js'
+    'highlight.js',
+    'markdown-it-emoji'
   ],
   resolve: {
     extensions: ['', '.js', '.jsx', 'styl']

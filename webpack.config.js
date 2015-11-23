@@ -69,7 +69,8 @@ var config = {
     'lodash',
     'markdown-it',
     'moment',
-    'highlight.js'
+    'highlight.js',
+    'markdown-it-emoji'
   ]
 }
 
