@@ -2,7 +2,7 @@
   "name": "boost",
   "version": "0.4.1-beta.4",
   "description": "Boost App",
-  "main": "main.js",
+  "main": "index.js",
   "scripts": {
     "start": "BOOST_ENV=development electron ./main.js",
     "webpack": "webpack-dev-server --hot --inline --config webpack.config.js",

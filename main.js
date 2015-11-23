@@ -87,8 +87,9 @@ app.on('ready', function () {
     mainWindow.hide()
   })
   mainWindow.webContents.on('did-finish-load', function () {
+    require('module')._load(path.resolve(__dirname, 'finder.js'), module, true)
     finderProcess = ChildProcess
-      .execFile(process.execPath, [path.resolve(__dirname, 'finder.js')], {
+      .execFile(process.execPath, [path.resolve(__dirname, 'finder.js'), '--finder'], {
         stdio: 'pipe'
       })
     finderProcess.stdout.on('data', format)
