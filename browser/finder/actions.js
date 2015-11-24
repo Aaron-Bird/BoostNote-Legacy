@@ -28,3 +28,12 @@ export function refreshData (data) {
     }
   }
 }
+
+export default {
+  SELECT_ARTICLE,
+  SEARCH_ARTICLE,
+  REFRESH_DATA,
+  selectArticle,
+  searchArticle,
+  refreshData
+}

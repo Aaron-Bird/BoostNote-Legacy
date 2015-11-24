@@ -3,7 +3,6 @@ const app = electron.app
 const Tray = electron.Tray
 const Menu = electron.Menu
 const MenuItem = electron.MenuItem
-const ipc = electron.ipcMain
 
 process.stdin.setEncoding('utf8')
 
@@ -11,14 +10,14 @@ console.log = function () {
   process.stdout.write(JSON.stringify({
     type: 'log',
     data: JSON.stringify(Array.prototype.slice.call(arguments).join(' '))
-  }))
+  }), 'utf-8')
 }
 
 function emit (type, data) {
   process.stdout.write(JSON.stringify({
     type: type,
     data: JSON.stringify(data)
-  }))
+  }), 'utf-8')
 }
 
 var finderWindow
@@ -50,10 +49,6 @@ app.on('ready', function () {
     }))
     appIcon.setContextMenu(trayMenu)
 
-    ipc.on('request-data', function () {
-      emit('request-data')
-    })
-
     process.stdin.on('data', function (payload) {
       try {
         payload = JSON.parse(payload)
@@ -66,13 +61,8 @@ app.on('ready', function () {
         case 'open-finder':
           finderWindow.show()
           break
-        case 'refresh-data':
-          finderWindow.webContents.send('refresh-data', payload.data)
-          break
       }
     })
-
-    emit('request-data')
   })
 
   global.hideFinder = function () {

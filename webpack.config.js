@@ -50,7 +50,8 @@ var config = {
     'markdown-it',
     'moment',
     'highlight.js',
-    'markdown-it-emoji'
+    'markdown-it-emoji',
+    'fs-jetpack'
   ]
 }
 

@@ -47,7 +47,8 @@ module.exports = {
     'markdown-it',
     'moment',
     'highlight.js',
-    'markdown-it-emoji'
+    'markdown-it-emoji',
+    'fs-jetpack'
   ],
   resolve: {
     extensions: ['', '.js', '.jsx', 'styl']

@@ -93,13 +93,14 @@ app.on('ready', function () {
     mainWindow.hide()
   })
   mainWindow.webContents.on('did-finish-load', function () {
-    require('module')._load(path.resolve(__dirname, 'finder.js'), module, true)
-    finderProcess = ChildProcess
-      .execFile(process.execPath, [path.resolve(__dirname, 'finder.js'), '--finder'], {
-        stdio: 'pipe'
-      })
-    finderProcess.stdout.on('data', format)
-    finderProcess.stderr.on('data', errorFormat)
+    if (finderProcess == null) {
+      finderProcess = ChildProcess
+        .execFile(process.execPath, [path.resolve(__dirname, 'finder.js'), '--finder'])
+      finderProcess.stdout.setEncoding('utf8')
+      finderProcess.stderr.setEncoding('utf8')
+      finderProcess.stdout.on('data', format)
+      finderProcess.stderr.on('data', errorFormat)
+    }
 
     if (update != null) {
       mainWindow.webContents.send('update-available', 'whoooooooh!')
@@ -152,12 +153,8 @@ app.on('ready', function () {
       type: type,
       data: data
     }
-    finderProcess.stdin.write(JSON.stringify(payload))
+    finderProcess.stdin.write(JSON.stringify(payload), 'utf-8')
   }
-
-  ipc.on('refresh-data', function (e, data) {
-    emitToFinder('refresh-data', data)
-  })
 
   var userDataPath = app.getPath('userData')
   if (!jetpack.cwd(userDataPath).exists('keymap.json')) {

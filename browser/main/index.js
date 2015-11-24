@@ -11,7 +11,6 @@ require('../styles/main/index.styl')
 import { openModal } from 'boost/modal'
 import Tutorial from 'boost/components/modal/Tutorial'
 import activityRecord from 'boost/activityRecord'
-import dataStore from 'boost/dataStore'
 const electron = require('electron')
 const ipc = electron.ipcRenderer
 
@@ -28,10 +27,6 @@ ipc.on('notify', function (e, payload) {
   notify(payload.title, {
     body: payload.body
   })
-})
-
-ipc.on('request-data', function () {
-  ipc.send('refresh-data', dataStore.getData())
 })
 
 let routes = (

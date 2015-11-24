@@ -6,12 +6,12 @@ import { createStore } from 'redux'
 import FinderInput from './FinderInput'
 import FinderList from './FinderList'
 import FinderDetail from './FinderDetail'
-import { selectArticle, searchArticle, refreshData } from './actions'
+import actions, { selectArticle, searchArticle } from './actions'
 import _ from 'lodash'
+import dataStore from 'boost/dataStore'
 
 const electron = require('electron')
 const { remote, clipboard } = electron
-const ipc = electron.ipcRenderer
 
 var hideFinder = remote.getGlobal('hideFinder')
 
@@ -212,16 +212,19 @@ function remap (state) {
 var Finder = connect(remap)(FinderMain)
 var store = createStore(reducer)
 
-window.onfocus = e => {
-  ipc.send('request-data')
+function refreshData () {
+  let data = dataStore.getData()
+  store.dispatch(actions.refreshData(data))
 }
 
-ipc.on('refresh-data', function (e, data) {
-  store.dispatch(refreshData(data))
-})
+window.onfocus = e => {
+  refreshData()
+}
 
 ReactDOM.render((
   <Provider store={store}>
     <Finder/>
   </Provider>
-), document.getElementById('content'))
+), document.getElementById('content'), function () {
+  refreshData()
+})
