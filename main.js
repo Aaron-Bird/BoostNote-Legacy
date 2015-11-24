@@ -43,7 +43,9 @@ autoUpdater
   })
   .on('error', function (err, message) {
     console.error(err)
-    notify('Updater error!', message)
+    if (!versionNotified) {
+      notify('Updater error!', message)
+    }
   })
   // .on('checking-for-update', function () {
   //   // Connecting
