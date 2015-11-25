@@ -1,4 +1,5 @@
-var BrowserWindow = require('browser-window')
+const electron = require('electron')
+const BrowserWindow = electron.BrowserWindow
 
 module.exports = [
   {

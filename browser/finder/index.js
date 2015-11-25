@@ -6,13 +6,14 @@ import { createStore } from 'redux'
 import FinderInput from './FinderInput'
 import FinderList from './FinderList'
 import FinderDetail from './FinderDetail'
-import { selectArticle, searchArticle, refreshData } from './actions'
+import actions, { selectArticle, searchArticle } from './actions'
 import _ from 'lodash'
-import activityRecord from 'boost/activityRecord'
+import dataStore from 'boost/dataStore'
 
-import remote from 'remote'
+const electron = require('electron')
+const { remote, clipboard } = electron
+
 var hideFinder = remote.getGlobal('hideFinder')
-import clipboard from 'clipboard'
 
 function notify (...args) {
   return new window.Notification(...args)
@@ -62,7 +63,6 @@ class FinderMain extends React.Component {
   saveToClipboard () {
     let { activeArticle } = this.props
     clipboard.writeText(activeArticle.content)
-    activityRecord.emit('FINDER_COPY')
 
     notify('Saved to Clipboard!', {
       body: 'Paste it wherever you want!'
@@ -212,13 +212,19 @@ function remap (state) {
 var Finder = connect(remap)(FinderMain)
 var store = createStore(reducer)
 
+function refreshData () {
+  let data = dataStore.getData()
+  store.dispatch(actions.refreshData(data))
+}
+
 window.onfocus = e => {
-  store.dispatch(refreshData())
-  activityRecord.emit('FINDER_OPEN')
+  refreshData()
 }
 
 ReactDOM.render((
   <Provider store={store}>
     <Finder/>
   </Provider>
-), document.getElementById('content'))
+), document.getElementById('content'), function () {
+  refreshData()
+})

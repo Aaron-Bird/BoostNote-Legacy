@@ -16,11 +16,8 @@ export function searchArticle (input) {
   }
 }
 
-export function refreshData () {
+export function refreshData (data) {
   console.log('refreshing data')
-  let data = JSON.parse(localStorage.getItem('local'))
-  if (data == null) return null
-
   let { folders, articles } = data
 
   return {
@@ -30,4 +27,13 @@ export function refreshData () {
       folders
     }
   }
+}
+
+export default {
+  SELECT_ARTICLE,
+  SEARCH_ARTICLE,
+  REFRESH_DATA,
+  selectArticle,
+  searchArticle,
+  refreshData
 }

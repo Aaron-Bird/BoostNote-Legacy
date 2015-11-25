@@ -7,7 +7,8 @@ import Preferences from 'boost/components/modal/Preferences'
 import CreateNewFolder from 'boost/components/modal/CreateNewFolder'
 import keygen from 'boost/keygen'
 
-import remote from 'remote'
+const electron = require('electron')
+const remote = electron.remote
 let userName = remote.getGlobal('process').env.USER
 
 const BRAND_COLOR = '#18AF90'

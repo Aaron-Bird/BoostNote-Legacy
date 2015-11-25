@@ -1,10 +1,8 @@
 import { combineReducers } from 'redux'
 import { SELECT_ARTICLE, SEARCH_ARTICLE, REFRESH_DATA } from './actions'
 
-let data = JSON.parse(localStorage.getItem('local'))
-
-let initialArticles = data != null ? data.articles : []
-let initialFolders = data != null ? data.folders : []
+let initialArticles = []
+let initialFolders = []
 let initialStatus = {
   articleKey: null,
   search: ''

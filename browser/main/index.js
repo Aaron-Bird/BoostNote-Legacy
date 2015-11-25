@@ -11,7 +11,8 @@ require('../styles/main/index.styl')
 import { openModal } from 'boost/modal'
 import Tutorial from 'boost/components/modal/Tutorial'
 import activityRecord from 'boost/activityRecord'
-import ipc from 'ipc'
+const electron = require('electron')
+const ipc = electron.ipcRenderer
 
 activityRecord.init()
 window.addEventListener('online', function () {
@@ -22,9 +23,9 @@ function notify (...args) {
   return new window.Notification(...args)
 }
 
-ipc.on('notify', function (title, message) {
-  notify(title, {
-    body: message
+ipc.on('notify', function (e, payload) {
+  notify(payload.title, {
+    body: payload.body
   })
 })
 

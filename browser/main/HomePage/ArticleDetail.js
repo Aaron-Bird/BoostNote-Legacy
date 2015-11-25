@@ -14,7 +14,6 @@ import {
   clearSearch,
   lockStatus,
   unlockStatus,
-  clearNewArticle,
   updateArticle,
   destroyArticle,
   NEW
@@ -248,9 +247,7 @@ export default class ArticleDetail extends React.Component {
   handleCancelButtonClick (e) {
     let { activeArticle, dispatch } = this.props
 
-    dispatch(unlockStatus())
     if (activeArticle.status === NEW) {
-      dispatch(clearNewArticle())
       dispatch(switchArticle(null))
     }
     dispatch(switchMode(IDLE_MODE))

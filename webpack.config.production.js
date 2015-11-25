@@ -38,6 +38,7 @@ module.exports = {
     })
   ],
   externals: [
+    'electron',
     'socket.io-client',
     'md5',
     'superagent',
@@ -45,10 +46,11 @@ module.exports = {
     'lodash',
     'markdown-it',
     'moment',
-    'node-notifier'
+    'highlight.js',
+    'markdown-it-emoji',
+    'fs-jetpack'
   ],
   resolve: {
     extensions: ['', '.js', '.jsx', 'styl']
-  },
-  target: 'atom'
+  }
 }

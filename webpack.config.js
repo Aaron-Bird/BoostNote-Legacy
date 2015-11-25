@@ -3,7 +3,6 @@ var path = require('path')
 var JsonpTemplatePlugin = webpack.JsonpTemplatePlugin
 var FunctionModulePlugin = require('webpack/lib/FunctionModulePlugin')
 var NodeTargetPlugin = require('webpack/lib/node/NodeTargetPlugin')
-var ExternalsPlugin = webpack.ExternalsPlugin
 var opt = {
   path: path.join(__dirname, 'compiled'),
   filename: '[name].js',
@@ -39,29 +38,10 @@ var config = {
   },
   plugins: [
     new webpack.NoErrorsPlugin(),
-    new ExternalsPlugin('commonjs', [
-      'app',
-      'auto-updater',
-      'browser-window',
-      'content-tracing',
-      'dialog',
-      'global-shortcut',
-      'ipc',
-      'menu',
-      'menu-item',
-      'power-monitor',
-      'protocol',
-      'tray',
-      'remote',
-      'web-frame',
-      'clipboard',
-      'crash-reporter',
-      'screen',
-      'shell'
-    ]),
     new NodeTargetPlugin()
   ],
   externals: [
+    'electron',
     'socket.io-client',
     'md5',
     'superagent',
@@ -69,7 +49,9 @@ var config = {
     'lodash',
     'markdown-it',
     'moment',
-    'node-notifier'
+    'highlight.js',
+    'markdown-it-emoji',
+    'fs-jetpack'
   ]
 }
 
