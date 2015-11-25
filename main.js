@@ -67,7 +67,7 @@ app.on('ready', function () {
     appQuit = true
   })
   console.log('Version ' + version)
-  autoUpdater.setFeedUrl('http://orbital.b00st.io/rokt33r/boost-app/latest?version=' + version)
+  autoUpdater.setFeedUrl('https://orbital.b00st.io/rokt33r/boost-app/latest?version=' + version)
   autoUpdater.checkForUpdates()
 
   var template = require('./atom-lib/menu-template')
