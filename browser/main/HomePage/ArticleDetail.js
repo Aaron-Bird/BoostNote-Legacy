@@ -267,6 +267,9 @@ export default class ArticleDetail extends React.Component {
     newArticle.updatedAt = new Date()
     if (newArticle.createdAt == null) {
       newArticle.createdAt = new Date()
+      if (newArticle.title.trim().length === 0) {
+        newArticle.title = `Created at ${moment(newArticle.createdAt).format('YYYY/MM/DD HH:mm')}`
+      }
       activityRecord.emit('ARTICLE_CREATE')
     } else {
       activityRecord.emit('ARTICLE_UPDATE')
@@ -464,7 +467,15 @@ export default class ArticleDetail extends React.Component {
           <div className='detailPanel'>
             <div className='header'>
               <div className='title'>
-                <input onKeyDown={e => this.handleTitleKeyDown(e)} placeholder='Title' ref='title' value={this.state.article.title} onChange={e => this.handleTitleChange(e)}/>
+                <input
+                  onKeyDown={e => this.handleTitleKeyDown(e)}
+                  placeholder={this.state.article.createdAt == null
+                    ? `Created at ${moment().format('YYYY/MM/DD HH:mm')}`
+                    : 'Title'}
+                  ref='title'
+                  value={this.state.article.title}
+                  onChange={e => this.handleTitleChange(e)}
+                />
               </div>
               <ModeSelect
                 ref='mode'
