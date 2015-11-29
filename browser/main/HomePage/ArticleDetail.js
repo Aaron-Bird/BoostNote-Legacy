@@ -185,7 +185,12 @@ export default class ArticleDetail extends React.Component {
       : (
         <span className='noTags'>Not tagged yet</span>
       ) : null
+
     let folder = _.findWhere(folders, {key: activeArticle.FolderKey})
+
+    let title = activeArticle.title.trim().length === 0
+      ? <small>(Untitled)</small>
+      : activeArticle.title
 
     return (
       <div className='ArticleDetail idle'>
@@ -232,7 +237,7 @@ export default class ArticleDetail extends React.Component {
           <div className='detailPanel'>
             <div className='header'>
               <ModeIcon className='mode' mode={activeArticle.mode}/>
-              <div className='title'>{activeArticle.title}</div>
+              <div className='title'>{title}</div>
             </div>
             {activeArticle.mode === 'markdown'
               ? <MarkdownPreview content={activeArticle.content}/>
@@ -265,9 +270,10 @@ export default class ArticleDetail extends React.Component {
 
     delete newArticle.status
     newArticle.updatedAt = new Date()
+    newArticle.title = newArticle.title.trim()
     if (newArticle.createdAt == null) {
       newArticle.createdAt = new Date()
-      if (newArticle.title.trim().length === 0) {
+      if (newArticle.title.length === 0) {
         newArticle.title = `Created at ${moment(newArticle.createdAt).format('YYYY/MM/DD HH:mm')}`
       }
       activityRecord.emit('ARTICLE_CREATE')
