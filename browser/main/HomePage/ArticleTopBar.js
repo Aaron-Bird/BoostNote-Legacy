@@ -118,8 +118,11 @@ export default class ArticleTopBar extends React.Component {
                 : null
             }
             <div className={'tooltip' + (this.state.isTooltipHidden ? ' hide' : '')}>
-              - Search by tag : #{'{string}'}<br/>
-              - Search by folder : /{'{folder_name}'}
+              <ul>
+                <li>- Search by tag : #{'{string}'}</li>
+                <li>- Search by folder : /{'{folder_name}'}</li>
+                <li><small>exact match : //{'{folder_name}'}</small></li>
+              </ul>
             </div>
           </div>
 
