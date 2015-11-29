@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import { findWhere } from 'lodash'
-import { setSearchFilter, switchFolder, switchMode, switchArticle, updateArticle, EDIT_MODE } from 'boost/actions'
+import { setSearchFilter, switchFolder, switchMode, switchArticle, updateArticle, clearNewArticle, EDIT_MODE } from 'boost/actions'
 import { openModal } from 'boost/modal'
 import FolderMark from 'boost/components/FolderMark'
 import Preferences from 'boost/components/modal/Preferences'
@@ -85,6 +85,7 @@ export default class ArticleNavigator extends React.Component {
       status: 'NEW'
     }
 
+    dispatch(clearNewArticle())
     dispatch(updateArticle(newArticle))
     dispatch(switchArticle(newArticle.key, true))
     dispatch(switchMode(EDIT_MODE))

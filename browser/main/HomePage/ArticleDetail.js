@@ -411,7 +411,9 @@ export default class ArticleDetail extends React.Component {
   }
 
   handleTogglePreviewButtonClick (e) {
-    this.setState({previewMode: !this.state.previewMode})
+    if (this.state.article.mode === 'markdown') {
+      this.setState({previewMode: !this.state.previewMode})
+    }
   }
 
   handleTitleKeyDown (e) {
