@@ -464,11 +464,21 @@ export default class ArticleDetail extends React.Component {
           <div className='right'>
             {
               this.state.article.mode === 'markdown'
-                ? (<button className='preview' onClick={e => this.handleTogglePreviewButtonClick(e)}>{!this.state.previewMode ? 'Preview' : 'Edit'}</button>)
+                ? (<button className='preview' onClick={e => this.handleTogglePreviewButtonClick(e)}>
+                    {
+                      !this.state.previewMode
+                      ? 'Preview'
+                      : 'Edit'
+                    }
+                  </button>)
                 : null
             }
-            <button onClick={e => this.handleCancelButtonClick(e)}>Cancel</button>
-            <button onClick={e => this.handleSaveButtonClick(e)} className='primary'>Save</button>
+            <button onClick={e => this.handleCancelButtonClick(e)}>
+              Cancel
+            </button>
+            <button onClick={e => this.handleSaveButtonClick(e)} className='primary'>
+              Save
+            </button>
           </div>
         </div>
         <div className='detailBody'>
