@@ -35,7 +35,8 @@ export default class ArticleTopBar extends React.Component {
     super(props)
 
     this.state = {
-      isTooltipHidden: true
+      isTooltipHidden: true,
+      isLinksDropdownOpen: false
     }
   }
 
@@ -96,6 +97,28 @@ export default class ArticleTopBar extends React.Component {
     dispatch(toggleTutorial())
   }
 
+  handleLinksDropdownClick (e) {
+    e.preventDefault()
+    let linksButton = document.activeElement
+    this.handleLinksDropdownClickHandler = e => {
+      if (linksButton !== document.activeElement) {
+        console.log('hide dropdown')
+        document.removeEventListener('click', this.handleLinksDropdownClickHandler)
+        this.setState({
+          isLinksDropdownOpen: false
+        })
+      }
+    }
+
+    if (!this.state.isLinksDropdownOpen) {
+      document.removeEventListener('click', this.handleLinksDropdownClickHandler)
+      document.addEventListener('click', this.handleLinksDropdownClickHandler)
+      this.setState({
+        isLinksDropdownOpen: true
+      })
+    }
+  }
+
   render () {
     let { status } = this.props
     return (
@@ -132,10 +155,23 @@ export default class ArticleTopBar extends React.Component {
         <div className='right'>
           <button onClick={e => this.handleTutorialButtonClick(e)}>?<span className='tooltip'>How to use</span>
           </button>
-          <ExternalLink className='logo' href='http://b00st.io'>
+          <a className='linksBtn' onClick={e => this.handleLinksDropdownClick(e)} href>
             <img src='../../resources/favicon-230x230.png' width='44' height='44'/>
-            <span className='tooltip'>Boost official page</span>
-          </ExternalLink>
+          </a>
+          {
+            this.state.isLinksDropdownOpen
+              ? (
+                <div className='links-dropdown'>
+                  <ExternalLink className='links-item' href='https://b00st.io'>
+                    <i className='fa fa-fw fa-home'/>Boost official page
+                  </ExternalLink>
+                  <ExternalLink className='links-item' href='https://github.com/BoostIO/boost-app-discussions/issues'>
+                    <i className='fa fa-fw fa-bullhorn'/> Discuss
+                  </ExternalLink>
+                </div>
+              )
+              : null
+          }
         </div>
 
         {status.isTutorialOpen ? (
