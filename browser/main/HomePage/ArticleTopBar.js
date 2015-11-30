@@ -42,12 +42,26 @@ export default class ArticleTopBar extends React.Component {
 
   componentDidMount () {
     this.searchInput = ReactDOM.findDOMNode(this.refs.searchInput)
+    this.linksButton = ReactDOM.findDOMNode(this.refs.links)
+    this.showLinksDropdown = e => {
+      e.preventDefault()
+      e.stopPropagation()
+      if (!this.state.isLinksDropdownOpen) {
+        this.setState({isLinksDropdownOpen: true})
+      }
+    }
+    this.linksButton.addEventListener('click', this.showLinksDropdown)
+    this.hideLinksDropdown = e => {
+      if (this.state.isLinksDropdownOpen) {
+        this.setState({isLinksDropdownOpen: false})
+      }
+    }
+    document.addEventListener('click', this.hideLinksDropdown)
   }
 
   componentWillUnmount () {
-    this.searchInput.removeEventListener('keydown', this.showTooltip)
-    this.searchInput.removeEventListener('focus', this.showTooltip)
-    this.searchInput.removeEventListener('blur', this.showTooltip)
+    document.removeEventListener('click', this.hideLinksDropdown)
+    this.linksButton.removeEventListener('click', this.showLinksDropdown())
   }
 
   handleTooltipRequest (e) {
@@ -97,28 +111,6 @@ export default class ArticleTopBar extends React.Component {
     dispatch(toggleTutorial())
   }
 
-  handleLinksDropdownClick (e) {
-    e.preventDefault()
-    let linksButton = document.activeElement
-    this.handleLinksDropdownClickHandler = e => {
-      if (linksButton !== document.activeElement) {
-        console.log('hide dropdown')
-        document.removeEventListener('click', this.handleLinksDropdownClickHandler)
-        this.setState({
-          isLinksDropdownOpen: false
-        })
-      }
-    }
-
-    if (!this.state.isLinksDropdownOpen) {
-      document.removeEventListener('click', this.handleLinksDropdownClickHandler)
-      document.addEventListener('click', this.handleLinksDropdownClickHandler)
-      this.setState({
-        isLinksDropdownOpen: true
-      })
-    }
-  }
-
   render () {
     let { status } = this.props
     return (
@@ -155,7 +147,7 @@ export default class ArticleTopBar extends React.Component {
         <div className='right'>
           <button onClick={e => this.handleTutorialButtonClick(e)}>?<span className='tooltip'>How to use</span>
           </button>
-          <a className='linksBtn' onClick={e => this.handleLinksDropdownClick(e)} href>
+          <a ref='links' className='linksBtn' href>
             <img src='../../resources/favicon-230x230.png' width='44' height='44'/>
           </a>
           {
