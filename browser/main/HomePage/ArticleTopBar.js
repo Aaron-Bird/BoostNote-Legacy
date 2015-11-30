@@ -35,18 +35,33 @@ export default class ArticleTopBar extends React.Component {
     super(props)
 
     this.state = {
-      isTooltipHidden: true
+      isTooltipHidden: true,
+      isLinksDropdownOpen: false
     }
   }
 
   componentDidMount () {
     this.searchInput = ReactDOM.findDOMNode(this.refs.searchInput)
+    this.linksButton = ReactDOM.findDOMNode(this.refs.links)
+    this.showLinksDropdown = e => {
+      e.preventDefault()
+      e.stopPropagation()
+      if (!this.state.isLinksDropdownOpen) {
+        this.setState({isLinksDropdownOpen: true})
+      }
+    }
+    this.linksButton.addEventListener('click', this.showLinksDropdown)
+    this.hideLinksDropdown = e => {
+      if (this.state.isLinksDropdownOpen) {
+        this.setState({isLinksDropdownOpen: false})
+      }
+    }
+    document.addEventListener('click', this.hideLinksDropdown)
   }
 
   componentWillUnmount () {
-    this.searchInput.removeEventListener('keydown', this.showTooltip)
-    this.searchInput.removeEventListener('focus', this.showTooltip)
-    this.searchInput.removeEventListener('blur', this.showTooltip)
+    document.removeEventListener('click', this.hideLinksDropdown)
+    this.linksButton.removeEventListener('click', this.showLinksDropdown())
   }
 
   handleTooltipRequest (e) {
@@ -118,8 +133,11 @@ export default class ArticleTopBar extends React.Component {
                 : null
             }
             <div className={'tooltip' + (this.state.isTooltipHidden ? ' hide' : '')}>
-              - Search by tag : #{'{string}'}<br/>
-              - Search by folder : /{'{folder_name}'}
+              <ul>
+                <li>- Search by tag : #{'{string}'}</li>
+                <li>- Search by folder : /{'{folder_name}'}</li>
+                <li><small>exact match : //{'{folder_name}'}</small></li>
+              </ul>
             </div>
           </div>
 
@@ -129,10 +147,23 @@ export default class ArticleTopBar extends React.Component {
         <div className='right'>
           <button onClick={e => this.handleTutorialButtonClick(e)}>?<span className='tooltip'>How to use</span>
           </button>
-          <ExternalLink className='logo' href='http://b00st.io'>
+          <a ref='links' className='linksBtn' href>
             <img src='../../resources/favicon-230x230.png' width='44' height='44'/>
-            <span className='tooltip'>Boost official page</span>
-          </ExternalLink>
+          </a>
+          {
+            this.state.isLinksDropdownOpen
+              ? (
+                <div className='links-dropdown'>
+                  <ExternalLink className='links-item' href='https://b00st.io'>
+                    <i className='fa fa-fw fa-home'/>Boost official page
+                  </ExternalLink>
+                  <ExternalLink className='links-item' href='https://github.com/BoostIO/boost-app-discussions/issues'>
+                    <i className='fa fa-fw fa-bullhorn'/> Discuss
+                  </ExternalLink>
+                </div>
+              )
+              : null
+          }
         </div>
 
         {status.isTutorialOpen ? (

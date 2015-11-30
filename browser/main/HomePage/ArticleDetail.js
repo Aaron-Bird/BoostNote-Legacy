@@ -25,6 +25,9 @@ import TagSelect from 'boost/components/TagSelect'
 import ModeSelect from 'boost/components/ModeSelect'
 import activityRecord from 'boost/activityRecord'
 
+const electron = require('electron')
+const clipboard = electron.clipboard
+
 const BRAND_COLOR = '#18AF90'
 
 const editDeleteTutorialElement = (
@@ -83,6 +86,10 @@ const modeSelectTutorialElement = (
     </svg>
   </svg>
 )
+
+function notify (...args) {
+  return new window.Notification(...args)
+}
 
 function makeInstantArticle (article) {
   return Object.assign({}, article)
@@ -154,6 +161,13 @@ export default class ArticleDetail extends React.Component {
     )
   }
 
+  handleClipboardButtonClick (e) {
+    clipboard.writeText(this.props.activeArticle.content)
+    notify('Saved to Clipboard!', {
+      body: 'Paste it wherever you want!'
+    })
+  }
+
   handleEditButtonClick (e) {
     let { dispatch } = this.props
     dispatch(switchMode(EDIT_MODE))
@@ -185,7 +199,12 @@ export default class ArticleDetail extends React.Component {
       : (
         <span className='noTags'>Not tagged yet</span>
       ) : null
+
     let folder = _.findWhere(folders, {key: activeArticle.FolderKey})
+
+    let title = activeArticle.title.trim().length === 0
+      ? <small>(Untitled)</small>
+      : activeArticle.title
 
     return (
       <div className='ArticleDetail idle'>
@@ -214,6 +233,9 @@ export default class ArticleDetail extends React.Component {
                 <div className='tags'><i className='fa fa-fw fa-tags'/>{tags}</div>
               </div>
               <div className='right'>
+                <button onClick={e => this.handleClipboardButtonClick(e)} className='editBtn'>
+                  <i className='fa fa-fw fa-clipboard'/><span className='tooltip'>Copy to clipboard</span>
+                </button>
                 <button onClick={e => this.handleEditButtonClick(e)} className='editBtn'>
                   <i className='fa fa-fw fa-edit'/><span className='tooltip'>Edit (e)</span>
                 </button>
@@ -232,7 +254,7 @@ export default class ArticleDetail extends React.Component {
           <div className='detailPanel'>
             <div className='header'>
               <ModeIcon className='mode' mode={activeArticle.mode}/>
-              <div className='title'>{activeArticle.title}</div>
+              <div className='title'>{title}</div>
             </div>
             {activeArticle.mode === 'markdown'
               ? <MarkdownPreview content={activeArticle.content}/>
@@ -265,8 +287,12 @@ export default class ArticleDetail extends React.Component {
 
     delete newArticle.status
     newArticle.updatedAt = new Date()
+    newArticle.title = newArticle.title.trim()
     if (newArticle.createdAt == null) {
       newArticle.createdAt = new Date()
+      if (newArticle.title.length === 0) {
+        newArticle.title = `Created at ${moment(newArticle.createdAt).format('YYYY/MM/DD HH:mm')}`
+      }
       activityRecord.emit('ARTICLE_CREATE')
     } else {
       activityRecord.emit('ARTICLE_UPDATE')
@@ -408,7 +434,9 @@ export default class ArticleDetail extends React.Component {
   }
 
   handleTogglePreviewButtonClick (e) {
-    this.setState({previewMode: !this.state.previewMode})
+    if (this.state.article.mode === 'markdown') {
+      this.setState({previewMode: !this.state.previewMode})
+    }
   }
 
   handleTitleKeyDown (e) {
@@ -453,18 +481,36 @@ export default class ArticleDetail extends React.Component {
           <div className='right'>
             {
               this.state.article.mode === 'markdown'
-                ? (<button className='preview' onClick={e => this.handleTogglePreviewButtonClick(e)}>{!this.state.previewMode ? 'Preview' : 'Edit'}</button>)
+                ? (<button className='preview' onClick={e => this.handleTogglePreviewButtonClick(e)}>
+                    {
+                      !this.state.previewMode
+                      ? 'Preview'
+                      : 'Edit'
+                    }
+                  </button>)
                 : null
             }
-            <button onClick={e => this.handleCancelButtonClick(e)}>Cancel</button>
-            <button onClick={e => this.handleSaveButtonClick(e)} className='primary'>Save</button>
+            <button onClick={e => this.handleCancelButtonClick(e)}>
+              Cancel
+            </button>
+            <button onClick={e => this.handleSaveButtonClick(e)} className='primary'>
+              Save
+            </button>
           </div>
         </div>
         <div className='detailBody'>
           <div className='detailPanel'>
             <div className='header'>
               <div className='title'>
-                <input onKeyDown={e => this.handleTitleKeyDown(e)} placeholder='Title' ref='title' value={this.state.article.title} onChange={e => this.handleTitleChange(e)}/>
+                <input
+                  onKeyDown={e => this.handleTitleKeyDown(e)}
+                  placeholder={this.state.article.createdAt == null
+                    ? `Created at ${moment().format('YYYY/MM/DD HH:mm')}`
+                    : 'Title'}
+                  ref='title'
+                  value={this.state.article.title}
+                  onChange={e => this.handleTitleChange(e)}
+                />
               </div>
               <ModeSelect
                 ref='mode'

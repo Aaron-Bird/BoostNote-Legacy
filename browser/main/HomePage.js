@@ -1,6 +1,6 @@
 import React, { PropTypes} from 'react'
 import { connect } from 'react-redux'
-import { CREATE_MODE, EDIT_MODE, IDLE_MODE, NEW, toggleTutorial } from 'boost/actions'
+import { EDIT_MODE, IDLE_MODE, NEW, toggleTutorial } from 'boost/actions'
 // import UserNavigator from './HomePage/UserNavigator'
 import ArticleNavigator from './HomePage/ArticleNavigator'
 import ArticleTopBar from './HomePage/ArticleTopBar'
@@ -57,13 +57,20 @@ class HomePage extends React.Component {
     }
 
     switch (status.mode) {
-      case CREATE_MODE:
+
       case EDIT_MODE:
         if (e.keyCode === 27) {
           detail.handleCancelButtonClick()
         }
         if ((e.keyCode === 13 && e.metaKey) || (e.keyCode === 83 && e.metaKey)) {
           detail.handleSaveButtonClick()
+        }
+        if (e.keyCode === 80 && e.metaKey) {
+          detail.handleTogglePreviewButtonClick()
+        }
+        if (e.keyCode === 78 && e.metaKey) {
+          nav.handleNewPostButtonClick()
+          e.preventDefault()
         }
         break
       case IDLE_MODE:
@@ -99,7 +106,7 @@ class HomePage extends React.Component {
           list.selectNextArticle()
         }
 
-        if (e.keyCode === 65 || e.keyCode === 13 && e.metaKey) {
+        if (e.keyCode === 65 || (e.keyCode === 13 && e.metaKey) || (e.keyCode === 78 && e.metaKey)) {
           nav.handleNewPostButtonClick()
           e.preventDefault()
         }
@@ -257,7 +264,8 @@ HomePage.propTypes = {
     folder: PropTypes.array,
     tag: PropTypes.array,
     text: PropTypes.array
-  })
+  }),
+  tags: PropTypes.array
 }
 
 export default connect(remap)(HomePage)

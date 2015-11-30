@@ -36,7 +36,7 @@ app.on('ready', function () {
       }
     }))
     trayMenu.append(new MenuItem({
-      label: 'Open Finder',
+      label: 'Open Finder window',
       click: function () {
         finderWindow.show()
       }

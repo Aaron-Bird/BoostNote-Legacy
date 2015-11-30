@@ -16,8 +16,6 @@ const url = path.resolve(__dirname, '../browser/main/index.html')
 
 mainWindow.loadURL('file://' + url)
 
-mainWindow.setVisibleOnAllWorkspaces(true)
-
 mainWindow.webContents.on('new-window', function (e) {
   e.preventDefault()
 })

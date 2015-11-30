@@ -25,6 +25,4 @@ finderWindow.on('blur', function () {
   finderWindow.hide()
 })
 
-finderWindow.setVisibleOnAllWorkspaces(true)
-
 module.exports = finderWindow
