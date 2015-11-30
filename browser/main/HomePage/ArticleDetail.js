@@ -25,6 +25,9 @@ import TagSelect from 'boost/components/TagSelect'
 import ModeSelect from 'boost/components/ModeSelect'
 import activityRecord from 'boost/activityRecord'
 
+const electron = require('electron')
+const clipboard = electron.clipboard
+
 const BRAND_COLOR = '#18AF90'
 
 const editDeleteTutorialElement = (
@@ -83,6 +86,10 @@ const modeSelectTutorialElement = (
     </svg>
   </svg>
 )
+
+function notify (...args) {
+  return new window.Notification(...args)
+}
 
 function makeInstantArticle (article) {
   return Object.assign({}, article)
@@ -154,6 +161,13 @@ export default class ArticleDetail extends React.Component {
     )
   }
 
+  handleClipboardButtonClick (e) {
+    clipboard.writeText(this.props.activeArticle.content)
+    notify('Saved to Clipboard!', {
+      body: 'Paste it wherever you want!'
+    })
+  }
+
   handleEditButtonClick (e) {
     let { dispatch } = this.props
     dispatch(switchMode(EDIT_MODE))
@@ -219,6 +233,9 @@ export default class ArticleDetail extends React.Component {
                 <div className='tags'><i className='fa fa-fw fa-tags'/>{tags}</div>
               </div>
               <div className='right'>
+                <button onClick={e => this.handleClipboardButtonClick(e)} className='editBtn'>
+                  <i className='fa fa-fw fa-clipboard'/><span className='tooltip'>Copy to clipboard</span>
+                </button>
                 <button onClick={e => this.handleEditButtonClick(e)} className='editBtn'>
                   <i className='fa fa-fw fa-edit'/><span className='tooltip'>Edit (e)</span>
                 </button>
