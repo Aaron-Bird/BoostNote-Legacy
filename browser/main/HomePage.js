@@ -7,6 +7,7 @@ import ArticleList from './HomePage/ArticleList'
 import ArticleDetail from './HomePage/ArticleDetail'
 import _ from 'lodash'
 import { isModalOpen, closeModal } from 'boost/modal'
+
 const electron = require('electron')
 const BrowserWindow = electron.remote.BrowserWindow
 
@@ -171,6 +172,14 @@ function buildFilter (key) {
   return {type: TEXT_FILTER, value: key}
 }
 
+function isContaining (target, needle) {
+  return target.match(new RegExp(_.escapeRegExp(needle)))
+}
+
+function startsWith (target, needle) {
+  return target.match(new RegExp('^' + _.escapeRegExp(needle)))
+}
+
 function remap (state) {
   let { user, folders, articles, status } = state
 
@@ -199,10 +208,10 @@ function remap (state) {
   let targetFolders
   if (folders != null) {
     let exactTargetFolders = folders.filter(folder => {
-      return _.find(folderExactFilters, filter => folder.name.match(new RegExp(`^${filter.value}$`)))
+      return _.findWhere(folderExactFilters, {value: folder.name})
     })
     let fuzzyTargetFolders = folders.filter(folder => {
-      return _.find(folderFilters, filter => folder.name.match(new RegExp(`^${filter.value}`)))
+      return _.find(folderFilters, filter => startsWith(folder.name, filter.value))
     })
     targetFolders = status.targetFolders = exactTargetFolders.concat(fuzzyTargetFolders)
 
@@ -215,7 +224,7 @@ function remap (state) {
     if (textFilters.length > 0) {
       articles = textFilters.reduce((articles, textFilter) => {
         return articles.filter(article => {
-          return article.title.match(new RegExp(textFilter.value, 'i')) || article.content.match(new RegExp(textFilter.value, 'i'))
+          return isContaining(article.title, textFilter.value) || isContaining(article.content, textFilter.value)
         })
       }, articles)
     }
@@ -223,7 +232,7 @@ function remap (state) {
     if (tagFilters.length > 0) {
       articles = tagFilters.reduce((articles, tagFilter) => {
         return articles.filter(article => {
-          return _.find(article.tags, tag => tag.match(new RegExp(tagFilter.value, 'i')))
+          return _.find(article.tags, tag => isContaining(tag, tagFilter.value))
         })
       }, articles)
     }
