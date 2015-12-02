@@ -11,7 +11,7 @@ import _ from 'lodash'
 import dataStore from 'boost/dataStore'
 
 const electron = require('electron')
-const { remote, clipboard } = electron
+const { remote, clipboard, ipcRenderer } = electron
 
 var hideFinder = remote.getGlobal('hideFinder')
 
@@ -64,6 +64,7 @@ class FinderMain extends React.Component {
     let { activeArticle } = this.props
     clipboard.writeText(activeArticle.content)
 
+    ipcRenderer.send('copy-finder')
     notify('Saved to Clipboard!', {
       body: 'Paste it wherever you want!'
     })
