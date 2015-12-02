@@ -209,7 +209,6 @@ function remap (state) {
   let activeArticle = _.findWhere(articles, {key: status.articleKey})
   if (activeArticle == null) activeArticle = articles[0]
 
-  console.log(status.search)
   return {
     articles,
     activeArticle,
