@@ -1,7 +1,6 @@
 import React, { PropTypes} from 'react'
 import { connect } from 'react-redux'
-import { EDIT_MODE, IDLE_MODE, NEW, toggleTutorial } from 'boost/actions'
-// import UserNavigator from './HomePage/UserNavigator'
+import { EDIT_MODE, IDLE_MODE, toggleTutorial } from 'boost/actions'
 import ArticleNavigator from './HomePage/ArticleNavigator'
 import ArticleTopBar from './HomePage/ArticleTopBar'
 import ArticleList from './HomePage/ArticleList'
@@ -114,13 +113,14 @@ class HomePage extends React.Component {
   }
 
   render () {
-    let { dispatch, status, articles, allArticles, activeArticle, folders, tags, filters } = this.props
+    let { dispatch, status, user, articles, allArticles, activeArticle, folders, tags, filters } = this.props
 
     return (
       <div className='HomePage'>
         <ArticleNavigator
           ref='nav'
           dispatch={dispatch}
+          user={user}
           folders={folders}
           status={status}
           allArticles={allArticles}
@@ -172,7 +172,7 @@ function buildFilter (key) {
 }
 
 function remap (state) {
-  let { folders, articles, status } = state
+  let { user, folders, articles, status } = state
 
   if (articles == null) articles = []
   articles.sort((a, b) => {
@@ -234,6 +234,7 @@ function remap (state) {
   if (activeArticle == null) activeArticle = articles[0]
 
   return {
+    user,
     folders,
     status,
     allArticles,
@@ -249,11 +250,9 @@ function remap (state) {
 }
 
 HomePage.propTypes = {
-  params: PropTypes.shape({
-    userId: PropTypes.string
-  }),
-  status: PropTypes.shape({
-    userId: PropTypes.string
+  status: PropTypes.shape(),
+  user: PropTypes.shape({
+    name: PropTypes.string
   }),
   articles: PropTypes.array,
   allArticles: PropTypes.array,

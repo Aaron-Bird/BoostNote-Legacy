@@ -7,10 +7,6 @@ import Preferences from 'boost/components/modal/Preferences'
 import CreateNewFolder from 'boost/components/modal/CreateNewFolder'
 import keygen from 'boost/keygen'
 
-const electron = require('electron')
-const remote = electron.remote
-let userName = remote.getGlobal('process').env.USER
-
 const BRAND_COLOR = '#18AF90'
 
 const preferenceTutorialElement = (
@@ -109,7 +105,7 @@ export default class ArticleNavigator extends React.Component {
   }
 
   render () {
-    let { status, folders, allArticles } = this.props
+    let { status, user, folders, allArticles } = this.props
     let { targetFolders } = status
     if (targetFolders == null) targetFolders = []
 
@@ -127,7 +123,7 @@ export default class ArticleNavigator extends React.Component {
     return (
       <div className='ArticleNavigator'>
         <div className='userInfo'>
-          <div className='userProfileName'>{userName}</div>
+          <div className='userProfileName'>{user.name}</div>
           <div className='userName'>localStorage</div>
           <button onClick={e => this.handlePreferencesButtonClick(e)} className='settingBtn'>
             <i className='fa fa-fw fa-chevron-down'/>
