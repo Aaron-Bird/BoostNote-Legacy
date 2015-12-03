@@ -3,6 +3,7 @@ const app = electron.app
 const Tray = electron.Tray
 const Menu = electron.Menu
 const MenuItem = electron.MenuItem
+const ipcMain = electron.ipcMain
 
 process.stdin.setEncoding('utf8')
 
@@ -62,6 +63,10 @@ app.on('ready', function () {
           finderWindow.show()
           break
       }
+    })
+
+    ipcMain.on('copy-finder', function () {
+      emit('copy-finder')
     })
   })
 

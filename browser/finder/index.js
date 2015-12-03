@@ -11,7 +11,7 @@ import _ from 'lodash'
 import dataStore from 'boost/dataStore'
 
 const electron = require('electron')
-const { remote, clipboard } = electron
+const { remote, clipboard, ipcRenderer } = electron
 
 var hideFinder = remote.getGlobal('hideFinder')
 
@@ -64,6 +64,7 @@ class FinderMain extends React.Component {
     let { activeArticle } = this.props
     clipboard.writeText(activeArticle.content)
 
+    ipcRenderer.send('copy-finder')
     notify('Saved to Clipboard!', {
       body: 'Paste it wherever you want!'
     })
@@ -152,6 +153,14 @@ function buildFilter (key) {
   return {type: TEXT_FILTER, value: key}
 }
 
+function isContaining (target, needle) {
+  return target.match(new RegExp(_.escapeRegExp(needle)))
+}
+
+function startsWith (target, needle) {
+  return target.match(new RegExp('^' + _.escapeRegExp(needle)))
+}
+
 function remap (state) {
   let { articles, folders, status } = state
 
@@ -168,10 +177,10 @@ function remap (state) {
   let targetFolders
   if (folders != null) {
     let exactTargetFolders = folders.filter(folder => {
-      return _.find(folderExactFilters, filter => folder.name.match(new RegExp(`^${filter.value}$`)))
+      return _.find(folderExactFilters, filter => isContaining(folder.name, filter.value))
     })
     let fuzzyTargetFolders = folders.filter(folder => {
-      return _.find(folderFilters, filter => folder.name.match(new RegExp(`^${filter.value}`)))
+      return _.find(folderFilters, filter => startsWith(folder.name, filter.value))
     })
     targetFolders = status.targetFolders = exactTargetFolders.concat(fuzzyTargetFolders)
 
@@ -184,7 +193,7 @@ function remap (state) {
     if (textFilters.length > 0) {
       articles = textFilters.reduce((articles, textFilter) => {
         return articles.filter(article => {
-          return article.title.match(new RegExp(textFilter.value, 'i')) || article.content.match(new RegExp(textFilter.value, 'i'))
+          return isContaining(article.title, textFilter.value) || isContaining(article.content, textFilter.value)
         })
       }, articles)
     }
@@ -192,7 +201,7 @@ function remap (state) {
     if (tagFilters.length > 0) {
       articles = tagFilters.reduce((articles, tagFilter) => {
         return articles.filter(article => {
-          return _.find(article.tags, tag => tag.match(new RegExp(tagFilter.value, 'i')))
+          return _.find(article.tags, tag => isContaining(tag, tagFilter.value))
         })
       }, articles)
     }
@@ -201,7 +210,6 @@ function remap (state) {
   let activeArticle = _.findWhere(articles, {key: status.articleKey})
   if (activeArticle == null) activeArticle = articles[0]
 
-  console.log(status.search)
   return {
     articles,
     activeArticle,

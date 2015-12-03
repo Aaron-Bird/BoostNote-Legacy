@@ -29,6 +29,13 @@ ipc.on('notify', function (e, payload) {
   })
 })
 
+ipc.on('copy-finder', function () {
+  activityRecord.emit('FINDER_COPY')
+})
+ipc.on('open-finder', function () {
+  activityRecord.emit('FINDER_OPEN')
+})
+
 let routes = (
   <Route path='/' component={MainPage}>
     <IndexRoute name='home' component={HomePage}/>

@@ -128,9 +128,10 @@ app.on('ready', function () {
         console.log('FINDER(stdout): ' + payload.data)
         break
       case 'show-main-window':
-        if (mainWindow != null) {
-          mainWindow.show()
-        }
+        mainWindow.show()
+        break
+      case 'copy-finder':
+        mainWindow.webContents.send('copy-finder')
         break
       case 'request-data':
         mainWindow.webContents.send('request-data')
@@ -173,6 +174,7 @@ app.on('ready', function () {
   try {
     globalShortcut.register(toggleFinderKey, function () {
       emitToFinder('open-finder')
+      mainWindow.webContents.send('open-finder', {})
     })
   } catch (err) {
     console.log(err.name)
@@ -189,6 +191,7 @@ app.on('ready', function () {
     try {
       globalShortcut.register(toggleFinderKey, function () {
         emitToFinder('open-finder')
+        mainWindow.webContents.send('open-finder', {})
       })
       mainWindow.webContents.send('APP_SETTING_DONE', {})
     } catch (err) {
