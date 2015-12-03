@@ -10,7 +10,7 @@
     "pack:osx": "electron-packager ./ Boost --app-version=$npm_package_version $npm_package_config_platform  $npm_package_config_version $npm_package_config_ignore --overwrite --out=\"dist\"",
     "codesign:osx": "codesign --verbose --deep --force --sign \"TG7C97ZRU2\" Boost-darwin-x64/Boost.app",
     "build:osx": "electron-builder \"dist/Boost-darwin-x64/Boost.app\" --platform=osx --out=\"dist\" --config=\"./builder-config.json\"",
-    "release": "electron-release --app=\"/Users/dickchoi/Boost/boost-app/Boost-darwin-x64/Boost.app\" --token=$(cat .env/.github-token) --repo=\"BoostIO/boost-releases\""
+    "release": "electron-release --app=\"dist/Boost-darwin-x64/Boost.app\" --token=$(cat .env/.github-token) --repo=\"BoostIO/boost-releases\""
   },
   "config": {
     "version": "--version=0.35.1 --app-bundle-id=com.maisin.boost",
