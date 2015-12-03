@@ -7,8 +7,9 @@
     "start": "BOOST_ENV=development electron ./main.js",
     "webpack": "webpack-dev-server --hot --inline --config webpack.config.js",
     "compile": "NODE_ENV=production webpack --config webpack.config.production.js",
-    "build": "electron-packager ./ Boost --app-version=$npm_package_version $npm_package_config_platform  $npm_package_config_version $npm_package_config_ignore --overwrite --asar",
-    "codesign": "codesign --verbose --deep --force --sign \"TG7C97ZRU2\" Boost-darwin-x64/Boost.app",
+    "pack:osx": "electron-packager ./ Boost --app-version=$npm_package_version $npm_package_config_platform  $npm_package_config_version $npm_package_config_ignore --overwrite --out=\"dist\"",
+    "codesign:osx": "codesign --verbose --deep --force --sign \"TG7C97ZRU2\" Boost-darwin-x64/Boost.app",
+    "build:osx": "electron-builder \"dist/Boost-darwin-x64/Boost.app\" --platform=osx --out=\"dist\" --config=\"./builder-config.json\"",
     "release": "electron-release --app=\"/Users/dickchoi/Boost/boost-app/Boost-darwin-x64/Boost.app\" --token=$(cat .env/.github-token) --repo=\"BoostIO/boost-releases\""
   },
   "config": {
