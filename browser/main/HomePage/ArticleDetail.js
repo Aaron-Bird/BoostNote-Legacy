@@ -162,6 +162,7 @@ export default class ArticleDetail extends React.Component {
   }
 
   handleClipboardButtonClick (e) {
+    activityRecord.emit('MAIN_DETAIL_COPY')
     clipboard.writeText(this.props.activeArticle.content)
     notify('Saved to Clipboard!', {
       body: 'Paste it wherever you want!'
@@ -293,9 +294,9 @@ export default class ArticleDetail extends React.Component {
       if (newArticle.title.length === 0) {
         newArticle.title = `Created at ${moment(newArticle.createdAt).format('YYYY/MM/DD HH:mm')}`
       }
-      activityRecord.emit('ARTICLE_CREATE')
+      activityRecord.emit('ARTICLE_CREATE', {mode: newArticle.mode})
     } else {
-      activityRecord.emit('ARTICLE_UPDATE')
+      activityRecord.emit('ARTICLE_UPDATE', {mode: newArticle.mode})
     }
 
     dispatch(updateArticle(newArticle))
