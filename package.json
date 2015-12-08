@@ -1,19 +1,19 @@
 {
   "name": "boost",
-  "version": "0.4.5-rc",
+  "version": "0.4.5",
   "description": "Boost App",
   "main": "index.js",
   "scripts": {
     "start": "BOOST_ENV=development electron ./main.js",
     "webpack": "webpack-dev-server --hot --inline --config webpack.config.js",
     "compile": "NODE_ENV=production webpack --config webpack.config.production.js",
-    "pack:osx": "electron-packager ./ Boost --app-version=$npm_package_version $npm_package_config_platform  $npm_package_config_version $npm_package_config_ignore --overwrite --out=\"dist\"",
+    "pack:osx": "electron-packager ./ Boost --app-version=$npm_package_version $npm_package_config_platform  $npm_package_config_version $npm_package_config_ignore --overwrite --out=\"dist\" --sign=\"Developer ID Application: MAISIN&CO., Inc. (TG7C97ZRU2)\"",
     "codesign:osx": "codesign --verbose --deep --force --sign \"TG7C97ZRU2\" dist/Boost-darwin-x64/Boost.app",
     "build:osx": "electron-builder \"dist/Boost-darwin-x64/Boost.app\" --platform=osx --out=\"dist\" --config=\"./builder-config.json\"",
     "release": "electron-release --app=\"dist/Boost-darwin-x64/Boost.app\" --token=$(cat .env/.github-token) --repo=\"BoostIO/boost-releases\""
   },
   "config": {
-    "version": "--version=0.35.1 --app-bundle-id=com.maisin.boost",
+    "version": "--version=0.35.3 --app-bundle-id=com.maisin.boost",
     "platform": "--platform=darwin --arch=x64 --prune --icon=resources/app.icns",
     "ignore": "--ignore=.env --ignore=Boost-darwin-x64 --ignore=node_modules/devicon/icons --ignore=submodules/ace/(?!src-min)|submodules/ace/(?=src-min-noconflict)"
   },
