@@ -1,6 +1,5 @@
 .env
 node_modules/*
 !node_modules/boost
-Boost-darwin-x64/
-backup/
+dist/
 compiled

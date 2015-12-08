@@ -162,6 +162,7 @@ export default class ArticleDetail extends React.Component {
   }
 
   handleClipboardButtonClick (e) {
+    activityRecord.emit('MAIN_DETAIL_COPY')
     clipboard.writeText(this.props.activeArticle.content)
     notify('Saved to Clipboard!', {
       body: 'Paste it wherever you want!'
@@ -293,9 +294,9 @@ export default class ArticleDetail extends React.Component {
       if (newArticle.title.length === 0) {
         newArticle.title = `Created at ${moment(newArticle.createdAt).format('YYYY/MM/DD HH:mm')}`
       }
-      activityRecord.emit('ARTICLE_CREATE')
+      activityRecord.emit('ARTICLE_CREATE', {mode: newArticle.mode})
     } else {
-      activityRecord.emit('ARTICLE_UPDATE')
+      activityRecord.emit('ARTICLE_UPDATE', {mode: newArticle.mode})
     }
 
     dispatch(updateArticle(newArticle))
@@ -435,7 +436,34 @@ export default class ArticleDetail extends React.Component {
 
   handleTogglePreviewButtonClick (e) {
     if (this.state.article.mode === 'markdown') {
-      this.setState({previewMode: !this.state.previewMode})
+      if (!this.state.previewMode) {
+        let cursorPosition = this.refs.code.getCursorPosition()
+        let firstVisibleRow = this.refs.code.getFirstVisibleRow()
+        this.setState({
+          previewMode: true,
+          cursorPosition,
+          firstVisibleRow
+        }, function () {
+          let previewEl = ReactDOM.findDOMNode(this.refs.preview)
+          let anchors = previewEl.querySelectorAll('.lineAnchor')
+          for (let i = 0; i < anchors.length; i++) {
+            if (parseInt(anchors[i].dataset.key, 10) > cursorPosition.row || i === anchors.length - 1) {
+              var targetAnchor = anchors[i > 0 ? i - 1 : 0]
+              previewEl.scrollTop = targetAnchor.offsetTop - 100
+              break
+            }
+          }
+        })
+      } else {
+        this.setState({
+          previewMode: false
+        }, function () {
+          console.log(this.state.cursorPosition)
+          this.refs.code.moveCursorTo(this.state.cursorPosition.row, this.state.cursorPosition.column)
+          this.refs.code.scrollToLine(this.state.firstVisibleRow)
+          this.refs.code.editor.focus()
+        })
+      }
     }
   }
 
@@ -524,7 +552,7 @@ export default class ArticleDetail extends React.Component {
             </div>
 
             {this.state.previewMode
-              ? <MarkdownPreview content={this.state.article.content}/>
+              ? <MarkdownPreview ref='preview' content={this.state.article.content}/>
               : (<CodeEditor
                   ref='code'
                   onChange={(e, value) => this.handleContentChange(e, value)}
