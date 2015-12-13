@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import api from 'boost/api'
 import clientKey from 'boost/clientKey'
+import activityRecord from 'boost/activityRecord'
 const clipboard = require('electron').clipboard
 
 function getDefault () {
@@ -11,7 +12,8 @@ function getDefault () {
     // Fetched url
     url: null,
     // for tooltip Copy -> Copied!
-    copied: false
+    copied: false,
+    failed: false
   }
 }
 
@@ -70,14 +72,21 @@ export default class ShareButton extends React.Component {
       clientKey: clientKey.get(),
       writerName: user.name
     })
-    api.shareWithPublicURL(input)
-      .then(res => {
-        let url = res.body.url
-        this.setState({url: url})
-      })
-      .catch(err => {
-        console.log(err)
-      })
+    this.setState({
+      isSharing: true,
+      failed: false
+    }, () => {
+      api.shareWithPublicURL(input)
+        .then(res => {
+          let url = res.body.url
+          this.setState({url: url, isSharing: false})
+          activityRecord.emit('ARTICLE_SHARE')
+        })
+        .catch(err => {
+          console.log(err)
+          this.setState({isSharing: false, failed: true})
+        })
+    })
   }
 
   handleCopyURLClick () {
@@ -109,7 +118,7 @@ export default class ShareButton extends React.Component {
                 onClick={e => this.shareWithPublicURLHandler(e)}
                 ref='sharePublicURL'
                 disabled={this.state.isSharing}>
-                <i className='fa fa-fw fa-external-link'/> {!this.state.isSharing ? 'Share with public URL' : 'Sharing...'}
+                <i className='fa fa-fw fa-external-link'/> {this.state.failed ? 'Failed : Click to Try again' : !this.state.isSharing ? 'Share with public URL' : 'Sharing...'}
               </button>
             ) : (
               <div className='ShareButton-url'>
