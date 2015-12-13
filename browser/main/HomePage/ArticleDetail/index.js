@@ -197,7 +197,7 @@ export default class ArticleDetail extends React.Component {
   }
 
   renderIdle () {
-    let { status, activeArticle, folders } = this.props
+    let { status, activeArticle, folders, user } = this.props
 
     let tags = activeArticle.tags != null ? activeArticle.tags.length > 0
       ? activeArticle.tags.map(tag => {
@@ -240,7 +240,10 @@ export default class ArticleDetail extends React.Component {
                 <div className='tags'><i className='fa fa-fw fa-tags'/>{tags}</div>
               </div>
               <div className='right'>
-                <ShareButton article={activeArticle}/>
+                <ShareButton
+                  article={activeArticle}
+                  user={user}
+                  />
 
                 <button onClick={e => this.handleClipboardButtonClick(e)} className='editBtn'>
                   <i className='fa fa-fw fa-clipboard'/><span className='tooltip'>Copy to clipboard</span>

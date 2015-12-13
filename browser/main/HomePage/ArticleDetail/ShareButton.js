@@ -65,7 +65,11 @@ export default class ShareButton extends React.Component {
   }
 
   handleShareWithPublicURLClick (e) {
-    let input = Object.assign({}, this.props.article, {clientKey: clientKey.get()})
+    let { user } = this.props
+    let input = Object.assign({}, this.props.article, {
+      clientKey: clientKey.get(),
+      writerName: user.name
+    })
     api.shareWithPublicURL(input)
       .then(res => {
         let url = res.body.url
@@ -131,5 +135,8 @@ export default class ShareButton extends React.Component {
 ShareButton.propTypes = {
   article: PropTypes.shape({
     publicURL: PropTypes.string
+  }),
+  user: PropTypes.shape({
+    name: PropTypes.string
   })
 }
