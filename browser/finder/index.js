@@ -35,10 +35,17 @@ class FinderMain extends React.Component {
     this.keyDownHandler = e => this.handleKeyDown(e)
     document.addEventListener('keydown', this.keyDownHandler)
     ReactDOM.findDOMNode(this.refs.finderInput.refs.input).focus()
+    this.focusHandler = e => {
+      let { dispatch } = this.props
+
+      dispatch(searchArticle(''))
+    }
+    window.addEventListener('focus', this.focusHandler)
   }
 
   componentWillUnmount () {
     document.removeEventListener('keydown', this.keyDownHandler)
+    window.removeEventListener('focus', this.focusHandler)
   }
 
   handleKeyDown (e) {
