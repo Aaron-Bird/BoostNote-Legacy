@@ -298,7 +298,7 @@ export default class ArticleDetail extends React.Component {
 
     dispatch(unlockStatus())
 
-    delete newArticle.status
+    newArticle.status = null
     newArticle.updatedAt = new Date()
     newArticle.title = newArticle.title.trim()
     if (newArticle.createdAt == null) {
