@@ -32,8 +32,8 @@ export default class ShareButton extends React.Component {
       this.dropdownClicked = true
     }
     ReactDOM.findDOMNode(this.refs.dropdown).addEventListener('click', this.dropdownInterceptor)
-    this.shareWithPublicURLHandler = e => {
-      this.handleShareWithPublicURLClick(e)
+    this.shareViaPublicURLHandler = e => {
+      this.handleShareViaPublicURLClick(e)
     }
   }
 
@@ -66,7 +66,7 @@ export default class ShareButton extends React.Component {
     this.setState({openDropdown: false})
   }
 
-  handleShareWithPublicURLClick (e) {
+  handleShareViaPublicURLClick (e) {
     let { user } = this.props
     let input = Object.assign({}, this.props.article, {
       clientKey: clientKey.get(),
@@ -76,7 +76,7 @@ export default class ShareButton extends React.Component {
       isSharing: true,
       failed: false
     }, () => {
-      api.shareWithPublicURL(input)
+      api.shareViaPublicURL(input)
         .then(res => {
           let url = res.body.url
           this.setState({url: url, isSharing: false})
@@ -115,10 +115,10 @@ export default class ShareButton extends React.Component {
           {
             !hasPublicURL ? (
               <button
-                onClick={e => this.shareWithPublicURLHandler(e)}
+                onClick={e => this.shareViaPublicURLHandler(e)}
                 ref='sharePublicURL'
                 disabled={this.state.isSharing}>
-                <i className='fa fa-fw fa-external-link'/> {this.state.failed ? 'Failed : Click to Try again' : !this.state.isSharing ? 'Share with public URL' : 'Sharing...'}
+                <i className='fa fa-fw fa-external-link'/> {this.state.failed ? 'Failed : Click to Try again' : !this.state.isSharing ? 'Share via public URL' : 'Sharing...'}
               </button>
             ) : (
               <div className='ShareButton-url'>
