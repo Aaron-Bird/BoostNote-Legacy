@@ -32,11 +32,13 @@ class FinderMain extends React.Component {
   }
 
   componentDidMount () {
+    this.keyDownHandler = e => this.handleKeyDown(e)
+    document.addEventListener('keydown', this.keyDownHandler)
     ReactDOM.findDOMNode(this.refs.finderInput.refs.input).focus()
   }
 
-  handleClick (e) {
-    ReactDOM.findDOMNode(this.refs.finderInput.refs.input).focus()
+  componentWillUnmount () {
+    document.removeEventListener('keydown', this.keyDownHandler)
   }
 
   handleKeyDown (e) {
@@ -58,6 +60,11 @@ class FinderMain extends React.Component {
       hideFinder()
       e.preventDefault()
     }
+    if (e.keyCode === 91 || e.metaKey) {
+      return
+    }
+
+    ReactDOM.findDOMNode(this.refs.finderInput.refs.input).focus()
   }
 
   saveToClipboard () {
@@ -99,7 +106,7 @@ class FinderMain extends React.Component {
     let { articles, activeArticle, status, dispatch } = this.props
     let saveToClipboard = () => this.saveToClipboard()
     return (
-      <div onClick={e => this.handleClick(e)} onKeyDown={e => this.handleKeyDown(e)} className='Finder'>
+      <div onClick={e => this.handleClick(e)} className='Finder'>
         <FinderInput
           handleSearchChange={e => this.handleSearchChange(e)}
           ref='finderInput'
