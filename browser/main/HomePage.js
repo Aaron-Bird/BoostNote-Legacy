@@ -29,13 +29,6 @@ class HomePage extends React.Component {
   }
 
   handleKeyDown (e) {
-    if (e.keyCode === 73 && e.metaKey && e.altKey) {
-      e.preventDefault()
-      e.stopPropagation()
-      remote.getCurrentWebContents().openDevTools()
-      return
-    }
-
     if (isModalOpen()) {
       if (e.keyCode === 27) closeModal()
       return
