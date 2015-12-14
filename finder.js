@@ -27,6 +27,10 @@ app.on('ready', function () {
   var appIcon = new Tray(__dirname + '/resources/tray-icon.png')
   appIcon.setToolTip('Boost')
 
+  var template = require('./atom-lib/menu-template')
+  var menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
+
   finderWindow = require('./atom-lib/finder-window')
   finderWindow.webContents.on('did-finish-load', function () {
     var trayMenu = new Menu()

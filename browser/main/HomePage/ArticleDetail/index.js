@@ -24,6 +24,8 @@ import TagLink from 'boost/components/TagLink'
 import TagSelect from 'boost/components/TagSelect'
 import ModeSelect from 'boost/components/ModeSelect'
 import activityRecord from 'boost/activityRecord'
+import api from 'boost/api'
+import ShareButton from './ShareButton'
 
 const electron = require('electron')
 const clipboard = electron.clipboard
@@ -106,12 +108,16 @@ export default class ArticleDetail extends React.Component {
       isTagChanged: false,
       isTitleChanged: false,
       isContentChanged: false,
-      isModeChanged: false
+      isModeChanged: false,
+      openShareDropdown: false
     }
   }
 
   componentDidMount () {
     this.refreshTimer = setInterval(() => this.forceUpdate(), 60 * 1000)
+    this.shareDropdownInterceptor = e => {
+      e.stopPropagation()
+    }
   }
 
   componentWillUnmount () {
@@ -191,7 +197,7 @@ export default class ArticleDetail extends React.Component {
   }
 
   renderIdle () {
-    let { status, activeArticle, folders } = this.props
+    let { status, activeArticle, folders, user } = this.props
 
     let tags = activeArticle.tags != null ? activeArticle.tags.length > 0
       ? activeArticle.tags.map(tag => {
@@ -234,9 +240,15 @@ export default class ArticleDetail extends React.Component {
                 <div className='tags'><i className='fa fa-fw fa-tags'/>{tags}</div>
               </div>
               <div className='right'>
+                <ShareButton
+                  article={activeArticle}
+                  user={user}
+                  />
+
                 <button onClick={e => this.handleClipboardButtonClick(e)} className='editBtn'>
                   <i className='fa fa-fw fa-clipboard'/><span className='tooltip'>Copy to clipboard</span>
                 </button>
+
                 <button onClick={e => this.handleEditButtonClick(e)} className='editBtn'>
                   <i className='fa fa-fw fa-edit'/><span className='tooltip'>Edit (e)</span>
                 </button>
@@ -286,7 +298,7 @@ export default class ArticleDetail extends React.Component {
 
     dispatch(unlockStatus())
 
-    delete newArticle.status
+    newArticle.status = null
     newArticle.updatedAt = new Date()
     newArticle.title = newArticle.title.trim()
     if (newArticle.createdAt == null) {
@@ -586,7 +598,8 @@ export default class ArticleDetail extends React.Component {
 ArticleDetail.propTypes = {
   status: PropTypes.shape(),
   activeArticle: PropTypes.shape(),
-  activeUser: PropTypes.shape(),
+  user: PropTypes.shape(),
+  folders: PropTypes.array,
   dispatch: PropTypes.func
 }
 ArticleDetail.prototype.linkState = linkState

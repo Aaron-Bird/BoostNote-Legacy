@@ -9,7 +9,7 @@ import _ from 'lodash'
 import { isModalOpen, closeModal } from 'boost/modal'
 
 const electron = require('electron')
-const BrowserWindow = electron.remote.BrowserWindow
+const remote = electron.remote
 
 const TEXT_FILTER = 'TEXT_FILTER'
 const FOLDER_FILTER = 'FOLDER_FILTER'
@@ -29,13 +29,6 @@ class HomePage extends React.Component {
   }
 
   handleKeyDown (e) {
-    if (process.env.BOOST_ENV === 'development' && e.keyCode === 73 && e.metaKey && e.altKey) {
-      e.preventDefault()
-      e.stopPropagation()
-      BrowserWindow.getFocusedWindow().toggleDevTools()
-      return
-    }
-
     if (isModalOpen()) {
       if (e.keyCode === 27) closeModal()
       return
@@ -106,7 +99,7 @@ class HomePage extends React.Component {
           list.selectNextArticle()
         }
 
-        if (e.keyCode === 65 || (e.keyCode === 13 && e.metaKey) || (e.keyCode === 78 && e.metaKey)) {
+        if ((e.keyCode === 65 && !e.metaKey && !e.ctrlKey) || (e.keyCode === 13 && e.metaKey) || (e.keyCode === 78 && e.metaKey)) {
           nav.handleNewPostButtonClick()
           e.preventDefault()
         }
@@ -142,6 +135,7 @@ class HomePage extends React.Component {
         <ArticleDetail
           ref='detail'
           dispatch={dispatch}
+          user={user}
           activeArticle={activeArticle}
           folders={folders}
           status={status}

@@ -1,5 +1,6 @@
 const electron = require('electron')
 const BrowserWindow = electron.BrowserWindow
+const shell = electron.shell
 
 module.exports = [
   {
@@ -90,7 +91,17 @@ module.exports = [
         click: function () {
           BrowserWindow.getFocusedWindow().reload()
         }
-      }
+      },
+      // {
+      //   label: 'Toggle Developer Tools',
+      //   accelerator: (function () {
+      //     if (process.platform === 'darwin') return 'Alt+Command+I'
+      //     else return 'Ctrl+Shift+I'
+      //   })(),
+      //   click: function (item, focusedWindow) {
+      //     if (focusedWindow) BrowserWindow.getFocusedWindow().toggleDevTools()
+      //   }
+      // }
     ]
   },
   {
@@ -117,6 +128,24 @@ module.exports = [
   },
   {
     label: 'Help',
-    submenu: []
+    role: 'help',
+    submenu: [
+      {
+        label: 'Boost official site',
+        click: function () { shell.openExternal('https://b00st.io/') }
+      },
+      {
+        label: 'Tutorial page',
+        click: function () { shell.openExternal('https://b00st.io/tutorial.html') }
+      },
+      {
+        label: 'Discussions',
+        click: function () { shell.openExternal('https://github.com/BoostIO/boost-app-discussions/issues') }
+      },
+      {
+        label: 'Changelog',
+        click: function () { shell.openExternal('https://github.com/BoostIO/boost-releases/blob/master/changelog.md') }
+      }
+    ]
   }
 ]
