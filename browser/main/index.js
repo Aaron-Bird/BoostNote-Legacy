@@ -13,14 +13,19 @@ import Tutorial from 'boost/components/modal/Tutorial'
 import activityRecord from 'boost/activityRecord'
 const electron = require('electron')
 const ipc = electron.ipcRenderer
+const path = require('path')
 
 activityRecord.init()
 window.addEventListener('online', function () {
   ipc.send('check-update', 'check-update')
 })
 
-function notify (...args) {
-  return new window.Notification(...args)
+function notify (title, options) {
+  if (process.platform === 'win32') {
+    options.icon = path.join('file://', global.__dirname, '../../resources/favicon-230x230.png')
+  }
+  console.log(options)
+  return new window.Notification(title, options)
 }
 
 ipc.on('notify', function (e, payload) {

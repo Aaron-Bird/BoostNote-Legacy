@@ -12,13 +12,17 @@ import dataStore from 'boost/dataStore'
 
 const electron = require('electron')
 const { remote, clipboard, ipcRenderer } = electron
+const path = require('path')
 
 function hideFinder () {
   ipcRenderer.send('hide-finder')
 }
 
-function notify (...args) {
-  return new window.Notification(...args)
+function notify (title, options) {
+  if (process.platform === 'win32') {
+    options.icon = path.join('file://', global.__dirname, '../../resources/favicon-230x230.png')
+  }
+  return new window.Notification(title, options)
 }
 
 require('../styles/finder/index.styl')
