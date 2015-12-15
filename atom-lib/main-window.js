@@ -1,5 +1,6 @@
-var BrowserWindow = require('browser-window')
-var path = require('path')
+const electron = require('electron')
+const BrowserWindow = electron.BrowserWindow
+const path = require('path')
 
 var mainWindow = new BrowserWindow({
   width: 1080,
@@ -11,11 +12,9 @@ var mainWindow = new BrowserWindow({
   'standard-window': false
 })
 
-var url = path.resolve(__dirname, '../browser/main/index.html')
+const url = path.resolve(__dirname, '../browser/main/index.html')
 
-mainWindow.loadUrl('file://' + url)
-
-mainWindow.setVisibleOnAllWorkspaces(true)
+mainWindow.loadURL('file://' + url)
 
 mainWindow.webContents.on('new-window', function (e) {
   e.preventDefault()

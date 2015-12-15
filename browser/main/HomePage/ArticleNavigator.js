@@ -1,16 +1,11 @@
 import React, { PropTypes } from 'react'
 import { findWhere } from 'lodash'
-import { setSearchFilter, switchFolder, switchMode, CREATE_MODE } from 'boost/actions'
+import { setSearchFilter, switchFolder, switchMode, switchArticle, updateArticle, clearNewArticle, EDIT_MODE } from 'boost/actions'
 import { openModal } from 'boost/modal'
 import FolderMark from 'boost/components/FolderMark'
 import Preferences from 'boost/components/modal/Preferences'
 import CreateNewFolder from 'boost/components/modal/CreateNewFolder'
-
-import remote from 'remote'
-let mainEnv = remote.getGlobal('process').env
-let userName = mainEnv.USER != null
-  ? mainEnv.USER
-  : mainEnv.USERNAME
+import keygen from 'boost/keygen'
 
 const BRAND_COLOR = '#18AF90'
 
@@ -68,9 +63,28 @@ export default class ArticleNavigator extends React.Component {
   }
 
   handleNewPostButtonClick (e) {
-    let { dispatch } = this.props
+    let { dispatch, folders, status } = this.props
+    let { targetFolders } = status
 
-    dispatch(switchMode(CREATE_MODE))
+    let FolderKey = targetFolders.length > 0
+      ? targetFolders[0].key
+      : folders[0].key
+
+    let newArticle = {
+      id: null,
+      key: keygen(),
+      title: '',
+      content: '',
+      mode: 'markdown',
+      tags: [],
+      FolderKey: FolderKey,
+      status: 'NEW'
+    }
+
+    dispatch(clearNewArticle())
+    dispatch(updateArticle(newArticle))
+    dispatch(switchArticle(newArticle.key, true))
+    dispatch(switchMode(EDIT_MODE))
   }
 
   handleNewFolderButton (e) {
@@ -91,13 +105,13 @@ export default class ArticleNavigator extends React.Component {
   }
 
   render () {
-    let { status, folders, allArticles } = this.props
+    let { status, user, folders, allArticles } = this.props
     let { targetFolders } = status
     if (targetFolders == null) targetFolders = []
 
     let folderElememts = folders.map((folder, index) => {
       let isActive = findWhere(targetFolders, {key: folder.key})
-      let articleCount = allArticles.filter(article => article.FolderKey === folder.key).length
+      let articleCount = allArticles.filter(article => article.FolderKey === folder.key && article.status !== 'NEW').length
 
       return (
         <button onClick={e => this.handleFolderButtonClick(folder.name)(e)} key={'folder-' + folder.key} className={isActive ? 'active' : ''}>
@@ -109,7 +123,7 @@ export default class ArticleNavigator extends React.Component {
     return (
       <div className='ArticleNavigator'>
         <div className='userInfo'>
-          <div className='userProfileName'>{userName}</div>
+          <div className='userProfileName'>{user.name}</div>
           <div className='userName'>localStorage</div>
           <button onClick={e => this.handlePreferencesButtonClick(e)} className='settingBtn'>
             <i className='fa fa-fw fa-chevron-down'/>

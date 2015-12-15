@@ -11,11 +11,29 @@ require('../styles/main/index.styl')
 import { openModal } from 'boost/modal'
 import Tutorial from 'boost/components/modal/Tutorial'
 import activityRecord from 'boost/activityRecord'
-import ipc from 'ipc'
+const electron = require('electron')
+const ipc = electron.ipcRenderer
 
 activityRecord.init()
 window.addEventListener('online', function () {
   ipc.send('check-update', 'check-update')
+})
+
+function notify (...args) {
+  return new window.Notification(...args)
+}
+
+ipc.on('notify', function (e, payload) {
+  notify(payload.title, {
+    body: payload.body
+  })
+})
+
+ipc.on('copy-finder', function () {
+  activityRecord.emit('FINDER_COPY')
+})
+ipc.on('open-finder', function () {
+  activityRecord.emit('FINDER_OPEN')
 })
 
 let routes = (

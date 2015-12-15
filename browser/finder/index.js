@@ -6,18 +6,17 @@ import { createStore } from 'redux'
 import FinderInput from './FinderInput'
 import FinderList from './FinderList'
 import FinderDetail from './FinderDetail'
-import { selectArticle, searchArticle, refreshData } from './actions'
+import actions, { selectArticle, searchArticle } from './actions'
 import _ from 'lodash'
-import activityRecord from 'boost/activityRecord'
+import dataStore from 'boost/dataStore'
 
-import remote from 'remote'
+const electron = require('electron')
+const { remote, clipboard, ipcRenderer } = electron
+
 var hideFinder = remote.getGlobal('hideFinder')
-import clipboard from 'clipboard'
 
-var notifier = require('node-notifier')
-var path = require('path')
-function getIconPath () {
-  return path.resolve(global.__dirname, '../../resources/favicon-230x230.png')
+function notify (...args) {
+  return new window.Notification(...args)
 }
 
 require('../styles/finder/index.styl')
@@ -33,11 +32,20 @@ class FinderMain extends React.Component {
   }
 
   componentDidMount () {
+    this.keyDownHandler = e => this.handleKeyDown(e)
+    document.addEventListener('keydown', this.keyDownHandler)
     ReactDOM.findDOMNode(this.refs.finderInput.refs.input).focus()
+    this.focusHandler = e => {
+      let { dispatch } = this.props
+
+      dispatch(searchArticle(''))
+    }
+    window.addEventListener('focus', this.focusHandler)
   }
 
-  handleClick (e) {
-    ReactDOM.findDOMNode(this.refs.finderInput.refs.input).focus()
+  componentWillUnmount () {
+    document.removeEventListener('keydown', this.keyDownHandler)
+    window.removeEventListener('focus', this.focusHandler)
   }
 
   handleKeyDown (e) {
@@ -59,17 +67,20 @@ class FinderMain extends React.Component {
       hideFinder()
       e.preventDefault()
     }
+    if (e.keyCode === 91 || e.metaKey) {
+      return
+    }
+
+    ReactDOM.findDOMNode(this.refs.finderInput.refs.input).focus()
   }
 
   saveToClipboard () {
     let { activeArticle } = this.props
     clipboard.writeText(activeArticle.content)
-    activityRecord.emit('FINDER_COPY')
 
-    notifier.notify({
-      icon: getIconPath(),
-      'title': 'Saved to Clipboard!',
-      'message': 'Paste it wherever you want!'
+    ipcRenderer.send('copy-finder')
+    notify('Saved to Clipboard!', {
+      body: 'Paste it wherever you want!'
     })
     hideFinder()
   }
@@ -102,7 +113,7 @@ class FinderMain extends React.Component {
     let { articles, activeArticle, status, dispatch } = this.props
     let saveToClipboard = () => this.saveToClipboard()
     return (
-      <div onClick={e => this.handleClick(e)} onKeyDown={e => this.handleKeyDown(e)} className='Finder'>
+      <div onClick={e => this.handleClick(e)} className='Finder'>
         <FinderInput
           handleSearchChange={e => this.handleSearchChange(e)}
           ref='finderInput'
@@ -156,6 +167,14 @@ function buildFilter (key) {
   return {type: TEXT_FILTER, value: key}
 }
 
+function isContaining (target, needle) {
+  return target.match(new RegExp(_.escapeRegExp(needle)))
+}
+
+function startsWith (target, needle) {
+  return target.match(new RegExp('^' + _.escapeRegExp(needle)))
+}
+
 function remap (state) {
   let { articles, folders, status } = state
 
@@ -172,10 +191,10 @@ function remap (state) {
   let targetFolders
   if (folders != null) {
     let exactTargetFolders = folders.filter(folder => {
-      return _.find(folderExactFilters, filter => folder.name.match(new RegExp(`^${filter.value}$`)))
+      return _.find(folderExactFilters, filter => isContaining(folder.name, filter.value))
     })
     let fuzzyTargetFolders = folders.filter(folder => {
-      return _.find(folderFilters, filter => folder.name.match(new RegExp(`^${filter.value}`)))
+      return _.find(folderFilters, filter => startsWith(folder.name, filter.value))
     })
     targetFolders = status.targetFolders = exactTargetFolders.concat(fuzzyTargetFolders)
 
@@ -188,7 +207,7 @@ function remap (state) {
     if (textFilters.length > 0) {
       articles = textFilters.reduce((articles, textFilter) => {
         return articles.filter(article => {
-          return article.title.match(new RegExp(textFilter.value, 'i')) || article.content.match(new RegExp(textFilter.value, 'i'))
+          return isContaining(article.title, textFilter.value) || isContaining(article.content, textFilter.value)
         })
       }, articles)
     }
@@ -196,7 +215,7 @@ function remap (state) {
     if (tagFilters.length > 0) {
       articles = tagFilters.reduce((articles, tagFilter) => {
         return articles.filter(article => {
-          return _.find(article.tags, tag => tag.match(new RegExp(tagFilter.value, 'i')))
+          return _.find(article.tags, tag => isContaining(tag, tagFilter.value))
         })
       }, articles)
     }
@@ -205,7 +224,6 @@ function remap (state) {
   let activeArticle = _.findWhere(articles, {key: status.articleKey})
   if (activeArticle == null) activeArticle = articles[0]
 
-  console.log(status.search)
   return {
     articles,
     activeArticle,
@@ -216,13 +234,19 @@ function remap (state) {
 var Finder = connect(remap)(FinderMain)
 var store = createStore(reducer)
 
+function refreshData () {
+  let data = dataStore.getData()
+  store.dispatch(actions.refreshData(data))
+}
+
 window.onfocus = e => {
-  store.dispatch(refreshData())
-  activityRecord.emit('FINDER_OPEN')
+  refreshData()
 }
 
 ReactDOM.render((
   <Provider store={store}>
     <Finder/>
   </Provider>
-), document.getElementById('content'))
+), document.getElementById('content'), function () {
+  refreshData()
+})

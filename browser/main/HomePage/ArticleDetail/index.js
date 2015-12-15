@@ -7,7 +7,6 @@ import MarkdownPreview from 'boost/components/MarkdownPreview'
 import CodeEditor from 'boost/components/CodeEditor'
 import {
   IDLE_MODE,
-  CREATE_MODE,
   EDIT_MODE,
   switchMode,
   switchArticle,
@@ -25,6 +24,11 @@ import TagLink from 'boost/components/TagLink'
 import TagSelect from 'boost/components/TagSelect'
 import ModeSelect from 'boost/components/ModeSelect'
 import activityRecord from 'boost/activityRecord'
+import api from 'boost/api'
+import ShareButton from './ShareButton'
+
+const electron = require('electron')
+const clipboard = electron.clipboard
 
 const BRAND_COLOR = '#18AF90'
 
@@ -85,6 +89,10 @@ const modeSelectTutorialElement = (
   </svg>
 )
 
+function notify (...args) {
+  return new window.Notification(...args)
+}
+
 function makeInstantArticle (article) {
   return Object.assign({}, article)
 }
@@ -100,12 +108,16 @@ export default class ArticleDetail extends React.Component {
       isTagChanged: false,
       isTitleChanged: false,
       isContentChanged: false,
-      isModeChanged: false
+      isModeChanged: false,
+      openShareDropdown: false
     }
   }
 
   componentDidMount () {
     this.refreshTimer = setInterval(() => this.forceUpdate(), 60 * 1000)
+    this.shareDropdownInterceptor = e => {
+      e.stopPropagation()
+    }
   }
 
   componentWillUnmount () {
@@ -114,7 +126,7 @@ export default class ArticleDetail extends React.Component {
 
   componentDidUpdate (prevProps) {
     let isModeChanged = prevProps.status.mode !== this.props.status.mode
-    if (isModeChanged && this.props.status.mode !== IDLE_MODE) {
+    if (isModeChanged && this.props.status.mode === EDIT_MODE) {
       ReactDOM.findDOMNode(this.refs.title).focus()
     }
   }
@@ -124,6 +136,7 @@ export default class ArticleDetail extends React.Component {
 
     let isArticleChanged = nextProps.activeArticle != null && (nextProps.activeArticle.key !== this.state.article.key)
     let isModeChanged = nextProps.status.mode !== this.props.status.mode
+
     // Reset article input
     if (isArticleChanged || (isModeChanged && nextProps.status.mode !== IDLE_MODE)) {
       Object.assign(nextState, {
@@ -154,6 +167,14 @@ export default class ArticleDetail extends React.Component {
     )
   }
 
+  handleClipboardButtonClick (e) {
+    activityRecord.emit('MAIN_DETAIL_COPY')
+    clipboard.writeText(this.props.activeArticle.content)
+    notify('Saved to Clipboard!', {
+      body: 'Paste it wherever you want!'
+    })
+  }
+
   handleEditButtonClick (e) {
     let { dispatch } = this.props
     dispatch(switchMode(EDIT_MODE))
@@ -176,7 +197,7 @@ export default class ArticleDetail extends React.Component {
   }
 
   renderIdle () {
-    let { status, activeArticle, folders } = this.props
+    let { status, activeArticle, folders, user } = this.props
 
     let tags = activeArticle.tags != null ? activeArticle.tags.length > 0
       ? activeArticle.tags.map(tag => {
@@ -185,7 +206,12 @@ export default class ArticleDetail extends React.Component {
       : (
         <span className='noTags'>Not tagged yet</span>
       ) : null
+
     let folder = _.findWhere(folders, {key: activeArticle.FolderKey})
+
+    let title = activeArticle.title.trim().length === 0
+      ? <small>(Untitled)</small>
+      : activeArticle.title
 
     return (
       <div className='ArticleDetail idle'>
@@ -214,6 +240,15 @@ export default class ArticleDetail extends React.Component {
                 <div className='tags'><i className='fa fa-fw fa-tags'/>{tags}</div>
               </div>
               <div className='right'>
+                <ShareButton
+                  article={activeArticle}
+                  user={user}
+                  />
+
+                <button onClick={e => this.handleClipboardButtonClick(e)} className='editBtn'>
+                  <i className='fa fa-fw fa-clipboard'/><span className='tooltip'>Copy to clipboard</span>
+                </button>
+
                 <button onClick={e => this.handleEditButtonClick(e)} className='editBtn'>
                   <i className='fa fa-fw fa-edit'/><span className='tooltip'>Edit (e)</span>
                 </button>
@@ -232,7 +267,7 @@ export default class ArticleDetail extends React.Component {
           <div className='detailPanel'>
             <div className='header'>
               <ModeIcon className='mode' mode={activeArticle.mode}/>
-              <div className='title'>{activeArticle.title}</div>
+              <div className='title'>{title}</div>
             </div>
             {activeArticle.mode === 'markdown'
               ? <MarkdownPreview content={activeArticle.content}/>
@@ -247,13 +282,14 @@ export default class ArticleDetail extends React.Component {
   handleCancelButtonClick (e) {
     let { activeArticle, dispatch } = this.props
 
-    dispatch(unlockStatus())
-    if (activeArticle.status === NEW) dispatch(switchArticle(null))
+    if (activeArticle.status === NEW) {
+      dispatch(switchArticle(null))
+    }
     dispatch(switchMode(IDLE_MODE))
   }
 
   handleSaveButtonClick (e) {
-    let { dispatch, folders, filters } = this.props
+    let { dispatch, folders, status } = this.props
     let article = this.state.article
     let newArticle = Object.assign({}, article)
 
@@ -262,13 +298,17 @@ export default class ArticleDetail extends React.Component {
 
     dispatch(unlockStatus())
 
-    delete newArticle.status
+    newArticle.status = null
     newArticle.updatedAt = new Date()
+    newArticle.title = newArticle.title.trim()
     if (newArticle.createdAt == null) {
       newArticle.createdAt = new Date()
-      activityRecord.emit('ARTICLE_CREATE')
+      if (newArticle.title.length === 0) {
+        newArticle.title = `Created at ${moment(newArticle.createdAt).format('YYYY/MM/DD HH:mm')}`
+      }
+      activityRecord.emit('ARTICLE_CREATE', {mode: newArticle.mode})
     } else {
-      activityRecord.emit('ARTICLE_UPDATE')
+      activityRecord.emit('ARTICLE_UPDATE', {mode: newArticle.mode})
     }
 
     dispatch(updateArticle(newArticle))
@@ -277,7 +317,7 @@ export default class ArticleDetail extends React.Component {
     // Searchを初期化し、更新先のFolder filterをかける
     // かかれていない時に
     // Searchを初期化する
-    if (filters.folder.length !== 0) dispatch(switchFolder(folder.name))
+    if (status.targetFolders.length > 0) dispatch(switchFolder(folder.name))
     else dispatch(clearSearch())
     dispatch(switchArticle(newArticle.key))
   }
@@ -318,8 +358,6 @@ export default class ArticleDetail extends React.Component {
   handleTagsChange (newTag, tags) {
     let article = this.state.article
     article.tags = tags
-
-    this.setState({article: article})
 
     let _isTagChanged = _.difference(article.tags, this.props.activeArticle.tags).length > 0 || _.difference(this.props.activeArticle.tags, article.tags).length > 0
 
@@ -378,6 +416,11 @@ export default class ArticleDetail extends React.Component {
   }
 
   handleContentChange (e, value) {
+    let { status } = this.props
+    if (status.mode === IDLE_MODE) {
+      return
+    }
+
     let { article } = this.state
     article.content = value
     let _isContentChanged = article.content !== this.props.activeArticle.content
@@ -404,7 +447,36 @@ export default class ArticleDetail extends React.Component {
   }
 
   handleTogglePreviewButtonClick (e) {
-    this.setState({previewMode: !this.state.previewMode})
+    if (this.state.article.mode === 'markdown') {
+      if (!this.state.previewMode) {
+        let cursorPosition = this.refs.code.getCursorPosition()
+        let firstVisibleRow = this.refs.code.getFirstVisibleRow()
+        this.setState({
+          previewMode: true,
+          cursorPosition,
+          firstVisibleRow
+        }, function () {
+          let previewEl = ReactDOM.findDOMNode(this.refs.preview)
+          let anchors = previewEl.querySelectorAll('.lineAnchor')
+          for (let i = 0; i < anchors.length; i++) {
+            if (parseInt(anchors[i].dataset.key, 10) > cursorPosition.row || i === anchors.length - 1) {
+              var targetAnchor = anchors[i > 0 ? i - 1 : 0]
+              previewEl.scrollTop = targetAnchor.offsetTop - 100
+              break
+            }
+          }
+        })
+      } else {
+        this.setState({
+          previewMode: false
+        }, function () {
+          console.log(this.state.cursorPosition)
+          this.refs.code.moveCursorTo(this.state.cursorPosition.row, this.state.cursorPosition.column)
+          this.refs.code.scrollToLine(this.state.firstVisibleRow)
+          this.refs.code.editor.focus()
+        })
+      }
+    }
   }
 
   handleTitleKeyDown (e) {
@@ -449,18 +521,36 @@ export default class ArticleDetail extends React.Component {
           <div className='right'>
             {
               this.state.article.mode === 'markdown'
-                ? (<button className='preview' onClick={e => this.handleTogglePreviewButtonClick(e)}>{!this.state.previewMode ? 'Preview' : 'Edit'}</button>)
+                ? (<button className='preview' onClick={e => this.handleTogglePreviewButtonClick(e)}>
+                    {
+                      !this.state.previewMode
+                      ? 'Preview'
+                      : 'Edit'
+                    }
+                  </button>)
                 : null
             }
-            <button onClick={e => this.handleCancelButtonClick(e)}>Cancel</button>
-            <button onClick={e => this.handleSaveButtonClick(e)} className='primary'>Save</button>
+            <button onClick={e => this.handleCancelButtonClick(e)}>
+              Cancel
+            </button>
+            <button onClick={e => this.handleSaveButtonClick(e)} className='primary'>
+              Save
+            </button>
           </div>
         </div>
         <div className='detailBody'>
           <div className='detailPanel'>
             <div className='header'>
               <div className='title'>
-                <input onKeyDown={e => this.handleTitleKeyDown(e)} placeholder='Title' ref='title' value={this.state.article.title} onChange={e => this.handleTitleChange(e)}/>
+                <input
+                  onKeyDown={e => this.handleTitleKeyDown(e)}
+                  placeholder={this.state.article.createdAt == null
+                    ? `Created at ${moment().format('YYYY/MM/DD HH:mm')}`
+                    : 'Title'}
+                  ref='title'
+                  value={this.state.article.title}
+                  onChange={e => this.handleTitleChange(e)}
+                />
               </div>
               <ModeSelect
                 ref='mode'
@@ -474,7 +564,7 @@ export default class ArticleDetail extends React.Component {
             </div>
 
             {this.state.previewMode
-              ? <MarkdownPreview content={this.state.article.content}/>
+              ? <MarkdownPreview ref='preview' content={this.state.article.content}/>
               : (<CodeEditor
                   ref='code'
                   onChange={(e, value) => this.handleContentChange(e, value)}
@@ -495,7 +585,6 @@ export default class ArticleDetail extends React.Component {
     if (activeArticle == null) return this.renderEmpty()
 
     switch (status.mode) {
-      case CREATE_MODE:
       case EDIT_MODE:
         return this.renderEdit()
       case IDLE_MODE:
@@ -509,7 +598,8 @@ export default class ArticleDetail extends React.Component {
 ArticleDetail.propTypes = {
   status: PropTypes.shape(),
   activeArticle: PropTypes.shape(),
-  activeUser: PropTypes.shape(),
+  user: PropTypes.shape(),
+  folders: PropTypes.array,
   dispatch: PropTypes.func
 }
 ArticleDetail.prototype.linkState = linkState

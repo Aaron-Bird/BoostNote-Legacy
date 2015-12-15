@@ -80,6 +80,12 @@ export default class ArticleList extends React.Component {
         : (<span>Not tagged yet</span>)
       let folder = _.findWhere(folders, {key: article.FolderKey})
 
+      let title = article.status !== NEW
+        ? article.title.trim().length === 0
+        ? <small>(Untitled)</small>
+        : article.title
+        : '(New article)'
+
       return (
         <div key={'article-' + article.key}>
           <div onClick={e => this.handleArticleClick(article)(e)} className={'articleItem' + (activeArticle.key === article.key ? ' active' : '')}>
@@ -91,7 +97,7 @@ export default class ArticleList extends React.Component {
             <span className='updatedAt'>{article.status != null ? article.status : moment(article.updatedAt).fromNow()}</span>
             </div>
             <div className='middle'>
-              <ModeIcon className='mode' mode={article.mode}/> <div className='title'>{article.status !== NEW ? article.title : '(New article)'}</div>
+              <ModeIcon className='mode' mode={article.mode}/> <div className='title'>{title}</div>
             </div>
             <div className='bottom'>
               <div className='tags'><i className='fa fa-fw fa-tags'/>{tagElements}</div>

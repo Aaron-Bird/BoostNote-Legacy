@@ -284,7 +284,87 @@ iptFocusBorderColor = #369DCD
             color noTagsColor
       .right
         z-index 30
-        button
+        div.share-dropdown
+          position absolute
+          right 5px
+          top 30px
+          background-color transparentify(invBackgroundColor, 80%)
+          padding 5px 0
+          width 200px
+          &.hide
+            display none
+          &>button
+            width 200px
+            text-align left
+            display block
+            height 33px
+            background-color transparent
+            color white
+            font-size 14px
+            padding 0 10px
+            border none
+            &:hover
+              background-color transparentify(lighten(invBackgroundColor, 30%), 80%)
+          &>.ShareButton-url
+            clearfix()
+            input.ShareButton-url-input
+              width 155px
+              margin 0 0 0 5px
+              height 25px
+              outline none
+              border none
+              border-top-left-radius 5px
+              border-bottom-left-radius 5px
+              float left
+              padding 5px
+            button.ShareButton-url-button
+              width 35px
+              height 25px
+              border none
+              margin 0 5px 0 0
+              outline none
+              border-top-right-radius 5px
+              border-bottom-right-radius 5px
+              background-color darken(white, 5%)
+              color inactiveTextColor
+              float right
+              div.ShareButton-url-button-tooltip
+                tooltip()
+                right 10px
+              &:hover
+                color textColor
+                div.ShareButton-url-button-tooltip
+                  opacity 1
+            div.ShareButton-url-alert
+              float left
+              height 25px
+              line-height 25px
+              padding 0 15px
+              color white
+
+        .ShareButton
+          display inline-block
+          button.ShareButton-open-button
+            border-radius 16.5px
+            cursor pointer
+            height 33px
+            width 33px
+            border none
+            margin-right 5px
+            font-size 18px
+            color inactiveTextColor
+            background-color darken(white, 5%)
+            padding 0
+            .tooltip
+              tooltip()
+              margin-top 25px
+              margin-left -40px
+            &:hover
+              color textColor
+              .tooltip
+                opacity 1
+
+        &>button
           border-radius 16.5px
           cursor pointer
           height 33px
@@ -323,7 +403,8 @@ iptFocusBorderColor = #369DCD
             right 15px
             font-size 24px
             line-height 60px
-
             white-space nowrap
             overflow-x auto
             overflow-y hidden
+            small
+              color #AAA

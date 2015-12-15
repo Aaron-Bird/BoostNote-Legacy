@@ -9,6 +9,7 @@
 
   <link rel="stylesheet" href="../../node_modules/font-awesome/css/font-awesome.min.css" media="screen" charset="utf-8">
   <link rel="stylesheet" href="../../node_modules/devicon/devicon.min.css">
+  <link rel="stylesheet" href="../../node_modules/highlight.js/styles/xcode.css">
   <link rel="shortcut icon" href="favicon.ico">
 
   <style>
@@ -27,7 +28,8 @@
   <div id="content"></div>
   <script src="../../submodules/ace/src-min/ace.js"></script>
   <script>
-    require('web-frame').setZoomLevelLimits(1, 1)
+    const electron = require('electron')
+    electron.webFrame.setZoomLevelLimits(1, 1)
     var scriptUrl = process.env.BOOST_ENV === 'development'
       ? 'http://localhost:8080/assets/finder.js'
       : '../../compiled/finder.js'

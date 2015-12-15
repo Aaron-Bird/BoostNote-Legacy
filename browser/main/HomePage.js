@@ -1,14 +1,15 @@
 import React, { PropTypes} from 'react'
 import { connect } from 'react-redux'
-import { CREATE_MODE, EDIT_MODE, IDLE_MODE, NEW, toggleTutorial } from 'boost/actions'
-// import UserNavigator from './HomePage/UserNavigator'
+import { EDIT_MODE, IDLE_MODE, toggleTutorial } from 'boost/actions'
 import ArticleNavigator from './HomePage/ArticleNavigator'
 import ArticleTopBar from './HomePage/ArticleTopBar'
 import ArticleList from './HomePage/ArticleList'
 import ArticleDetail from './HomePage/ArticleDetail'
 import _ from 'lodash'
-import keygen from 'boost/keygen'
 import { isModalOpen, closeModal } from 'boost/modal'
+
+const electron = require('electron')
+const remote = electron.remote
 
 const TEXT_FILTER = 'TEXT_FILTER'
 const FOLDER_FILTER = 'FOLDER_FILTER'
@@ -49,13 +50,20 @@ class HomePage extends React.Component {
     }
 
     switch (status.mode) {
-      case CREATE_MODE:
+
       case EDIT_MODE:
         if (e.keyCode === 27) {
           detail.handleCancelButtonClick()
         }
         if ((e.keyCode === 13 && (e.metaKey || e.ctrlKey)) || (e.keyCode === 83 && (e.metaKey || e.ctrlKey))) {
           detail.handleSaveButtonClick()
+        }
+        if (e.keyCode === 80 && e.metaKey) {
+          detail.handleTogglePreviewButtonClick()
+        }
+        if (e.keyCode === 78 && e.metaKey) {
+          nav.handleNewPostButtonClick()
+          e.preventDefault()
         }
         break
       case IDLE_MODE:
@@ -91,7 +99,7 @@ class HomePage extends React.Component {
           list.selectNextArticle()
         }
 
-        if (e.keyCode === 65 || e.keyCode === 13 && (e.metaKey || e.ctrlKey)) {
+        if ((e.keyCode === 65 && !e.metaKey && !e.ctrlKey) || (e.keyCode === 13 && e.metaKey) || (e.keyCode === 78 && e.metaKey)) {
           nav.handleNewPostButtonClick()
           e.preventDefault()
         }
@@ -99,13 +107,14 @@ class HomePage extends React.Component {
   }
 
   render () {
-    let { dispatch, status, articles, allArticles, activeArticle, folders, tags, filters } = this.props
+    let { dispatch, status, user, articles, allArticles, activeArticle, folders, tags, filters } = this.props
 
     return (
       <div className='HomePage'>
         <ArticleNavigator
           ref='nav'
           dispatch={dispatch}
+          user={user}
           folders={folders}
           status={status}
           allArticles={allArticles}
@@ -126,6 +135,7 @@ class HomePage extends React.Component {
         <ArticleDetail
           ref='detail'
           dispatch={dispatch}
+          user={user}
           activeArticle={activeArticle}
           folders={folders}
           status={status}
@@ -156,8 +166,16 @@ function buildFilter (key) {
   return {type: TEXT_FILTER, value: key}
 }
 
+function isContaining (target, needle) {
+  return target.match(new RegExp(_.escapeRegExp(needle)))
+}
+
+function startsWith (target, needle) {
+  return target.match(new RegExp('^' + _.escapeRegExp(needle)))
+}
+
 function remap (state) {
-  let { folders, articles, status } = state
+  let { user, folders, articles, status } = state
 
   if (articles == null) articles = []
   articles.sort((a, b) => {
@@ -184,10 +202,10 @@ function remap (state) {
   let targetFolders
   if (folders != null) {
     let exactTargetFolders = folders.filter(folder => {
-      return _.find(folderExactFilters, filter => folder.name.match(new RegExp(`^${filter.value}$`)))
+      return _.findWhere(folderExactFilters, {value: folder.name})
     })
     let fuzzyTargetFolders = folders.filter(folder => {
-      return _.find(folderFilters, filter => folder.name.match(new RegExp(`^${filter.value}`)))
+      return _.find(folderFilters, filter => startsWith(folder.name, filter.value))
     })
     targetFolders = status.targetFolders = exactTargetFolders.concat(fuzzyTargetFolders)
 
@@ -200,7 +218,7 @@ function remap (state) {
     if (textFilters.length > 0) {
       articles = textFilters.reduce((articles, textFilter) => {
         return articles.filter(article => {
-          return article.title.match(new RegExp(textFilter.value, 'i')) || article.content.match(new RegExp(textFilter.value, 'i'))
+          return isContaining(article.title, textFilter.value) || isContaining(article.content, textFilter.value)
         })
       }, articles)
     }
@@ -208,7 +226,7 @@ function remap (state) {
     if (tagFilters.length > 0) {
       articles = tagFilters.reduce((articles, tagFilter) => {
         return articles.filter(article => {
-          return _.find(article.tags, tag => tag.match(new RegExp(tagFilter.value, 'i')))
+          return _.find(article.tags, tag => isContaining(tag, tagFilter.value))
         })
       }, articles)
     }
@@ -218,43 +236,8 @@ function remap (state) {
   let activeArticle = _.findWhere(articles, {key: status.articleKey})
   if (activeArticle == null) activeArticle = articles[0]
 
-  // remove Unsaved new article if user is not CREATE_MODE
-  if (status.mode !== CREATE_MODE) {
-    let targetIndex = _.findIndex(articles, article => article.status === NEW)
-
-    if (targetIndex >= 0) articles.splice(targetIndex, 1)
-  }
-
-  // switching CREATE_MODE
-  // restrict
-  // 1. team have one folder at least
-  // or Change IDLE MODE
-  if (status.mode === CREATE_MODE) {
-    let newArticle = _.findWhere(articles, {status: 'NEW'})
-    console.log('targetFolders')
-    let FolderKey = targetFolders.length > 0
-      ? targetFolders[0].key
-      : folders[0].key
-
-    if (newArticle == null) {
-      newArticle = {
-        id: null,
-        key: keygen(),
-        title: '',
-        content: '',
-        mode: 'markdown',
-        tags: [],
-        FolderKey: FolderKey,
-        status: NEW
-      }
-      articles.unshift(newArticle)
-    }
-    activeArticle = newArticle
-  } else if (status.mode === CREATE_MODE) {
-    status.mode = IDLE_MODE
-  }
-
   return {
+    user,
     folders,
     status,
     allArticles,
@@ -270,11 +253,9 @@ function remap (state) {
 }
 
 HomePage.propTypes = {
-  params: PropTypes.shape({
-    userId: PropTypes.string
-  }),
-  status: PropTypes.shape({
-    userId: PropTypes.string
+  status: PropTypes.shape(),
+  user: PropTypes.shape({
+    name: PropTypes.string
   }),
   articles: PropTypes.array,
   allArticles: PropTypes.array,
@@ -285,7 +266,8 @@ HomePage.propTypes = {
     folder: PropTypes.array,
     tag: PropTypes.array,
     text: PropTypes.array
-  })
+  }),
+  tags: PropTypes.array
 }
 
 export default connect(remap)(HomePage)
