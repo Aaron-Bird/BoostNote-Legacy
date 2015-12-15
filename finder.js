@@ -4,26 +4,84 @@ const Tray = electron.Tray
 const Menu = electron.Menu
 const MenuItem = electron.MenuItem
 const ipcMain = electron.ipcMain
+const path = require('path')
 
-process.stdin.setEncoding('utf8')
+const nodeIpc = require('node-ipc')
 
-console.log = function () {
-  process.stdout.write(JSON.stringify({
-    type: 'log',
-    data: JSON.stringify(Array.prototype.slice.call(arguments).join(' '))
-  }), 'utf-8')
+var finderWindow = null
+var isFinderLoaded = false
+
+function hideFinder () {
+  if (!isFinderLoaded) return false
+
+  if (process.platform === 'darwin') {
+    Menu.sendActionToFirstResponder('hide:')
+  }
+  if (process.platform === 'win32') {
+    finderWindow.minimize()
+  }
+  finderWindow.hide()
 }
+
+function showFinder () {
+  if (!isFinderLoaded) return false
+
+  if (!finderWindow.isVisible()) {
+    finderWindow.show()
+  }
+  if (process.platform === 'win32') {
+    finderWindow.minimize()
+    finderWindow.restore()
+  }
+}
+
+nodeIpc.config.id = 'finder'
+nodeIpc.config.retry = 1500
+nodeIpc.config.silent = true
+
+nodeIpc.connectTo(
+  'main',
+  path.join(app.getPath('userData'), 'boost.service'),
+  function () {
+      nodeIpc.of.main.on(
+        'connect',
+        function () {
+          nodeIpc.log('<< ## connected to world ##'.rainbow, nodeIpc.config.delay)
+        }
+      )
+      nodeIpc.of.main.on(
+        'disconnect',
+        function(){
+          nodeIpc.log('<< disconnected from main'.notice)
+        }
+      )
+      nodeIpc.of.main.on(
+        'message',
+        function (payload) {
+          switch (payload.type) {
+            case 'open-finder':
+              showFinder()
+              break
+          }
+        }
+      )
+  }
+)
 
 function emit (type, data) {
-  process.stdout.write(JSON.stringify({
+  var payload = {
     type: type,
-    data: JSON.stringify(data)
-  }), 'utf-8')
+    data: data
+  }
+  nodeIpc.of.main.emit('message', payload)
 }
 
-var finderWindow
+var appQuit = false
 app.on('ready', function () {
-  app.dock.hide()
+  if (process.platform === 'darwin') {
+    app.dock.hide()
+  }
+
   var appIcon = new Tray(__dirname + '/resources/tray-icon.png')
   appIcon.setToolTip('Boost')
 
@@ -43,7 +101,7 @@ app.on('ready', function () {
     trayMenu.append(new MenuItem({
       label: 'Open Finder window',
       click: function () {
-        finderWindow.show()
+        showFinder()
       }
     }))
     trayMenu.append(new MenuItem({
@@ -53,29 +111,30 @@ app.on('ready', function () {
       }
     }))
     appIcon.setContextMenu(trayMenu)
-
-    process.stdin.on('data', function (payload) {
-      try {
-        payload = JSON.parse(payload)
-      } catch (e) {
-        console.log('Not parsable payload : ', payload)
-        return
-      }
-      console.log('from main >> ', payload.type)
-      switch (payload.type) {
-        case 'open-finder':
-          finderWindow.show()
-          break
-      }
+    appIcon.on('click', function (e) {
+      e.preventDefault()
+      appIcon.popUpContextMenu(trayMenu)
     })
 
     ipcMain.on('copy-finder', function () {
       emit('copy-finder')
     })
+
+    ipcMain.on('hide-finder', function () {
+      hideFinder()
+    })
+
+    isFinderLoaded = true
   })
 
-  global.hideFinder = function () {
-    Menu.sendActionToFirstResponder('hide:')
-  }
+  finderWindow.on('blur', function () {
+    hideFinder()
+  })
+
+  finderWindow.on('close', function (e) {
+    if (appQuit) return true
+    e.preventDefault()
+    hideFinder()
+  })
 })
 

@@ -7,7 +7,8 @@ const autoUpdater = electron.autoUpdater
 const jetpack = require('fs-jetpack')
 const path = require('path')
 const ChildProcess = require('child_process')
-electron.crashReporter.start()
+const _ = require('lodash')
+// electron.crashReporter.start()
 
 var mainWindow = null
 var finderProcess
@@ -61,6 +62,44 @@ autoUpdater
     }
   })
 
+
+const nodeIpc = require('node-ipc')
+var isNodeIpcReady = false
+nodeIpc.config.id   = 'node'
+nodeIpc.config.retry= 1500
+nodeIpc.config.silent = true
+
+nodeIpc.serve(
+  path.join(app.getPath('userData'), 'boost.service'),
+  function(){
+    isNodeIpcReady = true
+    nodeIpc.server.on(
+      'message',
+      function (data, socket){
+        console.log('>>', data)
+        format(data)
+      }
+    )
+  }
+)
+
+
+function format (payload) {
+  switch (payload.type) {
+    case 'show-main-window':
+      mainWindow.minimize()
+      mainWindow.restore()
+      break
+    case 'copy-finder':
+      mainWindow.webContents.send('copy-finder')
+      break
+    case 'quit-app':
+      appQuit = true
+      app.quit()
+      break
+  }
+}
+
 app.on('ready', function () {
   app.on('before-quit', function () {
     if (finderProcess) finderProcess.kill()
@@ -93,14 +132,26 @@ app.on('ready', function () {
     e.preventDefault()
     mainWindow.hide()
   })
+
+  function emitToFinder (type, data) {
+    if (!isNodeIpcReady) {
+      console.log('server is not ready')
+    }
+    var payload = {
+      type: type,
+      data: data
+    }
+    nodeIpc.server.broadcast('message', payload)
+  }
+
   mainWindow.webContents.on('did-finish-load', function () {
     if (finderProcess == null) {
+      var finderArgv = [path.resolve(__dirname, 'finder.js'), '--finder']
+      if (_.find(process.argv, a => a === '--hot')) finderArgv.push('--hot')
       finderProcess = ChildProcess
-        .execFile(process.execPath, [path.resolve(__dirname, 'finder.js'), '--finder'])
-      finderProcess.stdout.setEncoding('utf8')
-      finderProcess.stderr.setEncoding('utf8')
-      finderProcess.stdout.on('data', format)
-      finderProcess.stderr.on('data', errorFormat)
+        .execFile(process.execPath, finderArgv)
+
+      nodeIpc.server.start()
     }
 
     if (update != null) {
@@ -115,48 +166,6 @@ app.on('ready', function () {
     mainWindow.show()
   })
 
-  function format (payload) {
-    // console.log('from finder >> ', payload)
-    try {
-      payload = JSON.parse(payload)
-    } catch (e) {
-      console.log('Not parsable payload : ', payload)
-      return
-    }
-    switch (payload.type) {
-      case 'log':
-        console.log('FINDER(stdout): ' + payload.data)
-        break
-      case 'show-main-window':
-        mainWindow.show()
-        break
-      case 'copy-finder':
-        mainWindow.webContents.send('copy-finder')
-        break
-      case 'request-data':
-        mainWindow.webContents.send('request-data')
-        break
-      case 'quit-app':
-        appQuit = true
-        app.quit()
-        break
-    }
-  }
-  function errorFormat (output) {
-    console.error('FINDER(stderr):' + output)
-  }
-
-  function emitToFinder (type, data) {
-    if (!finderProcess) {
-      console.log('finder process is not ready')
-      return
-    }
-    var payload = {
-      type: type,
-      data: data
-    }
-    finderProcess.stdin.write(JSON.stringify(payload), 'utf-8')
-  }
 
   var userDataPath = app.getPath('userData')
   if (!jetpack.cwd(userDataPath).exists('keymap.json')) {

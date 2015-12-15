@@ -13,7 +13,9 @@ import dataStore from 'boost/dataStore'
 const electron = require('electron')
 const { remote, clipboard, ipcRenderer } = electron
 
-var hideFinder = remote.getGlobal('hideFinder')
+function hideFinder () {
+  ipcRenderer.send('hide-finder')
+}
 
 function notify (...args) {
   return new window.Notification(...args)

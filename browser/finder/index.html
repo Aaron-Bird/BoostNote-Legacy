@@ -30,7 +30,8 @@
   <script>
     const electron = require('electron')
     electron.webFrame.setZoomLevelLimits(1, 1)
-    var scriptUrl = process.env.BOOST_ENV === 'development'
+    const _ = require('lodash')
+    var scriptUrl = _.find(electron.remote.process.argv, a => a === '--hot')
       ? 'http://localhost:8080/assets/finder.js'
       : '../../compiled/finder.js'
     var scriptEl=document.createElement('script')

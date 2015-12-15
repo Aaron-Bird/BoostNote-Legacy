@@ -4,9 +4,10 @@
   "description": "Boost App",
   "main": "index.js",
   "scripts": {
-    "start": "set BOOST_ENV=development&& electron ./main.js",
+    "start": "electron ./index.js",
+    "hot": "electron ./index.js --hot",
     "webpack": "webpack-dev-server --hot --inline --config webpack.config.js",
-    "compile": "NODE_ENV=production webpack --config webpack.config.production.js",
+    "compile": "webpack --config webpack.config.production.js",
     "pack:osx": "electron-packager ./ Boost --app-version=$npm_package_version $npm_package_config_platform  $npm_package_config_version $npm_package_config_ignore --overwrite --out=\"dist\"",
     "codesign": "codesign --verbose --deep --force --sign \"MAISIN solutions Inc.\" dist/Boost-darwin-x64/Boost.app",
     "build:osx": "electron-builder \"dist/Boost-darwin-x64/Boost.app\" --platform=osx --out=\"dist\" --config=\"./builder-config.json\"",
@@ -48,6 +49,7 @@
     "markdown-it-emoji": "^1.1.0",
     "md5": "^2.0.0",
     "moment": "^2.10.3",
+    "node-ipc": "^5.0.0",
     "socket.io-client": "^1.3.6",
     "superagent": "^1.2.0",
     "superagent-promise": "^1.0.3"
