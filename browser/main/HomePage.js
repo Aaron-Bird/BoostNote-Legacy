@@ -29,6 +29,8 @@ class HomePage extends React.Component {
   }
 
   handleKeyDown (e) {
+    let cmdOrCtrl = process.platform === 'darwin' ? e.metaKey : e.ctrlKey
+
     if (isModalOpen()) {
       if (e.keyCode === 27) closeModal()
       return
@@ -55,13 +57,13 @@ class HomePage extends React.Component {
         if (e.keyCode === 27) {
           detail.handleCancelButtonClick()
         }
-        if ((e.keyCode === 13 && (e.metaKey || e.ctrlKey)) || (e.keyCode === 83 && (e.metaKey || e.ctrlKey))) {
+        if ((e.keyCode === 13 && (cmdOrCtrl)) || (e.keyCode === 83 && (cmdOrCtrl))) {
           detail.handleSaveButtonClick()
         }
-        if (e.keyCode === 80 && e.metaKey) {
+        if (e.keyCode === 80 && cmdOrCtrl) {
           detail.handleTogglePreviewButtonClick()
         }
-        if (e.keyCode === 78 && e.metaKey) {
+        if (e.keyCode === 78 && cmdOrCtrl) {
           nav.handleNewPostButtonClick()
           e.preventDefault()
         }
@@ -80,14 +82,14 @@ class HomePage extends React.Component {
           if (e.keyCode === 27) {
             detail.handleDeleteCancelButtonClick()
           }
-          if (e.keyCode === 13 && (e.metaKey || e.ctrlKey)) {
+          if (e.keyCode === 13 && cmdOrCtrl) {
             detail.handleDeleteConfirmButtonClick()
           }
           break
         }
 
         // `detail`の`openDeleteConfirmMenu`が`true`なら呼ばれない。
-        if (e.keyCode === 27 || (e.keyCode === 70 && (e.metaKey || e.ctrlKey))) {
+        if (e.keyCode === 27 || (e.keyCode === 70 && cmdOrCtrl)) {
           top.focusInput()
         }
 
@@ -99,7 +101,7 @@ class HomePage extends React.Component {
           list.selectNextArticle()
         }
 
-        if ((e.keyCode === 65 && !e.metaKey && !e.ctrlKey) || (e.keyCode === 13 && e.metaKey) || (e.keyCode === 78 && e.metaKey)) {
+        if ((e.keyCode === 65 && !e.metaKey && !e.ctrlKey) || (e.keyCode === 13 && cmdOrCtrl) || (e.keyCode === 78 && cmdOrCtrl)) {
           nav.handleNewPostButtonClick()
           e.preventDefault()
         }
