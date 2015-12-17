@@ -23,6 +23,7 @@ window.addEventListener('online', function () {
 function notify (title, options) {
   if (process.platform === 'win32') {
     options.icon = path.join('file://', global.__dirname, '../../resources/favicon-230x230.png')
+    options.silent = false
   }
   console.log(options)
   return new window.Notification(title, options)
