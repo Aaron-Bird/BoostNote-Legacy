@@ -65,8 +65,8 @@ autoUpdater
 
 const nodeIpc = require('node-ipc')
 var isNodeIpcReady = false
-nodeIpc.config.id   = 'node'
-nodeIpc.config.retry= 1500
+nodeIpc.config.id = 'node'
+nodeIpc.config.retry = 1500
 nodeIpc.config.silent = true
 
 nodeIpc.serve(
@@ -75,14 +75,13 @@ nodeIpc.serve(
     isNodeIpcReady = true
     nodeIpc.server.on(
       'message',
-      function (data, socket){
+      function (data, socket) {
         console.log('>>', data)
         format(data)
       }
     )
   }
 )
-
 
 function format (payload) {
   switch (payload.type) {
@@ -145,12 +144,21 @@ app.on('ready', function () {
   }
 
   mainWindow.webContents.on('did-finish-load', function () {
-    if (finderProcess == null) {
-      var finderArgv = [path.resolve(__dirname, 'finder.js'), '--finder']
+    if (finderProcess == null && process.platform === 'darwin') {
+      var finderArgv = [path.join(__dirname, 'finder.js'), '--finder']
       if (_.find(process.argv, a => a === '--hot')) finderArgv.push('--hot')
       finderProcess = ChildProcess
         .execFile(process.execPath, finderArgv)
 
+      nodeIpc.server.start()
+    } else {
+      finderWindow = require('./atom-lib/finder-window')
+
+      finderWindow.on('close', function (e) {
+        if (appQuit) return true
+        e.preventDefault()
+        finderWindow.hide()
+      })
       nodeIpc.server.start()
     }
 
