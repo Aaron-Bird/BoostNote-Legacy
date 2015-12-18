@@ -1,4 +1,5 @@
 const electron = require('electron')
+const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 
@@ -18,6 +19,11 @@ mainWindow.loadURL('file://' + url)
 
 mainWindow.webContents.on('new-window', function (e) {
   e.preventDefault()
+})
+
+app.on('activate', function () {
+  if (mainWindow == null) return null
+  mainWindow.show()
 })
 
 module.exports = mainWindow

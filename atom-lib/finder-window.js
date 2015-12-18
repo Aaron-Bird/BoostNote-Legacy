@@ -6,7 +6,7 @@ const app = electron.app
 const ipcMain = electron.ipcMain
 const Tray = electron.Tray
 const path = require('path')
-const nodeIpc = require('node-ipc')
+const nodeIpc = require('@rokt33r/node-ipc')
 
 var isFinderLoaded = false
 
@@ -18,6 +18,13 @@ nodeIpc.connectTo(
   'main',
   path.join(app.getPath('userData'), 'boost.service'),
   function () {
+      nodeIpc.of.main.on(
+        'error',
+        function (err) {
+          nodeIpc.log('<< ## err ##'.rainbow, nodeIpc.config.delay)
+          nodeIpc.log(err)
+        }
+      )
       nodeIpc.of.main.on(
         'connect',
         function () {
