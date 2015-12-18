@@ -148,7 +148,7 @@ export default class ArticleTopBar extends React.Component {
           <button onClick={e => this.handleTutorialButtonClick(e)}>?<span className='tooltip'>How to use</span>
           </button>
           <a ref='links' className='linksBtn' href>
-            <img src='../../resources/favicon-230x230.png' width='44' height='44'/>
+            <img src='../../resources/app.png' width='44' height='44'/>
           </a>
           {
             this.state.isLinksDropdownOpen
