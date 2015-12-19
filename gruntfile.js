@@ -21,8 +21,7 @@ module.exports = function (grunt) {
         setupIcon: path.join(__dirname, 'resources/dmg.ico'),
         certificateFile: grunt.config.get('auth_code.win_cert_path'),
         certificatePassword: grunt.config.get('auth_code.win_cert_pw'),
-        noMsi: true,
-        remoteReleases: 'https://github.com/BoostIO/boost-releases/releases/download/v0.4.10/'
+        noMsi: true
       }
     }
   })
