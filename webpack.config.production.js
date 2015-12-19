@@ -1,15 +1,18 @@
 var webpack = require('webpack')
-module.exports = {
-  entry: {
-    main: './browser/main/index.js',
-    finder: './browser/finder/index.js'
-  },
-  output: {
-    path: 'compiled',
-    filename: '[name].js',
-    // sourceMapFilename: '[name].map',
-    libraryTarget: 'commonjs2'
-  },
+var path = require('path')
+var JsonpTemplatePlugin = webpack.JsonpTemplatePlugin
+var FunctionModulePlugin = require('webpack/lib/FunctionModulePlugin')
+var NodeTargetPlugin = require('webpack/lib/node/NodeTargetPlugin')
+
+var opt = {
+  path: path.join(__dirname, 'compiled'),
+  filename: '[name].js',
+  sourceMapFilename: '[name].map',
+  libraryTarget: 'commonjs2',
+  publicPath: 'http://localhost:8080/assets/'
+}
+
+config = {
   module: {
     loaders: [
       {
@@ -24,11 +27,26 @@ module.exports = {
       }
     ]
   },
+  entry: {
+    main: './browser/main/index.js',
+    finder: './browser/finder/index.js'
+  },
+  output: opt,
+  resolve: {
+    extensions: ['', '.js', '.jsx'],
+    packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main'],
+    alias: {
+      'boost': path.resolve(__dirname, 'lib')
+    }
+  },
   plugins: [
+    new webpack.NoErrorsPlugin(),
+    new NodeTargetPlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('production')
+        'NODE_ENV': JSON.stringify('production'),
+        'BABEL_ENV': JSON.stringify('production')
       }
     }),
     new webpack.optimize.UglifyJsPlugin({
@@ -49,8 +67,14 @@ module.exports = {
     'highlight.js',
     'markdown-it-emoji',
     'fs-jetpack'
-  ],
-  resolve: {
-    extensions: ['', '.js', '.jsx', 'styl']
-  }
+  ]
 }
+
+config.target = function renderer (compiler) {
+  compiler.apply(
+    new JsonpTemplatePlugin(opt),
+    new FunctionModulePlugin(opt)
+  )
+}
+
+module.exports = config
