@@ -84,7 +84,10 @@ if (handleStartupEvent()) {
 
 var shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
   if (mainWindow) {
-    if (mainWindow.isMinimized()) mainWindow.restore()
+    if (process.platform === 'win32') {
+      mainWindow.minimize()
+      mainWindow.restore()
+    }
     mainWindow.focus()
   }
   return true
@@ -172,7 +175,7 @@ if (process.platform === 'darwin') {
 
   updater.on('update-downloaded', (info) => {
     if (mainWindow != null) {
-      notify('Ready to Update! ' + releaseName, 'Click update button on Main window.')
+      notify('Ready to Update!', 'Click update button on Main window.')
       mainWindow.webContents.send('update-available', 'Update available!')
       isUpdateReady = true
     }
@@ -262,7 +265,7 @@ app.on('ready', function () {
     ipc.on('update-app', function (event, msg) {
       if (isUpdateReady) {
         appQuit = true
-        update.install()
+        updater.install()
       }
     })
 
