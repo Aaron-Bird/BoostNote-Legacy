@@ -1,8 +1,6 @@
 const electron = require('electron')
 const app = electron.app
 const Menu = electron.Menu
-const ipcMain = electron.ipcMain
-const path = require('path')
 
 var finderWindow = null
 
@@ -24,4 +22,3 @@ app.on('ready', function () {
     finderWindow.hide()
   })
 })
-

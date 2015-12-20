@@ -5,8 +5,6 @@ const archiver = require('archiver')
 const fs = require('fs')
 
 module.exports = function (grunt) {
-
-  // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     auth_code: grunt.file.readJSON('secret/auth_code.json'),
@@ -25,27 +23,31 @@ module.exports = function (grunt) {
       }
     }
   })
+
   grunt.loadNpmTasks('grunt-electron-installer')
 
   grunt.registerTask('compile', function () {
     var done = this.async()
     var execPath = path.join('node_modules', '.bin', 'webpack') + ' --config webpack.config.production.js'
     grunt.log.writeln(execPath)
-    var compileProcess = ChildProcess.exec(execPath,
+    ChildProcess.exec(execPath,
       {
         env: Object.assign({}, process.env, {
           BABEL_ENV: 'production'
         })
-      }, function (err, stdout, stderr) {
-      grunt.log.writeln(stdout)
-      if (err) {
-        grunt.log.writeln(err)
-        grunt.log.writeln(stderr)
-        done(false)
-        return
+      },
+      function (err, stdout, stderr) {
+        grunt.log.writeln(stdout)
+
+        if (err) {
+          grunt.log.writeln(err)
+          grunt.log.writeln(stderr)
+          done(false)
+          return
+        }
+        done()
       }
-      done()
-    })
+    )
   })
 
   grunt.registerTask('zip', function (platform) {
@@ -53,10 +55,13 @@ module.exports = function (grunt) {
     var archive = archiver.create('zip', {})
     switch (platform) {
       case 'win':
-        archive.file(path.join('dist/Setup.exe'), { name:'Boostnote-installer-win32-x64.exe' })
+        archive.file(path.join('dist/Setup.exe'), {
+          name: 'Boostnote-installer-win32-x64.exe'
+        })
+        break
       default:
         done()
-        return
+        break
     }
     archive.finalize()
     var writeStream = fs.createWriteStream(path.join('dist/Boostnote-installer-win32-x64.zip'))

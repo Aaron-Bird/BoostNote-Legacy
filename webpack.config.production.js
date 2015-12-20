@@ -12,7 +12,7 @@ var opt = {
   publicPath: 'http://localhost:8080/assets/'
 }
 
-config = {
+var config = {
   module: {
     loaders: [
       {

@@ -1,10 +1,8 @@
 const electron = require('electron')
 const app = electron.app
-const Menu = electron.Menu
 const ipc = electron.ipcMain
 const globalShortcut = electron.globalShortcut
 const jetpack = require('fs-jetpack')
-const path = require('path')
 const mainWindow = require('./atom-lib/main-window')
 const nodeIpc = require('@rokt33r/node-ipc')
 
