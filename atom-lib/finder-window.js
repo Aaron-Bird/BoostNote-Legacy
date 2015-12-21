@@ -149,6 +149,9 @@ function hideFinder () {
     finderWindow.minimize()
     return
   }
+  if (process.platform === 'darwin') {
+    Menu.sendActionToFirstResponder('hide:')
+  }
   finderWindow.hide()
 }
 module.exports = finderWindow
