@@ -3,10 +3,10 @@ const BrowserWindow = electron.BrowserWindow
 const shell = electron.shell
 
 var boost = {
-  label: 'Boost',
+  label: 'Boostnote',
   submenu: [
     {
-      label: 'About Boost',
+      label: 'About Boostnote',
       selector: 'orderFrontStandardAboutPanel:'
     },
     {
@@ -20,7 +20,7 @@ var boost = {
       type: 'separator'
     },
     {
-      label: 'Hide Boost',
+      label: 'Hide Boostnote',
       accelerator: 'Command+H',
       selector: 'hide:'
     },
@@ -137,7 +137,7 @@ var help = {
   role: 'help',
   submenu: [
     {
-      label: 'Boost official site',
+      label: 'Boostnote official site',
       click: function () { shell.openExternal('https://b00st.io/') }
     },
     {
