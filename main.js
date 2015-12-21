@@ -94,7 +94,7 @@ var shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) 
 })
 
 if (shouldQuit) {
-  app.quit()
+  quitApp()
   return
 }
 
@@ -114,82 +114,71 @@ function notify (title, body) {
 }
 
 var isUpdateReady = false
-if (process.platform === 'darwin') {
-  autoUpdater.setFeedURL('https://orbital.b00st.io/rokt33r/boost-app/latest?version=' + version)
-  autoUpdater
-    .on('update-downloaded', function (event, releaseNotes, releaseName, releaseDate, updateUrl, quitAndUpdate) {
-      update = quitAndUpdate
+var GhReleases = require('electron-gh-releases')
 
-      if (mainWindow != null) {
-        notify('Ready to Update! ' + releaseName, 'Click update button on Main window.')
-        mainWindow.webContents.send('update-available', 'Update available!')
-      }
-    })
-    .on('error', function (err, message) {
-      console.error('error')
+var ghReleasesOpts = {
+  repo: 'BoostIO/boost-releases',
+  currentVersion: app.getVersion()
+}
+
+const updater = new GhReleases(ghReleasesOpts)
+
+// Check for updates
+// `status` returns true if there is a new update available
+function checkUpdate () {
+  updater.check((err, status) => {
+    if (err) {
       console.error(err)
-      if (!versionNotified) {
-        notify('Updater error!', message)
-      }
-    })
-    .on('update-available', function () {
-      notify('Update is available!', 'Download started.. wait for the update ready.')
-    })
-    .on('update-not-available', function () {
-      if (!versionNotified) {
-        versionNotified = true
-        notify('Latest Build!! ' + versionText, 'Hope you to enjoy our app :D')
-      }
-    })
-} else if (process.platform === 'win32') {
-  var GhReleases = require('electron-gh-releases')
-
-  var ghReleasesOpts = {
-    repo: 'BoostIO/boost-releases',
-    currentVersion: app.getVersion()
-  }
-
-  const updater = new GhReleases(ghReleasesOpts)
-
-  // Check for updates
-  // `status` returns true if there is a new update available
-  function checkUpdate () {
-    updater.check((err, status) => {
-      if (err) {
-        console.error(err)
-        if (!versionNotified) notify('Updater error!', message)
-      }
-      if (!err) {
-        if (status) {
-          notify('Update is available!', 'Download started.. wait for the update ready.')
-          updater.download()
-        } else {
-          if (!versionNotified) {
-            versionNotified = true
-            notify('Latest Build!! ' + versionText, 'Hope you to enjoy our app :D')
-          }
+      if (!versionNotified) notify('Updater error!', message)
+    }
+    if (!err) {
+      if (status) {
+        notify('Update is available!', 'Download started.. wait for the update ready.')
+        updater.download()
+      } else {
+        if (!versionNotified) {
+          versionNotified = true
+          notify('Latest Build!! ' + versionText, 'Hope you to enjoy our app :D')
         }
       }
-    })
-  }
-
-  updater.on('update-downloaded', (info) => {
-    if (mainWindow != null) {
-      notify('Ready to Update!', 'Click update button on Main window.')
-      mainWindow.webContents.send('update-available', 'Update available!')
-      isUpdateReady = true
     }
   })
 }
+
+updater.on('update-downloaded', (info) => {
+  if (mainWindow != null) {
+    notify('Ready to Update!', 'Click update button on Main window.')
+    mainWindow.webContents.send('update-available', 'Update available!')
+    isUpdateReady = true
+  }
+})
 
 const nodeIpc = require('@rokt33r/node-ipc')
 nodeIpc.config.id = 'node'
 nodeIpc.config.retry = 1500
 // nodeIpc.config.silent = true
 
+function spawnFinder() {
+  if (process.platform === 'darwin') {
+    var finderArgv = [path.join(__dirname, 'finder.js'), '--finder']
+    if (_.find(process.argv, a => a === '--hot')) finderArgv.push('--hot')
+    finderProcess = ChildProcess
+      .execFile(process.execPath, finderArgv)
+  }
+}
+
 nodeIpc.serve(
   path.join(app.getPath('userData'), 'boost.service'),
   function () {
+    nodeIpc.server.on(
+      'connect',
+      function (socket) {
+        socket.on('close', function () {
+          console.log('socket dead')
+          if (!appQuit) spawnFinder()
+        })
+      }
+    )
     nodeIpc.server.on(
       'message',
       function (data, socket) {
@@ -209,8 +198,12 @@ nodeIpc.serve(
 function format (payload) {
   switch (payload.type) {
     case 'show-main-window':
-      mainWindow.minimize()
-      mainWindow.restore()
+      if (process.platform === 'darwin') {
+        mainWindow.show()
+      } else {
+        mainWindow.minimize()
+        mainWindow.restore()
+      }
       break
     case 'copy-finder':
       mainWindow.webContents.send('copy-finder')
@@ -220,6 +213,7 @@ function format (payload) {
       break
   }
 }
+
 function quitApp () {
   appQuit = true
   if (finderProcess) finderProcess.kill()
@@ -228,8 +222,9 @@ function quitApp () {
 
 app.on('ready', function () {
   app.on('before-quit', function () {
-    if (finderProcess) finderProcess.kill()
+    console.log('before quite')
     appQuit = true
+    if (finderProcess) finderProcess.kill()
   })
 
   var template = require('./atom-lib/menu-template')
@@ -281,10 +276,7 @@ app.on('ready', function () {
 
   mainWindow.webContents.on('did-finish-load', function () {
     if (finderProcess == null && process.platform === 'darwin') {
-      var finderArgv = [path.join(__dirname, 'finder.js'), '--finder']
-      if (_.find(process.argv, a => a === '--hot')) finderArgv.push('--hot')
-      finderProcess = ChildProcess
-        .execFile(process.execPath, finderArgv)
+      spawnFinder()
     } else {
       finderWindow = require('./atom-lib/finder-window')
 
