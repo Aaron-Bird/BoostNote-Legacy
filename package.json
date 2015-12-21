@@ -12,9 +12,7 @@
     "release": "electron-release --app=\"dist/Boost-darwin-x64/Boost.app\" --token=$(cat .env/.github-token) --repo=\"BoostIO/boost-releases\""
   },
   "config": {
-    "version": "--version=0.35.3 --app-bundle-id=com.maisin.boost",
-    "platform": "--platform=darwin --arch=x64 --prune --icon=resources/app.icns",
-    "ignore": "--ignore=.env --ignore=Boost-darwin-x64 --ignore=node_modules/devicon/icons --ignore=submodules/ace/(?!src-min)|submodules/ace/(?=src-min-noconflict)"
+    "electron-version": "0.35.4"
   },
   "repository": {
     "type": "git",

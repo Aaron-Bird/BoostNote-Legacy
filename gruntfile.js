@@ -5,9 +5,8 @@ const archiver = require('archiver')
 const fs = require('fs')
 
 module.exports = function (grunt) {
-  grunt.initConfig({
+  var initConfig = {
     pkg: grunt.file.readJSON('package.json'),
-    auth_code: grunt.file.readJSON('secret/auth_code.json'),
     'create-windows-installer': {
       x64: {
         appDirectory: path.join(__dirname, 'dist', 'Boostnote-win32-x64'),
@@ -22,7 +21,9 @@ module.exports = function (grunt) {
         noMsi: true
       }
     }
-  })
+  }
+  if (process.platform === 'win32') initConfig.auth_code = grunt.file.readJSON('secret/auth_code.json')
+  grunt.initConfig(initConfig)
 
   grunt.loadNpmTasks('grunt-electron-installer')
 
@@ -61,7 +62,7 @@ module.exports = function (grunt) {
         break
       default:
         done()
-        break
+        return
     }
     archive.finalize()
     var writeStream = fs.createWriteStream(path.join('dist/Boostnote-installer-win32-x64.zip'))
@@ -79,7 +80,7 @@ module.exports = function (grunt) {
       name: 'Boostnote',
       arch: 'x64',
       dir: __dirname,
-      version: '0.35.4',
+      version: grunt.config.get('pkg.config.electron-version'),
       'app-version': grunt.config.get('pkg.version'),
       'app-bundle-id': 'com.maisin.boost',
       asar: true,
@@ -140,6 +141,7 @@ module.exports = function (grunt) {
         grunt.task.run(['pack:win', 'create-windows-installer', 'zip:win'])
     }
   })
+
   // Default task(s).
   grunt.registerTask('default', ['build'])
 }
