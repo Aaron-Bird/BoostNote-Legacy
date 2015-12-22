@@ -274,26 +274,24 @@ app.on('ready', function () {
     mainWindow.hide()
   })
 
-  mainWindow.webContents.on('did-finish-load', function () {
-    if (finderProcess == null && process.platform === 'darwin') {
-      spawnFinder()
-    } else {
-      finderWindow = require('./atom-lib/finder-window')
+  if (finderProcess == null && process.platform === 'darwin') {
+  console.log('fired only once  ')
+    spawnFinder()
+  } else {
+    finderWindow = require('./atom-lib/finder-window')
 
-      finderWindow.on('close', function (e) {
-        if (appQuit) return true
-        e.preventDefault()
-        finderWindow.hide()
-      })
-    }
-
-    nodeIpc.server.start(function (err) {
-      if (err.code === 'EADDRINUSE') {
-        notify('Error occurs!', 'You have to kill other Boostnote processes.')
-        quitApp()
-      }
+    finderWindow.on('close', function (e) {
+      if (appQuit) return true
+      e.preventDefault()
+      finderWindow.hide()
     })
+  }
 
+  nodeIpc.server.start(function (err) {
+    if (err.code === 'EADDRINUSE') {
+      notify('Error occurs!', 'You have to kill other Boostnote processes.')
+      quitApp()
+    }
   })
 
   require('./hotkey')
