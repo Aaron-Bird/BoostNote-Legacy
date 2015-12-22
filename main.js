@@ -247,41 +247,22 @@ app.on('ready', function () {
     Menu.setApplicationMenu(menu)
   }
 
-  if (process.platform === 'darwin') {
-    setInterval(function () {
-      if (update == null) autoUpdater.checkForUpdates()
-    }, 1000 * 60 * 60 * 24)
-
-    ipc.on('check-update', function (event, msg) {
-      if (update == null) autoUpdater.checkForUpdates()
-    })
-
-    ipc.on('update-app', function (event, msg) {
-      if (update != null) {
-        appQuit = true
-        update()
-      }
-    })
-
-    autoUpdater.checkForUpdates()
-  } else if (process.platform === 'win32') {
-    setInterval(function () {
-      checkUpdate()
-    }, 1000 * 60 * 60 * 24)
-
-    ipc.on('check-update', function (event, msg) {
-      if (update == null) checkUpdate()
-    })
-
-    ipc.on('update-app', function (event, msg) {
-      if (isUpdateReady) {
-        appQuit = true
-        updater.install()
-      }
-    })
-
+  setInterval(function () {
     checkUpdate()
-  }
+  }, 1000 * 60 * 60 * 24)
+
+  ipc.on('check-update', function (event, msg) {
+    if (update == null) checkUpdate()
+  })
+
+  ipc.on('update-app', function (event, msg) {
+    if (isUpdateReady) {
+      appQuit = true
+      updater.install()
+    }
+  })
+
+  checkUpdate()
 
   mainWindow = require('./atom-lib/main-window')
   if (process.platform === 'win32') {
