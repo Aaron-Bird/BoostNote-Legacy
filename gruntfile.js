@@ -3,7 +3,9 @@ const ChildProcess = require('child_process')
 const packager = require('electron-packager')
 const archiver = require('archiver')
 const fs = require('fs')
-const appdmg = require('appdmg')
+if (process.platform === 'darwin') {
+  const appdmg = require('appdmg')
+}
 
 module.exports = function (grunt) {
   var initConfig = {
