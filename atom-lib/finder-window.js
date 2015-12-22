@@ -36,8 +36,10 @@ nodeIpc.connectTo(
       'disconnect',
       function () {
         nodeIpc.log('<< disconnected from main'.notice)
-        appQuit = true
-        app.quit()
+        if (process.platform === 'darwin') {
+          appQuit = true
+          app.quit()
+        }
       }
     )
     nodeIpc.of.main.on(
@@ -95,9 +97,11 @@ finderWindow.on('blur', function () {
 })
 
 finderWindow.on('close', function (e) {
-  if (appQuit) return true
-  e.preventDefault()
-  finderWindow.hide()
+  if (process.platform === 'darwin') {
+    if (appQuit) return true
+    e.preventDefault()
+    finderWindow.hide()
+  }
 })
 
 var appIcon = new Tray(path.join(__dirname, '../resources/tray-icon.png'))

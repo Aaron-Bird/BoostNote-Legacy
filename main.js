@@ -56,7 +56,7 @@ var handleStartupEvent = function () {
     return false
   }
 
-  var squirrelCommand = process.argv[1];
+  var squirrelCommand = process.argv[1]
   switch (squirrelCommand) {
     case '--squirrel-install':
       spawnUpdate(['--createShortcut', exeName], function (err) {
@@ -228,8 +228,24 @@ app.on('ready', function () {
   })
 
   var template = require('./atom-lib/menu-template')
+  if (process.platform === 'win32') {
+    template.unshift({
+      label: 'Boostnote',
+      submenu: [
+        {
+          label: 'Quit',
+          accelerator: 'Control+Q',
+          click: function (e) {
+            quitApp()
+          }
+        }
+      ]
+    })
+  }
   var menu = Menu.buildFromTemplate(template)
-  Menu.setApplicationMenu(menu)
+  if (process.platform === 'darwin') {
+    Menu.setApplicationMenu(menu)
+  }
 
   if (process.platform === 'darwin') {
     setInterval(function () {
@@ -268,6 +284,9 @@ app.on('ready', function () {
   }
 
   mainWindow = require('./atom-lib/main-window')
+  if (process.platform === 'win32') {
+    mainWindow.setMenu(menu)
+  }
   mainWindow.on('close', function (e) {
     if (appQuit) return true
     e.preventDefault()
