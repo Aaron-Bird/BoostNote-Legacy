@@ -3,6 +3,7 @@ const ChildProcess = require('child_process')
 const packager = require('electron-packager')
 const archiver = require('archiver')
 const fs = require('fs')
+const appdmg = require('appdmg')
 
 module.exports = function (grunt) {
   var initConfig = {
@@ -13,7 +14,7 @@ module.exports = function (grunt) {
         outputDirectory: path.join(__dirname, 'dist'),
         authors: 'MAISIN&CO., Inc.',
         exe: 'Boostnote.exe',
-        loadingGif: path.join(__dirname, 'resources/install.gif'),
+        loadingGif: path.join(__dirname, 'resources/boostnote-install.gif'),
         iconUrl: path.join(__dirname, 'resources/app.ico'),
         setupIcon: path.join(__dirname, 'resources/dmg.ico'),
         certificateFile: grunt.config.get('auth_code.win_cert_path'),
@@ -53,24 +54,43 @@ module.exports = function (grunt) {
 
   grunt.registerTask('zip', function (platform) {
     var done = this.async()
-    var archive = archiver.create('zip', {})
     switch (platform) {
       case 'win':
+        var archive = archiver.create('zip', {})
+        var basename = 'Boostnote-installer-win32-x64'
         archive.file(path.join('dist/Setup.exe'), {
-          name: 'Boostnote-installer-win32-x64.exe'
+          name: basename + '.exe'
         })
+        archive.finalize()
+        var writeStream = fs.createWriteStream(path.join('dist/' + basename + '.zip'))
+        archive.pipe(writeStream)
+        writeStream.on('close', function () {
+          grunt.log.writeln('Zipped!')
+          done()
+        })
+        break
+      case 'osx':
+
+        var execPath = 'zip -r -y -q dist/Boostnote.zip dist/Boostnote-darwin-x64/Boostnote.app'
+        grunt.log.writeln(execPath)
+        ChildProcess.exec(execPath,
+          function (err, stdout, stderr) {
+            grunt.log.writeln(stdout)
+
+            if (err) {
+              grunt.log.writeln(err)
+              grunt.log.writeln(stderr)
+              done(false)
+              return
+            }
+            done()
+          }
+        )
         break
       default:
         done()
         return
     }
-    archive.finalize()
-    var writeStream = fs.createWriteStream(path.join('dist/Boostnote-installer-win32-x64.zip'))
-    archive.pipe(writeStream)
-    writeStream.on('close', function () {
-      grunt.log.writeln('Zipped!')
-      done()
-    })
   })
 
   grunt.registerTask('pack', function (platform) {
@@ -132,6 +152,53 @@ module.exports = function (grunt) {
     }
   })
 
+  grunt.registerTask('codesign', function (platform) {
+    var done = this.async()
+    if (process.platform !== 'darwin') {
+      done(false)
+      return
+    }
+
+    ChildProcess.exec('codesign --verbose --deep --force --sign \"\" dist/Boostnote-darwin-x64/Boostnote.app', function (err, stdout, stderr) {
+      grunt.log.writeln(stdout)
+
+      if (err) {
+        grunt.log.writeln(err)
+        grunt.log.writeln(stderr)
+        done(false)
+        return
+      }
+      done()
+    })
+  })
+
+  grunt.registerTask('create-osx-installer', function () {
+    var done = this.async()
+
+    var stream = appdmg({
+      target: 'dist/Boostnote-darwin-x64.dmg',
+      basepath: __dirname,
+      specification: {
+        'title': 'Boostnote',
+        'icon': 'resources/dmg.icns',
+        'background': 'resources/boostnote-install.png',
+        'icon-size': 80,
+        'contents': [
+          { 'x': 448, 'y': 344, 'type': 'link', 'path': '/Applications' },
+          { 'x': 192, 'y': 344, 'type': 'file', 'path': 'dist/Boostnote-darwin-x64/Boostnote.app' }
+        ]
+      }
+    })
+    stream.on('finish', function () {
+      done()
+    })
+
+    stream.on('error', function (err) {
+      grunt.log.writeln(err)
+      done(false)
+    })
+  })
+
   grunt.registerTask('build', function (platform) {
     if (!platform) {
       platform = process.platform === 'darwin' ? 'osx' : process.platform === 'win32' ? 'win' : null
@@ -139,6 +206,10 @@ module.exports = function (grunt) {
     switch (platform) {
       case 'win':
         grunt.task.run(['pack:win', 'create-windows-installer', 'zip:win'])
+        break
+      case 'osx':
+        grunt.task.run(['pack:osx', 'codesign', 'create-osx-installer', 'zip:osx'])
+        break
     }
   })
 

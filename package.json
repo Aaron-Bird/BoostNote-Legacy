@@ -7,9 +7,6 @@
     "start": "electron ./index.js",
     "hot": "electron ./index.js --hot",
     "webpack": "webpack-dev-server --hot --inline --config webpack.config.js",
-    "codesign": "codesign --verbose --deep --force --sign \"MAISIN solutions Inc.\" dist/Boost-darwin-x64/Boost.app",
-    "build:osx": "electron-builder \"dist/Boost-darwin-x64/Boost.app\" --platform=osx --out=\"dist\" --config=\"./builder-config.json\"",
-    "release": "electron-release --app=\"dist/Boost-darwin-x64/Boost.app\" --token=$(cat .env/.github-token) --repo=\"BoostIO/boost-releases\""
   },
   "config": {
     "electron-version": "0.35.4"
@@ -36,6 +33,7 @@
   "homepage": "https://github.com/Rokt33r/codexen-app#readme",
   "dependencies": {
     "@rokt33r/node-ipc": "^5.0.4",
+    "appdmg": "^0.3.5",
     "devicon": "^2.0.0",
     "electron-gh-releases": "^2.0.2",
     "font-awesome": "^4.3.0",
