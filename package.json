@@ -1,6 +1,6 @@
 {
   "name": "boost",
-  "version": "0.4.6",
+  "version": "0.5.0",
   "description": "Boostnote",
   "main": "index.js",
   "scripts": {
@@ -48,7 +48,6 @@
     "superagent-promise": "^1.0.3"
   },
   "devDependencies": {
-    "archiver": "^0.20.0",
     "babel-loader": "^5.3.2",
     "babel-plugin-react-transform": "^1.1.1",
     "css-loader": "^0.19.0",
