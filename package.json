@@ -6,7 +6,7 @@
   "scripts": {
     "start": "electron ./index.js",
     "hot": "electron ./index.js --hot",
-    "webpack": "webpack-dev-server --hot --inline --config webpack.config.js",
+    "webpack": "webpack-dev-server --hot --inline --config webpack.config.js"
   },
   "config": {
     "electron-version": "0.35.4"

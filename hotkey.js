@@ -56,5 +56,6 @@ function emitToFinder (type, data) {
     type: type,
     data: data
   }
+
   nodeIpc.server.broadcast('message', payload)
 }
