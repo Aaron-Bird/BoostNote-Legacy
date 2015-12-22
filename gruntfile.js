@@ -7,6 +7,8 @@ if (process.platform === 'darwin') {
 }
 
 module.exports = function (grunt) {
+  if (process.platform === 'win32') auth_code = grunt.file.readJSON('secret/auth_code.json')
+
   var initConfig = {
     pkg: grunt.file.readJSON('package.json'),
     'create-windows-installer': {
@@ -18,13 +20,12 @@ module.exports = function (grunt) {
         loadingGif: path.join(__dirname, 'resources/boostnote-install.gif'),
         iconUrl: path.join(__dirname, 'resources/app.ico'),
         setupIcon: path.join(__dirname, 'resources/dmg.ico'),
-        certificateFile: grunt.config.get('auth_code.win_cert_path'),
-        certificatePassword: grunt.config.get('auth_code.win_cert_pw'),
+        certificateFile: path.join(__dirname, 'secret', 'authenticode_cer.p12'),
+        certificatePassword: auth_code.win_cert_pw,
         noMsi: true
       }
     }
   }
-  if (process.platform === 'win32') initConfig.auth_code = grunt.file.readJSON('secret/auth_code.json')
   grunt.initConfig(initConfig)
 
   grunt.loadNpmTasks('grunt-electron-installer')
