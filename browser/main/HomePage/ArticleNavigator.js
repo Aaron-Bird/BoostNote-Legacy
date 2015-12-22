@@ -27,7 +27,7 @@ c-4,0-7.9,0-11.9-0.1C164,294,164,297,165.9,297L165.9,297z'/>
 const newPostTutorialElement = (
   <svg width='900' height='900' className='tutorial'>
     <text x='290' y='155' fill={BRAND_COLOR} fontSize='24'>Create a new post!!</text>
-    <text x='300' y='180' fill={BRAND_COLOR} fontSize='16'>press `⌘ + Enter` or `a`</text>
+    <text x='300' y='180' fill={BRAND_COLOR} fontSize='16' children={`press \`${process.platform === 'darwin' ? '⌘' : '^'} + Enter\` or \`a\``}/>
     <svg x='130' y='-20' width='400' height='400'>
       <path fill='white' d='M56.2,132.5c11.7-2.9,23.9-6,36.1-4.1c8.7,1.4,16.6,5.5,23.7,10.5c13.3,9.4,24.5,21.5,40.2,27
   c1.8,0.6,2.6-2.3,0.8-2.9c-17.1-6-28.9-20.3-44-29.7c-7-4.4-14.8-7.4-23-8.2c-11.7-1.1-23.3,1.7-34.5,4.5
@@ -137,7 +137,7 @@ export default class ArticleNavigator extends React.Component {
         <div className='controlSection'>
           <button onClick={e => this.handleNewPostButtonClick(e)} className='newPostBtn'>
             New Post
-            <span className='tooltip'>Create a new Post (⌘ + Enter or a)</span>
+            <span className='tooltip'>Create a new Post ({process.platform === 'darwin' ? '⌘' : '^'} + Enter or a)</span>
           </button>
 
           {status.isTutorialOpen ? newPostTutorialElement : null}
