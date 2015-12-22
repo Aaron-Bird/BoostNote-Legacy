@@ -1,7 +1,6 @@
 const path = require('path')
 const ChildProcess = require('child_process')
 const packager = require('electron-packager')
-const archiver = require('archiver')
 const fs = require('fs')
 if (process.platform === 'darwin') {
   const appdmg = require('appdmg')
@@ -57,23 +56,8 @@ module.exports = function (grunt) {
   grunt.registerTask('zip', function (platform) {
     var done = this.async()
     switch (platform) {
-      case 'win':
-        var archive = archiver.create('zip', {})
-        var basename = 'Boostnote-installer-win32-x64'
-        archive.file(path.join('dist/Setup.exe'), {
-          name: basename + '.exe'
-        })
-        archive.finalize()
-        var writeStream = fs.createWriteStream(path.join('dist/' + basename + '.zip'))
-        archive.pipe(writeStream)
-        writeStream.on('close', function () {
-          grunt.log.writeln('Zipped!')
-          done()
-        })
-        break
       case 'osx':
-
-        var execPath = 'zip -r -y -q dist/Boostnote.zip dist/Boostnote-darwin-x64/Boostnote.app'
+        var execPath = 'cd dist/Boostnote-darwin-x64 && zip -r -y -q ../Boostnote-mac.zip Boostnote.app'
         grunt.log.writeln(execPath)
         ChildProcess.exec(execPath,
           function (err, stdout, stderr) {
@@ -178,7 +162,7 @@ module.exports = function (grunt) {
     var done = this.async()
 
     var stream = appdmg({
-      target: 'dist/Boostnote-darwin-x64.dmg',
+      target: 'dist/Boostnote-mac.dmg',
       basepath: __dirname,
       specification: {
         'title': 'Boostnote',
@@ -207,10 +191,10 @@ module.exports = function (grunt) {
     }
     switch (platform) {
       case 'win':
-        grunt.task.run(['pack:win', 'create-windows-installer', 'zip:win'])
+        grunt.task.run(['compile', 'pack:win', 'create-windows-installer'])
         break
       case 'osx':
-        grunt.task.run(['pack:osx', 'codesign', 'create-osx-installer', 'zip:osx'])
+        grunt.task.run(['compile', 'pack:osx', 'codesign', 'create-osx-installer', 'zip:osx'])
         break
     }
   })
