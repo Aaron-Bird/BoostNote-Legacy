@@ -50,7 +50,6 @@ ipc.on('hotkeyUpdated', function (event, newKeymap) {
   }
 })
 
-
 function emitToFinder (type, data) {
   var payload = {
     type: type,

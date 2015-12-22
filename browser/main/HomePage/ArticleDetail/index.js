@@ -24,7 +24,6 @@ import TagLink from 'boost/components/TagLink'
 import TagSelect from 'boost/components/TagSelect'
 import ModeSelect from 'boost/components/ModeSelect'
 import activityRecord from 'boost/activityRecord'
-import api from 'boost/api'
 import ShareButton from './ShareButton'
 
 const electron = require('electron')
@@ -600,6 +599,7 @@ ArticleDetail.propTypes = {
   activeArticle: PropTypes.shape(),
   user: PropTypes.shape(),
   folders: PropTypes.array,
+  tags: PropTypes.array,
   dispatch: PropTypes.func
 }
 ArticleDetail.prototype.linkState = linkState
