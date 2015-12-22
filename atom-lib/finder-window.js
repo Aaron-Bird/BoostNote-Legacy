@@ -100,49 +100,49 @@ finderWindow.on('close', function (e) {
   finderWindow.hide()
 })
 
+var appIcon = new Tray(path.join(__dirname, '../resources/tray-icon.png'))
+appIcon.setToolTip('Boost')
+
+var trayMenu = new Menu()
+trayMenu.append(new MenuItem({
+  label: 'Open Main window',
+  click: function () {
+    emit('show-main-window')
+  }
+}))
+trayMenu.append(new MenuItem({
+  label: 'Open Finder window',
+  click: function () {
+    openFinder()
+  }
+}))
+trayMenu.append(new MenuItem({
+  label: 'Quit',
+  click: function () {
+    emit('quit-app')
+  }
+}))
+
+appIcon.setContextMenu(trayMenu)
+appIcon.on('click', function (e) {
+  e.preventDefault()
+  appIcon.popUpContextMenu(trayMenu)
+})
+
+ipcMain.on('copy-finder', function () {
+  emit('copy-finder')
+})
+
+ipcMain.on('hide-finder', function () {
+  hideFinder()
+})
+
 finderWindow.webContents.on('did-finish-load', function () {
-  var appIcon = new Tray(path.join(__dirname, '../resources/tray-icon.png'))
-  appIcon.setToolTip('Boost')
-
-  var trayMenu = new Menu()
-  trayMenu.append(new MenuItem({
-    label: 'Open Main window',
-    click: function () {
-      emit('show-main-window')
-    }
-  }))
-  trayMenu.append(new MenuItem({
-    label: 'Open Finder window',
-    click: function () {
-      openFinder()
-    }
-  }))
-  trayMenu.append(new MenuItem({
-    label: 'Quit',
-    click: function () {
-      emit('quit-app')
-    }
-  }))
-
-  appIcon.setContextMenu(trayMenu)
-  appIcon.on('click', function (e) {
-    e.preventDefault()
-    appIcon.popUpContextMenu(trayMenu)
-  })
-
-  ipcMain.on('copy-finder', function () {
-    emit('copy-finder')
-  })
-
-  ipcMain.on('hide-finder', function () {
-    hideFinder()
-  })
-
   isFinderLoaded = true
 })
 
 function openFinder () {
-  finderWindow.show()
+  if (isFinderLoaded) finderWindow.show()
 }
 function hideFinder () {
   if (process.platform === 'win32') {
