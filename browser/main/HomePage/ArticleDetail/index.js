@@ -526,14 +526,17 @@ export default class ArticleDetail extends React.Component {
                       ? 'Preview'
                       : 'Edit'
                     }
+                    <span className='tooltip'>{process.platform === 'darwin' ? '⌘' : '^'} + p</span>
                   </button>)
                 : null
             }
-            <button onClick={e => this.handleCancelButtonClick(e)}>
+            <button onClick={e => this.handleCancelButtonClick(e)} className='cancelBtn'>
               Cancel
+              <span className='tooltip'>Esc</span>
             </button>
-            <button onClick={e => this.handleSaveButtonClick(e)} className='primary'>
+            <button onClick={e => this.handleSaveButtonClick(e)} className='saveBtn'>
               Save
+              <span className='tooltip'>{process.platform === 'darwin' ? '⌘' : '^'} + s</span>
             </button>
           </div>
         </div>

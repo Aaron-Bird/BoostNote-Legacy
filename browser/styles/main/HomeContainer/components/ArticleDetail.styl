@@ -159,6 +159,7 @@ iptFocusBorderColor = #369DCD
               &:hover
                 background-color darken(white, 10%)
       .right
+        z-index 30
         button
           cursor pointer
           height 33px
@@ -169,14 +170,26 @@ iptFocusBorderColor = #369DCD
           background-color darken(white, 5%)
           border solid 1px borderColor
           border-radius 5px
+          &>.tooltip
+            tooltip()
+            top 105px
           &.preview
             width inherit
+            .tooltip
+              margin-left -55px
           &:hover
             background-color white
-          &.primary
+            .tooltip
+              opacity 1
+          &.cancelBtn
+            .tooltip
+              margin-left -25px
+          &.saveBtn
             border none
             background-color brandColor
             color white
+            .tooltip
+              margin-left -45px
             &:hover
               color white
               background-color lighten(brandColor, 10%)
