@@ -45,11 +45,4 @@ var config = Object.assign({}, skeleton, {
   ]
 })
 
-config.target = function renderer (compiler) {
-  compiler.apply(
-    new JsonpTemplatePlugin(config.output),
-    new FunctionModulePlugin(config.output)
-  )
-}
-
 module.exports = config

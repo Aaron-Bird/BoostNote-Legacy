@@ -1,24 +1,16 @@
-var webpack = require('webpack')
-var path = require('path')
-var JsonpTemplatePlugin = webpack.JsonpTemplatePlugin
-var FunctionModulePlugin = require('webpack/lib/FunctionModulePlugin')
-var NodeTargetPlugin = require('webpack/lib/node/NodeTargetPlugin')
+const skeleton = require('./webpack-skeleton')
+const webpack = require('webpack')
+const path = require('path')
+const JsonpTemplatePlugin = webpack.JsonpTemplatePlugin
+const FunctionModulePlugin = require('webpack/lib/FunctionModulePlugin')
 
-var opt = {
-  path: path.join(__dirname, 'compiled'),
-  filename: '[name].js',
-  sourceMapFilename: '[name].map',
-  libraryTarget: 'commonjs2',
-  publicPath: 'http://localhost:8080/assets/'
-}
-
-var config = {
+var config = Object.assign({}, skeleton, {
   module: {
     loaders: [
       {
         test: /\.js?$/,
-        loader: 'babel-loader?cacheDirectory',
-        exclude: /node_modules/
+        exclude: /node_modules/,
+        loader: 'babel?cacheDirectory'
       },
       {
         test: /\.styl?$/,
@@ -27,43 +19,21 @@ var config = {
       }
     ]
   },
+  output: {
+    path: path.join(__dirname, 'compiled'),
+    filename: '[name].js',
+    sourceMapFilename: '[name].map',
+    libraryTarget: 'commonjs2',
+    publicPath: 'http://localhost:8080/assets/'
+  },
   debug: true,
-  devtool: 'eval-source-map',
-  entry: {
-    main: './browser/main/index.js',
-    finder: './browser/finder/index.js'
-  },
-  output: opt,
-  resolve: {
-    extensions: ['', '.js', '.jsx'],
-    packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main'],
-    alias: {
-      'boost': path.resolve(__dirname, 'lib')
-    }
-  },
-  plugins: [
-    new webpack.NoErrorsPlugin(),
-    new NodeTargetPlugin()
-  ],
-  externals: [
-    'electron',
-    'socket.io-client',
-    'md5',
-    'superagent',
-    'superagent-promise',
-    'lodash',
-    'markdown-it',
-    'moment',
-    'highlight.js',
-    'markdown-it-emoji',
-    'fs-jetpack'
-  ]
-}
+  devtool: 'eval-source-map'
+})
 
 config.target = function renderer (compiler) {
   compiler.apply(
-    new JsonpTemplatePlugin(opt),
-    new FunctionModulePlugin(opt)
+    new JsonpTemplatePlugin(config.output),
+    new FunctionModulePlugin(config.output)
   )
 }
 
