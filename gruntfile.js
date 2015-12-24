@@ -1,13 +1,21 @@
 const path = require('path')
 const ChildProcess = require('child_process')
 const packager = require('electron-packager')
-const fs = require('fs')
-if (process.platform === 'darwin') {
-  const appdmg = require('appdmg')
-}
+const appdmg = process.platform === 'darwin'
+  ? require('appdmg')
+  : null
 
 module.exports = function (grunt) {
-  if (process.platform === 'win32') auth_code = grunt.file.readJSON('secret/auth_code.json')
+  var auth_code
+  try {
+    auth_code = grunt.file.readJSON('secret/auth_code.json')
+  } catch (e) {
+    if (e.origError.code === 'ENOENT') {
+      console.warn('secret/auth_code.json is not found. CodeSigning is not available.')
+    }
+  }
+  const OSX_COMMON_NAME = auth_code != null ? auth_code.OSX_COMMON_NAME : ''
+  const WIN_CERT_PASSWORD = auth_code != null ? auth_code.WIN_CERT_PASSWORD : ''
 
   var initConfig = {
     pkg: grunt.file.readJSON('package.json'),
@@ -21,23 +29,23 @@ module.exports = function (grunt) {
         iconUrl: path.join(__dirname, 'resources/app.ico'),
         setupIcon: path.join(__dirname, 'resources/dmg.ico'),
         certificateFile: path.join(__dirname, 'secret', 'authenticode_cer.p12'),
-        certificatePassword: auth_code.win_cert_pw,
+        certificatePassword: WIN_CERT_PASSWORD,
         noMsi: true
       }
     }
   }
   grunt.initConfig(initConfig)
-
   grunt.loadNpmTasks('grunt-electron-installer')
 
   grunt.registerTask('compile', function () {
     var done = this.async()
-    var execPath = path.join('node_modules', '.bin', 'webpack') + ' --config webpack.config.production.js'
+    var execPath = path.join('node_modules', '.bin', 'webpack') + ' --config webpack-production.config.js'
     grunt.log.writeln(execPath)
     ChildProcess.exec(execPath,
       {
         env: Object.assign({}, process.env, {
-          BABEL_ENV: 'production'
+          BABEL_ENV: 'production',
+          NODE_ENV: 'production'
         })
       },
       function (err, stdout, stderr) {
@@ -52,32 +60,6 @@ module.exports = function (grunt) {
         done()
       }
     )
-  })
-
-  grunt.registerTask('zip', function (platform) {
-    var done = this.async()
-    switch (platform) {
-      case 'osx':
-        var execPath = 'cd dist/Boostnote-darwin-x64 && zip -r -y -q ../Boostnote-mac.zip Boostnote.app'
-        grunt.log.writeln(execPath)
-        ChildProcess.exec(execPath,
-          function (err, stdout, stderr) {
-            grunt.log.writeln(stdout)
-
-            if (err) {
-              grunt.log.writeln(err)
-              grunt.log.writeln(stderr)
-              done(false)
-              return
-            }
-            done()
-          }
-        )
-        break
-      default:
-        done()
-        return
-    }
   })
 
   grunt.registerTask('pack', function (platform) {
@@ -146,17 +128,17 @@ module.exports = function (grunt) {
       return
     }
 
-    ChildProcess.exec('codesign --verbose --deep --force --sign \"\" dist/Boostnote-darwin-x64/Boostnote.app', function (err, stdout, stderr) {
-      grunt.log.writeln(stdout)
-
-      if (err) {
-        grunt.log.writeln(err)
-        grunt.log.writeln(stderr)
-        done(false)
-        return
-      }
-      done()
-    })
+    ChildProcess.exec(`codesign --verbose --deep --force --sign \"${OSX_COMMON_NAME}\" dist/Boostnote-darwin-x64/Boostnote.app`,
+      function (err, stdout, stderr) {
+        grunt.log.writeln(stdout)
+        if (err) {
+          grunt.log.writeln(err)
+          grunt.log.writeln(stderr)
+          done(false)
+          return
+        }
+        done()
+      })
   })
 
   grunt.registerTask('create-osx-installer', function () {
@@ -186,6 +168,31 @@ module.exports = function (grunt) {
     })
   })
 
+  grunt.registerTask('zip', function (platform) {
+    var done = this.async()
+    switch (platform) {
+      case 'osx':
+        var execPath = 'cd dist/Boostnote-darwin-x64 && zip -r -y -q ../Boostnote-mac.zip Boostnote.app'
+        grunt.log.writeln(execPath)
+        ChildProcess.exec(execPath,
+          function (err, stdout, stderr) {
+            grunt.log.writeln(stdout)
+            if (err) {
+              grunt.log.writeln(err)
+              grunt.log.writeln(stderr)
+              done(false)
+              return
+            }
+            done()
+          }
+        )
+        break
+      default:
+        done()
+        return
+    }
+  })
+
   grunt.registerTask('build', function (platform) {
     if (!platform) {
       platform = process.platform === 'darwin' ? 'osx' : process.platform === 'win32' ? 'win' : null
@@ -200,6 +207,5 @@ module.exports = function (grunt) {
     }
   })
 
-  // Default task(s).
   grunt.registerTask('default', ['build'])
 }
