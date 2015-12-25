@@ -1,16 +1,14 @@
 import { Provider } from 'react-redux'
-// import { updateUser } from 'boost/actions'
 import { Router, Route, IndexRoute } from 'react-router'
 import MainPage from './MainPage'
 import HomePage from './HomePage'
-// import auth from 'boost/auth'
-import store from 'boost/store'
+import store from './store'
 import React from 'react'
 import ReactDOM from 'react-dom'
 require('../styles/main/index.styl')
-import { openModal } from 'boost/modal'
-import Tutorial from 'boost/components/modal/Tutorial'
-import activityRecord from 'boost/activityRecord'
+import { openModal } from 'browser/lib/modal'
+import Tutorial from './modal/Tutorial'
+import activityRecord from 'browser/lib/activityRecord'
 const electron = require('electron')
 const ipc = electron.ipcRenderer
 const path = require('path')

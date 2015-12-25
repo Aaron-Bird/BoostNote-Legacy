@@ -1,15 +1,12 @@
 import React, { PropTypes} from 'react'
 import { connect } from 'react-redux'
-import { EDIT_MODE, IDLE_MODE, toggleTutorial } from 'boost/actions'
+import { EDIT_MODE, IDLE_MODE, toggleTutorial } from './actions'
 import ArticleNavigator from './HomePage/ArticleNavigator'
 import ArticleTopBar from './HomePage/ArticleTopBar'
 import ArticleList from './HomePage/ArticleList'
 import ArticleDetail from './HomePage/ArticleDetail'
 import _ from 'lodash'
-import { isModalOpen, closeModal } from 'boost/modal'
-
-const electron = require('electron')
-const remote = electron.remote
+import { isModalOpen, closeModal } from 'browser/lib/modal'
 
 const TEXT_FILTER = 'TEXT_FILTER'
 const FOLDER_FILTER = 'FOLDER_FILTER'

@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
-import linkState from 'boost/linkState'
-import { updateUser } from 'boost/actions'
+import linkState from 'browser/lib/linkState'
+import { updateUser } from '../../actions'
 
 const electron = require('electron')
 const ipc = electron.ipcRenderer

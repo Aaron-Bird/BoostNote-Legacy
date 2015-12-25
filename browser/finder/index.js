@@ -8,10 +8,10 @@ import FinderList from './FinderList'
 import FinderDetail from './FinderDetail'
 import actions, { selectArticle, searchArticle } from './actions'
 import _ from 'lodash'
-import dataStore from 'boost/dataStore'
+import dataStore from 'browser/lib/dataStore'
 
 const electron = require('electron')
-const { remote, clipboard, ipcRenderer } = electron
+const { clipboard, ipcRenderer } = electron
 const path = require('path')
 
 function hideFinder () {

@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import FolderRow from './FolderRow'
-import linkState from 'boost/linkState'
-import { createFolder } from 'boost/actions'
+import linkState from 'browser/lib/linkState'
+import { createFolder } from '../../actions'
 
 export default class FolderSettingTab extends React.Component {
   constructor (props) {

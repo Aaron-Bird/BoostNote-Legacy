@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
-import CodeEditor from 'boost/components/CodeEditor'
-import MarkdownPreview from 'boost/components/MarkdownPreview'
-import ModeIcon from 'boost/components/ModeIcon'
+import CodeEditor from 'browser/components/CodeEditor'
+import MarkdownPreview from 'browser/components/MarkdownPreview'
+import ModeIcon from 'browser/components/ModeIcon'
 
 export default class FinderDetail extends React.Component {
   render () {

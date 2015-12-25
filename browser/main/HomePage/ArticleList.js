@@ -1,10 +1,10 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import ModeIcon from 'boost/components/ModeIcon'
+import ModeIcon from 'browser/components/ModeIcon'
 import moment from 'moment'
-import { switchArticle, NEW } from 'boost/actions'
-import FolderMark from 'boost/components/FolderMark'
-import TagLink from 'boost/components/TagLink'
+import { switchArticle, NEW } from '../actions'
+import FolderMark from 'browser/components/FolderMark'
+import TagLink from './TagLink'
 import _ from 'lodash'
 
 export default class ArticleList extends React.Component {

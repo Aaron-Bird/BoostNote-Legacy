@@ -29,11 +29,11 @@ import {
   // view mode
   IDLE_MODE
 } from './actions'
-import dataStore from 'boost/dataStore'
-import keygen from 'boost/keygen'
-import activityRecord from 'boost/activityRecord'
-import { openModal } from 'boost/modal'
-import EditedAlert from 'boost/components/modal/EditedAlert'
+import dataStore from 'browser/lib/dataStore'
+import keygen from 'browser/lib/keygen'
+import activityRecord from 'browser/lib/activityRecord'
+import { openModal } from 'browser/lib/modal'
+import EditedAlert from './modal/EditedAlert'
 
 const initialStatus = {
   mode: IDLE_MODE,

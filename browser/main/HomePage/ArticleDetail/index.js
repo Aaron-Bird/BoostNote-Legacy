@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import moment from 'moment'
 import _ from 'lodash'
-import ModeIcon from 'boost/components/ModeIcon'
-import MarkdownPreview from 'boost/components/MarkdownPreview'
-import CodeEditor from 'boost/components/CodeEditor'
+import ModeIcon from 'browser/components/ModeIcon'
+import MarkdownPreview from 'browser/components/MarkdownPreview'
+import CodeEditor from 'browser/components/CodeEditor'
 import {
   IDLE_MODE,
   EDIT_MODE,
@@ -17,13 +17,13 @@ import {
   updateArticle,
   destroyArticle,
   NEW
-} from 'boost/actions'
-import linkState from 'boost/linkState'
-import FolderMark from 'boost/components/FolderMark'
-import TagLink from 'boost/components/TagLink'
-import TagSelect from 'boost/components/TagSelect'
-import ModeSelect from 'boost/components/ModeSelect'
-import activityRecord from 'boost/activityRecord'
+} from '../../actions'
+import linkState from 'browser/lib/linkState'
+import FolderMark from 'browser/components/FolderMark'
+import TagLink from '../TagLink'
+import TagSelect from 'browser/components/TagSelect'
+import ModeSelect from 'browser/components/ModeSelect'
+import activityRecord from 'browser/lib/activityRecord'
 import ShareButton from './ShareButton'
 
 const electron = require('electron')

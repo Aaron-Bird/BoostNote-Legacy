@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import modes from 'boost/vars/modes'
+import modes from '../lib/modes'
 import _ from 'lodash'
 var ace = window.ace
 

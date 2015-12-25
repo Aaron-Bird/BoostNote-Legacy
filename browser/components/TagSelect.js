@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import _ from 'lodash'
-import linkState from 'boost/linkState'
+import linkState from '../lib/linkState'
 
 function isNotEmptyString (str) {
   return _.isString(str) && str.length > 0

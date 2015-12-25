@@ -11,7 +11,8 @@ var config = {
     extensions: ['', '.js', '.jsx'],
     packageMains: ['webpack', 'browser', 'web', 'browserify', ['jam', 'main'], 'main'],
     alias: {
-      'boost': path.resolve(__dirname, 'lib')
+      'lib': path.resolve(__dirname, 'lib'),
+      'browser': path.resolve(__dirname, 'browser')
     }
   },
   plugins: [

@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import keygen from 'boost/keygen'
+import keygen from './keygen'
 
 function getClientKey () {
   let clientKey = localStorage.getItem('clientKey')

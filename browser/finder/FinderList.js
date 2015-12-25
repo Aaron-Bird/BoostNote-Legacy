@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import ModeIcon from 'boost/components/ModeIcon'
+import ModeIcon from 'browser/components/ModeIcon'
 import { selectArticle } from './actions'
 
 export default class FinderList extends React.Component {

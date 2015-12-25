@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import api from 'boost/api'
-import clientKey from 'boost/clientKey'
-import activityRecord from 'boost/activityRecord'
+import api from 'browser/lib/api'
+import clientKey from 'browser/lib/clientKey'
+import activityRecord from 'browser/lib/activityRecord'
 const clipboard = require('electron').clipboard
 
 function getDefault () {

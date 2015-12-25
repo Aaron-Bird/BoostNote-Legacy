@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import linkState from 'boost/linkState'
-import { createFolder } from 'boost/actions'
-import store from 'boost/store'
-import FolderMark from 'boost/components/FolderMark'
+import linkState from 'browser/lib/linkState'
+import { createFolder } from '../actions'
+import store from '../store'
+import FolderMark from 'browser/components/FolderMark'
 
 export default class CreateNewFolder extends React.Component {
   constructor (props) {

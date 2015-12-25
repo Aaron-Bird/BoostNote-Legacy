@@ -1,6 +1,6 @@
 var React = require('react')
 var { PropTypes } = React
-import markdown from 'boost/markdown'
+import markdown from '../lib/markdown'
 var ReactDOM = require('react-dom')
 
 const electron = require('electron')

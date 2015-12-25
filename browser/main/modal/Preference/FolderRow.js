@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react'
-import linkState from 'boost/linkState'
-import FolderMark from 'boost/components/FolderMark'
-import store from 'boost/store'
-import { updateFolder, destroyFolder, replaceFolder } from 'boost/actions'
+import linkState from 'browser/lib/linkState'
+import FolderMark from 'browser/components/FolderMark'
+import store from '../../store'
+import { updateFolder, destroyFolder, replaceFolder } from '../../actions'
 
 const IDLE = 'IDLE'
 const EDIT = 'EDIT'

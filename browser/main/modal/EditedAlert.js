@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import store from 'boost/store'
-import { unlockStatus, clearNewArticle } from 'boost/actions'
+import store from '../store'
+import { unlockStatus, clearNewArticle } from '../actions'
 
 export default class EditedAlert extends React.Component {
   componentDidMount () {

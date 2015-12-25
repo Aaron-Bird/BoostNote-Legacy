@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import moment from 'moment'
-import dataStore from 'boost/dataStore'
-import { request, SERVER_URL } from 'boost/api'
-import clientKey from 'boost/clientKey'
+import dataStore from './dataStore'
+import { request, SERVER_URL } from './api'
+import clientKey from './clientKey'
 
 const electron = require('electron')
 const version = electron.remote.app.getVersion()

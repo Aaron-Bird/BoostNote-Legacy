@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { getClientKey } from 'boost/activityRecord'
-import linkState from 'boost/linkState'
+import clientKey from 'browser/lib/clientKey'
+import linkState from 'browser/lib/linkState'
 import _ from 'lodash'
-import { request, WEB_URL } from 'boost/api'
+import { request, SERVER_URL } from 'browser/lib/api'
 
 const FORM_MODE = 'FORM_MODE'
 const DONE_MODE = 'DONE_MODE'
@@ -34,7 +34,7 @@ export default class ContactTab extends React.Component {
 
   handleSendButtonClick (e) {
     let input = _.pick(this.state, ['title', 'content', 'email'])
-    input.clientKey = getClientKey()
+    input.clientKey = clientKey.get()
 
     this.setState({
       alert: {
@@ -42,7 +42,7 @@ export default class ContactTab extends React.Component {
         message: 'Sending...'
       }
     }, () => {
-      request.post(WEB_URL + 'apis/inquiry')
+      request.post(SERVER_URL + 'apis/inquiry')
         .send(input)
         .then(res => {
           console.log('sent')

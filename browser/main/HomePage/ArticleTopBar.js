@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import ExternalLink from 'boost/components/ExternalLink'
-import { setSearchFilter, clearSearch, toggleTutorial } from 'boost/actions'
+import ExternalLink from 'browser/components/ExternalLink'
+import { setSearchFilter, clearSearch, toggleTutorial } from '../actions'
 
 const BRAND_COLOR = '#18AF90'
 
@@ -148,7 +148,7 @@ export default class ArticleTopBar extends React.Component {
           <button onClick={e => this.handleTutorialButtonClick(e)}>?<span className='tooltip'>How to use</span>
           </button>
           <a ref='links' className='linksBtn' href>
-            <img src='../../resources/app.png' width='44' height='44'/>
+            <img src='../resources/app.png' width='44' height='44'/>
           </a>
           {
             this.state.isLinksDropdownOpen

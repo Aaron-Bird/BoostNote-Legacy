@@ -1,19 +1,8 @@
 import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
-import ProfileImage from 'boost/components/ProfileImage'
-import { openModal } from 'boost/modal'
-import CreateNewTeam from 'boost/components/modal/CreateNewTeam'
+import ProfileImage from 'browser/components/ProfileImage'
 
 export default class UserNavigator extends Component {
-  handleClick (e) {
-    openModal(CreateNewTeam)
-  }
-
-  // for dev
-  componentDidMount () {
-    // openModal(CreateNewTeam)
-  }
-
   renderUserList () {
     if (this.props.users == null) return null
 
@@ -38,7 +27,7 @@ export default class UserNavigator extends Component {
     return (
       <div className='UserNavigator'>
         {this.renderUserList()}
-        <button className='createTeamBtn' onClick={e => this.handleClick(e)}>
+        <button className='createTeamBtn'>
           +
           <div className='tooltip'>Create a new team</div>
         </button>

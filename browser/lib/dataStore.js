@@ -1,4 +1,4 @@
-import keygen from 'boost/keygen'
+import keygen from './keygen'
 import _ from 'lodash'
 
 const electron = require('electron')

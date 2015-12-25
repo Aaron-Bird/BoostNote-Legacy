@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
-import ModeIcon from 'boost/components/ModeIcon'
-import modes from 'boost/vars/modes'
+import ModeIcon from './ModeIcon'
+import modes from '../lib/modes'
 import _ from 'lodash'
 
 const IDLE_MODE = 'IDLE_MODE'

@@ -1,11 +1,11 @@
 import React, { PropTypes } from 'react'
 import { findWhere } from 'lodash'
-import { setSearchFilter, switchFolder, switchMode, switchArticle, updateArticle, clearNewArticle, EDIT_MODE } from 'boost/actions'
-import { openModal } from 'boost/modal'
-import FolderMark from 'boost/components/FolderMark'
-import Preferences from 'boost/components/modal/Preferences'
-import CreateNewFolder from 'boost/components/modal/CreateNewFolder'
-import keygen from 'boost/keygen'
+import { setSearchFilter, switchFolder, switchMode, switchArticle, updateArticle, clearNewArticle, EDIT_MODE } from '../actions'
+import { openModal } from 'browser/lib/modal'
+import FolderMark from 'browser/components/FolderMark'
+import Preferences from '../modal/Preferences'
+import CreateNewFolder from '../modal/CreateNewFolder'
+import keygen from 'browser/lib/keygen'
 
 const BRAND_COLOR = '#18AF90'
 

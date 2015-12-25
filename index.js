@@ -4,7 +4,7 @@ function isFinderCalled () {
 }
 
 if (isFinderCalled()) {
-  require('./finder.js')
+  require('./lib/finder-app')
 } else {
-  require('./main.js')
+  require('./lib/main-app')
 }

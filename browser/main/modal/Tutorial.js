@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
-import MarkdownPreview from 'boost/components/MarkdownPreview'
-import CodeEditor from 'boost/components/CodeEditor'
+import MarkdownPreview from 'browser/components/MarkdownPreview'
+import CodeEditor from 'browser/components/CodeEditor'
 
 export default class Tutorial extends React.Component {
   constructor (props) {
