@@ -16,15 +16,12 @@
     "url": "git+https://github.com/Rokt33r/codexen-app.git"
   },
   "keywords": [
-    "boost",
+    "boostnote",
     "b00st",
+    "boostio",
+    "note",
     "snippet",
-    "template",
-    "task",
-    "runner",
-    "code",
     "storage",
-    "short code"
   ],
   "author": "Dick Choi <fluke8259@gmail.com> (http://kazup.co)",
   "bugs": {
