@@ -46,6 +46,7 @@ class FinderMain extends React.Component {
       let { dispatch } = this.props
 
       dispatch(searchArticle(''))
+      dispatch(selectArticle(null))
     }
     window.addEventListener('focus', this.focusHandler)
   }
