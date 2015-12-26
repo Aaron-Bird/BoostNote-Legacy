@@ -174,119 +174,6 @@ export default class ArticleDetail extends React.Component {
     })
   }
 
-  handleEditButtonClick (e) {
-    let { dispatch } = this.props
-    dispatch(switchMode(EDIT_MODE))
-  }
-
-  handleDeleteButtonClick (e) {
-    this.setState({openDeleteConfirmMenu: true})
-  }
-
-  handleDeleteConfirmButtonClick (e) {
-    let { dispatch, activeArticle } = this.props
-
-    dispatch(destroyArticle(activeArticle.key))
-    activityRecord.emit('ARTICLE_DESTROY')
-    this.setState({openDeleteConfirmMenu: false})
-  }
-
-  handleDeleteCancelButtonClick (e) {
-    this.setState({openDeleteConfirmMenu: false})
-  }
-
-  renderIdle () {
-    let { status, activeArticle, folders, user } = this.props
-
-    let tags = activeArticle.tags != null ? activeArticle.tags.length > 0
-      ? activeArticle.tags.map(tag => {
-        return (<TagLink key={tag} tag={tag}/>)
-      })
-      : (
-        <span className='noTags'>Not tagged yet</span>
-      ) : null
-
-    let folder = _.findWhere(folders, {key: activeArticle.FolderKey})
-
-    let title = activeArticle.title.trim().length === 0
-      ? <small>(Untitled)</small>
-      : activeArticle.title
-
-    return (
-      <div className='ArticleDetail idle'>
-        {this.state.openDeleteConfirmMenu
-          ? (
-            <div className='deleteConfirm'>
-              <div className='right'>
-                Are you sure to delete this article?
-                <button onClick={e => this.handleDeleteConfirmButtonClick(e)} className='primary'>
-                  <i className='fa fa-fw fa-check'/> Sure
-                </button>
-                <button onClick={e => this.handleDeleteCancelButtonClick(e)}>
-                  <i className='fa fa-fw fa-times'/> Cancel
-                </button>
-              </div>
-            </div>
-          )
-          : (
-            <div className='detailInfo'>
-              <div className='left'>
-                <div className='info'>
-                  <FolderMark color={folder.color}/> <span className='folderName'>{folder.name}</span>&nbsp;
-                  Created : {moment(activeArticle.createdAt).format('YYYY/MM/DD')}&nbsp;
-                  Updated : {moment(activeArticle.updatedAt).format('YYYY/MM/DD')}
-                </div>
-                <div className='tags'><i className='fa fa-fw fa-tags'/>{tags}</div>
-              </div>
-              <div className='right'>
-                <ShareButton
-                  article={activeArticle}
-                  user={user}
-                  />
-
-                <button onClick={e => this.handleClipboardButtonClick(e)} className='editBtn'>
-                  <i className='fa fa-fw fa-clipboard'/><span className='tooltip'>Copy to clipboard</span>
-                </button>
-
-                <button onClick={e => this.handleEditButtonClick(e)} className='editBtn'>
-                  <i className='fa fa-fw fa-edit'/><span className='tooltip'>Edit (e)</span>
-                </button>
-                <button onClick={e => this.handleDeleteButtonClick(e)} className='deleteBtn'>
-                  <i className='fa fa-fw fa-trash'/><span className='tooltip'>Delete (d)</span>
-                </button>
-              </div>
-
-              {status.isTutorialOpen ? editDeleteTutorialElement : null}
-
-            </div>
-          )
-        }
-
-        <div className='detailBody'>
-          <div className='detailPanel'>
-            <div className='header'>
-              <ModeIcon className='mode' mode={activeArticle.mode}/>
-              <div className='title'>{title}</div>
-            </div>
-            {activeArticle.mode === 'markdown'
-              ? <MarkdownPreview content={activeArticle.content}/>
-              : <CodeEditor readOnly onChange={(e, value) => this.handleContentChange(e, value)} mode={activeArticle.mode} code={activeArticle.content}/>
-            }
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  handleCancelButtonClick (e) {
-    let { activeArticle, dispatch } = this.props
-
-    if (activeArticle.status === NEW) {
-      dispatch(switchArticle(null))
-    }
-    dispatch(switchMode(IDLE_MODE))
-  }
-
   handleSaveButtonClick (e) {
     let { dispatch, folders, status } = this.props
     let article = this.state.article
@@ -485,8 +372,8 @@ export default class ArticleDetail extends React.Component {
     }
   }
 
-  renderEdit () {
-    let { folders, status, tags } = this.props
+  render () {
+    let { folders, status, tags, activeArticle, user } = this.props
 
     let folderOptions = folders.map(folder => {
       return (
@@ -495,11 +382,11 @@ export default class ArticleDetail extends React.Component {
     })
 
     return (
-      <div className='ArticleDetail edit'>
-        <div className='detailInfo'>
-          <div className='left'>
+      <div className='ArticleDetail'>
+        <div className='ArticleDetail-info'>
+          <div className='ArticleDetail-info-row'>
             <select
-              className='folder'
+              className='ArticleDetail-info-folder'
               value={this.state.article.FolderKey}
               onChange={e => this.handleFolderKeyChange(e)}
             >
@@ -507,6 +394,26 @@ export default class ArticleDetail extends React.Component {
             </select>
             {this.state.isArticleEdited ? ' (edited)' : ''}
 
+            <div className='ArticleDetail-info-control'>
+              <ShareButton
+                article={activeArticle}
+                user={user}
+                />
+
+              <button onClick={e => this.handleClipboardButtonClick(e)}>
+                <i className='fa fa-fw fa-clipboard'/><span className='tooltip'>Copy to clipboard</span>
+              </button>
+
+              <button onClick={e => this.handleEditButtonClick(e)}>
+                <i className='fa fa-fw fa-edit'/><span className='tooltip'>Save (⌘ + s)</span>
+              </button>
+              <button onClick={e => this.handleDeleteButtonClick(e)}>
+                <i className='fa fa-fw fa-trash'/><span className='tooltip'>Delete</span>
+              </button>
+            </div>
+          </div>
+          {status.isTutorialOpen ? editDeleteTutorialElement : null}
+          <div>
             <TagSelect
               tags={this.state.article.tags}
               onChange={(tags, tag) => this.handleTagsChange(tags, tag)}
@@ -514,86 +421,45 @@ export default class ArticleDetail extends React.Component {
             />
 
             {status.isTutorialOpen ? tagSelectTutorialElement : null}
-
-          </div>
-
-          <div className='right'>
-            {
-              this.state.article.mode === 'markdown'
-                ? (<button className='preview' onClick={e => this.handleTogglePreviewButtonClick(e)}>
-                    {
-                      !this.state.previewMode
-                      ? 'Preview'
-                      : 'Edit'
-                    }
-                    <span className='tooltip'>{process.platform === 'darwin' ? '⌘' : '^'} + p</span>
-                  </button>)
-                : null
-            }
-            <button onClick={e => this.handleCancelButtonClick(e)} className='cancelBtn'>
-              Cancel
-              <span className='tooltip'>Esc</span>
-            </button>
-            <button onClick={e => this.handleSaveButtonClick(e)} className='saveBtn'>
-              Save
-              <span className='tooltip'>{process.platform === 'darwin' ? '⌘' : '^'} + s</span>
-            </button>
           </div>
         </div>
-        <div className='detailBody'>
-          <div className='detailPanel'>
-            <div className='header'>
-              <div className='title'>
-                <input
-                  onKeyDown={e => this.handleTitleKeyDown(e)}
-                  placeholder={this.state.article.createdAt == null
-                    ? `Created at ${moment().format('YYYY/MM/DD HH:mm')}`
-                    : 'Title'}
-                  ref='title'
-                  value={this.state.article.title}
-                  onChange={e => this.handleTitleChange(e)}
-                />
-              </div>
-              <ModeSelect
-                ref='mode'
-                onChange={e => this.handleModeChange(e)}
-                value={this.state.article.mode}
-                className='mode'
-                onBlur={() => this.handleModeSelectBlur()}
+
+        <div className='ArticleDetail-panel'>
+          <div className='ArticleDetail-panel-header'>
+            <ModeSelect
+              ref='mode'
+              onChange={e => this.handleModeChange(e)}
+              value={this.state.article.mode}
+              className='ArticleDetail-panel-header-mode'
+              onBlur={() => this.handleModeSelectBlur()}
+            />
+            <div className='ArticleDetail-panel-header-title'>
+              <input
+                onKeyDown={e => this.handleTitleKeyDown(e)}
+                placeholder={this.state.article.createdAt == null
+                  ? `Created at ${moment().format('YYYY/MM/DD HH:mm')}`
+                  : 'Title'}
+                ref='title'
+                value={this.state.article.title}
+                onChange={e => this.handleTitleChange(e)}
               />
-
-              {status.isTutorialOpen ? modeSelectTutorialElement : null}
             </div>
-
-            {this.state.previewMode
-              ? <MarkdownPreview ref='preview' content={this.state.article.content}/>
-              : (<CodeEditor
-                  ref='code'
-                  onChange={(e, value) => this.handleContentChange(e, value)}
-                  readOnly={false}
-                  mode={this.state.article.mode}
-                  code={this.state.article.content}
-                />)
-            }
           </div>
+          {status.isTutorialOpen ? modeSelectTutorialElement : null}
+
+          {this.state.previewMode
+            ? <MarkdownPreview ref='preview' content={this.state.article.content}/>
+            : (<CodeEditor
+                ref='code'
+                onChange={(e, value) => this.handleContentChange(e, value)}
+                readOnly={false}
+                mode={this.state.article.mode}
+                code={this.state.article.content}
+              />)
+          }
         </div>
       </div>
     )
-  }
-
-  render () {
-    let { status, activeArticle } = this.props
-
-    if (activeArticle == null) return this.renderEmpty()
-
-    switch (status.mode) {
-      case EDIT_MODE:
-        return this.renderEdit()
-      case IDLE_MODE:
-      default:
-        return this.renderIdle()
-
-    }
   }
 }
 

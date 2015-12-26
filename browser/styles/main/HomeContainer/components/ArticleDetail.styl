@@ -1,6 +1,21 @@
 noTagsColor = #999
 iptFocusBorderColor = #369DCD
 
+infoButton()
+  display inline-block
+  border-radius 16.5px
+  cursor pointer
+  height 33px
+  width 33px
+  border none
+  margin-right 5px
+  font-size 18px
+  color inactiveTextColor
+  background-color white
+  padding 0
+  &:hover
+    color inherit
+
 .ArticleDetail
   absolute right bottom
   top 60px
@@ -10,414 +25,231 @@ iptFocusBorderColor = #369DCD
   border-top 1px solid borderColor
   border-left 1px solid borderColor
   *
-    -webkit-user-select all
-  .deleteConfirm
-    width 100%
-    height 70px
-    .right
-      float right
-      button
-        cursor pointer
-        height 33px
-        padding 0 10px
-        margin-left 5px
-        font-size 14px
-        color inactiveTextColor
-        background-color darken(white, 5%)
-        border solid 1px borderColor
-        border-radius 5px
-        &:hover
-          background-color white
-        &.primary
-          border none
-          background-color brandColor
-          color white
-          &:hover
-            color white
-            background-color lighten(brandColor, 10%)
-
-  .detailInfo
+    -webkit-user-select none
+  .ArticleDetail-info
     height 70px
     width 100%
     font-size 12px
-    position relative
-    .left
-      absolute top left bottom
-      right 120px
-      .folderName
+    &>.tutorial
+      position fixed
+      z-index 35
+    .ArticleDetail-info-folder
+      display inline-block
+      max-width 100px
+      overflow ellipsis
+      height 10px
+      width 150px
+      height 27px
+      outline none
+      background-color darken(white, 5%)
+      border 1px solid transparent
+      &:hover
+        background-color white
+      &:focus
+        border-color iptFocusBorderColor
+      &>.tutorial
+        position fixed
+        z-index 35
+    .ArticleDetail-info-control
+      float right
+      .ShareButton
         display inline-block
-        max-width 100px
-        overflow ellipsis
-        height 10px
-    .right
-      absolute top right
-  .detailBody
-    absolute left right bottom
+      &>button, .ShareButton-open-button
+        infoButton()
+        .tooltip
+          tooltip()
+          margin-top 30px
+        &:hover
+          .tooltip
+            opacity 1
+        &:nth-child(1) .tooltip
+          margin-left -40px
+        &:nth-child(2) .tooltip
+          margin-left -80px
+        &:nth-child(3) .tooltip
+          margin-left -60px
+        &:nth-child(4) .tooltip
+          margin-left -50px
+      .ShareButton-dropdown
+        position fixed
+        &.hide
+          display none
+
+    .TagSelect
+      margin-top 5px
+      .TagSelect-tags
+        white-space nowrap
+        overflow-x auto
+        position relative
+        noSelect()
+        z-index 30
+        background-color #E6E6E6
+        clearfix()
+        .TagSelect-tags-item
+          background-color transparent
+          color white
+          margin 0 2px
+          padding 0
+          height 17px
+          float left
+          button.TagSelect-tags-item-remove
+            display block
+            float left
+            background-color transparent
+            border none
+            font-size 8px
+            color white
+            width 15px
+            height 17px
+            text-align center
+            line-height 12px
+            padding 0
+            margin 0
+            border-top solid 1px darken(brandColor, 5%)
+            border-bottom solid 1px darken(brandColor, 5%)
+            border-left solid 1px darken(brandColor, 5%)
+            border-radius left 2px
+            background-color brandColor
+            &:hover
+              background-color lighten(brandColor, 10%)
+              border-color lighten(brandColor, 10%)
+          .TagSelect-tags-item-label
+            background-color brandColor
+            float left
+            font-size 12px
+            border-top solid 1px darken(brandColor, 5%)
+            border-bottom solid 1px darken(brandColor, 5%)
+            border-right solid 1px darken(brandColor, 5%)
+            line-height 15px
+            padding 0 5px
+            border-radius right 2px
+        input.TagSelect-input
+          background-color transparent
+          border none
+          outline none
+          margin 0 2px
+          transition 0.15s
+          height 18px
+          &:focus
+            font-size 13px
+      .TagSelect-suggest
+        position fixed
+        width 150px
+        max-height 150px
+        background-color white
+        z-index 5
+        border 1px solid borderColor
+        border-radius 5px
+        &>button
+          width 100%
+          display block
+          padding 0 15px
+          height 33px
+          line-height 33px
+          background-color transparent
+          border none
+          text-align left
+          font-size 14px
+          &:hover
+            background-color darken(white, 10%)
+  .ArticleDetail-panel
+    position absolute
     top 70px
+    left 10px
+    right 10px
+    bottom 10px
     overflow-x hidden
     overflow-y auto
-    .detailPanel
-      absolute top
-      left 10px
-      right 10px
-      bottom 10px
-      background-color white
-      border-radius 5px
-      border solid 1px borderColor
-      &>.header
-        absolute top left right
-        height 60px
-      .MarkdownPreview
-        absolute left right bottom
-        top 60px
-        marked()
-        box-sizing border-box
-        padding 5px 15px
-        border-top solid 1px borderColor
-        overflow-y auto
-      .CodeEditor
-        absolute left right bottom
-        top 60px
-        border-top solid 1px borderColor
-        min-height 300px
-        border-bottom-left-radius 5px
-        border-bottom-right-radius 5px
-  &.edit
-    .detailInfo
-      .left
-        &>.tutorial
-          position fixed
-          z-index 35
-          font-style italic
-        .folder
-          border none
-          width 150px
-          height 27px
-          outline none
-          background-color darken(white, 5%)
-          &:hover
-            background-color white
-        .TagSelect
-          .tags
-            white-space nowrap
-            overflow-x auto
-            position relative
-            max-width 350px
-            margin-top 5px
-            noSelect()
-            z-index 30
-            background-color #E6E6E6
-            .tagItem
-              background-color brandColor
-              border-radius 2px
-              color white
-              margin 0 2px
-              padding 0
-              border 1px solid darken(brandColor, 10%)
-              button.tagRemoveBtn
-                color white
-                border-radius 2px
-                border none
-                background-color transparent
-                padding 4px 2px
-                border-right 1px solid #E6E6E6
-                font-size 8px
-                line-height 12px
-                transition 0.1s
-                &:hover
-                  background-color lighten(brandColor, 10%)
-              .tagLabel
-                padding 4px 4px
-                font-size 12px
-                line-height 12px
-            input.tagInput
-              background-color transparent
-              outline none
-              margin 0 2px
-              border-radius 2px
-              border none
-              transition 0.1s
-              height 18px
-          .suggestTags
-            position fixed
-            width 150px
-            max-height 150px
-            background-color white
-            z-index 5
-            border 1px solid borderColor
-            border-radius 5px
-            button
-              width 100%
-              display block
-              padding 0 15px
-              height 33px
-              line-height 33px
-              background-color transparent
-              border none
-              text-align left
-              font-size 14px
-              &:hover
-                background-color darken(white, 10%)
-      .right
-        z-index 30
-        button
-          cursor pointer
-          height 33px
-          width 55px
-          margin-left 5px
-          font-size 14px
-          color inactiveTextColor
-          background-color darken(white, 5%)
-          border solid 1px borderColor
-          border-radius 5px
-          &>.tooltip
-            tooltip()
-            top 105px
-          &.preview
-            width inherit
-            .tooltip
-              margin-left -55px
-          &:hover
-            background-color white
-            .tooltip
-              opacity 1
-          &.cancelBtn
-            .tooltip
-              margin-left -25px
-          &.saveBtn
-            border none
-            background-color brandColor
-            color white
-            .tooltip
-              margin-left -45px
-            &:hover
-              color white
-              background-color lighten(brandColor, 10%)
-    .detailBody
-      .detailPanel
-        &>.header
-          &>.tutorial
-            fixed right
-            z-index 35
-            font-style italic
-          .mode
-            position relative
-            z-index 30
-            absolute top bottom right
-            display block
-            height 33px
-            margin-top 12px
-            width 150px
-            margin-right 15px
-            border-radius 5px
-            border solid 1px borderColor
-            transition 0.1s
-            &.idle
-              background-color darken(white, 5%)
-              cursor pointer
-              &:hover
-                background-color white
-              .ModeIcon
-                float left
-                width 25px
-                line-height 33px
-                text-align center
-              .modeLabel
-                line-height 30px
-            &.edit
-              background-color white
-              input
-                width 150px
-                line-height 30px
-                padding 0 10px
-                border none
-                outline none
-                background-color transparent
-                font-size 14px
-              .modeOptions
-                position fixed
-                width 150px
-                z-index 10
-                margin-top 5px
-                border 1px solid borderColor
-                border-radius 5px
-                background-color white
-                max-height 250px
-                overflow-y auto
-                .option
-                  height 33px
-                  line-height 33px
-                  cursor pointer
-                  &.active, &:hover.active
-                    background-color brandColor
-                    color white
-                  .ModeIcon
-                    width 30px
-                    text-align center
-                    display inline-block
-                  &:hover
-                    background-color darken(white, 10%)
-          .title
-            absolute left top bottom
-            right 150px
-            padding 0 15px
-            input
-              width 100%
-              border none
-              background-color transparent
-              line-height 60px
-              font-size 24px
-              outline none
-  &.idle
-    .detailInfo
+    background-color white
+    border-radius 5px
+    border solid 1px lighten(borderColor, 15%)
+    &>.ArticleDetail-panel-header
+      display block
+      height 60px
       &>.tutorial
-        fixed top right
+        fixed right
         z-index 35
         font-style italic
-      .left
-        right 99px
-        .info
-          padding 5px
-          overflow ellipsis
-        .tags
-          padding 10px 10px 5px
-          color articleItemColor
-          a
-            background-color brandColor
-            color white
-            border-radius 2px
-            padding 1.5px 5px
-            margin 2px
-            font-size 10px
-            opacity 0.8
-            cursor pointer
-            &:hover
-              opacity 1
-          span.noTags
-            color noTagsColor
-      .right
+      .ArticleDetail-panel-header-mode
         z-index 30
-        div.share-dropdown
-          position absolute
-          right 5px
-          top 30px
-          background-color transparentify(invBackgroundColor, 80%)
-          padding 5px 0
-          width 200px
-          &.hide
-            display none
-          &>button
-            width 200px
-            text-align left
-            display block
-            height 33px
-            background-color transparent
-            color white
-            font-size 14px
+        background-color white
+        absolute top bottom
+        left 10px
+        display block
+        height 33px
+        margin-top 14px
+        width 33px
+        margin-right 15px
+        border solid 1px transparent
+        border-radius 5px
+        transition width 0.15s
+        &.idle
+          cursor pointer
+          &:hover
+            background-color darken(white, 5%)
+            border-color borderColor
+          .ModeIcon
+            float left
+            width 100%
+            line-height 33px
+            text-align center
+        &.edit
+          width 150px
+          border-color iptFocusBorderColor
+          input
+            width 150px
+            line-height 31px
             padding 0 10px
             border none
-            &:hover
-              background-color transparentify(lighten(invBackgroundColor, 30%), 80%)
-          &>.ShareButton-url
-            clearfix()
-            input.ShareButton-url-input
-              width 155px
-              margin 0 0 0 5px
-              height 25px
-              outline none
-              border none
-              border-top-left-radius 5px
-              border-bottom-left-radius 5px
-              float left
-              padding 5px
-            button.ShareButton-url-button
-              width 35px
-              height 25px
-              border none
-              margin 0 5px 0 0
-              outline none
-              border-top-right-radius 5px
-              border-bottom-right-radius 5px
-              background-color darken(white, 5%)
-              color inactiveTextColor
-              float right
-              div.ShareButton-url-button-tooltip
-                tooltip()
-                right 10px
+            outline none
+            background-color transparent
+            font-size 14px
+          .ModeSelect-options
+            position fixed
+            width 150px
+            z-index 10
+            border 1px solid borderColor
+            border-radius 5px
+            background-color white
+            max-height 250px
+            overflow-y auto
+            margin-top 5px
+            .ModeSelect-options-item
+              height 33px
+              line-height 33px
+              cursor pointer
+              &.active, &:hover.active
+                background-color brandColor
+                color white
+              .ModeIcon
+                width 30px
+                text-align center
+                display inline-block
               &:hover
-                color textColor
-                div.ShareButton-url-button-tooltip
-                  opacity 1
-            div.ShareButton-url-alert
-              float left
-              height 25px
-              line-height 25px
-              padding 0 15px
-              color white
-
-        .ShareButton
-          display inline-block
-          button.ShareButton-open-button
-            border-radius 16.5px
-            cursor pointer
-            height 33px
-            width 33px
-            border none
-            margin-right 5px
-            font-size 18px
-            color inactiveTextColor
-            background-color darken(white, 5%)
-            padding 0
-            .tooltip
-              tooltip()
-              margin-top 25px
-              margin-left -40px
-            &:hover
-              color textColor
-              .tooltip
-                opacity 1
-
-        &>button
-          border-radius 16.5px
-          cursor pointer
-          height 33px
-          width 33px
+                background-color darken(white, 10%)
+      .ArticleDetail-panel-header-title
+        absolute left top right
+        left 33px
+        padding 0 15px
+        background-color transparent
+        input
           border none
-          margin-right 5px
-          font-size 18px
-          color inactiveTextColor
-          background-color darken(white, 5%)
-          padding 0
-          .tooltip
-            tooltip()
-          &.editBtn .tooltip
-            margin-top 25px
-            margin-left -45px
-          &.deleteBtn .tooltip
-            margin-top 25px
-            margin-left -73px
-          &:hover
-            color textColor
-            .tooltip
-              opacity 1
-    .detailBody
-      .detailPanel
-        &>.header
-          .mode
-            display block
-            line-height 60px
-            width 45px
-            height 60px
-            font-size 18px
-            text-align center
-          .title
-            absolute top bottom
-            left 45px
-            right 15px
-            font-size 24px
-            line-height 60px
-            white-space nowrap
-            overflow-x auto
-            overflow-y hidden
-            small
-              color #AAA
+          line-height 60px
+          width 100%
+          font-size 24px
+          outline none
+    .MarkdownPreview
+      absolute left right bottom
+      top 60px
+      marked()
+      box-sizing border-box
+      padding 5px 15px
+      border-top solid 1px borderColor
+      overflow-y auto
+    .CodeEditor
+      absolute left right bottom
+      top 60px
+      border-top solid 1px borderColor
+      min-height 300px
+      border-bottom-left-radius 5px
+      border-bottom-right-radius 5px

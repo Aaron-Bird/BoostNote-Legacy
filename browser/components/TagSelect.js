@@ -117,10 +117,10 @@ export default class TagSelect extends React.Component {
 
     let tagElements = _.isArray(tags)
       ? this.props.tags.map(tag => (
-        <span key={tag} className='tagItem'>
-          <button onClick={e => this.handleItemRemoveButton(tag)(e)} className='tagRemoveBtn'><i className='fa fa-fw fa-times'/></button>
-          <span className='tagLabel'>{tag}</span>
-        </span>))
+        <div key={tag} className='TagSelect-tags-item'>
+          <button onClick={e => this.handleItemRemoveButton(tag)(e)} className='TagSelect-tags-item-remove'><i className='fa fa-fw fa-times'/></button>
+          <div className='TagSelect-tags-item-label'>{tag}</div>
+        </div>))
       : null
 
     let suggestElements = this.shouldShowSuggest() ? suggestTags
@@ -134,7 +134,7 @@ export default class TagSelect extends React.Component {
 
     return (
       <div className='TagSelect' onClick={e => this.handleThisClick(e)}>
-        <div className='tags'>
+        <div className='TagSelect-tags'>
           {tagElements}
           <input
             type='text'
@@ -142,13 +142,13 @@ export default class TagSelect extends React.Component {
             ref='tagInput'
             valueLink={this.linkState('input')}
             placeholder='Click here to add tags'
-            className='tagInput'
+            className='TagSelect-input'
             onFocus={e => this.handleInputFocus(e)}
           />
         </div>
         {suggestElements != null && suggestElements.length > 0
           ? (
-            <div ref='suggestTags' className='suggestTags'>
+            <div ref='suggestTags' className='TagSelect-suggest'>
               {suggestElements}
             </div>
           )

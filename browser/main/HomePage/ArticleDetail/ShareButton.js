@@ -111,7 +111,7 @@ export default class ShareButton extends React.Component {
             )
           }
         </button>
-        <div ref='dropdown' className={'share-dropdown' + (this.state.openDropdown ? '' : ' hide')}>
+        <div ref='dropdown' className={'ShareButton-dropdown' + (this.state.openDropdown ? '' : ' hide')}>
           {
             !hasPublicURL ? (
               <button
