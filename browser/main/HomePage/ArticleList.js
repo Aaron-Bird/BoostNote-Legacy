@@ -92,8 +92,8 @@ export default class ArticleList extends React.Component {
 
       return (
         <div key={'article-' + article.key}>
-          <div onClick={e => this.handleArticleClick(article)(e)} className={'articleItem' + (activeArticle.key === article.key ? ' active' : '')}>
-            <div className='top'>
+          <div onClick={e => this.handleArticleClick(article)(e)} className={'ArticleList-item' + (activeArticle.key === article.key ? ' active' : '')}>
+            <div className='ArticleList-item-top'>
               {folder != null
                 ? folderChanged
                   ? <span className='folderName'>
@@ -114,10 +114,13 @@ export default class ArticleList extends React.Component {
                 }
               />
             </div>
-            <div className='middle'>
+            <div className='ArticleList-item-middle'>
               <ModeIcon className='mode' mode={article.mode}/> <div className='title' children={title}/>
             </div>
-            <div className='bottom'>
+            <div className='ArticleList-item-middle2'>
+              <pre><code children={article.content.substring(0, 50)}/></pre>
+            </div>
+            <div className='ArticleList-item-bottom'>
               <div className='tags'><i className='fa fa-fw fa-tags'/>{tagElements}</div>
             </div>
           </div>

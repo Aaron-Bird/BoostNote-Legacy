@@ -11,35 +11,37 @@ articleItemColor = #777
   overflow-y auto
   noSelect()
   &>div
-    .articleItem
+    .ArticleList-item
       border solid 2px transparent
       position relative
-      height 88px
+      height 110px
       width 100%
       cursor pointer
       transition 0.1s
       background-color white
       padding 0 10px
       font-size 12px
-      .top
+      .ArticleList-item-top
         clearfix()
-        line-height 20px
-        padding 5px 0
+        padding-top 2px
+        line-height 18px
+        height 20px
         color articleItemColor
+        font-size 11px
         .folderName
           overflow ellipsis
           display inline-block
           width 120px
         .updatedAt
           float right
-          line-height 20px
+          line-height 18px
           .unsaved-mark
             color brandColor
-      .middle
-        padding 3px 0 7px
+      .ArticleList-item-middle
         font-size 16px
         position relative
-        height 26px
+        padding-top 6px
+        height 22px
         .mode
           position absolute
           left 0
@@ -52,17 +54,28 @@ articleItemColor = #777
           overflow ellipsis
           small
             color #AAA
-      .bottom
-        padding 5px 0
+      .ArticleList-item-middle2
+        padding-top 8px
+        pre
+          white-space pre-wrap
+          overflow hidden
+          height 33px
+          line-height 14px
+          font-size 10px
+          code
+            font-family Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro, monospace
+      .ArticleList-item-bottom
         overflow-x auto
         white-space nowrap
+        padding-top 6px
         .tags
           color articleItemColor
+          height 14px
           a
             background-color brandColor
             color white
             border-radius 2px
-            padding 1.5px 5px
+            padding 1px 5px
             margin 2px
             font-size 10px
             opacity 0.8
