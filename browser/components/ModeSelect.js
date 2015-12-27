@@ -133,7 +133,7 @@ export default class ModeSelect extends React.Component {
 
       return (
         <div className={className + ' idle'} onClick={e => this.handleIdleSelectClick(e)}>
-          <ModeIcon mode={modeName}/>
+          <ModeIcon mode={modeName}/>{mode.label}
         </div>
       )
     }

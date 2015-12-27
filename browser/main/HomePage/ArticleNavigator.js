@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import { findWhere } from 'lodash'
-import { setSearchFilter, switchFolder, switchMode, switchArticle, updateArticle, clearNewArticle, EDIT_MODE } from '../actions'
+import { setSearchFilter, switchFolder, saveArticle } from '../actions'
 import { openModal } from 'browser/lib/modal'
 import FolderMark from 'browser/components/FolderMark'
 import Preferences from '../modal/Preferences'
@@ -71,20 +71,17 @@ export default class ArticleNavigator extends React.Component {
       : folders[0].key
 
     let newArticle = {
-      id: null,
       key: keygen(),
       title: '',
       content: '',
       mode: 'markdown',
       tags: [],
       FolderKey: FolderKey,
-      status: 'NEW'
+      craetedAt: new Date(),
+      updatedAt: new Date()
     }
 
-    dispatch(clearNewArticle())
-    dispatch(updateArticle(newArticle))
-    dispatch(switchArticle(newArticle.key, true))
-    dispatch(switchMode(EDIT_MODE))
+    dispatch(saveArticle(newArticle.key, newArticle, true))
   }
 
   handleNewFolderButton (e) {

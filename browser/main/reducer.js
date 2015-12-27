@@ -3,13 +3,10 @@ import _ from 'lodash'
 import {
   // Status action type
   SWITCH_FOLDER,
-  SWITCH_MODE,
   SWITCH_ARTICLE,
   SET_SEARCH_FILTER,
   SET_TAG_FILTER,
   CLEAR_SEARCH,
-  LOCK_STATUS,
-  UNLOCK_STATUS,
   TOGGLE_TUTORIAL,
 
   // user
@@ -18,37 +15,32 @@ import {
   // Article action type
   ARTICLE_UPDATE,
   ARTICLE_DESTROY,
-  CLEAR_NEW_ARTICLE,
+  ARTICLE_CACHE,
+  ARTICLE_SAVE,
 
   // Folder action type
   FOLDER_CREATE,
   FOLDER_UPDATE,
   FOLDER_DESTROY,
-  FOLDER_REPLACE,
-
-  // view mode
-  IDLE_MODE
+  FOLDER_REPLACE
 } from './actions'
 import dataStore from 'browser/lib/dataStore'
 import keygen from 'browser/lib/keygen'
 import activityRecord from 'browser/lib/activityRecord'
-import { openModal } from 'browser/lib/modal'
-import EditedAlert from './modal/EditedAlert'
 
 const initialStatus = {
-  mode: IDLE_MODE,
   search: '',
   isTutorialOpen: false,
   isStatusLocked: false
 }
 
 let data = dataStore.getData()
-let initialArticles = data.articles
+let initialArticles = {
+  data: data.articles,
+  modified: []
+}
 let initialFolders = data.folders
 let initialUser = dataStore.getUser().user
-
-let isStatusLocked = false
-let isCreatingNew = false
 
 function user (state = initialUser, action) {
   switch (action.type) {
@@ -140,58 +132,84 @@ function folders (state = initialFolders, action) {
       return state
   }
 }
-let isCleaned = true
-function articles (state = initialArticles, action) {
-  state = state.slice()
 
-  if (!isCreatingNew && !isCleaned) {
-    state = state.filter(article => article.status !== 'NEW')
-    isCleaned = true
-  }
+function compareArticle (original, modified) {
+  var keys = _.keys(_.pick(modified, ['mode', 'title', 'tags', 'content', 'FolderKey']))
+
+  return keys.reduce((sum, key) => {
+    if (original[key] !== modified[key]) {
+      if (sum == null) {
+        sum = {
+          key: original.key
+        }
+      }
+      sum[key] = modified[key]
+    }
+    return sum
+  }, null)
+}
+
+function articles (state = initialArticles, action) {
   switch (action.type) {
-    case SWITCH_ARTICLE:
-      if (action.data.isNew) {
-        isCleaned = false
-      }
-      if (!isStatusLocked && !action.data.isNew) {
-        isCreatingNew = false
-        if (!isCleaned) {
-          state = state.filter(article => article.status !== 'NEW')
-          isCleaned = true
+    case ARTICLE_CACHE:
+      {
+        let modified = action.data.article
+        let targetKey = action.data.key
+        let originalIndex = _.findIndex(state.data, _article => targetKey === _article.key)
+        if (originalIndex === -1) return state
+        let modifiedIndex = _.findIndex(state.modified, _article => targetKey === _article.key)
+
+        modified = compareArticle(state.data[originalIndex], modified)
+        if (modified == null) {
+          if (modifiedIndex !== -1) state.modified.splice(modifiedIndex, 1)
+          return state
         }
+
+        if (modifiedIndex === -1) state.modified.push(modified)
+        else Object.assign(state.modified[modifiedIndex], modified)
+        return state
       }
-      return state
-    case SWITCH_FOLDER:
-    case SET_SEARCH_FILTER:
-    case SET_TAG_FILTER:
-    case CLEAR_SEARCH:
-      if (!isStatusLocked) {
-        isCreatingNew = false
-        if (!isCleaned) {
-          state = state.filter(article => article.status !== 'NEW')
-          isCleaned = true
+    case ARTICLE_SAVE:
+      {
+        let targetKey = action.data.key
+        let override = action.data.article
+        let modifiedIndex = _.findIndex(state.modified, _article => targetKey === _article.key)
+        let modified = modifiedIndex !== -1 ? state.modified.splice(modifiedIndex, 1)[0] : null
+
+        let targetIndex = _.findIndex(state.data, _article => targetKey === _article.key)
+        // Make a new if target article is not found.
+        if (targetIndex === -1) {
+          state.data.push(Object.assign({
+            title: '',
+            content: '',
+            mode: 'markdown',
+            tags: [],
+            craetedAt: new Date()
+          }, modified, override, {key: targetKey, updatedAt: new Date()}))
+          return state
         }
+
+        Object.assign(state.data[targetIndex], modified, override, {key: targetKey, updatedAt: new Date()})
+
+        dataStore.setArticles(state.data)
+        return state
       }
-      return state
-    case CLEAR_NEW_ARTICLE:
-      return state.filter(article => article.status !== 'NEW')
     case ARTICLE_UPDATE:
       {
         let article = action.data.article
 
-        let targetIndex = _.findIndex(state, _article => article.key === _article.key)
-        if (targetIndex < 0) state.unshift(article)
-        else Object.assign(state[targetIndex], article)
+        let targetIndex = _.findIndex(state.data, _article => article.key === _article.key)
+        if (targetIndex < 0) state.data.unshift(article)
+        else Object.assign(state.data[targetIndex], article)
 
-        if (article.status !== 'NEW') dataStore.setArticles(state)
-        else isCreatingNew = true
+        dataStore.setArticles(state.data)
         return state
       }
     case ARTICLE_DESTROY:
       {
         let articleKey = action.data.key
 
-        let targetIndex = _.findIndex(state, _article => articleKey === _article.key)
+        let targetIndex = _.findIndex(state.data, _article => articleKey === _article.key)
         if (targetIndex >= 0) state.splice(targetIndex, 1)
 
         dataStore.setArticles(state)
@@ -217,47 +235,34 @@ function status (state = initialStatus, action) {
     case TOGGLE_TUTORIAL:
       state.isTutorialOpen = !state.isTutorialOpen
       return state
-    case LOCK_STATUS:
-      isStatusLocked = state.isStatusLocked = true
-      return state
-    case UNLOCK_STATUS:
-      isStatusLocked = state.isStatusLocked = false
-      return state
   }
 
-  // if status locked, status become unmutable
-  if (state.isStatusLocked) {
-    openModal(EditedAlert, {action})
-    return state
-  }
   switch (action.type) {
-    case SWITCH_FOLDER:
-      state.mode = IDLE_MODE
-      state.search = `//${action.data} `
-
+    case ARTICLE_SAVE:
+      if (action.data.forceSwitch) {
+        let article = action.data.article
+        state.articleKey = article.key
+        state.search = ''
+      }
       return state
-    case SWITCH_MODE:
-      state.mode = action.data
+    case SWITCH_FOLDER:
+      state.search = `//${action.data} `
 
       return state
     case SWITCH_ARTICLE:
       state.articleKey = action.data.key
-      state.mode = IDLE_MODE
 
       return state
     case SET_SEARCH_FILTER:
       state.search = action.data
-      state.mode = IDLE_MODE
 
       return state
     case SET_TAG_FILTER:
       state.search = `#${action.data}`
-      state.mode = IDLE_MODE
 
       return state
     case CLEAR_SEARCH:
       state.search = ''
-      state.mode = IDLE_MODE
 
       return state
     default:

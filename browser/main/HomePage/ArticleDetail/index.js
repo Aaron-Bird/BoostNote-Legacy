@@ -2,25 +2,16 @@ import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import moment from 'moment'
 import _ from 'lodash'
-import ModeIcon from 'browser/components/ModeIcon'
 import MarkdownPreview from 'browser/components/MarkdownPreview'
 import CodeEditor from 'browser/components/CodeEditor'
 import {
-  IDLE_MODE,
-  EDIT_MODE,
-  switchMode,
-  switchArticle,
   switchFolder,
-  clearSearch,
-  lockStatus,
-  unlockStatus,
-  updateArticle,
-  destroyArticle,
-  NEW
+  cacheArticle,
+  saveArticle,
+  destroyArticle
 } from '../../actions'
 import linkState from 'browser/lib/linkState'
 import FolderMark from 'browser/components/FolderMark'
-import TagLink from '../TagLink'
 import TagSelect from 'browser/components/TagSelect'
 import ModeSelect from 'browser/components/ModeSelect'
 import activityRecord from 'browser/lib/activityRecord'
@@ -123,45 +114,31 @@ export default class ArticleDetail extends React.Component {
     clearInterval(this.refreshTimer)
   }
 
-  componentDidUpdate (prevProps) {
-    let isModeChanged = prevProps.status.mode !== this.props.status.mode
-    if (isModeChanged && this.props.status.mode === EDIT_MODE) {
-      ReactDOM.findDOMNode(this.refs.title).focus()
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.activeArticle == null || this.props.activeArticle == null || nextProps.activeArticle.key !== this.props.activeArticle.key) {
+      let nextArticle = nextProps.activeArticle
+      let nextModified = nextArticle != null ? _.findWhere(nextProps.modified, {key: nextArticle.key}) : null
+
+      let article = Object.assign({}, nextProps.activeArticle, nextModified)
+
+      this.setState({
+        article
+      })
     }
   }
 
-  componentWillReceiveProps (nextProps) {
-    let nextState = {}
+  cacheArticle () {
+    let { dispatch } = this.props
 
-    let isArticleChanged = nextProps.activeArticle != null && (nextProps.activeArticle.key !== this.state.article.key)
-    let isModeChanged = nextProps.status.mode !== this.props.status.mode
-
-    // Reset article input
-    if (isArticleChanged || (isModeChanged && nextProps.status.mode !== IDLE_MODE)) {
-      Object.assign(nextState, {
-        article: makeInstantArticle(nextProps.activeArticle)
-      })
-    }
-
-    // Clean state
-    if (isModeChanged) {
-      Object.assign(nextState, {
-        openDeleteConfirmMenu: false,
-        previewMode: false,
-        isArticleEdited: false,
-        isTagChanged: false,
-        isTitleChanged: false,
-        isContentChanged: false
-      })
-    }
-
-    this.setState(nextState)
+    dispatch(cacheArticle(this.props.activeArticle.key, this.state.article))
   }
 
   renderEmpty () {
     return (
       <div className='ArticleDetail empty'>
-        Command(⌘) + Enter to create a new post
+        <div className='ArticleDetail-empty-box'>
+          <div className='ArticleDetail-empty-box-message'>Command(⌘) + N<br/>to create a new post</div>
+        </div>
       </div>
     )
   }
@@ -176,123 +153,46 @@ export default class ArticleDetail extends React.Component {
 
   handleSaveButtonClick (e) {
     let { dispatch, folders, status } = this.props
-    let article = this.state.article
-    let newArticle = Object.assign({}, article)
 
-    let folder = _.findWhere(folders, {key: article.FolderKey})
-    if (folder == null) return false
-
-    dispatch(unlockStatus())
-
-    newArticle.status = null
-    newArticle.updatedAt = new Date()
-    newArticle.title = newArticle.title.trim()
-    if (newArticle.createdAt == null) {
-      newArticle.createdAt = new Date()
-      if (newArticle.title.length === 0) {
-        newArticle.title = `Created at ${moment(newArticle.createdAt).format('YYYY/MM/DD HH:mm')}`
-      }
-      activityRecord.emit('ARTICLE_CREATE', {mode: newArticle.mode})
-    } else {
-      activityRecord.emit('ARTICLE_UPDATE', {mode: newArticle.mode})
+    let targetFolderKey = this.state.article.FolderKey
+    dispatch(saveArticle(this.props.activeArticle.key, this.state.article), true)
+    if (status.targetFolders.length > 0) {
+      let targetFolder = _.findWhere(folders, {key: targetFolderKey})
+      dispatch(switchFolder(targetFolder.name))
     }
-
-    dispatch(updateArticle(newArticle))
-    dispatch(switchMode(IDLE_MODE))
-    // Folder filterがかかっている時に、
-    // Searchを初期化し、更新先のFolder filterをかける
-    // かかれていない時に
-    // Searchを初期化する
-    if (status.targetFolders.length > 0) dispatch(switchFolder(folder.name))
-    else dispatch(clearSearch())
-    dispatch(switchArticle(newArticle.key))
   }
 
   handleFolderKeyChange (e) {
     let article = this.state.article
     article.FolderKey = e.target.value
 
-    this.setState({article: article})
+    this.setState({article: article}, () => this.cacheArticle())
   }
 
   handleTitleChange (e) {
     let { article } = this.state
     article.title = e.target.value
-    let _isTitleChanged = article.title !== this.props.activeArticle.title
-
-    let { isTagChanged, isContentChanged, isArticleEdited, isModeChanged } = this.state
-    let _isArticleEdited = _isTitleChanged || isTagChanged || isContentChanged || isModeChanged
 
     this.setState({
-      article,
-      isTitleChanged: _isTitleChanged,
-      isArticleEdited: _isArticleEdited
-    }, () => {
-      if (isArticleEdited !== _isArticleEdited) {
-        let { dispatch } = this.props
-        if (_isArticleEdited) {
-          console.log('lockit')
-          dispatch(lockStatus())
-        } else {
-          console.log('unlockit')
-          dispatch(unlockStatus())
-        }
-      }
-    })
+      article
+    }, () => this.cacheArticle())
   }
 
   handleTagsChange (newTag, tags) {
     let article = this.state.article
     article.tags = tags
 
-    let _isTagChanged = _.difference(article.tags, this.props.activeArticle.tags).length > 0 || _.difference(this.props.activeArticle.tags, article.tags).length > 0
-
-    let { isTitleChanged, isContentChanged, isArticleEdited, isModeChanged } = this.state
-    let _isArticleEdited = _isTagChanged || isTitleChanged || isContentChanged || isModeChanged
-
     this.setState({
-      article,
-      isTagChanged: _isTagChanged,
-      isArticleEdited: _isArticleEdited
-    }, () => {
-      if (isArticleEdited !== _isArticleEdited) {
-        let { dispatch } = this.props
-        if (_isArticleEdited) {
-          console.log('lockit')
-          dispatch(lockStatus())
-        } else {
-          console.log('unlockit')
-          dispatch(unlockStatus())
-        }
-      }
-    })
+      article
+    }, () => this.cacheArticle())
   }
 
   handleModeChange (value) {
     let { article } = this.state
     article.mode = value
-    let _isModeChanged = article.mode !== this.props.activeArticle.mode
-
-    let { isTagChanged, isContentChanged, isArticleEdited, isTitleChanged } = this.state
-    let _isArticleEdited = _isModeChanged || isTagChanged || isContentChanged || isTitleChanged
-
     this.setState({
-      article,
-      previewMode: false,
-      isModeChanged: _isModeChanged,
-      isArticleEdited: _isArticleEdited
-    }, () => {
-      if (isArticleEdited !== _isArticleEdited) {
-        let { dispatch } = this.props
-        if (_isArticleEdited) {
-          console.log('lockit')
-          dispatch(lockStatus())
-        } else {
-          console.log('unlockit')
-          dispatch(unlockStatus())
-        }
-      }
-    })
+      article
+    }, () => this.cacheArticle())
   }
 
   handleModeSelectBlur () {
@@ -302,34 +202,12 @@ export default class ArticleDetail extends React.Component {
   }
 
   handleContentChange (e, value) {
-    let { status } = this.props
-    if (status.mode === IDLE_MODE) {
-      return
-    }
-
     let { article } = this.state
     article.content = value
-    let _isContentChanged = article.content !== this.props.activeArticle.content
-
-    let { isTagChanged, isModeChanged, isArticleEdited, isTitleChanged } = this.state
-    let _isArticleEdited = _isContentChanged || isTagChanged || isModeChanged || isTitleChanged
 
     this.setState({
-      article,
-      isContentChanged: _isContentChanged,
-      isArticleEdited: _isArticleEdited
-    }, () => {
-      if (isArticleEdited !== _isArticleEdited) {
-        let { dispatch } = this.props
-        if (_isArticleEdited) {
-          console.log('lockit')
-          dispatch(lockStatus())
-        } else {
-          console.log('unlockit')
-          dispatch(unlockStatus())
-        }
-      }
-    })
+      article
+    }, () => this.cacheArticle())
   }
 
   handleTogglePreviewButtonClick (e) {
@@ -373,13 +251,15 @@ export default class ArticleDetail extends React.Component {
   }
 
   render () {
-    let { folders, status, tags, activeArticle, user } = this.props
-
+    let { folders, status, tags, activeArticle, modified, user } = this.props
+    if (activeArticle == null) return this.renderEmpty()
     let folderOptions = folders.map(folder => {
       return (
         <option key={folder.key} value={folder.key}>{folder.name}</option>
       )
     })
+
+    let isUnsaved = !!_.findWhere(modified, {key: activeArticle.key})
 
     return (
       <div className='ArticleDetail'>
@@ -392,7 +272,13 @@ export default class ArticleDetail extends React.Component {
             >
               {folderOptions}
             </select>
-            {this.state.isArticleEdited ? ' (edited)' : ''}
+            <span className='ArticleDetail-info-status'
+              children={
+                isUnsaved
+                  ? <span> <span className='unsaved-mark'>●</span> Unsaved</span>
+                  : `Created : ${moment(this.state.article.createdAt).format('YYYY/MM/DD')} Updated : ${moment(this.state.article.updatedAt).format('YYYY/MM/DD')}`
+              }
+            />
 
             <div className='ArticleDetail-info-control'>
               <ShareButton
@@ -404,8 +290,8 @@ export default class ArticleDetail extends React.Component {
                 <i className='fa fa-fw fa-clipboard'/><span className='tooltip'>Copy to clipboard</span>
               </button>
 
-              <button onClick={e => this.handleEditButtonClick(e)}>
-                <i className='fa fa-fw fa-edit'/><span className='tooltip'>Save (⌘ + s)</span>
+              <button onClick={e => this.handleSaveButtonClick(e)}>
+                <i className='fa fa-fw fa-save'/><span className='tooltip'>Save (⌘ + s)</span>
               </button>
               <button onClick={e => this.handleDeleteButtonClick(e)}>
                 <i className='fa fa-fw fa-trash'/><span className='tooltip'>Delete</span>
@@ -426,6 +312,15 @@ export default class ArticleDetail extends React.Component {
 
         <div className='ArticleDetail-panel'>
           <div className='ArticleDetail-panel-header'>
+            <div className='ArticleDetail-panel-header-title'>
+              <input
+                onKeyDown={e => this.handleTitleKeyDown(e)}
+                placeholder='(Untitled)'
+                ref='title'
+                value={this.state.article.title}
+                onChange={e => this.handleTitleChange(e)}
+              />
+            </div>
             <ModeSelect
               ref='mode'
               onChange={e => this.handleModeChange(e)}
@@ -433,17 +328,6 @@ export default class ArticleDetail extends React.Component {
               className='ArticleDetail-panel-header-mode'
               onBlur={() => this.handleModeSelectBlur()}
             />
-            <div className='ArticleDetail-panel-header-title'>
-              <input
-                onKeyDown={e => this.handleTitleKeyDown(e)}
-                placeholder={this.state.article.createdAt == null
-                  ? `Created at ${moment().format('YYYY/MM/DD HH:mm')}`
-                  : 'Title'}
-                ref='title'
-                value={this.state.article.title}
-                onChange={e => this.handleTitleChange(e)}
-              />
-            </div>
           </div>
           {status.isTutorialOpen ? modeSelectTutorialElement : null}
 
@@ -466,6 +350,7 @@ export default class ArticleDetail extends React.Component {
 ArticleDetail.propTypes = {
   status: PropTypes.shape(),
   activeArticle: PropTypes.shape(),
+  modified: PropTypes.array,
   user: PropTypes.shape(),
   folders: PropTypes.array,
   tags: PropTypes.array,

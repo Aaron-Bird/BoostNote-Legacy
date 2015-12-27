@@ -4,24 +4,20 @@ export const USER_UPDATE = 'USER_UPDATE'
 export const CLEAR_NEW_ARTICLE = 'CLEAR_NEW_ARTICLE'
 export const ARTICLE_UPDATE = 'ARTICLE_UPDATE'
 export const ARTICLE_DESTROY = 'ARTICLE_DESTROY'
+export const ARTICLE_SAVE = 'ARTICLE_SAVE'
+export const ARTICLE_CACHE = 'ARTICLE_CACHE'
 export const FOLDER_CREATE = 'FOLDER_CREATE'
 export const FOLDER_UPDATE = 'FOLDER_UPDATE'
 export const FOLDER_DESTROY = 'FOLDER_DESTROY'
 export const FOLDER_REPLACE = 'FOLDER_REPLACE'
 
 export const SWITCH_FOLDER = 'SWITCH_FOLDER'
-export const SWITCH_MODE = 'SWITCH_MODE'
 export const SWITCH_ARTICLE = 'SWITCH_ARTICLE'
 export const SET_SEARCH_FILTER = 'SET_SEARCH_FILTER'
 export const SET_TAG_FILTER = 'SET_TAG_FILTER'
 export const CLEAR_SEARCH = 'CLEAR_SEARCH'
-export const LOCK_STATUS = 'LOCK_STATUS'
-export const UNLOCK_STATUS = 'UNLOCK_STATUS'
-export const TOGGLE_TUTORIAL = 'TOGGLE_TUTORIAL'
 
-// Status - mode
-export const IDLE_MODE = 'IDLE_MODE'
-export const EDIT_MODE = 'EDIT_MODE'
+export const TOGGLE_TUTORIAL = 'TOGGLE_TUTORIAL'
 
 // Article status
 export const NEW = 'NEW'
@@ -37,6 +33,20 @@ export function updateUser (input) {
 export function clearNewArticle () {
   return {
     type: CLEAR_NEW_ARTICLE
+  }
+}
+
+export function cacheArticle (key, article) {
+  return {
+    type: ARTICLE_CACHE,
+    data: { key, article }
+  }
+}
+
+export function saveArticle (key, article, forceSwitch) {
+  return {
+    type: ARTICLE_SAVE,
+    data: { key, article, forceSwitch }
   }
 }
 
@@ -92,19 +102,11 @@ export function switchFolder (folderName) {
   }
 }
 
-export function switchMode (mode) {
-  return {
-    type: SWITCH_MODE,
-    data: mode
-  }
-}
-
-export function switchArticle (articleKey, isNew) {
+export function switchArticle (articleKey) {
   return {
     type: SWITCH_ARTICLE,
     data: {
-      key: articleKey,
-      isNew: isNew
+      key: articleKey
     }
   }
 }
@@ -129,18 +131,6 @@ export function clearSearch () {
   }
 }
 
-export function lockStatus () {
-  return {
-    type: LOCK_STATUS
-  }
-}
-
-export function unlockStatus () {
-  return {
-    type: UNLOCK_STATUS
-  }
-}
-
 export function toggleTutorial () {
   return {
     type: TOGGLE_TUTORIAL
@@ -152,17 +142,16 @@ export default {
   clearNewArticle,
   updateArticle,
   destroyArticle,
+  cacheArticle,
+  saveArticle,
   createFolder,
   updateFolder,
   destroyFolder,
   replaceFolder,
   switchFolder,
-  switchMode,
   switchArticle,
   setSearchFilter,
   setTagFilter,
   clearSearch,
-  lockStatus,
-  unlockStatus,
   toggleTutorial
 }

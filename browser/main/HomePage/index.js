@@ -1,10 +1,10 @@
 import React, { PropTypes} from 'react'
 import { connect } from 'react-redux'
-import { EDIT_MODE, IDLE_MODE, toggleTutorial } from './actions'
-import ArticleNavigator from './HomePage/ArticleNavigator'
-import ArticleTopBar from './HomePage/ArticleTopBar'
-import ArticleList from './HomePage/ArticleList'
-import ArticleDetail from './HomePage/ArticleDetail'
+import { toggleTutorial } from '../actions'
+import ArticleNavigator from './ArticleNavigator'
+import ArticleTopBar from './ArticleTopBar'
+import ArticleList from './ArticleList'
+import ArticleDetail from './ArticleDetail'
 import _ from 'lodash'
 import { isModalOpen, closeModal } from 'browser/lib/modal'
 
@@ -48,65 +48,27 @@ class HomePage extends React.Component {
       return
     }
 
-    switch (status.mode) {
+    // `detail`の`openDeleteConfirmMenu`が`true`なら呼ばれない。
+    if (e.keyCode === 27 || (e.keyCode === 70 && cmdOrCtrl)) {
+      top.focusInput()
+    }
 
-      case EDIT_MODE:
-        if (e.keyCode === 27) {
-          detail.handleCancelButtonClick()
-        }
-        if ((e.keyCode === 13 && (cmdOrCtrl)) || (e.keyCode === 83 && (cmdOrCtrl))) {
-          detail.handleSaveButtonClick()
-        }
-        if (e.keyCode === 80 && cmdOrCtrl) {
-          detail.handleTogglePreviewButtonClick()
-        }
-        if (e.keyCode === 78 && cmdOrCtrl) {
-          nav.handleNewPostButtonClick()
-          e.preventDefault()
-        }
-        break
-      case IDLE_MODE:
-        if (e.keyCode === 69) {
-          detail.handleEditButtonClick()
-          e.preventDefault()
-        }
-        if (e.keyCode === 68) {
-          detail.handleDeleteButtonClick()
-        }
+    if (e.keyCode === 38) {
+      list.selectPriorArticle()
+    }
 
-        // `detail`の`openDeleteConfirmMenu`の時。
-        if (detail.state.openDeleteConfirmMenu) {
-          if (e.keyCode === 27) {
-            detail.handleDeleteCancelButtonClick()
-          }
-          if (e.keyCode === 13 && cmdOrCtrl) {
-            detail.handleDeleteConfirmButtonClick()
-          }
-          break
-        }
+    if (e.keyCode === 40) {
+      list.selectNextArticle()
+    }
 
-        // `detail`の`openDeleteConfirmMenu`が`true`なら呼ばれない。
-        if (e.keyCode === 27 || (e.keyCode === 70 && cmdOrCtrl)) {
-          top.focusInput()
-        }
-
-        if (e.keyCode === 38) {
-          list.selectPriorArticle()
-        }
-
-        if (e.keyCode === 40) {
-          list.selectNextArticle()
-        }
-
-        if ((e.keyCode === 65 && !e.metaKey && !e.ctrlKey) || (e.keyCode === 13 && cmdOrCtrl) || (e.keyCode === 78 && cmdOrCtrl)) {
-          nav.handleNewPostButtonClick()
-          e.preventDefault()
-        }
+    if (e.keyCode === 78 && cmdOrCtrl) {
+      nav.handleNewPostButtonClick()
+      e.preventDefault()
     }
   }
 
   render () {
-    let { dispatch, status, user, articles, allArticles, activeArticle, folders, tags, filters } = this.props
+    let { dispatch, status, user, articles, allArticles, modified, activeArticle, folders, tags, filters } = this.props
 
     return (
       <div className='HomePage'>
@@ -128,6 +90,7 @@ class HomePage extends React.Component {
           dispatch={dispatch}
           folders={folders}
           articles={articles}
+          modified={modified}
           status={status}
           activeArticle={activeArticle}
         />
@@ -136,6 +99,7 @@ class HomePage extends React.Component {
           dispatch={dispatch}
           user={user}
           activeArticle={activeArticle}
+          modified={modified}
           folders={folders}
           status={status}
           tags={tags}
@@ -174,9 +138,12 @@ function startsWith (target, needle) {
 }
 
 function remap (state) {
-  let { user, folders, articles, status } = state
+  let { user, folders, status } = state
+  let _articles = state.articles
 
-  if (articles == null) articles = []
+  let articles = _articles != null ? _articles.data : []
+  let modified = _articles != null ? _articles.modified : []
+
   articles.sort((a, b) => {
     return new Date(b.updatedAt) - new Date(a.updatedAt)
   })
@@ -239,8 +206,9 @@ function remap (state) {
     user,
     folders,
     status,
-    allArticles,
     articles,
+    allArticles,
+    modified,
     activeArticle,
     tags,
     filters: {
@@ -258,6 +226,7 @@ HomePage.propTypes = {
   }),
   articles: PropTypes.array,
   allArticles: PropTypes.array,
+  modified: PropTypes.array,
   activeArticle: PropTypes.shape(),
   dispatch: PropTypes.func,
   folders: PropTypes.array,
