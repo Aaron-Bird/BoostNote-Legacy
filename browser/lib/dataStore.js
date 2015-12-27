@@ -36,7 +36,7 @@ function getRepositories () {
   try {
     let parsed = JSON.parse(raw)
     if (!_.isArray(parsed)) {
-      throw new Error('repositories data is currupte. re-init data.')
+      throw new Error('repositories data is corrupted. re-init data.')
     }
     return parsed
   } catch (e) {
