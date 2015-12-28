@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import ExternalLink from 'browser/components/ExternalLink'
-import { setSearchFilter, clearSearch, toggleTutorial } from '../actions'
+import { setSearchFilter, clearSearch, toggleOnlyUnsavedFilter, toggleTutorial } from '../actions'
 
 const BRAND_COLOR = '#18AF90'
 
@@ -105,8 +105,15 @@ export default class ArticleTopBar extends React.Component {
     this.focusInput()
   }
 
+  handleOnlyUnsavedChange (e) {
+    let { dispatch } = this.props
+
+    dispatch(toggleOnlyUnsavedFilter())
+  }
+
   handleTutorialButtonClick (e) {
     let { dispatch } = this.props
+    console.log(e.target.value)
 
     dispatch(toggleTutorial())
   }
@@ -142,7 +149,7 @@ export default class ArticleTopBar extends React.Component {
           </div>
 
           {status.isTutorialOpen ? searchTutorialElement : null}
-
+          <label className='only-unsaved'><input value={status.onlyUnsaved} onChange={e => this.handleOnlyUnsavedChange(e)} type='checkbox'/> only unsaved</label>
         </div>
         <div className='right'>
           <button onClick={e => this.handleTutorialButtonClick(e)}>?<span className='tooltip'>How to use</span>

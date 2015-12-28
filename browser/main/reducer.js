@@ -7,6 +7,7 @@ import {
   SET_SEARCH_FILTER,
   SET_TAG_FILTER,
   CLEAR_SEARCH,
+  TOGGLE_ONLY_UNSAVED_FILTER,
   TOGGLE_TUTORIAL,
 
   // user
@@ -31,7 +32,7 @@ import activityRecord from 'browser/lib/activityRecord'
 const initialStatus = {
   search: '',
   isTutorialOpen: false,
-  isStatusLocked: false
+  onlyUnsaved: false
 }
 
 let data = dataStore.getData()
@@ -263,6 +264,10 @@ function status (state = initialStatus, action) {
       return state
     case CLEAR_SEARCH:
       state.search = ''
+
+      return state
+    case TOGGLE_ONLY_UNSAVED_FILTER:
+      state.onlyUnsaved = !state.onlyUnsaved
 
       return state
     default:

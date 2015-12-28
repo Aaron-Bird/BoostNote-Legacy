@@ -16,6 +16,7 @@ export const SWITCH_ARTICLE = 'SWITCH_ARTICLE'
 export const SET_SEARCH_FILTER = 'SET_SEARCH_FILTER'
 export const SET_TAG_FILTER = 'SET_TAG_FILTER'
 export const CLEAR_SEARCH = 'CLEAR_SEARCH'
+export const TOGGLE_ONLY_UNSAVED_FILTER = 'TOGGLE_ONLY_UNSAVED_FILTER'
 
 export const TOGGLE_TUTORIAL = 'TOGGLE_TUTORIAL'
 
@@ -131,6 +132,12 @@ export function clearSearch () {
   }
 }
 
+export function toggleOnlyUnsavedFilter () {
+  return {
+    type: TOGGLE_ONLY_UNSAVED_FILTER
+  }
+}
+
 export function toggleTutorial () {
   return {
     type: TOGGLE_TUTORIAL
@@ -153,5 +160,6 @@ export default {
   setSearchFilter,
   setTagFilter,
   clearSearch,
+  toggleOnlyUnsavedFilter,
   toggleTutorial
 }

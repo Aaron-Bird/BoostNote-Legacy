@@ -144,6 +144,10 @@ function remap (state) {
   let articles = _articles != null ? _articles.data : []
   let modified = _articles != null ? _articles.modified : []
 
+  if (state.status.onlyUnsaved) {
+    articles = modified.map(modifiedArticle => _.findWhere(articles, {key: modifiedArticle.key}))
+  }
+
   articles.sort((a, b) => {
     return new Date(b.updatedAt) - new Date(a.updatedAt)
   })
