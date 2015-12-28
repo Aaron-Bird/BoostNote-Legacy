@@ -84,6 +84,7 @@ class HomePage extends React.Component {
           ref='top'
           dispatch={dispatch}
           status={status}
+          modified={modified}
         />
         <ArticleList
           ref='list'
@@ -112,7 +113,7 @@ class HomePage extends React.Component {
 
 // Ignore invalid key
 function ignoreInvalidKey (key) {
-  return key.length > 0 && !key.match(/^\/\/$/) && !key.match(/^\/$/) && !key.match(/^#$/)
+  return key.length > 0 && !key.match(/^\/\/$/) && !key.match(/^\/$/) && !key.match(/^#$/) && !key.match(/^--/)
 }
 
 // Build filter object by key
@@ -144,10 +145,6 @@ function remap (state) {
   let articles = _articles != null ? _articles.data : []
   let modified = _articles != null ? _articles.modified : []
 
-  if (state.status.onlyUnsaved) {
-    articles = modified.map(modifiedArticle => _.findWhere(articles, {key: modifiedArticle.key}))
-  }
-
   articles.sort((a, b) => {
     return new Date(b.updatedAt) - new Date(a.updatedAt)
   })
@@ -158,6 +155,7 @@ function remap (state) {
     return sum.concat(article.tags)
   }, []))
 
+  if (status.search.split(' ').some(key => key === '--unsaved')) articles = articles.filter(article => _.findWhere(modified, {key: article.key}))
   // Filter articles
   let filters = status.search.split(' ')
     .map(key => key.trim())

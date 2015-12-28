@@ -5,6 +5,7 @@ export const CLEAR_NEW_ARTICLE = 'CLEAR_NEW_ARTICLE'
 export const ARTICLE_UPDATE = 'ARTICLE_UPDATE'
 export const ARTICLE_DESTROY = 'ARTICLE_DESTROY'
 export const ARTICLE_SAVE = 'ARTICLE_SAVE'
+export const ARTICLE_SAVE_ALL = 'ARTICLE_SAVE_ALL'
 export const ARTICLE_CACHE = 'ARTICLE_CACHE'
 export const FOLDER_CREATE = 'FOLDER_CREATE'
 export const FOLDER_UPDATE = 'FOLDER_UPDATE'
@@ -16,7 +17,6 @@ export const SWITCH_ARTICLE = 'SWITCH_ARTICLE'
 export const SET_SEARCH_FILTER = 'SET_SEARCH_FILTER'
 export const SET_TAG_FILTER = 'SET_TAG_FILTER'
 export const CLEAR_SEARCH = 'CLEAR_SEARCH'
-export const TOGGLE_ONLY_UNSAVED_FILTER = 'TOGGLE_ONLY_UNSAVED_FILTER'
 
 export const TOGGLE_TUTORIAL = 'TOGGLE_TUTORIAL'
 
@@ -48,6 +48,12 @@ export function saveArticle (key, article, forceSwitch) {
   return {
     type: ARTICLE_SAVE,
     data: { key, article, forceSwitch }
+  }
+}
+
+export function saveAllArticles () {
+  return {
+    type: ARTICLE_SAVE_ALL
   }
 }
 
@@ -132,12 +138,6 @@ export function clearSearch () {
   }
 }
 
-export function toggleOnlyUnsavedFilter () {
-  return {
-    type: TOGGLE_ONLY_UNSAVED_FILTER
-  }
-}
-
 export function toggleTutorial () {
   return {
     type: TOGGLE_TUTORIAL
@@ -146,20 +146,23 @@ export function toggleTutorial () {
 
 export default {
   updateUser,
+
   clearNewArticle,
   updateArticle,
   destroyArticle,
   cacheArticle,
   saveArticle,
+  saveAllArticles,
+
   createFolder,
   updateFolder,
   destroyFolder,
   replaceFolder,
+
   switchFolder,
   switchArticle,
   setSearchFilter,
   setTagFilter,
   clearSearch,
-  toggleOnlyUnsavedFilter,
   toggleTutorial
 }

@@ -1,7 +1,35 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import ExternalLink from 'browser/components/ExternalLink'
-import { setSearchFilter, clearSearch, toggleOnlyUnsavedFilter, toggleTutorial } from '../actions'
+import { setSearchFilter, clearSearch, toggleOnlyUnsavedFilter, toggleTutorial, saveAllArticles, switchArticle } from '../actions'
+import store from '../store'
+
+const electron = require('electron')
+const remote = electron.remote
+const Menu = remote.Menu
+const MenuItem = remote.MenuItem
+
+var menu = new Menu()
+var lastIndex = -1
+menu.append(new MenuItem({
+  label: 'Show only unsaved',
+  click: function () {
+    store.dispatch(setSearchFilter('--unsaved'))
+  }
+}))
+menu.append(new MenuItem({
+  label: 'Go to an unsaved article',
+  click: function () {
+    lastIndex++
+    let state = store.getState()
+    let modified = state.articles.modified
+    if (modified.length === 0) return
+    if (modified.length <= lastIndex) {
+      lastIndex = 0
+    }
+    store.dispatch(switchArticle(modified[lastIndex].key))
+  }
+}))
 
 const BRAND_COLOR = '#18AF90'
 
@@ -111,19 +139,28 @@ export default class ArticleTopBar extends React.Component {
     dispatch(toggleOnlyUnsavedFilter())
   }
 
+  handleSaveAllButtonClick (e) {
+    let { dispatch } = this.props
+
+    dispatch(saveAllArticles())
+  }
+
+  handleSaveMenuButtonClick (e) {
+    menu.popup(590, 45)
+  }
+
   handleTutorialButtonClick (e) {
     let { dispatch } = this.props
-    console.log(e.target.value)
 
     dispatch(toggleTutorial())
   }
 
   render () {
-    let { status } = this.props
+    let { status, modified } = this.props
     return (
       <div className='ArticleTopBar'>
-        <div className='left'>
-          <div className='search'>
+        <div className='ArticleTopBar-left'>
+          <div className='ArticleTopBar-left-search'>
             <i className='fa fa-search fa-fw' />
             <input
               ref='searchInput'
@@ -142,16 +179,25 @@ export default class ArticleTopBar extends React.Component {
             <div className={'tooltip' + (this.state.isTooltipHidden ? ' hide' : '')}>
               <ul>
                 <li>- Search by tag : #{'{string}'}</li>
-                <li>- Search by folder : /{'{folder_name}'}</li>
-                <li><small>exact match : //{'{folder_name}'}</small></li>
+                <li>- Search by folder : /{'{folder_name}'}<br/><small>exact match : //{'{folder_name}'}</small></li>
+                <li>- Only unsaved : --unsaved</li>
               </ul>
             </div>
           </div>
 
           {status.isTutorialOpen ? searchTutorialElement : null}
-          <label className='only-unsaved'><input value={status.onlyUnsaved} onChange={e => this.handleOnlyUnsavedChange(e)} type='checkbox'/> only unsaved</label>
+
+          <div className={'ArticleTopBar-left-unsaved'}>
+            <button onClick={e => this.handleSaveAllButtonClick(e)} className='ArticleTopBar-left-unsaved-save-button' disabled={modified.length === 0}>
+              <i className='fa fa-save'/>
+              <span className={'ArticleTopBar-left-unsaved-save-button-count' + (modified.length === 0 ? ' hide' : '')} children={modified.length}/>
+              <span className='ArticleTopBar-left-unsaved-save-button-tooltip' children={`Save all ${modified.length} articles (⌘ + Shift + s)`}></span>
+            </button>
+            <button onClick={e => this.handleSaveMenuButtonClick(e)} className='ArticleTopBar-left-unsaved-menu-button'><i className='fa fa-angle-down'/></button>
+          </div>
         </div>
-        <div className='right'>
+
+        <div className='ArticleTopBar-right'>
           <button onClick={e => this.handleTutorialButtonClick(e)}>?<span className='tooltip'>How to use</span>
           </button>
           <a ref='links' className='linksBtn' href>
@@ -198,5 +244,6 @@ ArticleTopBar.propTypes = {
   dispatch: PropTypes.func,
   status: PropTypes.shape({
     search: PropTypes.string
-  })
+  }),
+  modified: PropTypes.array
 }

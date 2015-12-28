@@ -7,7 +7,6 @@ import {
   SET_SEARCH_FILTER,
   SET_TAG_FILTER,
   CLEAR_SEARCH,
-  TOGGLE_ONLY_UNSAVED_FILTER,
   TOGGLE_TUTORIAL,
 
   // user
@@ -18,6 +17,7 @@ import {
   ARTICLE_DESTROY,
   ARTICLE_CACHE,
   ARTICLE_SAVE,
+  ARTICLE_SAVE_ALL,
 
   // Folder action type
   FOLDER_CREATE,
@@ -31,8 +31,7 @@ import activityRecord from 'browser/lib/activityRecord'
 
 const initialStatus = {
   search: '',
-  isTutorialOpen: false,
-  onlyUnsaved: false
+  isTutorialOpen: false
 }
 
 let data = dataStore.getData()
@@ -195,6 +194,18 @@ function articles (state = initialArticles, action) {
         dataStore.setArticles(state.data)
         return state
       }
+    case ARTICLE_SAVE_ALL:
+      if (state.modified.length > 0) {
+        state.modified.forEach(modifiedArticle => {
+          let targetIndex = _.findIndex(state.data, _article => modifiedArticle.key === _article.key)
+          Object.assign(state.data[targetIndex], modifiedArticle, {key: modifiedArticle.key, updatedAt: new Date()})
+        })
+      }
+
+      state.modified = []
+      dataStore.setArticles(state.data)
+
+      return state
     case ARTICLE_UPDATE:
       {
         let article = action.data.article
@@ -264,10 +275,6 @@ function status (state = initialStatus, action) {
       return state
     case CLEAR_SEARCH:
       state.search = ''
-
-      return state
-    case TOGGLE_ONLY_UNSAVED_FILTER:
-      state.onlyUnsaved = !state.onlyUnsaved
 
       return state
     default:
