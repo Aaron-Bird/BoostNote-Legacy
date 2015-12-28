@@ -91,11 +91,6 @@ export default class ArticleDetail extends React.Component {
     this.state = {
       article: Object.assign({content: ''}, props.activeArticle),
       previewMode: false,
-      isArticleEdited: false,
-      isTagChanged: false,
-      isTitleChanged: false,
-      isContentChanged: false,
-      isModeChanged: false,
       openShareDropdown: false
     }
 
