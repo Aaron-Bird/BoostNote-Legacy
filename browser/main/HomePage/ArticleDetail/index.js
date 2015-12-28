@@ -102,7 +102,7 @@ export default class ArticleDetail extends React.Component {
       openShareDropdown: false
     }
 
-    if (props.activeArticle != null && props.activeArticle.mode === 'markdown') this.state.previewMode = true
+    if (props.activeArticle != null && props.activeArticle.content.trim().length > 0 && props.activeArticle.mode === 'markdown') this.state.previewMode = true
   }
 
   componentDidMount () {
@@ -127,7 +127,7 @@ export default class ArticleDetail extends React.Component {
         previewMode: false
       }
 
-      if (article.mode === 'markdown') {
+      if (article.content.trim().length > 0 && article.mode === 'markdown') {
         nextState.previewMode = true
       }
 
