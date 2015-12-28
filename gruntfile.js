@@ -76,7 +76,7 @@ module.exports = function (grunt) {
       prune: true,
       overwrite: true,
       out: path.join(__dirname, 'dist'),
-      ignore: /submodules\/ace\/(?!src-min)|submodules\/ace\/(?=src-min-noconflict)|node_modules\/devicon\/icons|dist|.env/
+      ignore: /submodules\/ace\/(?!src-min)|submodules\/ace\/(?=src-min-noconflict)|node_modules\/devicon\/icons|dist|^\/browser|^\/secret|\.babelrc|\.gitignore|^\/\.gitmodules|^\/gruntfile|^\/readme.md|^\/webpack/
     }
     switch (platform) {
       case 'win':
@@ -203,6 +203,20 @@ module.exports = function (grunt) {
         break
       case 'osx':
         grunt.task.run(['compile', 'pack:osx', 'codesign', 'create-osx-installer', 'zip:osx'])
+        break
+    }
+  })
+
+  grunt.registerTask('pre-build', function (platform) {
+    if (!platform) {
+      platform = process.platform === 'darwin' ? 'osx' : process.platform === 'win32' ? 'win' : null
+    }
+    switch (platform) {
+      case 'win':
+        grunt.task.run(['compile', 'pack:win'])
+        break
+      case 'osx':
+        grunt.task.run(['compile', 'pack:osx'])
         break
     }
   })
