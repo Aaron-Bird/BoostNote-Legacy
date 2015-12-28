@@ -95,7 +95,7 @@ infoBtnActiveBgColor = #3A3A3A
         line-height 33px
         z-index 1
         pointer-events none
-      .searchClearBtn
+      .ArticleTopBar-left-search-clear-button
         position absolute
         top 6px
         right 10px
@@ -112,20 +112,9 @@ infoBtnActiveBgColor = #3A3A3A
         &:hover
           color white
           background-color topBarBtnBgColor
-    &>.refreshBtn
-      float left
-      width 33px
-      height 33px
-      margin-top 13.5px
-      margin-left 15px
-      border none
-      color refreshBtColor
-      background transparent
-      font-size 18px
-      line-height 18px
-      transition 0.1s
-      &:hover
-        color refreshBtnActiveColor
+        &:active
+          color white
+          background-color darken(topBarBtnBgColor, 35%)
     .ArticleTopBar-left-unsaved
       line-height 33px
       float left
@@ -138,8 +127,15 @@ infoBtnActiveBgColor = #3A3A3A
         border none
         outline none
         color inactiveTextColor
+        width 33px
+        height 33px
+        border-radius 16.5px
+        transition 0.1s
         &:hover
           color inherit
+        &:active
+          color inherit
+          background-color lighten(topBarBtnBgColor, 15%)
         &.ArticleTopBar-left-unsaved-save-button
           position relative
           .ArticleTopBar-left-unsaved-save-button-count
@@ -189,7 +185,7 @@ infoBtnActiveBgColor = #3A3A3A
         .tooltip
           opacity 1
 
-    &>.linksBtn
+    &>.ArticleTopBar-right-links-button
       display block
       position absolute
       top 8px
@@ -199,14 +195,14 @@ infoBtnActiveBgColor = #3A3A3A
         opacity 1
         .tooltip
           opacity 1
-    &>.links-dropdown
+    &>.ArticleTopBar-right-links-button-dropdown
       position fixed
       z-index 50
       right 10px
       top 40px
       background-color transparentify(invBackgroundColor, 80%)
       padding 5px 0
-      .links-item
+      .ArticleTopBar-right-links-button-dropdown-item
         padding 0 10px
         height 33px
         width 100%

@@ -173,7 +173,7 @@ export default class ArticleTopBar extends React.Component {
             />
             {
               this.props.status.search != null && this.props.status.search.length > 0
-                ? <button onClick={e => this.handleSearchClearButton(e)} className='searchClearBtn'><i className='fa fa-times'/></button>
+                ? <button onClick={e => this.handleSearchClearButton(e)} className='ArticleTopBar-left-search-clear-button'><i className='fa fa-times'/></button>
                 : null
             }
             <div className={'tooltip' + (this.state.isTooltipHidden ? ' hide' : '')}>
@@ -200,17 +200,17 @@ export default class ArticleTopBar extends React.Component {
         <div className='ArticleTopBar-right'>
           <button onClick={e => this.handleTutorialButtonClick(e)}>?<span className='tooltip'>How to use</span>
           </button>
-          <a ref='links' className='linksBtn' href>
+          <a ref='links' className='ArticleTopBar-right-links-button' href>
             <img src='../resources/app.png' width='44' height='44'/>
           </a>
           {
             this.state.isLinksDropdownOpen
               ? (
-                <div className='links-dropdown'>
-                  <ExternalLink className='links-item' href='https://b00st.io'>
+                <div className='ArticleTopBar-right-links-button-dropdown'>
+                  <ExternalLink className='ArticleTopBar-right-links-button-dropdown-item' href='https://b00st.io'>
                     <i className='fa fa-fw fa-home'/>Boost official page
                   </ExternalLink>
-                  <ExternalLink className='links-item' href='https://github.com/BoostIO/boost-app-discussions/issues'>
+                  <ExternalLink className='ArticleTopBar-right-links-button-dropdown-item' href='https://github.com/BoostIO/boost-app-discussions/issues'>
                     <i className='fa fa-fw fa-bullhorn'/> Discuss
                   </ExternalLink>
                 </div>
