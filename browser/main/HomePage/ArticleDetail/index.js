@@ -101,6 +101,8 @@ export default class ArticleDetail extends React.Component {
       isModeChanged: false,
       openShareDropdown: false
     }
+
+    if (props.activeArticle != null && props.activeArticle.mode === 'markdown') this.state.previewMode = true
   }
 
   componentDidMount () {
@@ -120,10 +122,16 @@ export default class ArticleDetail extends React.Component {
       let nextModified = nextArticle != null ? _.findWhere(nextProps.modified, {key: nextArticle.key}) : null
 
       let article = Object.assign({}, nextProps.activeArticle, nextModified)
+      let nextState = {
+        article,
+        previewMode: false
+      }
 
-      this.setState({
-        article
-      })
+      if (article.mode === 'markdown') {
+        nextState.previewMode = true
+      }
+
+      this.setState(nextState)
     }
   }
 
@@ -234,7 +242,7 @@ export default class ArticleDetail extends React.Component {
         this.setState({
           previewMode: false
         }, function () {
-          console.log(this.state.cursorPosition)
+          if (this.state.cursorPosition == null) return true
           this.refs.code.moveCursorTo(this.state.cursorPosition.row, this.state.cursorPosition.column)
           this.refs.code.scrollToLine(this.state.firstVisibleRow)
           this.refs.code.editor.focus()
@@ -281,6 +289,14 @@ export default class ArticleDetail extends React.Component {
             />
 
             <div className='ArticleDetail-info-control'>
+              {
+                this.state.article.mode === 'markdown'
+                ? <button onClick={e => this.handleTogglePreviewButtonClick(e)}>
+                    {this.state.previewMode ? <i className='fa fa-fw fa-code'/> : <i className='fa fa-fw fa-image'/>}<span className='tooltip'>Toggle preview (⌘ + p)</span>
+                  </button>
+                : null
+              }
+
               <ShareButton
                 article={activeArticle}
                 user={user}
