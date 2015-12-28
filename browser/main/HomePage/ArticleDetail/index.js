@@ -20,6 +20,7 @@ import DeleteArticleModal from '../../modal/DeleteArticleModal'
 const electron = require('electron')
 const clipboard = electron.clipboard
 const ipc = electron.ipcRenderer
+const remote = electron.remote
 
 const OSX = process.platform === 'darwin'
 const BRAND_COLOR = '#18AF90'
@@ -263,6 +264,7 @@ export default class ArticleDetail extends React.Component {
               break
             }
           }
+          remote.getCurrentWebContents().send('list-focus')
         })
       } else {
         this.setState({
