@@ -34,12 +34,11 @@ infoButton()
         text-align center
         width 100%
         color inactiveTextColor
-  *
-    -webkit-user-select none
   .ArticleDetail-info
     height 70px
     width 100%
     font-size 12px
+    user-select none
     &>.tutorial
       position fixed
       z-index 35
@@ -197,6 +196,7 @@ infoButton()
         border solid 1px borderColor
         border-radius 5px
         transition width 0.15s
+        user-select none
         &.idle
           cursor pointer
           &:hover
@@ -239,7 +239,7 @@ infoButton()
                 background-color darken(white, 10%)
       .ArticleDetail-panel-header-title
         absolute left top
-        right 120px
+        right 145px
         padding 0 15px
         background-color transparent
         input
@@ -256,6 +256,7 @@ infoButton()
       padding 5px 15px
       border-top solid 1px borderColor
       overflow-y auto
+      user-select all
     .CodeEditor
       absolute left right bottom
       top 60px
