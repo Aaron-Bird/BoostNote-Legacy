@@ -137,7 +137,7 @@ function compareArticle (original, modified) {
   var keys = _.keys(_.pick(modified, ['mode', 'title', 'tags', 'content', 'FolderKey']))
 
   return keys.reduce((sum, key) => {
-    if (original[key] !== modified[key]) {
+    if ((key === 'tags' && !_.isEqual(original[key], modified[key])) || (key !== 'tags' && original[key] !== modified[key])) {
       if (sum == null) {
         sum = {
           key: original.key
