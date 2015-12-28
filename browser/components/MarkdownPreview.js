@@ -44,18 +44,23 @@ export default class MarkdownPreview extends React.Component {
     }
   }
 
+  handleDoubleClick (e) {
+    this.props.onDoubleClick(e)
+  }
+
   render () {
     let isEmpty = this.props.content.trim().length === 0
     let content = isEmpty
       ? '(Empty content)'
       : this.props.content
     return (
-      <div className={'MarkdownPreview' + (this.props.className != null ? ' ' + this.props.className : '') + (isEmpty ? ' empty' : '')} dangerouslySetInnerHTML={{__html: ' ' + markdown(content)}}/>
+      <div onDoubleClick={e => this.handleDoubleClick(e)} className={'MarkdownPreview' + (this.props.className != null ? ' ' + this.props.className : '') + (isEmpty ? ' empty' : '')} dangerouslySetInnerHTML={{__html: ' ' + markdown(content)}}/>
     )
   }
 }
 
 MarkdownPreview.propTypes = {
+  onDoubleClick: PropTypes.func,
   className: PropTypes.string,
   content: PropTypes.string
 }

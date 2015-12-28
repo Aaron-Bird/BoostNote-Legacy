@@ -264,6 +264,12 @@ export default class ArticleDetail extends React.Component {
     }
   }
 
+  handlePreviewButtonDoubleClick (e) {
+    this.setState({
+      previewMode: false
+    })
+  }
+
   render () {
     let { folders, status, tags, activeArticle, modified, user } = this.props
     if (activeArticle == null) return this.renderEmpty()
@@ -354,7 +360,7 @@ export default class ArticleDetail extends React.Component {
           {status.isTutorialOpen ? modeSelectTutorialElement : null}
 
           {this.state.previewMode
-            ? <MarkdownPreview ref='preview' content={this.state.article.content}/>
+            ? <MarkdownPreview ref='preview' onDoubleClick={e => this.handlePreviewButtonDoubleClick(e)} content={this.state.article.content}/>
             : (<CodeEditor
                 ref='code'
                 onChange={(e, value) => this.handleContentChange(e, value)}
