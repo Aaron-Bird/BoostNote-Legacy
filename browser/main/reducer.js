@@ -222,7 +222,9 @@ function articles (state = initialArticles, action) {
         let articleKey = action.data.key
 
         let targetIndex = _.findIndex(state.data, _article => articleKey === _article.key)
-        if (targetIndex >= 0) state.splice(targetIndex, 1)
+        if (targetIndex >= 0) state.data.splice(targetIndex, 1)
+        let modifiedIndex = _.findIndex(state.modified, _article => articleKey === _article.key)
+        if (modifiedIndex >= 0) state.modified.splice(modifiedIndex, 1)
 
         dataStore.setArticles(state)
         return state

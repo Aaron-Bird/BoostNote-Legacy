@@ -7,15 +7,15 @@ import CodeEditor from 'browser/components/CodeEditor'
 import {
   switchFolder,
   cacheArticle,
-  saveArticle,
-  destroyArticle
+  saveArticle
 } from '../../actions'
 import linkState from 'browser/lib/linkState'
-import FolderMark from 'browser/components/FolderMark'
 import TagSelect from 'browser/components/TagSelect'
 import ModeSelect from 'browser/components/ModeSelect'
 import activityRecord from 'browser/lib/activityRecord'
 import ShareButton from './ShareButton'
+import { openModal } from 'browser/lib/modal'
+import DeleteArticleModal from '../../modal/DeleteArticleModal'
 
 const electron = require('electron')
 const clipboard = electron.clipboard
@@ -248,6 +248,12 @@ export default class ArticleDetail extends React.Component {
           this.refs.code.editor.focus()
         })
       }
+    }
+  }
+
+  handleDeleteButtonClick (e) {
+    if (this.props.activeArticle) {
+      openModal(DeleteArticleModal, {articleKey: this.props.activeArticle.key})
     }
   }
 
