@@ -9,6 +9,8 @@ const remote = electron.remote
 const Menu = remote.Menu
 const MenuItem = remote.MenuItem
 
+const OSX = process.platform === 'darwin'
+
 var menu = new Menu()
 var lastIndex = -1
 menu.append(new MenuItem({
@@ -191,7 +193,7 @@ export default class ArticleTopBar extends React.Component {
             <button onClick={e => this.handleSaveAllButtonClick(e)} className='ArticleTopBar-left-unsaved-save-button' disabled={modified.length === 0}>
               <i className='fa fa-save'/>
               <span className={'ArticleTopBar-left-unsaved-save-button-count' + (modified.length === 0 ? ' hide' : '')} children={modified.length}/>
-              <span className='ArticleTopBar-left-unsaved-save-button-tooltip' children={`Save all ${modified.length} articles (⌘ + Shift + s)`}></span>
+              <span className='ArticleTopBar-left-unsaved-save-button-tooltip' children={`Save all ${modified.length} articles (${OSX ? '⌘ + Shift + s' : '^ + Shift + s'})`}></span>
             </button>
             <button onClick={e => this.handleSaveMenuButtonClick(e)} className='ArticleTopBar-left-unsaved-menu-button'><i className='fa fa-angle-down'/></button>
           </div>

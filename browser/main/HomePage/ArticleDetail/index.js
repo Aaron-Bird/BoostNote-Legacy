@@ -20,6 +20,7 @@ import DeleteArticleModal from '../../modal/DeleteArticleModal'
 const electron = require('electron')
 const clipboard = electron.clipboard
 
+const OSX = process.platform === 'darwin'
 const BRAND_COLOR = '#18AF90'
 
 const editDeleteTutorialElement = (
@@ -83,16 +84,12 @@ function notify (...args) {
   return new window.Notification(...args)
 }
 
-function makeInstantArticle (article) {
-  return Object.assign({}, article)
-}
-
 export default class ArticleDetail extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      article: makeInstantArticle(props.activeArticle),
+      article: Object.assign({content: ''}, props.activeArticle),
       previewMode: false,
       isArticleEdited: false,
       isTagChanged: false,
@@ -121,7 +118,7 @@ export default class ArticleDetail extends React.Component {
       let nextArticle = nextProps.activeArticle
       let nextModified = nextArticle != null ? _.findWhere(nextProps.modified, {key: nextArticle.key}) : null
 
-      let article = Object.assign({}, nextProps.activeArticle, nextModified)
+      let article = Object.assign({content: ''}, nextProps.activeArticle, nextModified)
       let nextState = {
         article,
         previewMode: false
@@ -304,7 +301,7 @@ export default class ArticleDetail extends React.Component {
               {
                 this.state.article.mode === 'markdown'
                 ? <button onClick={e => this.handleTogglePreviewButtonClick(e)}>
-                    {this.state.previewMode ? <i className='fa fa-fw fa-code'/> : <i className='fa fa-fw fa-image'/>}<span className='tooltip'>Toggle preview (⌘ + p)</span>
+                    {this.state.previewMode ? <i className='fa fa-fw fa-code'/> : <i className='fa fa-fw fa-image'/>}<span className='tooltip'>Toggle preview ({OSX ? '⌘ + p' : '^ + p'})</span>
                   </button>
                 : null
               }
@@ -319,10 +316,10 @@ export default class ArticleDetail extends React.Component {
               </button>
 
               <button onClick={e => this.handleSaveButtonClick(e)}>
-                <i className='fa fa-fw fa-save'/><span className='tooltip'>Save (⌘ + s)</span>
+                <i className='fa fa-fw fa-save'/><span className='tooltip'>Save ({OSX ? '⌘ + s' : '^ + s'})</span>
               </button>
               <button onClick={e => this.handleDeleteButtonClick(e)}>
-                <i className='fa fa-fw fa-trash'/><span className='tooltip'>Delete</span>
+                <i className='fa fa-fw fa-trash'/><span className='tooltip'>Delete (^ + Del)</span>
               </button>
             </div>
           </div>

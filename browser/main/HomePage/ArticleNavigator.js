@@ -66,7 +66,8 @@ export default class ArticleNavigator extends React.Component {
     let { dispatch, folders, status } = this.props
     let { targetFolders } = status
 
-    let FolderKey = targetFolders.length > 0
+    let isFolderFilterApplied = targetFolders.length > 0
+    let FolderKey = isFolderFilterApplied
       ? targetFolders[0].key
       : folders[0].key
 
@@ -82,11 +83,12 @@ export default class ArticleNavigator extends React.Component {
     }
 
     dispatch(saveArticle(newArticle.key, newArticle, true))
+    if (isFolderFilterApplied) dispatch(switchFolder(targetFolders[0].name))
   }
 
   handleNewFolderButton (e) {
-    let { activeUser } = this.props
-    openModal(CreateNewFolder, {user: activeUser})
+    let { user } = this.props
+    openModal(CreateNewFolder, {user: user})
   }
 
   handleFolderButtonClick (name) {
@@ -163,7 +165,7 @@ export default class ArticleNavigator extends React.Component {
 }
 
 ArticleNavigator.propTypes = {
-  activeUser: PropTypes.object,
+  user: PropTypes.object,
   folders: PropTypes.array,
   allArticles: PropTypes.array,
   status: PropTypes.shape({

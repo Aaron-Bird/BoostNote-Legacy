@@ -93,7 +93,9 @@ export function init () {
       content: defaultContent,
       mode: 'markdown',
       key: keygen(),
-      FolderKey: defaultFolder.key
+      FolderKey: defaultFolder.key,
+      createdAt: new Date(),
+      updatedAt: new Date()
     }
 
     data = {
