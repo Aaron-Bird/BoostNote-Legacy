@@ -110,12 +110,14 @@ export function getData () {
 }
 
 export function setArticles (articles) {
+  if (!_.isArray(articles)) throw new Error('Articles must be an array')
   let data = getData()
   data.articles = articles
   jetpack.write(getLocalPath(), data)
 }
 
 export function setFolders (folders) {
+  if (!_.isArray(folders)) throw new Error('Folders must be an array')
   let data = getData()
   data.folders = folders
   jetpack.write(getLocalPath(), data)

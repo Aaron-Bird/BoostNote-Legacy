@@ -226,16 +226,16 @@ function articles (state = initialArticles, action) {
         let modifiedIndex = _.findIndex(state.modified, _article => articleKey === _article.key)
         if (modifiedIndex >= 0) state.modified.splice(modifiedIndex, 1)
 
-        dataStore.setArticles(state)
+        dataStore.setArticles(state.data)
         return state
       }
     case FOLDER_DESTROY:
       {
         let folderKey = action.data.key
 
-        state = state.filter(article => article.FolderKey !== folderKey)
+        state.data = state.data.filter(article => article.FolderKey !== folderKey)
 
-        dataStore.setArticles(state)
+        dataStore.setArticles(state.data)
         return state
       }
     default:
