@@ -257,6 +257,10 @@ infoButton()
       border-top solid 1px borderColor
       overflow-y auto
       user-select all
+      &.empty
+        color lighten(inactiveTextColor, 10%)
+        user-select none
+        font-size 14px
     .CodeEditor
       absolute left right bottom
       top 60px

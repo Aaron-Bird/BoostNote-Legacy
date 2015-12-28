@@ -50,6 +50,7 @@ button, input
     width 250px
     overflow-y auto
     z-index 0
+    user-select none
     &>ul>li
       .articleItem
         padding 10px
@@ -119,5 +120,9 @@ button, input
       overflow-y auto
       .MarkdownPreview
         marked()
+        &.empty
+          color lighten(inactiveTextColor, 10%)
+          user-select none
+          font-size 14px
       .CodeEditor
         absolute top bottom left right

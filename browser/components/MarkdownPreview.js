@@ -45,8 +45,12 @@ export default class MarkdownPreview extends React.Component {
   }
 
   render () {
+    let isEmpty = this.props.content.trim().length === 0
+    let content = isEmpty
+      ? '(Empty content)'
+      : this.props.content
     return (
-      <div className={'MarkdownPreview' + (this.props.className != null ? ' ' + this.props.className : '')} dangerouslySetInnerHTML={{__html: ' ' + markdown(this.props.content)}}/>
+      <div className={'MarkdownPreview' + (this.props.className != null ? ' ' + this.props.className : '') + (isEmpty ? ' empty' : '')} dangerouslySetInnerHTML={{__html: ' ' + markdown(content)}}/>
     )
   }
 }

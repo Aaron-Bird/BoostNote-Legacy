@@ -118,7 +118,7 @@ export default class ArticleList extends React.Component {
               <ModeIcon className='mode' mode={article.mode}/> <div className='title' children={title}/>
             </div>
             <div className='ArticleList-item-middle2'>
-              <pre><code children={article.content.substring(0, 50)}/></pre>
+              <pre><code children={article.content.trim().length === 0 ? '(Empty content)' : article.content.substring(0, 50)}/></pre>
             </div>
             <div className='ArticleList-item-bottom'>
               <div className='tags'><i className='fa fa-fw fa-tags'/>{tagElements}</div>
