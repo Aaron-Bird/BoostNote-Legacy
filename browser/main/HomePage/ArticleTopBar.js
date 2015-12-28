@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom'
 import ExternalLink from 'browser/components/ExternalLink'
 import { setSearchFilter, clearSearch, toggleOnlyUnsavedFilter, toggleTutorial, saveAllArticles, switchArticle } from '../actions'
 import store from '../store'
+import { isModalOpen } from 'browser/lib/modal'
 
 const electron = require('electron')
 const remote = electron.remote
 const Menu = remote.Menu
 const MenuItem = remote.MenuItem
+const ipc = electron.ipcRenderer
 
 const OSX = process.platform === 'darwin'
 
@@ -64,6 +66,15 @@ export default class ArticleTopBar extends React.Component {
   constructor (props) {
     super(props)
 
+    this.saveAllHandler = e => {
+      if (isModalOpen()) return true
+      this.handleSaveAllButtonClick(e)
+    }
+    this.focusSearchHandler = e => {
+      if (isModalOpen()) return true
+      this.focusInput(e)
+    }
+
     this.state = {
       isTooltipHidden: true,
       isLinksDropdownOpen: false
@@ -87,11 +98,17 @@ export default class ArticleTopBar extends React.Component {
       }
     }
     document.addEventListener('click', this.hideLinksDropdown)
+
+    ipc.on('top-save-all', this.saveAllHandler)
+    ipc.on('top-focus-search', this.focusSearchHandler)
   }
 
   componentWillUnmount () {
     document.removeEventListener('click', this.hideLinksDropdown)
     this.linksButton.removeEventListener('click', this.showLinksDropdown())
+
+    ipc.removeListener('top-save-all', this.saveAllHandler)
+    ipc.removeListener('top-focus-search', this.focusSearchHandler)
   }
 
   handleTooltipRequest (e) {
@@ -112,10 +129,10 @@ export default class ArticleTopBar extends React.Component {
       dispatch(clearSearch())
       return
     }
-    this.blurInput()
   }
 
   focusInput () {
+    console.log('focinp')
     this.searchInput.focus()
   }
 
@@ -145,6 +162,7 @@ export default class ArticleTopBar extends React.Component {
     let { dispatch } = this.props
 
     dispatch(saveAllArticles())
+    remote.getCurrentWebContents().send('list-focus')
   }
 
   handleSaveMenuButtonClick (e) {

@@ -7,13 +7,25 @@ import FolderMark from 'browser/components/FolderMark'
 import TagLink from './TagLink'
 import _ from 'lodash'
 
+const electron = require('electron')
+const remote = electron.remote
+const ipc = electron.ipcRenderer
+
 export default class ArticleList extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.focusHandler = e => this.focus()
+  }
+
   componentDidMount () {
     this.refreshTimer = setInterval(() => this.forceUpdate(), 60 * 1000)
+    ipc.on('list-focus', this.focusHandler)
   }
 
   componentWillUnmount () {
     clearInterval(this.refreshTimer)
+    ipc.removeListener('list-focus', this.focusHandler)
   }
 
   componentDidUpdate () {
@@ -34,6 +46,10 @@ export default class ArticleList extends React.Component {
     if (overflowAbove) {
       el.scrollTop = li.offsetTop
     }
+  }
+
+  focus () {
+    ReactDOM.findDOMNode(this).focus()
   }
 
   // 移動ができなかったらfalseを返す:
@@ -65,6 +81,41 @@ export default class ArticleList extends React.Component {
     let { dispatch } = this.props
     return function (e) {
       dispatch(switchArticle(article.key))
+    }
+  }
+
+  handleArticleListKeyDown (e) {
+    console.log(e.keyCode)
+    if (e.metaKey || e.ctrlKey) return true
+
+    if (e.keyCode === 65) {
+      e.preventDefault()
+      remote.getCurrentWebContents().send('nav-new-post')
+    }
+
+    if (e.keyCode === 68) {
+      e.preventDefault()
+      remote.getCurrentWebContents().send('detail-delete')
+    }
+
+    if (e.keyCode === 69) {
+      e.preventDefault()
+      remote.getCurrentWebContents().send('detail-edit')
+    }
+
+    if (e.keyCode === 83) {
+      e.preventDefault()
+      remote.getCurrentWebContents().send('detail-save')
+    }
+
+    if (e.keyCode === 38) {
+      e.preventDefault()
+      this.selectPriorArticle()
+    }
+
+    if (e.keyCode === 40) {
+      e.preventDefault()
+      this.selectNextArticle()
     }
   }
 
@@ -130,7 +181,7 @@ export default class ArticleList extends React.Component {
     })
 
     return (
-      <div className='ArticleList'>
+      <div tabIndex='1' onKeyDown={e => this.handleArticleListKeyDown(e)} className='ArticleList'>
         {articleElements}
       </div>
     )

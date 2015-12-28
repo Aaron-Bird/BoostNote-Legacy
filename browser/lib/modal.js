@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
+const remote = require('electron').remote
+
 class ModalBase extends React.Component {
   constructor (props) {
     super(props)
@@ -13,6 +15,8 @@ class ModalBase extends React.Component {
 
   close () {
     if (modalBase != null) modalBase.setState({component: null, componentProps: null, isHidden: true})
+
+    remote.getCurrentWebContents().send('list-focus')
   }
 
   render () {
@@ -38,9 +42,15 @@ export function openModal (component, props) {
 
 export function closeModal () {
   if (modalBase == null) { return }
-  modalBase.setState({component: null, componentProps: null, isHidden: true})
+  modalBase.close()
 }
 
 export function isModalOpen () {
   return !modalBase.state.isHidden
+}
+
+export default {
+  open: openModal,
+  close: closeModal,
+  isOpen: isModalOpen
 }

@@ -1,11 +1,13 @@
 import React, { PropTypes } from 'react'
 import { findWhere } from 'lodash'
 import { setSearchFilter, switchFolder, saveArticle } from '../actions'
-import { openModal } from 'browser/lib/modal'
+import { openModal, isModalOpen } from 'browser/lib/modal'
 import FolderMark from 'browser/components/FolderMark'
 import Preferences from '../modal/Preferences'
 import CreateNewFolder from '../modal/CreateNewFolder'
 import keygen from 'browser/lib/keygen'
+
+const ipc = require('electron').ipcRenderer
 
 const BRAND_COLOR = '#18AF90'
 
@@ -58,6 +60,28 @@ c-3.4-6.1-8.2-11.3-13.8-15.4C50.2,11.6,31,10.9,15.3,19C13.6,19.8,15.1,22.4,16.8,
 )
 
 export default class ArticleNavigator extends React.Component {
+  constructor (props) {
+    super(props)
+    this.newPostHandler = e => {
+      if (isModalOpen()) return true
+      this.handleNewPostButtonClick(e)
+    }
+    this.newFolderHandler = e => {
+      if (isModalOpen()) return true
+      this.handleNewFolderButton(e)
+    }
+  }
+
+  componentDidMount () {
+    ipc.on('nav-new-post', this.newPostHandler)
+    ipc.on('nav-new-folder', this.newFolderHandler)
+  }
+
+  componentWillUnmount () {
+    ipc.removeListener('nav-new-post', this.newPostHandler)
+    ipc.removeListener('nav-new-folder', this.newFolderHandler)
+  }
+
   handlePreferencesButtonClick (e) {
     openModal(Preferences)
   }
@@ -136,7 +160,7 @@ export default class ArticleNavigator extends React.Component {
         <div className='controlSection'>
           <button onClick={e => this.handleNewPostButtonClick(e)} className='newPostBtn'>
             New Post
-            <span className='tooltip'>Create a new Post ({process.platform === 'darwin' ? '⌘' : '^'} + Enter or a)</span>
+            <span className='tooltip'>Create a new Post ({process.platform === 'darwin' ? '⌘' : '^'} + n)</span>
           </button>
 
           {status.isTutorialOpen ? newPostTutorialElement : null}
@@ -148,7 +172,7 @@ export default class ArticleNavigator extends React.Component {
             <div className='title'>Folders</div>
             <button onClick={e => this.handleNewFolderButton(e)} className='addBtn'>
               <i className='fa fa-fw fa-plus'/>
-              <span className='tooltip'>Create a new folder</span>
+              <span className='tooltip'>Create a new folder ({process.platform === 'darwin' ? '⌘' : '^'} + Shift + n)</span>
             </button>
 
             {status.isTutorialOpen ? newFolderTutorialElement : null}

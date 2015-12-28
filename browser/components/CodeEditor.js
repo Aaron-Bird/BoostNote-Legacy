@@ -2,7 +2,9 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import modes from '../lib/modes'
 import _ from 'lodash'
-var ace = window.ace
+
+const remote = require('electron').remote
+const ace = window.ace
 
 module.exports = React.createClass({
   propTypes: {
@@ -37,6 +39,15 @@ module.exports = React.createClass({
       exec: function (editor) {
         editor.navigateUp(1)
         if (editor.getCursorPosition().row < editor.getFirstVisibleRow()) editor.scrollToLine(editor.getCursorPosition().row, false, false)
+      },
+      readOnly: true
+    })
+    editor.commands.addCommand({
+      name: 'Focus title',
+      bindKey: {win: 'Esc', mac: 'Esc'},
+      exec: function (editor, e) {
+        console.log(e)
+        remote.getCurrentWebContents().send('detail-edit')
       },
       readOnly: true
     })

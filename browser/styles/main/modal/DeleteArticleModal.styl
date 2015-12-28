@@ -1,5 +1,5 @@
 .DeleteArticleModal.modal
-  width 350px
+  width 350px !important
   top 100px
   user-select none
   .title
@@ -21,9 +21,13 @@
       margin-left 5px
       &:hover
         background-color darken(white, 10%)
+      &:focus
+        border-color focusBorderColor
       &.danger
         border-color #E9432A
         background-color #E9432A
         color white
         &:hover
+          background-color lighten(#E9432A, 15%)
+        &:focus
           background-color lighten(#E9432A, 15%)

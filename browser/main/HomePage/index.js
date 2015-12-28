@@ -1,5 +1,6 @@
 import React, { PropTypes} from 'react'
 import { connect } from 'react-redux'
+import ReactDOM from 'react-dom'
 import { toggleTutorial } from '../actions'
 import ArticleNavigator from './ArticleNavigator'
 import ArticleTopBar from './ArticleTopBar'
@@ -26,15 +27,14 @@ class HomePage extends React.Component {
   }
 
   handleKeyDown (e) {
-    let cmdOrCtrl = process.platform === 'darwin' ? e.metaKey : e.ctrlKey
-
     if (isModalOpen()) {
       if (e.keyCode === 27) closeModal()
       return
     }
 
     let { status, dispatch } = this.props
-    let { nav, top, list, detail } = this.refs
+    let { top, list } = this.refs
+    let listElement = ReactDOM.findDOMNode(list)
 
     if (status.isTutorialOpen) {
       dispatch(toggleTutorial())
@@ -42,28 +42,24 @@ class HomePage extends React.Component {
       return
     }
 
-    // Search inputがfocusされていたら大体のキー入力は無視される。
-    if (top.isInputFocused() && !(e.metaKey || e.ctrlKey)) {
-      if (e.keyCode === 13 || e.keyCode === 27) top.escape()
+    if (e.keyCode === 13 && top.isInputFocused()) {
+      listElement.focus()
+      return
+    }
+    if (e.keyCode === 27 && top.isInputFocused()) {
+      if (status.search.length > 0) top.escape()
+      else listElement.focus()
       return
     }
 
-    // `detail`の`openDeleteConfirmMenu`が`true`なら呼ばれない。
-    if (e.keyCode === 27 || (e.keyCode === 70 && cmdOrCtrl)) {
-      top.focusInput()
-    }
-
-    if (e.keyCode === 38) {
-      list.selectPriorArticle()
-    }
-
-    if (e.keyCode === 40) {
-      list.selectNextArticle()
-    }
-
-    if (e.keyCode === 78 && cmdOrCtrl) {
-      nav.handleNewPostButtonClick()
-      e.preventDefault()
+    // Search inputがfocusされていたら大体のキー入力は無視される。
+    if (e.keyCode === 27) {
+      if (document.activeElement !== listElement) {
+        listElement.focus()
+      } else {
+        top.focusInput()
+      }
+      return
     }
   }
 

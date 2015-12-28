@@ -137,6 +137,11 @@ infoBtnActiveBgColor = #3A3A3A
         &:active
           color inherit
           background-color lighten(topBarBtnBgColor, 15%)
+        &:disabled
+          color inactiveTextColor
+          background transparent
+        &:focus
+          color focusBorderColor
         &.ArticleTopBar-left-unsaved-save-button
           position relative
           .ArticleTopBar-left-unsaved-save-button-count
@@ -175,8 +180,10 @@ infoBtnActiveBgColor = #3A3A3A
       background-color infoBtnBgColor
       color bgColor
       border-radius 11px
-      border none
+      border 1px solid bgColor
       transition 0.1s
+      &:focus
+        border-color focusBorderColor
       .tooltip
         tooltip()
         margin-left -50px
@@ -192,6 +199,12 @@ infoBtnActiveBgColor = #3A3A3A
       top 8px
       right 15px
       opacity 0.7
+      border-radius 23px
+      height 46px
+      width 46px
+      border 1px solid transparent
+      &:focus
+        border-color focusBorderColor
       &:hover
         opacity 1
         .tooltip

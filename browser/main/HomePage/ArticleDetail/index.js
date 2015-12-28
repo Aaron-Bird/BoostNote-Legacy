@@ -14,11 +14,12 @@ import TagSelect from 'browser/components/TagSelect'
 import ModeSelect from 'browser/components/ModeSelect'
 import activityRecord from 'browser/lib/activityRecord'
 import ShareButton from './ShareButton'
-import { openModal } from 'browser/lib/modal'
+import { openModal, isModalOpen } from 'browser/lib/modal'
 import DeleteArticleModal from '../../modal/DeleteArticleModal'
 
 const electron = require('electron')
 const clipboard = electron.clipboard
+const ipc = electron.ipcRenderer
 
 const OSX = process.platform === 'darwin'
 const BRAND_COLOR = '#18AF90'
@@ -88,6 +89,23 @@ export default class ArticleDetail extends React.Component {
   constructor (props) {
     super(props)
 
+    this.saveHandler = e => {
+      if (isModalOpen()) return true
+      this.handleSaveButtonClick()
+    }
+    this.deleteHandler = e => {
+      if (isModalOpen()) return true
+      this.handleDeleteButtonClick()
+    }
+    this.togglePreviewHandler = e => {
+      if (isModalOpen()) return true
+      this.handleTogglePreviewButtonClick()
+    }
+    this.editHandler = e => {
+      if (isModalOpen()) return true
+      this.editArticle()
+    }
+
     this.state = {
       article: Object.assign({content: ''}, props.activeArticle),
       previewMode: false,
@@ -102,10 +120,20 @@ export default class ArticleDetail extends React.Component {
     this.shareDropdownInterceptor = e => {
       e.stopPropagation()
     }
+
+    ipc.on('detail-save', this.saveHandler)
+    ipc.on('detail-delete', this.deleteHandler)
+    ipc.on('detail-toggle-preview', this.togglePreviewHandler)
+    ipc.on('detail-edit', this.editHandler)
   }
 
   componentWillUnmount () {
     clearInterval(this.refreshTimer)
+
+    ipc.removeListener('detail-save', this.saveHandler)
+    ipc.removeListener('detail-delete', this.deleteHandler)
+    ipc.removeListener('detail-toggle-preview', this.togglePreviewHandler)
+    ipc.removeListener('detail-on', this.editHandler)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -125,6 +153,12 @@ export default class ArticleDetail extends React.Component {
 
       this.setState(nextState)
     }
+  }
+
+  editArticle () {
+    ReactDOM.findDOMNode(this.refs.title).focus()
+    ReactDOM.findDOMNode(this.refs.title).select()
+    this.setState({previewMode: false})
   }
 
   cacheArticle () {

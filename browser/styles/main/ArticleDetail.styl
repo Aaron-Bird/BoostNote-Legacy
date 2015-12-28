@@ -1,5 +1,4 @@
 noTagsColor = #999
-iptFocusBorderColor = #369DCD
 
 infoButton()
   display inline-block
@@ -7,14 +6,17 @@ infoButton()
   cursor pointer
   height 33px
   width 33px
-  border none
   margin-right 5px
   font-size 18px
   color inactiveTextColor
   background-color white
   padding 0
+  border 1px solid white
+  &:focus
+    border-color focusBorderColor
   &:hover
     color inherit
+
 .ArticleDetail
   absolute right bottom
   top 60px
@@ -55,7 +57,7 @@ infoButton()
       &:hover
         background-color white
       &:focus
-        border-color iptFocusBorderColor
+        border-color focusBorderColor
       &>.tutorial
         position fixed
         z-index 35
@@ -124,11 +126,15 @@ infoButton()
             border-top solid 1px darken(brandColor, 5%)
             border-bottom solid 1px darken(brandColor, 5%)
             border-left solid 1px darken(brandColor, 5%)
+            border-right solid 1px transparent
             border-radius left 2px
             background-color brandColor
             &:hover
               background-color lighten(brandColor, 10%)
               border-color lighten(brandColor, 10%)
+            &:focus
+              background-color lighten(brandColor, 10%)
+              border-color focusBorderColor
           .TagSelect-tags-item-label
             background-color brandColor
             float left
@@ -142,12 +148,13 @@ infoButton()
         input.TagSelect-input
           background-color transparent
           border none
+          border-bottom 1px solid transparent
           outline none
           margin 0 2px
           transition 0.15s
           height 18px
           &:focus
-            font-size 13px
+            border-color focusBorderColor
       .TagSelect-suggest
         position fixed
         width 150px
@@ -208,7 +215,7 @@ infoButton()
             padding 0 5px
             line-height 33px
         &.edit
-          border-color iptFocusBorderColor
+          border-color focusBorderColor
           input
             width 120px
             line-height 31px
