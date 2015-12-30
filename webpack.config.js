@@ -1,8 +1,6 @@
 const skeleton = require('./webpack-skeleton')
 const webpack = require('webpack')
 const path = require('path')
-const JsonpTemplatePlugin = webpack.JsonpTemplatePlugin
-const FunctionModulePlugin = require('webpack/lib/FunctionModulePlugin')
 
 var config = Object.assign({}, skeleton, {
   module: {
@@ -29,13 +27,6 @@ var config = Object.assign({}, skeleton, {
   debug: true,
   devtool: 'eval-source-map'
 })
-
-config.target = function renderer (compiler) {
-  compiler.apply(
-    new JsonpTemplatePlugin(config.output),
-    new FunctionModulePlugin(config.output)
-  )
-}
 
 module.exports = config
 
