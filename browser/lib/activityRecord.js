@@ -41,10 +41,11 @@ Post all records(except today)
 and remove all posted records
 */
 export function postRecords (data) {
-  if (process.env.BOOST_ENV === 'development') {
-    console.log('post failed - on development')
+  if (process.NODE_ENV !== 'production') {
+    console.log('post failed - NOT PRODUCTION ')
     return
   }
+
   let records = getAllRecords()
   records = records.filter(record => {
     return !isSameDate(new Date(), record.date)
