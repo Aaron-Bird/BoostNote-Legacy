@@ -3,8 +3,6 @@ const webpack = require('webpack')
 const path = require('path')
 const NodeTargetPlugin = require('webpack/lib/node/NodeTargetPlugin')
 
-var JsonpTemplatePlugin = webpack.JsonpTemplatePlugin
-var FunctionModulePlugin = require('webpack/lib/FunctionModulePlugin')
 var config = Object.assign({}, skeleton, {
   module: {
     loaders: [
