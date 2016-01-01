@@ -198,7 +198,7 @@ export default class ArticleTopBar extends React.Component {
           {status.isTutorialOpen ? searchTutorialElement : null}
 
           <div className={'ArticleTopBar-left-control'}>
-            <button onClick={e => this.handleNewPostButtonClick(e)}>
+            <button className='ArticleTopBar-left-control-new-post-button' onClick={e => this.handleNewPostButtonClick(e)}>
               <i className='fa fa-plus'/>
               <span className='tooltip'>New Post ({OSX ? '⌘' : '^'} + n)</span>
             </button>

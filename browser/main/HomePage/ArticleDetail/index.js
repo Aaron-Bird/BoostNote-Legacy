@@ -22,7 +22,7 @@ const clipboard = electron.clipboard
 const ipc = electron.ipcRenderer
 const remote = electron.remote
 
-const OSX = process.platform === 'darwin'
+const OSX = global.process.platform === 'darwin'
 const BRAND_COLOR = '#18AF90'
 
 const editDeleteTutorialElement = (
