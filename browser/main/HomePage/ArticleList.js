@@ -85,12 +85,16 @@ export default class ArticleList extends React.Component {
   }
 
   handleArticleListKeyDown (e) {
-    console.log(e.keyCode)
     if (e.metaKey || e.ctrlKey) return true
 
-    if (e.keyCode === 65) {
+    if (e.keyCode === 65 && !e.shiftKey) {
       e.preventDefault()
-      remote.getCurrentWebContents().send('nav-new-post')
+      remote.getCurrentWebContents().send('top-new-post')
+    }
+
+    if (e.keyCode === 65 && e.shiftKey) {
+      e.preventDefault()
+      remote.getCurrentWebContents().send('nav-new-folder')
     }
 
     if (e.keyCode === 68) {
@@ -129,7 +133,7 @@ export default class ArticleList extends React.Component {
         article = Object.assign({}, article, modifiedArticle)
       }
       let tagElements = Array.isArray(article.tags) && article.tags.length > 0
-        ? article.tags.map(tag => {
+        ? article.tags.slice().map(tag => {
           return (<TagLink key={tag} tag={tag}/>)
         })
         : (<span>Not tagged yet</span>)
@@ -189,9 +193,9 @@ export default class ArticleList extends React.Component {
 }
 
 ArticleList.propTypes = {
+  dispatch: PropTypes.func,
   folders: PropTypes.array,
   articles: PropTypes.array,
   modified: PropTypes.array,
-  activeArticle: PropTypes.shape(),
-  dispatch: PropTypes.func
+  activeArticle: PropTypes.shape()
 }

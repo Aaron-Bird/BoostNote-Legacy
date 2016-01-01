@@ -1,39 +1,15 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import ExternalLink from 'browser/components/ExternalLink'
-import { setSearchFilter, clearSearch, toggleOnlyUnsavedFilter, toggleTutorial, saveAllArticles, switchArticle } from '../actions'
-import store from '../store'
+import { setSearchFilter, clearSearch, toggleTutorial, saveArticle, switchFolder } from '../actions'
 import { isModalOpen } from 'browser/lib/modal'
+import keygen from 'browser/lib/keygen'
 
 const electron = require('electron')
 const remote = electron.remote
-const Menu = remote.Menu
-const MenuItem = remote.MenuItem
 const ipc = electron.ipcRenderer
 
-const OSX = process.platform === 'darwin'
-
-var menu = new Menu()
-var lastIndex = -1
-menu.append(new MenuItem({
-  label: 'Show only unsaved',
-  click: function () {
-    store.dispatch(setSearchFilter('--unsaved'))
-  }
-}))
-menu.append(new MenuItem({
-  label: 'Go to an unsaved article',
-  click: function () {
-    lastIndex++
-    let state = store.getState()
-    let modified = state.articles.modified
-    if (modified.length === 0) return
-    if (modified.length <= lastIndex) {
-      lastIndex = 0
-    }
-    store.dispatch(switchArticle(modified[lastIndex].key))
-  }
-}))
+const OSX = global.process.platform === 'darwin'
 
 const BRAND_COLOR = '#18AF90'
 
@@ -74,6 +50,10 @@ export default class ArticleTopBar extends React.Component {
       if (isModalOpen()) return true
       this.focusInput(e)
     }
+    this.newPostHandler = e => {
+      if (isModalOpen()) return true
+      this.handleNewPostButtonClick(e)
+    }
 
     this.state = {
       isTooltipHidden: true,
@@ -101,6 +81,7 @@ export default class ArticleTopBar extends React.Component {
 
     ipc.on('top-save-all', this.saveAllHandler)
     ipc.on('top-focus-search', this.focusSearchHandler)
+    ipc.on('top-new-post', this.newPostHandler)
   }
 
   componentWillUnmount () {
@@ -109,6 +90,7 @@ export default class ArticleTopBar extends React.Component {
 
     ipc.removeListener('top-save-all', this.saveAllHandler)
     ipc.removeListener('top-focus-search', this.focusSearchHandler)
+    ipc.removeListener('top-new-post', this.newPostHandler)
   }
 
   handleTooltipRequest (e) {
@@ -152,21 +134,29 @@ export default class ArticleTopBar extends React.Component {
     this.focusInput()
   }
 
-  handleOnlyUnsavedChange (e) {
-    let { dispatch } = this.props
+  handleNewPostButtonClick (e) {
+    let { dispatch, folders, status } = this.props
+    let { targetFolders } = status
 
-    dispatch(toggleOnlyUnsavedFilter())
-  }
+    let isFolderFilterApplied = targetFolders.length > 0
+    let FolderKey = isFolderFilterApplied
+      ? targetFolders[0].key
+      : folders[0].key
 
-  handleSaveAllButtonClick (e) {
-    let { dispatch } = this.props
+    let newArticle = {
+      key: keygen(),
+      title: '',
+      content: '',
+      mode: 'markdown',
+      tags: [],
+      FolderKey: FolderKey,
+      craetedAt: new Date(),
+      updatedAt: new Date()
+    }
 
-    dispatch(saveAllArticles())
-    remote.getCurrentWebContents().send('list-focus')
-  }
-
-  handleSaveMenuButtonClick (e) {
-    menu.popup(590, 45)
+    dispatch(saveArticle(newArticle.key, newArticle, true))
+    if (isFolderFilterApplied) dispatch(switchFolder(targetFolders[0].name))
+    remote.getCurrentWebContents().send('detail-edit')
   }
 
   handleTutorialButtonClick (e) {
@@ -176,7 +166,7 @@ export default class ArticleTopBar extends React.Component {
   }
 
   render () {
-    let { status, modified } = this.props
+    let { status } = this.props
     return (
       <div className='ArticleTopBar'>
         <div className='ArticleTopBar-left'>
@@ -207,13 +197,11 @@ export default class ArticleTopBar extends React.Component {
 
           {status.isTutorialOpen ? searchTutorialElement : null}
 
-          <div className={'ArticleTopBar-left-unsaved'}>
-            <button onClick={e => this.handleSaveAllButtonClick(e)} className='ArticleTopBar-left-unsaved-save-button' disabled={modified.length === 0}>
-              <i className='fa fa-save'/>
-              <span className={'ArticleTopBar-left-unsaved-save-button-count' + (modified.length === 0 ? ' hide' : '')} children={modified.length}/>
-              <span className='ArticleTopBar-left-unsaved-save-button-tooltip' children={`Save all ${modified.length} articles (${OSX ? '⌘ + Shift + s' : '^ + Shift + s'})`}></span>
+          <div className={'ArticleTopBar-left-control'}>
+            <button onClick={e => this.handleNewPostButtonClick(e)}>
+              <i className='fa fa-plus'/>
+              <span className='tooltip'>New Post ({OSX ? '⌘' : '^'} + n)</span>
             </button>
-            <button onClick={e => this.handleSaveMenuButtonClick(e)} className='ArticleTopBar-left-unsaved-menu-button'><i className='fa fa-angle-down'/></button>
           </div>
         </div>
 
@@ -260,10 +248,9 @@ export default class ArticleTopBar extends React.Component {
 }
 
 ArticleTopBar.propTypes = {
-  search: PropTypes.string,
   dispatch: PropTypes.func,
   status: PropTypes.shape({
     search: PropTypes.string
   }),
-  modified: PropTypes.array
+  folders: PropTypes.array
 }

@@ -138,22 +138,15 @@ export default class ArticleDetail extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.activeArticle == null || this.props.activeArticle == null || nextProps.activeArticle.key !== this.props.activeArticle.key) {
-      let nextArticle = nextProps.activeArticle
-      let nextModified = nextArticle != null ? _.findWhere(nextProps.modified, {key: nextArticle.key}) : null
+    let nextArticle = nextProps.activeArticle
+    let nextModified = nextArticle != null ? _.findWhere(nextProps.modified, {key: nextArticle.key}) : null
 
-      let article = Object.assign({content: ''}, nextProps.activeArticle, nextModified)
-      let nextState = {
-        article,
-        previewMode: false
-      }
-
-      if (article.content.trim().length > 0 && article.mode === 'markdown') {
-        nextState.previewMode = true
-      }
-
-      this.setState(nextState)
+    let article = Object.assign({content: ''}, nextProps.activeArticle, nextModified)
+    let nextState = {
+      article
     }
+
+    this.setState(nextState)
   }
 
   editArticle () {
@@ -404,12 +397,12 @@ export default class ArticleDetail extends React.Component {
 }
 
 ArticleDetail.propTypes = {
+  dispatch: PropTypes.func,
   status: PropTypes.shape(),
-  activeArticle: PropTypes.shape(),
-  modified: PropTypes.array,
+  tags: PropTypes.array,
   user: PropTypes.shape(),
   folders: PropTypes.array,
-  tags: PropTypes.array,
-  dispatch: PropTypes.func
+  modified: PropTypes.array,
+  activeArticle: PropTypes.shape()
 }
 ArticleDetail.prototype.linkState = linkState

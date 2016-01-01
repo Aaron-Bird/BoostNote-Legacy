@@ -1,15 +1,17 @@
 import React, { PropTypes } from 'react'
 import { findWhere } from 'lodash'
-import { setSearchFilter, switchFolder, saveArticle } from '../actions'
+import { setSearchFilter, switchFolder, uncacheArticle, saveAllArticles, switchArticle, clearSearch } from '../actions'
 import { openModal, isModalOpen } from 'browser/lib/modal'
 import FolderMark from 'browser/components/FolderMark'
 import Preferences from '../modal/Preferences'
 import CreateNewFolder from '../modal/CreateNewFolder'
-import keygen from 'browser/lib/keygen'
+import _ from 'lodash'
+import ModeIcon from 'browser/components/ModeIcon'
 
 const ipc = require('electron').ipcRenderer
 
 const BRAND_COLOR = '#18AF90'
+const OSX = global.process.platform === 'darwin'
 
 const preferenceTutorialElement = (
   <svg width='300' height='300' className='tutorial'>
@@ -29,7 +31,7 @@ c-4,0-7.9,0-11.9-0.1C164,294,164,297,165.9,297L165.9,297z'/>
 const newPostTutorialElement = (
   <svg width='900' height='900' className='tutorial'>
     <text x='290' y='155' fill={BRAND_COLOR} fontSize='24'>Create a new post!!</text>
-    <text x='300' y='180' fill={BRAND_COLOR} fontSize='16' children={`press \`${process.platform === 'darwin' ? '⌘' : '^'} + Enter\` or \`a\``}/>
+    <text x='300' y='180' fill={BRAND_COLOR} fontSize='16' children={`press \`${OSX === 'darwin' ? '⌘' : '^'} + Enter\` or \`a\``}/>
     <svg x='130' y='-20' width='400' height='400'>
       <path fill='white' d='M56.2,132.5c11.7-2.9,23.9-6,36.1-4.1c8.7,1.4,16.6,5.5,23.7,10.5c13.3,9.4,24.5,21.5,40.2,27
   c1.8,0.6,2.6-2.3,0.8-2.9c-17.1-6-28.9-20.3-44-29.7c-7-4.4-14.8-7.4-23-8.2c-11.7-1.1-23.3,1.7-34.5,4.5
@@ -62,10 +64,6 @@ c-3.4-6.1-8.2-11.3-13.8-15.4C50.2,11.6,31,10.9,15.3,19C13.6,19.8,15.1,22.4,16.8,
 export default class ArticleNavigator extends React.Component {
   constructor (props) {
     super(props)
-    this.newPostHandler = e => {
-      if (isModalOpen()) return true
-      this.handleNewPostButtonClick(e)
-    }
     this.newFolderHandler = e => {
       if (isModalOpen()) return true
       this.handleNewFolderButton(e)
@@ -73,41 +71,15 @@ export default class ArticleNavigator extends React.Component {
   }
 
   componentDidMount () {
-    ipc.on('nav-new-post', this.newPostHandler)
     ipc.on('nav-new-folder', this.newFolderHandler)
   }
 
   componentWillUnmount () {
-    ipc.removeListener('nav-new-post', this.newPostHandler)
     ipc.removeListener('nav-new-folder', this.newFolderHandler)
   }
 
   handlePreferencesButtonClick (e) {
     openModal(Preferences)
-  }
-
-  handleNewPostButtonClick (e) {
-    let { dispatch, folders, status } = this.props
-    let { targetFolders } = status
-
-    let isFolderFilterApplied = targetFolders.length > 0
-    let FolderKey = isFolderFilterApplied
-      ? targetFolders[0].key
-      : folders[0].key
-
-    let newArticle = {
-      key: keygen(),
-      title: '',
-      content: '',
-      mode: 'markdown',
-      tags: [],
-      FolderKey: FolderKey,
-      craetedAt: new Date(),
-      updatedAt: new Date()
-    }
-
-    dispatch(saveArticle(newArticle.key, newArticle, true))
-    if (isFolderFilterApplied) dispatch(switchFolder(targetFolders[0].name))
   }
 
   handleNewFolderButton (e) {
@@ -127,10 +99,51 @@ export default class ArticleNavigator extends React.Component {
     dispatch(setSearchFilter(''))
   }
 
+  handleUnsavedItemClick (article) {
+    let { dispatch } = this.props
+    return e => {
+      let { articles } = this.props
+      let isInArticleList = articles.some(_article => _article.key === article.key)
+      if (!isInArticleList) dispatch(clearSearch())
+      dispatch(switchArticle(article.key))
+    }
+  }
+
+  handleUncacheButtonClick (article) {
+    let { dispatch } = this.props
+    return e => {
+      dispatch(uncacheArticle(article.key))
+    }
+  }
+
+  handleSaveAllClick (e) {
+    let { dispatch } = this.props
+    dispatch(saveAllArticles())
+  }
+
   render () {
-    let { status, user, folders, allArticles } = this.props
+    let { status, user, folders, allArticles, modified, activeArticle } = this.props
     let { targetFolders } = status
     if (targetFolders == null) targetFolders = []
+
+    let modifiedElements = modified.map(modifiedArticle => {
+      let originalArticle = _.findWhere(allArticles, {key: modifiedArticle.key})
+      if (originalArticle == null) return false
+      let combinedArticle = Object.assign({}, originalArticle, modifiedArticle)
+
+      let className = 'ArticleNavigator-unsaved-list-item'
+      if (activeArticle && activeArticle.key === combinedArticle.key) className += ' active'
+
+      return (
+        <div key={modifiedArticle.key} onClick={e => this.handleUnsavedItemClick(combinedArticle)(e)} className={className}>
+          <div className='ArticleNavigator-unsaved-list-item-label'>
+            <ModeIcon mode={combinedArticle.mode}/>&nbsp;
+            {combinedArticle.title}
+          </div>
+          <button onClick={e => this.handleUncacheButtonClick(combinedArticle)(e)} className='ArticleNavigator-unsaved-list-item-discard-button'><i className='fa fa-times'/></button>
+        </div>
+      )
+    }).filter(modifiedArticle => modifiedArticle).sort((a, b) => a.updatedAt - b.updatedAt)
 
     let folderElememts = folders.map((folder, index) => {
       let isActive = findWhere(targetFolders, {key: folder.key})
@@ -157,22 +170,27 @@ export default class ArticleNavigator extends React.Component {
 
         </div>
 
-        <div className='controlSection'>
-          <button onClick={e => this.handleNewPostButtonClick(e)} className='newPostBtn'>
-            New Post
-            <span className='tooltip'>Create a new Post ({process.platform === 'darwin' ? '⌘' : '^'} + n)</span>
-          </button>
-
-          {status.isTutorialOpen ? newPostTutorialElement : null}
-
+        <div className='ArticleNavigator-unsaved'>
+          <div className='ArticleNavigator-unsaved-header'>Work in progress</div>
+          <div className='ArticleNavigator-unsaved-list'>
+            {modifiedElements.length > 0
+              ? modifiedElements
+              : (
+                <div className='ArticleNavigator-unsaved-list-empty'>Empty list</div>
+              )
+            }
+          </div>
+          <div className='ArticleNavigator-unsaved-control'>
+            <button onClick={e => this.handleSaveAllClick()} className='ArticleNavigator-unsaved-control-save-all-button' disabled={modifiedElements.length === 0}>Save all</button>
+          </div>
         </div>
 
-        <div className='folders'>
-          <div className='header'>
+        <div className='ArticleNavigator-folders'>
+          <div className='ArticleNavigator-folders-header'>
             <div className='title'>Folders</div>
             <button onClick={e => this.handleNewFolderButton(e)} className='addBtn'>
               <i className='fa fa-fw fa-plus'/>
-              <span className='tooltip'>Create a new folder ({process.platform === 'darwin' ? '⌘' : '^'} + Shift + n)</span>
+              <span className='tooltip'>Create a new folder ({OSX === 'darwin' ? '⌘' : '^'} + Shift + n)</span>
             </button>
 
             {status.isTutorialOpen ? newFolderTutorialElement : null}
@@ -189,12 +207,17 @@ export default class ArticleNavigator extends React.Component {
 }
 
 ArticleNavigator.propTypes = {
-  user: PropTypes.object,
-  folders: PropTypes.array,
-  allArticles: PropTypes.array,
+  dispatch: PropTypes.func,
   status: PropTypes.shape({
     folderId: PropTypes.number
   }),
-  dispatch: PropTypes.func
+  user: PropTypes.object,
+  folders: PropTypes.array,
+  allArticles: PropTypes.array,
+  articles: PropTypes.array,
+  modified: PropTypes.array,
+  activeArticle: PropTypes.shape({
+    key: PropTypes.string
+  })
 }
 

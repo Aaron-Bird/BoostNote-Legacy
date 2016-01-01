@@ -1,6 +1,5 @@
 bgColor = #E6E6E6
 inputBgColor = white
-iptFocusBorderColor = #369DCD
 
 topBarBtnColor = #B3B3B3
 topBarBtnBgColor = #B3B3B3
@@ -87,7 +86,7 @@ infoBtnActiveBgColor = #3A3A3A
         line-height 33px
         z-index 0
         &:focus
-          border-color iptFocusBorderColor
+          border-color focusBorderColor
       i.fa.fa-search
         position absolute
         display block
@@ -110,13 +109,15 @@ infoBtnActiveBgColor = #3A3A3A
         line-height 20px
         text-align center
         padding 0
+        &:focus
+          color textColor
         &:hover
           color white
           background-color topBarBtnBgColor
         &:active
           color white
           background-color darken(topBarBtnBgColor, 35%)
-    .ArticleTopBar-left-unsaved
+    .ArticleTopBar-left-control
       line-height 33px
       float left
       height 33px
@@ -132,40 +133,22 @@ infoBtnActiveBgColor = #3A3A3A
         height 33px
         border-radius 16.5px
         transition 0.1s
+        border 1px solid transparent
         &:hover
-          color inherit
+          color textColor
         &:active
-          color inherit
+          color textColor
           background-color lighten(topBarBtnBgColor, 15%)
         &:disabled
           color inactiveTextColor
           background transparent
         &:focus
-          color focusBorderColor
-        &.ArticleTopBar-left-unsaved-save-button
-          position relative
-          .ArticleTopBar-left-unsaved-save-button-count
-            position absolute
-            font-size 10px
-            background-color brandColor
-            color white
-            height 14px
-            width 14px
-            line-height 14px
-            border-radius 7px
-            top 16px
-            right -3px
-            transition 0.15s
-            &.hide
-              transform scale(0)
-          .ArticleTopBar-left-unsaved-save-button-tooltip
-            tooltip()
-            margin-top 30px
-            margin-left -100px
-          &:hover
-            .ArticleTopBar-left-unsaved-save-button-tooltip
-              opacity 1
-
+          color textColor
+        .tooltip
+          tooltip()
+        &:hover
+          .tooltip
+            opacity 1
   &>.ArticleTopBar-right
     float right
     &>button
@@ -183,7 +166,7 @@ infoBtnActiveBgColor = #3A3A3A
       border 1px solid bgColor
       transition 0.1s
       &:focus
-        border-color focusBorderColor
+        background-color lighten(infoBtnActiveBgColor, 15%)
       .tooltip
         tooltip()
         margin-left -50px

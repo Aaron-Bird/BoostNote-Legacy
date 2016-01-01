@@ -64,23 +64,26 @@ class HomePage extends React.Component {
   }
 
   render () {
-    let { dispatch, status, user, articles, allArticles, modified, activeArticle, folders, tags, filters } = this.props
+    let { dispatch, status, user, articles, allArticles, modified, activeArticle, folders, tags } = this.props
 
     return (
       <div className='HomePage'>
         <ArticleNavigator
           ref='nav'
           dispatch={dispatch}
+          status={status}
           user={user}
           folders={folders}
-          status={status}
           allArticles={allArticles}
+          articles={articles}
+          modified={modified}
+          activeArticle={activeArticle}
         />
         <ArticleTopBar
           ref='top'
           dispatch={dispatch}
           status={status}
-          modified={modified}
+          folders={folders}
         />
         <ArticleList
           ref='list'
@@ -88,19 +91,17 @@ class HomePage extends React.Component {
           folders={folders}
           articles={articles}
           modified={modified}
-          status={status}
           activeArticle={activeArticle}
         />
         <ArticleDetail
           ref='detail'
           dispatch={dispatch}
-          user={user}
-          activeArticle={activeArticle}
-          modified={modified}
-          folders={folders}
           status={status}
           tags={tags}
-          filters={filters}
+          user={user}
+          folders={folders}
+          modified={modified}
+          activeArticle={activeArticle}
         />
       </div>
     )
@@ -208,12 +209,7 @@ function remap (state) {
     allArticles,
     modified,
     activeArticle,
-    tags,
-    filters: {
-      folder: folderFilters,
-      tag: tagFilters,
-      text: textFilters
-    }
+    tags
   }
 }
 
@@ -228,11 +224,6 @@ HomePage.propTypes = {
   activeArticle: PropTypes.shape(),
   dispatch: PropTypes.func,
   folders: PropTypes.array,
-  filters: PropTypes.shape({
-    folder: PropTypes.array,
-    tag: PropTypes.array,
-    text: PropTypes.array
-  }),
   tags: PropTypes.array
 }
 

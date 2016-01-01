@@ -56,42 +56,91 @@ articleCount = #999
       &:active
         background-color brandColor
         border-color brandColor
-  .controlSection
-    height 88px
-    padding 22px 15px
-    margin-bottom 44px
-    .tutorial
-      fixed top left
-      z-index 35
-      pointer-event none
-      font-style italic
-      transition 0.1s
-      &.hide
-        opacity 0
-    .newPostBtn
-      position relative
-      border none
-      background-color brandColor
-      color white
-      height 44px
-      width 170px
-      border-radius 5px
-      font-size 20px
-      transition 0.1s
-      z-index 30
-      .tooltip
-        tooltip()
-        margin-left 48px
-        margin-top -3px
-      &:hover
-        background-color lighten(brandColor, 7%)
-        .tooltip
-          opacity 1
-  .folders, .members
-    .header
-      border-bottom 1px solid borderColor
+  .ArticleNavigator-unsaved
+    position absolute
+    top 100px
+    width 100%
+    height 225px
+    .ArticleNavigator-unsaved-header
+      border-bottom 1px solid alpha(borderColor, 0.5)
       padding-bottom 5px
-      margin-bottom 10px
+      clearfix()
+      position relative
+      z-index 30
+      padding-left 10px
+      font-size 18px
+      line-height 22px
+      margin-bottom 5px
+    .ArticleNavigator-unsaved-list
+      .ArticleNavigator-unsaved-list-item
+        height 33px
+        padding-left 15px
+        clearfix()
+        transition 0.1s
+        cursor pointer
+        overflow hidden
+        &:hover
+          background-color alpha(white, 0.05)
+        &.active, &:active
+          background-color alpha(lighten(brandColor, 25%), 70%)
+        .ArticleNavigator-unsaved-list-item-label
+          float left
+          width 151px
+          line-height 33px
+          overflow ellipsis
+        .ArticleNavigator-unsaved-list-item-discard-button
+          float right
+          width 33px
+          line-height 30px
+          height 33px
+          border none
+          background-color transparent
+          color white
+          font-size 18px
+          opacity 0.5
+          &:hover
+            opacity 1
+      .ArticleNavigator-unsaved-list-empty
+        height 33px
+        padding-left 15px
+        color alpha(white, 0.4)
+        transition 0.1s
+        line-height 33px
+        &:hover
+          color alpha(white, 0.6)
+    .ArticleNavigator-unsaved-control
+      absolute bottom
+      height 33px
+      border-top 1px solid alpha(borderColor, 0.5)
+      width 100%
+      .ArticleNavigator-unsaved-control-save-all-button
+        border none
+        background-color transparent
+        font-size 14px
+        color brandColor
+        padding-left 15px
+        width 100%
+        height 33px
+        text-align left
+        &:hover
+          color lighten(brandColor, 15%)
+          background-color alpha(white, 0.05)
+        &:active
+          color white
+        &:disabled
+          color alpha(brandColor, 0.5)
+          &:hover
+            color alpha(lighten(brandColor, 25%), 0.5)
+            background-color transparent
+
+
+  .ArticleNavigator-folders
+    absolute bottom
+    top 365px
+    width 100%
+    .ArticleNavigator-folders-header
+      border-bottom 1px solid alpha(borderColor, 0.5)
+      padding-bottom 5px
       clearfix()
       position relative
       z-index 30
@@ -124,11 +173,6 @@ articleCount = #999
         &:active
           background-color brandColor
           border-color brandColor
-  .folders
-    absolute bottom
-    top 200px
-    width 100%
-    .header
       .tutorial
         position fixed
         z-index 35px
@@ -136,7 +180,7 @@ articleCount = #999
         font-style italic
     .folderList
       absolute bottom
-      top 38px
+      top 33px
       overflow-y auto
     .folderList button
       height 33px
@@ -149,23 +193,9 @@ articleCount = #999
       padding-left 15px
       overflow ellipsis
       &:hover
-        background-color transparentify(white, 5%)
+        background-color alpha(white, 0.05)
       &.active, &:active
-        background-color transparentify(lighten(brandColor, 25%), 70%)
+        background-color alpha(lighten(brandColor, 25%), 70%)
       .articleCount
         color articleCount
         font-size 12px
-  .members
-    .memberList>div
-      height 33px
-      width 200px
-      margin-bottom 5px
-      padding-left 15px
-      .memberImage
-        float left
-        margin-top 5.5px
-        border-radius 11px
-      .memberProfileName
-        float left
-        line-height 33px
-        margin-left 7px
