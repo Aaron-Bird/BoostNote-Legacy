@@ -16,6 +16,8 @@ import {
   ARTICLE_UPDATE,
   ARTICLE_DESTROY,
   ARTICLE_CACHE,
+  ARTICLE_UNCACHE,
+  ARTICLE_UNCACHE_ALL,
   ARTICLE_SAVE,
   ARTICLE_SAVE_ALL,
 
@@ -169,6 +171,16 @@ function articles (state = initialArticles, action) {
         else Object.assign(state.modified[modifiedIndex], modified)
         return state
       }
+    case ARTICLE_UNCACHE:
+      {
+        let targetKey = action.data.key
+        let modifiedIndex = _.findIndex(state.modified, _article => targetKey === _article.key)
+        if (modifiedIndex >= 0) state.modified.splice(modifiedIndex, 1)
+        return state
+      }
+    case ARTICLE_UNCACHE_ALL:
+      state.modified = []
+      return state
     case ARTICLE_SAVE:
       {
         let targetKey = action.data.key

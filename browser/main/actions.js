@@ -1,12 +1,14 @@
 // Action types
 export const USER_UPDATE = 'USER_UPDATE'
 
-export const CLEAR_NEW_ARTICLE = 'CLEAR_NEW_ARTICLE'
 export const ARTICLE_UPDATE = 'ARTICLE_UPDATE'
 export const ARTICLE_DESTROY = 'ARTICLE_DESTROY'
 export const ARTICLE_SAVE = 'ARTICLE_SAVE'
 export const ARTICLE_SAVE_ALL = 'ARTICLE_SAVE_ALL'
 export const ARTICLE_CACHE = 'ARTICLE_CACHE'
+export const ARTICLE_UNCACHE = 'ARTICLE_UNCACHE'
+export const ARTICLE_UNCACHE_ALL = 'ARTICLE_UNCACHE_ALL'
+
 export const FOLDER_CREATE = 'FOLDER_CREATE'
 export const FOLDER_UPDATE = 'FOLDER_UPDATE'
 export const FOLDER_DESTROY = 'FOLDER_DESTROY'
@@ -31,16 +33,23 @@ export function updateUser (input) {
 }
 
 // DB
-export function clearNewArticle () {
-  return {
-    type: CLEAR_NEW_ARTICLE
-  }
-}
-
 export function cacheArticle (key, article) {
   return {
     type: ARTICLE_CACHE,
     data: { key, article }
+  }
+}
+
+export function uncacheArticle (key) {
+  return {
+    type: ARTICLE_UNCACHE,
+    data: { key }
+  }
+}
+
+export function uncacheAllArticles () {
+  return {
+    type: ARTICLE_UNCACHE_ALL
   }
 }
 
@@ -147,10 +156,11 @@ export function toggleTutorial () {
 export default {
   updateUser,
 
-  clearNewArticle,
   updateArticle,
   destroyArticle,
   cacheArticle,
+  uncacheArticle,
+  uncacheAllArticles,
   saveArticle,
   saveAllArticles,
 
