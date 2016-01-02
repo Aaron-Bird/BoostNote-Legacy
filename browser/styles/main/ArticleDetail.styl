@@ -258,23 +258,35 @@ infoButton()
           width 100%
           font-size 24px
           outline none
-    .MarkdownPreview
+    .ArticleDetail-panel-content
       absolute left right bottom
       top 60px
-      marked()
-      box-sizing border-box
-      padding 5px 15px
-      border-top solid 1px borderColor
-      overflow-y auto
-      user-select all
-      &.empty
-        color lighten(inactiveTextColor, 10%)
-        user-select none
-        font-size 14px
-    .CodeEditor
-      absolute left right bottom
-      top 60px
-      border-top solid 1px borderColor
-      min-height 300px
-      border-bottom-left-radius 5px
-      border-bottom-right-radius 5px
+      .ArticleDetail-panel-content-tooltip
+        absolute bottom right
+        height 24px
+        background-color alpha(black, 0.5)
+        line-height 24px
+        color white
+        padding 0 15px
+        opacity 0
+        transition 0.1s
+      &:hover .ArticleDetail-panel-content-tooltip
+        opacity 1
+      .MarkdownPreview
+        absolute top left right bottom
+        marked()
+        box-sizing border-box
+        padding 5px 15px
+        border-top solid 1px borderColor
+        overflow-y auto
+        user-select all
+        &.empty
+          color lighten(inactiveTextColor, 10%)
+          user-select none
+          font-size 14px
+      .CodeEditor
+        absolute top left right bottom
+        border-top solid 1px borderColor
+        min-height 300px
+        border-bottom-left-radius 5px
+        border-bottom-right-radius 5px

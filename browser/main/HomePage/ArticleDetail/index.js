@@ -20,7 +20,6 @@ import DeleteArticleModal from '../../modal/DeleteArticleModal'
 const electron = require('electron')
 const clipboard = electron.clipboard
 const ipc = electron.ipcRenderer
-const remote = electron.remote
 
 const OSX = global.process.platform === 'darwin'
 const BRAND_COLOR = '#18AF90'
@@ -109,7 +108,7 @@ export default class ArticleDetail extends React.Component {
 
     this.state = {
       article: Object.assign({content: ''}, props.activeArticle),
-      previewMode: false,
+      previewMode: true,
       openShareDropdown: false
     }
 
@@ -152,7 +151,6 @@ export default class ArticleDetail extends React.Component {
   editArticle () {
     ReactDOM.findDOMNode(this.refs.title).focus()
     ReactDOM.findDOMNode(this.refs.title).select()
-    this.setState({previewMode: false})
   }
 
   cacheArticle () {
@@ -223,12 +221,6 @@ export default class ArticleDetail extends React.Component {
     }, () => this.cacheArticle())
   }
 
-  handleModeSelectBlur () {
-    if (this.refs.code != null) {
-      this.refs.code.editor.focus()
-    }
-  }
-
   handleContentChange (e, value) {
     let { article } = this.state
     article.content = value
@@ -238,37 +230,11 @@ export default class ArticleDetail extends React.Component {
     }, () => this.cacheArticle())
   }
 
-  handleTogglePreviewButtonClick (e) {
-    if (this.state.article.mode === 'markdown') {
-      if (!this.state.previewMode) {
-        let cursorPosition = this.refs.code.getCursorPosition()
-        let firstVisibleRow = this.refs.code.getFirstVisibleRow()
-        this.setState({
-          previewMode: true,
-          cursorPosition,
-          firstVisibleRow
-        }, function () {
-          let previewEl = ReactDOM.findDOMNode(this.refs.preview)
-          let anchors = previewEl.querySelectorAll('.lineAnchor')
-          for (let i = 0; i < anchors.length; i++) {
-            if (parseInt(anchors[i].dataset.key, 10) > cursorPosition.row || i === anchors.length - 1) {
-              var targetAnchor = anchors[i > 0 ? i - 1 : 0]
-              previewEl.scrollTop = targetAnchor.offsetTop - 100
-              break
-            }
-          }
-          remote.getCurrentWebContents().send('list-focus')
-        })
-      } else {
-        this.setState({
-          previewMode: false
-        }, function () {
-          if (this.state.cursorPosition == null) return true
-          this.refs.code.moveCursorTo(this.state.cursorPosition.row, this.state.cursorPosition.column)
-          this.refs.code.scrollToLine(this.state.firstVisibleRow)
-          this.refs.code.editor.focus()
-        })
-      }
+  handleCodeEditorBlur (e) {
+    if (this.state.article.mode === 'markdown' && !this.state.previewMode) {
+      this.setState({
+        previewMode: true
+      })
     }
   }
 
@@ -285,9 +251,24 @@ export default class ArticleDetail extends React.Component {
     }
   }
 
-  handlePreviewButtonDoubleClick (e) {
+  handleModeSelectKeyDown (e) {
+    if (e.keyCode === 9 && !e.shiftKey) {
+      e.preventDefault()
+      this.setState({previewMode: false}, function () {
+        this.refs.code.editor.focus()
+      })
+    }
+    if (e.keyCode === 9 && e.shiftKey) {
+      e.preventDefault()
+      ReactDOM.findDOMNode(this.refs.title).focus()
+    }
+  }
+
+  handlePreviewDoubleClick (e) {
     this.setState({
       previewMode: false
+    }, function () {
+      this.refs.code.editor.focus()
     })
   }
 
@@ -373,23 +354,33 @@ export default class ArticleDetail extends React.Component {
             <ModeSelect
               ref='mode'
               onChange={e => this.handleModeChange(e)}
+              onKeyDown={e => this.handleModeSelectKeyDown(e)}
               value={this.state.article.mode}
               className='ArticleDetail-panel-header-mode'
-              onBlur={() => this.handleModeSelectBlur()}
             />
           </div>
           {status.isTutorialOpen ? modeSelectTutorialElement : null}
-
-          {this.state.previewMode
-            ? <MarkdownPreview ref='preview' onDoubleClick={e => this.handlePreviewButtonDoubleClick(e)} content={this.state.article.content}/>
-            : (<CodeEditor
-                ref='code'
-                onChange={(e, value) => this.handleContentChange(e, value)}
-                readOnly={false}
-                mode={this.state.article.mode}
-                code={this.state.article.content}
-              />)
-          }
+          <div className='ArticleDetail-panel-content'>
+            {this.state.article.mode === 'markdown' && this.state.previewMode
+              ? (<MarkdownPreview
+                  ref='preview'
+                  onDoubleClick={e => this.handlePreviewDoubleClick(e)}
+                  content={this.state.article.content}
+                />)
+              : (<CodeEditor
+                  ref='code'
+                  onChange={(e, value) => this.handleContentChange(e, value)}
+                  onBlur={e => this.handleCodeEditorBlur(e)}
+                  readOnly={false}
+                  mode={this.state.article.mode}
+                  code={this.state.article.content}
+                />)}
+            {
+              this.state.article.mode === 'markdown' && this.state.previewMode
+              ? <div className='ArticleDetail-panel-content-tooltip'>Double click to edit post</div>
+              : null
+            }
+          </div>
         </div>
       </div>
     )
