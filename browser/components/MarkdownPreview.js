@@ -44,8 +44,16 @@ export default class MarkdownPreview extends React.Component {
     }
   }
 
+  handleClick (e) {
+    if (this.props.onClick) {
+      this.props.onClick(e)
+    }
+  }
+
   handleDoubleClick (e) {
-    this.props.onDoubleClick(e)
+    if (this.props.onDoubleClick) {
+      this.props.onDoubleClick(e)
+    }
   }
 
   render () {
@@ -60,6 +68,7 @@ export default class MarkdownPreview extends React.Component {
 }
 
 MarkdownPreview.propTypes = {
+  onClick: PropTypes.func,
   onDoubleClick: PropTypes.func,
   className: PropTypes.string,
   content: PropTypes.string
