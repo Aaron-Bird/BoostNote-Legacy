@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import modes from '../lib/modes'
 import _ from 'lodash'
@@ -6,26 +6,15 @@ import _ from 'lodash'
 const remote = require('electron').remote
 const ace = window.ace
 
-module.exports = React.createClass({
-  propTypes: {
-    code: React.PropTypes.string,
-    mode: React.PropTypes.string,
-    className: React.PropTypes.string,
-    onChange: React.PropTypes.func,
-    readOnly: React.PropTypes.bool
-  },
-  getDefaultProps: function () {
-    return {
-      readOnly: false
-    }
-  },
-  componentWillReceiveProps: function (nextProps) {
+export default class CodeEditor extends React.Component {
+  componentWillReceiveProps (nextProps) {
     if (nextProps.readOnly !== this.props.readOnly) {
       this.editor.setReadOnly(!!nextProps.readOnly)
     }
-  },
-  componentDidMount: function () {
-    var el = ReactDOM.findDOMNode(this.refs.target)
+  }
+
+  componentDidMount () {
+    var el = ReactDOM.findDOMNode(this)
     var editor = this.editor = ace.edit(el)
     editor.$blockScrolling = Infinity
     editor.setValue(this.props.code)
@@ -33,6 +22,8 @@ module.exports = React.createClass({
     editor.setTheme('ace/theme/xcode')
     editor.clearSelection()
     editor.moveCursorTo(0, 0)
+    editor.setReadOnly(!!this.props.readOnly)
+
     editor.commands.addCommand({
       name: 'Emacs cursor up',
       bindKey: {mac: 'Ctrl-P'},
@@ -46,13 +37,14 @@ module.exports = React.createClass({
       name: 'Focus title',
       bindKey: {win: 'Esc', mac: 'Esc'},
       exec: function (editor, e) {
-        console.log(e)
         remote.getCurrentWebContents().send('detail-edit')
       },
       readOnly: true
     })
 
-    editor.setReadOnly(!!this.props.readOnly)
+    editor.on('blur', () => {
+      if (this.props.onBlur) this.props.onBlur()
+    })
 
     var session = editor.getSession()
     let mode = _.findWhere(modes, {name: this.props.mode})
@@ -65,14 +57,15 @@ module.exports = React.createClass({
     session.setOption('useWorker', false)
     session.setUseWrapMode(true)
 
-    session.on('change', function (e) {
+    session.on('change', e => {
       if (this.props.onChange != null) {
         var value = editor.getValue()
         this.props.onChange(e, value)
       }
-    }.bind(this))
-  },
-  componentDidUpdate: function (prevProps) {
+    })
+  }
+
+  componentDidUpdate (prevProps) {
     if (this.editor.getValue() !== this.props.code) {
       this.editor.setValue(this.props.code)
       this.editor.clearSelection()
@@ -85,22 +78,42 @@ module.exports = React.createClass({
         : 'text'
       session.setMode('ace/mode/' + syntaxMode)
     }
-  },
-  getFirstVisibleRow: function () {
+  }
+
+  getFirstVisibleRow () {
     return this.editor.getFirstVisibleRow()
-  },
-  getCursorPosition: function () {
+  }
+
+  getCursorPosition () {
     return this.editor.getCursorPosition()
-  },
-  moveCursorTo: function (row, col) {
+  }
+
+  moveCursorTo (row, col) {
     this.editor.moveCursorTo(row, col)
-  },
-  scrollToLine: function (num) {
+  }
+
+  scrollToLine (num) {
     this.editor.scrollToLine(num, false, false)
-  },
-  render: function () {
+  }
+
+  render () {
     return (
-      <div ref='target' className={this.props.className == null ? 'CodeEditor' : 'CodeEditor ' + this.props.className}></div>
+      <div className={this.props.className == null ? 'CodeEditor' : 'CodeEditor ' + this.props.className}></div>
     )
   }
-})
+}
+
+CodeEditor.propTypes = {
+  code: PropTypes.string,
+  mode: PropTypes.string,
+  className: PropTypes.string,
+  onChange: PropTypes.func,
+  onBlur: PropTypes.func,
+  readOnly: PropTypes.bool
+}
+
+CodeEditor.defaultProps = {
+  readOnly: false
+}
+
+export default CodeEditor
