@@ -7,19 +7,34 @@ import CodeEditor from 'browser/components/CodeEditor'
 import {
   switchFolder,
   cacheArticle,
-  saveArticle
+  saveArticle,
+  uncacheArticle
 } from '../../actions'
 import linkState from 'browser/lib/linkState'
 import TagSelect from 'browser/components/TagSelect'
 import ModeSelect from 'browser/components/ModeSelect'
-import activityRecord from 'browser/lib/activityRecord'
 import ShareButton from './ShareButton'
 import { openModal, isModalOpen } from 'browser/lib/modal'
 import DeleteArticleModal from '../../modal/DeleteArticleModal'
 
 const electron = require('electron')
-const clipboard = electron.clipboard
 const ipc = electron.ipcRenderer
+const remote = electron.remote
+const { Menu, MenuItem } = remote
+
+const othersMenu = new Menu()
+othersMenu.append(new MenuItem({
+  label: 'Delete Post',
+  click: function () {
+    remote.getCurrentWebContents().send('detail-delete')
+  }
+}))
+othersMenu.append(new MenuItem({
+  label: 'Discard Change',
+  click: function (item) {
+    remote.getCurrentWebContents().send('detail-uncache')
+  }
+}))
 
 const OSX = global.process.platform === 'darwin'
 const BRAND_COLOR = '#18AF90'
@@ -81,10 +96,6 @@ const modeSelectTutorialElement = (
   </svg>
 )
 
-function notify (...args) {
-  return new window.Notification(...args)
-}
-
 export default class ArticleDetail extends React.Component {
   constructor (props) {
     super(props)
@@ -96,6 +107,10 @@ export default class ArticleDetail extends React.Component {
     this.deleteHandler = e => {
       if (isModalOpen()) return true
       this.handleDeleteButtonClick()
+    }
+    this.uncacheHandler = e => {
+      if (isModalOpen()) return true
+      this.handleUncache()
     }
     this.togglePreviewHandler = e => {
       if (isModalOpen()) return true
@@ -123,6 +138,7 @@ export default class ArticleDetail extends React.Component {
 
     ipc.on('detail-save', this.saveHandler)
     ipc.on('detail-delete', this.deleteHandler)
+    ipc.on('detail-uncache', this.uncacheHandler)
     ipc.on('detail-toggle-preview', this.togglePreviewHandler)
     ipc.on('detail-edit', this.editHandler)
   }
@@ -132,6 +148,7 @@ export default class ArticleDetail extends React.Component {
 
     ipc.removeListener('detail-save', this.saveHandler)
     ipc.removeListener('detail-delete', this.deleteHandler)
+    ipc.removeListener('detail-uncache', this.uncacheHandler)
     ipc.removeListener('detail-toggle-preview', this.togglePreviewHandler)
     ipc.removeListener('detail-on', this.editHandler)
   }
@@ -169,14 +186,6 @@ export default class ArticleDetail extends React.Component {
     )
   }
 
-  handleClipboardButtonClick (e) {
-    activityRecord.emit('MAIN_DETAIL_COPY')
-    clipboard.writeText(this.props.activeArticle.content)
-    notify('Saved to Clipboard!', {
-      body: 'Paste it wherever you want!'
-    })
-  }
-
   handleSaveButtonClick (e) {
     let { dispatch, folders, status } = this.props
 
@@ -186,6 +195,11 @@ export default class ArticleDetail extends React.Component {
       let targetFolder = _.findWhere(folders, {key: targetFolderKey})
       dispatch(switchFolder(targetFolder.name))
     }
+  }
+
+  handleOthersButtonClick (e) {
+    let size = remote.getCurrentWindow().getSize()
+    othersMenu.popup(size[0] - 150, 100)
   }
 
   handleFolderKeyChange (e) {
@@ -241,6 +255,13 @@ export default class ArticleDetail extends React.Component {
   handleDeleteButtonClick (e) {
     if (this.props.activeArticle) {
       openModal(DeleteArticleModal, {articleKey: this.props.activeArticle.key})
+    }
+  }
+
+  handleUncache (e) {
+    if (this.props.activeArticle) {
+      let { dispatch, activeArticle } = this.props
+      dispatch(uncacheArticle(activeArticle.key))
     }
   }
 
@@ -303,28 +324,16 @@ export default class ArticleDetail extends React.Component {
             />
 
             <div className='ArticleDetail-info-control'>
-              {
-                this.state.article.mode === 'markdown'
-                ? <button onClick={e => this.handleTogglePreviewButtonClick(e)}>
-                    {this.state.previewMode ? <i className='fa fa-fw fa-code'/> : <i className='fa fa-fw fa-image'/>}<span className='tooltip'>Toggle preview ({OSX ? '⌘ + p' : '^ + p'})</span>
-                  </button>
-                : null
-              }
-
               <ShareButton
                 article={activeArticle}
                 user={user}
                 />
 
-              <button onClick={e => this.handleClipboardButtonClick(e)}>
-                <i className='fa fa-fw fa-clipboard'/><span className='tooltip'>Copy to clipboard</span>
-              </button>
-
               <button onClick={e => this.handleSaveButtonClick(e)}>
                 <i className='fa fa-fw fa-save'/><span className='tooltip'>Save ({OSX ? '⌘ + s' : '^ + s'})</span>
               </button>
-              <button onClick={e => this.handleDeleteButtonClick(e)}>
-                <i className='fa fa-fw fa-trash'/><span className='tooltip'>Delete (^ + Del)</span>
+              <button onClick={e => this.handleOthersButtonClick(e)}>
+                <i className='fa fa-fw fa-angle-down'/>
               </button>
             </div>
           </div>

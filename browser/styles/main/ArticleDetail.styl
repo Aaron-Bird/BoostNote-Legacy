@@ -78,20 +78,73 @@ infoButton()
           .tooltip
             opacity 1
       &>button
-        &:nth-child(1) .tooltip
-          margin-left -85px
-        &:nth-child(3) .tooltip
-          margin-left -80px
-        &:nth-child(4) .tooltip
-          margin-left -60px
-        &:nth-child(5) .tooltip
-          margin-left -100px
+        &:nth-child(2) .tooltip
+          margin-left -65px
       .ShareButton-open-button .tooltip
         margin-left -40px
       .ShareButton-dropdown
         position fixed
+        width 185px
+        z-index 35
+        background-color #F0F0F0
+        padding 4px 0
+        border-radius 5px
+        right 5px
+        top 95px
+        box-shadow 0px 0px 10px 1px #c0c0c0
+        border 1px solid #bcbcbc
         &.hide
           display none
+        &>button
+          background-color transparent
+          height 21px
+          width 100%
+          border none
+          padding-left 20px
+          text-align left
+          font-size 13px
+          font-family 'Helvetica Neue'
+          &:hover
+            background-color #4297FE
+            color white
+        .ShareButton-url
+          height 40px
+          width 100%
+          position relative
+          padding 0 5px
+          .ShareButton-url-input
+            height 21px
+            border none
+            width 143px
+            float left
+            border-top-left-radius 3px
+            border-bottom-left-radius 3px
+            border 1px solid borderColor
+            border-right none
+          .ShareButton-url-button
+            height 21px
+            border none
+            width 30px
+            float left
+            background-color #F0F0F0
+            border-top-right-radius 3px
+            border-bottom-right-radius 3px
+            border 1px solid borderColor
+            .ShareButton-url-button-tooltip
+              tooltip()
+              right 10px
+              margin-top 5px
+            &:hover
+              .ShareButton-url-button-tooltip
+                opacity 1
+            &:active
+              background-color #4297FE
+              color white
+          .ShareButton-url-alert
+            padding 10px
+            line-height 16px
+
+
 
     .TagSelect
       margin-top 5px

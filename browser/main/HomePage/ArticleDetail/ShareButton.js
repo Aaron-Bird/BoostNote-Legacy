@@ -5,6 +5,10 @@ import clientKey from 'browser/lib/clientKey'
 import activityRecord from 'browser/lib/activityRecord'
 const clipboard = require('electron').clipboard
 
+function notify (...args) {
+  return new window.Notification(...args)
+}
+
 function getDefault () {
   return {
     openDropdown: false,
@@ -63,6 +67,15 @@ export default class ShareButton extends React.Component {
 
   closeDropdown () {
     document.removeEventListener('click', this.dropdownHandler)
+    this.setState({openDropdown: false})
+  }
+
+  handleClipboardButtonClick (e) {
+    activityRecord.emit('MAIN_DETAIL_COPY')
+    clipboard.writeText(this.props.article.content)
+    notify('Saved to Clipboard!', {
+      body: 'Paste it wherever you want!'
+    })
     this.setState({openDropdown: false})
   }
 
@@ -135,6 +148,9 @@ export default class ShareButton extends React.Component {
               </div>
             )
           }
+          <button onClick={e => this.handleClipboardButtonClick(e)}>
+            <i className='fa fa-fw fa-clipboard'/>&nbsp;Copy to clipboard
+          </button>
         </div>
       </div>
     )
@@ -143,7 +159,8 @@ export default class ShareButton extends React.Component {
 
 ShareButton.propTypes = {
   article: PropTypes.shape({
-    publicURL: PropTypes.string
+    publicURL: PropTypes.string,
+    content: PropTypes.string
   }),
   user: PropTypes.shape({
     name: PropTypes.string
