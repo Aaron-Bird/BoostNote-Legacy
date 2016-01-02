@@ -99,9 +99,8 @@ export default class ModeSelect extends React.Component {
         e.stopPropagation()
         this.handleBlur()
         break
-      case 9:
-        this.handleBlur()
     }
+    if (this.props.onKeyDown) this.props.onKeyDown(e)
   }
 
   handleSearchChange (e) {
@@ -117,9 +116,10 @@ export default class ModeSelect extends React.Component {
         mode: IDLE_MODE,
         search: '',
         focusIndex: 0
+      }, function () {
+        if (this.props.onBlur) this.props.onBlur()
       })
     }
-    if (this.props.onBlur != null) this.props.onBlur()
   }
 
   render () {
@@ -153,7 +153,7 @@ export default class ModeSelect extends React.Component {
 
     return (
       <div className={className + ' edit'}>
-        <input onKeyDown={e => this.handleSearchKeyDown(e)} ref='search' onChange={e => this.handleSearchChange(e)} value={this.state.search} type='text'/>
+        <input onBlur={e => this.handleBlur(e)} onKeyDown={e => this.handleSearchKeyDown(e)} ref='search' onChange={e => this.handleSearchChange(e)} value={this.state.search} type='text'/>
         <div ref='options' className='ModeSelect-options hide'>
           {filteredOptions}
         </div>
@@ -166,5 +166,6 @@ ModeSelect.propTypes = {
   className: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func,
+  onKeyDown: PropTypes.func,
   onBlur: PropTypes.func
 }
