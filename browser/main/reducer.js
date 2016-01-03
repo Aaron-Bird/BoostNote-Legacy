@@ -272,7 +272,7 @@ function status (state = initialStatus, action) {
       }
       return state
     case SWITCH_FOLDER:
-      state.search = `//${action.data} `
+      state.search = `\/\/${action.data} `
 
       return state
     case SWITCH_ARTICLE:
