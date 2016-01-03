@@ -130,10 +130,11 @@ export default class ModeSelect extends React.Component {
     if (this.state.mode === IDLE_MODE) {
       let mode = _.findWhere(modes, {name: this.props.value})
       let modeName = mode != null ? mode.name : 'text'
+      let modeLabel = mode != null ? mode.label : this.props.value
 
       return (
         <div className={className + ' idle'} onClick={e => this.handleIdleSelectClick(e)}>
-          <ModeIcon mode={modeName}/>{mode.label}
+          <ModeIcon mode={modeName}/>{modeLabel}
         </div>
       )
     }
