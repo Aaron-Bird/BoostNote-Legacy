@@ -1,4 +1,18 @@
 marked()
+  a
+    color brandColor
+    text-decoration none
+    padding 5px
+    border-radius 5px
+    margin -5px
+    transition 0.1s
+    &:hover
+      color lighten(brandColor, 5%)
+      text-decoration underline
+      background-color alpha(#FFC95C, 0.3)
+      transform scale(1.1)
+    &:visited
+      color brandColor
   hr
     border-top none
     border-bottom solid 1px borderColor
