@@ -2,8 +2,6 @@ import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import moment from 'moment'
 import _ from 'lodash'
-import MarkdownPreview from 'browser/components/MarkdownPreview'
-import CodeEditor from 'browser/components/CodeEditor'
 import {
   switchFolder,
   cacheArticle,
@@ -16,7 +14,7 @@ import ModeSelect from 'browser/components/ModeSelect'
 import ShareButton from './ShareButton'
 import { openModal, isModalOpen } from 'browser/lib/modal'
 import DeleteArticleModal from '../../modal/DeleteArticleModal'
-
+import ArticleEditor from './ArticleEditor'
 const electron = require('electron')
 const ipc = electron.ipcRenderer
 const remote = electron.remote
@@ -275,22 +273,12 @@ export default class ArticleDetail extends React.Component {
   handleModeSelectKeyDown (e) {
     if (e.keyCode === 9 && !e.shiftKey) {
       e.preventDefault()
-      this.setState({previewMode: false}, function () {
-        this.refs.code.editor.focus()
-      })
+      this.refs.editor.switchEditMode()
     }
     if (e.keyCode === 9 && e.shiftKey) {
       e.preventDefault()
       ReactDOM.findDOMNode(this.refs.title).focus()
     }
-  }
-
-  handlePreviewDoubleClick (e) {
-    this.setState({
-      previewMode: false
-    }, function () {
-      this.refs.code.editor.focus()
-    })
   }
 
   render () {
@@ -369,27 +357,12 @@ export default class ArticleDetail extends React.Component {
             />
           </div>
           {status.isTutorialOpen ? modeSelectTutorialElement : null}
-          <div className='ArticleDetail-panel-content'>
-            {this.state.article.mode === 'markdown' && this.state.previewMode
-              ? (<MarkdownPreview
-                  ref='preview'
-                  onDoubleClick={e => this.handlePreviewDoubleClick(e)}
-                  content={this.state.article.content}
-                />)
-              : (<CodeEditor
-                  ref='code'
-                  onChange={(e, value) => this.handleContentChange(e, value)}
-                  onBlur={e => this.handleCodeEditorBlur(e)}
-                  readOnly={false}
-                  mode={this.state.article.mode}
-                  code={this.state.article.content}
-                />)}
-            {
-              this.state.article.mode === 'markdown' && this.state.previewMode
-              ? <div className='ArticleDetail-panel-content-tooltip'>Double click to edit post</div>
-              : null
-            }
-          </div>
+          <ArticleEditor
+            ref='editor'
+            content={this.state.article.content}
+            mode={this.state.article.mode}
+            onChange={(e, content) => this.handleContentChange(e, content)}
+          />
         </div>
       </div>
     )
