@@ -35,6 +35,7 @@ othersMenu.append(new MenuItem({
 }))
 
 const BRAND_COLOR = '#18AF90'
+const OSX = global.process.platform === 'darwin'
 
 const editDeleteTutorialElement = (
   <svg width='300' height='500' className='tutorial'>
@@ -318,6 +319,7 @@ export default class ArticleDetail extends React.Component {
                   disabled={!isUnsaved}
                   >
                   <i className='fa fa-fw fa-save'/>&nbsp;Save
+                  <span className='tooltip' children={`Save Post (${OSX ? '⌘' : '^'} + S)`}/>
                 </button>
               </div>
 

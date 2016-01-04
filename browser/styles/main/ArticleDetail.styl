@@ -110,6 +110,13 @@ infoButton()
         &:focus
           color white
           background-color lighten(brandColor, 15%)
+        .tooltip
+          tooltip()
+          margin-top 30px
+          margin-left -90px
+        &:hover .tooltip
+          opacity 1
+
       .ShareButton-open-button .tooltip
         margin-left -40px
       .ShareButton-dropdown
@@ -121,7 +128,7 @@ infoButton()
         border-radius 5px
         right 5px
         top 95px
-        box-shadow 0px 0px 10px 1px #c0c0c0
+        box-shadow 0px 0px 10px 1px alpha(#bbb, 0.8)
         border 1px solid #bcbcbc
         &.hide
           display none
@@ -133,7 +140,7 @@ infoButton()
           padding-left 20px
           text-align left
           font-size 13px
-          font-family 'Helvetica Neue'
+          font-family '.HelveticaNeueDeskInterface-Regular'
           &:hover
             background-color #4297FE
             color white

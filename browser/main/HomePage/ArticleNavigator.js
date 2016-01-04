@@ -186,7 +186,7 @@ export default class ArticleNavigator extends React.Component {
             <div className='title'>Folders</div>
             <button onClick={e => this.handleNewFolderButton(e)} className='addBtn'>
               <i className='fa fa-fw fa-plus'/>
-              <span className='tooltip'>Create a new folder ({OSX === 'darwin' ? '⌘' : '^'} + Shift + n)</span>
+              <span className='tooltip'>Create a new folder ({OSX ? '⌘' : '^'} + Shift + n)</span>
             </button>
 
             {status.isTutorialOpen ? newFolderTutorialElement : null}
