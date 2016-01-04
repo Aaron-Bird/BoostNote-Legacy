@@ -143,7 +143,11 @@ function remap (state) {
   let modified = _articles != null ? _articles.modified : []
 
   articles.sort((a, b) => {
-    return new Date(b.updatedAt) - new Date(a.updatedAt)
+    let match = new Date(b.updatedAt) - new Date(a.updatedAt)
+    if (match === 0) match = new Date(b.createdAt) - new Date(a.createdAt)
+    if (match === 0) match = b.title.compare(a.title)
+    if (match === 0) match = b.key.compare(a.key)
+    return match
   })
   let allArticles = articles.slice()
 
