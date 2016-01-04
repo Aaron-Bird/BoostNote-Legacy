@@ -1,16 +1,18 @@
 marked()
+  font-size 14px
   a
     color brandColor
     text-decoration none
-    padding 5px
+    padding 0 5px
     border-radius 5px
     margin -5px
-    transition 0.1s
+    transition .1s
+    display inline-block
     &:hover
       color lighten(brandColor, 5%)
       text-decoration underline
       background-color alpha(#FFC95C, 0.3)
-      transform scale(1.1)
+      transform scale(1.2)
     &:visited
       color brandColor
   hr
