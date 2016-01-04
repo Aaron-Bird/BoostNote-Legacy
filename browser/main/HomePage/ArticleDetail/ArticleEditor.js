@@ -78,7 +78,12 @@ export default class ArticleEditor extends React.Component {
           mode={this.props.mode}
           code={this.props.content}
         />
-        <div className='ArticleDetail-panel-content-tooltip'>Press ESC to watch Preview</div>
+        {this.props.mode === 'markdown'
+          ? (
+            <div className='ArticleDetail-panel-content-tooltip'>Press ESC to watch Preview</div>
+          )
+          : null
+        }
       </div>
     )
   }
