@@ -144,6 +144,7 @@ export default class ArticleNavigator extends React.Component {
         </div>
       )
     }).filter(modifiedArticle => modifiedArticle).sort((a, b) => a.updatedAt - b.updatedAt)
+    let hasModified = modifiedElements.length > 0
 
     let folderElememts = folders.map((folder, index) => {
       let isActive = findWhere(targetFolders, {key: folder.key})
@@ -170,22 +171,17 @@ export default class ArticleNavigator extends React.Component {
 
         </div>
 
-        <div className='ArticleNavigator-unsaved'>
+        <div className={'ArticleNavigator-unsaved' + (hasModified ? '' : ' hide')}>
           <div className='ArticleNavigator-unsaved-header'>Work in progress</div>
           <div className='ArticleNavigator-unsaved-list'>
-            {modifiedElements.length > 0
-              ? modifiedElements
-              : (
-                <div className='ArticleNavigator-unsaved-list-empty'>Empty list</div>
-              )
-            }
+            {modifiedElements}
           </div>
           <div className='ArticleNavigator-unsaved-control'>
             <button onClick={e => this.handleSaveAllClick()} className='ArticleNavigator-unsaved-control-save-all-button' disabled={modifiedElements.length === 0}>Save all</button>
           </div>
         </div>
 
-        <div className='ArticleNavigator-folders'>
+        <div className={'ArticleNavigator-folders' + (hasModified ? '' : ' expand')}>
           <div className='ArticleNavigator-folders-header'>
             <div className='title'>Folders</div>
             <button onClick={e => this.handleNewFolderButton(e)} className='addBtn'>

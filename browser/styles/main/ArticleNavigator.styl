@@ -61,12 +61,14 @@ articleCount = #999
     top 100px
     width 100%
     height 225px
+    transition opacity 0.2s ease-in-out
+    &.hide
+      opacity 0.2
     .ArticleNavigator-unsaved-header
       border-bottom 1px solid alpha(borderColor, 0.5)
       padding-bottom 5px
       clearfix()
       position relative
-      z-index 30
       padding-left 10px
       font-size 18px
       line-height 22px
@@ -140,6 +142,10 @@ articleCount = #999
     absolute bottom
     top 365px
     width 100%
+    transition top 0.15s ease-in-out
+    background-color articleNavBgColor
+    &.expand
+      top 100px
     .ArticleNavigator-folders-header
       border-bottom 1px solid alpha(borderColor, 0.5)
       padding-bottom 5px

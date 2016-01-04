@@ -34,7 +34,6 @@ othersMenu.append(new MenuItem({
   }
 }))
 
-const OSX = global.process.platform === 'darwin'
 const BRAND_COLOR = '#18AF90'
 
 const editDeleteTutorialElement = (
@@ -312,14 +311,21 @@ export default class ArticleDetail extends React.Component {
             />
 
             <div className='ArticleDetail-info-control'>
+              <div className={'ArticleDetail-info-control-save' + (!isUnsaved ? ' hide' : '')}>
+                <button
+                  onClick={e => this.handleSaveButtonClick(e)}
+                  className='ArticleDetail-info-control-save-button'
+                  disabled={!isUnsaved}
+                  >
+                  <i className='fa fa-fw fa-save'/>&nbsp;Save
+                </button>
+              </div>
+
               <ShareButton
                 article={activeArticle}
                 user={user}
                 />
 
-              <button onClick={e => this.handleSaveButtonClick(e)}>
-                <i className='fa fa-fw fa-save'/><span className='tooltip'>Save ({OSX ? '⌘ + s' : '^ + s'})</span>
-              </button>
               <button onClick={e => this.handleOthersButtonClick(e)}>
                 <i className='fa fa-fw fa-angle-down'/>
               </button>

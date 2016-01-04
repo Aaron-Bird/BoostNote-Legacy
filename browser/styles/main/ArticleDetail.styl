@@ -6,6 +6,7 @@ infoButton()
   cursor pointer
   height 33px
   width 33px
+  line-height 33px
   margin-right 5px
   font-size 18px
   color inactiveTextColor
@@ -67,8 +68,10 @@ infoButton()
         color brandColor
     .ArticleDetail-info-control
       float right
+      clearfix
       .ShareButton
-        display inline-block
+        display block
+        float left
       &>button, .ShareButton-open-button
         infoButton()
         .tooltip
@@ -78,8 +81,35 @@ infoButton()
           .tooltip
             opacity 1
       &>button
-        &:nth-child(2) .tooltip
+        float left
+        &:nth-child(1) .tooltip
           margin-left -65px
+      .ArticleDetail-info-control-save
+        float left
+        width 80px
+        margin-right 5px
+        overflow hidden
+        transition width 0.15s ease-in-out
+        border-radius 16.5px
+        &.hide
+          width 0px
+          opacity 0.2
+      .ArticleDetail-info-control-save-button
+        infoButton()
+        background-color brandColor
+        color white
+        font-size 12px
+        width 100%
+        border 1px solid brandBorderColor
+        white-space nowrap
+        .fa
+          font-size 18px
+        &:hover
+          color white
+          background-color lighten(brandColor, 15%)
+        &:focus
+          color white
+          background-color lighten(brandColor, 15%)
       .ShareButton-open-button .tooltip
         margin-left -40px
       .ShareButton-dropdown
