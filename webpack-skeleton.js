@@ -30,7 +30,8 @@ var config = {
     'moment',
     'highlight.js',
     'markdown-it-emoji',
-    'fs-jetpack'
+    'fs-jetpack',
+    'markdown-it-math'
   ]
 }
 

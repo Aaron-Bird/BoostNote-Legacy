@@ -6,6 +6,8 @@ var ReactDOM = require('react-dom')
 const electron = require('electron')
 const shell = electron.shell
 
+const katex = window.katex
+
 function handleAnchorClick (e) {
   e.preventDefault()
   e.stopPropagation()
@@ -17,13 +19,27 @@ function stopPropagation (e) {
   e.stopPropagation()
 }
 
+function math2Katex (display) {
+  return function (el) {
+    try {
+      katex.render(el.innerHTML, el, {display: display})
+      el.className = 'math-rendered'
+    } catch (e) {
+      el.innerHTML = e.message
+      el.className = 'math-failed'
+    }
+  }
+}
+
 export default class MarkdownPreview extends React.Component {
   componentDidMount () {
     this.addListener()
+    this.renderMath()
   }
 
   componentDidUpdate () {
     this.addListener()
+    this.renderMath()
   }
 
   componentWillUnmount () {
@@ -32,6 +48,13 @@ export default class MarkdownPreview extends React.Component {
 
   componentWillUpdate () {
     this.removeListener()
+  }
+
+  renderMath () {
+    let inline = ReactDOM.findDOMNode(this).querySelectorAll('span.math')
+    Array.prototype.forEach.call(inline, math2Katex(false))
+    let block = ReactDOM.findDOMNode(this).querySelectorAll('div.math')
+    Array.prototype.forEach.call(block, math2Katex(true))
   }
 
   addListener () {

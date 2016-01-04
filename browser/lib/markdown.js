@@ -1,6 +1,7 @@
 import markdownit from 'markdown-it'
 import hljs from 'highlight.js'
 import emoji from 'markdown-it-emoji'
+import math from 'markdown-it-math'
 
 var md = markdownit({
   typographer: true,
@@ -20,6 +21,14 @@ var md = markdownit({
   }
 })
 md.use(emoji)
+md.use(math, {
+  inlineRenderer: function (str) {
+    return `<span class='math'>${str}</span>`
+  },
+  blockRenderer: function (str) {
+    return `<div class='math'>${str}</div>`
+  }
+})
 
 let originalRenderToken = md.renderer.renderToken
 md.renderer.renderToken = function renderToken (tokens, idx, options) {
