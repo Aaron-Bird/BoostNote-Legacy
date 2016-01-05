@@ -138,7 +138,9 @@ export default class ArticleNavigator extends React.Component {
         <div key={modifiedArticle.key} onClick={e => this.handleUnsavedItemClick(combinedArticle)(e)} className={className}>
           <div className='ArticleNavigator-unsaved-list-item-label'>
             <ModeIcon mode={combinedArticle.mode}/>&nbsp;
-            {combinedArticle.title}
+            {combinedArticle.title.trim().length > 0
+              ? combinedArticle.title
+              : <span className='ArticleNavigator-unsaved-list-item-label-untitled'>(Untitled)</span>}
           </div>
           <button onClick={e => this.handleUncacheButtonClick(combinedArticle)(e)} className='ArticleNavigator-unsaved-list-item-discard-button'><i className='fa fa-times'/></button>
         </div>

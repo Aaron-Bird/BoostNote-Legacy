@@ -1,16 +1,34 @@
-var React = require('react')
-var { PropTypes } = React
+import React, { PropTypes } from 'react'
 import markdown from '../lib/markdown'
-var ReactDOM = require('react-dom')
+import ReactDOM from 'react-dom'
+import sanitizeHtml from '@rokt33r/sanitize-html'
+import hljs from 'highlight.js'
 
 const electron = require('electron')
 const shell = electron.shell
 
 const katex = window.katex
 
+const sanitizeOpts = {
+  allowedTags: [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
+  'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
+  'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'img', 'span', 'cite', 'del', 'u' ],
+  allowedClasses: {
+    'a': ['lineAnchor'],
+    'div': ['math'],
+    'span': ['math', 'hljs-*'],
+    'code': ['language-*']
+  },
+  allowedAttributes: {
+    a: ['href', 'data-key'],
+    img: [ 'src' ]
+  }
+}
+
 function handleAnchorClick (e) {
   e.preventDefault()
   e.stopPropagation()
+  console.log(e.target.href)
   shell.openExternal(e.target.href)
 }
 
@@ -34,11 +52,13 @@ function math2Katex (display) {
 export default class MarkdownPreview extends React.Component {
   componentDidMount () {
     this.addListener()
+    // this.renderCode()
     this.renderMath()
   }
 
   componentDidUpdate () {
     this.addListener()
+    // this.renderCode()
     this.renderMath()
   }
 
@@ -48,6 +68,20 @@ export default class MarkdownPreview extends React.Component {
 
   componentWillUpdate () {
     this.removeListener()
+  }
+
+  renderCode () {
+    let codes = ReactDOM.findDOMNode(this).querySelectorAll('code:not(.rendered)')
+    Array.prototype.forEach.call(codes, el => {
+      let matched = el.className.match(/language-(.+)/)
+      let lang = matched ? matched[1] : null
+      try {
+        let result = hljs.highlight(lang, el.innerHTML)
+        el.innerHTML = result.value
+        el.className += ' rendered'
+      } catch (e) {
+      }
+    })
   }
 
   renderMath () {
@@ -112,6 +146,9 @@ export default class MarkdownPreview extends React.Component {
     let content = isEmpty
       ? '(Empty content)'
       : this.props.content
+    content = markdown(content)
+    content = sanitizeHtml(content, sanitizeOpts)
+
     return (
       <div
         className={'MarkdownPreview' + (this.props.className != null ? ' ' + this.props.className : '') + (isEmpty ? ' empty' : '')}
@@ -120,7 +157,7 @@ export default class MarkdownPreview extends React.Component {
         onMouseDown={e => this.handleMouseDown(e)}
         onMouseMove={e => this.handleMouseMove(e)}
         onMouseUp={e => this.handleMouseUp(e)}
-        dangerouslySetInnerHTML={{__html: ' ' + markdown(content)}}
+        dangerouslySetInnerHTML={{__html: ' ' + content}}
       />
     )
   }

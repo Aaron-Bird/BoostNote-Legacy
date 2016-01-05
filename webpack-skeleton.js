@@ -31,7 +31,8 @@ var config = {
     'highlight.js',
     'markdown-it-emoji',
     'fs-jetpack',
-    'markdown-it-math'
+    'markdown-it-math',
+    '@rokt33r/sanitize-html'
   ]
 }
 

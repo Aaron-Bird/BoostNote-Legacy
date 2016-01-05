@@ -26,6 +26,7 @@ marked()
       padding 0
       margin 0
       display inline
+      font-size 0
   hr
     border-top none
     border-bottom solid 1px borderColor
@@ -33,7 +34,7 @@ marked()
   h1, h2, h3, h4, h5, h6
     margin 0 0 15px
     font-weight 600
-  * + h1, * + h2, * + h3, * + h4, * + h5, * + h6
+  *:not(a.lineAnchor) + h1, *:not(a.lineAnchor) + h2, *:not(a.lineAnchor) + h3, *:not(a.lineAnchor) + h4, *:not(a.lineAnchor) + h5, *:not(a.lineAnchor) + h6
     margin-top 25px
   h1
     font-size 2em
@@ -55,26 +56,28 @@ marked()
     font-size 0.8em
     line-height 1em
 
-  * + p, * + blockquote, * + ul, * + ol, * + pre
+  *:not(a.lineAnchor) + p, *:not(a.lineAnchor) + blockquote, *:not(a.lineAnchor) + ul, *:not(a.lineAnchor) + ol, *:not(a.lineAnchor) + pre
     margin-top 15px
   p
     line-height 1.9em
     margin 0 0 15px
   img
     max-width 100%
-  strong
+  strong, b
     font-weight bold
-  em
+  em, i
     font-style italic
   s
     text-decoration line-through
+  u
+    text-decoration underline
   blockquote
     border-left solid 4px brandBorderColor
     margin 0 0 15px
     padding 0 25px
   ul
     list-style-type disc
-    padding-left 35px
+    padding-left 25px
     margin-bottom 15px
     li
       display list-item
@@ -87,7 +90,7 @@ marked()
         list-style-type square
   ol
     list-style-type decimal
-    padding-left 35px
+    padding-left 25px
     margin-bottom 15px
     li
       display list-item
@@ -97,18 +100,18 @@ marked()
   code
     font-family Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro, monospace
     padding 2px 4px
-    border solid 1px borderColor
+    border solid 1px alpha(borderColor, 0.3)
     border-radius 4px
     font-size 0.9em
     color black
     text-decoration none
     background-color #F6F6F6
     margin-right 2px
-  * + code
+  *:not(a.lineAnchor) + code
     margin-left 2px
   pre
     padding 5px
-    border solid 1px borderColor
+    border solid 1px alpha(borderColor, 0.3)
     border-radius 5px
     overflow-x auto
     margin 0 0 15px

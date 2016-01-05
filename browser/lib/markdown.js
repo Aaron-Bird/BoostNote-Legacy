@@ -1,23 +1,20 @@
 import markdownit from 'markdown-it'
-import hljs from 'highlight.js'
 import emoji from 'markdown-it-emoji'
 import math from 'markdown-it-math'
+import hljs from 'highlight.js'
 
 var md = markdownit({
   typographer: true,
   linkify: true,
+  html: true,
+  xhtmlOut: true,
   highlight: function (str, lang) {
     if (lang && hljs.getLanguage(lang)) {
       try {
         return hljs.highlight(lang, str).value
-      } catch (__) {}
+      } catch (e) {}
     }
-
-    try {
-      return hljs.highlightAuto(str).value
-    } catch (__) {}
-
-    return ''
+    return str
   }
 })
 md.use(emoji)
@@ -33,6 +30,7 @@ md.use(math, {
 let originalRenderToken = md.renderer.renderToken
 md.renderer.renderToken = function renderToken (tokens, idx, options) {
   let token = tokens[idx]
+
   let result = originalRenderToken.call(md.renderer, tokens, idx, options)
   if (token.map != null) {
     return result + '<a class=\'lineAnchor\' data-key=\'' + token.map[0] + '\'></a>'

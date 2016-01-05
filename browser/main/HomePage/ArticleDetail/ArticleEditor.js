@@ -56,7 +56,8 @@ export default class ArticleEditor extends React.Component {
   }
 
   render () {
-    if (this.props.mode === 'markdown' && this.state.status === PREVIEW_MODE) {
+    let showPreview = this.props.mode === 'markdown' && this.state.status === PREVIEW_MODE
+    if (showPreview) {
       return (
         <div className='ArticleEditor'>
           <MarkdownPreview
