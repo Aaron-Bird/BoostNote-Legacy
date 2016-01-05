@@ -62,7 +62,8 @@ function folders (state = initialFolders, action) {
       {
         let newFolder = action.data.folder
         if (!_.isString(newFolder.name)) throw new Error('Folder name must be a string')
-        newFolder.name = newFolder.name.trim().replace(/\s/, '_')
+        newFolder.name = newFolder.name.trim().replace(/\s/g, '_')
+
         Object.assign(newFolder, {
           key: keygen(),
           createdAt: new Date(),
@@ -86,7 +87,7 @@ function folders (state = initialFolders, action) {
         let targetFolder = _.findWhere(state, {key: folder.key})
 
         if (!_.isString(folder.name)) throw new Error('Folder name must be a string')
-        folder.name = folder.name.trim().replace(/\s/, '_')
+        folder.name = folder.name.trim().replace(/\s/g, '_')
         if (folder.name.length === 0) throw new Error('Folder name is required')
         if (folder.name.match(/\//)) throw new Error('`/` is not available for folder name')
 
