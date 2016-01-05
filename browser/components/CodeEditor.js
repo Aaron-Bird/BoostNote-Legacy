@@ -17,10 +17,8 @@ export default class CodeEditor extends React.Component {
     var el = ReactDOM.findDOMNode(this)
     var editor = this.editor = ace.edit(el)
     editor.$blockScrolling = Infinity
-    editor.setValue(this.props.code)
     editor.renderer.setShowGutter(true)
     editor.setTheme('ace/theme/xcode')
-    editor.clearSelection()
     editor.moveCursorTo(0, 0)
     editor.setReadOnly(!!this.props.readOnly)
 
@@ -56,6 +54,7 @@ export default class CodeEditor extends React.Component {
     session.setUseSoftTabs(true)
     session.setOption('useWorker', false)
     session.setUseWrapMode(true)
+    session.setValue(this.props.code)
 
     session.on('change', e => {
       if (this.props.onChange != null) {
@@ -66,12 +65,11 @@ export default class CodeEditor extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
+    var session = this.editor.getSession()
     if (this.editor.getValue() !== this.props.code) {
-      this.editor.setValue(this.props.code)
-      this.editor.clearSelection()
+      session.setValue(this.props.code)
     }
     if (prevProps.mode !== this.props.mode) {
-      var session = this.editor.getSession()
       let mode = _.findWhere(modes, {name: this.props.mode})
       let syntaxMode = mode != null
         ? mode.mode
