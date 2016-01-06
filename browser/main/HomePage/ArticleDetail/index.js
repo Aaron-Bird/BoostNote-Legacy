@@ -164,6 +164,12 @@ export default class ArticleDetail extends React.Component {
     this.setState(nextState)
   }
 
+  componentDidUpdate (prevProps, prevState) {
+    if (this.props.activeArticle == null || prevProps.activeArticle == null || this.props.activeArticle.key !== prevProps.activeArticle.key) {
+      this.refs.editor.resetCursorPosition()
+    }
+  }
+
   editArticle () {
     ReactDOM.findDOMNode(this.refs.title).focus()
     ReactDOM.findDOMNode(this.refs.title).select()

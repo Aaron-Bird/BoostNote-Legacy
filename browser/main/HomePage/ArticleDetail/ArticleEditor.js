@@ -11,16 +11,39 @@ export default class ArticleEditor extends React.Component {
     super(props)
     this.isMouseDown = false
     this.state = {
-      status: PREVIEW_MODE
+      status: PREVIEW_MODE,
+      cursorPosition: null,
+      firstVisibleRow: null
     }
   }
 
-  componentWillReceiveProps (nextProps) {
+  resetCursorPosition () {
+    this.setState({
+      cursorPosition: null,
+      firstVisibleRow: null
+    }, function () {
+      let previewEl = ReactDOM.findDOMNode(this.refs.preview)
+      previewEl.scrollTop = 0
+    })
   }
 
   switchPreviewMode () {
+    let cursorPosition = this.refs.editor.getCursorPosition()
+    let firstVisibleRow = this.refs.editor.getFirstVisibleRow()
     this.setState({
-      status: PREVIEW_MODE
+      status: PREVIEW_MODE,
+      cursorPosition,
+      firstVisibleRow
+    }, function () {
+      let previewEl = ReactDOM.findDOMNode(this.refs.preview)
+      let anchors = previewEl.querySelectorAll('.lineAnchor')
+      for (let i = 0; i < anchors.length; i++) {
+        if (parseInt(anchors[i].dataset.key, 10) > cursorPosition.row || i === anchors.length - 1) {
+          var targetAnchor = anchors[i > 0 ? i - 1 : 0]
+          previewEl.scrollTop = targetAnchor.offsetTop - 100
+          break
+        }
+      }
     })
   }
 
@@ -28,6 +51,10 @@ export default class ArticleEditor extends React.Component {
     this.setState({
       status: EDIT_MODE
     }, function () {
+      if (this.state.cursorPosition != null) {
+        this.refs.editor.moveCursorTo(this.state.cursorPosition.row, this.state.cursorPosition.column)
+        this.refs.editor.scrollToLine(this.state.firstVisibleRow)
+      }
       this.refs.editor.editor.focus()
     })
   }
@@ -61,6 +88,7 @@ export default class ArticleEditor extends React.Component {
       return (
         <div className='ArticleEditor'>
           <MarkdownPreview
+            ref='preview'
             onMouseUp={e => this.handlePreviewMouseUp(e)}
             onMouseDown={e => this.handlePreviewMouseDown(e)}
             onMouseMove={e => this.handlePreviewMouseMove(e)}
@@ -73,7 +101,8 @@ export default class ArticleEditor extends React.Component {
 
     return (
       <div className='ArticleEditor'>
-        <CodeEditor ref='editor'
+        <CodeEditor
+          ref='editor'
           onBlur={e => this.handleBlurCodeEditor(e)}
           onChange={this.props.onChange}
           mode={this.props.mode}
