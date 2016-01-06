@@ -35,7 +35,7 @@ export default class CodeEditor extends React.Component {
       name: 'Focus title',
       bindKey: {win: 'Esc', mac: 'Esc'},
       exec: function (editor, e) {
-        remote.getCurrentWebContents().send('detail-edit')
+        remote.getCurrentWebContents().send('list-focus')
       },
       readOnly: true
     })

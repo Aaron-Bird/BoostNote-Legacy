@@ -160,7 +160,7 @@ export default class ArticleNavigator extends React.Component {
     })
 
     return (
-      <div className='ArticleNavigator'>
+      <div tabIndex='1' className='ArticleNavigator'>
         <div className='userInfo'>
           <div className='userProfileName'>{user.name}</div>
           <div className='userName'>localStorage</div>
@@ -173,7 +173,7 @@ export default class ArticleNavigator extends React.Component {
 
         </div>
 
-        <div className={'ArticleNavigator-unsaved' + (hasModified ? '' : ' hide')}>
+        {/*<div className={'ArticleNavigator-unsaved' + (hasModified ? '' : ' hide')}>
           <div className='ArticleNavigator-unsaved-header'>Work in progress</div>
           <div className='ArticleNavigator-unsaved-list'>
             {modifiedElements}
@@ -181,9 +181,9 @@ export default class ArticleNavigator extends React.Component {
           <div className='ArticleNavigator-unsaved-control'>
             <button onClick={e => this.handleSaveAllClick()} className='ArticleNavigator-unsaved-control-save-all-button' disabled={modifiedElements.length === 0}>Save all</button>
           </div>
-        </div>
+        </div>*/}
 
-        <div className={'ArticleNavigator-folders' + (hasModified ? '' : ' expand')}>
+        <div className={'ArticleNavigator-folders expand'}>
           <div className='ArticleNavigator-folders-header'>
             <div className='title'>Folders</div>
             <button onClick={e => this.handleNewFolderButton(e)} className='addBtn'>

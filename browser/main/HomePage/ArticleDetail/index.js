@@ -4,9 +4,10 @@ import moment from 'moment'
 import _ from 'lodash'
 import {
   switchFolder,
-  cacheArticle,
-  saveArticle,
-  uncacheArticle
+  updateArticle,
+  // cacheArticle,
+  // saveArticle,
+  // uncacheArticle
 } from '../../actions'
 import linkState from 'browser/lib/linkState'
 import TagSelect from 'browser/components/TagSelect'
@@ -20,19 +21,19 @@ const ipc = electron.ipcRenderer
 const remote = electron.remote
 const { Menu, MenuItem } = remote
 
-const othersMenu = new Menu()
-othersMenu.append(new MenuItem({
-  label: 'Delete Post',
-  click: function () {
-    remote.getCurrentWebContents().send('detail-delete')
-  }
-}))
-othersMenu.append(new MenuItem({
-  label: 'Discard Change',
-  click: function (item) {
-    remote.getCurrentWebContents().send('detail-uncache')
-  }
-}))
+// const othersMenu = new Menu()
+// othersMenu.append(new MenuItem({
+//   label: 'Delete Post',
+//   click: function () {
+//     remote.getCurrentWebContents().send('detail-delete')
+//   }
+// }))
+// othersMenu.append(new MenuItem({
+//   label: 'Discard Change',
+//   click: function (item) {
+//     remote.getCurrentWebContents().send('detail-uncache')
+//   }
+// }))
 
 const BRAND_COLOR = '#18AF90'
 const OSX = global.process.platform === 'darwin'
@@ -116,7 +117,7 @@ export default class ArticleDetail extends React.Component {
     }
     this.editHandler = e => {
       if (isModalOpen()) return true
-      this.editArticle()
+      this.refs.editor.switchEditMode()
     }
 
     this.state = {
@@ -134,7 +135,7 @@ export default class ArticleDetail extends React.Component {
       e.stopPropagation()
     }
 
-    ipc.on('detail-save', this.saveHandler)
+    // ipc.on('detail-save', this.saveHandler)
     ipc.on('detail-delete', this.deleteHandler)
     ipc.on('detail-uncache', this.uncacheHandler)
     ipc.on('detail-toggle-preview', this.togglePreviewHandler)
@@ -144,11 +145,11 @@ export default class ArticleDetail extends React.Component {
   componentWillUnmount () {
     clearInterval(this.refreshTimer)
 
-    ipc.removeListener('detail-save', this.saveHandler)
+    // ipc.removeListener('detail-save', this.saveHandler)
     ipc.removeListener('detail-delete', this.deleteHandler)
     ipc.removeListener('detail-uncache', this.uncacheHandler)
     ipc.removeListener('detail-toggle-preview', this.togglePreviewHandler)
-    ipc.removeListener('detail-on', this.editHandler)
+    ipc.removeListener('detail-edit', this.editHandler)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -169,9 +170,17 @@ export default class ArticleDetail extends React.Component {
   }
 
   cacheArticle () {
-    let { dispatch } = this.props
+    let { dispatch, status, folders } = this.props
 
-    dispatch(cacheArticle(this.props.activeArticle.key, this.state.article))
+    let input = Object.assign({}, this.props.activeArticle.key, this.state.article, {updatedAt: new Date()})
+
+    dispatch(updateArticle(input))
+
+    let targetFolderKey = this.state.article.FolderKey
+    if (status.targetFolders.length > 0) {
+      let targetFolder = _.findWhere(folders, {key: targetFolderKey})
+      dispatch(switchFolder(targetFolder.name))
+    }
   }
 
   renderEmpty () {
@@ -185,19 +194,18 @@ export default class ArticleDetail extends React.Component {
   }
 
   handleSaveButtonClick (e) {
-    let { dispatch, folders, status } = this.props
+    // let { dispatch, folders, status } = this.props
 
-    let targetFolderKey = this.state.article.FolderKey
-    dispatch(saveArticle(this.props.activeArticle.key, this.state.article), true)
-    if (status.targetFolders.length > 0) {
-      let targetFolder = _.findWhere(folders, {key: targetFolderKey})
-      dispatch(switchFolder(targetFolder.name))
-    }
+    // let targetFolderKey = this.state.article.FolderKey
+    // dispatch(saveArticle(this.props.activeArticle.key, this.state.article), true)
+    // if (status.targetFolders.length > 0) {
+    //   let targetFolder = _.findWhere(folders, {key: targetFolderKey})
+    //   dispatch(switchFolder(targetFolder.name))
+    // }
   }
 
   handleOthersButtonClick (e) {
-    let size = remote.getCurrentWindow().getSize()
-    othersMenu.popup(size[0] - 150, 100)
+    this.deleteHandler()
   }
 
   handleFolderKeyChange (e) {
@@ -293,7 +301,7 @@ export default class ArticleDetail extends React.Component {
     let isUnsaved = !!_.findWhere(modified, {key: activeArticle.key})
 
     return (
-      <div className='ArticleDetail'>
+      <div tabIndex='4' className='ArticleDetail'>
         <div className='ArticleDetail-info'>
           <div className='ArticleDetail-info-row'>
             <select
@@ -312,7 +320,7 @@ export default class ArticleDetail extends React.Component {
             />
 
             <div className='ArticleDetail-info-control'>
-              <div className={'ArticleDetail-info-control-save' + (!isUnsaved ? ' hide' : '')}>
+              {/*<div className={'ArticleDetail-info-control-save' + (!isUnsaved ? ' hide' : '')}>
                 <button
                   onClick={e => this.handleSaveButtonClick(e)}
                   className='ArticleDetail-info-control-save-button'
@@ -321,15 +329,16 @@ export default class ArticleDetail extends React.Component {
                   <i className='fa fa-fw fa-save'/>&nbsp;Save
                   <span className='tooltip' children={`Save Post (${OSX ? '⌘' : '^'} + S)`}/>
                 </button>
-              </div>
+              </div>*/}
 
               <ShareButton
                 article={activeArticle}
                 user={user}
                 />
 
-              <button onClick={e => this.handleOthersButtonClick(e)}>
-                <i className='fa fa-fw fa-angle-down'/>
+              <button className='ArticleDetail-info-control-delete-button' onClick={e => this.handleOthersButtonClick(e)}>
+                <i className='fa fa-fw fa-trash'/>
+                <span className='tooltip' children={`Delete Post (^ + Del)`}/>
               </button>
             </div>
           </div>

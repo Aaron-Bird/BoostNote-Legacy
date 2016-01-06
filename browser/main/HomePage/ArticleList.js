@@ -185,7 +185,7 @@ export default class ArticleList extends React.Component {
     })
 
     return (
-      <div tabIndex='1' onKeyDown={e => this.handleArticleListKeyDown(e)} className='ArticleList'>
+      <div tabIndex='3' onKeyDown={e => this.handleArticleListKeyDown(e)} className='ArticleList'>
         {articleElements}
       </div>
     )

@@ -79,7 +79,7 @@ export default class ArticleTopBar extends React.Component {
     }
     document.addEventListener('click', this.hideLinksDropdown)
 
-    ipc.on('top-save-all', this.saveAllHandler)
+    // ipc.on('top-save-all', this.saveAllHandler)
     ipc.on('top-focus-search', this.focusSearchHandler)
     ipc.on('top-new-post', this.newPostHandler)
   }
@@ -88,7 +88,7 @@ export default class ArticleTopBar extends React.Component {
     document.removeEventListener('click', this.hideLinksDropdown)
     this.linksButton.removeEventListener('click', this.showLinksDropdown())
 
-    ipc.removeListener('top-save-all', this.saveAllHandler)
+    // ipc.removeListener('top-save-all', this.saveAllHandler)
     ipc.removeListener('top-focus-search', this.focusSearchHandler)
     ipc.removeListener('top-new-post', this.newPostHandler)
   }
@@ -168,7 +168,7 @@ export default class ArticleTopBar extends React.Component {
   render () {
     let { status } = this.props
     return (
-      <div className='ArticleTopBar'>
+      <div tabIndex='2' className='ArticleTopBar'>
         <div className='ArticleTopBar-left'>
           <div className='ArticleTopBar-left-search'>
             <i className='fa fa-search fa-fw' />
