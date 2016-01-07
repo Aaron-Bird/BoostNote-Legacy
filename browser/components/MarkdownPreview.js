@@ -3,6 +3,7 @@ import markdown from '../lib/markdown'
 import ReactDOM from 'react-dom'
 import sanitizeHtml from '@rokt33r/sanitize-html'
 import hljs from 'highlight.js'
+import _ from 'lodash'
 
 const electron = require('electron')
 const shell = electron.shell
@@ -21,14 +22,29 @@ const sanitizeOpts = {
   },
   allowedAttributes: {
     a: ['href', 'data-key'],
-    img: [ 'src' ]
+    img: [ 'src' ],
+    '*': ['id', 'name']
+  },
+  transformTags: {
+    '*': function (tagName, attribs) {
+      let href = attribs.href
+      if (_.isString(href) && href.match(/^#.+$/)) attribs.href = href.replace(/^#/, '#md-anchor-')
+      if (attribs.id) attribs.id = 'md-anchor-' + attribs.id
+      if (attribs.name) attribs.name = 'md-anchor-' + attribs.name
+      return {
+        tagName: tagName,
+        attribs: attribs
+      }
+    }
   }
 }
 
 function handleAnchorClick (e) {
+  if (e.target.attributes.href && e.target.attributes.href.nodeValue.match(/#.+/)) {
+    return
+  }
   e.preventDefault()
   e.stopPropagation()
-  console.log(e.target.href)
   shell.openExternal(e.target.href)
 }
 

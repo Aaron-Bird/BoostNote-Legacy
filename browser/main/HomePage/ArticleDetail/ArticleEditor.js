@@ -23,7 +23,7 @@ export default class ArticleEditor extends React.Component {
       firstVisibleRow: null
     }, function () {
       let previewEl = ReactDOM.findDOMNode(this.refs.preview)
-      previewEl.scrollTop = 0
+      if (previewEl) previewEl.scrollTop = 0
     })
   }
 

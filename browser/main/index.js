@@ -1,7 +1,5 @@
 import { Provider } from 'react-redux'
-import { Router, Route, IndexRoute } from 'react-router'
 import MainPage from './MainPage'
-import HomePage from './HomePage'
 import store from './store'
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -40,17 +38,11 @@ ipc.on('open-finder', function () {
   activityRecord.emit('FINDER_OPEN')
 })
 
-let routes = (
-  <Route path='/' component={MainPage}>
-    <IndexRoute name='home' component={HomePage}/>
-  </Route>
-)
-
 let el = document.getElementById('content')
 ReactDOM.render((
   <div>
     <Provider store={store}>
-      <Router>{routes}</Router>
+      <MainPage/>
     </Provider>
   </div>
 ), el, function () {

@@ -1,6 +1,7 @@
 const electron = require('electron')
 const ipc = electron.ipcRenderer
 import React, { PropTypes } from 'react'
+import HomePage from './HomePage'
 
 export default class MainContainer extends React.Component {
   constructor (props) {
@@ -24,7 +25,7 @@ export default class MainContainer extends React.Component {
         {this.state.updateAvailable ? (
         <button onClick={this.updateApp} className='appUpdateButton'><i className='fa fa-cloud-download'/> Update available!</button>
         ) : null}
-        {this.props.children}
+        <HomePage/>
       </div>
     )
   }
