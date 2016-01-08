@@ -38,25 +38,6 @@ const ipc = electron.ipcRenderer
 const BRAND_COLOR = '#18AF90'
 const OSX = global.process.platform === 'darwin'
 
-const editDeleteTutorialElement = (
-  <svg width='300' height='500' className='tutorial'>
-    <text x='50' y='220' fill={BRAND_COLOR} fontSize='24'>Edit / Delete a post</text>
-    <text x='90' y='245' fill={BRAND_COLOR} fontSize='18'>press `e`/`d`</text>
-
-    <svg x='150' y='35'>
-      <path fill='white' d='M87.5,93.6c-16.3-5.7-30.6-16.7-39.9-31.4c-5.5-8.7-9-19.1-3.4-28.7c4.8-8.2,13.6-12.8,22.4-15.3
-        c15.7-4.5,34.4-6.2,49.7,0.4c17.3,7.4,25.6,26.3,25.7,44.4c0.1,10.4-3.4,20.9-13.1,26c-8.6,4.5-19,4.1-28.4,3.7
-        c-1.9-0.1-1.9,2.9,0,3c9.3,0.4,19.2,0.6,27.9-3.2c8.5-3.7,13.8-11.2,15.7-20.2c3.6-17.9-2.9-40.2-17.7-51.4
-        C110.8,9.1,89,9.9,70.8,14c-17.9,4-37.4,16.8-31.3,37.9C45.6,73,66.7,89.5,86.7,96.5C88.6,97.1,89.4,94.2,87.5,93.6L87.5,93.6z'/>
-      <path fill='white' d='M11.9,89.7c14.8-3.4,29.7-6,44.8-7.9c-0.5-0.6-1-1.3-1.4-1.9c-2.6,6.3-2.8,12.7-0.7,19.2
-        c0.6,1.8,3.5,1,2.9-0.8c-1.9-6-1.7-11.8,0.7-17.6c0.3-0.8-0.5-2-1.4-1.9c-15.3,1.9-30.6,4.5-45.6,8C9.3,87.3,10.1,90.2,11.9,89.7
-        L11.9,89.7z'/>
-      <path fill='white' d='M48.6,81.5c-9.4,10.4-17,22.3-22.2,35.3c-5.5,13.6-9.3,28.9-6,43.4c0.4,1.9,3.3,1.1,2.9-0.8
-        c-3.2-14,0.7-28.8,6-41.8c5.1-12.5,12.4-24,21.5-34C52,82.2,49.9,80,48.6,81.5L48.6,81.5z'/>
-    </svg>
-  </svg>
-)
-
 const tagSelectTutorialElement = (
   <svg width='500' height='500' className='tutorial'>
     <text x='155' y='50' fill={BRAND_COLOR} fontSize='24'>Attach some tags here!</text>
@@ -311,8 +292,7 @@ export default class ArticleDetail extends React.Component {
               </button>
             </div>
           </div>
-          {status.isTutorialOpen ? editDeleteTutorialElement : null}
-          <div>
+          <div className='ArticleDetail-info-row2'>
             <TagSelect
               tags={activeArticle.tags}
               onChange={(tags, tag) => this.handleTagsChange(tags, tag)}
@@ -341,8 +321,8 @@ export default class ArticleDetail extends React.Component {
               value={activeArticle.mode}
               className='ArticleDetail-panel-header-mode'
             />
+            {status.isTutorialOpen ? modeSelectTutorialElement : null}
           </div>
-          {status.isTutorialOpen ? modeSelectTutorialElement : null}
           <ArticleEditor
             ref='editor'
             article={activeArticle}

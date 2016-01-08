@@ -185,89 +185,93 @@ infoButton()
             line-height 16px
 
 
-
-    .TagSelect
-      margin-top 5px
-      .TagSelect-tags
-        white-space nowrap
-        overflow-x auto
-        position relative
-        noSelect()
-        z-index 30
-        background-color #E6E6E6
-        clearfix()
-        .TagSelect-tags-item
-          background-color transparent
-          color white
-          margin 0 2px
-          padding 0
-          height 17px
-          float left
-          button.TagSelect-tags-item-remove
-            display block
+    .ArticleDetail-info-row2
+      .tutorial
+        position fixed
+        z-index 35
+        font-style italic
+      .TagSelect
+        margin-top 5px
+        .TagSelect-tags
+          white-space nowrap
+          overflow-x auto
+          position relative
+          noSelect()
+          z-index 30
+          background-color #E6E6E6
+          clearfix()
+          .TagSelect-tags-item
+            background-color transparent
+            color white
+            margin 0 2px
+            padding 0
+            height 17px
             float left
+            button.TagSelect-tags-item-remove
+              display block
+              float left
+              background-color transparent
+              border none
+              font-size 8px
+              color white
+              width 15px
+              height 17px
+              text-align center
+              line-height 12px
+              padding 0
+              margin 0
+              border-top solid 1px darken(brandColor, 5%)
+              border-bottom solid 1px darken(brandColor, 5%)
+              border-left solid 1px darken(brandColor, 5%)
+              border-right solid 1px transparent
+              border-radius left 2px
+              background-color brandColor
+              &:hover
+                background-color lighten(brandColor, 10%)
+                border-color lighten(brandColor, 10%)
+              &:focus
+                background-color lighten(brandColor, 10%)
+                border-color focusBorderColor
+            .TagSelect-tags-item-label
+              background-color brandColor
+              float left
+              font-size 12px
+              border-top solid 1px darken(brandColor, 5%)
+              border-bottom solid 1px darken(brandColor, 5%)
+              border-right solid 1px darken(brandColor, 5%)
+              line-height 15px
+              padding 0 5px
+              border-radius right 2px
+          input.TagSelect-input
             background-color transparent
             border none
-            font-size 8px
-            color white
-            width 15px
-            height 17px
-            text-align center
-            line-height 12px
-            padding 0
-            margin 0
-            border-top solid 1px darken(brandColor, 5%)
-            border-bottom solid 1px darken(brandColor, 5%)
-            border-left solid 1px darken(brandColor, 5%)
-            border-right solid 1px transparent
-            border-radius left 2px
-            background-color brandColor
-            &:hover
-              background-color lighten(brandColor, 10%)
-              border-color lighten(brandColor, 10%)
+            border-bottom 1px solid transparent
+            outline none
+            margin 0 2px
+            transition 0.15s
+            height 18px
             &:focus
-              background-color lighten(brandColor, 10%)
               border-color focusBorderColor
-          .TagSelect-tags-item-label
-            background-color brandColor
-            float left
-            font-size 12px
-            border-top solid 1px darken(brandColor, 5%)
-            border-bottom solid 1px darken(brandColor, 5%)
-            border-right solid 1px darken(brandColor, 5%)
-            line-height 15px
-            padding 0 5px
-            border-radius right 2px
-        input.TagSelect-input
-          background-color transparent
-          border none
-          border-bottom 1px solid transparent
-          outline none
-          margin 0 2px
-          transition 0.15s
-          height 18px
-          &:focus
-            border-color focusBorderColor
-      .TagSelect-suggest
-        position fixed
-        width 150px
-        max-height 150px
-        background-color white
-        z-index 5
-        border 1px solid borderColor
-        border-radius 5px
-        &>button
-          width 100%
-          display block
-          padding 0 15px
-          height 33px
-          line-height 33px
-          background-color transparent
-          border none
-          text-align left
-          font-size 14px
-          &:hover
-            background-color darken(white, 10%)
+        .TagSelect-suggest
+          position fixed
+          width 150px
+          max-height 150px
+          background-color white
+          z-index 5
+          border 1px solid borderColor
+          border-radius 5px
+          &>button
+            width 100%
+            display block
+            padding 0 15px
+            height 33px
+            line-height 33px
+            background-color transparent
+            border none
+            text-align left
+            font-size 14px
+            &:hover
+              background-color darken(white, 10%)
   .ArticleDetail-panel
     position absolute
     top 70px

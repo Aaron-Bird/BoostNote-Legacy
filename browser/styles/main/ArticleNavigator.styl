@@ -146,6 +146,10 @@ articleCount = #999
     width 100%
     transition top 0.15s ease-in-out
     background-color articleNavBgColor
+    .tutorial
+      position fixed
+      z-index 35
+      font-style italic
     &.expand
       top 100px
     .ArticleNavigator-folders-header
@@ -183,11 +187,6 @@ articleCount = #999
         &:active
           background-color brandColor
           border-color brandColor
-      .tutorial
-        position fixed
-        z-index 35px
-        top 200px
-        font-style italic
     .folderList
       absolute bottom
       top 33px
