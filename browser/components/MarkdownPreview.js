@@ -2,11 +2,12 @@ import React, { PropTypes } from 'react'
 import markdown from '../lib/markdown'
 import ReactDOM from 'react-dom'
 import sanitizeHtml from '@rokt33r/sanitize-html'
-import hljs from 'highlight.js'
 import _ from 'lodash'
 
 const electron = require('electron')
 const shell = electron.shell
+const remote = electron.remote
+const ipc = electron.ipcRenderer
 
 const katex = window.katex
 
@@ -65,39 +66,41 @@ function math2Katex (display) {
   }
 }
 
+function getConfig () {
+  return Object.assign({}, remote.getGlobal('config'))
+}
+
+let config = getConfig()
+
 export default class MarkdownPreview extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.configApplyHandler = e => this.handleConfigApply(e)
+
+    this.state = {
+      fontSize: config['preview-font-size'],
+      fontFamily: config['preview-font-family']
+    }
+  }
   componentDidMount () {
     this.addListener()
-    // this.renderCode()
     this.renderMath()
+    ipc.on('config-apply', this.configApplyHandler)
   }
 
   componentDidUpdate () {
     this.addListener()
-    // this.renderCode()
     this.renderMath()
   }
 
   componentWillUnmount () {
     this.removeListener()
+    ipc.removeListener('config-apply', this.configApplyHandler)
   }
 
   componentWillUpdate () {
     this.removeListener()
-  }
-
-  renderCode () {
-    let codes = ReactDOM.findDOMNode(this).querySelectorAll('code:not(.rendered)')
-    Array.prototype.forEach.call(codes, el => {
-      let matched = el.className.match(/language-(.+)/)
-      let lang = matched ? matched[1] : null
-      try {
-        let result = hljs.highlight(lang, el.innerHTML)
-        el.innerHTML = result.value
-        el.className += ' rendered'
-      } catch (e) {
-      }
-    })
   }
 
   renderMath () {
@@ -157,6 +160,14 @@ export default class MarkdownPreview extends React.Component {
     }
   }
 
+  handleConfigApply () {
+    config = getConfig()
+    this.setState({
+      fontSize: config['preview-font-size'],
+      fontFamily: config['preview-font-family']
+    })
+  }
+
   render () {
     let isEmpty = this.props.content.trim().length === 0
     let content = isEmpty
@@ -174,6 +185,7 @@ export default class MarkdownPreview extends React.Component {
         onMouseMove={e => this.handleMouseMove(e)}
         onMouseUp={e => this.handleMouseUp(e)}
         dangerouslySetInnerHTML={{__html: ' ' + content}}
+        style={{fontSize: this.state.fontSize, fontFamily: this.state.fontFamily}}
       />
     )
   }

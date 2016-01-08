@@ -18,9 +18,9 @@ import DeleteArticleModal from '../../modal/DeleteArticleModal'
 import ArticleEditor from './ArticleEditor'
 const electron = require('electron')
 const ipc = electron.ipcRenderer
-const remote = electron.remote
-const { Menu, MenuItem } = remote
-
+let count = 0
+// const remote = electron.remote
+// const { Menu, MenuItem } = remote
 // const othersMenu = new Menu()
 // othersMenu.append(new MenuItem({
 //   label: 'Delete Post',
@@ -152,18 +152,6 @@ export default class ArticleDetail extends React.Component {
     ipc.removeListener('detail-edit', this.editHandler)
   }
 
-  componentWillReceiveProps (nextProps) {
-    let nextArticle = nextProps.activeArticle
-    let nextModified = nextArticle != null ? _.findWhere(nextProps.modified, {key: nextArticle.key}) : null
-
-    let article = Object.assign({content: ''}, nextProps.activeArticle, nextModified)
-    let nextState = {
-      article
-    }
-
-    this.setState(nextState)
-  }
-
   componentDidUpdate (prevProps, prevState) {
     if (this.props.activeArticle == null || prevProps.activeArticle == null || this.props.activeArticle.key !== prevProps.activeArticle.key) {
       this.refs.editor.resetCursorPosition()
@@ -173,20 +161,6 @@ export default class ArticleDetail extends React.Component {
   editArticle () {
     ReactDOM.findDOMNode(this.refs.title).focus()
     ReactDOM.findDOMNode(this.refs.title).select()
-  }
-
-  cacheArticle () {
-    let { dispatch, status, folders } = this.props
-
-    let input = Object.assign({}, this.props.activeArticle.key, this.state.article, {updatedAt: new Date()})
-
-    dispatch(updateArticle(input))
-
-    let targetFolderKey = this.state.article.FolderKey
-    if (status.targetFolders.length > 0) {
-      let targetFolder = _.findWhere(folders, {key: targetFolderKey})
-      dispatch(switchFolder(targetFolder.name))
-    }
   }
 
   renderEmpty () {
@@ -199,81 +173,70 @@ export default class ArticleDetail extends React.Component {
     )
   }
 
-  handleSaveButtonClick (e) {
-    // let { dispatch, folders, status } = this.props
-
-    // let targetFolderKey = this.state.article.FolderKey
-    // dispatch(saveArticle(this.props.activeArticle.key, this.state.article), true)
-    // if (status.targetFolders.length > 0) {
-    //   let targetFolder = _.findWhere(folders, {key: targetFolderKey})
-    //   dispatch(switchFolder(targetFolder.name))
-    // }
-  }
-
   handleOthersButtonClick (e) {
     this.deleteHandler()
   }
 
   handleFolderKeyChange (e) {
-    let article = this.state.article
-    article.FolderKey = e.target.value
+    let { dispatch, activeArticle, status, folders } = this.props
+    let article = Object.assign({}, activeArticle, {
+      FolderKey: e.target.value,
+      updatedAt: new Date()
+    })
 
-    this.setState({article: article}, () => this.cacheArticle())
+    dispatch(updateArticle(article))
+
+    let targetFolderKey = this.state.article.FolderKey
+    if (status.targetFolders.length > 0) {
+      let targetFolder = _.findWhere(folders, {key: targetFolderKey})
+      dispatch(switchFolder(targetFolder.name))
+    }
   }
 
   handleTitleChange (e) {
-    let { article } = this.state
-    article.title = e.target.value
-
-    this.setState({
-      article
-    }, () => this.cacheArticle())
+    let { dispatch, activeArticle } = this.props
+    let article = Object.assign({}, activeArticle, {
+      title: e.target.value,
+      updatedAt: new Date()
+    })
+    dispatch(updateArticle(article))
   }
 
   handleTagsChange (newTag, tags) {
-    let article = this.state.article
-    article.tags = tags
+    let { dispatch, activeArticle } = this.props
+    let article = Object.assign({}, activeArticle, {
+      tags: tags,
+      updatedAt: new Date()
+    })
 
-    this.setState({
-      article
-    }, () => this.cacheArticle())
+    dispatch(updateArticle(article))
   }
 
   handleModeChange (value) {
-    let { article } = this.state
-    article.mode = value
-    this.setState({
-      article
-    }, () => this.cacheArticle())
+    let { dispatch, activeArticle } = this.props
+    let article = Object.assign({}, activeArticle, {
+      mode: value,
+      updatedAt: new Date()
+    })
+
+    dispatch(updateArticle(article))
   }
 
-  handleContentChange (e, value) {
-    let { article } = this.state
-    article.content = value
-
-    this.setState({
-      article
-    }, () => this.cacheArticle())
-  }
-
-  handleCodeEditorBlur (e) {
-    if (this.state.article.mode === 'markdown' && !this.state.previewMode) {
-      this.setState({
-        previewMode: true
+  handleContentChange (value) {
+    let { dispatch, activeArticle } = this.props
+    if (activeArticle.content !== value) {
+      let article = Object.assign({}, activeArticle, {
+        content: value,
+        updatedAt: new Date()
       })
+
+      dispatch(updateArticle(article))
     }
   }
 
   handleDeleteButtonClick (e) {
     if (this.props.activeArticle) {
       openModal(DeleteArticleModal, {articleKey: this.props.activeArticle.key})
-    }
-  }
-
-  handleUncache (e) {
-    if (this.props.activeArticle) {
-      let { dispatch, activeArticle } = this.props
-      dispatch(uncacheArticle(activeArticle.key))
     }
   }
 
@@ -312,7 +275,7 @@ export default class ArticleDetail extends React.Component {
           <div className='ArticleDetail-info-row'>
             <select
               className='ArticleDetail-info-folder'
-              value={this.state.article.FolderKey}
+              value={activeArticle.FolderKey}
               onChange={e => this.handleFolderKeyChange(e)}
             >
               {folderOptions}
@@ -321,7 +284,7 @@ export default class ArticleDetail extends React.Component {
               children={
                 isUnsaved
                   ? <span> <span className='unsaved-mark'>●</span> Unsaved</span>
-                  : `Created : ${moment(this.state.article.createdAt).format('YYYY/MM/DD')} Updated : ${moment(this.state.article.updatedAt).format('YYYY/MM/DD')}`
+                  : `Created : ${moment(activeArticle.createdAt).format('YYYY/MM/DD')} Updated : ${moment(activeArticle.updatedAt).format('YYYY/MM/DD')}`
               }
             />
 
@@ -351,7 +314,7 @@ export default class ArticleDetail extends React.Component {
           {status.isTutorialOpen ? editDeleteTutorialElement : null}
           <div>
             <TagSelect
-              tags={this.state.article.tags}
+              tags={activeArticle.tags}
               onChange={(tags, tag) => this.handleTagsChange(tags, tag)}
               suggestTags={tags}
             />
@@ -367,7 +330,7 @@ export default class ArticleDetail extends React.Component {
                 onKeyDown={e => this.handleTitleKeyDown(e)}
                 placeholder='(Untitled)'
                 ref='title'
-                value={this.state.article.title}
+                value={activeArticle.title}
                 onChange={e => this.handleTitleChange(e)}
               />
             </div>
@@ -375,16 +338,15 @@ export default class ArticleDetail extends React.Component {
               ref='mode'
               onChange={e => this.handleModeChange(e)}
               onKeyDown={e => this.handleModeSelectKeyDown(e)}
-              value={this.state.article.mode}
+              value={activeArticle.mode}
               className='ArticleDetail-panel-header-mode'
             />
           </div>
           {status.isTutorialOpen ? modeSelectTutorialElement : null}
           <ArticleEditor
             ref='editor'
-            content={this.state.article.content}
-            mode={this.state.article.mode}
-            onChange={(e, content) => this.handleContentChange(e, content)}
+            article={activeArticle}
+            onChange={content => this.handleContentChange(content)}
           />
         </div>
       </div>

@@ -24,7 +24,7 @@ export default class FinderDetail extends React.Component {
           <div className='content'>
             {activeArticle.mode === 'markdown'
               ? <MarkdownPreview content={activeArticle.content}/>
-              : <CodeEditor readOnly mode={activeArticle.mode} code={activeArticle.content}/>
+              : <CodeEditor readOnly article={activeArticle}/>
             }
           </div>
         </div>

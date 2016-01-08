@@ -89,7 +89,7 @@ export default class Tutorial extends React.Component {
           <div className='title'>Easy to access with Finder</div>
           <div className='content'>
             The Finder helps you organize all of the files and documents.<br/>
-            There is a short-cut key [control + shift + tab] to open the Finder.<br/>
+            There is a short-cut key [⌘ + alt + s] to open the Finder.<br/>
             It is available to save your articles on the Clipboard<br/>
             by selecting your file with pressing Enter key,<br/>
             and to paste the contents of the Clipboard with [{process.platform === 'darwin' ? 'Command' : 'Control'}-V]

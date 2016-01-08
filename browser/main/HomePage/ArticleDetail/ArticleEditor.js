@@ -17,6 +17,14 @@ export default class ArticleEditor extends React.Component {
     }
   }
 
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.article.key !== this.props.article.key) {
+      this.setState({
+        content: this.props.article.content
+      })
+    }
+  }
+
   resetCursorPosition () {
     this.setState({
       cursorPosition: null,
@@ -77,13 +85,19 @@ export default class ArticleEditor extends React.Component {
   }
 
   handleBlurCodeEditor () {
-    if (this.props.mode === 'markdown') {
+    let { article } = this.props
+    if (article.mode === 'markdown') {
       this.switchPreviewMode()
     }
   }
 
+  handleCodeEditorChange (value) {
+    this.props.onChange(value)
+  }
+
   render () {
-    let showPreview = this.props.mode === 'markdown' && this.state.status === PREVIEW_MODE
+    let { article } = this.props
+    let showPreview = article.mode === 'markdown' && this.state.status === PREVIEW_MODE
     if (showPreview) {
       return (
         <div className='ArticleEditor'>
@@ -92,7 +106,7 @@ export default class ArticleEditor extends React.Component {
             onMouseUp={e => this.handlePreviewMouseUp(e)}
             onMouseDown={e => this.handlePreviewMouseDown(e)}
             onMouseMove={e => this.handlePreviewMouseMove(e)}
-            content={this.props.content}
+            content={article.content}
           />
           <div className='ArticleDetail-panel-content-tooltip'>Click to Edit</div>
         </div>
@@ -104,11 +118,10 @@ export default class ArticleEditor extends React.Component {
         <CodeEditor
           ref='editor'
           onBlur={e => this.handleBlurCodeEditor(e)}
-          onChange={this.props.onChange}
-          mode={this.props.mode}
-          code={this.props.content}
+          onChange={value => this.handleCodeEditorChange(value)}
+          article={article}
         />
-        {this.props.mode === 'markdown'
+        {article.mode === 'markdown'
           ? (
             <div className='ArticleDetail-panel-content-tooltip'>Press ESC to watch Preview</div>
           )
@@ -120,7 +133,10 @@ export default class ArticleEditor extends React.Component {
 }
 
 ArticleEditor.propTypes = {
-  content: PropTypes.string,
-  mode: PropTypes.string,
+  article: PropTypes.shape({
+    content: PropTypes.string,
+    key: PropTypes.string,
+    mode: PropTypes.string
+  }),
   onChange: PropTypes.func
 }

@@ -105,7 +105,7 @@ export function init () {
       folders: [defaultFolder],
       version: '0.4'
     }
-    jetpack.write(getLocalPath(), data)
+    queueSave()
   }
 }
 
@@ -114,18 +114,44 @@ export function getData () {
   return data
 }
 
+let timer = null
+let isSaving = false
+let saveAgain = false
+function saveData () {
+  timer = null
+  isSaving = true
+  jetpack.writeAsync(getLocalPath(), data)
+    .then(function () {
+      isSaving = false
+      if (saveAgain) {
+        saveAgain = false
+        queueSave()
+      }
+    })
+}
+function queueSave () {
+  if (!isSaving) {
+    if (timer) {
+      clearTimeout(timer)
+    }
+    timer = setTimeout(saveData, 3000)
+  } else {
+    saveAgain = true
+  }
+}
+
 export function setArticles (articles) {
   if (!_.isArray(articles)) throw new Error('Articles must be an array')
   let data = getData()
   data.articles = articles
-  jetpack.write(getLocalPath(), data)
+  queueSave()
 }
 
 export function setFolders (folders) {
   if (!_.isArray(folders)) throw new Error('Folders must be an array')
   let data = getData()
   data.folders = folders
-  jetpack.write(getLocalPath(), data)
+  queueSave()
 }
 
 function isFinderCalled () {

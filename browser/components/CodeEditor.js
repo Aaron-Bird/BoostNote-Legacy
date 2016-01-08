@@ -3,10 +3,35 @@ import ReactDOM from 'react-dom'
 import modes from '../lib/modes'
 import _ from 'lodash'
 
-const remote = require('electron').remote
+const electron = require('electron')
+const remote = electron.remote
+const ipc = electron.ipcRenderer
+
 const ace = window.ace
 
+function getConfig () {
+  return Object.assign({}, remote.getGlobal('config'))
+}
+
+let config = getConfig()
+
 export default class CodeEditor extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.configApplyHandler = e => this.handleConfigApply(e)
+    this.changeHandler = e => this.handleChange(e)
+
+    this.state = {
+      fontSize: config['editor-font-size'],
+      fontFamily: config['editor-font-family'],
+      indentType: config['editor-indent-type'],
+      indentSize: config['editor-indent-size']
+    }
+
+    this.silentChange = false
+  }
+
   componentWillReceiveProps (nextProps) {
     if (nextProps.readOnly !== this.props.readOnly) {
       this.editor.setReadOnly(!!nextProps.readOnly)
@@ -14,6 +39,7 @@ export default class CodeEditor extends React.Component {
   }
 
   componentDidMount () {
+    let { article } = this.props
     var el = ReactDOM.findDOMNode(this)
     var editor = this.editor = ace.edit(el)
     editor.$blockScrolling = Infinity
@@ -21,6 +47,7 @@ export default class CodeEditor extends React.Component {
     editor.setTheme('ace/theme/xcode')
     editor.moveCursorTo(0, 0)
     editor.setReadOnly(!!this.props.readOnly)
+    editor.setFontSize(this.state.fontSize)
 
     editor.commands.addCommand({
       name: 'Emacs cursor up',
@@ -45,36 +72,62 @@ export default class CodeEditor extends React.Component {
     })
 
     var session = editor.getSession()
-    let mode = _.findWhere(modes, {name: this.props.mode})
+    let mode = _.findWhere(modes, {name: article.mode})
     let syntaxMode = mode != null
       ? mode.mode
       : 'text'
     session.setMode('ace/mode/' + syntaxMode)
 
-    session.setUseSoftTabs(true)
-    session.setOption('useWorker', false)
+    session.setUseSoftTabs(this.state.indentType === 'space')
+    session.setTabSize(!isNaN(this.state.indentSize) ? parseInt(this.state.indentSize, 10) : 4)
+    session.setOption('useWorker', true)
     session.setUseWrapMode(true)
-    session.setValue(this.props.code)
+    session.setValue(this.props.article.content)
 
-    session.on('change', e => {
-      if (this.props.onChange != null) {
-        var value = editor.getValue()
-        this.props.onChange(e, value)
-      }
-    })
+    session.on('change', this.changeHandler)
+
+    ipc.on('config-apply', this.configApplyHandler)
   }
 
-  componentDidUpdate (prevProps) {
+  componentWillUnmount () {
+    ipc.removeListener('config-apply', this.configApplyHandler)
+    this.editor.getSession().removeListener('change', this.changeHandler)
+  }
+
+  componentDidUpdate (prevProps, prevState) {
     var session = this.editor.getSession()
-    if (this.editor.getValue() !== this.props.code) {
-      session.setValue(this.props.code)
+    if (this.props.article.key !== prevProps.article.key) {
+      session.removeListener('change', this.changeHandler)
+      session.setValue(this.props.article.content)
+      session.getUndoManager().reset()
+      session.on('change', this.changeHandler)
     }
-    if (prevProps.mode !== this.props.mode) {
-      let mode = _.findWhere(modes, {name: this.props.mode})
+    if (prevProps.article.mode !== this.props.article.mode) {
+      let mode = _.findWhere(modes, {name: this.props.article.mode})
       let syntaxMode = mode != null
         ? mode.mode
         : 'text'
       session.setMode('ace/mode/' + syntaxMode)
+    }
+  }
+
+  handleConfigApply () {
+    config = getConfig()
+    this.setState({
+      fontSize: config['editor-font-size'],
+      fontFamily: config['editor-font-family'],
+      indentType: config['editor-indent-type'],
+      indentSize: config['editor-indent-size']
+    }, function () {
+      var session = this.editor.getSession()
+      session.setUseSoftTabs(this.state.indentType === 'space')
+      session.setTabSize(!isNaN(this.state.indentSize) ? parseInt(this.state.indentSize, 10) : 4)
+    })
+  }
+  handleChange (e) {
+    if (this.props.onChange) {
+      var value = this.editor.getValue()
+      this.props.onChange(value)
     }
   }
 
@@ -96,14 +149,23 @@ export default class CodeEditor extends React.Component {
 
   render () {
     return (
-      <div className={this.props.className == null ? 'CodeEditor' : 'CodeEditor ' + this.props.className}></div>
+      <div
+        className={this.props.className == null ? 'CodeEditor' : 'CodeEditor ' + this.props.className}
+        style={{
+          fontSize: this.state.fontSize,
+          fontFamily: this.state.fontFamily
+        }}
+      />
     )
   }
 }
 
 CodeEditor.propTypes = {
-  code: PropTypes.string,
-  mode: PropTypes.string,
+  article: PropTypes.shape({
+    content: PropTypes.string,
+    mode: PropTypes.string,
+    key: PropTypes.string
+  }),
   className: PropTypes.string,
   onChange: PropTypes.func,
   onBlur: PropTypes.func,

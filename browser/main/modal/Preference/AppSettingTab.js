@@ -6,10 +6,13 @@ const electron = require('electron')
 const ipc = electron.ipcRenderer
 const remote = electron.remote
 
+const OSX = global.process.platform === 'darwin'
+
 export default class AppSettingTab extends React.Component {
   constructor (props) {
     super(props)
-    let keymap = remote.getGlobal('keymap')
+    let keymap = Object.assign({}, remote.getGlobal('keymap'))
+    let config = Object.assign({}, remote.getGlobal('config'))
     let userName = props.user != null ? props.user.name : null
 
     this.state = {
@@ -18,10 +21,10 @@ export default class AppSettingTab extends React.Component {
         alert: null
       },
       userAlert: null,
-      keymap: {
-        toggleFinder: keymap.toggleFinder
-      },
-      keymapAlert: null
+      keymap: keymap,
+      keymapAlert: null,
+      config: config,
+      configAlert: null
     }
   }
 
@@ -48,18 +51,30 @@ export default class AppSettingTab extends React.Component {
   }
 
   submitHotKey () {
-    ipc.send('hotkeyUpdated', {
-      toggleFinder: this.state.keymap.toggleFinder
-    })
+    ipc.send('hotkeyUpdated', this.state.keymap)
+  }
+
+  submitConfig () {
+    ipc.send('configUpdated', this.state.config)
   }
 
   handleSaveButtonClick (e) {
     this.submitHotKey()
   }
 
+  handleConfigSaveButtonClick (e) {
+    this.submitConfig()
+  }
+
   handleKeyDown (e) {
     if (e.keyCode === 13) {
       this.submitHotKey()
+    }
+  }
+
+  handleConfigKeyDown (e) {
+    if (e.keyCode === 13) {
+      this.submitConfig()
     }
   }
 
@@ -105,7 +120,60 @@ export default class AppSettingTab extends React.Component {
           </div>
         </div>
         <div className='section'>
+          <div className='sectionTitle'>Text</div>
+          <div className='sectionInput'>
+            <label>Editor Font Size</label>
+            <input valueLink={this.linkState('config.editor-font-size')} onKeyDown={e => this.handleConfigKeyDown(e)} type='text'/>
+          </div>
+          <div className='sectionInput'>
+            <label>Editor Font Family</label>
+            <input valueLink={this.linkState('config.editor-font-family')} onKeyDown={e => this.handleConfigKeyDown(e)} type='text'/>
+          </div>
+          <div className='sectionSelect'>
+            <label>Editor Indent Style</label>
+            <div className='sectionSelect-input'>
+              type
+              <select valueLink={this.linkState('config.editor-indent-type')}>
+                <option value='space'>Space</option>
+                <option value='tab'>Tab</option>
+              </select>
+              size
+              <select valueLink={this.linkState('config.editor-indent-size')}>
+                <option value='2'>2</option>
+                <option value='4'>4</option>
+                <option value='8'>8</option>
+              </select>
+            </div>
+          </div>
+          <div className='sectionInput'>
+            <label>Preview Font Size</label>
+            <input valueLink={this.linkState('config.preview-font-size')} onKeyDown={e => this.handleConfigKeyDown(e)} type='text'/>
+          </div>
+          <div className='sectionInput'>
+            <label>Preview Font Family</label>
+            <input valueLink={this.linkState('config.preview-font-family')} onKeyDown={e => this.handleConfigKeyDown(e)} type='text'/>
+          </div>
+          {
+            true// !OSX
+            ? (
+              <div className='sectionInput'>
+                <label>Direct write(Windows only)</label>
+                <input disabled={OSX} onKeyDown={e => this.handleConfigKeyDown(e)} type='checkbox'/>
+              </div>
+            )
+            : null
+          }
+
+          <div className='sectionConfirm'>
+            <button onClick={e => this.handleConfigSaveButtonClick(e)}>Save</button>
+          </div>
+        </div>
+        <div className='section'>
           <div className='sectionTitle'>Hotkey</div>
+          <div className='sectionInput'>
+            <label>Toggle Main</label>
+            <input onKeyDown={e => this.handleKeyDown(e)} valueLink={this.linkState('keymap.toggleMain')} type='text'/>
+          </div>
           <div className='sectionInput'>
             <label>Toggle Finder(popup)</label>
             <input onKeyDown={e => this.handleKeyDown(e)} valueLink={this.linkState('keymap.toggleFinder')} type='text'/>
@@ -142,5 +210,8 @@ export default class AppSettingTab extends React.Component {
 
 AppSettingTab.prototype.linkState = linkState
 AppSettingTab.propTypes = {
+  user: PropTypes.shape({
+    name: PropTypes.string
+  }),
   dispatch: PropTypes.func
 }

@@ -89,6 +89,31 @@ iptFocusBorderColor = #369DCD
           outline none
           &:focus
             border-color iptFocusBorderColor
+      &>.sectionSelect
+
+        margin-bottom 5px
+        clearfix()
+        height 33px
+        label
+          width 150px
+          padding-left 15px
+          float left
+          line-height 33px
+        .sectionSelect-input
+          float left
+          select
+            width 80px
+            height 25px
+            margin-top 4px
+            border-radius 5px
+            border 1px solid borderColor
+            padding 0 10px
+            font-size 14px
+            outline none
+            margin-left 5px
+            margin-right 15px
+            &:focus
+              border-color iptFocusBorderColor
       &>.sectionConfirm
         clearfix()
         padding 5px 15px
@@ -624,10 +649,3 @@ iptFocusBorderColor = #369DCD
                      color brandColor
                      &:hover
                       color lighten(brandColor, 10%)
-
-
-
-
-
-
-

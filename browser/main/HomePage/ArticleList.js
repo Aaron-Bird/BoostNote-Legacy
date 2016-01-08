@@ -130,7 +130,7 @@ export default class ArticleList extends React.Component {
       let modifiedArticle = _.findWhere(modified, {key: article.key})
       let originalArticle = article
       if (modifiedArticle) {
-        article = Object.assign({}, article, modifiedArticle)
+        article = Object.assign({}, article)
       }
       let tagElements = Array.isArray(article.tags) && article.tags.length > 0
         ? article.tags.slice().map(tag => {
