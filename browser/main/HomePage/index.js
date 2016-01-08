@@ -128,11 +128,11 @@ function buildFilter (key) {
 }
 
 function isContaining (target, needle) {
-  return target.match(new RegExp(_.escapeRegExp(needle)))
+  return target.match(new RegExp(_.escapeRegExp(needle), 'i'))
 }
 
 function startsWith (target, needle) {
-  return target.match(new RegExp('^' + _.escapeRegExp(needle)))
+  return target.match(new RegExp('^' + _.escapeRegExp(needle), 'i'))
 }
 
 function remap (state) {
@@ -170,10 +170,10 @@ function remap (state) {
   let targetFolders
   if (folders != null) {
     let exactTargetFolders = folders.filter(folder => {
-      return _.findWhere(folderExactFilters, {value: folder.name})
+      return _.find(folderExactFilters, filter => filter.value.toLowerCase() === folder.name.toLowerCase())
     })
     let fuzzyTargetFolders = folders.filter(folder => {
-      return _.find(folderFilters, filter => startsWith(folder.name, filter.value))
+      return _.find(folderFilters, filter => startsWith(folder.name.replace(/_/g, ''), filter.value.replace(/_/g, '')))
     })
     targetFolders = status.targetFolders = exactTargetFolders.concat(fuzzyTargetFolders)
 

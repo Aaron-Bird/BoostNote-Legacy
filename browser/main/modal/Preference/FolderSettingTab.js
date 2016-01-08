@@ -20,8 +20,6 @@ export default class FolderSettingTab extends React.Component {
 
   handleSaveButtonClick (e) {
     this.setState({alert: null}, () => {
-      if (this.state.name.trim().length === 0) return false
-
       let { dispatch } = this.props
 
       try {

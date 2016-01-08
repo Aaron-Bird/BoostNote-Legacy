@@ -80,7 +80,7 @@ export default class CodeEditor extends React.Component {
 
     session.setUseSoftTabs(this.state.indentType === 'space')
     session.setTabSize(!isNaN(this.state.indentSize) ? parseInt(this.state.indentSize, 10) : 4)
-    session.setOption('useWorker', true)
+    session.setOption('useWorker', false)
     session.setUseWrapMode(true)
     session.setValue(this.props.article.content)
 

@@ -33,7 +33,6 @@ export default class CreateNewFolder extends React.Component {
         name,
         color
       }
-      console.log(input)
       try {
         store.dispatch(createFolder(input))
       } catch (e) {

@@ -70,11 +70,11 @@ function folders (state = initialFolders, action) {
           updatedAt: new Date()
         })
 
-        if (newFolder.name == null && newFolder.name.length === 0) throw new Error('Folder name is required')
+        if (newFolder.name == null || newFolder.name.length === 0) throw new Error('Folder name is required')
         if (newFolder.name.match(/\//)) throw new Error('`/` is not available for folder name')
 
-        let conflictFolder = _.findWhere(state, {name: newFolder.name})
-        if (conflictFolder != null) throw new Error(`${newFolder.name} already exists!`)
+        let conflictFolder = _.find(state, folder => folder.name.toLowerCase() === newFolder.name.toLowerCase())
+        if (conflictFolder != null) throw new Error(`${conflictFolder.name} already exists!`)
         state.push(newFolder)
 
         dataStore.setFolders(state)
@@ -96,7 +96,7 @@ function folders (state = initialFolders, action) {
         // Name conflict check
         if (targetFolder.name !== folder.name) {
           let conflictFolder = _.find(state, _folder => {
-            return folder.name === _folder.name && folder.key !== _folder.key
+            return folder.name.toLowerCase() === _folder.name.toLowerCase() && folder.key !== _folder.key
           })
           if (conflictFolder != null) throw new Error('Name conflicted')
         }

@@ -18,7 +18,7 @@ import DeleteArticleModal from '../../modal/DeleteArticleModal'
 import ArticleEditor from './ArticleEditor'
 const electron = require('electron')
 const ipc = electron.ipcRenderer
-let count = 0
+
 // const remote = electron.remote
 // const { Menu, MenuItem } = remote
 // const othersMenu = new Menu()
@@ -154,7 +154,7 @@ export default class ArticleDetail extends React.Component {
 
   componentDidUpdate (prevProps, prevState) {
     if (this.props.activeArticle == null || prevProps.activeArticle == null || this.props.activeArticle.key !== prevProps.activeArticle.key) {
-      this.refs.editor.resetCursorPosition()
+      if (this.refs.editor) this.refs.editor.resetCursorPosition()
     }
   }
 
