@@ -94,13 +94,13 @@ export default class ArticleDetail extends React.Component {
     }
     this.titleHandler = e => {
       if (isModalOpen()) return true
-      let titleEl = ReactDOM.findDOMNode(this.refs.title)
-      titleEl.focus()
-      titleEl.select()
+      if (this.refs.title) {
+        this.focusTitle()
+      }
     }
     this.editHandler = e => {
       if (isModalOpen()) return true
-      this.refs.editor.switchEditMode()
+      if (this.refs.editor) this.refs.editor.switchEditMode()
     }
 
     this.state = {
@@ -136,11 +136,10 @@ export default class ArticleDetail extends React.Component {
     if (this.props.activeArticle == null || prevProps.activeArticle == null || this.props.activeArticle.key !== prevProps.activeArticle.key) {
       if (this.refs.editor) this.refs.editor.resetCursorPosition()
     }
-  }
 
-  editArticle () {
-    ReactDOM.findDOMNode(this.refs.title).focus()
-    ReactDOM.findDOMNode(this.refs.title).select()
+    if (prevProps.activeArticle == null && this.props.activeArticle) {
+
+    }
   }
 
   renderEmpty () {
@@ -233,14 +232,27 @@ export default class ArticleDetail extends React.Component {
       e.preventDefault()
       this.switchEditMode()
     }
+
     if (e.keyCode === 9 && e.shiftKey) {
       e.preventDefault()
-      ReactDOM.findDOMNode(this.refs.title).focus()
+      this.focusTitle()
+    }
+
+    if (e.keyCode === 27) {
+      this.focusTitle()
     }
   }
 
   switchEditMode () {
     this.refs.editor.switchEditMode()
+  }
+
+  focusTitle () {
+    if (this.refs.title) {
+      let titleEl = ReactDOM.findDOMNode(this.refs.title)
+      titleEl.focus()
+      titleEl.select()
+    }
   }
 
   render () {

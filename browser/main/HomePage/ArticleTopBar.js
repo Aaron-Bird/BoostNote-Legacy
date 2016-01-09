@@ -125,7 +125,6 @@ export default class ArticleTopBar extends React.Component {
   }
 
   focusInput () {
-    console.log('focinp')
     this.searchInput.focus()
   }
 
@@ -167,7 +166,7 @@ export default class ArticleTopBar extends React.Component {
 
     dispatch(saveArticle(newArticle.key, newArticle, true))
     if (isFolderFilterApplied) dispatch(switchFolder(targetFolders[0].name))
-    remote.getCurrentWebContents().send('detail-edit')
+    remote.getCurrentWebContents().send('detail-title')
   }
 
   handleTutorialButtonClick (e) {

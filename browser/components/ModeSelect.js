@@ -95,10 +95,9 @@ export default class ModeSelect extends React.Component {
         break
       // esc
       case 27:
-        e.preventDefault()
+      case 9:
         e.stopPropagation()
-        this.handleBlur()
-        break
+        this.setIdle()
     }
     if (this.props.onKeyDown) this.props.onKeyDown(e)
   }
