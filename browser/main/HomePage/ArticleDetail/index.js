@@ -92,10 +92,6 @@ export default class ArticleDetail extends React.Component {
       if (isModalOpen()) return true
       this.handleUncache()
     }
-    this.togglePreviewHandler = e => {
-      if (isModalOpen()) return true
-      this.handleTogglePreviewButtonClick()
-    }
     this.editHandler = e => {
       if (isModalOpen()) return true
       this.refs.editor.switchEditMode()
@@ -103,11 +99,8 @@ export default class ArticleDetail extends React.Component {
 
     this.state = {
       article: Object.assign({content: ''}, props.activeArticle),
-      previewMode: true,
       openShareDropdown: false
     }
-
-    if (props.activeArticle != null && props.activeArticle.content.trim().length > 0 && props.activeArticle.mode === 'markdown') this.state.previewMode = true
   }
 
   componentDidMount () {
@@ -119,7 +112,6 @@ export default class ArticleDetail extends React.Component {
     // ipc.on('detail-save', this.saveHandler)
     ipc.on('detail-delete', this.deleteHandler)
     ipc.on('detail-uncache', this.uncacheHandler)
-    ipc.on('detail-toggle-preview', this.togglePreviewHandler)
     ipc.on('detail-edit', this.editHandler)
   }
 
@@ -129,7 +121,6 @@ export default class ArticleDetail extends React.Component {
     // ipc.removeListener('detail-save', this.saveHandler)
     ipc.removeListener('detail-delete', this.deleteHandler)
     ipc.removeListener('detail-uncache', this.uncacheHandler)
-    ipc.removeListener('detail-toggle-preview', this.togglePreviewHandler)
     ipc.removeListener('detail-edit', this.editHandler)
   }
 
