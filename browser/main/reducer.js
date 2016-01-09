@@ -36,6 +36,7 @@ const initialStatus = {
   isTutorialOpen: false
 }
 
+dataStore.init()
 let data = dataStore.getData()
 let initialArticles = {
   data: data && data.articles ? data.articles : [],

@@ -121,7 +121,7 @@ class FinderMain extends React.Component {
     let { articles, activeArticle, status, dispatch } = this.props
     let saveToClipboard = () => this.saveToClipboard()
     return (
-      <div onClick={e => this.handleClick(e)} className='Finder'>
+      <div className='Finder'>
         <FinderInput
           handleSearchChange={e => this.handleSearchChange(e)}
           ref='finderInput'
@@ -243,7 +243,7 @@ var Finder = connect(remap)(FinderMain)
 var store = createStore(reducer)
 
 function refreshData () {
-  let data = dataStore.getData()
+  let data = dataStore.getData(true)
   store.dispatch(actions.refreshData(data))
 }
 

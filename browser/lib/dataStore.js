@@ -71,19 +71,8 @@ export function saveUser (repoName, user) {
 export function init () {
   // set repositories info
   getRepositories()
-
-  data = getData()
-
+  data = jetpack.read(getLocalPath(), 'json')
   if (data == null) {
-    // for 0.4.1 -> 0.4.2
-    if (localStorage.getItem('local') != null) {
-      data = JSON.parse(localStorage.getItem('local'))
-      jetpack.write(getLocalPath(), data)
-      localStorage.removeItem('local')
-      console.log('update 0.4.1 => 0.4.2')
-      return
-    }
-
     let defaultFolder = {
       name: 'default',
       key: keygen()
@@ -108,14 +97,11 @@ export function init () {
   }
 }
 
-export function getData () {
-  if (data == null) {
+export function getData (forceRead) {
+  if (forceRead) {
     try {
       data = jetpack.read(getLocalPath(), 'json')
-
-    } catch (e) {
-      return null
-    }
+    } catch (e) {}
   }
   return data
 }
@@ -140,7 +126,7 @@ function queueSave () {
     if (timer) {
       clearTimeout(timer)
     }
-    timer = setTimeout(saveData, 3000)
+    timer = setTimeout(saveData, 500)
   } else {
     saveAgain = true
   }
@@ -160,21 +146,11 @@ export function setFolders (folders) {
   queueSave()
 }
 
-function isFinderCalled () {
-  var argv = process.argv.slice(1)
-  return argv.some(arg => arg.match(/--finder/))
+export default {
+  getUser,
+  saveUser,
+  init,
+  getData,
+  setArticles,
+  setFolders
 }
-
-export default (function () {
-  if (!isFinderCalled()) {
-    init()
-  }
-  return {
-    getUser,
-    saveUser,
-    init,
-    getData,
-    setArticles,
-    setFolders
-  }
-})()
