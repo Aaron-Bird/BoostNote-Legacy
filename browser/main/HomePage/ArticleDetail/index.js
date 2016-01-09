@@ -139,7 +139,7 @@ export default class ArticleDetail extends React.Component {
     return (
       <div className='ArticleDetail empty'>
         <div className='ArticleDetail-empty-box'>
-          <div className='ArticleDetail-empty-box-message'>Command(⌘) + N<br/>to create a new post</div>
+          <div className='ArticleDetail-empty-box-message'>{OSX ? 'Command(⌘)' : 'Ctrl(^)'} + N<br/>to create a new post</div>
         </div>
       </div>
     )
