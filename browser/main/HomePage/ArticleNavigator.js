@@ -31,7 +31,7 @@ c-4,0-7.9,0-11.9-0.1C164,294,164,297,165.9,297L165.9,297z'/>
 const newFolderTutorialElement = (
   <svg width='800' height='500' className='tutorial'>
     <text x='30' y='110' fill={BRAND_COLOR} fontSize='24'>Create a new folder!!</text>
-    <text x='50' y='135' fill={BRAND_COLOR} fontSize='16'>{OSX ? '`⌘ + Shift + n`' : '`^ + Shift + n`'}</text>
+    <text x='50' y='135' fill={BRAND_COLOR} fontSize='16'>{'press ' + (OSX ? '`⌘ + Shift + n`' : '`^ + Shift + n`')}</text>
     <svg x='50' y='10' width='300' height='400'>
       <path fill='white' d='M94.1,10.9C77.7,15.6,62,22.7,47.8,32.1c-13.6,9-27.7,20.4-37.1,33.9c-1.1,1.6,1.5,3.1,2.6,1.5
         C22.6,54.1,37,42.7,50.6,33.8c13.7-8.8,28.6-15.5,44.2-20C96.7,13.3,95.9,10.4,94.1,10.9L94.1,10.9z'/>
