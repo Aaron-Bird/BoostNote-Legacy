@@ -78,6 +78,14 @@ export default class AppSettingTab extends React.Component {
     }
   }
 
+  handleDisableDirectWriteClick (e) {
+    let config = this.state.config
+    config['disable-direct-write'] = !config['disable-direct-write']
+    this.setState({
+      config
+    })
+  }
+
   handleNameSaveButtonClick (e) {
     let { dispatch } = this.props
 
@@ -156,9 +164,8 @@ export default class AppSettingTab extends React.Component {
           {
             true// !OSX
             ? (
-              <div className='sectionInput'>
-                <label>Direct write(Windows only)</label>
-                <input disabled={OSX} onKeyDown={e => this.handleConfigKeyDown(e)} type='checkbox'/>
+              <div className='sectionCheck'>
+                <label><input onClick={e => this.handleDisableDirectWriteClick(e)} checked={this.state.config['disable-direct-write']} disabled={OSX} type='checkbox'/>Disable Direct Write<span className='sectionCheck-warn'>It will be applied after restarting</span></label>
               </div>
             )
             : null
