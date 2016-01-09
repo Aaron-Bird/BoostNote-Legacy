@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import linkState from 'browser/lib/linkState'
 import { updateUser } from '../../actions'
+import fetchConfig from 'browser/lib/fetchConfig'
 
 const electron = require('electron')
 const ipc = electron.ipcRenderer
@@ -12,7 +13,7 @@ export default class AppSettingTab extends React.Component {
   constructor (props) {
     super(props)
     let keymap = Object.assign({}, remote.getGlobal('keymap'))
-    let config = Object.assign({}, remote.getGlobal('config'))
+    let config = Object.assign({}, fetchConfig())
     let userName = props.user != null ? props.user.name : null
 
     this.state = {

@@ -3,10 +3,10 @@ import markdown from '../lib/markdown'
 import ReactDOM from 'react-dom'
 import sanitizeHtml from '@rokt33r/sanitize-html'
 import _ from 'lodash'
+import fetchConfig from '../lib/fetchConfig'
 
 const electron = require('electron')
 const shell = electron.shell
-const remote = electron.remote
 const ipc = electron.ipcRenderer
 
 const katex = window.katex
@@ -66,17 +66,16 @@ function math2Katex (display) {
   }
 }
 
-function getConfig () {
-  return Object.assign({}, remote.getGlobal('config'))
-}
-
-let config = getConfig()
+let config = fetchConfig()
+ipc.on('config-apply', function (e, newConfig) {
+  config = newConfig
+})
 
 export default class MarkdownPreview extends React.Component {
   constructor (props) {
     super(props)
 
-    this.configApplyHandler = e => this.handleConfigApply(e)
+    this.configApplyHandler = (e, config) => this.handleConfigApply(e, config)
 
     this.state = {
       fontSize: config['preview-font-size'],
@@ -160,8 +159,7 @@ export default class MarkdownPreview extends React.Component {
     }
   }
 
-  handleConfigApply () {
-    config = getConfig()
+  handleConfigApply (e, config) {
     this.setState({
       fontSize: config['preview-font-size'],
       fontFamily: config['preview-font-family']
