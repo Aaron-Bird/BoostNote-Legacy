@@ -183,7 +183,10 @@ export default class MarkdownPreview extends React.Component {
         onMouseMove={e => this.handleMouseMove(e)}
         onMouseUp={e => this.handleMouseUp(e)}
         dangerouslySetInnerHTML={{__html: ' ' + content}}
-        style={{fontSize: this.state.fontSize, fontFamily: this.state.fontFamily}}
+        style={{
+          fontSize: this.state.fontSize,
+          fontFamily: this.state.fontFamily.trim() + ', helvetica, arial, sans-serif'
+        }}
       />
     )
   }

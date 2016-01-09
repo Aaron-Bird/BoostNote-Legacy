@@ -152,7 +152,7 @@ export default class CodeEditor extends React.Component {
         className={this.props.className == null ? 'CodeEditor' : 'CodeEditor ' + this.props.className}
         style={{
           fontSize: this.state.fontSize,
-          fontFamily: this.state.fontFamily
+          fontFamily: this.state.fontFamily.trim() + ', monospace'
         }}
       />
     )
