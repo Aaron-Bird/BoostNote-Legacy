@@ -3,9 +3,23 @@ import ReactDOM from 'react-dom'
 import store from '../store'
 import { destroyArticle } from '../actions'
 
+const electron = require('electron')
+const ipc = electron.ipcRenderer
+
 export default class DeleteArticleModal extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.confirmHandler = e => this.handleYesButtonClick()
+  }
+
   componentDidMount () {
     ReactDOM.findDOMNode(this.refs.no).focus()
+    ipc.on('modal-confirm', this.confirmHandler)
+  }
+
+  componentWillUnmount () {
+    ipc.removeListener('modal-confirm', this.confirmHandler)
   }
 
   handleNoButtonClick (e) {

@@ -9,10 +9,15 @@ import ArticleDetail from './ArticleDetail'
 import _ from 'lodash'
 import { isModalOpen, closeModal } from 'browser/lib/modal'
 
+const electron = require('electron')
+const remote = electron.remote
+
 const TEXT_FILTER = 'TEXT_FILTER'
 const FOLDER_FILTER = 'FOLDER_FILTER'
 const FOLDER_EXACT_FILTER = 'FOLDER_EXACT_FILTER'
 const TAG_FILTER = 'TAG_FILTER'
+
+const OSX = global.process.platform === 'darwin'
 
 class HomePage extends React.Component {
   componentDidMount () {
@@ -28,6 +33,9 @@ class HomePage extends React.Component {
 
   handleKeyDown (e) {
     if (isModalOpen()) {
+      if (e.keyCode === 13 && (OSX ? e.metaKey : e.ctrlKey)) {
+        remote.getCurrentWebContents().send('modal-confirm')
+      }
       if (e.keyCode === 27) closeModal()
       return
     }
