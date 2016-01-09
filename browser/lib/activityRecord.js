@@ -118,15 +118,15 @@ export function emit (type, data = {}) {
   }
 
   let storeData = dataStore.getData()
-  todayRecord.FOLDER_COUNT = _.isArray(storeData.folders) ? storeData.folders.length : 0
-  todayRecord.ARTICLE_COUNT = _.isArray(storeData.articles) ? storeData.articles.length : 0
+  todayRecord.FOLDER_COUNT = storeData && _.isArray(storeData.folders) ? storeData.folders.length : 0
+  todayRecord.ARTICLE_COUNT = storeData && _.isArray(storeData.articles) ? storeData.articles.length : 0
   todayRecord.CLIENT_VERSION = version
 
-  todayRecord.SYNTAX_COUNT = storeData.articles.reduce((sum, article) => {
+  todayRecord.SYNTAX_COUNT = storeData && _.isArray(storeData.articles) ? storeData.articles.reduce((sum, article) => {
     if (sum[article.mode] == null) sum[article.mode] = 1
     else sum[article.mode]++
     return sum
-  }, {})
+  }, {}) : 0
 
   saveAllRecords(records)
 }

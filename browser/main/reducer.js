@@ -38,10 +38,10 @@ const initialStatus = {
 
 let data = dataStore.getData()
 let initialArticles = {
-  data: data.articles,
+  data: data && data.articles ? data.articles : [],
   modified: []
 }
-let initialFolders = data.folders
+let initialFolders = data && data.folders ? data.folders : []
 let initialUser = dataStore.getUser().user
 
 function user (state = initialUser, action) {

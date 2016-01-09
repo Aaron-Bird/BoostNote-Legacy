@@ -72,8 +72,7 @@ export function init () {
   // set repositories info
   getRepositories()
 
-  // set local.json
-  let data = jetpack.read(getLocalPath(), 'json')
+  data = getData()
 
   if (data == null) {
     // for 0.4.1 -> 0.4.2
@@ -105,12 +104,19 @@ export function init () {
       folders: [defaultFolder],
       version: '0.4'
     }
-    queueSave()
+    saveData()
   }
 }
 
 export function getData () {
-  if (data == null) data = jetpack.read(getLocalPath(), 'json')
+  if (data == null) {
+    try {
+      data = jetpack.read(getLocalPath(), 'json')
+
+    } catch (e) {
+      return null
+    }
+  }
   return data
 }
 

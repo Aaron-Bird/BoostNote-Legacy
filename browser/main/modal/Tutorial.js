@@ -80,7 +80,7 @@ export default class Tutorial extends React.Component {
             Boost supports code syntax highlighting.<br/>
             There are more than 100 different type of language.
             <div className='code'>
-              <CodeEditor readOnly mode='jsx' code={code}/>
+              <CodeEditor readOnly article={{content:code, mode: 'jsx'}}/>
             </div>
           </div>
         </div>)
@@ -94,7 +94,7 @@ export default class Tutorial extends React.Component {
             by selecting your file with pressing Enter key,<br/>
             and to paste the contents of the Clipboard with [{process.platform === 'darwin' ? 'Command' : 'Control'}-V]
 
-            <img width='480' src='../../resources/finder.png'/>
+            <img width='480' src='../resources/finder.png'/>
           </div>
         </div>)
       case 4:
