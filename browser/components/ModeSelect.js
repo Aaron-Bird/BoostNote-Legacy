@@ -22,7 +22,7 @@ export default class ModeSelect extends React.Component {
     this.blurHandler = e => {
       let searchElement = ReactDOM.findDOMNode(this.refs.search)
       if (this.state.mode === EDIT_MODE && document.activeElement !== searchElement) {
-        this.handleBlur()
+        this.handleBlur(e)
       }
     }
     window.addEventListener('click', this.blurHandler)
@@ -43,6 +43,7 @@ export default class ModeSelect extends React.Component {
   }
 
   handleModeOptionClick (modeName) {
+    console.log(modeName)
     return e => {
       this.props.onChange(modeName)
       this.setState({
@@ -110,8 +111,8 @@ export default class ModeSelect extends React.Component {
     })
   }
 
-  handleBlur () {
-    if (this.state.mode === EDIT_MODE) {
+  handleBlur (e) {
+    if (e.target !== ReactDOM.findDOMNode(this.refs.search)) {
       this.setState({
         mode: IDLE_MODE,
         search: '',
