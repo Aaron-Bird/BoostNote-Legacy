@@ -1,9 +1,6 @@
 const path = require('path')
 const ChildProcess = require('child_process')
 const packager = require('electron-packager')
-const appdmg = process.platform === 'darwin'
-  ? require('appdmg')
-  : null
 
 module.exports = function (grunt) {
   var auth_code
@@ -76,7 +73,7 @@ module.exports = function (grunt) {
       prune: true,
       overwrite: true,
       out: path.join(__dirname, 'dist'),
-      ignore: /submodules\/ace\/(?!src-min)|submodules\/ace\/(?=src-min-noconflict)|node_modules\/devicon\/icons|dist|^\/browser|^\/secret|\.babelrc|\.gitignore|^\/\.gitmodules|^\/gruntfile|^\/readme.md|^\/webpack/
+      ignore: /submodules\/ace\/(?!src-min)|submodules\/ace\/(?=src-min-noconflict)|node_modules\/devicon\/icons|dist|^\/browser|^\/secret|\.babelrc|\.gitignore|^\/\.gitmodules|^\/gruntfile|^\/readme.md|^\/webpack|^\/appdmg\.json/
     }
     switch (platform) {
       case 'win':
@@ -143,29 +140,19 @@ module.exports = function (grunt) {
 
   grunt.registerTask('create-osx-installer', function () {
     var done = this.async()
-
-    var stream = appdmg({
-      target: 'dist/Boostnote-mac.dmg',
-      basepath: __dirname,
-      specification: {
-        'title': 'Boostnote',
-        'icon': 'resources/dmg.icns',
-        'background': 'resources/boostnote-install.png',
-        'icon-size': 80,
-        'contents': [
-          { 'x': 448, 'y': 344, 'type': 'link', 'path': '/Applications' },
-          { 'x': 192, 'y': 344, 'type': 'file', 'path': 'dist/Boostnote-darwin-x64/Boostnote.app' }
-        ]
-      }
-    })
-    stream.on('finish', function () {
-      done()
-    })
-
-    stream.on('error', function (err) {
-      grunt.log.writeln(err)
-      done(false)
-    })
+    var execPath = 'appdmg appdmg.json dist/Boostnote-mac.dmg'
+    grunt.log.writeln(execPath)
+    ChildProcess.exec(execPath,
+      function (err, stdout, stderr) {
+        grunt.log.writeln(stdout)
+        if (err) {
+          grunt.log.writeln(err)
+          grunt.log.writeln(stderr)
+          done(false)
+          return
+        }
+        done()
+      })
   })
 
   grunt.registerTask('zip', function (platform) {
