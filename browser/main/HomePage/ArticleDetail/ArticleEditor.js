@@ -71,14 +71,21 @@ export default class ArticleEditor extends React.Component {
     if (e.button === 2) return true
     this.isDrag = false
     this.isMouseDown = true
+    this.moveCount = 0
   }
 
   handlePreviewMouseMove () {
-    if (this.isMouseDown) this.isDrag = true
+    if (this.isMouseDown) {
+      this.moveCount++
+      if (this.moveCount > 5) {
+        this.isDrag = true
+      }
+    }
   }
 
   handlePreviewMouseUp () {
     this.isMouseDown = false
+    this.moveCount = 0
     if (!this.isDrag) {
       this.switchEditMode()
     }
