@@ -21,6 +21,7 @@ export default class ArticleList extends React.Component {
   componentDidMount () {
     this.refreshTimer = setInterval(() => this.forceUpdate(), 60 * 1000)
     ipc.on('list-focus', this.focusHandler)
+    this.focus()
   }
 
   componentWillUnmount () {
@@ -100,6 +101,11 @@ export default class ArticleList extends React.Component {
     if (e.keyCode === 68) {
       e.preventDefault()
       remote.getCurrentWebContents().send('detail-delete')
+    }
+
+    if (e.keyCode === 84) {
+      e.preventDefault()
+      remote.getCurrentWebContents().send('detail-title')
     }
 
     if (e.keyCode === 69) {

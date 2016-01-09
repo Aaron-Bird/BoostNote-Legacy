@@ -43,7 +43,6 @@ export default class ModeSelect extends React.Component {
   }
 
   handleModeOptionClick (modeName) {
-    console.log(modeName)
     return e => {
       this.props.onChange(modeName)
       this.setState({
@@ -90,7 +89,7 @@ export default class ModeSelect extends React.Component {
           let targetMode = filteredModes[this.state.focusIndex]
           if (targetMode != null) {
             this.props.onChange(targetMode.name)
-            this.handleBlur()
+            this.setIdle()
           }
         }
         break
@@ -113,14 +112,16 @@ export default class ModeSelect extends React.Component {
 
   handleBlur (e) {
     if (e.target !== ReactDOM.findDOMNode(this.refs.search)) {
-      this.setState({
-        mode: IDLE_MODE,
-        search: '',
-        focusIndex: 0
-      }, function () {
-        if (this.props.onBlur) this.props.onBlur()
-      })
+      this.setIdle()
     }
+  }
+
+  setIdle () {
+    this.setState({
+      mode: IDLE_MODE,
+      search: '',
+      focusIndex: 0
+    })
   }
 
   render () {
@@ -168,6 +169,5 @@ ModeSelect.propTypes = {
   className: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func,
-  onKeyDown: PropTypes.func,
-  onBlur: PropTypes.func
+  onKeyDown: PropTypes.func
 }

@@ -92,6 +92,12 @@ export default class ArticleDetail extends React.Component {
       if (isModalOpen()) return true
       this.handleUncache()
     }
+    this.titleHandler = e => {
+      if (isModalOpen()) return true
+      let titleEl = ReactDOM.findDOMNode(this.refs.title)
+      titleEl.focus()
+      titleEl.select()
+    }
     this.editHandler = e => {
       if (isModalOpen()) return true
       this.refs.editor.switchEditMode()
@@ -112,6 +118,7 @@ export default class ArticleDetail extends React.Component {
     // ipc.on('detail-save', this.saveHandler)
     ipc.on('detail-delete', this.deleteHandler)
     ipc.on('detail-uncache', this.uncacheHandler)
+    ipc.on('detail-title', this.titleHandler)
     ipc.on('detail-edit', this.editHandler)
   }
 
@@ -121,6 +128,7 @@ export default class ArticleDetail extends React.Component {
     // ipc.removeListener('detail-save', this.saveHandler)
     ipc.removeListener('detail-delete', this.deleteHandler)
     ipc.removeListener('detail-uncache', this.uncacheHandler)
+    ipc.removeListener('detail-title', this.titleHandler)
     ipc.removeListener('detail-edit', this.editHandler)
   }
 
@@ -192,6 +200,7 @@ export default class ArticleDetail extends React.Component {
     })
 
     dispatch(updateArticle(article))
+    this.switchEditMode()
   }
 
   handleContentChange (value) {
@@ -222,12 +231,16 @@ export default class ArticleDetail extends React.Component {
   handleModeSelectKeyDown (e) {
     if (e.keyCode === 9 && !e.shiftKey) {
       e.preventDefault()
-      this.refs.editor.switchEditMode()
+      this.switchEditMode()
     }
     if (e.keyCode === 9 && e.shiftKey) {
       e.preventDefault()
       ReactDOM.findDOMNode(this.refs.title).focus()
     }
+  }
+
+  switchEditMode () {
+    this.refs.editor.switchEditMode()
   }
 
   render () {
