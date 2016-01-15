@@ -26,7 +26,8 @@ export default class ArticleEditor extends React.Component {
       status: PREVIEW_MODE,
       cursorPosition: null,
       firstVisibleRow: null,
-      switchPreview: config['switch-preview']
+      switchPreview: config['switch-preview'],
+      isTemporary: false
     }
   }
 
@@ -63,13 +64,14 @@ export default class ArticleEditor extends React.Component {
     })
   }
 
-  switchPreviewMode () {
+  switchPreviewMode (isTemporary = false) {
     let cursorPosition = this.refs.editor.getCursorPosition()
     let firstVisibleRow = this.refs.editor.getFirstVisibleRow()
     this.setState({
       status: PREVIEW_MODE,
       cursorPosition,
-      firstVisibleRow
+      firstVisibleRow,
+      isTemporary: isTemporary
     }, function () {
       let previewEl = ReactDOM.findDOMNode(this.refs.preview)
       let anchors = previewEl.querySelectorAll('.lineAnchor')
@@ -83,16 +85,18 @@ export default class ArticleEditor extends React.Component {
     })
   }
 
-  switchEditMode () {
+  switchEditMode (isTemporary = false) {
     this.setState({
-      status: EDIT_MODE
+      status: EDIT_MODE,
+      isTemporary: false
     }, function () {
       if (this.state.cursorPosition != null) {
         this.refs.editor.moveCursorTo(this.state.cursorPosition.row, this.state.cursorPosition.column)
         this.refs.editor.scrollToLine(this.state.firstVisibleRow)
       }
       this.refs.editor.editor.focus()
-      activityRecord.emit('ARTICLE_UPDATE', this.props.article)
+
+      if (!isTemporary) activityRecord.emit('ARTICLE_UPDATE', this.props.article)
     })
   }
 
@@ -153,12 +157,29 @@ export default class ArticleEditor extends React.Component {
     this.props.onChange(value)
   }
 
+  handleMouseUp (e) {
+    if (e.button === 2 && this.state.switchPreview !== 'rightclick') {
+      if (this.state.isTemporary) this.switchEditMode(true)
+    }
+  }
+
+  handleMouseDowm (e) {
+    if (e.button === 2 && this.state.switchPreview !== 'rightclick' && this.state.status === EDIT_MODE && this.props.article.mode === 'markdown') {
+      this.switchPreviewMode(true)
+    }
+  }
+
   render () {
     let { article } = this.props
     let showPreview = article.mode === 'markdown' && this.state.status === PREVIEW_MODE
     if (showPreview) {
       return (
-        <div onContextMenu={e => this.handleRightClickPreview(e)} className='ArticleEditor'>
+        <div
+          onContextMenu={e => this.handleRightClickPreview(e)}
+          onMouseUp={e => this.handleMouseUp(e)}
+          onMouseDown={e => this.handleMouseDowm(e)}
+          className='ArticleEditor'
+        >
           <MarkdownPreview
             ref='preview'
             onMouseUp={e => this.handlePreviewMouseUp(e)}
@@ -177,7 +198,13 @@ export default class ArticleEditor extends React.Component {
     }
 
     return (
-      <div onContextMenu={e => this.handleRightClickCodeEditor(e)} tabIndex='5' className='ArticleEditor'>
+      <div
+        onContextMenu={e => this.handleRightClickCodeEditor(e)}
+        tabIndex='5'
+        onMouseUp={e => this.handleMouseUp(e)}
+        onMouseDown={e => this.handleMouseDowm(e)}
+        className='ArticleEditor'
+      >
         <CodeEditor
           ref='editor'
           onBlur={e => this.handleBlurCodeEditor(e)}
