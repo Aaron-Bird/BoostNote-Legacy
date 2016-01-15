@@ -1,5 +1,4 @@
 const skeleton = require('./webpack-skeleton')
-const webpack = require('webpack')
 const path = require('path')
 
 var config = Object.assign({}, skeleton, {

@@ -11,8 +11,16 @@ import _ from 'lodash'
 import dataStore from 'browser/lib/dataStore'
 
 const electron = require('electron')
-const { clipboard, ipcRenderer } = electron
+const { clipboard, ipcRenderer, remote } = electron
 const path = require('path')
+
+if (process.env.NODE_ENV === 'development') {
+  window.addEventListener('keydown', function (e) {
+    if (e.keyCode === 73 && e.metaKey && e.altKey) {
+      remote.getCurrentWindow().toggleDevTools()
+    }
+  })
+}
 
 function hideFinder () {
   ipcRenderer.send('hide-finder')

@@ -10,6 +10,15 @@ import activityRecord from 'browser/lib/activityRecord'
 const electron = require('electron')
 const ipc = electron.ipcRenderer
 const path = require('path')
+const remote = electron.remote
+
+if (process.env.NODE_ENV === 'development') {
+  window.addEventListener('keydown', function (e) {
+    if (e.keyCode === 73 && e.metaKey && e.altKey) {
+      remote.getCurrentWindow().toggleDevTools()
+    }
+  })
+}
 
 activityRecord.init()
 window.addEventListener('online', function () {
