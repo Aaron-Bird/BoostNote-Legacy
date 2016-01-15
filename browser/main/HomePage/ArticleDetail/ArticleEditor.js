@@ -85,7 +85,8 @@ export default class ArticleEditor extends React.Component {
     }
   }
 
-  handlePreviewMouseUp () {
+  handlePreviewMouseUp (e) {
+    if (e.button === 2) return true
     this.isMouseDown = false
     this.moveCount = 0
     if (!this.isDrag) {
@@ -94,17 +95,8 @@ export default class ArticleEditor extends React.Component {
   }
 
   handleBlurCodeEditor (e) {
-    let isWindowBlurred = e.relatedTarget === null
     let isFocusingToThis = e.relatedTarget === ReactDOM.findDOMNode(this)
-    let isFocusingToSearch = e.relatedTarget.className === 'ace_search_field'
-
-    if (isWindowBlurred || isFocusingToThis) {
-      e.preventDefault()
-      return
-    }
-
-    if (isFocusingToSearch) {
-      e.preventDefault()
+    if (isFocusingToThis) {
       return
     }
 

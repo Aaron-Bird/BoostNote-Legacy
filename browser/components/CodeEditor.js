@@ -21,6 +21,29 @@ export default class CodeEditor extends React.Component {
 
     this.configApplyHandler = (e, config) => this.handleConfigApply(e, config)
     this.changeHandler = e => this.handleChange(e)
+    this.blurHandler = (e) => {
+      if (e.relatedTarget === null) {
+        return
+      }
+
+      let isFocusingToSearch = e.relatedTarget.className && e.relatedTarget.className.split(' ').some(clss => {
+        return clss === 'ace_search_field' || clss === 'ace_searchbtn' || clss === 'ace_replacebtn' || clss === 'ace_searchbtn_close' || clss === 'ace_text-input'
+      })
+      if (isFocusingToSearch) {
+        return
+      }
+
+      if (this.props.onBlur) this.props.onBlur(e)
+    }
+    this.afterExecHandler = (e) => {
+      switch (e.command.name) {
+        case 'find':
+          Array.prototype.forEach.call(ReactDOM.findDOMNode(this).querySelectorAll('.ace_search_field, .ace_searchbtn, .ace_replacebtn, .ace_searchbtn_close'), el => {
+            el.removeEventListener('blur', this.blurHandler)
+            el.addEventListener('blur', this.blurHandler)
+          })
+      }
+    }
 
     this.state = {
       fontSize: config['editor-font-size'],
@@ -49,6 +72,8 @@ export default class CodeEditor extends React.Component {
     editor.setReadOnly(!!this.props.readOnly)
     editor.setFontSize(this.state.fontSize)
 
+    editor.on('blur', this.blurHandler)
+
     editor.commands.addCommand({
       name: 'Emacs cursor up',
       bindKey: {mac: 'Ctrl-P'},
@@ -67,9 +92,7 @@ export default class CodeEditor extends React.Component {
       readOnly: true
     })
 
-    editor.on('blur', () => {
-      if (this.props.onBlur) this.props.onBlur()
-    })
+    editor.commands.on('afterExec', this.afterExecHandler)
 
     var session = editor.getSession()
     let mode = _.findWhere(modes, {name: article.mode})
@@ -92,6 +115,8 @@ export default class CodeEditor extends React.Component {
   componentWillUnmount () {
     ipc.removeListener('config-apply', this.configApplyHandler)
     this.editor.getSession().removeListener('change', this.changeHandler)
+    this.editor.removeListener('blur', this.blurHandler)
+    this.editor.commands.removeListener('afterExec', this.afterExecHandler)
   }
 
   componentDidUpdate (prevProps, prevState) {
