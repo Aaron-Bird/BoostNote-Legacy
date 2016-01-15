@@ -41,7 +41,7 @@ Post all records(except today)
 and remove all posted records
 */
 export function postRecords (data) {
-  if (process.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== 'production') {
     console.log('post failed - NOT PRODUCTION ')
     return
   }

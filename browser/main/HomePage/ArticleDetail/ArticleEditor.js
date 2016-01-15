@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import MarkdownPreview from 'browser/components/MarkdownPreview'
 import CodeEditor from 'browser/components/CodeEditor'
+import activityRecord from 'browser/lib/activityRecord'
 
 export const PREVIEW_MODE = 'PREVIEW_MODE'
 export const EDIT_MODE = 'EDIT_MODE'
@@ -64,6 +65,7 @@ export default class ArticleEditor extends React.Component {
         this.refs.editor.scrollToLine(this.state.firstVisibleRow)
       }
       this.refs.editor.editor.focus()
+      activityRecord.emit('ARTICLE_UPDATE', this.props.article)
     })
   }
 
@@ -91,7 +93,21 @@ export default class ArticleEditor extends React.Component {
     }
   }
 
-  handleBlurCodeEditor () {
+  handleBlurCodeEditor (e) {
+    let isWindowBlurred = e.relatedTarget === null
+    let isFocusingToThis = e.relatedTarget === ReactDOM.findDOMNode(this)
+    let isFocusingToSearch = e.relatedTarget.className === 'ace_search_field'
+
+    if (isWindowBlurred || isFocusingToThis) {
+      e.preventDefault()
+      return
+    }
+
+    if (isFocusingToSearch) {
+      e.preventDefault()
+      return
+    }
+
     let { article } = this.props
     if (article.mode === 'markdown') {
       this.switchPreviewMode()
@@ -121,7 +137,7 @@ export default class ArticleEditor extends React.Component {
     }
 
     return (
-      <div className='ArticleEditor'>
+      <div tabIndex='5' className='ArticleEditor'>
         <CodeEditor
           ref='editor'
           onBlur={e => this.handleBlurCodeEditor(e)}
@@ -145,5 +161,6 @@ ArticleEditor.propTypes = {
     key: PropTypes.string,
     mode: PropTypes.string
   }),
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  parent: PropTypes.object
 }
