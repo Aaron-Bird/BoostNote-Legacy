@@ -14,7 +14,7 @@ const electron = require('electron')
 const { clipboard, ipcRenderer, remote } = electron
 const path = require('path')
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV !== 'production') {
   window.addEventListener('keydown', function (e) {
     if (e.keyCode === 73 && e.metaKey && e.altKey) {
       remote.getCurrentWindow().toggleDevTools()
