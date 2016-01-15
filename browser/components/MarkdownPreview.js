@@ -52,7 +52,10 @@ function handleAnchorClick (e) {
   }
   e.preventDefault()
   e.stopPropagation()
-  shell.openExternal(e.target.href)
+  let href = e.target.href
+  if (href.match(/^http:\/\/|https:\/\/|mailto:\/\//)) {
+    shell.openExternal(href)
+  }
 }
 
 function stopPropagation (e) {
@@ -117,22 +120,30 @@ export default class MarkdownPreview extends React.Component {
 
   addListener () {
     var anchors = ReactDOM.findDOMNode(this).querySelectorAll('a:not(.lineAnchor)')
+    var inputs = ReactDOM.findDOMNode(this).querySelectorAll('input')
 
-    for (var i = 0; i < anchors.length; i++) {
-      anchors[i].addEventListener('click', handleAnchorClick)
-      anchors[i].addEventListener('mousedown', stopPropagation)
-      anchors[i].addEventListener('mouseup', stopPropagation)
-    }
+    Array.prototype.forEach.call(anchors, anchor => {
+      anchor.addEventListener('click', handleAnchorClick)
+      anchor.addEventListener('mousedown', stopPropagation)
+      anchor.addEventListener('mouseup', stopPropagation)
+    })
+    Array.prototype.forEach.call(inputs, input => {
+      input.addEventListener('click', stopPropagation)
+    })
   }
 
   removeListener () {
     var anchors = ReactDOM.findDOMNode(this).querySelectorAll('a:not(.lineAnchor)')
+    var inputs = ReactDOM.findDOMNode(this).querySelectorAll('input')
 
-    for (var i = 0; i < anchors.length; i++) {
-      anchors[i].removeEventListener('click', handleAnchorClick)
-      anchors[i].removeEventListener('mousedown', stopPropagation)
-      anchors[i].removeEventListener('mouseup', stopPropagation)
-    }
+    Array.prototype.forEach.call(anchors, anchor => {
+      anchor.removeEventListener('click', handleAnchorClick)
+      anchor.removeEventListener('mousedown', stopPropagation)
+      anchor.removeEventListener('mouseup', stopPropagation)
+    })
+    Array.prototype.forEach.call(inputs, input => {
+      input.removeEventListener('click', stopPropagation)
+    })
   }
 
   handleClick (e) {
