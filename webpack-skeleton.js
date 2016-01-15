@@ -32,7 +32,8 @@ var config = {
     'markdown-it-emoji',
     'fs-jetpack',
     'markdown-it-math',
-    '@rokt33r/sanitize-html'
+    '@rokt33r/sanitize-html',
+    'markdown-it-checkbox'
   ]
 }
 

@@ -14,7 +14,7 @@ const katex = window.katex
 const sanitizeOpts = {
   allowedTags: [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
   'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
-  'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'img', 'span', 'cite', 'del', 'u', 'sub', 'sup' ],
+  'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'img', 'span', 'cite', 'del', 'u', 'sub', 'sup', 's', 'input', 'label' ],
   allowedClasses: {
     'a': ['lineAnchor'],
     'div': ['math'],
@@ -24,14 +24,20 @@ const sanitizeOpts = {
   allowedAttributes: {
     a: ['href', 'data-key'],
     img: [ 'src' ],
+    label: ['for'],
+    input: ['checked', 'type'],
     '*': ['id', 'name']
   },
   transformTags: {
     '*': function (tagName, attribs) {
       let href = attribs.href
+      if (tagName === 'input' && attribs.type !== 'checkbox') {
+        return false
+      }
       if (_.isString(href) && href.match(/^#.+$/)) attribs.href = href.replace(/^#/, '#md-anchor-')
       if (attribs.id) attribs.id = 'md-anchor-' + attribs.id
       if (attribs.name) attribs.name = 'md-anchor-' + attribs.name
+      if (attribs.for) attribs.for = 'md-anchor-' + attribs.for
       return {
         tagName: tagName,
         attribs: attribs

@@ -17,7 +17,9 @@ var md = markdownit({
     return str
   }
 })
-md.use(emoji)
+md.use(emoji, {
+  shortcuts: {}
+})
 md.use(math, {
   inlineRenderer: function (str) {
     return `<span class='math'>${str}</span>`
@@ -26,6 +28,7 @@ md.use(math, {
     return `<div class='math'>${str}</div>`
   }
 })
+md.use(require('markdown-it-checkbox'))
 
 let originalRenderToken = md.renderer.renderToken
 md.renderer.renderToken = function renderToken (tokens, idx, options) {
