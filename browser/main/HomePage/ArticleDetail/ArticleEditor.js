@@ -100,47 +100,6 @@ export default class ArticleEditor extends React.Component {
     })
   }
 
-  handlePreviewMouseDown (e) {
-    if (this.state.switchPreview === 'blur' && e.button === 0) {
-      this.isDrag = false
-      this.isMouseDown = true
-      this.moveCount = 0
-    }
-  }
-
-  handlePreviewMouseMove () {
-    if (this.state.switchPreview === 'blur' && this.isMouseDown) {
-      this.moveCount++
-      if (this.moveCount > 5) {
-        this.isDrag = true
-      }
-    }
-  }
-
-  handlePreviewMouseUp (e) {
-    if (this.state.switchPreview === 'blur' && e.button === 0) {
-      this.isMouseDown = false
-      this.moveCount = 0
-      if (!this.isDrag) {
-        this.switchEditMode()
-      }
-    }
-  }
-
-  handleRightClickPreview (e) {
-    let { article } = this.props
-    if (this.state.switchPreview !== 'rightclick' || article.mode !== 'markdown') return true
-
-    this.switchEditMode()
-  }
-
-  handleRightClickCodeEditor (e) {
-    let { article } = this.props
-    if (this.state.switchPreview !== 'rightclick' || article.mode !== 'markdown') return true
-
-    this.switchPreviewMode()
-  }
-
   handleBlurCodeEditor (e) {
     let isFocusingToThis = e.relatedTarget === ReactDOM.findDOMNode(this)
     if (isFocusingToThis || this.state.switchPreview !== 'blur') {
@@ -157,70 +116,97 @@ export default class ArticleEditor extends React.Component {
     this.props.onChange(value)
   }
 
+  handleRightClick (e) {
+    let { article } = this.props
+    if (this.state.switchPreview === 'rightclick' && article.mode === 'markdown') {
+      if (this.state.status === EDIT_MODE) this.switchPreviewMode()
+      else this.switchEditMode()
+    }
+  }
+
   handleMouseUp (e) {
-    if (e.button === 2 && this.state.switchPreview !== 'rightclick') {
-      if (this.state.isTemporary) this.switchEditMode(true)
+    switch (this.state.switchPreview) {
+      case 'blur':
+        switch (e.button) {
+          case 0:
+            this.isMouseDown = false
+            this.moveCount = 0
+            if (!this.isDrag) {
+              this.switchEditMode()
+            }
+            break
+          case 2:
+            if (this.state.isTemporary) this.switchEditMode(true)
+        }
+        break
+      case 'rightclick':
+    }
+  }
+
+  handleMouseMove (e) {
+    if (this.state.switchPreview === 'blur' && this.isMouseDown) {
+      this.moveCount++
+      if (this.moveCount > 5) {
+        this.isDrag = true
+      }
     }
   }
 
   handleMouseDowm (e) {
-    if (e.button === 2 && this.state.switchPreview !== 'rightclick' && this.state.status === EDIT_MODE && this.props.article.mode === 'markdown') {
-      this.switchPreviewMode(true)
+    switch (this.state.switchPreview) {
+      case 'blur':
+        switch (e.button) {
+          case 0:
+            this.isDrag = false
+            this.isMouseDown = true
+            this.moveCount = 0
+            break
+          case 2:
+            if (this.state.status === EDIT_MODE && this.props.article.mode === 'markdown') {
+              this.switchPreviewMode(true)
+            }
+        }
+        break
+      case 'rightclick':
     }
   }
 
   render () {
     let { article } = this.props
     let showPreview = article.mode === 'markdown' && this.state.status === PREVIEW_MODE
-    if (showPreview) {
-      return (
-        <div
-          onContextMenu={e => this.handleRightClickPreview(e)}
-          onMouseUp={e => this.handleMouseUp(e)}
-          onMouseDown={e => this.handleMouseDowm(e)}
-          className='ArticleEditor'
-        >
-          <MarkdownPreview
-            ref='preview'
-            onMouseUp={e => this.handlePreviewMouseUp(e)}
-            onMouseDown={e => this.handlePreviewMouseDown(e)}
-            onMouseMove={e => this.handlePreviewMouseMove(e)}
-            content={article.content}
-          />
-          <div className='ArticleDetail-panel-content-tooltip' children={
-              this.state.switchPreview === 'blur'
-                ? 'Click to Edit'
-                : 'Right Click to Edit'
-            }
-          />
-        </div>
-      )
-    }
 
     return (
       <div
-        onContextMenu={e => this.handleRightClickCodeEditor(e)}
         tabIndex='5'
+        onContextMenu={e => this.handleRightClick(e)}
         onMouseUp={e => this.handleMouseUp(e)}
+        onMouseMove={e => this.handleMouseMove(e)}
         onMouseDown={e => this.handleMouseDowm(e)}
         className='ArticleEditor'
       >
-        <CodeEditor
-          ref='editor'
-          onBlur={e => this.handleBlurCodeEditor(e)}
-          onChange={value => this.handleCodeEditorChange(value)}
-          article={article}
-        />
+        {showPreview
+          ? <MarkdownPreview
+              ref='preview'
+              content={article.content}
+            />
+          : <CodeEditor
+              ref='editor'
+              onBlur={e => this.handleBlurCodeEditor(e)}
+              onChange={value => this.handleCodeEditorChange(value)}
+              article={article}
+            />
+        }
         {article.mode === 'markdown'
-          ? (
-            <div className='ArticleDetail-panel-content-tooltip'
-              children={
-                this.state.switchPreview === 'blur'
+          ? <div className='ArticleDetail-panel-content-tooltip' children={
+              showPreview
+                ? this.state.switchPreview === 'blur'
+                  ? 'Click to Edit'
+                  : 'Right Click to Edit'
+                : this.state.switchPreview === 'blur'
                   ? 'Press ESC to Watch Preview'
                   : 'Right Click to Watch Preview'
               }
             />
-          )
           : null
         }
       </div>
