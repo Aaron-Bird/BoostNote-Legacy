@@ -138,9 +138,9 @@ export default class AppSettingTab extends React.Component {
             <label>Editor Font Family</label>
             <input valueLink={this.linkState('config.editor-font-family')} onKeyDown={e => this.handleConfigKeyDown(e)} type='text'/>
           </div>
-          <div className='sectionSelect'>
+          <div className='sectionMultiSelect'>
             <label>Editor Indent Style</label>
-            <div className='sectionSelect-input'>
+            <div className='sectionMultiSelect-input'>
               type
               <select valueLink={this.linkState('config.editor-indent-type')}>
                 <option value='space'>Space</option>
@@ -162,8 +162,15 @@ export default class AppSettingTab extends React.Component {
             <label>Preview Font Family</label>
             <input valueLink={this.linkState('config.preview-font-family')} onKeyDown={e => this.handleConfigKeyDown(e)} type='text'/>
           </div>
+          <div className='sectionSelect'>
+            <label>Switching Preview</label>
+            <select valueLink={this.linkState('config.switch-preview')}>
+              <option value='blur'>When Editor Blurred</option>
+              <option value='rightclick'>When Right Clicking</option>
+            </select>
+          </div>
           {
-            true// !OSX
+            global.process.platform === 'win32'
             ? (
               <div className='sectionCheck'>
                 <label><input onClick={e => this.handleDisableDirectWriteClick(e)} checked={this.state.config['disable-direct-write']} disabled={OSX} type='checkbox'/>Disable Direct Write<span className='sectionCheck-warn'>It will be applied after restarting</span></label>

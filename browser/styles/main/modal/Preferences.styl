@@ -60,7 +60,7 @@ iptFocusBorderColor = #369DCD
     left 180px
     overflow-y auto
     &>.section
-      padding 10px
+      padding 10px 20px
       border-bottom 1px solid borderColor
       overflow-y auto
       &:nth-last-child(1)
@@ -102,7 +102,6 @@ iptFocusBorderColor = #369DCD
           &:focus
             border-color iptFocusBorderColor
       &>.sectionSelect
-
         margin-bottom 5px
         clearfix()
         height 33px
@@ -111,7 +110,28 @@ iptFocusBorderColor = #369DCD
           padding-left 15px
           float left
           line-height 33px
-        .sectionSelect-input
+        select
+          float left
+          width 200px
+          height 25px
+          margin-top 4px
+          border-radius 5px
+          border 1px solid borderColor
+          padding 0 10px
+          font-size 14px
+          outline none
+          &:focus
+            border-color iptFocusBorderColor
+      &>.sectionMultiSelect
+        margin-bottom 5px
+        clearfix()
+        height 33px
+        label
+          width 150px
+          padding-left 15px
+          float left
+          line-height 33px
+        .sectionMultiSelect-input
           float left
           select
             width 80px

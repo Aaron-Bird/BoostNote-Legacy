@@ -191,8 +191,8 @@ CodeEditor.propTypes = {
     key: PropTypes.string
   }),
   className: PropTypes.string,
-  onChange: PropTypes.func,
   onBlur: PropTypes.func,
+  onChange: PropTypes.func,
   readOnly: PropTypes.bool
 }
 
