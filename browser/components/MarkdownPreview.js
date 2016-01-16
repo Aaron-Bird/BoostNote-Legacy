@@ -66,7 +66,7 @@ function stopPropagation (e) {
 function math2Katex (display) {
   return function (el) {
     try {
-      katex.render(el.innerHTML, el, {display: display})
+      katex.render(el.innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&'), el, {display: display})
       el.className = 'math-rendered'
     } catch (e) {
       el.innerHTML = e.message
