@@ -11,6 +11,8 @@ const ipc = electron.ipcRenderer
 
 const katex = window.katex
 
+const OSX = global.process.platform === 'darwin'
+
 const sanitizeOpts = {
   allowedTags: [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
   'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
@@ -202,7 +204,7 @@ export default class MarkdownPreview extends React.Component {
         dangerouslySetInnerHTML={{__html: ' ' + content}}
         style={{
           fontSize: this.state.fontSize,
-          fontFamily: this.state.fontFamily.trim() + ', helvetica, arial, sans-serif'
+          fontFamily: this.state.fontFamily.trim() + ', helvetica, arial' + (OSX ? '' : ', meiryo, \'Microsoft YaHei\'') + ', sans-serif'
         }}
       />
     )
