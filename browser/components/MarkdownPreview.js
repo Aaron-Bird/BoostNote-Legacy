@@ -204,7 +204,7 @@ export default class MarkdownPreview extends React.Component {
         dangerouslySetInnerHTML={{__html: ' ' + content}}
         style={{
           fontSize: this.state.fontSize,
-          fontFamily: this.state.fontFamily.trim() + ', helvetica, arial' + (OSX ? '' : ', meiryo, \'Microsoft YaHei\'') + ', sans-serif'
+          fontFamily: this.state.fontFamily.trim() + (OSX ? '' : ', meiryo, \'Microsoft YaHei\'') + ', helvetica, arial, sans-serif'
         }}
       />
     )
