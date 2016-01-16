@@ -165,7 +165,7 @@ export default class ArticleDetail extends React.Component {
 
     dispatch(updateArticle(article))
 
-    let targetFolderKey = this.state.article.FolderKey
+    let targetFolderKey = e.target.value
     if (status.targetFolders.length > 0) {
       let targetFolder = _.findWhere(folders, {key: targetFolderKey})
       dispatch(switchFolder(targetFolder.name))
