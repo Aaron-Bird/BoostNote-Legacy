@@ -65,6 +65,7 @@ export default class ArticleEditor extends React.Component {
   }
 
   switchPreviewMode (isTemporary = false) {
+    if (this.props.article.mode !== 'markdown') return true
     let cursorPosition = this.refs.editor.getCursorPosition()
     let firstVisibleRow = this.refs.editor.getFirstVisibleRow()
     this.setState({

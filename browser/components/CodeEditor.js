@@ -87,7 +87,11 @@ export default class CodeEditor extends React.Component {
       name: 'Focus title',
       bindKey: {win: 'Esc', mac: 'Esc'},
       exec: function (editor, e) {
-        remote.getCurrentWebContents().send('list-focus')
+        let currentWindow = remote.getCurrentWebContents()
+        if (config['switch-preview'] === 'rightclick') {
+          currentWindow.send('detail-preview')
+        }
+        currentWindow.send('list-focus')
       },
       readOnly: true
     })

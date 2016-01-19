@@ -102,6 +102,10 @@ export default class ArticleDetail extends React.Component {
       if (isModalOpen()) return true
       if (this.refs.editor) this.refs.editor.switchEditMode()
     }
+    this.previewHandler = e => {
+      if (isModalOpen()) return true
+      if (this.refs.editor) this.refs.editor.switchPreviewMode()
+    }
 
     this.state = {
       article: Object.assign({content: ''}, props.activeArticle),
@@ -120,6 +124,7 @@ export default class ArticleDetail extends React.Component {
     ipc.on('detail-uncache', this.uncacheHandler)
     ipc.on('detail-title', this.titleHandler)
     ipc.on('detail-edit', this.editHandler)
+    ipc.on('detail-preview', this.previewHandler)
   }
 
   componentWillUnmount () {
@@ -130,6 +135,7 @@ export default class ArticleDetail extends React.Component {
     ipc.removeListener('detail-uncache', this.uncacheHandler)
     ipc.removeListener('detail-title', this.titleHandler)
     ipc.removeListener('detail-edit', this.editHandler)
+    ipc.removeListener('detail-preview', this.previewHandler)
   }
 
   componentDidUpdate (prevProps, prevState) {
