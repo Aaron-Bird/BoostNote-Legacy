@@ -38,13 +38,18 @@ export default class CodeEditor extends React.Component {
 
     this.killedBuffer = ''
     this.execHandler = (e) => {
+      console.log(e.command.name)
       switch (e.command.name) {
+        case 'gotolineend':
+          e.preventDefault()
+          let position = this.editor.getCursorPosition()
+          this.editor.navigateTo(position.row, this.editor.getSession().getLine(position.row).length)
+          break
         case 'removetolineend':
           e.preventDefault()
           let range = this.editor.getSelectionRange()
           let session = this.editor.getSession()
           if (range.isEmpty()) {
-            console.log(session.getLine(range.end.row).length)
             range.setEnd(range.start.row, session.getLine(range.start.row).length)
             this.killedBuffer = session.getTextRange(range)
             if (this.killedBuffer.length > 0) {
@@ -60,11 +65,9 @@ export default class CodeEditor extends React.Component {
               session.remove(range)
             }
           } else {
-            console.log('selected')
             this.killedBuffer = session.getTextRange(range)
             session.remove(range)
           }
-          console.log(this.killedBuffer)
       }
     }
     this.afterExecHandler = (e) => {
