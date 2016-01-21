@@ -55,7 +55,7 @@ function handleAnchorClick (e) {
   e.preventDefault()
   e.stopPropagation()
   let href = e.target.href
-  if (href.match(/^http:\/\/|https:\/\/|mailto:\/\//)) {
+  if (href && href.match(/^http:\/\/|https:\/\/|mailto:\/\//)) {
     shell.openExternal(href)
   }
 }
