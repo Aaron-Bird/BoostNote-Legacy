@@ -4,10 +4,7 @@ import moment from 'moment'
 import _ from 'lodash'
 import {
   switchFolder,
-  updateArticle,
-  // cacheArticle,
-  // saveArticle,
-  // uncacheArticle
+  updateArticle
 } from '../../actions'
 import linkState from 'browser/lib/linkState'
 import TagSelect from 'browser/components/TagSelect'
@@ -18,22 +15,6 @@ import DeleteArticleModal from '../../modal/DeleteArticleModal'
 import ArticleEditor from './ArticleEditor'
 const electron = require('electron')
 const ipc = electron.ipcRenderer
-
-// const remote = electron.remote
-// const { Menu, MenuItem } = remote
-// const othersMenu = new Menu()
-// othersMenu.append(new MenuItem({
-//   label: 'Delete Post',
-//   click: function () {
-//     remote.getCurrentWebContents().send('detail-delete')
-//   }
-// }))
-// othersMenu.append(new MenuItem({
-//   label: 'Discard Change',
-//   click: function (item) {
-//     remote.getCurrentWebContents().send('detail-uncache')
-//   }
-// }))
 
 const BRAND_COLOR = '#18AF90'
 const OSX = global.process.platform === 'darwin'
@@ -80,10 +61,6 @@ export default class ArticleDetail extends React.Component {
   constructor (props) {
     super(props)
 
-    this.saveHandler = e => {
-      if (isModalOpen()) return true
-      this.handleSaveButtonClick()
-    }
     this.deleteHandler = e => {
       if (isModalOpen()) return true
       this.handleDeleteButtonClick()
@@ -119,7 +96,6 @@ export default class ArticleDetail extends React.Component {
       e.stopPropagation()
     }
 
-    // ipc.on('detail-save', this.saveHandler)
     ipc.on('detail-delete', this.deleteHandler)
     ipc.on('detail-uncache', this.uncacheHandler)
     ipc.on('detail-title', this.titleHandler)
@@ -130,7 +106,6 @@ export default class ArticleDetail extends React.Component {
   componentWillUnmount () {
     clearInterval(this.refreshTimer)
 
-    // ipc.removeListener('detail-save', this.saveHandler)
     ipc.removeListener('detail-delete', this.deleteHandler)
     ipc.removeListener('detail-uncache', this.uncacheHandler)
     ipc.removeListener('detail-title', this.titleHandler)

@@ -108,7 +108,7 @@ export function emit (type, data = {}) {
   }
 
   // Count ARTICLE_CREATE and ARTICLE_UPDATE again by syntax
-  if ((type === 'ARTICLE_CREATE' || type === 'ARTICLE_UPDATE') && data.mode != null) {
+  if (type === 'ARTICLE_UPDATE' && data.mode != null) {
     let recordKey = type + '_BY_SYNTAX'
     if (todayRecord[recordKey] == null) todayRecord[recordKey] = {}
 

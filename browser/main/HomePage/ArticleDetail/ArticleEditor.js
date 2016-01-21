@@ -32,7 +32,6 @@ export default class ArticleEditor extends React.Component {
   }
 
   componentDidMount () {
-    console.log(this.state.switchPreview)
     ipc.on('config-apply', this.configApplyHandler)
   }
 

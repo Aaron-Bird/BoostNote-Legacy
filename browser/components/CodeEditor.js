@@ -35,6 +35,41 @@ export default class CodeEditor extends React.Component {
 
       if (this.props.onBlur) this.props.onBlur(e)
     }
+
+    this.killedBuffer = ''
+    this.execHandler = (e) => {
+      console.log(e.command.name)
+      switch (e.command.name) {
+        case 'gotolineend':
+          e.preventDefault()
+          let position = this.editor.getCursorPosition()
+          this.editor.navigateTo(position.row, this.editor.getSession().getLine(position.row).length)
+          break
+        case 'removetolineend':
+          e.preventDefault()
+          let range = this.editor.getSelectionRange()
+          let session = this.editor.getSession()
+          if (range.isEmpty()) {
+            range.setEnd(range.start.row, session.getLine(range.start.row).length)
+            this.killedBuffer = session.getTextRange(range)
+            if (this.killedBuffer.length > 0) {
+              console.log('remove to lineend')
+              session.remove(range)
+            } else {
+              if (session.getLength() === range.start.row) {
+                return
+              }
+              range.setStart(range.start.row, range.end.col)
+              range.setEnd(range.start.row + 1, 0)
+              this.killedBuffer = '\n'
+              session.remove(range)
+            }
+          } else {
+            this.killedBuffer = session.getTextRange(range)
+            session.remove(range)
+          }
+      }
+    }
     this.afterExecHandler = (e) => {
       switch (e.command.name) {
         case 'find':
@@ -42,6 +77,7 @@ export default class CodeEditor extends React.Component {
             el.removeEventListener('blur', this.blurHandler)
             el.addEventListener('blur', this.blurHandler)
           })
+          break
       }
     }
 
@@ -84,6 +120,14 @@ export default class CodeEditor extends React.Component {
       readOnly: true
     })
     editor.commands.addCommand({
+      name: 'Emacs cursor up',
+      bindKey: {mac: 'Ctrl-Y'},
+      exec: function (editor) {
+        editor.insert(this.killedBuffer)
+      }.bind(this),
+      readOnly: true
+    })
+    editor.commands.addCommand({
       name: 'Focus title',
       bindKey: {win: 'Esc', mac: 'Esc'},
       exec: function (editor, e) {
@@ -96,6 +140,7 @@ export default class CodeEditor extends React.Component {
       readOnly: true
     })
 
+    editor.commands.on('exec', this.execHandler)
     editor.commands.on('afterExec', this.afterExecHandler)
 
     var session = editor.getSession()
@@ -120,6 +165,7 @@ export default class CodeEditor extends React.Component {
     ipc.removeListener('config-apply', this.configApplyHandler)
     this.editor.getSession().removeListener('change', this.changeHandler)
     this.editor.removeListener('blur', this.blurHandler)
+    this.editor.commands.removeListener('exec', this.execHandler)
     this.editor.commands.removeListener('afterExec', this.afterExecHandler)
   }
 
