@@ -4,6 +4,7 @@ import ExternalLink from 'browser/components/ExternalLink'
 import { setSearchFilter, clearSearch, toggleTutorial, saveArticle, switchFolder } from '../actions'
 import { isModalOpen } from 'browser/lib/modal'
 import keygen from 'browser/lib/keygen'
+import activityRecord from 'browser/lib/activityRecord'
 
 const electron = require('electron')
 const remote = electron.remote
@@ -167,6 +168,7 @@ export default class ArticleTopBar extends React.Component {
     dispatch(saveArticle(newArticle.key, newArticle, true))
     if (isFolderFilterApplied) dispatch(switchFolder(targetFolders[0].name))
     remote.getCurrentWebContents().send('detail-title')
+    activityRecord.emit('ARTICLE_CREATE')
   }
 
   handleTutorialButtonClick (e) {
