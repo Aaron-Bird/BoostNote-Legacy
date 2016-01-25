@@ -49,12 +49,12 @@ const sanitizeOpts = {
 }
 
 function handleAnchorClick (e) {
-  if (e.target.attributes.href && e.target.attributes.href.nodeValue.match(/#.+/)) {
+  if (this.attributes.href && this.attributes.href.nodeValue.match(/^#.+/)) {
     return
   }
   e.preventDefault()
   e.stopPropagation()
-  let href = e.target.href
+  let href = this.href
   if (href && href.match(/^http:\/\/|https:\/\/|mailto:\/\//)) {
     shell.openExternal(href)
   }
