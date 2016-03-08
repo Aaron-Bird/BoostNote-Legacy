@@ -115,6 +115,21 @@ module.exports = function (grunt) {
           done()
         })
         break
+      case 'linux':
+        Object.assign(opts, {
+          platform: 'linux',
+          icon: path.join(__dirname, 'resources/app.icns'),
+          'app-category-type': 'public.app-category.developer-tools'
+        })
+        packager(opts, function (err, appPath) {
+          if (err) {
+            grunt.log.writeln(err)
+            done(err)
+            return
+          }
+          done()
+        })
+        break
     }
   })
 
