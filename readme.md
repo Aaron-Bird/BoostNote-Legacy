@@ -1,8 +1,8 @@
 # Boostnote
 
-Hack your memory
+Simple note app
 
-## Develope
+## Develop
 
 1. turn on HMR server
 
@@ -18,7 +18,11 @@ npm run hot
 
 > `npm start` is using compiled scripts. see [Build](#Build) to compile scripts.
 
+
 ## Build
+
+> '3. Codesign' and '4. Create' installer are needed to deploy this app.
+> You can skip these steps.
 
 1. Compile scripts
 
@@ -78,15 +82,18 @@ grunt zip:osx
 - Webpack
 ... check [`package.json`](./package.json)
 
+
 ## Codestyle
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
 ## Author
 
-[Rokt33r(Dick Choi)](https://github.com/rokt33r)
+[Rokt33r(Dick Choi of MAISIN&CO.)](https://github.com/rokt33r)
 
-## License
+## Copyright & License
+
+Copyright (C) 2016 MAISIN&CO.
 
 [Check here](./LICENSE).
 
