@@ -20,7 +20,7 @@ export default class MainContainer extends React.Component {
   }
 
   handleWheel (e) {
-    if (e.ctrlKey && process.platform !== 'darwin') {
+    if (e.ctrlKey && global.process.platform !== 'darwin') {
       if (window.document.body.style.zoom == null) {
         window.document.body.style.zoom = 1
       }
