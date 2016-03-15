@@ -24,7 +24,7 @@ export default class MainContainer extends React.Component {
       if (window.document.body.style.zoom == null) {
         window.document.body.style.zoom = 1
       }
-      console.log(window.document.body.style.zoom)
+
       let zoom = Number(window.document.body.style.zoom)
       if (e.deltaY > 0 && zoom < 4) {
         document.body.style.zoom = zoom + 0.05

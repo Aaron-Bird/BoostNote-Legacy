@@ -40,10 +40,21 @@ export default class CodeEditor extends React.Component {
     this.execHandler = (e) => {
       console.log(e.command.name)
       switch (e.command.name) {
+        case 'gotolinestart':
+          e.preventDefault()
+          {
+            let position = this.editor.getCursorPosition()
+            this.editor.navigateTo(position.row, 0)
+          }
+          break
         case 'gotolineend':
           e.preventDefault()
           let position = this.editor.getCursorPosition()
           this.editor.navigateTo(position.row, this.editor.getSession().getLine(position.row).length)
+          break
+        case 'jumptomatching':
+          e.preventDefault()
+          this.editor.navigateUp()
           break
         case 'removetolineend':
           e.preventDefault()
