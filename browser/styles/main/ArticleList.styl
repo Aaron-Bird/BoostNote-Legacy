@@ -70,17 +70,25 @@ articleItemColor = #777
       .ArticleList-item-bottom
         padding-bottom 5px
         .tags
-          word-wrap break-word
           color articleItemColor
           line-height 18px
+          word-wrap break-word
+          clearfix()
           i.fa-tags
             display inline
+            float left
+            padding 2px 2px 0 0
+            height 14px
+            line-height 13px
           a
             background-color brandColor
+            float left
             color white
             border-radius 2px
             padding 1px 5px
             margin 2px
+            height 14px
+            line-height 13px
             font-size 10px
             opacity 0.8
             &:hover
