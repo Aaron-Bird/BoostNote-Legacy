@@ -16,7 +16,7 @@ articleItemColor = #777
     .ArticleList-item
       border solid 2px transparent
       position relative
-      height 110px
+      min-height 110px
       width 100%
       cursor pointer
       transition 0.1s
@@ -68,18 +68,27 @@ articleItemColor = #777
           code
             font-family Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro, monospace
       .ArticleList-item-bottom
-        overflow-x auto
-        white-space nowrap
-        padding-top 6px
+        padding-bottom 5px
         .tags
           color articleItemColor
-          height 14px
+          line-height 18px
+          word-wrap break-word
+          clearfix()
+          i.fa-tags
+            display inline
+            float left
+            padding 2px 2px 0 0
+            height 14px
+            line-height 13px
           a
             background-color brandColor
+            float left
             color white
             border-radius 2px
             padding 1px 5px
             margin 2px
+            height 14px
+            line-height 13px
             font-size 10px
             opacity 0.8
             &:hover

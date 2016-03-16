@@ -2,6 +2,14 @@
 
 Simple note app
 
+## Progress Kanban
+
+https://trello.com/b/wJlinZJx/boostnote-todo-list
+
+This is a public Kanban board. Also everyone can comment here.
+
+If you want to join us, ask me to add you.
+
 ## Develop
 
 1. turn on HMR server

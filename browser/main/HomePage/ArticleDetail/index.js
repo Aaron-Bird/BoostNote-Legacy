@@ -15,6 +15,12 @@ import DeleteArticleModal from '../../modal/DeleteArticleModal'
 import ArticleEditor from './ArticleEditor'
 const electron = require('electron')
 const ipc = electron.ipcRenderer
+import fetchConfig from 'browser/lib/fetchConfig'
+
+let config = fetchConfig()
+ipc.on('config-apply', function (e, newConfig) {
+  config = newConfig
+})
 
 const BRAND_COLOR = '#18AF90'
 const OSX = global.process.platform === 'darwin'
@@ -83,10 +89,12 @@ export default class ArticleDetail extends React.Component {
       if (isModalOpen()) return true
       if (this.refs.editor) this.refs.editor.switchPreviewMode()
     }
+    this.configApplyHandler = (e, config) => this.handleConfigApply(e, config)
 
     this.state = {
       article: Object.assign({content: ''}, props.activeArticle),
-      openShareDropdown: false
+      openShareDropdown: false,
+      fontFamily: config['editor-font-family']
     }
   }
 
@@ -101,6 +109,7 @@ export default class ArticleDetail extends React.Component {
     ipc.on('detail-title', this.titleHandler)
     ipc.on('detail-edit', this.editHandler)
     ipc.on('detail-preview', this.previewHandler)
+    ipc.on('config-apply', this.configApplyHandler)
   }
 
   componentWillUnmount () {
@@ -121,6 +130,12 @@ export default class ArticleDetail extends React.Component {
     if (prevProps.activeArticle == null && this.props.activeArticle) {
 
     }
+  }
+
+  handleConfigApply (e, config) {
+    this.setState({
+      fontFamily: config['editor-font-family']
+    })
   }
 
   renderEmpty () {
@@ -309,6 +324,9 @@ export default class ArticleDetail extends React.Component {
                 ref='title'
                 value={activeArticle.title}
                 onChange={e => this.handleTitleChange(e)}
+                style={{
+                  fontFamily: this.state.fontFamily
+                }}
               />
             </div>
             <ModeSelect
