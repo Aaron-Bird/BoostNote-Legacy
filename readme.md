@@ -10,6 +10,13 @@ This is a public Kanban board. Also everyone can comment here.
 
 If you want to join us, ask me to add you.
 
+## Live coding
+
+I've been broadcasting my work. You can check it from the below links. :smile:
+
+- [Live Stream](https://www.livecoding.tv/rokt33r/videos/)
+- [Recorded Videos](https://www.livecoding.tv/rokt33r/videos/)
+
 ## Develop
 
 1. turn on HMR server
