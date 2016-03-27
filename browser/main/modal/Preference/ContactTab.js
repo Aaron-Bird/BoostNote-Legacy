@@ -14,9 +14,6 @@ export default class ContactTab extends React.Component {
       <div className='ContactTab content'>
         <div className='title'>Contact</div>
         <p>
-          - E-mail: <ExternalLink href='mailto:rokt33r@gmail.com?Subject=About%20Boost'>rokt33r@gmail.com</ExternalLink>
-        </p>
-        <p>
           - Issues: <ExternalLink href='https://github.com/BoostIO/Boostnote/issues'>https://github.com/BoostIO/Boostnote/issues</ExternalLink>
         </p>
       </div>
