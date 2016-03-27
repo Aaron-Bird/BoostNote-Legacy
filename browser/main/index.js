@@ -5,7 +5,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 require('../styles/main/index.styl')
 import { openModal } from 'browser/lib/modal'
-import Tutorial from './modal/Tutorial'
+import OSSAnnounceModal from './modal/OSSAnnounceModal'
 import activityRecord from 'browser/lib/activityRecord'
 const electron = require('electron')
 const ipc = electron.ipcRenderer
@@ -59,9 +59,10 @@ ReactDOM.render((
   loadingCover.parentNode.removeChild(loadingCover)
   let status = JSON.parse(localStorage.getItem('status'))
   if (status == null) status = {}
-  if (!status.introWatched) {
-    openModal(Tutorial)
-    status.introWatched = true
+
+  if (!status.ossAnnounceWatched) {
+    openModal(OSSAnnounceModal)
+    status.ossAnnounceWatched = true
     localStorage.setItem('status', JSON.stringify(status))
   }
 })

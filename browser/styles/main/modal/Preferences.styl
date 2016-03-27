@@ -177,69 +177,14 @@ iptFocusBorderColor = #369DCD
         color errorTextColor
         background-color errorBackgroundColor
     &.ContactTab
-      &.done
-        .message
-          margin-top 75px
-          margin-bottom 15px
-          text-align center
-          font-size 22px
-          .checkIcon
-            margin-bottom 15px
-            font-size 144px
-            color brandColor
-            text-align center
-        .control
-          text-align center
-          button
-            border solid 1px borderColor
-            border-radius 5px
-            background-color white
-            padding 15px 15px
-            font-size 14px
-            &:hover
-              background-color darken(white, 10%)
-      &.form
-        padding 10px
-        .title
-          font-size 18px
-          color brandColor
-          margin-top 10px
-          margin-bottom 10px
-        .description
-          margin-bottom 15px
-        .iptGroup
-          margin-bottom 10px
-          input, textarea
-            border-radius 5px
-            border 1px solid borderColor
-            font-size 14px
-            outline none
-            padding 10px 15px
-            width 100%
-            &:focus
-              border-color iptFocusBorderColor
-          textarea
-            resize vertical
-            min-height 150px
-        .formControl
-          clearfix()
-          .alert
-            float right
-            padding 10px 15px
-            margin 0 5px 0
-            font-size 14px
-            line-height normal
-          button
-            padding 10px 15px
-            background-color brandColor
-            color white
-            font-size 14px
-            border-radius 5px
-            border none
-            float right
-            &:hover
-              background-color lighten(brandColor, 10%)
-
+      padding 10px
+      .title
+        font-size 18px
+        color brandColor
+        margin-top 10px
+        margin-bottom 10px
+      p
+        line-height 2
     &.AppSettingTab
       .description
         marked()

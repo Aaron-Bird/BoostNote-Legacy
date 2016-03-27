@@ -231,8 +231,8 @@ export default class ArticleTopBar extends React.Component {
                   <ExternalLink className='ArticleTopBar-right-links-button-dropdown-item' href='https://b00st.io'>
                     <i className='fa fa-fw fa-home'/>Boost official page
                   </ExternalLink>
-                  <ExternalLink className='ArticleTopBar-right-links-button-dropdown-item' href='https://github.com/BoostIO/boost-app-discussions/issues'>
-                    <i className='fa fa-fw fa-bullhorn'/> Discuss
+                  <ExternalLink className='ArticleTopBar-right-links-button-dropdown-item' href='https://github.com/BoostIO/Boostnote/issues'>
+                    <i className='fa fa-fw fa-github'/> Issues
                   </ExternalLink>
                 </div>
               )
