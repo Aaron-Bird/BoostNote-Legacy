@@ -125,6 +125,12 @@ export default class ArticleEditor extends React.Component {
   }
 
   handleMouseUp (e) {
+    let { article } = this.props
+    let showPreview = article.mode === 'markdown' && this.state.status === PREVIEW_MODE
+    if (!showPreview) {
+      return false
+    }
+
     switch (this.state.switchPreview) {
       case 'blur':
         switch (e.button) {
@@ -144,6 +150,12 @@ export default class ArticleEditor extends React.Component {
   }
 
   handleMouseMove (e) {
+    let { article } = this.props
+    let showPreview = article.mode === 'markdown' && this.state.status === PREVIEW_MODE
+    if (!showPreview) {
+      return false
+    }
+
     if (this.state.switchPreview === 'blur' && this.isMouseDown) {
       this.moveCount++
       if (this.moveCount > 5) {
@@ -153,6 +165,12 @@ export default class ArticleEditor extends React.Component {
   }
 
   handleMouseDowm (e) {
+    let { article } = this.props
+    let showPreview = article.mode === 'markdown' && this.state.status === PREVIEW_MODE
+    if (!showPreview) {
+      return false
+    }
+
     switch (this.state.switchPreview) {
       case 'blur':
         switch (e.button) {
