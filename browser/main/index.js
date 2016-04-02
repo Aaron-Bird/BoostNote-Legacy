@@ -25,6 +25,15 @@ window.addEventListener('online', function () {
   ipc.send('check-update', 'check-update')
 })
 
+document.addEventListener('drop', function (e) {
+  e.preventDefault()
+  e.stopPropagation()
+})
+document.addEventListener('dragover', function (e) {
+  e.preventDefault()
+  e.stopPropagation()
+})
+
 function notify (title, options) {
   if (process.platform === 'win32') {
     options.icon = path.join('file://', global.__dirname, '../../resources/app.png')
