@@ -60,6 +60,7 @@
     "electron-release": "^2.2.0",
     "grunt": "^0.4.5",
     "grunt-electron-installer": "^1.2.0",
+    "grunt-electron-installer-debian": "^0.2.0",
     "history": "^1.17.0",
     "nib": "^1.1.0",
     "react": "^0.14.3",

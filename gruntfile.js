@@ -29,10 +29,27 @@ module.exports = function (grunt) {
         certificatePassword: WIN_CERT_PASSWORD,
         noMsi: true
       }
+   },
+  'electron-installer-debian': {
+      app: {
+        options: {
+          arch: 'amd64',
+          categories: [
+              'Development',
+              'Utility'
+          ],
+          icon: path.join(__dirname, 'resources/app.png'),
+          bin: 'Boostnote'
+        },
+        src: path.join(__dirname, 'dist', 'Boostnote-linux-x64'),
+        dest: path.join(__dirname, 'dist')
+      }
     }
   }
+
   grunt.initConfig(initConfig)
   grunt.loadNpmTasks('grunt-electron-installer')
+  grunt.loadNpmTasks('grunt-electron-installer-debian')
 
   grunt.registerTask('compile', function () {
     var done = this.async()
@@ -206,6 +223,9 @@ module.exports = function (grunt) {
       case 'osx':
         grunt.task.run(['compile', 'pack:osx', 'codesign', 'create-osx-installer', 'zip:osx'])
         break
+      case 'linux':
+        grunt.task.run(['compile', 'pack:linux', 'electron-installer-debian'])
+        break;
     }
   })
 
