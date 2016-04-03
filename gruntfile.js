@@ -212,10 +212,22 @@ module.exports = function (grunt) {
     }
   })
 
-  grunt.registerTask('build', function (platform) {
-    if (!platform) {
-      platform = process.platform === 'darwin' ? 'osx' : process.platform === 'win32' ? 'win' : null
+  function getTarget () {
+    switch (process.platform) {
+      case 'darwin':
+        return 'osx'
+      case 'win32':
+        return 'win'
+      case 'linux':
+        return 'linux'
+      default:
+        return process.platform
     }
+  }
+
+  grunt.registerTask('build', function (platform) {
+    if (platform == null) platform = getTarget()
+
     switch (platform) {
       case 'win':
         grunt.task.run(['compile', 'pack:win', 'create-windows-installer'])
@@ -225,14 +237,13 @@ module.exports = function (grunt) {
         break
       case 'linux':
         grunt.task.run(['compile', 'pack:linux', 'electron-installer-debian'])
-        break;
+        break
     }
   })
 
   grunt.registerTask('pre-build', function (platform) {
-    if (!platform) {
-      platform = process.platform === 'darwin' ? 'osx' : process.platform === 'win32' ? 'win' : null
-    }
+    if (platform == null) platform = getTarget()
+
     switch (platform) {
       case 'win':
         grunt.task.run(['compile', 'pack:win'])
