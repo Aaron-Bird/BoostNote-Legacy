@@ -29,14 +29,16 @@ module.exports = function (grunt) {
         certificatePassword: WIN_CERT_PASSWORD,
         noMsi: true
       }
-   },
-  'electron-installer-debian': {
+    },
+    'electron-installer-debian': {
       app: {
         options: {
+          productName: 'Boostnote',
+          productDescription: 'The opensource note app for developer.',
           arch: 'amd64',
           categories: [
-              'Development',
-              'Utility'
+            'Development',
+            'Utility'
           ],
           icon: path.join(__dirname, 'resources/app.png'),
           bin: 'Boostnote'
