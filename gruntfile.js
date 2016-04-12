@@ -33,7 +33,9 @@ module.exports = function (grunt) {
     'electron-installer-debian': {
       app: {
         options: {
+          name: 'boostnote',
           productName: 'Boostnote',
+          genericName: 'Boostnote',
           productDescription: 'The opensource note app for developer.',
           arch: 'amd64',
           categories: [
