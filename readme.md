@@ -10,12 +10,29 @@ This is a public Kanban board. Also everyone can comment here.
 
 If you want to join us, ask me to add you.
 
-## Live coding
+## System requirement
 
-I've been broadcasting my work. You can check it from the below links. :smile:
+This app is built on Electron.
 
-- [Live Stream](https://www.livecoding.tv/rokt33r/videos/)
-- [Recorded Videos](https://www.livecoding.tv/rokt33r/videos/)
+You can check it from [here](https://github.com/electron/electron/blob/master/docs/tutorial/supported-platforms.md).
+
+## About note storage
+
+Currently, Boostnote stores data to a single json file.
+
+You can find it from the path below.
+
+OS X
+```
+/Users/$USER_NAME$/Library/Application Support/boost/local.json
+```
+
+Windows
+```
+C:\Users\$USER_NAME$\AppData\Roaming\boost\local.json
+```
+
+On v0.6.0, You will be able to select any folder in your file system.
 
 ## Develop
 
