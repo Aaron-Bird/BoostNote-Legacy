@@ -16,6 +16,8 @@ This app is built on Electron.
 
 You can check it from [here](https://github.com/electron/electron/blob/master/docs/tutorial/supported-platforms.md).
 
+Currently, I'm testing this app on Windows 10(64bit), OS X El Capitan, Ubuntu Linux, Arch Linux.
+
 ## About note storage
 
 Currently, Boostnote stores data to a single json file.
