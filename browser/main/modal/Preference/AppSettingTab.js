@@ -118,7 +118,7 @@ export default class AppSettingTab extends React.Component {
     return (
       <div className='AppSettingTab content'>
         <div className='section'>
-          <div className='sectionTitle'>User's info</div>
+          <div className='sectionTitle'>User&apos;s info</div>
           <div className='sectionInput'>
             <label>User name</label>
             <input valueLink={this.linkState('user.name')} type='text'/>
