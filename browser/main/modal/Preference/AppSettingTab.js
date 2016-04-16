@@ -6,6 +6,7 @@ import fetchConfig from 'browser/lib/fetchConfig'
 const electron = require('electron')
 const ipc = electron.ipcRenderer
 const remote = electron.remote
+const ace = window.ace
 
 const OSX = global.process.platform === 'darwin'
 
@@ -114,6 +115,7 @@ export default class AppSettingTab extends React.Component {
           {userAlert.message}
         </p>
       ) : null
+    let aceThemeList = ace.require("ace/ext/themelist")
 
     return (
       <div className='AppSettingTab content'>
@@ -129,7 +131,7 @@ export default class AppSettingTab extends React.Component {
           </div>
         </div>
         <div className='section'>
-          <div className='sectionTitle'>Text</div>
+          <div className='sectionTitle'>Editor</div>
           <div className='sectionInput'>
             <label>Editor Font Size</label>
             <input valueLink={this.linkState('config.editor-font-size')} onKeyDown={e => this.handleConfigKeyDown(e)} type='text'/>
@@ -154,6 +156,7 @@ export default class AppSettingTab extends React.Component {
               </select>
             </div>
           </div>
+          <div className='sectionTitle'>Preview</div>
           <div className='sectionInput'>
             <label>Preview Font Size</label>
             <input valueLink={this.linkState('config.preview-font-size')} onKeyDown={e => this.handleConfigKeyDown(e)} type='text'/>
@@ -178,7 +181,17 @@ export default class AppSettingTab extends React.Component {
             )
             : null
           }
-
+          <div className='sectionTitle'>Theme</div>
+          <div className='sectionSelect'>
+            <label>Syntax Theme</label>
+            <select valueLink={this.linkState('config.theme-syntax')}>
+              {
+                aceThemeList.themes.map(function(v, i){
+                  return (<option value={v.name} key={v.name}>{v.caption}</option>)
+                })
+              }
+            </select>
+          </div>
           <div className='sectionConfirm'>
             <button onClick={e => this.handleConfigSaveButtonClick(e)}>Save</button>
           </div>
