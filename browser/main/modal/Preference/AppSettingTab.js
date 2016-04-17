@@ -183,6 +183,13 @@ export default class AppSettingTab extends React.Component {
           }
           <div className='sectionTitle'>Theme</div>
           <div className='sectionSelect'>
+            <label>UI Theme</label>
+            <select valueLink={this.linkState('config.theme-ui')}>
+              <option value='light'>Light</option>
+              <option value='dark'>Dark</option>
+            </select>
+          </div>
+          <div className='sectionSelect'>
             <label>Syntax Theme</label>
             <select valueLink={this.linkState('config.theme-syntax')}>
               {

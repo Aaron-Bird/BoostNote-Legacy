@@ -14,6 +14,7 @@ const defaultConfig = {
   'preview-font-family': 'Lato',
   'switch-preview': 'blur',
   'disable-direct-write': false,
+  'theme-ui': 'light',
   'theme-syntax': 'xcode'
 }
 
