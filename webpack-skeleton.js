@@ -19,9 +19,15 @@ var config = {
     new webpack.NoErrorsPlugin(),
     new NodeTargetPlugin()
   ],
+  stylus: {
+    use: [require('nib')()],
+    import: [
+      '~nib/lib/nib/index.styl',
+      path.resolve(__dirname, 'browser/styles/index.styl')
+    ]
+  },
   externals: [
     'electron',
-    'socket.io-client',
     'md5',
     'superagent',
     'superagent-promise',
@@ -33,7 +39,14 @@ var config = {
     'fs-jetpack',
     'markdown-it-math',
     '@rokt33r/sanitize-html',
-    'markdown-it-checkbox'
+    'markdown-it-checkbox',
+    'season',
+    {
+      react: 'var React',
+      'react-dom': 'var ReactDOM',
+      'react-redux': 'var ReactRedux',
+      'redux': 'var Redux'
+    }
   ]
 }
 

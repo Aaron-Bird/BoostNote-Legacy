@@ -1,6 +1,8 @@
 const path = require('path')
 const ChildProcess = require('child_process')
 const packager = require('electron-packager')
+const fs = require('fs')
+const merge = require('merge-stream')
 
 module.exports = function (grunt) {
   var auth_code
@@ -54,6 +56,30 @@ module.exports = function (grunt) {
   grunt.initConfig(initConfig)
   grunt.loadNpmTasks('grunt-electron-installer')
   grunt.loadNpmTasks('grunt-electron-installer-debian')
+
+  grunt.registerTask('copy', function () {
+    var done = this.async()
+    var targetPaths = [
+      'node_modules/react/dist/react.min.js',
+      'node_modules/react-dom/dist/react-dom.min.js',
+      'node_modules/react-redux/dist/react-redux.min.js',
+      'node_modules/redux/dist/redux.min.js'
+    ]
+
+    var merged = merge()
+    targetPaths.forEach(function (targetPath) {
+      var read = fs
+        .createReadStream(path.resolve(__dirname, targetPath))
+      var write = fs.createWriteStream(path.resolve(__dirname, 'compiled', path.basename(targetPath)))
+      read.pipe(write)
+      merged.add(read)
+    })
+
+    merged
+      .on('end', function () {
+        done()
+      })
+  })
 
   grunt.registerTask('compile', function () {
     var done = this.async()
