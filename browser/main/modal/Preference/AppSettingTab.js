@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import linkState from 'browser/lib/linkState'
 import { updateUser } from '../../actions'
 import fetchConfig from 'browser/lib/fetchConfig'
+import hljsTheme from 'browser/lib/hljsThemes'
 
 const electron = require('electron')
 const ipc = electron.ipcRenderer
@@ -116,6 +117,7 @@ export default class AppSettingTab extends React.Component {
         </p>
       ) : null
     let aceThemeList = ace.require("ace/ext/themelist")
+    let hljsThemeList = hljsTheme()
 
     return (
       <div className='AppSettingTab content'>
@@ -187,6 +189,16 @@ export default class AppSettingTab extends React.Component {
             <select valueLink={this.linkState('config.theme-ui')}>
               <option value='light'>Light</option>
               <option value='dark'>Dark</option>
+            </select>
+          </div>
+          <div className='sectionSelect'>
+            <label>Code Theme</label>
+            <select valueLink={this.linkState('config.theme-code')}>
+              {
+                hljsThemeList.map(function(v, i){
+                  return (<option value={v.name} key={v.name}>{v.caption}</option>)
+                })
+              }
             </select>
           </div>
           <div className='sectionSelect'>

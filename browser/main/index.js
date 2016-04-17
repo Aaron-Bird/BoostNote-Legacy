@@ -24,6 +24,9 @@ ipc.on('config-apply', function (e, newConfig) {
 function applyConfig(config) {
   let body = document.body
   body.setAttribute('data-theme', config['theme-ui'])
+
+  let hljsCss = document.getElementById('hljs-css')
+  hljsCss.setAttribute('href', '../node_modules/highlight.js/styles/' + config['theme-code'] + '.css')
 }
 
 if (process.env.NODE_ENV !== 'production') {
