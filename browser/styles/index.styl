@@ -1,0 +1,32 @@
+$brand-color = #2BAC8F
+
+$danger-color = red
+$danger-lighten-color = #FFE5E6
+
+
+/*
+* # Border
+*/
+$border-color = #D0D0D0
+$active-border-color = #369DCD
+
+$default-border = solid 1px $border-color
+$active-border = solid 1px $active-border-color
+
+/**
+* # Modal Stuff
+* These will be moved lib/modal
+*/
+
+$modal-z-index = 1002
+$modal-background = white
+$modal-margin = 64px auto 0
+$modal-border-radius = 5px
+
+modal()
+  position relative
+  z-index $modal-z-index
+  margin $modal-margin
+  background-color $modal-background
+  overflow hidden
+  border-radius $modal-border-radius
