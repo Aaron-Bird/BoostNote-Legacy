@@ -3,7 +3,7 @@ import MainPage from './MainPage'
 import store from './store'
 import React from 'react'
 import ReactDOM from 'react-dom'
-require('../styles/main/index.styl')
+require('!!style!css!stylus?sourceMap!../styles/main/index.styl')
 import { openModal } from 'browser/lib/modal'
 import OSSAnnounceModal from './modal/OSSAnnounceModal'
 import activityRecord from 'browser/lib/activityRecord'
