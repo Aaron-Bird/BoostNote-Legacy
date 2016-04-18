@@ -153,6 +153,17 @@ export function toggleTutorial () {
   }
 }
 
+/**
+ * v0.6.* Actions
+ */
+
+export function addRepo (data) {
+  return {
+    type: 'ADD_REPOSITORY',
+    data
+  }
+}
+
 export default {
   updateUser,
 
@@ -174,5 +185,8 @@ export default {
   setSearchFilter,
   setTagFilter,
   clearSearch,
-  toggleTutorial
+  toggleTutorial,
+
+  // v0.6.*
+  addRepo
 }

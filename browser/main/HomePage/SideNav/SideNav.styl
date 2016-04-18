@@ -1,0 +1,63 @@
+$nav-border-color = #838383
+$nav-background-color = #353535
+
+.root
+  absolute top bottom left
+  width 200px
+  border-right solid 1px $nav-border-color
+  background-color $nav-background-color
+
+.menu
+  margin-top 30px
+  margin-bottom 15px
+
+.menu-button
+  height 33px
+  padding 0 10px
+  font-size 14px
+  width 100%
+  text-align left
+  border none
+  color white
+  background-color transparent
+  &:hover
+    background-color alph(white, 0.1)
+  &:active
+    background-color $brand-color
+
+.repositoryList
+  absolute left right
+  top 145px
+  border-top solid 1px $nav-border-color
+
+.control
+  absolute bottom left right
+  height 33px
+  border-top solid 1px $nav-border-color
+
+.control-newRepositoryButton
+  absolute top bottom left
+  width 167px
+  padding 0 10px
+  text-align left
+  border-width 0 1px 0 0
+  border-color $nav-border-color
+  border-style solid
+  color white
+  background-color transparent
+  &:hover
+    background-color alph(white, 0.1)
+  &:active
+    background-color $brand-color
+
+.control-toggleButton
+  absolute top bottom right
+  width 33px
+  color white
+  background-color transparent
+  border none
+  &:hover
+    background-color alph(white, 0.1)
+  &:active
+    background-color $brand-color
+

@@ -36,14 +36,16 @@ const initialStatus = {
   isTutorialOpen: false
 }
 
-dataStore.init()
-let data = dataStore.getData()
+let data = {
+  articles: [],
+  folders: []
+}
 let initialArticles = {
   data: data && data.articles ? data.articles : [],
   modified: []
 }
 let initialFolders = data && data.folders ? data.folders : []
-let initialUser = dataStore.getUser().user
+let initialUser = {}
 
 function user (state = initialUser, action) {
   switch (action.type) {
@@ -298,9 +300,53 @@ function status (state = initialStatus, action) {
   }
 }
 
+/**
+ * v0.6.* Reducers
+ */
+
+/**
+ * Repositories
+ * ```
+ * repositories = [{
+ *   key: String,
+ *   name: String,
+ *   path: String, // path of repository
+ *   status: String, // status of repository [LOADING, IDLE, ERROR]
+ *   folders: {
+ *     name: String,
+ *     color: String
+ *   },
+ *   notes: [{
+ *     key: String,
+ *     title: String,
+ *     content: String,
+ *     folder: String,
+ *     tags: [String],
+ *     createdAt: Date,
+ *     updatedAt: Date
+ *   }]
+ * }]
+ * ```
+ */
+import RepositoryManager from 'browser/lib/RepositoryManager'
+const initialRepositories = RepositoryManager.getRepos()
+
+function repositories (state = initialRepositories, action) {
+  console.log(state)
+  switch (action.type) {
+    case 'ADD_REPOSITORY':
+      let repos = state.slice()
+      repos.push(action.data)
+      return repos
+  }
+  return state
+}
+// v0.6 end
+
 export default combineReducers({
   user,
   folders,
   articles,
-  status
+  status,
+  repositories
 })

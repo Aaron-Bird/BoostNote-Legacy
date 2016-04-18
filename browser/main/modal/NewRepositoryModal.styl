@@ -1,0 +1,133 @@
+$modal-width = 550px
+$modal-header-color = #F2F2F2
+$body-button-background-color = #2BAC8F
+
+.root
+  modal()
+  width $modal-width
+  height 310px
+
+.header
+  height 50px
+  background-color $modal-header-color
+
+.header-title
+  font-size 24px
+  line-height 50px
+  padding-left 15px
+
+.header-closeButton
+  position absolute
+  top 8.5px
+  right 8.5px
+  width 33px
+  height 33px
+  font-size 20px
+  background-color transparent
+  border none
+  color #AAA
+  &:hover
+    color #4D4D4D
+
+.body
+  absolute left right
+  top 50px
+  bottom 50px
+  padding 35px 0
+
+.body-section
+  height 33px
+  margin-bottom 15px
+  position relative
+
+.body-section-label
+  absolute top bottom left
+  width 175px
+  text-align right
+  line-height 33px
+  padding-right 15px
+
+.body-section-input
+  absolute top bottom
+  left 175px
+  width 315px
+  padding 0 10px
+  border $default-border
+  border-radius 5px
+  outline none
+  &:focus
+    border $active-border
+
+.body-section-path
+  absolute top bottom
+  left 175px
+  width 315px
+  padding 0 10px
+  border $default-border
+  border-radius 5px
+  outline none
+  overflow hidden
+
+.body-section-path--focus
+  @extend .body-section-path
+  border $active-border
+
+.body-section-path-input
+  absolute top left bottom
+  width 265px
+  border none
+  outline none
+  padding 0 10px
+
+.body-section-path-button
+  absolute top right bottom
+  width 50px
+  border none
+  border-left $default-border
+  outline none
+  color white
+  background-color $body-button-background-color
+  transition 0.15s
+  &:hover
+    background-color lighten($body-button-background-color, 7%)
+  &:disabled
+    background-color lighten(gray, 15%)
+
+.body-error
+  height 33px
+  margin 35px auto 0
+  width 320px
+  border-radius 5px
+  text-align center
+  line-height 33px
+  color $danger-color
+  background-color $danger-lighten-color
+
+.footer
+  absolute left right bottom
+  height 50px
+
+.footer-cancelButton
+  position absolute
+  height 33px
+  right 85.5px
+  width 72px
+  top 8.5px
+  border-radius 5px
+  border $default-border
+  background-color darken(white, 0.03)
+  &:hover
+    background-color white
+
+.footer-confirmButton
+  position absolute
+  height 33px
+  right 8.5px
+  width 72px
+  top 8.5px
+  color white
+  border-radius 5px
+  border none
+  background-color #2BAC8F
+  &:hover
+    background-color lighten($body-button-background-color, 7%)

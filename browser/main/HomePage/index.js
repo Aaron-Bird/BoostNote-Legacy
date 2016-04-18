@@ -2,7 +2,7 @@ import React, { PropTypes} from 'react'
 import { connect } from 'react-redux'
 import ReactDOM from 'react-dom'
 import { toggleTutorial } from '../actions'
-import ArticleNavigator from './ArticleNavigator'
+import SideNav from './SideNav'
 import ArticleTopBar from './ArticleTopBar'
 import ArticleList from './ArticleList'
 import ArticleDetail from './ArticleDetail'
@@ -73,12 +73,14 @@ class HomePage extends React.Component {
 
   render () {
     let { dispatch, status, user, articles, allArticles, modified, activeArticle, folders, tags } = this.props
+    let { repositories } = this.props
 
     return (
       <div className='HomePage'>
-        <ArticleNavigator
+        <SideNav
           ref='nav'
           dispatch={dispatch}
+          repositories={repositories}
           status={status}
           user={user}
           folders={folders}
@@ -212,6 +214,8 @@ function remap (state) {
   let activeArticle = _.findWhere(articles, {key: status.articleKey})
   if (activeArticle == null) activeArticle = articles[0]
 
+  let { repositories } = state
+
   return {
     user,
     folders,
@@ -220,7 +224,8 @@ function remap (state) {
     allArticles,
     modified,
     activeArticle,
-    tags
+    tags,
+    repositories
   }
 }
 
@@ -235,7 +240,8 @@ HomePage.propTypes = {
   activeArticle: PropTypes.shape(),
   dispatch: PropTypes.func,
   folders: PropTypes.array,
-  tags: PropTypes.array
+  tags: PropTypes.array,
+  repositories: PropTypes.array
 }
 
 export default connect(remap)(HomePage)
