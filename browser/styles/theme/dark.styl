@@ -1,10 +1,10 @@
 @import '../vars'
 
-themeDarkBackground = lighten(#212327, 5%)
-themeDarkModal = lighten(themeDarkBackground, 0%)
-themeDarkList = darken(themeDarkBackground, 25%)
-themeDarkPreview = #181818
-themeDarkSidebar = darken(themeDarkBackground, 45%)
+themeDarkBackground = darken(#21252B, 10%)
+themeDarkModal = darken(#21252B, 10%)
+themeDarkList = #282C34
+themeDarkPreview = #282C34
+themeDarkSidebar = darken(#21252B, 10%)
 themeDarkText = #DDDDDD
 themeDarkBorder = lighten(themeDarkBackground, 20%)
 themeDarkTopicColor = #369dcd
@@ -382,6 +382,9 @@ body[data-theme="dark"]
             .tooltip
               background-color themeDarkTooltip
 
+  .ArticleDetail-panel
+    border-radius 0
+
   // Markdown Preview
   .Finder .FinderDetail .content,
   .ArticleDetail .ArticleDetail-panel .ArticleEditor
@@ -389,3 +392,6 @@ body[data-theme="dark"]
       color themeDarkText
       border-color themeDarkBorder
       background-color themeDarkPreview
+
+      a:hover
+        background-color alpha(lighten(brandColor, 30%), 0.2) !important
