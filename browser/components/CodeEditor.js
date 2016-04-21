@@ -96,7 +96,8 @@ export default class CodeEditor extends React.Component {
       fontSize: config['editor-font-size'],
       fontFamily: config['editor-font-family'],
       indentType: config['editor-indent-type'],
-      indentSize: config['editor-indent-size']
+      indentSize: config['editor-indent-size'],
+      themeSyntax: config['theme-syntax']
     }
 
     this.silentChange = false
@@ -114,7 +115,7 @@ export default class CodeEditor extends React.Component {
     var editor = this.editor = ace.edit(el)
     editor.$blockScrolling = Infinity
     editor.renderer.setShowGutter(true)
-    editor.setTheme('ace/theme/xcode')
+    editor.setTheme('ace/theme/' + this.state.themeSyntax)
     editor.moveCursorTo(0, 0)
     editor.setReadOnly(!!this.props.readOnly)
     editor.setFontSize(this.state.fontSize)
@@ -202,9 +203,13 @@ export default class CodeEditor extends React.Component {
       fontSize: config['editor-font-size'],
       fontFamily: config['editor-font-family'],
       indentType: config['editor-indent-type'],
-      indentSize: config['editor-indent-size']
+      indentSize: config['editor-indent-size'],
+      themeSyntax: config['theme-syntax']
     }, function () {
-      var session = this.editor.getSession()
+      var editor = this.editor
+      editor.setTheme('ace/theme/' + this.state.themeSyntax)
+
+      var session = editor.getSession()
       session.setUseSoftTabs(this.state.indentType === 'space')
       session.setTabSize(!isNaN(this.state.indentSize) ? parseInt(this.state.indentSize, 10) : 4)
     })

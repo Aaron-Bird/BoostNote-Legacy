@@ -9,10 +9,26 @@ import FinderDetail from './FinderDetail'
 import actions, { selectArticle, searchArticle } from './actions'
 import _ from 'lodash'
 import dataStore from 'browser/lib/dataStore'
-
+import fetchConfig from '../lib/fetchConfig'
 const electron = require('electron')
 const { clipboard, ipcRenderer, remote } = electron
 const path = require('path')
+
+let config = fetchConfig()
+applyConfig(config)
+
+ipcRenderer.on('config-apply', function (e, newConfig) {
+  config = newConfig
+  applyConfig(config)
+})
+
+function applyConfig(){
+  let body = document.body
+  body.setAttribute('data-theme', config['theme-ui'])
+
+  let hljsCss = document.getElementById('hljs-css')
+  hljsCss.setAttribute('href', '../node_modules/highlight.js/styles/' + config['theme-code'] + '.css')
+}
 
 if (process.env.NODE_ENV !== 'production') {
   window.addEventListener('keydown', function (e) {
