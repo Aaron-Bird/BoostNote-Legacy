@@ -74,7 +74,7 @@ function folders (state = initialFolders, action) {
         if (newFolder.name == null || newFolder.name.length === 0) throw new Error('Folder name is required')
         if (newFolder.name.match(/\//)) throw new Error('`/` is not available for folder name')
 
-        let conflictFolder = _.find(state, folder => folder.name.toLowerCase() === newFolder.name.toLowerCase())
+        let conflictFolder = _.find(state, (folder) => folder.name.toLowerCase() === newFolder.name.toLowerCase())
         if (conflictFolder != null) throw new Error(`${conflictFolder.name} already exists!`)
         state.push(newFolder)
 
@@ -96,7 +96,7 @@ function folders (state = initialFolders, action) {
         if (targetFolder == null) throw new Error('Folder doesnt exist')
         // Name conflict check
         if (targetFolder.name !== folder.name) {
-          let conflictFolder = _.find(state, _folder => {
+          let conflictFolder = _.find(state, (_folder) => {
             return folder.name.toLowerCase() === _folder.name.toLowerCase() && folder.key !== _folder.key
           })
           if (conflictFolder != null) throw new Error('Name conflicted')
@@ -114,7 +114,7 @@ function folders (state = initialFolders, action) {
         if (state.length < 2) throw new Error('Folder must exist more than one')
 
         let targetKey = action.data.key
-        let targetIndex = _.findIndex(state, folder => folder.key === targetKey)
+        let targetIndex = _.findIndex(state, (folder) => folder.key === targetKey)
         if (targetIndex >= 0) {
           state.splice(targetIndex, 1)
         }
@@ -159,9 +159,9 @@ function articles (state = initialArticles, action) {
       {
         let modified = action.data.article
         let targetKey = action.data.key
-        let originalIndex = _.findIndex(state.data, _article => targetKey === _article.key)
+        let originalIndex = _.findIndex(state.data, (_article) => targetKey === _article.key)
         if (originalIndex === -1) return state
-        let modifiedIndex = _.findIndex(state.modified, _article => targetKey === _article.key)
+        let modifiedIndex = _.findIndex(state.modified, (_article) => targetKey === _article.key)
 
         modified = compareArticle(state.data[originalIndex], modified)
         if (modified == null) {

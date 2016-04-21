@@ -75,10 +75,10 @@ export default class FolderSettingTab extends React.Component {
             {folderElements}
             <div className='newFolder'>
               <div className='folderName'>
-                <input onKeyDown={e => this.handleNewFolderNameKeyDown(e)} valueLink={this.linkState('name')} type='text' placeholder='New Folder'/>
+                <input onKeyDown={(e) => this.handleNewFolderNameKeyDown(e)} valueLink={this.linkState('name')} type='text' placeholder='New Folder'/>
               </div>
               <div className='folderControl'>
-                <button onClick={e => this.handleSaveButtonClick(e)} className='primary'>Add</button>
+                <button onClick={(e) => this.handleSaveButtonClick(e)} className='primary'>Add</button>
               </div>
             </div>
             {alertElement}

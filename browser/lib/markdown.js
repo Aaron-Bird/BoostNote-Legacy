@@ -12,13 +12,13 @@ var md = markdownit({
     if (lang && hljs.getLanguage(lang)) {
       try {
         return '<pre class="hljs"><code>' +
-               hljs.highlight(lang, str).value +
-               '</code></pre>';
+        hljs.highlight(lang, str).value +
+        '</code></pre>'
       } catch (e) {}
     }
     return '<pre class="hljs"><code>' +
-           str.replace(/\&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/\"/g, '&quot;') +
-           '</code></pre>';
+    str.replace(/\&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/\"/g, '&quot;') +
+    '</code></pre>'
   }
 })
 md.use(emoji, {

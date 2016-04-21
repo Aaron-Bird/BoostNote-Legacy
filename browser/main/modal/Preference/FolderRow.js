@@ -63,7 +63,7 @@ export default class FolderRow extends React.Component {
   }
 
   handleColorButtonClick (index) {
-    return e => {
+    return (e) => {
       this.setState({
         color: index,
         isColorEditing: false
@@ -116,7 +116,7 @@ export default class FolderRow extends React.Component {
             ? 'active'
             : null
           return (
-            <button onClick={e => this.handleColorButtonClick(index)(e)} className={className} key={index}>
+            <button onClick={(e) => this.handleColorButtonClick(index)(e)} className={className} key={index}>
               <FolderMark color={index}/>
             </button>
           )
@@ -125,7 +125,7 @@ export default class FolderRow extends React.Component {
         return (
           <div className='FolderRow edit'>
             <div className='folderColor'>
-              <button onClick={e => this.handleColorSelectClick(e)} className='select'>
+              <button onClick={(e) => this.handleColorSelectClick(e)} className='select'>
                 <FolderMark color={this.state.color}/>
               </button>
               {this.state.isColorEditing
@@ -139,11 +139,11 @@ export default class FolderRow extends React.Component {
               }
             </div>
             <div className='folderName'>
-              <input onKeyDown={e => this.handleNameInputKeyDown(e)} valueLink={this.linkState('name')} type='text'/>
+              <input onKeyDown={(e) => this.handleNameInputKeyDown(e)} valueLink={this.linkState('name')} type='text'/>
             </div>
             <div className='folderControl'>
-              <button onClick={e => this.handleSaveButtonClick(e)} className='primary'>Save</button>
-              <button onClick={e => this.handleCancelButtonClick(e)}>Cancel</button>
+              <button onClick={(e) => this.handleSaveButtonClick(e)} className='primary'>Save</button>
+              <button onClick={(e) => this.handleCancelButtonClick(e)}>Cancel</button>
             </div>
           </div>
         )
@@ -152,8 +152,8 @@ export default class FolderRow extends React.Component {
           <div className='FolderRow delete'>
             <div className='folderDeleteLabel'>Are you sure to delete <strong>{folder.name}</strong> folder?</div>
             <div className='folderControl'>
-              <button onClick={e => this.handleDeleteConfirmButtonClick(e)} className='primary'>Sure</button>
-              <button onClick={e => this.handleCancelButtonClick(e)}>Cancel</button>
+              <button onClick={(e) => this.handleDeleteConfirmButtonClick(e)} className='primary'>Sure</button>
+              <button onClick={(e) => this.handleCancelButtonClick(e)}>Cancel</button>
             </div>
           </div>
         )
@@ -162,14 +162,14 @@ export default class FolderRow extends React.Component {
         return (
           <div className='FolderRow'>
             <div className='sortBtns'>
-              <button onClick={e => this.handleUpClick(e)}><i className='fa fa-sort-up fa-fw'/></button>
-              <button onClick={e => this.handleDownClick(e)}><i className='fa fa-sort-down fa-fw'/></button>
+              <button onClick={(e) => this.handleUpClick(e)}><i className='fa fa-sort-up fa-fw'/></button>
+              <button onClick={(e) => this.handleDownClick(e)}><i className='fa fa-sort-down fa-fw'/></button>
             </div>
             <div className='folderColor'><FolderMark color={folder.color}/></div>
             <div className='folderName'>{folder.name}</div>
             <div className='folderControl'>
-              <button onClick={e => this.handleEditButtonClick(e)}><i className='fa fa-fw fa-edit'/></button>
-              <button onClick={e => this.handleDeleteButtonClick(e)}><i className='fa fa-fw fa-close'/></button>
+              <button onClick={(e) => this.handleEditButtonClick(e)}><i className='fa fa-fw fa-edit'/></button>
+              <button onClick={(e) => this.handleDeleteButtonClick(e)}><i className='fa fa-fw fa-close'/></button>
             </div>
           </div>
         )

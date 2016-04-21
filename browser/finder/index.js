@@ -22,7 +22,7 @@ ipcRenderer.on('config-apply', function (e, newConfig) {
   applyConfig(config)
 })
 
-function applyConfig(){
+function applyConfig () {
   let body = document.body
   body.setAttribute('data-theme', config['theme-ui'])
 

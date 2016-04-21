@@ -21,7 +21,7 @@ ipc.on('config-apply', function (e, newConfig) {
   applyConfig(config)
 })
 
-function applyConfig(config) {
+function applyConfig (config) {
   let body = document.body
   body.setAttribute('data-theme', config['theme-ui'])
 

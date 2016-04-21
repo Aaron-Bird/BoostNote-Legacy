@@ -8,7 +8,6 @@ import ContactTab from './Preference/ContactTab'
 import { closeModal } from 'browser/lib/modal'
 
 const APP = 'APP'
-const HELP = 'HELP'
 const FOLDER = 'FOLDER'
 const CONTACT = 'CONTACT'
 
@@ -64,8 +63,6 @@ class Preferences extends React.Component {
     let { user, folders, dispatch } = this.props
 
     switch (this.state.currentTab) {
-      case HELP:
-        return (<HelpTab/>)
       case FOLDER:
         return (
           <FolderSettingTab

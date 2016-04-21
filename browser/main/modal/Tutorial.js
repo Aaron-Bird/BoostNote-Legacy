@@ -33,10 +33,10 @@ export default class Tutorial extends React.Component {
 
     return (
       <div className='Tutorial modal'>
-        <button onClick={e => this.handlePriorSlideClick()} className={'priorBtn' + (this.state.slideIndex === 0 ? ' hide' : '')}>
+        <button onClick={(e) => this.handlePriorSlideClick()} className={'priorBtn' + (this.state.slideIndex === 0 ? ' hide' : '')}>
           <i className='fa fa-fw fa-angle-left'/>
         </button>
-        <button onClick={e => this.handleNextSlideClick()} className={'nextBtn' + (this.state.slideIndex === 4 ? ' hide' : '')}>
+        <button onClick={(e) => this.handleNextSlideClick()} className={'nextBtn' + (this.state.slideIndex === 4 ? ' hide' : '')}>
           <i className='fa fa-fw fa-angle-right'/>
         </button>
         {content}
@@ -80,7 +80,7 @@ export default class Tutorial extends React.Component {
             Boost supports code syntax highlighting.<br/>
             There are more than 100 different type of language.
             <div className='code'>
-              <CodeEditor readOnly article={{content:code, mode: 'jsx'}}/>
+              <CodeEditor readOnly article={{content: code, mode: 'jsx'}}/>
             </div>
           </div>
         </div>)
@@ -101,7 +101,7 @@ export default class Tutorial extends React.Component {
         return (<div className='slide slide4'>
           <div className='title'>Are you ready?</div>
           <div className='content'>
-          <button onClick={e => this.startButtonClick(e)}>Start<br/>Boost</button>
+          <button onClick={(e) => this.startButtonClick(e)}>Start<br/>Boost</button>
           </div>
         </div>)
       default:
