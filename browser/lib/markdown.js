@@ -1,6 +1,6 @@
 import markdownit from 'markdown-it'
 import emoji from 'markdown-it-emoji'
-import math from 'markdown-it-math'
+import math from '@rokt33r/markdown-it-math'
 import hljs from 'highlight.js'
 
 var md = markdownit({
