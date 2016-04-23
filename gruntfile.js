@@ -2,6 +2,8 @@ const path = require('path')
 const ChildProcess = require('child_process')
 const packager = require('electron-packager')
 
+const WIN = process.platform === 'win32'
+
 module.exports = function (grunt) {
   var auth_code
   try {
@@ -53,7 +55,9 @@ module.exports = function (grunt) {
 
   grunt.initConfig(initConfig)
   grunt.loadNpmTasks('grunt-electron-installer')
-  grunt.loadNpmTasks('grunt-electron-installer-debian')
+  if (!WIN) {
+    grunt.loadNpmTasks('grunt-electron-installer-debian')
+  }
 
   grunt.registerTask('compile', function () {
     var done = this.async()
