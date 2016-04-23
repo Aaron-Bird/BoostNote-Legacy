@@ -1,6 +1,6 @@
 {
   "name": "boost",
-  "version": "0.5.9",
+  "version": "0.5.10",
   "description": "Boostnote",
   "main": "index.js",
   "scripts": {
@@ -25,6 +25,10 @@
     "electron"
   ],
   "author": "Dick Choi <fluke8259@gmail.com> (https://github.com/Rokt33r)",
+  "contributors": [
+    "dojineko (https://github.com/dojineko)",
+    "Romain Bazile (https://github.com/gromain)"
+  ],
   "bugs": {
     "url": "https://github.com/BoostIO/Boostnote/issues"
   },
