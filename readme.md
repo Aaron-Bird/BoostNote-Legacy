@@ -127,8 +127,9 @@ grunt zip:osx
 
 ## Contributors
 
-[dojineko](https://github.com/dojineko)
-[Romain Bazile](https://github.com/gromain)
+- [dojineko](https://github.com/dojineko)
+- [Romain Bazile](https://github.com/gromain)
+- [Bruno Paz](https://github.com/brpaz)
 
 ## Copyright & License
 
