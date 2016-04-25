@@ -12,6 +12,10 @@ themeDarkTooltip = rgba(0, 0, 0, 0.7)
 themeDarkFocusText = #FFFFFF
 themeDarkFocusButton = lighten(themeDarkTopicColor, 30%)
 themeDarkBoxShadow = alpha(lighten(themeDarkTopicColor, 10%), 0.4);
+themeDarkTableOdd = themeDarkPreview
+themeDarkTableEven = darken(themeDarkPreview, 10%)
+themeDarkTableHead = themeDarkTableEven
+themeDarkTableBorder = themeDarkBorder
 
 body[data-theme="dark"]
   .Main
@@ -395,3 +399,21 @@ body[data-theme="dark"]
 
       a:hover
         background-color alpha(lighten(brandColor, 30%), 0.2) !important
+
+      table
+        thead
+          tr
+            background-color themeDarkTableHead
+          th
+            border-color themeDarkTableBorder
+            &:last-child
+              border-right solid 1px themeDarkTableBorder
+        tbody
+          tr:nth-child(2n + 1)
+            background-color themeDarkTableOdd
+          tr:nth-child(2n)
+            background-color themeDarkTableEven
+          td
+            border-color themeDarkTableBorder
+            &:last-child
+              border-right solid 1px themeDarkTableBorder
