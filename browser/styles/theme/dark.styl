@@ -427,6 +427,14 @@ body[data-theme="dark"]
       a:hover
         background-color alpha(lighten(brandColor, 30%), 0.2) !important
 
+      code
+        border-color darken(themeDarkBorder, 10%)
+        background-color lighten(themeDarkPreview, 5%)
+
+      pre
+        code
+          background-color transparent
+
       table
         thead
           tr
