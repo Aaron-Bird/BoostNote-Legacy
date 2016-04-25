@@ -16,6 +16,8 @@ themeDarkTableOdd = themeDarkPreview
 themeDarkTableEven = darken(themeDarkPreview, 10%)
 themeDarkTableHead = themeDarkTableEven
 themeDarkTableBorder = themeDarkBorder
+themeDarkModalButtonDefault = themeDarkPreview
+themeDarkModalButtonDanger = #BF360C
 
 body[data-theme="dark"]
   .Main
@@ -247,6 +249,30 @@ body[data-theme="dark"]
 
         &:hover
           background-color brandColor
+
+    .DeleteArticleModal.modal
+      .control
+        button
+          transition 0.1s
+          color themeDarkText
+          border-color lighten(themeDarkModalButtonDefault, 20%)
+          background-color themeDarkModalButtonDefault
+
+          &:hover
+            background-color: lighten(themeDarkModalButtonDefault, 10%)
+
+          &:focus
+            border-color themeDarkTopicColor
+
+          &.danger
+            background-color themeDarkModalButtonDanger
+            border-color lighten(themeDarkModalButtonDanger, 30%)
+
+            &:hover
+              background-color: lighten(themeDarkModalButtonDanger, 10%)
+
+            &:focus
+              border-color lighten(themeDarkModalButtonDanger, 50%)
 
     .Preferences.modal
       .sectionInput input,
