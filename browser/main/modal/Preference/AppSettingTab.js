@@ -192,7 +192,7 @@ export default class AppSettingTab extends React.Component {
             </select>
           </div>
           <div className='sectionSelect'>
-            <label>Code Theme</label>
+            <label>Code block Theme</label>
             <select valueLink={this.linkState('config.theme-code')}>
               {
                 hljsThemeList.map(function(v, i){
@@ -202,7 +202,7 @@ export default class AppSettingTab extends React.Component {
             </select>
           </div>
           <div className='sectionSelect'>
-            <label>Syntax Theme</label>
+            <label>Editor Theme</label>
             <select valueLink={this.linkState('config.theme-syntax')}>
               {
                 aceThemeList.themes.map(function(v, i){
