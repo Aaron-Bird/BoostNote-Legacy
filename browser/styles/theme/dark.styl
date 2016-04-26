@@ -12,8 +12,16 @@ themeDarkTooltip = rgba(0, 0, 0, 0.7)
 themeDarkFocusText = #FFFFFF
 themeDarkFocusButton = lighten(themeDarkTopicColor, 30%)
 themeDarkBoxShadow = alpha(lighten(themeDarkTopicColor, 10%), 0.4);
+themeDarkTableOdd = themeDarkPreview
+themeDarkTableEven = darken(themeDarkPreview, 10%)
+themeDarkTableHead = themeDarkTableEven
+themeDarkTableBorder = themeDarkBorder
+themeDarkModalButtonDefault = themeDarkPreview
+themeDarkModalButtonDanger = #BF360C
 
 body[data-theme="dark"]
+  background-color themeDarkBackground
+
   .Main
     .ArticleNavigator .userInfo .settingBtn .tooltip,
     .ArticleNavigator .ArticleNavigator-folders .ArticleNavigator-folders-header .addBtn .tooltip,
@@ -122,6 +130,10 @@ body[data-theme="dark"]
         &:hover
           background-color lighten(themeDarkList, 5%)
 
+        .ArticleList-item-top
+          .folderName
+            color darken(themeDarkText, 15%)
+
       .divider
         border-color themeDarkBorder
 
@@ -182,6 +194,7 @@ body[data-theme="dark"]
         .ArticleEditor
           .CodeEditor
             border-color themeDarkBorder
+            border-radius 0
 
         &>.ArticleDetail-panel-header .ArticleDetail-panel-header-mode
           transition 0.1s
@@ -243,6 +256,30 @@ body[data-theme="dark"]
 
         &:hover
           background-color brandColor
+
+    .DeleteArticleModal.modal
+      .control
+        button
+          transition 0.1s
+          color themeDarkText
+          border-color lighten(themeDarkModalButtonDefault, 20%)
+          background-color themeDarkModalButtonDefault
+
+          &:hover
+            background-color: lighten(themeDarkModalButtonDefault, 10%)
+
+          &:focus
+            border-color themeDarkTopicColor
+
+          &.danger
+            background-color themeDarkModalButtonDanger
+            border-color lighten(themeDarkModalButtonDanger, 30%)
+
+            &:hover
+              background-color: lighten(themeDarkModalButtonDanger, 10%)
+
+            &:focus
+              border-color lighten(themeDarkModalButtonDanger, 50%)
 
     .Preferences.modal
       .sectionInput input,
@@ -395,3 +432,29 @@ body[data-theme="dark"]
 
       a:hover
         background-color alpha(lighten(brandColor, 30%), 0.2) !important
+
+      code
+        border-color darken(themeDarkBorder, 10%)
+        background-color lighten(themeDarkPreview, 5%)
+
+      pre
+        code
+          background-color transparent
+
+      table
+        thead
+          tr
+            background-color themeDarkTableHead
+          th
+            border-color themeDarkTableBorder
+            &:last-child
+              border-right solid 1px themeDarkTableBorder
+        tbody
+          tr:nth-child(2n + 1)
+            background-color themeDarkTableOdd
+          tr:nth-child(2n)
+            background-color themeDarkTableEven
+          td
+            border-color themeDarkTableBorder
+            &:last-child
+              border-right solid 1px themeDarkTableBorder
