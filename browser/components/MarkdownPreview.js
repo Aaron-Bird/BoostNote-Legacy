@@ -20,6 +20,7 @@ const sanitizeOpts = {
   allowedClasses: {
     'a': ['lineAnchor'],
     'div': ['math'],
+    'pre': ['hljs'],
     'span': ['math', 'hljs-*'],
     'code': ['language-*']
   },

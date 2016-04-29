@@ -4,6 +4,8 @@ const packager = require('electron-packager')
 const fs = require('fs')
 const merge = require('merge-stream')
 
+const WIN = process.platform === 'win32'
+
 module.exports = function (grunt) {
   var auth_code
   try {
@@ -55,7 +57,9 @@ module.exports = function (grunt) {
 
   grunt.initConfig(initConfig)
   grunt.loadNpmTasks('grunt-electron-installer')
-  grunt.loadNpmTasks('grunt-electron-installer-debian')
+  if (!WIN) {
+    grunt.loadNpmTasks('grunt-electron-installer-debian')
+  }
 
   grunt.registerTask('copy', function () {
     var done = this.async()
@@ -116,11 +120,11 @@ module.exports = function (grunt) {
       version: grunt.config.get('pkg.config.electron-version'),
       'app-version': grunt.config.get('pkg.version'),
       'app-bundle-id': 'com.maisin.boost',
-      asar: true,
+      asar: false,
       prune: true,
       overwrite: true,
       out: path.join(__dirname, 'dist'),
-      ignore: /submodules\/ace\/(?!src-min)|submodules\/ace\/(?=src-min-noconflict)|node_modules\/devicon\/icons|dist|^\/browser|^\/secret|\.babelrc|\.gitignore|^\/\.gitmodules|^\/gruntfile|^\/readme.md|^\/webpack|^\/appdmg\.json/
+      ignore: /submodules\/ace\/(?!src-min)|submodules\/ace\/(?=src-min-noconflict)|node_modules\/devicon\/icons|dist|^\/browser|^\/secret|\.babelrc|\.gitignore|^\/\.gitmodules|^\/gruntfile|^\/readme.md|^\/webpack|^\/appdmg\.json|^\/node_modules\/grunt/
     }
     switch (platform) {
       case 'win':

@@ -37,7 +37,7 @@ var config = {
     'highlight.js',
     'markdown-it-emoji',
     'fs-jetpack',
-    'markdown-it-math',
+    '@rokt33r/markdown-it-math',
     '@rokt33r/sanitize-html',
     'markdown-it-checkbox',
     'season',

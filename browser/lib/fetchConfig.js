@@ -13,7 +13,10 @@ const defaultConfig = {
   'preview-font-size': '14',
   'preview-font-family': 'Lato',
   'switch-preview': 'blur',
-  'disable-direct-write': false
+  'disable-direct-write': false,
+  'theme-ui': 'light',
+  'theme-code': 'xcode',
+  'theme-syntax': 'xcode'
 }
 
 export default function fetchConfig () {

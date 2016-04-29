@@ -1,6 +1,6 @@
 import markdownit from 'markdown-it'
 import emoji from 'markdown-it-emoji'
-import math from 'markdown-it-math'
+import math from '@rokt33r/markdown-it-math'
 import hljs from 'highlight.js'
 
 var md = markdownit({
@@ -11,10 +11,14 @@ var md = markdownit({
   highlight: function (str, lang) {
     if (lang && hljs.getLanguage(lang)) {
       try {
-        return hljs.highlight(lang, str).value
+        return '<pre class="hljs"><code>' +
+        hljs.highlight(lang, str).value +
+        '</code></pre>'
       } catch (e) {}
     }
-    return str.replace(/\&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/\"/g, '&quot;')
+    return '<pre class="hljs"><code>' +
+    str.replace(/\&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/\"/g, '&quot;') +
+    '</code></pre>'
   }
 })
 md.use(emoji, {

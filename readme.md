@@ -125,6 +125,12 @@ grunt zip:osx
 
 [Rokt33r(Dick Choi of MAISIN&CO.)](https://github.com/rokt33r)
 
+## Contributors
+
+- [dojineko](https://github.com/dojineko)
+- [Romain Bazile](https://github.com/gromain)
+- [Bruno Paz](https://github.com/brpaz)
+
 ## Copyright & License
 
 Copyright (C) 2016 MAISIN&CO.
