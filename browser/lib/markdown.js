@@ -3,6 +3,15 @@ import emoji from 'markdown-it-emoji'
 import math from '@rokt33r/markdown-it-math'
 import hljs from 'highlight.js'
 
+var createGutter = function (str) {
+  var lc = (str.match(/\n/g) || []).length;
+  var lines = [];
+  for (var i=1; i <= lc; i++) {
+    lines.push('<span>'+i+'</span>');
+  }
+  return '<span>' + lines.join('') + '</span>';
+};
+
 var md = markdownit({
   typographer: true,
   linkify: true,
@@ -11,12 +20,16 @@ var md = markdownit({
   highlight: function (str, lang) {
     if (lang && hljs.getLanguage(lang)) {
       try {
-        return '<pre class="hljs"><code>' +
+        return '<pre class="hljs">' +
+        createGutter(str) +
+        '<code>' +
         hljs.highlight(lang, str).value +
         '</code></pre>'
       } catch (e) {}
     }
-    return '<pre class="hljs"><code>' +
+    return '<pre class="hljs">' +
+    createGutter(str) +
+    '<code>' +
     str.replace(/\&/g, '&amp;').replace(/\</g, '&lt;').replace(/\>/g, '&gt;').replace(/\"/g, '&quot;') +
     '</code></pre>'
   }
