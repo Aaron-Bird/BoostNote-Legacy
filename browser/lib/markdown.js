@@ -6,8 +6,8 @@ import hljs from 'highlight.js'
 var createGutter = function (str) {
   var lc = (str.match(/\n/g) || []).length;
   var lines = [];
-  for (var i=1; i <= lc; i++) {
-    lines.push('<span>'+i+'</span>');
+  for (var i = 1; i <= lc; i++) {
+    lines.push('<span>' + i + '</span>');
   }
   return '<span>' + lines.join('') + '</span>';
 };
