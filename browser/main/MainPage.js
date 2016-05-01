@@ -41,7 +41,7 @@ export default class MainContainer extends React.Component {
         onWheel={(e) => this.handleWheel(e)}
       >
         {this.state.updateAvailable ? (
-        <button onClick={this.updateApp} className='appUpdateButton'><i className='fa fa-cloud-download'/> Update available!</button>
+          <button onClick={this.updateApp} className='appUpdateButton'><i className='fa fa-cloud-download'/> Update available!</button>
         ) : null}
         <HomePage/>
       </div>

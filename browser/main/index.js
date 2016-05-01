@@ -4,8 +4,6 @@ import store from './store'
 import React from 'react'
 import ReactDOM from 'react-dom'
 require('!!style!css!stylus?sourceMap!../styles/main/index.styl')
-import { openModal } from 'browser/lib/modal'
-import OSSAnnounceModal from './modal/OSSAnnounceModal'
 import activityRecord from 'browser/lib/activityRecord'
 import fetchConfig from '../lib/fetchConfig'
 const electron = require('electron')
@@ -84,12 +82,4 @@ ReactDOM.render((
 ), el, function () {
   let loadingCover = document.getElementById('loadingCover')
   loadingCover.parentNode.removeChild(loadingCover)
-  let status = JSON.parse(localStorage.getItem('status'))
-  if (status == null) status = {}
-
-  if (!status.ossAnnounceWatched) {
-    openModal(OSSAnnounceModal)
-    status.ossAnnounceWatched = true
-    localStorage.setItem('status', JSON.stringify(status))
-  }
 })
