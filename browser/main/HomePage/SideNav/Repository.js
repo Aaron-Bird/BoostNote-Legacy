@@ -1,10 +1,22 @@
 import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './Repository.styl'
+import actions from 'browser/main/actions'
+import RepositoryManager from 'browser/lib/RepositoryManager'
 
 class Repository extends React.Component {
+  handleUnlinkButtonClick (e) {
+    let { dispatch, repository } = this.props
+
+    RepositoryManager.removeRepo(repository)
+      .then(() => {
+        dispatch(actions.removeRepo(repository))
+      })
+  }
+
   render () {
     let { repository } = this.props
+
     let folderElements = repository.folders.map((folder) => {
       return (
         <div
@@ -38,6 +50,7 @@ class Repository extends React.Component {
 
           <div styleName='header-control'>
             <button styleName='header-control-button'
+              onClick={(e) => this.handleUnlinkButtonClick(e)}
             >
               <i className='fa fa-unlink'/>
             </button>
@@ -69,7 +82,8 @@ Repository.propTypes = {
     folders: PropTypes.arrayOf(PropTypes.shape({
       name: PropTypes.string
     }))
-  })
+  }),
+  dispatch: PropTypes.func
 }
 
 export default CSSModules(Repository, styles)

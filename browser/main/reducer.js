@@ -332,12 +332,22 @@ import RepositoryManager from 'browser/lib/RepositoryManager'
 const initialRepositories = RepositoryManager.getRepos()
 
 function repositories (state = initialRepositories, action) {
-  console.log(state)
   switch (action.type) {
     case 'ADD_REPOSITORY':
-      let repos = state.slice()
-      repos.push(action.data)
-      return repos
+      {
+        let repos = state.slice()
+        repos.push(action.data)
+        return repos
+      }
+    case 'REMOVE_REPOSITORY':
+      {
+        let repos = state.slice()
+        let targetIndex = _.findIndex(repos, {key: action.data.key})
+        if (targetIndex > -1) {
+          repos.splice(targetIndex, 1)
+        }
+        return repos
+      }
   }
   return state
 }

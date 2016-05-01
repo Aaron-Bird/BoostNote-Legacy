@@ -164,6 +164,13 @@ export function addRepo (data) {
   }
 }
 
+export function removeRepo (data) {
+  return {
+    type: 'REMOVE_REPOSITORY',
+    data
+  }
+}
+
 export default {
   updateUser,
 
@@ -188,5 +195,6 @@ export default {
   toggleTutorial,
 
   // v0.6.*
-  addRepo
+  addRepo,
+  removeRepo
 }

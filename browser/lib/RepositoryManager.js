@@ -152,7 +152,7 @@ function _resolveRepoJSON (targetPath) {
 function getAllRepoStats () {
   let data
   try {
-    data = JSON.parse(localStorage.getItem('repositories'))
+    data = JSON.parse(localStorage.getItem('repoStats'))
     if (!_.isArray(data)) {
       throw new Error('Data is corrupted. it must be an array.')
     }
@@ -208,7 +208,7 @@ function addRepo (newRepo) {
       let resolveBoostrepoJSON = _resolveRepoJSON(path.resolve(targetPath, 'boostrepo.json'))
       return Promise.all([resolveDataDirectory, resolveBoostrepoJSON])
     })
-    .then(function setLoalStorage (data) {
+    .then(function saveToLocalStorage (data) {
       let dataPath = data[0]
       repoJSON = data[1]
 
@@ -260,6 +260,22 @@ function addRepo (newRepo) {
     })
 }
 
+function removeRepo (repository) {
+  return new Promise(function (resolve, reject) {
+    try {
+      let repoStats = getAllRepoStats()
+      let targetIndex = _.findIndex(repoStats, {key: repository.key})
+      if (targetIndex > -1) {
+        repoStats.splice(targetIndex, 1)
+      }
+      _saveAllRepoStats(repoStats)
+      resolve(true)
+    } catch (err) {
+      reject(err)
+    }
+  })
+}
+
 function getRepos () {
   let repoStats
   try {
@@ -291,5 +307,6 @@ function getRepos () {
 export default {
   getAllRepoStats,
   addRepo,
+  removeRepo,
   getRepos
 }
