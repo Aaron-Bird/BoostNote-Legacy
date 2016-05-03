@@ -10,7 +10,7 @@ const remote = electron.remote
 function browseFolder () {
   let dialog = remote.dialog
 
-  let defaultPath = remote.app.getHomeDir()
+  let defaultPath = remote.app.getPath('home')
   return new Promise((resolve, reject) => {
     dialog.showOpenDialog({
       title: 'Select Directory',
@@ -34,6 +34,10 @@ class NewRepositoryModal extends React.Component {
       error: null,
       isBrowsingPath: false
     }
+  }
+
+  componentDidMount () {
+    this.refs.nameInput.focus()
   }
 
   handleCloseButtonClick (e) {
