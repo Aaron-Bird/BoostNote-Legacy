@@ -35,16 +35,36 @@ function repositories (state = initialRepositories, action) {
     case 'ADD_REPOSITORY':
       {
         let repos = state.slice()
+
         repos.push(action.repository)
+
         return repos
       }
     case 'REMOVE_REPOSITORY':
       {
         let repos = state.slice()
+
         let targetIndex = _.findIndex(repos, {key: action.key})
         if (targetIndex > -1) {
           repos.splice(targetIndex, 1)
         }
+
+        return repos
+      }
+    case 'ADD_FOLDER':
+      {
+        let repos = state.slice()
+        let targetRepo = _.find(repos, {key: action.key})
+
+        if (targetRepo == null) return state
+
+        let targetFolderIndex = _.findIndex(targetRepo.folders, {key: action.folder.key})
+        if (targetFolderIndex < 0) {
+          targetRepo.folders.push(action.folder)
+        } else {
+          targetRepo.folders.splice(targetFolderIndex, 1, action.folder)
+        }
+
         return repos
       }
   }

@@ -3,6 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const CSON = require('season')
 const _ = require('lodash')
+const consts = require('browser/lib/consts')
 
 let repositories = []
 
@@ -19,10 +20,10 @@ let repositories = []
  *   .then(() => repo.load())
  *
  * // Update Cached
- * repo.updateCache({name: 'renamed'})
+ * repo.saveCache({name: 'renamed'})
  *
  * // Update JSON
- * repo.updateJSON({author: 'Other user'})
+ * repo.saveJSON({author: 'Other user'})
  *
  * // Remove repository
  * repo.unmount()
@@ -142,6 +143,7 @@ class Repository {
       return Promise.all([resolveDataDirectory, resolveBoostrepoJSON])
         .then((data) => {
           this.json = data[1]
+          return true
         })
     }
 
@@ -167,6 +169,7 @@ class Repository {
       return Promise.all(notes)
         .then((notes) => {
           this.notes = notes
+          return true
         })
     }
 
@@ -178,10 +181,11 @@ class Repository {
 
         return this.getData()
       })
-      .catch(function handleError (err) {
+      .catch((err) => {
         this.status = 'ERROR'
         this.error = err
-        return err
+        console.error(err)
+        return this
       })
   }
 
@@ -253,14 +257,23 @@ class Repository {
    * @return {Promise} all data of a repository
    */
   getData () {
-    if (this.status !== 'READY') {
+    function carbonCopy (obj) {
+      return JSON.parse(JSON.stringify(obj))
+    }
+    if (this.status === 'IDLE') {
       return this.load()
     }
 
-    return Promise.resolve(Object.assign({}, this.json, this.cached, {
+    if (this.status === 'ERROR') {
+      return Promise.resolve(carbonCopy(Object.assign({}, this.json, this.cached, {
+        status: this.status
+      })))
+    }
+
+    return Promise.resolve(carbonCopy(Object.assign({}, this.json, this.cached, {
       status: this.status,
       notes: this.notes
-    }))
+    })))
   }
 
   /**
@@ -287,11 +300,13 @@ class Repository {
    */
   saveJSON (newJSON) {
     let jsonPath = path.join(this.cached.path, 'boostrepo.json')
-    Object.assign(this.json, newJSON)
+    if (_.isObject(newJSON)) {
+      Object.assign(this.json, newJSON)
+    }
 
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve, reject) => {
       CSON
-        .writeFile(jsonPath, this.json, function (err) {
+        .writeFile(jsonPath, this.json, (err) => {
           if (err != null) return reject(err)
           resolve(this.json)
         })
@@ -316,9 +331,9 @@ class Repository {
 
     newFolder = _.pick(newFolder, ['color', 'name'])
     if (!_.isString(newFolder.name) || newFolder.name.trim().length === 0) newFolder.name = 'unnamed'
-    else newFolder.name = newFolder.trim()
+    else newFolder.name = newFolder.name.trim()
 
-    if (!_.isString(newFolder.color)) newFolder.color = ''
+    if (!_.isString(newFolder.color)) newFolder.color = this.constructor.randomColor()
 
     newFolder.key = keygen()
     while (_.findIndex(folders, {key: newFolder.key}) > -1) {
@@ -327,7 +342,7 @@ class Repository {
 
     folders.push(newFolder)
 
-    return this.updateJSON(this.json)
+    return this.saveJSON(this.json)
       .then(() => newFolder)
   }
 
@@ -451,6 +466,10 @@ class Repository {
     return Promise.resolve(this.notes)
   }
 
+  /**
+   * Static Methods
+   */
+
   static generateDefaultJSON (override) {
     return Object.assign({
       name: 'unnamed',
@@ -458,7 +477,7 @@ class Repository {
       folders: [{
         key: keygen(),
         name: 'general',
-        color: 'green'
+        color: this.randomColor()
       }]
     }, override)
   }
@@ -474,21 +493,28 @@ class Repository {
    * @return {Promise} resolving parsed data
    */
   static resolveJSON (targetPath, defaultOverrides) {
-    return new Promise(function checkIfExists (resolve, reject) {
-      // If JSON doesn't exist, make a new one.
-      if (CSON.resolve(targetPath) == null) {
-        let newRepoJSON = this.constructor.generateDefaultJSON(defaultOverrides)
-        CSON.writeFile(targetPath, newRepoJSON, function (err) {
+    return (new Promise((resolve, reject) => {
+      let writeNew = () => {
+        let newRepoJSON = this.generateDefaultJSON(defaultOverrides)
+        CSON.writeFile(targetPath, newRepoJSON, (err) => {
           if (err != null) return reject(err)
           resolve(newRepoJSON)
         })
+      }
+      // If JSON doesn't exist, make a new one.
+      if (CSON.resolve(targetPath) == null) {
+        writeNew()
       } else {
-        CSON.readFile(targetPath, function (err, obj) {
+        CSON.readFile(targetPath, (err, obj) => {
           if (err != null) return reject(err)
-          resolve(obj)
+          if (obj == null) {
+            writeNew()
+          } else {
+            resolve(obj)
+          }
         })
       }
-    })
+    }))
   }
 
   /**
@@ -553,7 +579,6 @@ class Repository {
         throw new Error('Data is corrupted. it must be an array.')
       }
     } catch (err) {
-      console.log(err)
       data = []
       this.saveAllCached(data)
     }
@@ -581,6 +606,10 @@ class Repository {
   static find (repoKey) {
     let repository = _.find(repositories, {cached: {key: repoKey}})
     return Promise.resolve(repository)
+  }
+
+  static randomColor () {
+    return consts.FOLDER_COLORS[Math.floor(Math.random() * consts.FOLDER_COLORS.length)]
   }
 }
 
