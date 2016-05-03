@@ -1,10 +1,8 @@
 import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './NewRepositoryModal.styl'
-import linkState from 'browser/lib/linkState'
-import RepositoryManager from 'browser/lib/RepositoryManager'
+import Repository from 'browser/lib/Repository'
 import store from 'browser/main/store'
-import actions from 'browser/main/actions'
 
 const electron = require('electron')
 const remote = electron.remote
@@ -81,13 +79,19 @@ class NewRepositoryModal extends React.Component {
     let targetPath = this.state.path
     let name = this.state.name
 
-    RepositoryManager
-      .addRepo({
-        targetPath,
-        name
-      })
-      .then((newRepo) => {
-        store.dispatch(actions.addRepo(newRepo))
+    let repository = new Repository({
+      name: name,
+      path: targetPath
+    })
+
+    repository
+      .mount()
+      .then(() => repository.load())
+      .then((data) => {
+        store.dispatch({
+          type: 'ADD_REPOSITORY',
+          repository: data
+        })
         this.props.close()
       })
       .catch((err) => {
@@ -96,6 +100,15 @@ class NewRepositoryModal extends React.Component {
           error: err.message
         })
       })
+  }
+
+  handleChange (e) {
+    let name = this.refs.nameInput.value
+    let path = this.refs.pathInput.value
+    this.setState({
+      name,
+      path
+    })
   }
 
   render () {
@@ -116,7 +129,8 @@ class NewRepositoryModal extends React.Component {
             <div styleName='body-section-label'>Repository Name</div>
             <input styleName='body-section-input'
               ref='nameInput'
-              valueLink={this.linkState('name')}
+              value={this.state.name}
+              onChange={(e) => this.handleChange(e)}
             />
           </div>
 
@@ -124,11 +138,13 @@ class NewRepositoryModal extends React.Component {
             <div styleName='body-section-label'>Repository Path</div>
             <div styleName={!this.state.isPathSectionFocused ? 'body-section-path' : 'body-section-path--focus'}>
               <input styleName='body-section-path-input'
-                valueLink={this.linkState('path')}
+                ref='pathInput'
+                value={this.state.path}
                 style={styles.body_section_path_input}
                 onFocus={(e) => this.handlePathFocus(e)}
                 onBlur={(e) => this.handlePathBlur(e)}
                 disabled={this.state.isBrowsingPath}
+                onChange={(e) => this.handleChange(e)}
               />
               <button styleName='body-section-path-button'
                 onClick={(e) => this.handleBrowseButtonClick(e)}
@@ -169,7 +185,5 @@ class NewRepositoryModal extends React.Component {
 NewRepositoryModal.propTypes = {
   close: PropTypes.func
 }
-
-NewRepositoryModal.prototype.linkState = linkState
 
 export default CSSModules(NewRepositoryModal, styles)

@@ -1,11 +1,10 @@
 import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './SideNav.styl'
-import actions from 'browser/main/actions'
 import { openModal, isModalOpen } from 'browser/lib/modal'
 import Preferences from '../../modal/Preferences'
 import CreateNewFolder from '../../modal/CreateNewFolder'
-import Repository from './Repository'
+import RepositorySection from './RepositorySection'
 import NewRepositoryModal from '../../modal/NewRepositoryModal'
 
 const ipc = require('electron').ipcRenderer
@@ -39,13 +38,11 @@ class SideNav extends React.Component {
   handleFolderButtonClick (name) {
     return (e) => {
       let { dispatch } = this.props
-      dispatch(actions.switchFolder(name))
     }
   }
 
   handleAllFoldersButtonClick (e) {
     let { dispatch } = this.props
-    dispatch(actions.setSearchFilter(''))
   }
 
   handleNewRepositoryButtonClick (e) {
@@ -55,8 +52,8 @@ class SideNav extends React.Component {
   render () {
     let { repositories, dispatch } = this.props
     let repositorieElements = repositories.map((repo) => {
-      return <Repository
-        key={repo.name}
+      return <RepositorySection
+        key={repo.key}
         repository={repo}
         dispatch={dispatch}
       />
@@ -108,17 +105,6 @@ class SideNav extends React.Component {
 
 SideNav.propTypes = {
   dispatch: PropTypes.func,
-  status: PropTypes.shape({
-    folderId: PropTypes.number
-  }),
-  user: PropTypes.object,
-  folders: PropTypes.array,
-  allArticles: PropTypes.array,
-  articles: PropTypes.array,
-  modified: PropTypes.array,
-  activeArticle: PropTypes.shape({
-    key: PropTypes.string
-  }),
   repositories: PropTypes.array
 }
 

@@ -1,16 +1,21 @@
 import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
-import styles from './Repository.styl'
-import actions from 'browser/main/actions'
-import RepositoryManager from 'browser/lib/RepositoryManager'
+import styles from './RepositorySection.styl'
+import Repository from 'browser/lib/Repository'
 
-class Repository extends React.Component {
+class RepositorySection extends React.Component {
   handleUnlinkButtonClick (e) {
     let { dispatch, repository } = this.props
 
-    RepositoryManager.removeRepo(repository)
+    Repository.find(repository.key)
+      .then((repositoryInstance) => {
+        return repositoryInstance.unmount()
+      })
       .then(() => {
-        dispatch(actions.removeRepo(repository))
+        dispatch({
+          type: 'REMOVE_REPOSITORY',
+          key: repository.key
+        })
       })
   }
 
@@ -40,7 +45,7 @@ class Repository extends React.Component {
 
     return (
       <div
-        className='Repository'
+        className='RepositorySection'
         styleName='root'
       >
         <div styleName='header'>
@@ -76,7 +81,7 @@ class Repository extends React.Component {
   }
 }
 
-Repository.propTypes = {
+RepositorySection.propTypes = {
   repository: PropTypes.shape({
     name: PropTypes.string,
     folders: PropTypes.arrayOf(PropTypes.shape({
@@ -86,4 +91,4 @@ Repository.propTypes = {
   dispatch: PropTypes.func
 }
 
-export default CSSModules(Repository, styles)
+export default CSSModules(RepositorySection, styles)
