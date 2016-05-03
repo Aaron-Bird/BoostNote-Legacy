@@ -14,6 +14,46 @@ $default-border = solid 1px $border-color
 $active-border = solid 1px $active-border-color
 
 /**
+* # Button styles
+*/
+
+// Default button
+$default-button-background = white
+$default-button-background--hover = #e6e6e6
+$default-button-background--active = #d4d4d4
+
+colorDefaultButton()
+  background-color $default-button-background
+  &:hover
+    background-color $default-button-background--hover
+  &:active
+    background-color $default-button-background--active
+  &:active:hover
+    background-color $default-button-background--active
+
+// Primary button(Brand color)
+$primary-button-background = $brand-color
+$primary-button-background--hover = darken($brand-color, 5%)
+$primary-button-background--hover = darken($brand-color, 10%)
+
+colorPrimaryButton()
+  background-color $primary-button-background
+  &:hover
+    background-color $primary-button-background--hover
+  &:active
+    background-color $primary-button-background--active
+  &:active:hover
+    background-color $primary-button-background--active
+
+/**
+* Nav
+*/
+
+$nav-border-color = #838383
+$nav-background-color = #353535
+$nav-inactive-color = #838383
+
+/**
 * # Modal Stuff
 * These will be moved lib/modal
 */
