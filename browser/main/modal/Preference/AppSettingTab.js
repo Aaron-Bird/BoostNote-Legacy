@@ -81,9 +81,18 @@ export default class AppSettingTab extends React.Component {
     }
   }
 
+  handleLineNumberingClick (e) {
+    let config = this.state.config
+
+    config['preview-line-number'] = e.target.checked
+    this.setState({
+      config
+    })
+  }
+
   handleDisableDirectWriteClick (e) {
     let config = this.state.config
-    config['disable-direct-write'] = !config['disable-direct-write']
+    config['disable-direct-write'] = e.target.checked
     this.setState({
       config
     })
@@ -174,11 +183,14 @@ export default class AppSettingTab extends React.Component {
               <option value='rightclick'>When Right Clicking</option>
             </select>
           </div>
+          <div className='sectionCheck'>
+            <label><input onChange={e => this.handleLineNumberingClick(e)} checked={this.state.config['preview-line-number']} type='checkbox'/>Code block line numbering</label>
+          </div>
           {
             global.process.platform === 'win32'
             ? (
               <div className='sectionCheck'>
-                <label><input onClick={e => this.handleDisableDirectWriteClick(e)} checked={this.state.config['disable-direct-write']} disabled={OSX} type='checkbox'/>Disable Direct Write<span className='sectionCheck-warn'>It will be applied after restarting</span></label>
+                <label><input onChange={e => this.handleDisableDirectWriteClick(e)} checked={this.state.config['disable-direct-write']} disabled={OSX} type='checkbox'/>Disable Direct Write<span className='sectionCheck-warn'>It will be applied after restarting</span></label>
               </div>
             )
             : null
