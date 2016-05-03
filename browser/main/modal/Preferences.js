@@ -3,12 +3,10 @@ import { connect, Provider } from 'react-redux'
 import linkState from 'browser/lib/linkState'
 import store from '../store'
 import AppSettingTab from './Preference/AppSettingTab'
-import FolderSettingTab from './Preference/FolderSettingTab'
 import ContactTab from './Preference/ContactTab'
 import { closeModal } from 'browser/lib/modal'
 
 const APP = 'APP'
-const FOLDER = 'FOLDER'
 const CONTACT = 'CONTACT'
 
 class Preferences extends React.Component {
@@ -25,7 +23,7 @@ class Preferences extends React.Component {
   }
 
   handleNavButtonClick (tab) {
-    return e => {
+    return (e) => {
       this.setState({currentTab: tab})
     }
   }
@@ -35,19 +33,18 @@ class Preferences extends React.Component {
 
     let tabs = [
       {target: APP, label: 'Preferences'},
-      {target: FOLDER, label: 'Manage folder'},
-      {target: CONTACT, label: 'Contact form'}
+      {target: CONTACT, label: 'Contact'}
     ]
 
-    let navButtons = tabs.map(tab => (
-      <button key={tab.target} onClick={e => this.handleNavButtonClick(tab.target)(e)} className={this.state.currentTab === tab.target ? 'active' : ''}>{tab.label}</button>
+    let navButtons = tabs.map((tab) => (
+      <button key={tab.target} onClick={(e) => this.handleNavButtonClick(tab.target)(e)} className={this.state.currentTab === tab.target ? 'active' : ''}>{tab.label}</button>
     ))
 
     return (
       <div className='Preferences modal'>
         <div className='header'>
           <div className='title'>Setting</div>
-          <button onClick={e => closeModal()} className='closeBtn'>Done</button>
+          <button onClick={(e) => closeModal()} className='closeBtn'>Done</button>
         </div>
 
         <div className='nav'>
@@ -60,16 +57,9 @@ class Preferences extends React.Component {
   }
 
   renderContent () {
-    let { user, folders, dispatch } = this.props
+    let { user, dispatch } = this.props
 
     switch (this.state.currentTab) {
-      case FOLDER:
-        return (
-          <FolderSettingTab
-            dispatch={dispatch}
-            folders={folders}
-          />
-        )
       case CONTACT:
         return (
           <ContactTab/>
@@ -90,23 +80,12 @@ Preferences.propTypes = {
   user: PropTypes.shape({
     name: PropTypes.string
   }),
-  folders: PropTypes.array,
   dispatch: PropTypes.func
 }
 
 Preferences.prototype.linkState = linkState
 
-function remap (state) {
-  let { user, folders, status } = state
-
-  return {
-    user,
-    folders,
-    status
-  }
-}
-
-let RootComponent = connect(remap)(Preferences)
+let RootComponent = connect((x) => x)(Preferences)
 export default class PreferencesModal extends React.Component {
   render () {
     return (

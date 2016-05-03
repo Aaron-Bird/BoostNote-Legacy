@@ -88,58 +88,27 @@ export default class AppSettingTab extends React.Component {
     })
   }
 
-  handleNameSaveButtonClick (e) {
-    let { dispatch } = this.props
-
-    dispatch(updateUser({name: this.state.user.name}))
-    this.setState({
-      userAlert: {
-        type: 'success',
-        message: 'Successfully done!'
-      }
-    })
-  }
-
   render () {
     let keymapAlert = this.state.keymapAlert
     let keymapAlertElement = keymapAlert != null
-      ? (
-        <p className={`alert ${keymapAlert.type}`}>
-          {keymapAlert.message}
-        </p>
-      ) : null
-    let userAlert = this.state.userAlert
-    let userAlertElement = userAlert != null
-      ? (
-        <p className={`alert ${userAlert.type}`}>
-          {userAlert.message}
-        </p>
-      ) : null
-    let aceThemeList = ace.require("ace/ext/themelist")
+      ? <p className={`alert ${keymapAlert.type}`}>
+        {keymapAlert.message}
+      </p>
+      : null
+    let aceThemeList = ace.require('ace/ext/themelist')
     let hljsThemeList = hljsTheme()
 
     return (
       <div className='AppSettingTab content'>
         <div className='section'>
-          <div className='sectionTitle'>User&apos;s info</div>
-          <div className='sectionInput'>
-            <label>User name</label>
-            <input valueLink={this.linkState('user.name')} type='text'/>
-          </div>
-          <div className='sectionConfirm'>
-            <button onClick={e => this.handleNameSaveButtonClick(e)}>Save</button>
-            {userAlertElement}
-          </div>
-        </div>
-        <div className='section'>
           <div className='sectionTitle'>Editor</div>
           <div className='sectionInput'>
             <label>Editor Font Size</label>
-            <input valueLink={this.linkState('config.editor-font-size')} onKeyDown={e => this.handleConfigKeyDown(e)} type='text'/>
+            <input valueLink={this.linkState('config.editor-font-size')} onKeyDown={(e) => this.handleConfigKeyDown(e)} type='text'/>
           </div>
           <div className='sectionInput'>
             <label>Editor Font Family</label>
-            <input valueLink={this.linkState('config.editor-font-family')} onKeyDown={e => this.handleConfigKeyDown(e)} type='text'/>
+            <input valueLink={this.linkState('config.editor-font-family')} onKeyDown={(e) => this.handleConfigKeyDown(e)} type='text'/>
           </div>
           <div className='sectionMultiSelect'>
             <label>Editor Indent Style</label>
@@ -160,11 +129,11 @@ export default class AppSettingTab extends React.Component {
           <div className='sectionTitle'>Preview</div>
           <div className='sectionInput'>
             <label>Preview Font Size</label>
-            <input valueLink={this.linkState('config.preview-font-size')} onKeyDown={e => this.handleConfigKeyDown(e)} type='text'/>
+            <input valueLink={this.linkState('config.preview-font-size')} onKeyDown={(e) => this.handleConfigKeyDown(e)} type='text'/>
           </div>
           <div className='sectionInput'>
             <label>Preview Font Family</label>
-            <input valueLink={this.linkState('config.preview-font-family')} onKeyDown={e => this.handleConfigKeyDown(e)} type='text'/>
+            <input valueLink={this.linkState('config.preview-font-family')} onKeyDown={(e) => this.handleConfigKeyDown(e)} type='text'/>
           </div>
           <div className='sectionSelect'>
             <label>Switching Preview</label>
@@ -194,8 +163,8 @@ export default class AppSettingTab extends React.Component {
             <label>Code block Theme</label>
             <select valueLink={this.linkState('config.theme-code')}>
               {
-                hljsThemeList.map(function(v, i){
-                  return (<option value={v.name} key={v.name}>{v.caption}</option>)
+                hljsThemeList.map((theme) => {
+                  return (<option value={theme.name} key={theme.name}>{theme.caption}</option>)
                 })
               }
             </select>
@@ -204,28 +173,28 @@ export default class AppSettingTab extends React.Component {
             <label>Editor Theme</label>
             <select valueLink={this.linkState('config.theme-syntax')}>
               {
-                aceThemeList.themes.map(function(v, i){
-                  return (<option value={v.name} key={v.name}>{v.caption}</option>)
+                aceThemeList.themes.map((theme) => {
+                  return (<option value={theme.name} key={theme.name}>{theme.caption}</option>)
                 })
               }
             </select>
           </div>
           <div className='sectionConfirm'>
-            <button onClick={e => this.handleConfigSaveButtonClick(e)}>Save</button>
+            <button onClick={(e) => this.handleConfigSaveButtonClick(e)}>Save</button>
           </div>
         </div>
         <div className='section'>
           <div className='sectionTitle'>Hotkey</div>
           <div className='sectionInput'>
             <label>Toggle Main</label>
-            <input onKeyDown={e => this.handleKeyDown(e)} valueLink={this.linkState('keymap.toggleMain')} type='text'/>
+            <input onKeyDown={(e) => this.handleKeyDown(e)} valueLink={this.linkState('keymap.toggleMain')} type='text'/>
           </div>
           <div className='sectionInput'>
             <label>Toggle Finder(popup)</label>
-            <input onKeyDown={e => this.handleKeyDown(e)} valueLink={this.linkState('keymap.toggleFinder')} type='text'/>
+            <input onKeyDown={(e) => this.handleKeyDown(e)} valueLink={this.linkState('keymap.toggleFinder')} type='text'/>
           </div>
           <div className='sectionConfirm'>
-            <button onClick={e => this.handleSaveButtonClick(e)}>Save</button>
+            <button onClick={(e) => this.handleSaveButtonClick(e)}>Save</button>
             {keymapAlertElement}
           </div>
           <div className='description'>
