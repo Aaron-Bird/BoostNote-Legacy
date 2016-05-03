@@ -7,46 +7,33 @@ import CreateNewFolder from '../../modal/CreateNewFolder'
 import RepositorySection from './RepositorySection'
 import NewRepositoryModal from '../../modal/NewRepositoryModal'
 
-const ipc = require('electron').ipcRenderer
+const electron = require('electron')
+const { remote } = electron
+const Menu = remote.Menu
+const MenuItem = remote.MenuItem
 
 class SideNav extends React.Component {
-  constructor (props) {
-    super(props)
-    this.newFolderHandler = (e) => {
-      if (isModalOpen()) return true
-      this.handleNewFolderButton(e)
-    }
-  }
-
-  componentDidMount () {
-    ipc.on('nav-new-folder', this.newFolderHandler)
-  }
-
-  componentWillUnmount () {
-    ipc.removeListener('nav-new-folder', this.newFolderHandler)
-  }
-
-  handlePreferencesButtonClick (e) {
-    openModal(Preferences)
-  }
-
-  handleNewFolderButton (e) {
-    let { user } = this.props
-    openModal(CreateNewFolder, {user: user})
-  }
-
-  handleFolderButtonClick (name) {
-    return (e) => {
-      let { dispatch } = this.props
-    }
-  }
-
-  handleAllFoldersButtonClick (e) {
-    let { dispatch } = this.props
+  // TODO: should not use electron stuff v0.7
+  handleMenuButtonClick (e) {
+    var menu = new Menu()
+    menu.append(new MenuItem({
+      label: 'Preferences',
+      click: (e) => this.handlePreferencesButtonClick(e)
+    }))
+    menu.append(new MenuItem({ type: 'separator' }))
+    menu.append(new MenuItem({
+      label: 'Mount Repository',
+      click: (e) => this.handleNewRepositoryButtonClick(e)
+    }))
+    menu.popup(remote.getCurrentWindow())
   }
 
   handleNewRepositoryButtonClick (e) {
     openModal(NewRepositoryModal)
+  }
+
+  handlePreferencesButtonClick (e) {
+    openModal(Preferences)
   }
 
   render () {
@@ -65,39 +52,34 @@ class SideNav extends React.Component {
         styleName='root'
         tabIndex='1'
       >
+        <div styleName='top'>
+          <button styleName='top-menu'
+            onClick={(e) => this.handleMenuButtonClick(e)}
+          >
+            <i className='fa fa-navicon'/> Menu
+          </button>
+        </div>
+
         <div styleName='menu'>
           <button styleName='menu-button'
           >
-            <i className='fa fa-history'/> Recents
+            <i className='fa fa-home'/> Home
           </button>
           <button styleName='menu-button'
           >
             <i className='fa fa-star'/> Favorited
           </button>
-          <button styleName='menu-button'
-          >
-            <i className='fa fa-list'/> All posts
-          </button>
         </div>
 
         <div styleName='repositoryList'>
           {repositories.length > 0 ? repositorieElements : (
-            <div styleName='repositoryList-empty'>Empty</div>
+            <div styleName='repositoryList-empty'>No repository mount</div>
           )}
         </div>
 
-        <div styleName='control'>
-          <button
-            styleName='control-newRepositoryButton'
-            onClick={(e) => this.handleNewRepositoryButtonClick(e)}
-          >
-            <i className='fa fa-plus'/> New Repository
-          </button>
-          <button styleName='control-toggleButton'
-          >
-            <i className='fa fa-angle-double-right'/>
-          </button>
-        </div>
+        <button styleName='navToggle'>
+          <i className='fa fa-angle-double-left'/>
+        </button>
       </div>
     )
   }

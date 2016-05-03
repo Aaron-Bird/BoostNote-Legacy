@@ -1,10 +1,12 @@
 .root
   margin-top 15px
   margin-bottom 15px
+  user-select none
 
 .header
   position relative
   height 33px
+  cursor pointer
   &:hover
     background-color alpha(white, 0.1)
 
@@ -23,7 +25,7 @@
   top 0
   bottom 0
   right 5px
-  width 72px
+  width 48px
 
 .header-control-button
   width 24px
@@ -33,16 +35,19 @@
   border none
   border-radius 5px
   background-color transparent
-  color white
+  color $nav-inactive-color
   &:hover
+    color white
     background-color alpha(white, 0.1)
   &:active
+    color white
     background-color $brand-color
 
 .folder
   height 33px
   width 100%
   position relative
+  cursor pointer
   &:hover
     background-color alpha(white 0.1)
 
@@ -60,8 +65,8 @@
   position absolute
   top 0
   bottom 0
-  right 0
-  width 48px
+  right 5px
+  width 24px
 
 .folder-control-button
   width 24px
@@ -70,10 +75,12 @@
   border none
   border-radius 5px
   background-color transparent
-  color white
+  color $nav-inactive-color
   &:hover
+    color white
     background-color alpha(white, 0.1)
   &:active
+    color white
     background-color $brand-color
 
 .newFolderButton
@@ -83,8 +90,10 @@
   padding-left 20px
   text-align left
   background-color transparent
-  color white
+  color $nav-inactive-color
   &:hover
     background-color alpha(white, 0.1)
+    color white
   &:active
     background-color $brand-color
+    color white
