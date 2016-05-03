@@ -7,7 +7,8 @@
     "start": "electron ./index.js",
     "hot": "electron ./index.js --hot",
     "webpack": "webpack-dev-server --hot --inline --config webpack.config.js",
-    "postinstall": "grunt copy"
+    "postinstall": "npm run vendor",
+    "vendor": "oh-my-cdn"
   },
   "config": {
     "electron-version": "0.36.11"
@@ -63,18 +64,15 @@
     "babel-preset-react-hmre": "^1.0.1",
     "css-loader": "^0.19.0",
     "electron-packager": "^6.0.0",
-    "electron-prebuilt": "^0.36.11",
+    "electron-prebuilt": "^0.36.12",
     "electron-release": "^2.2.0",
     "grunt": "^0.4.5",
     "grunt-electron-installer": "^1.2.0",
     "history": "^1.17.0",
     "merge-stream": "^1.0.0",
     "nib": "^1.1.0",
-    "react": "^0.14.3",
+    "oh-my-cdn": "^0.1.1",
     "react-css-modules": "^3.7.6",
-    "react-dom": "^0.14.3",
-    "react-redux": "^4.0.6",
-    "redux": "^3.0.5",
     "standard": "^6.0.8",
     "style-loader": "^0.12.4",
     "stylus": "^0.52.4",
