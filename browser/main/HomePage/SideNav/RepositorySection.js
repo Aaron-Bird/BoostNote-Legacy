@@ -87,25 +87,36 @@ class RepositorySection extends React.Component {
   handleNameInputBlur (e) {
     let { dispatch, repository } = this.props
 
-    this.getRepository()
-      .then((repositoryInstance) => {
-        return repositoryInstance.addFolder({
-          name: this.state.newFolder.name
+    this.setState({
+      isSaving: true
+    }, () => {
+      this.getRepository()
+        .then((repositoryInstance) => {
+          return repositoryInstance.addFolder({
+            name: this.state.newFolder.name
+          })
         })
-      })
-      .then((folder) => {
-        console.log(folder)
-        dispatch({
-          type: 'ADD_FOLDER',
-          key: repository.key,
-          folder: folder
-        })
+        .then((folder) => {
+          dispatch({
+            type: 'ADD_FOLDER',
+            key: repository.key,
+            folder: folder
+          })
 
-        this.setState({
-          isCreatingFolder: false,
-          isSaving: false
+          this.setState({
+            isCreatingFolder: false,
+            isSaving: false
+          })
         })
-      })
+        .catch((err) => {
+          console.error(err)
+
+          this.setState({
+            isCreatingFolder: false,
+            isSaving: false
+          })
+        })
+    })
   }
 
   render () {
@@ -138,7 +149,9 @@ class RepositorySection extends React.Component {
         className='RepositorySection'
         styleName='root'
       >
-        <div styleName='header'>
+        <div styleName='header'
+          onContextMenu={(e) => this.handleContextButtonClick(e)}
+        >
           <div styleName='header-name'>
             <i className='fa fa-archive'/> {repository.name}
           </div>
@@ -149,7 +162,7 @@ class RepositorySection extends React.Component {
             >
               <i className='fa fa-ellipsis-v'/>
             </button>
-            <button styleName='header-control-button'
+            <button styleName='header-control-button--show'
               onClick={(e) => this.handleToggleButtonClick(e)}
             >
               <i className={toggleButtonIconClassName}/>
@@ -163,6 +176,7 @@ class RepositorySection extends React.Component {
             ? <div styleName='newFolderForm'>
               <input styleName='newFolderForm-nameInput'
                 ref='nameInput'
+                disabled={this.state.isSaving}
                 value={this.state.newFolder.name}
                 onChange={(e) => this.handleNewFolderFormChange(e)}
                 onBlur={(e) => this.handleNameInputBlur(e)}
