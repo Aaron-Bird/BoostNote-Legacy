@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import ModeIcon from 'browser/components/ModeIcon'
 import moment from 'moment'
-import { switchArticle } from '../actions'
 import FolderMark from 'browser/components/FolderMark'
 import TagLink from './TagLink'
 import _ from 'lodash'
@@ -15,7 +14,7 @@ export default class ArticleList extends React.Component {
   constructor (props) {
     super(props)
 
-    this.focusHandler = e => this.focus()
+    this.focusHandler = (e) => this.focus()
   }
 
   componentDidMount () {
@@ -30,8 +29,8 @@ export default class ArticleList extends React.Component {
   }
 
   componentDidUpdate () {
-    let { articles, activeArticle } = this.props
-    var index = articles.indexOf(activeArticle)
+    return false
+    var index = articles.indexOf(null)
     var el = ReactDOM.findDOMNode(this)
     var li = el.querySelectorAll('.ArticleList>div')[index]
 
@@ -130,16 +129,12 @@ export default class ArticleList extends React.Component {
   }
 
   render () {
-    let { articles, modified, activeArticle, folders } = this.props
-
-    let articleElements = articles.map(article => {
-      let modifiedArticle = _.findWhere(modified, {key: article.key})
+    let articles = []
+    let folders = []
+    let articleElements = articles.map((article) => {
       let originalArticle = article
-      if (modifiedArticle) {
-        article = Object.assign({}, article)
-      }
       let tagElements = Array.isArray(article.tags) && article.tags.length > 0
-        ? article.tags.slice().map(tag => {
+        ? article.tags.slice().map((tag) => {
           return (<TagLink key={tag} tag={tag}/>)
         })
         : (<span>Not tagged yet</span>)
@@ -153,27 +148,21 @@ export default class ArticleList extends React.Component {
 
       return (
         <div key={'article-' + article.key}>
-          <div onClick={e => this.handleArticleClick(article)(e)} className={'ArticleList-item' + (activeArticle.key === article.key ? ' active' : '')}>
+          <div onClick={(e) => this.handleArticleClick(article)(e)} className={'ArticleList-item' + (article.key === 'ACTIVE_POST_KEY' ? ' active' : '')}>
             <div className='ArticleList-item-top'>
               {folder != null
                 ? folderChanged
                   ? <span className='folderName'>
-                      <FolderMark color={originalFolder.color}/>{originalFolder.name}
-                      ->
-                      <FolderMark color={folder.color}/>{folder.name}
-                    </span>
+                    <FolderMark color={originalFolder.color}/>{originalFolder.name}
+                    ->
+                    <FolderMark color={folder.color}/>{folder.name}
+                  </span>
                   : <span className='folderName'>
-                      <FolderMark color={folder.color}/>{folder.name}
-                    </span>
+                    <FolderMark color={folder.color}/>{folder.name}
+                  </span>
                 : <span><FolderMark color={-1}/>Unknown</span>
               }
-              <span className='updatedAt'
-                children={
-                  modifiedArticle != null
-                    ? <span><span className='unsaved-mark'>●</span> Unsaved</span>
-                    : moment(article.updatedAt).fromNow()
-                }
-              />
+              <span className='updatedAt'>{moment(article.updatedAt).fromNow()}</span>
             </div>
             <div className='ArticleList-item-middle'>
               <ModeIcon className='mode' mode={article.mode}/> <div className='title' children={title}/>
@@ -191,7 +180,7 @@ export default class ArticleList extends React.Component {
     })
 
     return (
-      <div tabIndex='3' onKeyDown={e => this.handleArticleListKeyDown(e)} className='ArticleList'>
+      <div tabIndex='3' onKeyDown={(e) => this.handleArticleListKeyDown(e)} className='ArticleList'>
         {articleElements}
       </div>
     )
@@ -200,8 +189,5 @@ export default class ArticleList extends React.Component {
 
 ArticleList.propTypes = {
   dispatch: PropTypes.func,
-  folders: PropTypes.array,
-  articles: PropTypes.array,
-  modified: PropTypes.array,
-  activeArticle: PropTypes.shape()
+  repositories: PropTypes.array
 }

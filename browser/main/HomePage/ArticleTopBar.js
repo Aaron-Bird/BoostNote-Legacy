@@ -1,13 +1,10 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import ExternalLink from 'browser/components/ExternalLink'
-import { setSearchFilter, clearSearch, toggleTutorial, saveArticle, switchFolder } from '../actions'
 import { isModalOpen } from 'browser/lib/modal'
-import keygen from 'browser/lib/keygen'
 import activityRecord from 'browser/lib/activityRecord'
 
 const electron = require('electron')
-const remote = electron.remote
 const ipc = electron.ipcRenderer
 
 const OSX = global.process.platform === 'darwin'
@@ -83,7 +80,7 @@ export default class ArticleTopBar extends React.Component {
         this.setState({isLinksDropdownOpen: true})
       }
     }
-    this.linksButton.addEventListener('click', this.showLinksDropdown)
+    // this.linksButton.addEventListener('click', this.showLinksDropdown)
     this.hideLinksDropdown = e => {
       if (this.state.isLinksDropdownOpen) {
         this.setState({isLinksDropdownOpen: false})
@@ -118,11 +115,6 @@ export default class ArticleTopBar extends React.Component {
   }
 
   escape () {
-    let { status, dispatch } = this.props
-    if (status.search.length > 0) {
-      dispatch(clearSearch())
-      return
-    }
   }
 
   focusInput () {
@@ -136,7 +128,7 @@ export default class ArticleTopBar extends React.Component {
   handleSearchChange (e) {
     let { dispatch } = this.props
 
-    dispatch(setSearchFilter(e.target.value))
+    // dispatch(setSearchFilter(e.target.value))
     this.handleTooltipRequest()
   }
 
@@ -146,35 +138,13 @@ export default class ArticleTopBar extends React.Component {
   }
 
   handleNewPostButtonClick (e) {
-    let { dispatch, folders, status } = this.props
-    let { targetFolders } = status
-
-    let isFolderFilterApplied = targetFolders.length > 0
-    let FolderKey = isFolderFilterApplied
-      ? targetFolders[0].key
-      : folders[0].key
-
-    let newArticle = {
-      key: keygen(),
-      title: '',
-      content: '',
-      mode: 'markdown',
-      tags: [],
-      FolderKey: FolderKey,
-      craetedAt: new Date(),
-      updatedAt: new Date()
-    }
-
-    dispatch(saveArticle(newArticle.key, newArticle, true))
-    if (isFolderFilterApplied) dispatch(switchFolder(targetFolders[0].name))
-    remote.getCurrentWebContents().send('detail-title')
     activityRecord.emit('ARTICLE_CREATE')
   }
 
   handleTutorialButtonClick (e) {
     let { dispatch } = this.props
 
-    dispatch(toggleTutorial())
+    // dispatch(toggleTutorial())
   }
 
   render () {
@@ -186,16 +156,16 @@ export default class ArticleTopBar extends React.Component {
             <i className='fa fa-search fa-fw' />
             <input
               ref='searchInput'
-              onFocus={e => this.handleSearchChange(e)}
-              onBlur={e => this.handleSearchChange(e)}
-              value={this.props.status.search}
-              onChange={e => this.handleSearchChange(e)}
+              onFocus={(e) => this.handleSearchChange(e)}
+              onBlur={(e) => this.handleSearchChange(e)}
+              value={'this.props.status.search'}
+              onChange={(e) => this.handleSearchChange(e)}
               placeholder='Search'
               type='text'
             />
             {
-              this.props.status.search != null && this.props.status.search.length > 0
-                ? <button onClick={e => this.handleSearchClearButton(e)} className='ArticleTopBar-left-search-clear-button'><i className='fa fa-times'/></button>
+              'sadf' > 0
+                ? <button onClick={(e) => this.handleSearchClearButton(e)} className='ArticleTopBar-left-search-clear-button'><i className='fa fa-times'/></button>
                 : null
             }
             <div className={'tooltip' + (this.state.isTooltipHidden ? ' hide' : '')}>
@@ -207,19 +177,16 @@ export default class ArticleTopBar extends React.Component {
             </div>
           </div>
 
-          {status.isTutorialOpen ? searchTutorialElement : null}
-
           <div className={'ArticleTopBar-left-control'}>
-            <button className='ArticleTopBar-left-control-new-post-button' onClick={e => this.handleNewPostButtonClick(e)}>
+            <button className='ArticleTopBar-left-control-new-post-button' onClick={(e) => this.handleNewPostButtonClick(e)}>
               <i className='fa fa-plus'/>
               <span className='tooltip'>New Post ({OSX ? '⌘' : '^'} + n)</span>
             </button>
-            {status.isTutorialOpen ? newPostTutorialElement : null}
           </div>
         </div>
 
         <div className='ArticleTopBar-right'>
-          <button onClick={e => this.handleTutorialButtonClick(e)}>?<span className='tooltip'>How to use</span>
+          <button onClick={(e) => this.handleTutorialButtonClick(e)}>?<span className='tooltip'>How to use</span>
           </button>
           <a ref='links' className='ArticleTopBar-right-links-button' href>
             <img src='../resources/app.png' width='44' height='44'/>
@@ -240,9 +207,9 @@ export default class ArticleTopBar extends React.Component {
           }
         </div>
 
-        {status.isTutorialOpen ? (
+        {false ? (
           <div className='tutorial'>
-            <div onClick={e => this.handleTutorialButtonClick(e)} className='clickJammer'/>
+            <div onClick={(e) => this.handleTutorialButtonClick(e)} className='clickJammer'/>
             <svg width='500' height='250' className='finder'>
               <text x='100' y='25' fontSize='32' fill={BRAND_COLOR}>Also, you can open Finder!!</text>
               <text x='150' y='55' fontSize='18' fill={BRAND_COLOR} children={'with pressing ' + (OSX ? '`⌘ + Alt + s`' : '`Win + Alt + s`')}/>

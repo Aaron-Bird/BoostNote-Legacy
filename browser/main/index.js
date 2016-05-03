@@ -1,5 +1,5 @@
 import { Provider } from 'react-redux'
-import MainPage from './MainPage'
+import Main from './Main'
 import store from './store'
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -76,7 +76,7 @@ let el = document.getElementById('content')
 ReactDOM.render((
   <div>
     <Provider store={store}>
-      <MainPage/>
+      <Main/>
     </Provider>
   </div>
 ), el, function () {

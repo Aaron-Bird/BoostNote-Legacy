@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react'
 import linkState from 'browser/lib/linkState'
 import FolderMark from 'browser/components/FolderMark'
 import store from '../../store'
-import { updateFolder, destroyFolder, replaceFolder } from '../../actions'
 
 const IDLE = 'IDLE'
 const EDIT = 'EDIT'
@@ -20,14 +19,14 @@ export default class FolderRow extends React.Component {
   handleUpClick (e) {
     let { index } = this.props
     if (index > 0) {
-      store.dispatch(replaceFolder(index, index - 1))
+      // store.dispatch(replaceFolder(index, index - 1))
     }
   }
 
   handleDownClick (e) {
     let { index, count } = this.props
     if (index < count - 1) {
-      store.dispatch(replaceFolder(index, index + 1))
+      // store.dispatch(replaceFolder(index, index + 1))
     }
   }
 
@@ -82,7 +81,7 @@ export default class FolderRow extends React.Component {
       folder = Object.assign({}, folder, input)
 
       try {
-        store.dispatch(updateFolder(folder))
+        // store.dispatch(updateFolder(folder))
         this.setState({
           mode: IDLE
         })
@@ -98,7 +97,7 @@ export default class FolderRow extends React.Component {
 
   handleDeleteConfirmButtonClick (e) {
     let { folder } = this.props
-    store.dispatch(destroyFolder(folder.key))
+    // store.dispatch(destroyFolder(folder.key))
   }
 
   render () {
@@ -111,7 +110,7 @@ export default class FolderRow extends React.Component {
           colorIndexes.push(i)
         }
 
-        let colorOptions = colorIndexes.map(index => {
+        let colorOptions = colorIndexes.map((index) => {
           let className = this.state.color === index
             ? 'active'
             : null
@@ -129,12 +128,10 @@ export default class FolderRow extends React.Component {
                 <FolderMark color={this.state.color}/>
               </button>
               {this.state.isColorEditing
-                ? (
-                  <div className='options'>
-                    <div className='label'>Color select</div>
-                    {colorOptions}
-                  </div>
-                )
+                ? <div className='options'>
+                  <div className='label'>Color select</div>
+                  {colorOptions}
+                </div>
                 : null
               }
             </div>

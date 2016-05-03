@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react'
 import FolderRow from './FolderRow'
 import linkState from 'browser/lib/linkState'
-import { createFolder } from '../../actions'
 
 export default class FolderSettingTab extends React.Component {
   constructor (props) {
@@ -23,9 +22,9 @@ export default class FolderSettingTab extends React.Component {
       let { dispatch } = this.props
 
       try {
-        dispatch(createFolder({
-          name: this.state.name
-        }))
+        // dispatch(createFolder({
+        //   name: this.state.name
+        // }))
       } catch (e) {
         this.setState({alert: {
           type: 'error',

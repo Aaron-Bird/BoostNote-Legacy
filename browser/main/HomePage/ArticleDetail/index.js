@@ -2,10 +2,6 @@ import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import moment from 'moment'
 import _ from 'lodash'
-import {
-  switchFolder,
-  updateArticle
-} from '../../actions'
 import linkState from 'browser/lib/linkState'
 import TagSelect from 'browser/components/TagSelect'
 import ModeSelect from 'browser/components/ModeSelect'
@@ -67,25 +63,25 @@ export default class ArticleDetail extends React.Component {
   constructor (props) {
     super(props)
 
-    this.deleteHandler = e => {
+    this.deleteHandler = (e) => {
       if (isModalOpen()) return true
       this.handleDeleteButtonClick()
     }
-    this.uncacheHandler = e => {
+    this.uncacheHandler = (e) => {
       if (isModalOpen()) return true
       this.handleUncache()
     }
-    this.titleHandler = e => {
+    this.titleHandler = (e) => {
       if (isModalOpen()) return true
       if (this.refs.title) {
         this.focusTitle()
       }
     }
-    this.editHandler = e => {
+    this.editHandler = (e) => {
       if (isModalOpen()) return true
       if (this.refs.editor) this.refs.editor.switchEditMode()
     }
-    this.previewHandler = e => {
+    this.previewHandler = (e) => {
       if (isModalOpen()) return true
       if (this.refs.editor) this.refs.editor.switchPreviewMode()
     }
@@ -100,7 +96,7 @@ export default class ArticleDetail extends React.Component {
 
   componentDidMount () {
     this.refreshTimer = setInterval(() => this.forceUpdate(), 60 * 1000)
-    this.shareDropdownInterceptor = e => {
+    this.shareDropdownInterceptor = (e) => {
       e.stopPropagation()
     }
 
@@ -159,12 +155,12 @@ export default class ArticleDetail extends React.Component {
       updatedAt: new Date()
     })
 
-    dispatch(updateArticle(article))
+    // dispatch(updateArticle(article))
 
     let targetFolderKey = e.target.value
     if (status.targetFolders.length > 0) {
       let targetFolder = _.findWhere(folders, {key: targetFolderKey})
-      dispatch(switchFolder(targetFolder.name))
+      // dispatch(switchFolder(targetFolder.name))
     }
   }
 
@@ -174,7 +170,7 @@ export default class ArticleDetail extends React.Component {
       title: e.target.value,
       updatedAt: new Date()
     })
-    dispatch(updateArticle(article))
+    // dispatch(updateArticle(article))
   }
 
   handleTagsChange (newTag, tags) {
@@ -184,7 +180,7 @@ export default class ArticleDetail extends React.Component {
       updatedAt: new Date()
     })
 
-    dispatch(updateArticle(article))
+    // dispatch(updateArticle(article))
   }
 
   handleModeChange (value) {
@@ -194,7 +190,7 @@ export default class ArticleDetail extends React.Component {
       updatedAt: new Date()
     })
 
-    dispatch(updateArticle(article))
+    // dispatch(updateArticle(article))
     this.switchEditMode()
   }
 
@@ -206,7 +202,7 @@ export default class ArticleDetail extends React.Component {
         updatedAt: new Date()
       })
 
-      dispatch(updateArticle(article))
+      // dispatch(updateArticle(article))
     }
   }
 
@@ -254,7 +250,7 @@ export default class ArticleDetail extends React.Component {
   render () {
     let { folders, status, tags, activeArticle, modified, user } = this.props
     if (activeArticle == null) return this.renderEmpty()
-    let folderOptions = folders.map(folder => {
+    let folderOptions = folders.map((folder) => {
       return (
         <option key={folder.key} value={folder.key}>{folder.name}</option>
       )
@@ -269,7 +265,7 @@ export default class ArticleDetail extends React.Component {
             <select
               className='ArticleDetail-info-folder'
               value={activeArticle.FolderKey}
-              onChange={e => this.handleFolderKeyChange(e)}
+              onChange={(e) => this.handleFolderKeyChange(e)}
             >
               {folderOptions}
             </select>
@@ -282,25 +278,14 @@ export default class ArticleDetail extends React.Component {
             />
 
             <div className='ArticleDetail-info-control'>
-              {/*<div className={'ArticleDetail-info-control-save' + (!isUnsaved ? ' hide' : '')}>
-                <button
-                  onClick={e => this.handleSaveButtonClick(e)}
-                  className='ArticleDetail-info-control-save-button'
-                  disabled={!isUnsaved}
-                  >
-                  <i className='fa fa-fw fa-save'/>&nbsp;Save
-                  <span className='tooltip' children={`Save Post (${OSX ? '⌘' : '^'} + S)`}/>
-                </button>
-              </div>*/}
-
               <ShareButton
                 article={activeArticle}
                 user={user}
                 />
 
-              <button className='ArticleDetail-info-control-delete-button' onClick={e => this.handleOthersButtonClick(e)}>
+              <button className='ArticleDetail-info-control-delete-button' onClick={(e) => this.handleOthersButtonClick(e)}>
                 <i className='fa fa-fw fa-trash'/>
-                <span className='tooltip' children={`Delete Post (^ + Del)`}/>
+                <span className='tooltip'>Delete Post (^ + Del)</span>
               </button>
             </div>
           </div>
@@ -319,11 +304,11 @@ export default class ArticleDetail extends React.Component {
           <div className='ArticleDetail-panel-header'>
             <div className='ArticleDetail-panel-header-title'>
               <input
-                onKeyDown={e => this.handleTitleKeyDown(e)}
+                onKeyDown={(e) => this.handleTitleKeyDown(e)}
                 placeholder='(Untitled)'
                 ref='title'
                 value={activeArticle.title}
-                onChange={e => this.handleTitleChange(e)}
+                onChange={(e) => this.handleTitleChange(e)}
                 style={{
                   fontFamily: this.state.fontFamily
                 }}
@@ -331,8 +316,8 @@ export default class ArticleDetail extends React.Component {
             </div>
             <ModeSelect
               ref='mode'
-              onChange={e => this.handleModeChange(e)}
-              onKeyDown={e => this.handleModeSelectKeyDown(e)}
+              onChange={(e) => this.handleModeChange(e)}
+              onKeyDown={(e) => this.handleModeSelectKeyDown(e)}
               value={activeArticle.mode}
               className='ArticleDetail-panel-header-mode'
             />
@@ -341,7 +326,7 @@ export default class ArticleDetail extends React.Component {
           <ArticleEditor
             ref='editor'
             article={activeArticle}
-            onChange={content => this.handleContentChange(content)}
+            onChange={(content) => this.handleContentChange(content)}
           />
         </div>
       </div>
@@ -351,11 +336,6 @@ export default class ArticleDetail extends React.Component {
 
 ArticleDetail.propTypes = {
   dispatch: PropTypes.func,
-  status: PropTypes.shape(),
-  tags: PropTypes.array,
-  user: PropTypes.shape(),
-  folders: PropTypes.array,
-  modified: PropTypes.array,
-  activeArticle: PropTypes.shape()
+  repositories: PropTypes.array
 }
 ArticleDetail.prototype.linkState = linkState

@@ -1,6 +1,5 @@
 import React, { PropTypes } from 'react'
 import linkState from 'browser/lib/linkState'
-import { updateUser } from '../../actions'
 import fetchConfig from 'browser/lib/fetchConfig'
 import hljsTheme from 'browser/lib/hljsThemes'
 
@@ -38,7 +37,7 @@ export default class AppSettingTab extends React.Component {
         message: 'Successfully done!'
       }})
     }
-    this.handleSettingError = err => {
+    this.handleSettingError = (err) => {
       this.setState({keymapAlert: {
         type: 'error',
         message: err.message != null ? err.message : 'Error occurs!'
