@@ -362,7 +362,7 @@ class Repository {
     if (_.isString(override.name) && override.name.trim().length > 0) targetFolder.name = override.name.trim()
     if (_.isString(override.color)) targetFolder.color = override.color
 
-    return this.updateJSON(this.json)
+    return this.saveJSON(this.json)
       .then(() => targetFolder)
   }
 
@@ -380,7 +380,7 @@ class Repository {
       targetFolder = folders.splice(targetIndex, 1)[0]
     }
 
-    return this.updateJSON(null)
+    return this.saveJSON(null)
       .then(() => targetFolder)
   }
 

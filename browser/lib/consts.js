@@ -8,6 +8,16 @@ const consts = {
     '#1FAD85',
     '#E10051',
     '#B013A4'
+  ],
+  FOLDER_COLOR_NAMES: [
+    'Cerulean Blue',
+    'Dodger Blue',
+    'Pizazz',
+    'Confetti',
+    'Emerald',
+    'Mountain Meadow',
+    'Razzmatazz',
+    'Violet Eggplant'
   ]
 }
 

@@ -72,7 +72,7 @@ class SideNav extends React.Component {
 
         <div styleName='repositoryList'>
           {repositories.length > 0 ? repositorieElements : (
-            <div styleName='repositoryList-empty'>No repository mount</div>
+            <div styleName='repositoryList-empty'>No repository mount.</div>
           )}
         </div>
 

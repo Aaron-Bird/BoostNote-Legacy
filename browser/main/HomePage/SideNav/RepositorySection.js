@@ -2,11 +2,11 @@ import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './RepositorySection.styl'
 import Repository from 'browser/lib/Repository'
+import FolderItem from './FolderItem'
 
 const electron = require('electron')
 const { remote } = electron
-const Menu = remote.Menu
-const MenuItem = remote.MenuItem
+const { Menu, MenuItem } = remote
 
 class RepositorySection extends React.Component {
   constructor (props) {
@@ -124,19 +124,11 @@ class RepositorySection extends React.Component {
 
     let folderElements = repository.folders.map((folder) => {
       return (
-        <div
+        <FolderItem
           key={folder.key}
-          styleName='folder'
-        >
-          <div styleName='folder-label'>
-            <i className='fa fa-cube' style={{color: folder.color}}/> {folder.name}
-          </div>
-          <div styleName='folder-control'>
-            <button styleName='folder-control-button'>
-              <i className='fa fa-ellipsis-v'/>
-            </button>
-          </div>
-        </div>
+          folder={folder}
+          repository={repository}
+        />
       )
     })
 

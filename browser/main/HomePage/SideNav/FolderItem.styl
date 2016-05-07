@@ -1,0 +1,56 @@
+.root
+  height 33px
+  width 100%
+  position relative
+  cursor pointer
+  &:hover
+    background-color alpha(white, 0.1)
+    .control
+      opacity 1
+
+.label
+  position absolute
+  left 0
+  top 0
+  bottom 0
+  right 48px
+  padding-left 20px
+  line-height 33px
+  color white
+
+.control
+  opacity 0
+  position absolute
+  top 0
+  bottom 0
+  right 5px
+  width 24px
+
+.control-button
+  width 24px
+  height 24px
+  margin-top 4.5px
+  border none
+  border-radius 5px
+  background-color transparent
+  color $nav-inactive-color
+  &:hover
+    color white
+    background-color alpha(white, 0.1)
+  &:active
+    color white
+    background-color $brand-color
+
+.nameInput
+  absolute top bottom
+  left 10px
+  right 10px
+  height 33px
+  padding 0 10px
+  border-radius 5px
+  border solid 1px $nav-border-color
+  outline none
+  &:focus
+    border-color $focus-border-color
+  &:disabled
+    background-color $disabled-input-background

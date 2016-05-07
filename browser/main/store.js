@@ -67,6 +67,44 @@ function repositories (state = initialRepositories, action) {
 
         return repos
       }
+    case 'EDIT_FOLDER':
+      {
+        let repos = state.slice()
+        let targetRepo = _.find(repos, {key: action.key})
+
+        if (targetRepo == null) return state
+
+        let targetFolderIndex = _.findIndex(targetRepo.folders, {key: action.folder.key})
+        if (targetFolderIndex < 0) {
+          targetRepo.folders.push(action.folder)
+        } else {
+          targetRepo.folders.splice(targetFolderIndex, 1, action.folder)
+        }
+
+        return repos
+      }
+    /**
+     *  Remove a folder from the repository
+     * {
+     *  type: 'REMOVE_FOLDER',
+     *  repository: repositoryKey,
+     *  folder: folderKey
+     * }
+     */
+    case 'REMOVE_FOLDER':
+      {
+        let repos = state.slice()
+        let targetRepo = _.find(repos, {key: action.repository})
+
+        if (targetRepo == null) return state
+
+        let targetFolderIndex = _.findIndex(targetRepo.folders, {key: action.folder})
+        if (targetFolderIndex > -1) {
+          targetRepo.folders.splice(targetFolderIndex, 1)
+        }
+
+        return repos
+      }
   }
   return state
 }
