@@ -89,6 +89,7 @@ class FolderItem extends React.Component {
       name: this.props.folder.name
     }, () => {
       this.refs.nameInput.focus()
+      this.refs.nameInput.select()
     })
   }
 
@@ -124,7 +125,9 @@ class FolderItem extends React.Component {
 
     return (
       <div className='FolderItem'
-        styleName='root'>
+        styleName='root'
+        onContextMenu={(e) => this.handleContextButtonClick(e)}
+      >
         <div styleName='label'>
           <i className='fa fa-cube' style={{color: folder.color}}/> {folder.name}
         </div>
@@ -181,7 +184,6 @@ class FolderItem extends React.Component {
     return (
       <div className='FolderItem'
         styleName='root'
-        onContextMenu={(e) => this.handleContextButtonClick(e)}
       >
         <input styleName='nameInput'
           ref='nameInput'
