@@ -27,7 +27,7 @@ export default class MainContainer extends React.Component {
         {this.state.updateAvailable ? (
           <button onClick={this.updateApp} className='appUpdateButton'><i className='fa fa-cloud-download'/> Update available!</button>
         ) : null}
-        <HomePage/>
+        <HomePage {...this.props}/>
       </div>
     )
   }

@@ -35,8 +35,18 @@ class SideNav extends React.Component {
     openModal(Preferences)
   }
 
+  handleHomeButtonClick (e) {
+    let { router } = this.context
+    router.push('/repositories')
+  }
+
+  handleStarredButtonClick (e) {
+    let { router } = this.context
+    router.push('/starred')
+  }
+
   render () {
-    let { repositories, dispatch } = this.props
+    let { repositories, dispatch, location } = this.props
     let repositorieElements = repositories.map((repo) => {
       return <RepositorySection
         key={repo.key}
@@ -44,6 +54,8 @@ class SideNav extends React.Component {
         dispatch={dispatch}
       />
     })
+    let isHomeActive = location.pathname.match(/^\/home$/)
+    let isStarredActive = location.pathname.match(/^\/starred$/)
 
     return (
       <div
@@ -60,13 +72,15 @@ class SideNav extends React.Component {
         </div>
 
         <div styleName='menu'>
-          <button styleName='menu-button'
+          <button styleName={isHomeActive ? 'menu-button--active' : 'menu-button'}
+            onClick={(e) => this.handleHomeButtonClick(e)}
           >
             <i className='fa fa-home'/> Home
           </button>
-          <button styleName='menu-button'
+          <button styleName={isStarredActive ? 'menu-button--active' : 'menu-button'}
+            onClick={(e) => this.handleStarredButtonClick(e)}
           >
-            <i className='fa fa-star'/> Favorited
+            <i className='fa fa-star'/> Starred
           </button>
         </div>
 
@@ -82,6 +96,10 @@ class SideNav extends React.Component {
       </div>
     )
   }
+}
+
+SideNav.contextTypes = {
+  router: PropTypes.shape({})
 }
 
 SideNav.propTypes = {

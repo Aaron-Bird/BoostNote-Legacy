@@ -6,9 +6,11 @@ import ReactDOM from 'react-dom'
 require('!!style!css!stylus?sourceMap!../styles/main/index.styl')
 import activityRecord from 'browser/lib/activityRecord'
 import fetchConfig from '../lib/fetchConfig'
+import { Router, Route, IndexRoute, IndexRedirect, hashHistory } from 'react-router'
 const electron = require('electron')
 const ipc = electron.ipcRenderer
 const path = require('path')
+import { syncHistoryWithStore } from 'react-router-redux'
 
 const remote = electron.remote
 
@@ -73,12 +75,26 @@ ipc.on('open-finder', function () {
 })
 
 let el = document.getElementById('content')
+const history = syncHistoryWithStore(hashHistory, store)
+history.listen((location) => console.info(location))
 ReactDOM.render((
-  <div>
-    <Provider store={store}>
-      <Main/>
-    </Provider>
-  </div>
+  <Provider store={store}>
+    <Router history={history}>
+      <Route path='/' component={Main}>
+        <IndexRedirect to='/home'/>
+        <Route path='home'/>
+        <Route path='starred'/>
+        <Route path='repositories'>
+          <IndexRedirect to='/home'/>
+          <Route path=':repositoryKey'>
+            <IndexRoute/>
+            <Route path='settings'/>
+            <Route path='folders/:folderKey'/>
+          </Route>
+        </Route>
+      </Route>
+    </Router>
+  </Provider>
 ), el, function () {
   let loadingCover = document.getElementById('loadingCover')
   loadingCover.parentNode.removeChild(loadingCover)

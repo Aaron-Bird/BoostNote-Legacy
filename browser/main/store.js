@@ -1,5 +1,6 @@
 import { combineReducers, createStore } from 'redux'
 import _ from 'lodash'
+import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
 
 /**
  * Repositories
@@ -110,7 +111,8 @@ function repositories (state = initialRepositories, action) {
 }
 
 let reducer = combineReducers({
-  repositories
+  repositories,
+  routing: routerReducer
 })
 
 let store = createStore(reducer)
