@@ -9,10 +9,10 @@ const consts = {
     '#B013A4'
   ],
   FOLDER_COLOR_NAMES: [
-    'Razzmatazz',
-    'Pizazz',
-    'Confetti',
-    'Emerald',
+    'Razzmatazz (Red)',
+    'Pizazz (Orange)',
+    'Confetti (Yellow)',
+    'Emerald (Green)',
     'Turquoise',
     'Dodger Blue',
     'Violet Eggplant'
