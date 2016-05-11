@@ -19,6 +19,7 @@
   border none
   color $nav-inactive-text-color
   background-color transparent
+  transition 0.15s
   &:hover
     background-color $nav-hover-background
   &:active
@@ -37,6 +38,7 @@
   border none
   color $nav-inactive-text-color
   background-color transparent
+  transition 0.15s
   &:hover
     background-color $nav-hover-background
   &:active
@@ -52,7 +54,7 @@
 
 .repositoryList
   absolute left right bottom
-  top 167px
+  top 178px
   overflow-y auto
 
 .repositoryList-empty
@@ -69,30 +71,13 @@
   border-radius 16.5px
   height 33px
   width 33px
-  color $nav-inactive-color
+  color $nav-inactive-text-color
   border none
   background-color transparent
+  transition 0.15s
   &:hover
-    background-color alpha(white, 0.1)
-    color white
+    background-color $nav-hover-background
+    color $nav-inactive-text-color
   &:active
-    background-color $brand-color
-    color white
-
-.control
-  absolute bottom left right
-  height 33px
-  background-color transparent
-  border none
-  &:hover
-    background-color alph(white, 0.1)
-  &:active
-    background-color $brand-color
-
-.control-newRepositoryButton
-  absolute top bottom left
-  width 167px
-  padding 0 10px
-  text-align left
-  border none
-  color white
+    background-color $nav-active-background
+    color $nav-text-color

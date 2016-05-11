@@ -60,6 +60,10 @@ class FolderItem extends React.Component {
 
     var menu = new Menu()
     menu.append(new MenuItem({
+      label: 'New Note'
+    }))
+    menu.append(new MenuItem({ type: 'separator' }))
+    menu.append(new MenuItem({
       label: 'Rename',
       click: () => this.handleRenameButtonClick(e)
     }))

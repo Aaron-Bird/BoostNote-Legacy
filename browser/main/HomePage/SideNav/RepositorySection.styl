@@ -1,6 +1,4 @@
 .root
-  margin-top 15px
-  margin-bottom 15px
   user-select none
   color $nav-text-color
 
@@ -9,6 +7,7 @@
   height 33px
   cursor pointer
   color $nav-inactive-text-color
+  transition 0.15s
   &:hover
     background-color $nav-hover-background
     .header-control-button
@@ -40,6 +39,7 @@
   background-color transparent
   color $nav-inactive-text-color
   opacity 0
+  transition 0.15s
   &:hover
     background-color $nav-hover-background
   &:active
@@ -75,6 +75,7 @@
   text-align left
   color $nav-inactive-text-color
   background-color transparent
+  transition 0.15s
   &:hover
     background-color $nav-hover-background
   &:active
