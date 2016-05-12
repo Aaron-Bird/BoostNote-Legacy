@@ -2,13 +2,15 @@
 
 Simple note app
 
-## Progress Kanban
+## !!v0.6.0 is Underconstruction!!
 
-https://trello.com/b/wJlinZJx/boostnote-todo-list
+Check the links below for further information.
 
-This is a public Kanban board. Also everyone can comment here.
+Progress summary
+https://github.com/BoostIO/Boostnote/issues/3
 
-If you want to join us, ask me to add you.
+v0.6.0 Branch
+https://github.com/BoostIO/Boostnote/tree/0.6.0
 
 ## System requirement
 
