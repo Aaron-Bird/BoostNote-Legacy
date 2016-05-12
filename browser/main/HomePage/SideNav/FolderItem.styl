@@ -4,13 +4,24 @@
   position relative
   cursor pointer
   transition 0.15s
+  color $nav-inactive-text-color
   &:hover
     background-color $nav-hover-background
     .control
       opacity 1
-  &:active
+  &:active, &:hover:active
     background-color $nav-active-background
     color $nav-text-color
+
+.root--active
+  @extend .root
+  background-color $nav-active-background
+  color $nav-text-color
+  &:hover
+    background-color $nav-active-background
+    color $nav-text-color
+  .control
+    opacity 1
 
 .label
   position absolute
@@ -20,7 +31,10 @@
   right 48px
   padding-left 20px
   line-height 33px
-  color $nav-inactive-text-color
+  overflow-x hidden
+
+.label-name
+  margin-left 5px
 
 .control
   opacity 0
@@ -29,7 +43,7 @@
   bottom 0
   right 5px
   width 24px
-  transition 0.15s
+  transition opacity 0.15s
 
 .control-button
   width 24px
@@ -39,12 +53,14 @@
   border-radius 5px
   background-color transparent
   color $nav-inactive-text-color
-  transition 0.15s
+  transition color background-color 0.15s
   &:hover
     background-color $nav-hover-background
   &:active
     background-color $nav-active-background
     color $nav-text-color
+.root--edit
+  @extend .root
 
 .nameInput
   absolute top bottom
@@ -59,3 +75,48 @@
     border-color $focus-border-color
   &:disabled
     background-color $disabled-input-background
+
+.root--folded
+  @extend .root
+  width 44px
+  &:hover .label-name
+    width 100px
+  .label
+    padding-left 0
+    text-align center
+    right 0
+  .label-icon
+    width 44px
+  .label-name
+    position fixed
+    height 34px
+    left 44px
+    width 0
+    box-sizing border-box
+    margin-left 0
+    overflow ellipsis
+    background-color $nav-tooltip-background-color
+    color white
+    line-height 34px
+    border-top-right-radius 5px
+    border-bottom-right-radius 5px
+    transition width 0.15s
+    pointer-events none
+  .control
+    display none
+
+.root--folded--active
+  @extend .root--folded
+  background-color $nav-active-background
+  color $nav-text-color
+  &:hover
+    background-color $nav-active-background
+    color $nav-text-color
+
+.root--edit--folded
+  @extend .root--edit
+  .nameInput
+    position fixed
+    top inherit
+    bottom inherit
+    width 100px

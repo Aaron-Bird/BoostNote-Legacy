@@ -43,12 +43,20 @@ class RepositorySection extends React.Component {
   }
 
   handleToggleButtonClick (e) {
+    e.stopPropagation()
     this.setState({
       isOpen: !this.state.isOpen
     })
   }
 
+  handleHeaderClick (e) {
+    let { repository } = this.props
+    let { router } = this.context
+    router.push('/repositories/' + repository.key)
+  }
+
   handleContextButtonClick (e) {
+    e.stopPropagation()
     var menu = new Menu()
     menu.append(new MenuItem({
       label: 'New Folder',
@@ -60,7 +68,7 @@ class RepositorySection extends React.Component {
       click: () => this.handleUnlinkButtonClick()
     }))
 
-    menu.popup(remote.getCurrentWindow())
+    menu.popup(remote.getCurrentWindow(), e.clientX, e.clientY - 44)
   }
 
   handleNewFolderButtonClick (e) {
@@ -120,7 +128,10 @@ class RepositorySection extends React.Component {
   }
 
   render () {
-    let { repository } = this.props
+    let { repository, isFolded } = this.props
+    let { router } = this.context
+
+    let isActive = router.isActive('/repositories/' + repository.key, true)
 
     let folderElements = repository.folders.map((folder) => {
       return (
@@ -128,6 +139,7 @@ class RepositorySection extends React.Component {
           key={folder.key}
           folder={folder}
           repository={repository}
+          isFolded={isFolded}
         />
       )
     })
@@ -139,20 +151,22 @@ class RepositorySection extends React.Component {
     return (
       <div
         className='RepositorySection'
-        styleName='root'
+        styleName={isFolded ? 'root-folded' : 'root'}
       >
-        <div styleName='header'
+        <div styleName={isActive ? 'header--active' : 'header'}
+          onClick={(e) => this.handleHeaderClick(e)}
           onContextMenu={(e) => this.handleContextButtonClick(e)}
         >
           <div styleName='header-name'>
-            <i className='fa fa-archive'/> {repository.name}
+            <i styleName='header-name-icon' className='fa fa-archive fa-fw'/>
+            <span styleName='header-name-label'>{repository.name}</span>
           </div>
 
           <div styleName='header-control'>
             <button styleName='header-control-button'
               onClick={(e) => this.handleContextButtonClick(e)}
             >
-              <i className='fa fa-ellipsis-v'/>
+              <i className='fa fa-ellipsis-v fa-fw'/>
             </button>
             <button styleName='header-control-button--show'
               onClick={(e) => this.handleToggleButtonClick(e)}
@@ -177,13 +191,18 @@ class RepositorySection extends React.Component {
             : <button styleName='newFolderButton'
               onClick={(e) => this.handleNewFolderButtonClick(e)}
             >
-              <i className='fa fa-plus'/> New Folder
+              <i styleName='newFolderButton-icon' className='fa fa-plus fa-fw'/>
+              <span styleName='newFolderButton-label'>New Folder</span>
             </button>
           }
         </div>}
       </div>
     )
   }
+}
+
+RepositorySection.contextTypes = {
+  router: PropTypes.object
 }
 
 RepositorySection.propTypes = {
@@ -193,7 +212,8 @@ RepositorySection.propTypes = {
       name: PropTypes.string
     }))
   }),
-  dispatch: PropTypes.func
+  dispatch: PropTypes.func,
+  isFolded: PropTypes.bool
 }
 
 export default CSSModules(RepositorySection, styles)

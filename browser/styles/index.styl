@@ -59,9 +59,23 @@ $disabled-input-background = #DDD
 $nav-text-color = #515151
 $nav-inactive-text-color = #939395
 $nav-hover-background = rgba(126, 127, 129, 0.08)
-$nav-active-background = #E7E7E7
-$nav-border-color = #D1D1D2
+$nav-active-background = alpha(#E0E0E0, 90%)
+$nav-border-color = #D1D1D1
 $nav-background-color = #FAFAFA
+$nav-tooltip-background-color = alpha(#444, 70%)
+$nav-tooltip-button-background = #D1D1D1
+$nav-tooltip-button-background--hover = lighten(#D1D1D1, 30%)
+
+navButtonColor()
+  border none
+  color $nav-inactive-text-color
+  background-color transparent
+  transition color background-color  0.15s
+  &:hover
+    background-color $nav-hover-background
+  &:active
+    background-color $nav-active-background
+    color $nav-text-color
 
 /**
 * # Modal Stuff

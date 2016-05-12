@@ -11,39 +11,26 @@
   border-bottom solid 1px $nav-border-color
 
 .top-menu
+  navButtonColor()
   height 59px
   padding 0 10px
   font-size 14px
   width 100%
   text-align left
-  border none
-  color $nav-inactive-text-color
-  background-color transparent
-  transition 0.15s
-  &:hover
-    background-color $nav-hover-background
-  &:active
-    background-color $nav-active-background
-    color $nav-text-color
+
+.top-menu-label
+  margin-left 5px
 
 .menu
   margin-top 15px
 
 .menu-button
+  navButtonColor()
   height 44px
   padding 0 10px
   font-size 14px
   width 100%
   text-align left
-  border none
-  color $nav-inactive-text-color
-  background-color transparent
-  transition 0.15s
-  &:hover
-    background-color $nav-hover-background
-  &:active
-    background-color $nav-active-background
-    color $nav-text-color
 
 .menu-button--active
   @extend .menu-button
@@ -51,6 +38,9 @@
   color $nav-text-color
   &:hover
     background-color $nav-active-background
+
+.menu-button-label
+  margin-left 5px
 
 .repositoryList
   absolute left right bottom
@@ -74,10 +64,57 @@
   color $nav-inactive-text-color
   border none
   background-color transparent
-  transition 0.15s
+  transition color background-color 0.15s
   &:hover
     background-color $nav-hover-background
     color $nav-inactive-text-color
   &:active
     background-color $nav-active-background
     color $nav-text-color
+
+.root-folded
+  @extend .root
+  width 44px
+  .top-menu
+    width 44px
+    text-align center
+    &:hover .top-menu-label
+      width 100px
+  .top-menu-label
+    position fixed
+    display inline-block
+    height 34px
+    left 44px
+    width 0
+    margin-top -5px
+    margin-left 0
+    overflow hidden
+    background-color $nav-tooltip-background-color
+    color white
+    line-height 34px
+    border-top-right-radius 5px
+    border-bottom-right-radius 5px
+    transition width 0.15s
+    pointer-events none
+  .menu-button, .menu-button--active
+    width 44px
+    text-align center
+    &:hover .menu-button-label
+      width 100px
+  .menu-button-label
+    position fixed
+    display inline-block
+    height 34px
+    left 44px
+    width 0
+    padding-left 0
+    margin-top -9px
+    margin-left 0
+    overflow ellipsis
+    background-color $nav-tooltip-background-color
+    color white
+    line-height 34px
+    border-top-right-radius 5px
+    border-bottom-right-radius 5px
+    transition width 0.15s
+    pointer-events none

@@ -110,8 +110,22 @@ function repositories (state = initialRepositories, action) {
   return state
 }
 
+const defaultStatus = {
+  sideNavExpand: false
+}
+
+function status (state = defaultStatus, action) {
+  switch (action.type) {
+    case 'TOGGLE_SIDENAV':
+      state.sideNavExpand = !state.sideNavExpand
+      return Object.assign({}, state)
+  }
+  return state
+}
+
 let reducer = combineReducers({
   repositories,
+  status,
   routing: routerReducer
 })
 

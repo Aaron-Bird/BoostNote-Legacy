@@ -24,7 +24,7 @@ class SideNav extends React.Component {
       label: 'Mount Repository',
       click: (e) => this.handleNewRepositoryButtonClick(e)
     }))
-    menu.popup(remote.getCurrentWindow())
+    menu.popup(remote.getCurrentWindow(), e.clientX, e.clientY - 44)
   }
 
   handleNewRepositoryButtonClick (e) {
@@ -45,29 +45,43 @@ class SideNav extends React.Component {
     router.push('/starred')
   }
 
-  render () {
-    let { repositories, dispatch, location } = this.props
-    let repositorieElements = repositories.map((repo) => {
-      return <RepositorySection
-        key={repo.key}
-        repository={repo}
-        dispatch={dispatch}
-      />
+  handleToggleButtonClick (e) {
+    let { dispatch } = this.props
+
+    dispatch({
+      type: 'TOGGLE_SIDENAV'
     })
+  }
+
+  render () {
+    let { repositories, dispatch, location, status } = this.props
+
+    let isFolded = !status.sideNavExpand
     let isHomeActive = location.pathname.match(/^\/home$/)
     let isStarredActive = location.pathname.match(/^\/starred$/)
+
+    let repositorieElements = repositories
+      .map((repo) => {
+        return <RepositorySection
+          key={repo.key}
+          repository={repo}
+          dispatch={dispatch}
+          isFolded={isFolded}
+        />
+      })
 
     return (
       <div
         className='SideNav'
-        styleName='root'
+        styleName={isFolded ? 'root-folded' : 'root'}
         tabIndex='1'
       >
         <div styleName='top'>
           <button styleName='top-menu'
             onClick={(e) => this.handleMenuButtonClick(e)}
           >
-            <i className='fa fa-navicon'/> Menu
+            <i styleName='top-menu-icon' className='fa fa-navicon fa-fw'/>
+            <span styleName='top-menu-label'>Menu</span>
           </button>
         </div>
 
@@ -75,12 +89,18 @@ class SideNav extends React.Component {
           <button styleName={isHomeActive ? 'menu-button--active' : 'menu-button'}
             onClick={(e) => this.handleHomeButtonClick(e)}
           >
-            <i className='fa fa-home'/> Home
+            <i styleName='menu-button-icon'
+              className='fa fa-home fa-fw'
+            />
+            <span styleName='menu-button-label'>Home</span>
           </button>
           <button styleName={isStarredActive ? 'menu-button--active' : 'menu-button'}
             onClick={(e) => this.handleStarredButtonClick(e)}
           >
-            <i className='fa fa-star'/> Starred
+            <i styleName='menu-button-icon'
+              className='fa fa-star fa-fw'
+            />
+            <span styleName='menu-button-label'>Starred</span>
           </button>
         </div>
 
@@ -90,8 +110,13 @@ class SideNav extends React.Component {
           )}
         </div>
 
-        <button styleName='navToggle'>
-          <i className='fa fa-angle-double-left'/>
+        <button styleName='navToggle'
+          onClick={(e) => this.handleToggleButtonClick(e)}
+        >
+          {isFolded
+            ? <i className='fa fa-angle-double-right'/>
+            : <i className='fa fa-angle-double-left'/>
+          }
         </button>
       </div>
     )

@@ -54,6 +54,7 @@ class FolderItem extends React.Component {
   }
 
   handleContextButtonClick (e) {
+    e.stopPropagation()
     if (this.state.isUpdating) {
       return
     }
@@ -84,7 +85,7 @@ class FolderItem extends React.Component {
       click: () => this.handleDeleteButtonClick(e)
     }))
 
-    menu.popup(remote.getCurrentWindow())
+    menu.popup(remote.getCurrentWindow(), e.clientX, e.clientY - 44)
   }
 
   handleRenameButtonClick (e) {
@@ -124,16 +125,33 @@ class FolderItem extends React.Component {
     })
   }
 
+  handleClick (e) {
+    let { folder, repository } = this.props
+    let { router } = this.context
+
+    router.push('/repositories/' + repository.key + '/folders/' + folder.key)
+  }
+
   renderIdle () {
-    let { folder } = this.props
+    let { folder, repository, isFolded } = this.props
+    let { router } = this.context
+
+    let isActive = router.isActive('/repositories/' + repository.key + '/folders/' + folder.key)
 
     return (
-      <div className='FolderItem'
-        styleName='root'
+      <div styleName={isFolded
+          ? isActive ? 'root--folded--active' : 'root--folded'
+          : isActive ? 'root--active' : 'root'
+        }
+        onClick={(e) => this.handleClick(e)}
         onContextMenu={(e) => this.handleContextButtonClick(e)}
       >
         <div styleName='label'>
-          <i className='fa fa-cube' style={{color: folder.color}}/> {folder.name}
+          <i styleName='label-icon'
+            className='fa fa-cube'
+            style={{color: folder.color}}
+          />
+          <span styleName='label-name'>{folder.name}</span>
         </div>
         <div styleName='control'>
           <button styleName='control-button'
@@ -185,9 +203,12 @@ class FolderItem extends React.Component {
   }
 
   renderEdit () {
+    let { isFolded } = this.props
     return (
-      <div className='FolderItem'
-        styleName='root'
+      <div styleName={isFolded
+          ? 'root--edit--folded'
+          : 'root--edit'
+        }
       >
         <input styleName='nameInput'
           ref='nameInput'
@@ -205,6 +226,10 @@ class FolderItem extends React.Component {
   }
 }
 
+FolderItem.contextTypes = {
+  router: PropTypes.object
+}
+
 FolderItem.propTypes = {
   folder: PropTypes.shape({
     name: PropTypes.string,
@@ -212,7 +237,8 @@ FolderItem.propTypes = {
   }),
   repository: PropTypes.shape({
     key: PropTypes.string
-  })
+  }),
+  isFolded: PropTypes.bool
 }
 
 export default CSSModules(FolderItem, styles)

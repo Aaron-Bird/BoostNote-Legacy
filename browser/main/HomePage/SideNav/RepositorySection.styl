@@ -8,10 +8,28 @@
   cursor pointer
   color $nav-inactive-text-color
   transition 0.15s
+  border none
+  width 100%
+  text-align left
+  background-color transparent
+  font-size 14px
   &:hover
     background-color $nav-hover-background
     .header-control-button
       opacity 1
+  &:active, &:active:hover
+    background-color $nav-active-background
+    color $nav-text-color
+
+.header--active
+  @extend .header
+  background-color $nav-active-background
+  color $nav-text-color
+  .header-control-button
+    opacity 1
+  &:hover
+    background-color $nav-active-background
+    color $nav-text-color
 
 .header-name
   position absolute
@@ -21,6 +39,9 @@
   right 72px
   padding-left 10px
   line-height 33px
+
+.header-name-label
+  margin-left 5px
 
 .header-control
   position absolute
@@ -39,7 +60,7 @@
   background-color transparent
   color $nav-inactive-text-color
   opacity 0
-  transition 0.15s
+  transition color background-color 0.15s
   &:hover
     background-color $nav-hover-background
   &:active
@@ -75,9 +96,94 @@
   text-align left
   color $nav-inactive-text-color
   background-color transparent
-  transition 0.15s
+  transition color background-color 0.15s
   &:hover
     background-color $nav-hover-background
   &:active
     background-color $nav-active-background
     color $nav-text-color
+
+.newFolderButton
+  height 34px
+  line-height 34px
+.newFolderButton-label
+  margin-left 0
+
+.root-folded
+  @extend .root
+  width 44px
+  .header, .header--active
+    width 44px
+    text-align center
+    overflow hidden
+    &:hover
+      .header-name-label
+        width 134px
+        padding-left 34px
+      .header-control
+        width 35px
+        padding-right 5px
+  .header-name
+    width 44px
+    padding-left 0
+  .header-name-label
+    position fixed
+    display inline-block
+    height 34px
+    left 44px
+    width 0
+    box-sizing border-box
+    margin-left 0
+    overflow ellipsis
+    background-color $nav-tooltip-background-color
+    color white
+    line-height 34px
+    border-top-right-radius 5px
+    border-bottom-right-radius 5px
+    transition width 0.15s
+    pointer-events none
+  .header-control
+    position fixed
+    width 0
+    height 33px
+    top inherit
+    bottom inherit
+    left 43px
+    box-sizing border-box
+    overflow hidden
+  .header-control-button
+    display none
+  .header-control-button--show
+    float right
+    background-color $nav-tooltip-button-background
+    &:hover
+      background-color $nav-tooltip-button-background--hover
+  .newFolderButton
+    width 44px
+    padding 0
+    &:hover .newFolderButton-label
+      width 100px
+  .newFolderButton-icon
+    text-align center
+    width 44px
+  .newFolderButton-label
+    position fixed
+    display inline-block
+    height 34px
+    left 44px
+    width 0
+    box-sizing border-box
+    margin-left 0
+    overflow ellipsis
+    background-color $nav-tooltip-background-color
+    color white
+    line-height 34px
+    border-top-right-radius 5px
+    border-bottom-right-radius 5px
+    transition width 0.15s
+    pointer-events none
+    font-size 14px
+    text-align center
+  .newFolderForm-nameInput
+    position fixed
+    width 100px
