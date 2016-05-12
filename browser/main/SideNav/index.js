@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './SideNav.styl'
 import { openModal } from 'browser/lib/modal'
-import Preferences from '../../modal/Preferences'
+import Preferences from '../modals/Preferences'
 import RepositorySection from './RepositorySection'
-import NewRepositoryModal from '../../modal/NewRepositoryModal'
+import NewRepositoryModal from '../modals/NewRepositoryModal'
 
 const electron = require('electron')
 const { remote } = electron

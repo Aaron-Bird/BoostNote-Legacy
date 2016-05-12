@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react'
 import { connect, Provider } from 'react-redux'
 import linkState from 'browser/lib/linkState'
-import store from '../store'
-import AppSettingTab from './Preference/AppSettingTab'
-import ContactTab from './Preference/ContactTab'
+import store from 'browser/main/store'
+import AppSettingTab from './AppSettingTab'
+import ContactTab from './ContactTab'
 import { closeModal } from 'browser/lib/modal'
 
 const APP = 'APP'

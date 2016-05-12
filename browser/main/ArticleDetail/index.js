@@ -7,7 +7,7 @@ import TagSelect from 'browser/components/TagSelect'
 import ModeSelect from 'browser/components/ModeSelect'
 import ShareButton from './ShareButton'
 import { openModal, isModalOpen } from 'browser/lib/modal'
-import DeleteArticleModal from '../../modal/DeleteArticleModal'
+import DeleteArticleModal from '../modals/DeleteArticleModal'
 import ArticleEditor from './ArticleEditor'
 const electron = require('electron')
 const ipc = electron.ipcRenderer
