@@ -21,7 +21,7 @@ const sanitizeOpts = {
     'a': ['lineAnchor'],
     'div': ['math'],
     'pre': ['hljs'],
-    'span': ['math', 'hljs-*'],
+    'span': ['math', 'hljs-*', 'lineNumber'],
     'code': ['language-*']
   },
   allowedAttributes: {
@@ -91,7 +91,8 @@ export default class MarkdownPreview extends React.Component {
 
     this.state = {
       fontSize: config['preview-font-size'],
-      fontFamily: config['preview-font-family']
+      fontFamily: config['preview-font-family'],
+      lineNumber: config['preview-line-number']
     }
   }
   componentDidMount () {
@@ -182,7 +183,8 @@ export default class MarkdownPreview extends React.Component {
   handleConfigApply (e, config) {
     this.setState({
       fontSize: config['preview-font-size'],
-      fontFamily: config['preview-font-family']
+      fontFamily: config['preview-font-family'],
+      lineNumber: config['preview-line-number']
     })
   }
 
@@ -196,7 +198,7 @@ export default class MarkdownPreview extends React.Component {
 
     return (
       <div
-        className={'MarkdownPreview' + (this.props.className != null ? ' ' + this.props.className : '') + (isEmpty ? ' empty' : '')}
+        className={'MarkdownPreview' + (this.props.className != null ? ' ' + this.props.className : '') + (isEmpty ? ' empty' : '') + (this.state.lineNumber ? ' lineNumbered' : '')}
         onClick={e => this.handleClick(e)}
         onDoubleClick={e => this.handleDoubleClick(e)}
         onMouseDown={e => this.handleMouseDown(e)}
