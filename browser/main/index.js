@@ -12,6 +12,9 @@ const ipc = electron.ipcRenderer
 const path = require('path')
 import { syncHistoryWithStore } from 'react-router-redux'
 
+const PRO = process.env.NODE_ENV === 'production'
+if (!PRO) require('devtron').install()
+
 const remote = electron.remote
 
 let config = fetchConfig()

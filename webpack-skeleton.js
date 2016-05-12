@@ -41,6 +41,7 @@ var config = {
     '@rokt33r/sanitize-html',
     'markdown-it-checkbox',
     'season',
+    'devtron',
     {
       react: 'var React',
       'react-dom': 'var ReactDOM',
