@@ -1,7 +1,7 @@
 .root
   absolute top left
-  bottom 24px
-  width 200px
+  bottom $statusBar-height
+  width $sideNav-width
   border-right $ui-border
   background-color $ui-backgroundColor
   user-select none
@@ -44,7 +44,8 @@
   margin-left 5px
 
 .repositoryList
-  absolute left right bottom
+  absolute left right
+  bottom 44px
   top 178px
   overflow-y auto
 
@@ -61,8 +62,10 @@
   right 5px
   bottom 5px
   border-radius 16.5px
-  height 33px
-  width 33px
+  height 34px
+  width 34px
+  line-height 32px
+  padding 0
 
 .root-folded
   @extend .root
