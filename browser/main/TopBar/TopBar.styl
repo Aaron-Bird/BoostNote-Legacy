@@ -1,0 +1,108 @@
+.root
+  absolute top right
+  background-color $ui-backgroundColor
+  left $sideNav-width
+  border-bottom $ui-border
+  height 60px
+  clearfix()
+
+.left
+  float left
+  height 59px
+  line-height 60px
+
+.left-search
+  margin-top 12px
+  margin-left 25px
+  height 34px
+  width 200px
+  float left
+  border-radius 22px
+  position relative
+  background-color white
+  border $ui-border
+
+.left-search-icon
+  absolute left
+  width 36px
+  height 32px
+  padding 0
+  line-height 32px
+  color $ui-inactive-text-color
+
+.left-search-input
+  absolute top bottom right
+  height 32px
+  left 34px
+  border none
+  outline none
+  font-size 14px
+
+.left-control
+  float left
+  margin-left 15px
+
+.left-control-newPostButton
+  width 34px
+  height 34px
+  margin-top 12px
+  border-radius 17px
+  navButtonColor()
+  border $ui-border
+  font-size 14px
+  line-height 32px
+  padding 0
+  &:active
+    border-color $ui-button--active-backgroundColor
+  &:hover .left-control-newPostButton-tooltip
+    display block
+
+
+.left-control-newPostButton-tooltip
+  position fixed
+  background-color $ui-tooltip-backgroundColor
+  color $ui-tooltip-text-color
+  font-size 10px
+  margin-left -35px
+  margin-top 12px
+  padding 5px
+  z-index 1
+  border-radius 5px
+  display none
+  pointer-events none
+
+.right
+  float right
+  height 60px
+  clearfix()
+
+.right-helpButton
+  width 24px
+  height 24px
+  border-radius 12px
+  navButtonColor()
+  border $ui-border
+  line-height 22px
+  font-size 12px
+  padding 0
+  float left
+  margin-top 17px
+
+.right-linksButton
+  float left
+  height 44px
+  width 44px
+  border-radius 17px
+  background-color transparent
+  border none
+  margin-top 7px
+  margin-left 5px
+  margin-right 15px
+  opacity 0.8
+  &:hover, &:active
+    opacity 1
+
+.root--expanded
+  @extend .root
+  absolute top right
+  left $sideNav--folded-width

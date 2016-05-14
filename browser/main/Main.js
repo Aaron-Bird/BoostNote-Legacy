@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import { connect } from 'react-redux'
 import SideNav from './SideNav'
-import ArticleTopBar from './ArticleTopBar'
+import TopBar from './TopBar'
 import ArticleList from './ArticleList'
 import ArticleDetail from './ArticleDetail'
 import Repository from 'browser/lib/Repository'
@@ -26,7 +26,7 @@ class Main extends React.Component {
         <SideNav
           {...this.props}
         />
-        <ArticleTopBar
+        <TopBar
           {...this.props}
         />
         <ArticleList
