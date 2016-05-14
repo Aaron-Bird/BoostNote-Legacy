@@ -85,7 +85,7 @@ class FolderItem extends React.Component {
       click: () => this.handleDeleteButtonClick(e)
     }))
 
-    menu.popup(remote.getCurrentWindow(), e.clientX, e.clientY - 44)
+    menu.popup(remote.getCurrentWindow())
   }
 
   handleRenameButtonClick (e) {

@@ -68,7 +68,7 @@ class RepositorySection extends React.Component {
       click: () => this.handleUnlinkButtonClick()
     }))
 
-    menu.popup(remote.getCurrentWindow(), e.clientX, e.clientY - 44)
+    menu.popup(remote.getCurrentWindow())
   }
 
   handleNewFolderButtonClick (e) {

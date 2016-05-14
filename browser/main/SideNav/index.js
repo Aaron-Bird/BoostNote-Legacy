@@ -25,7 +25,7 @@ class SideNav extends React.Component {
       label: 'Mount Repository',
       click: (e) => this.handleNewRepositoryButtonClick(e)
     }))
-    menu.popup(remote.getCurrentWindow(), e.clientX, e.clientY - 44)
+    menu.popup(remote.getCurrentWindow())
   }
 
   handleNewRepositoryButtonClick (e) {
