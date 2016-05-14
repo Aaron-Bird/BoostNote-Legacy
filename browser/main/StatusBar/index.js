@@ -8,6 +8,8 @@ const ipc = electron.ipcRenderer
 const { remote } = electron
 const { Menu, MenuItem } = remote
 
+const zoomOptions = [0.8, 0.9, 1, 1.1, 1.2, 1.3]
+
 class StatusBar extends React.Component {
   constructor (props) {
     super(props)
@@ -26,30 +28,14 @@ class StatusBar extends React.Component {
 
   handleZoomButtonClick (e) {
     let menu = new Menu()
-    menu.append(new MenuItem({
-      label: '130%',
-      click: () => this.handleZoomMenuItemClick(1.3)
-    }))
-    menu.append(new MenuItem({
-      label: '120%',
-      click: () => this.handleZoomMenuItemClick(1.2)
-    }))
-    menu.append(new MenuItem({
-      label: '110%',
-      click: () => this.handleZoomMenuItemClick(1.1)
-    }))
-    menu.append(new MenuItem({
-      label: '100%',
-      click: () => this.handleZoomMenuItemClick(1)
-    }))
-    menu.append(new MenuItem({
-      label: '90%',
-      click: () => this.handleZoomMenuItemClick(0.9)
-    }))
-    menu.append(new MenuItem({
-      label: '80%',
-      click: () => this.handleZoomMenuItemClick(0.8)
-    }))
+
+    zoomOptions.forEach((zoom) => {
+      menu.append(new MenuItem({
+        label: Math.floor(zoom * 100) + '%',
+        click: () => this.handleZoomMenuItemClick(zoom)
+      }))
+    })
+
     menu.popup(remote.getCurrentWindow())
   }
 
