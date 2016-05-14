@@ -3,6 +3,27 @@ $brand-color = #2BAC8F
 $danger-color = red
 $danger-lighten-color = #FFE5E6
 
+// UI default
+$ui-text-color = #515151
+$ui-inactive-text-color = #939395
+$ui-borderColor = #D1D1D1
+$ui-backgroundColor = #FAFAFA
+$ui-border = solid 1px $ui-borderColor
+
+// UI Button
+$ui-button-color = #939395
+$ui-button--hover-backgroundColor = rgba(126, 127, 129, 0.08)
+$ui-button--active-color = #515151
+$ui-button--active-backgroundColor = alpha(#E0E0E0, 90%)
+
+// UI Tooltip
+$ui-tooltip-backgroundColor = alpha(#444, 70%)
+$ui-tooltip-button-backgroundColor = #D1D1D1
+$ui-tooltip-button--hover-backgroundColor = lighten(#D1D1D1, 30%)
+
+// UI Input
+$ui-input--focus-borderColor = #369DCD
+$ui-input--disabled-backgroundColor = #DDD
 
 /*
 * # Border
@@ -47,35 +68,22 @@ colorPrimaryButton()
     background-color $primary-button-background--active
 
 /**
-* Input
-*/
-
-$disabled-input-background = #DDD
-
-/**
 * Nav
 */
 
-$nav-text-color = #515151
-$nav-inactive-text-color = #939395
-$nav-hover-background = rgba(126, 127, 129, 0.08)
-$nav-active-background = alpha(#E0E0E0, 90%)
-$nav-border-color = #D1D1D1
-$nav-background-color = #FAFAFA
-$nav-tooltip-background-color = alpha(#444, 70%)
-$nav-tooltip-button-background = #D1D1D1
-$nav-tooltip-button-background--hover = lighten(#D1D1D1, 30%)
-
 navButtonColor()
   border none
-  color $nav-inactive-text-color
+  color $ui-button-color
   background-color transparent
   transition color background-color  0.15s
   &:hover
-    background-color $nav-hover-background
+    background-color $ui-button--hover-backgroundColor
   &:active
-    background-color $nav-active-background
-    color $nav-text-color
+    background-color $ui-button--active-backgroundColor
+    color $ui-button--active-color
+  &:active, &:active:hover
+    background-color $ui-button--active-backgroundColor
+    color $ui-button--active-color
 
 /**
 * # Modal Stuff

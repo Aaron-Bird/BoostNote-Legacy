@@ -3,23 +3,15 @@
   width 100%
   position relative
   cursor pointer
-  transition 0.15s
-  color $nav-inactive-text-color
-  &:hover
-    background-color $nav-hover-background
-    .control
-      opacity 1
-  &:active, &:hover:active
-    background-color $nav-active-background
-    color $nav-text-color
+  navButtonColor()
 
 .root--active
   @extend .root
-  background-color $nav-active-background
-  color $nav-text-color
+  background-color $ui-button--active-backgroundColor
+  color $ui-button--active-color
   &:hover
-    background-color $nav-active-background
-    color $nav-text-color
+    background-color $ui-button--active-backgroundColor
+    color $ui-button--active-color
   .control
     opacity 1
 
@@ -46,19 +38,11 @@
   transition opacity 0.15s
 
 .control-button
+  navButtonColor()
   width 24px
   height 24px
   margin-top 4.5px
-  border none
   border-radius 5px
-  background-color transparent
-  color $nav-inactive-text-color
-  transition color background-color 0.15s
-  &:hover
-    background-color $nav-hover-background
-  &:active
-    background-color $nav-active-background
-    color $nav-text-color
 .root--edit
   @extend .root
 
@@ -69,12 +53,12 @@
   height 33px
   padding 0 10px
   border-radius 5px
-  border solid 1px $nav-border-color
+  border $ui-border
   outline none
   &:focus
-    border-color $focus-border-color
+    border-color $ui-input--focus-borderColor
   &:disabled
-    background-color $disabled-input-background
+    background-color $ui-input--disabled-backgroundColor
 
 .root--folded
   @extend .root
@@ -95,7 +79,7 @@
     box-sizing border-box
     margin-left 0
     overflow ellipsis
-    background-color $nav-tooltip-background-color
+    background-color $ui-tooltip-backgroundColor
     color white
     line-height 34px
     border-top-right-radius 5px
@@ -107,11 +91,11 @@
 
 .root--folded--active
   @extend .root--folded
-  background-color $nav-active-background
-  color $nav-text-color
+  background-color $ui-button--active-backgroundColor
+  color $ui-button--active-color
   &:hover
-    background-color $nav-active-background
-    color $nav-text-color
+    background-color $ui-button--active-backgroundColor
+    color $ui-button--active-color
 
 .root--edit--folded
   @extend .root--edit

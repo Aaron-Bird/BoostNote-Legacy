@@ -2,14 +2,14 @@
   absolute top left
   bottom 24px
   width 200px
-  border-right solid 1px $nav-border-color
-  background-color $nav-background-color
+  border-right $ui-border
+  background-color $ui-backgroundColor
   user-select none
-  color $nav-text-color
+  color $ui-text-color
 
 .top
   height 60px
-  border-bottom solid 1px $nav-border-color
+  border-bottom $ui-border
 
 .top-menu
   navButtonColor()
@@ -35,10 +35,10 @@
 
 .menu-button--active
   @extend .menu-button
-  background-color $nav-active-background
-  color $nav-text-color
+  background-color $ui-button--active-backgroundColor
+  color $ui-button--active-color
   &:hover
-    background-color $nav-active-background
+    background-color $ui-button--active-backgroundColor
 
 .menu-button-label
   margin-left 5px
@@ -52,9 +52,10 @@
   padding 0 10px
   margin-top 15px
   line-height 24px
-  color $nav-inactive-color
+  color $ui-inactive-text-color
 
 .navToggle
+  navButtonColor()
   display block
   position absolute
   right 5px
@@ -62,16 +63,6 @@
   border-radius 16.5px
   height 33px
   width 33px
-  color $nav-inactive-text-color
-  border none
-  background-color transparent
-  transition color background-color 0.15s
-  &:hover
-    background-color $nav-hover-background
-    color $nav-inactive-text-color
-  &:active
-    background-color $nav-active-background
-    color $nav-text-color
 
 .root-folded
   @extend .root
@@ -93,7 +84,7 @@
     margin-top -5px
     margin-left 0
     overflow hidden
-    background-color $nav-tooltip-background-color
+    background-color $ui-tooltip-backgroundColor
     color white
     line-height 34px
     border-top-right-radius 5px
@@ -115,7 +106,7 @@
     margin-top -9px
     margin-left 0
     overflow ellipsis
-    background-color $nav-tooltip-background-color
+    background-color $ui-tooltip-backgroundColor
     color white
     line-height 34px
     border-top-right-radius 5px

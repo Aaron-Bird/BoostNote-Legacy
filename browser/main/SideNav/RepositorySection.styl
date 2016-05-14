@@ -3,33 +3,25 @@
   color $nav-text-color
 
 .header
+  navButtonColor()
   position relative
+  width 100%
   height 33px
   cursor pointer
-  color $nav-inactive-text-color
-  transition 0.15s
-  border none
-  width 100%
   text-align left
-  background-color transparent
   font-size 14px
-  &:hover
-    background-color $nav-hover-background
-    .header-control-button
-      opacity 1
-  &:active, &:active:hover
-    background-color $nav-active-background
-    color $nav-text-color
+  &:hover .header-control-button
+    opacity 1
 
 .header--active
   @extend .header
-  background-color $nav-active-background
-  color $nav-text-color
+  background-color $ui-button--active-backgroundColor
+  color $ui-button--active-color
   .header-control-button
     opacity 1
   &:hover
-    background-color $nav-active-background
-    color $nav-text-color
+    background-color $ui-button--active-backgroundColor
+    color $ui-button--active-color
 
 .header-name
   position absolute
@@ -51,21 +43,13 @@
   width 48px
 
 .header-control-button
+  navButtonColor()
   width 24px
+  height 24px
   padding 0
   margin-top 4.5px
-  height 24px
-  border none
   border-radius 5px
-  background-color transparent
-  color $nav-inactive-text-color
   opacity 0
-  transition color background-color 0.15s
-  &:hover
-    background-color $nav-hover-background
-  &:active
-    background-color $nav-active-background
-    color $nav-text-color
 
 .header-control-button--show
   @extend .header-control-button
@@ -81,31 +65,22 @@
   height 33px
   padding 0 10px
   border-radius 5px
-  border solid 1px $nav-border-color
+  border $ui-border
   outline none
   &:focus
-    border-color $focus-border-color
+    border-color $ui-input--focus-borderColor
   &:disabled
-    background-color $disabled-input-background
+    background-color $ui-input--disabled-backgroundColor
 
 .newFolderButton
-  height 33px
+  navButtonColor()
+  height 34px
   width 100%
   border none
   padding-left 20px
   text-align left
-  color $nav-inactive-text-color
-  background-color transparent
-  transition color background-color 0.15s
-  &:hover
-    background-color $nav-hover-background
-  &:active
-    background-color $nav-active-background
-    color $nav-text-color
-
-.newFolderButton
-  height 34px
   line-height 34px
+
 .newFolderButton-label
   margin-left 0
 
@@ -135,7 +110,7 @@
     box-sizing border-box
     margin-left 0
     overflow ellipsis
-    background-color $nav-tooltip-background-color
+    background-color $ui-tooltip-backgroundColor
     color white
     line-height 34px
     border-top-right-radius 5px
@@ -155,9 +130,9 @@
     display none
   .header-control-button--show
     float right
-    background-color $nav-tooltip-button-background
+    background-color $ui-tooltip-button-backgroundColor
     &:hover
-      background-color $nav-tooltip-button-background--hover
+      background-color $ui-tooltip-button--hover-backgroundColor
   .newFolderButton
     width 44px
     padding 0
@@ -175,7 +150,7 @@
     box-sizing border-box
     margin-left 0
     overflow ellipsis
-    background-color $nav-tooltip-background-color
+    background-color $ui-tooltip-backgroundColor
     color white
     line-height 34px
     border-top-right-radius 5px

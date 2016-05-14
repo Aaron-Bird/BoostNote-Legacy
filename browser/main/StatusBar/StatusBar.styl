@@ -1,40 +1,23 @@
 .root
   absolute bottom left right
   height 24px
-  border-top solid 1px $nav-border-color
-  background-color $nav-background-color
+  border-top $ui-border
+  background-color $ui-backgroundColor
 
 .zoom
+  navButtonColor()
   absolute right
   height 24px
   width 60px
   border-width 0 1px
   border-style solid
-  border-color $nav-border-color
-  background-color transparent
-  color $nav-inactive-text-color
-  transition color background-color 0.15s
-  &:hover
-    background-color $nav-hover-background
-    color $nav-inactive-text-color
-  &:active
-    background-color $nav-active-background
-    color $nav-text-color
+  border-color $ui-borderColor
 
 .update
+  navButtonColor()
   position absolute
   right 60px
   height 24px
   border-width 0 0 0 1px
   border-style solid
-  border-color $nav-border-color
-  background-color transparent
-  color $brand-color
-  transition color background-color 0.15s
-  &:hover
-    background-color $nav-hover-background
-    color $brand-color
-  &:active
-    background-color $nav-active-background
-    color $brand-color
-
+  border-color $ui-borderColor
