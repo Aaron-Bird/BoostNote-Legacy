@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './SideNav.styl'
-import { openModal } from 'browser/lib/modal'
+import { openModal } from 'browser/main/lib/modal'
 import Preferences from '../modals/Preferences'
 import RepositorySection from './RepositorySection'
 import NewRepositoryModal from '../modals/NewRepositoryModal'

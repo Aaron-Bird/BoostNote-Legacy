@@ -1,7 +1,7 @@
 import React from 'react'
+import { Provider } from 'react-redux'
 import ReactDOM from 'react-dom'
-
-const remote = require('electron').remote
+import store from '../store'
 
 class ModalBase extends React.Component {
   constructor (props) {
@@ -15,8 +15,6 @@ class ModalBase extends React.Component {
 
   close () {
     if (modalBase != null) modalBase.setState({component: null, componentProps: null, isHidden: true})
-
-    remote.getCurrentWebContents().send('list-focus')
   }
 
   render () {
@@ -24,7 +22,9 @@ class ModalBase extends React.Component {
       <div className={'ModalBase' + (this.state.isHidden ? ' hide' : '')}>
         <div onClick={(e) => this.close(e)} className='modalBack'/>
         {this.state.component == null ? null : (
-          <this.state.component {...this.state.componentProps} close={this.close}/>
+          <Provider store={store}>
+            <this.state.component {...this.state.componentProps} close={this.close}/>
+          </Provider>
         )}
       </div>
     )

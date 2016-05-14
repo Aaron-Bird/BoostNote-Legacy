@@ -1,5 +1,4 @@
 import React, { PropTypes } from 'react'
-import linkState from 'browser/lib/linkState'
 import fetchConfig from 'browser/lib/fetchConfig'
 import hljsTheme from 'browser/lib/hljsThemes'
 
@@ -235,7 +234,6 @@ export default class AppSettingTab extends React.Component {
   }
 }
 
-AppSettingTab.prototype.linkState = linkState
 AppSettingTab.propTypes = {
   user: PropTypes.shape({
     name: PropTypes.string

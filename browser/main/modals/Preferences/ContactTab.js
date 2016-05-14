@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import linkState from 'browser/lib/linkState'
 import ExternalLink from 'browser/components/ExternalLink'
 
 export default class ContactTab extends React.Component {
@@ -20,5 +19,3 @@ export default class ContactTab extends React.Component {
     )
   }
 }
-
-ContactTab.prototype.linkState = linkState

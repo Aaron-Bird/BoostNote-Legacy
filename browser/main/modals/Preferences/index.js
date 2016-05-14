@@ -1,10 +1,8 @@
 import React, { PropTypes } from 'react'
-import { connect, Provider } from 'react-redux'
-import linkState from 'browser/lib/linkState'
-import store from 'browser/main/store'
+import { connect } from 'react-redux'
 import AppSettingTab from './AppSettingTab'
 import ContactTab from './ContactTab'
-import { closeModal } from 'browser/lib/modal'
+import { closeModal } from 'browser/main/lib/modal'
 
 const APP = 'APP'
 const CONTACT = 'CONTACT'
@@ -83,15 +81,4 @@ Preferences.propTypes = {
   dispatch: PropTypes.func
 }
 
-Preferences.prototype.linkState = linkState
-
-let RootComponent = connect((x) => x)(Preferences)
-export default class PreferencesModal extends React.Component {
-  render () {
-    return (
-      <Provider store={store}>
-        <RootComponent/>
-      </Provider>
-    )
-  }
-}
+export default connect((x) => x)(Preferences)

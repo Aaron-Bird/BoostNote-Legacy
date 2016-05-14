@@ -2,11 +2,10 @@ import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import moment from 'moment'
 import _ from 'lodash'
-import linkState from 'browser/lib/linkState'
 import TagSelect from 'browser/components/TagSelect'
 import ModeSelect from 'browser/components/ModeSelect'
 import ShareButton from './ShareButton'
-import { openModal, isModalOpen } from 'browser/lib/modal'
+import { openModal, isModalOpen } from 'browser/main/lib/modal'
 import DeleteArticleModal from '../modals/DeleteArticleModal'
 import ArticleEditor from './ArticleEditor'
 const electron = require('electron')
@@ -338,4 +337,3 @@ ArticleDetail.propTypes = {
   dispatch: PropTypes.func,
   repositories: PropTypes.array
 }
-ArticleDetail.prototype.linkState = linkState

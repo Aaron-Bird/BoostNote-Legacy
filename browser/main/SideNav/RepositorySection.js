@@ -57,7 +57,7 @@ class RepositorySection extends React.Component {
 
   handleContextButtonClick (e) {
     e.stopPropagation()
-    var menu = new Menu()
+    let menu = new Menu()
     menu.append(new MenuItem({
       label: 'New Folder',
       click: () => this.handleNewFolderButtonClick()

@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import _ from 'lodash'
-import linkState from '../lib/linkState'
 
 function isNotEmptyString (str) {
   return _.isString(str) && str.length > 0
@@ -164,5 +163,3 @@ TagSelect.propTypes = {
   onChange: PropTypes.func,
   suggestTags: PropTypes.array
 }
-
-TagSelect.prototype.linkState = linkState
