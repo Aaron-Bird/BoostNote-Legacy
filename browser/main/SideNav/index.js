@@ -5,6 +5,7 @@ import { openModal } from 'browser/lib/modal'
 import Preferences from '../modals/Preferences'
 import RepositorySection from './RepositorySection'
 import NewRepositoryModal from '../modals/NewRepositoryModal'
+import ConfigManager from 'browser/main/lib/ConfigManager'
 
 const electron = require('electron')
 const { remote } = electron
@@ -46,17 +47,19 @@ class SideNav extends React.Component {
   }
 
   handleToggleButtonClick (e) {
-    let { dispatch } = this.props
+    let { dispatch, config } = this.props
 
+    ConfigManager.set({isSideNavFolded: !config.isSideNavFolded})
     dispatch({
-      type: 'TOGGLE_SIDENAV'
+      type: 'SET_IS_SIDENAV_FOLDED',
+      isFolded: !config.isSideNavFolded
     })
   }
 
   render () {
-    let { repositories, dispatch, location, status } = this.props
+    let { repositories, dispatch, location, config } = this.props
 
-    let isFolded = !status.sideNavExpand
+    let isFolded = config.isSideNavFolded
     let isHomeActive = location.pathname.match(/^\/home$/)
     let isStarredActive = location.pathname.match(/^\/starred$/)
 

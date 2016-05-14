@@ -1,6 +1,7 @@
 import { combineReducers, createStore } from 'redux'
 import _ from 'lodash'
-import { syncHistoryWithStore, routerReducer } from 'react-router-redux'
+import { routerReducer } from 'react-router-redux'
+import ConfigManager from 'browser/main/lib/ConfigManager'
 
 /**
  * Repositories
@@ -110,14 +111,15 @@ function repositories (state = initialRepositories, action) {
   return state
 }
 
-const defaultStatus = {
-  sideNavExpand: false
-}
+const defaultConfig = ConfigManager.get()
 
-function status (state = defaultStatus, action) {
+function config (state = defaultConfig, action) {
   switch (action.type) {
-    case 'TOGGLE_SIDENAV':
-      state.sideNavExpand = !state.sideNavExpand
+    case 'SET_IS_SIDENAV_FOLDED':
+      state.isSideNavFolded = action.isFolded
+      return Object.assign({}, state)
+    case 'SET_ZOOM':
+      state.zoom = action.zoom
       return Object.assign({}, state)
   }
   return state
@@ -125,7 +127,7 @@ function status (state = defaultStatus, action) {
 
 let reducer = combineReducers({
   repositories,
-  status,
+  config,
   routing: routerReducer
 })
 
