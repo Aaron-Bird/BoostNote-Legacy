@@ -1,8 +1,18 @@
 .root
   absolute bottom left right
-  height 24px
+  height $statusBar-height
   border-top $ui-border
   background-color $ui-backgroundColor
+
+.pathname
+  absolute left
+  height 24px
+  overflow ellipsis
+  width 350px
+  line-height 24px
+  font-size 12px
+  padding 0 15px
+  color $ui-inactive-text-color
 
 .zoom
   navButtonColor()
@@ -21,3 +31,8 @@
   border-width 0 0 0 1px
   border-style solid
   border-color $ui-borderColor
+  &:active .update-icon
+    color white
+
+.update-icon
+  color $brand-color

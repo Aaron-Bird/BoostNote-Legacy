@@ -49,14 +49,16 @@ class StatusBar extends React.Component {
   }
 
   render () {
-    let { config } = this.props
+    let { config, location } = this.props
+
     return (
       <div className='StatusBar'
         styleName='root'
       >
+        <div styleName='pathname'>{location.pathname}</div>
         {this.state.updateAvailable
           ? <button onClick={this.updateApp} styleName='update'>
-            <i className='fa fa-cloud-download'/> Update is available!
+            <i styleName='update-icon' className='fa fa-cloud-download'/> Update is available!
           </button>
           : null
         }
