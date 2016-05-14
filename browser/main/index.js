@@ -7,14 +7,11 @@ require('!!style!css!stylus?sourceMap!../styles/main/index.styl')
 import activityRecord from 'browser/lib/activityRecord'
 import fetchConfig from '../lib/fetchConfig'
 import { Router, Route, IndexRoute, IndexRedirect, hashHistory } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
+
 const electron = require('electron')
 const ipc = electron.ipcRenderer
 const path = require('path')
-import { syncHistoryWithStore } from 'react-router-redux'
-
-const PRO = process.env.NODE_ENV === 'production'
-if (!PRO) require('devtron').install()
-
 const remote = electron.remote
 
 let config = fetchConfig()
