@@ -158,7 +158,7 @@ class RepositorySection extends React.Component {
           onContextMenu={(e) => this.handleContextButtonClick(e)}
         >
           <div styleName='header-name'>
-            <i styleName='header-name-icon' className='fa fa-archive fa-fw'/>
+            <i className='fa fa-archive fa-fw'/>
             <span styleName='header-name-label'>{repository.name}</span>
           </div>
 

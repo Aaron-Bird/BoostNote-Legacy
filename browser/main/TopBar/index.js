@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import { connect } from 'react-redux'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './TopBar.styl'
 import activityRecord from 'browser/lib/activityRecord'
@@ -80,7 +81,7 @@ class TopBar extends React.Component {
               onClick={(e) => this.handleNewPostButtonClick(e)}>
               <i className='fa fa-plus'/>
               <span styleName='left-control-newPostButton-tooltip'>
-                New Post ({OSX ? '⌘' : '^'} + n)
+                New Post {OSX ? '⌘' : '^'} + n
               </span>
             </button>
           </div>
@@ -111,4 +112,4 @@ TopBar.propTypes = {
   })
 }
 
-export default CSSModules(TopBar, styles)
+export default connect((x) => x)(CSSModules(TopBar, styles))

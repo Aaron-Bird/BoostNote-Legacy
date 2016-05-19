@@ -1,0 +1,25 @@
+.root
+  absolute top left bottom right
+
+.body
+  absolute right
+  bottom $statusBar-height - 1
+  top $topBar-height - 1
+  left $sideNav-width
+
+.body--expanded
+  @extend .body
+  left $sideNav--folded-width
+
+.slider
+  absolute top bottom
+  width 5px
+  background-color $ui-backgroundColor
+  border-width 0 1px 0
+  border-style solid
+  border-color $ui-borderColor
+  cursor ew-resize
+
+.slider--active
+  @extend .slider
+  background-color $ui-button--active-backgroundColor

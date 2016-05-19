@@ -1,8 +1,9 @@
 .root
   absolute top left
-  bottom $statusBar-height
+  bottom $statusBar-height - 1
   width $sideNav-width
   border-right $ui-border
+  border-bottom $ui-border
   background-color $ui-backgroundColor
   user-select none
   color $ui-text-color
@@ -88,6 +89,7 @@
     margin-left 0
     overflow hidden
     background-color $ui-tooltip-backgroundColor
+    z-index 10
     color white
     line-height 34px
     border-top-right-radius 5px
@@ -99,6 +101,7 @@
     text-align center
     &:hover .menu-button-label
       width 100px
+  // TODO: extract tooltip style to a mixin
   .menu-button-label
     position fixed
     display inline-block
@@ -110,6 +113,7 @@
     margin-left 0
     overflow ellipsis
     background-color $ui-tooltip-backgroundColor
+    z-index 10
     color white
     line-height 34px
     border-top-right-radius 5px

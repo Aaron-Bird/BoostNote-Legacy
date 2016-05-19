@@ -1,13 +1,27 @@
 import React, { PropTypes } from 'react'
+import CSSModules from 'browser/lib/CSSModules'
+import styles from './Main.styl'
 import { connect } from 'react-redux'
 import SideNav from './SideNav'
 import TopBar from './TopBar'
-import ArticleList from './ArticleList'
-import ArticleDetail from './ArticleDetail'
+import NoteList from './NoteList'
+import NoteDetail from './NoteDetail'
 import Repository from 'browser/lib/Repository'
 import StatusBar from './StatusBar'
+import _ from 'lodash'
+import ConfigManager from 'browser/main/lib/ConfigManager'
 
 class Main extends React.Component {
+  constructor (props) {
+    super(props)
+
+    let { config } = props
+
+    this.state = {
+      isSliderFocused: false,
+      listWidth: config.listWidth
+    }
+  }
   componentDidMount () {
     let { dispatch } = this.props
 
@@ -18,25 +32,74 @@ class Main extends React.Component {
       })
   }
 
+  handleSlideMouseDown (e) {
+    e.preventDefault()
+    this.setState({
+      isSliderFocused: true
+    })
+  }
+
+  handleMouseUp (e) {
+    if (this.state.isSliderFocused) {
+      this.setState({
+        isSliderFocused: false
+      }, () => {
+        let { dispatch } = this.props
+        let newListWidth = this.state.listWidth
+        // TODO: ConfigManager should dispatch itself.
+        ConfigManager.set({listWidth: newListWidth})
+        dispatch({
+          type: 'SET_LIST_WIDTH',
+          listWidth: newListWidth
+        })
+      })
+    }
+  }
+
+  handleMouseMove (e) {
+    if (this.state.isSliderFocused) {
+      let offset = this.refs.body.getBoundingClientRect().left
+      let newListWidth = e.pageX - offset
+      if (newListWidth < 10) {
+        newListWidth = 10
+      } else if (newListWidth > 600) {
+        newListWidth = 600
+      }
+      this.setState({
+        listWidth: newListWidth
+      })
+    }
+  }
+
   render () {
+    let { config } = this.props
+
     return (
       <div
         className='Main'
+        styleName='root'
+        onMouseMove={(e) => this.handleMouseMove(e)}
+        onMouseUp={(e) => this.handleMouseUp(e)}
       >
         <SideNav
-          {...this.props}
+          {..._.pick(this.props, ['dispatch', 'repositories', 'config', 'location'])}
         />
-        <TopBar
-          {...this.props}
-        />
-        <ArticleList
-          {...this.props}
-        />
-        <ArticleDetail
-          {...this.props}
-        />
+        <TopBar/>
+        <div styleName={config.isSideNavFolded ? 'body--expanded' : 'body'}
+          ref='body'
+        >
+          <NoteList style={{width: this.state.listWidth}}/>
+          <div styleName={this.state.isSliderFocused ? 'slider--active' : 'slider'}
+            style={{left: this.state.listWidth}}
+            onMouseDown={(e) => this.handleSlideMouseDown(e)}
+            draggable='false'
+          />
+          <NoteDetail
+            style={{left: this.state.listWidth + 5}}
+          />
+        </div>
         <StatusBar
-          {...this.props}
+          {..._.pick(this.props, ['config', 'location', 'dispatch'])}
         />
       </div>
     )
@@ -48,4 +111,4 @@ Main.propTypes = {
   repositories: PropTypes.array
 }
 
-export default connect((x) => x)(Main)
+export default connect((x) => x)(CSSModules(Main, styles))

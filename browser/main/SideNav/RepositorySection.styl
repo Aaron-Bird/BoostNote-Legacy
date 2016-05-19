@@ -10,10 +10,12 @@
   text-align left
   font-size 14px
   color $ui-inactive-text-color
+  &:hover
+    background-color $ui-button--hover-backgroundColor
   &:hover .header-control-button
     opacity 1
   &:active
-    background-color $ui-button--active-backgroundColor !important
+    background-color $ui-button--active-backgroundColor
     color $ui-button--active-color
     .header-control-button, .header-control-button--show
       color white
@@ -22,6 +24,8 @@
   @extend .header
   background-color $ui-button--active-backgroundColor
   color $ui-button--active-color
+  &:hover
+    background-color $ui-button--active-backgroundColor
   .header-control-button,
   .header-control-button--show
     color white
@@ -124,6 +128,7 @@
     margin-left 0
     overflow ellipsis
     background-color $ui-tooltip-backgroundColor
+    z-index 10
     color white
     line-height 34px
     border-top-right-radius 5px
@@ -136,6 +141,7 @@
     height 33px
     top inherit
     bottom inherit
+    z-index 11
     left 43px
     box-sizing border-box
     overflow hidden
@@ -164,6 +170,7 @@
     margin-left 0
     overflow ellipsis
     background-color $ui-tooltip-backgroundColor
+    z-index 10
     color white
     line-height 34px
     border-top-right-radius 5px

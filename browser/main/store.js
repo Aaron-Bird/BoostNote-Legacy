@@ -30,7 +30,7 @@ import ConfigManager from 'browser/main/lib/ConfigManager'
 const initialRepositories = []
 
 function repositories (state = initialRepositories, action) {
-  console.log(action)
+  console.info('REDUX >> ', action)
   switch (action.type) {
     case 'INIT_ALL':
       return action.data.slice()
@@ -121,6 +121,11 @@ function config (state = defaultConfig, action) {
     case 'SET_ZOOM':
       state.zoom = action.zoom
       return Object.assign({}, state)
+    case 'SET_LIST_WIDTH':
+      state.listWidth = action.listWidth
+      return Object.assign({}, state)
+    case 'SET_CONFIG':
+      return Object.assign({}, state, action.config)
   }
   return state
 }

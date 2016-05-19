@@ -2,13 +2,16 @@ import _ from 'lodash'
 
 const defaultConfig = {
   zoom: 1,
-  isSideNavFolded: false
+  isSideNavFolded: false,
+  listWidth: 250
 }
 
-function _validate (config) {
+function validate (config) {
+  console.log(config)
   if (!_.isObject(config)) return false
   if (!_.isNumber(config.zoom) || config.zoom < 0) return false
   if (!_.isBoolean(config.isSideNavFolded)) return false
+  if (!_.isNumber(config.listWidth) || config.listWidth <= 0) return false
 
   return true
 }
@@ -22,7 +25,7 @@ function get () {
 
   try {
     config = JSON.parse(config)
-    if (!_validate(config)) throw new Error('INVALID CONFIG')
+    if (!validate(config)) throw new Error('INVALID CONFIG')
   } catch (err) {
     console.warn('Boostnote resets the malformed configuration.')
     config = defaultConfig
@@ -35,11 +38,12 @@ function get () {
 function set (updates) {
   let currentConfig = get()
   let newConfig = Object.assign({}, defaultConfig, currentConfig, updates)
-  if (!_validate(newConfig)) throw new Error('INVALID CONFIG')
+  if (!validate(newConfig)) throw new Error('INVALID CONFIG')
   _save(newConfig)
 }
 
 export default {
   get,
-  set
+  set,
+  validate
 }

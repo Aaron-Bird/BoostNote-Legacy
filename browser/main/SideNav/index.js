@@ -74,8 +74,7 @@ class SideNav extends React.Component {
       })
 
     return (
-      <div
-        className='SideNav'
+      <div className='SideNav'
         styleName={isFolded ? 'root-folded' : 'root'}
         tabIndex='1'
       >
@@ -83,7 +82,7 @@ class SideNav extends React.Component {
           <button styleName='top-menu'
             onClick={(e) => this.handleMenuButtonClick(e)}
           >
-            <i styleName='top-menu-icon' className='fa fa-navicon fa-fw'/>
+            <i className='fa fa-navicon fa-fw'/>
             <span styleName='top-menu-label'>Menu</span>
           </button>
         </div>
@@ -92,17 +91,13 @@ class SideNav extends React.Component {
           <button styleName={isHomeActive ? 'menu-button--active' : 'menu-button'}
             onClick={(e) => this.handleHomeButtonClick(e)}
           >
-            <i styleName='menu-button-icon'
-              className='fa fa-home fa-fw'
-            />
+            <i className='fa fa-home fa-fw'/>
             <span styleName='menu-button-label'>Home</span>
           </button>
           <button styleName={isStarredActive ? 'menu-button--active' : 'menu-button'}
             onClick={(e) => this.handleStarredButtonClick(e)}
           >
-            <i styleName='menu-button-icon'
-              className='fa fa-star fa-fw'
-            />
+            <i className='fa fa-star fa-fw'/>
             <span styleName='menu-button-label'>Starred</span>
           </button>
         </div>
@@ -132,7 +127,13 @@ SideNav.contextTypes = {
 
 SideNav.propTypes = {
   dispatch: PropTypes.func,
-  repositories: PropTypes.array
+  repositories: PropTypes.array,
+  config: PropTypes.shape({
+    isSideNavFolded: PropTypes.bool
+  }),
+  location: PropTypes.shape({
+    pathname: PropTypes.string
+  })
 }
 
 export default CSSModules(SideNav, styles)

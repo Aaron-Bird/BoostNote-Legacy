@@ -2,14 +2,13 @@
   absolute top right
   background-color $ui-backgroundColor
   left $sideNav-width
-  border-bottom $ui-border
-  height 60px
+  height $topBar-height -1
   clearfix()
 
 .left
   float left
-  height 59px
-  line-height 60px
+  height $topBar-height - 1
+  line-height $topBar-height
 
 .left-search
   margin-top 12px
@@ -60,11 +59,12 @@
 
 .left-control-newPostButton-tooltip
   position fixed
+  line-height 1.4
   background-color $ui-tooltip-backgroundColor
   color $ui-tooltip-text-color
   font-size 10px
   margin-left -35px
-  margin-top 12px
+  margin-top 5px
   padding 5px
   z-index 1
   border-radius 5px
@@ -73,7 +73,7 @@
 
 .right
   float right
-  height 60px
+  height $topBar-height -1
   clearfix()
 
 .right-helpButton
