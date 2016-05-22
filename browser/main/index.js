@@ -76,7 +76,7 @@ ipc.on('open-finder', function () {
 
 let el = document.getElementById('content')
 const history = syncHistoryWithStore(hashHistory, store)
-history.listen((location) => console.info(location))
+
 ReactDOM.render((
   <Provider store={store}>
     <Router history={history}>

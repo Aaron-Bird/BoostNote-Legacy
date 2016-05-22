@@ -2,3 +2,36 @@
   absolute top left bottom
   border-top $ui-border
   border-bottom $ui-border
+  overflow auto
+
+.item
+  height 80px
+  border-bottom $ui-border
+  padding 0 5px
+  user-select none
+  cursor pointer
+  &:hover
+    background-color alpha(black, 5%)
+
+.item-info
+  height 30px
+  clearfix()
+  font-size 12px
+  line-height 30px
+
+.item-info-left
+  float left
+
+.item-info-right
+  float right
+
+.item-title
+  height 20px
+  line-height 20px
+  font-weight bold
+  overflow ellipsis
+
+.item-tags
+  height 30px
+  font-size 12px
+  line-height 30px

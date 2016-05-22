@@ -107,6 +107,16 @@ function repositories (state = initialRepositories, action) {
 
         return repos
       }
+    case 'ADD_NOTE':
+      {
+        let repos = state.slice()
+        let targetRepo = _.find(repos, {key: action.repository})
+
+        if (targetRepo == null) return state
+        targetRepo.notes.push(action.note)
+
+        return repos
+      }
   }
   return state
 }

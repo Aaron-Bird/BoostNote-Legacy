@@ -1,8 +1,9 @@
 import React, { PropTypes } from 'react'
-import { connect } from 'react-redux'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './TopBar.styl'
 import activityRecord from 'browser/lib/activityRecord'
+import Repository from 'browser/lib/Repository'
+import _ from 'lodash'
 
 const OSX = window.process.platform === 'darwin'
 
@@ -30,23 +31,56 @@ class TopBar extends React.Component {
     this.searchInput.blur()
   }
 
-  handleSearchChange (e) {
-  }
-
-  handleSearchClearButton (e) {
-    this.searchInput.value = ''
-    this.focusInput()
-  }
-
   handleNewPostButtonClick (e) {
     activityRecord.emit('ARTICLE_CREATE')
+
+    let { params, repositories } = this.props
+
+    let folderKey = params.folderKey
+    let repositoryKey = params.repositoryKey
+    if (folderKey == null) {
+      let repository = _.find(repositories, {key: repositoryKey})
+      if (repository == null) {
+        repository = repositories[0]
+      }
+      if (repository != null) {
+        repositoryKey = repository.key
+        folderKey = repository.folders[0] != null && repository.folders[0].key
+      }
+      if (folderKey == null) throw new Error('no folder exists')
+    }
+
+    let newNote = {
+      title: 'New Note',
+      content: '',
+      folder: folderKey,
+      tags: [],
+      mode: 'markdown'
+    }
+
+    Repository
+      .find(repositoryKey)
+      .then((repo) => {
+        console.log(repo)
+        return repo.addNote(newNote)
+      })
+      .then((note) => {
+        let { dispatch } = this.props
+        dispatch({
+          type: 'ADD_NOTE',
+          repository: repositoryKey,
+          note: note
+        })
+      })
+      .catch((err) => {
+        console.error(err)
+      })
   }
 
   handleTutorialButtonClick (e) {
   }
 
   handleLinksButton (e) {
-
   }
 
   render () {
@@ -112,4 +146,4 @@ TopBar.propTypes = {
   })
 }
 
-export default connect((x) => x)(CSSModules(TopBar, styles))
+export default CSSModules(TopBar, styles)

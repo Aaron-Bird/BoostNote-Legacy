@@ -87,7 +87,6 @@ let repositories = []
  * ##### `note.cson`
  *
  * ```cson
- * name: String
  * tags: [String] // tags
  * folder: String // hash key of folder
  * mode: String // syntax mode
@@ -151,7 +150,7 @@ class Repository {
       let noteNames = fs.readdirSync(dataPath)
       let notes = noteNames
         .map((noteName) => {
-          let notePath = path.join(dataPath, noteNames)
+          let notePath = path.join(dataPath, noteName)
 
           return new Promise(function (resolve, reject) {
             CSON.readFile(notePath, function (err, obj) {
@@ -218,7 +217,9 @@ class Repository {
     this.isMount = true
 
     // Put in `repositories` array if it isn't in.
-    let targetIndex = _.findIndex(repositories, {cached: {key: this.cached.key}})
+    let targetIndex = _.findIndex(repositories, (repo) => {
+      this.cached.key === repo.cached.key
+    })
     if (targetIndex < 0) {
       repositories.push(this)
     }
@@ -241,7 +242,9 @@ class Repository {
     this.isMount = false
 
     // Discard from `repositories` array if it is in.
-    let targetIndex = _.findIndex(repositories, {cached: {key: this.cached.key}})
+    let targetIndex = _.findIndex(repositories, (repo) => {
+      this.cached.key === repo.cached.key
+    })
     if (targetIndex > -1) {
       repositories.splice(targetIndex, 1)
     }
@@ -586,6 +589,7 @@ class Repository {
   }
 
   static saveAllCached (allCached) {
+    console.info('cach updated > ', allCached)
     localStorage.setItem('repositories', JSON.stringify(allCached))
   }
 

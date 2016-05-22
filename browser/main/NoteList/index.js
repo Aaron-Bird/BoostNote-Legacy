@@ -123,8 +123,81 @@ class NoteList extends React.Component {
     }
   }
 
+  getNotes () {
+    let { repositories, params, location } = this.props
+    let repositoryKey = params.repositoryKey
+    let folderKey = params.folderKey
+
+    if (location.pathname.match(/\/home/)) {
+      return repositories
+      .reduce((sum, repository) => {
+        return sum.concat(repository.notes
+          .map((note) => {
+            note._repository = repository
+            return note
+          }))
+      }, [])
+    }
+
+    let repository = _.find(repositories, {key: repositoryKey})
+    if (repository == null) return []
+
+    let folder = _.find(repository.folders, {key: folderKey})
+    if (folder == null) {
+      return repository.notes
+        .map((note) => {
+          note._repository = repository
+          return note
+        })
+    }
+
+    return repository.notes
+      .filter((note) => note.folder === folderKey)
+      .map((note) => {
+        note._repository = repository
+        return note
+      })
+  }
+
+  handleNoteClick (key) {
+    return (e) => {
+      console.log(key)
+    }
+  }
+
   render () {
-    let articleElements = []
+    let notes = this.getNotes()
+    let noteElements = notes.map((note) => {
+      let folder = _.find(note._repository.folders, {key: note.folder})
+      let tagElements = note.tags.map((tag) => {
+        return <span key='tag'>{tag}</span>
+      })
+      let key = `${note._repository.key}/${note.key}`
+
+      return (
+        <div styleName='item'
+          key={key}
+          onClick={(e) => this.handleNoteClick(key)(e)}
+        >
+          <div styleName='item-info'>
+
+            <div styleName='item-info-left'>
+              <i className='fa fa-cube fa-fw' style={{color: folder.color}}/> {folder.name}
+            </div>
+
+            <div styleName='item-info-right'>
+              {moment(note.createdAt).fromNow()}
+            </div>
+
+          </div>
+
+          <div styleName='item-title'>{note.title}</div>
+
+          <div styleName='item-tags'><i className='fa fa-tags fa-fw'/>{tagElements.length > 0 ? tagElements : <span>Not tagged yet</span>}</div>
+
+        </div>
+      )
+    })
 
     return (
       <div className='NoteList'
@@ -133,10 +206,13 @@ class NoteList extends React.Component {
         onKeyDown={(e) => this.handleNoteListKeyDown(e)}
         style={this.props.style}
       >
-        {articleElements}
+        {noteElements}
       </div>
     )
   }
+}
+NoteList.contextTypes = {
+  router: PropTypes.shape([])
 }
 
 NoteList.propTypes = {

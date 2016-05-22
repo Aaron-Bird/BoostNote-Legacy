@@ -84,18 +84,35 @@ class Main extends React.Component {
         <SideNav
           {..._.pick(this.props, ['dispatch', 'repositories', 'config', 'location'])}
         />
-        <TopBar/>
+        <TopBar
+          {..._.pick(this.props, [
+            'dispatch',
+            'repositories',
+            'config',
+            'params'
+          ])}
+        />
         <div styleName={config.isSideNavFolded ? 'body--expanded' : 'body'}
           ref='body'
         >
-          <NoteList style={{width: this.state.listWidth}}/>
+          <NoteList style={{width: this.state.listWidth}}
+            {..._.pick(this.props, [
+              'dispatch',
+              'repositories',
+              'config',
+              'params',
+              'location'
+            ])}
+          />
           <div styleName={this.state.isSliderFocused ? 'slider--active' : 'slider'}
             style={{left: this.state.listWidth}}
             onMouseDown={(e) => this.handleSlideMouseDown(e)}
             draggable='false'
-          />
+          >
+            <div styleName='slider-hitbox'/>
+          </div>
           <NoteDetail
-            style={{left: this.state.listWidth + 5}}
+            style={{left: this.state.listWidth + 1}}
           />
         </div>
         <StatusBar
