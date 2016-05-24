@@ -29,6 +29,16 @@ class NoteList extends React.Component {
   }
 
   componentDidUpdate () {
+    let { location } = this.props
+    if (this.notes.length > 0 && location.query.key == null) {
+      let { router } = this.context
+      router.replace({
+        pathname: location.pathname,
+        query: {
+          key: `${this.notes[0]._repository.key}-${this.notes[0].key}`
+        }
+      })
+    }
     // return false
     // var index = articles.indexOf(null)
     // var el = ReactDOM.findDOMNode(this)
@@ -175,13 +185,13 @@ class NoteList extends React.Component {
 
   render () {
     let { location } = this.props
-    let notes = this.getNotes()
+    let notes = this.notes = this.getNotes()
     let noteElements = notes.map((note) => {
       let folder = _.find(note._repository.folders, {key: note.folder})
       let tagElements = note.tags.map((tag) => {
         return <span key='tag'>{tag}</span>
       })
-      let key = `${note._repository.key}/${note.key}`
+      let key = `${note._repository.key}-${note.key}`
       let isActive = location.query.key === key
       return (
         <div styleName={isActive
