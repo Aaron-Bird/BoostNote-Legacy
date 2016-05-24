@@ -5,18 +5,33 @@
   overflow auto
 
 .item
+  position relative
   height 80px
   border-bottom $ui-border
   padding 0 5px
   user-select none
   cursor pointer
+  transition background-color 0.15s
   &:hover
     background-color alpha(black, 5%)
+
+.item--active
+  @extend .item
+  .item-border
+    border-color $ui-active-color
+
+.item-border
+  absolute top bottom left right
+  border-style solid
+  border-width 2px
+  border-color transparent
+  transition 0.15s
 
 .item-info
   height 30px
   clearfix()
   font-size 12px
+  color $ui-inactive-text-color
   line-height 30px
 
 .item-info-left
@@ -28,6 +43,7 @@
 .item-title
   height 20px
   line-height 20px
+  padding 0 5px
   font-weight bold
   overflow ellipsis
 
@@ -35,3 +51,4 @@
   height 30px
   font-size 12px
   line-height 30px
+  color $ui-inactive-text-color

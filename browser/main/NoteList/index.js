@@ -161,11 +161,20 @@ class NoteList extends React.Component {
 
   handleNoteClick (key) {
     return (e) => {
-      console.log(key)
+      let { router } = this.context
+      let { location } = this.props
+
+      router.push({
+        pathname: location.pathname,
+        query: {
+          key: key
+        }
+      })
     }
   }
 
   render () {
+    let { location } = this.props
     let notes = this.getNotes()
     let noteElements = notes.map((note) => {
       let folder = _.find(note._repository.folders, {key: note.folder})
@@ -173,12 +182,16 @@ class NoteList extends React.Component {
         return <span key='tag'>{tag}</span>
       })
       let key = `${note._repository.key}/${note.key}`
-
+      let isActive = location.query.key === key
       return (
-        <div styleName='item'
+        <div styleName={isActive
+            ? 'item--active'
+            : 'item'
+          }
           key={key}
           onClick={(e) => this.handleNoteClick(key)(e)}
         >
+          <div styleName='item-border'/>
           <div styleName='item-info'>
 
             <div styleName='item-info-left'>
