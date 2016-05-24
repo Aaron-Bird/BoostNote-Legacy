@@ -6,14 +6,17 @@ import ZoomManager from 'browser/main/lib/ZoomManager'
 const electron = require('electron')
 const ipc = electron.ipcRenderer
 const { remote } = electron
-const { Menu, MenuItem } = remote
+const { Menu, MenuItem, dialog } = remote
 
 const zoomOptions = [0.8, 0.9, 1, 1.1, 1.2, 1.3]
 
 class StatusBar extends React.Component {
   constructor (props) {
     super(props)
-    this.state = {updateAvailable: false}
+
+    this.state = {
+      updateAvailable: false
+    }
   }
 
   componentDidMount () {
@@ -23,7 +26,16 @@ class StatusBar extends React.Component {
   }
 
   updateApp () {
-    ipc.send('update-app', 'Deal with it.')
+    let index = dialog.showMessageBox(remote.getCurrentWindow(), {
+      type: 'warning',
+      message: 'Update Boostnote',
+      detail: 'New Boostnote is ready to be installed.',
+      buttons: ['Restart & Install', 'Not Now']
+    })
+
+    if (index === 0) {
+      ipc.send('update-app', 'Deal with it.')
+    }
   }
 
   handleZoomButtonClick (e) {
@@ -55,7 +67,7 @@ class StatusBar extends React.Component {
       <div className='StatusBar'
         styleName='root'
       >
-        <div styleName='pathname'>{location.pathname}</div>
+        <div styleName='pathname'>{location.pathname + location.search}</div>
         {this.state.updateAvailable
           ? <button onClick={this.updateApp} styleName='update'>
             <i styleName='update-icon' className='fa fa-cloud-download'/> Update is available!
