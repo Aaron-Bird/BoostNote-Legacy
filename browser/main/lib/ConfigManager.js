@@ -7,7 +7,6 @@ const defaultConfig = {
 }
 
 function validate (config) {
-  console.log(config)
   if (!_.isObject(config)) return false
   if (!_.isNumber(config.zoom) || config.zoom < 0) return false
   if (!_.isBoolean(config.isSideNavFolded)) return false

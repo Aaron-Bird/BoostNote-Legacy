@@ -4,7 +4,7 @@ import keygen from './keygen'
 function getClientKey () {
   let clientKey = localStorage.getItem('clientKey')
   if (!_.isString(clientKey) || clientKey.length !== 40) {
-    clientKey = keygen()
+    clientKey = keygen(20)
     setClientKey(clientKey)
   }
 

@@ -9,7 +9,6 @@
   <link rel="stylesheet" href="../node_modules/highlight.js/styles/xcode.css" id="hljs-css">
   <link rel="shortcut icon" href="../resources/favicon.ico">
   <title>Boostnote</title>
-  <link rel="stylesheet" href="../resources/katex.min.css">
 </script>
 
   <style>
@@ -65,13 +64,12 @@
   <script type='text/javascript'>
     const electron = require('electron')
     electron.webFrame.setZoomLevelLimits(1, 1)
-    var version = electron.remote.app.getVersion()
     const _ = require('lodash')
-    var scriptUrl = _.find(electron.remote.process.argv, a => a === '--hot')
+    var scriptUrl = _.find(electron.remote.process.argv, (a) => a === '--hot')
       ? 'http://localhost:8080/assets/main.js'
       : '../compiled/main.js'
     var scriptEl = document.createElement('script')
-    scriptEl.setAttribute("type","text/javascript")
+    scriptEl.setAttribute("type", "text/javascript")
     scriptEl.setAttribute("src", scriptUrl)
     document.body.appendChild(scriptEl)
   </script>

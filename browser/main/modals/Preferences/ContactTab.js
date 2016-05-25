@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import ExternalLink from 'browser/components/ExternalLink'
 
 export default class ContactTab extends React.Component {
   componentDidMount () {
@@ -13,7 +12,7 @@ export default class ContactTab extends React.Component {
       <div className='ContactTab content'>
         <div className='title'>Contact</div>
         <p>
-          - Issues: <ExternalLink href='https://github.com/BoostIO/Boostnote/issues'>https://github.com/BoostIO/Boostnote/issues</ExternalLink>
+          - Issues: <a href='https://github.com/BoostIO/Boostnote/issues'>https://github.com/BoostIO/Boostnote/issues</a>
         </p>
       </div>
     )
