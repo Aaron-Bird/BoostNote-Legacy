@@ -117,6 +117,22 @@ function repositories (state = initialRepositories, action) {
 
         return repos
       }
+    case 'SAVE_NOTE':
+      {
+        let repos = state.slice()
+        let targetRepo = _.find(repos, {key: action.repository})
+
+        if (targetRepo == null) return state
+
+        let targetNoteIndex = _.findIndex(targetRepo.notes, {key: action.note.key})
+        if (targetNoteIndex > -1) {
+          targetRepo.notes.splice(targetNoteIndex, 1, action.note)
+        } else {
+          targetRepo.notes.push(action.note)
+        }
+
+        return repos
+      }
   }
   return state
 }

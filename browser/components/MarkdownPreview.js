@@ -1,214 +1,81 @@
 import React, { PropTypes } from 'react'
-import markdown from '../lib/markdown'
-import ReactDOM from 'react-dom'
-import sanitizeHtml from '@rokt33r/sanitize-html'
-import _ from 'lodash'
-import fetchConfig from '../lib/fetchConfig'
+import markdown from 'browser/lib/markdown'
 
-const electron = require('electron')
-const shell = electron.shell
-const ipc = electron.ipcRenderer
-
-const katex = window.katex
-
-const OSX = global.process.platform === 'darwin'
-
-const sanitizeOpts = {
-  allowedTags: [ 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'p', 'a', 'ul', 'ol',
-  'nl', 'li', 'b', 'i', 'strong', 'em', 'strike', 'code', 'hr', 'br', 'div',
-  'table', 'thead', 'caption', 'tbody', 'tr', 'th', 'td', 'pre', 'img', 'span', 'cite', 'del', 'u', 'sub', 'sup', 's', 'input', 'label' ],
-  allowedClasses: {
-    'a': ['lineAnchor'],
-    'div': ['math'],
-    'pre': ['hljs'],
-    'span': ['math', 'hljs-*', 'lineNumber'],
-    'code': ['language-*']
-  },
-  allowedAttributes: {
-    a: ['href', 'data-key'],
-    img: [ 'src' ],
-    label: ['for'],
-    input: ['checked', 'type'],
-    '*': ['id', 'name']
-  },
-  transformTags: {
-    '*': function (tagName, attribs) {
-      let href = attribs.href
-      if (tagName === 'input' && attribs.type !== 'checkbox') {
-        return false
-      }
-      if (_.isString(href) && href.match(/^#.+$/)) attribs.href = href.replace(/^#/, '#md-anchor-')
-      if (attribs.id) attribs.id = 'md-anchor-' + attribs.id
-      if (attribs.name) attribs.name = 'md-anchor-' + attribs.name
-      if (attribs.for) attribs.for = 'md-anchor-' + attribs.for
-      return {
-        tagName: tagName,
-        attribs: attribs
-      }
-    }
-  }
-}
-
-function handleAnchorClick (e) {
-  if (this.attributes.href && this.attributes.href.nodeValue.match(/^#.+/)) {
-    return
-  }
+const markdownStyle = require('!!css!stylus?sourceMap!./markdown.styl')[0][1]
+const { shell } = require('electron')
+const goExternal = function (e) {
   e.preventDefault()
-  e.stopPropagation()
-  let href = this.href
-  if (href && href.match(/^http:\/\/|https:\/\/|mailto:\/\//)) {
-    shell.openExternal(href)
-  }
+  shell.openExternal(e.target.href)
 }
-
-function stopPropagation (e) {
-  e.preventDefault()
-  e.stopPropagation()
-}
-
-function math2Katex (display) {
-  return function (el) {
-    try {
-      katex.render(el.innerHTML.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&amp;/g, '&'), el, {display: display})
-      el.className = 'math-rendered'
-    } catch (e) {
-      el.innerHTML = e.message
-      el.className = 'math-failed'
-    }
-  }
-}
-
-let config = fetchConfig()
-ipc.on('config-apply', function (e, newConfig) {
-  config = newConfig
-})
 
 export default class MarkdownPreview extends React.Component {
   constructor (props) {
     super(props)
 
-    this.configApplyHandler = (e, config) => this.handleConfigApply(e, config)
-
-    this.state = {
-      fontSize: config['preview-font-size'],
-      fontFamily: config['preview-font-family'],
-      lineNumber: config['preview-line-number']
-    }
+    this.contextMenuHandler = (e) => this.handleContextMenu(e)
   }
+
+  handleContextMenu (e) {
+    this.props.onContextMenu(e)
+  }
+
   componentDidMount () {
-    this.addListener()
-    this.renderMath()
-    ipc.on('config-apply', this.configApplyHandler)
-  }
-
-  componentDidUpdate () {
-    this.addListener()
-    this.renderMath()
+    this.refs.root.setAttribute('sandbox', 'allow-same-origin')
+    this.refs.root.contentWindow.document.body.addEventListener('contextmenu', this.contextMenuHandler)
+    this.rewriteIframe()
   }
 
   componentWillUnmount () {
-    this.removeListener()
-    ipc.removeListener('config-apply', this.configApplyHandler)
+    this.refs.root.contentWindow.document.body.removeEventListener('contextmenu', this.contextMenuHandler)
   }
 
-  componentWillUpdate () {
-    this.removeListener()
+  componentDidUpdate (prevProps) {
+    if (prevProps.value !== this.props.value) this.rewriteIframe()
   }
 
-  renderMath () {
-    let inline = ReactDOM.findDOMNode(this).querySelectorAll('span.math')
-    Array.prototype.forEach.call(inline, math2Katex(false))
-    let block = ReactDOM.findDOMNode(this).querySelectorAll('div.math')
-    Array.prototype.forEach.call(block, math2Katex(true))
-  }
-
-  addListener () {
-    var anchors = ReactDOM.findDOMNode(this).querySelectorAll('a:not(.lineAnchor)')
-    var inputs = ReactDOM.findDOMNode(this).querySelectorAll('input')
-
-    Array.prototype.forEach.call(anchors, anchor => {
-      anchor.addEventListener('click', handleAnchorClick)
-      anchor.addEventListener('mousedown', stopPropagation)
-      anchor.addEventListener('mouseup', stopPropagation)
+  rewriteIframe () {
+    Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
+      el.removeEventListener('click', goExternal)
     })
-    Array.prototype.forEach.call(inputs, input => {
-      input.addEventListener('click', stopPropagation)
-    })
-  }
 
-  removeListener () {
-    var anchors = ReactDOM.findDOMNode(this).querySelectorAll('a:not(.lineAnchor)')
-    var inputs = ReactDOM.findDOMNode(this).querySelectorAll('input')
+    let { value } = this.props
+    this.refs.root.contentWindow.document.head.innerHTML = `
+      <style>
+        @font-face {
+          font-family: 'Lato';
+          src: url('../resources/fonts/Lato-Regular.woff2') format('woff2'), /* Modern Browsers */
+               url('../resources/fonts/Lato-Regular.woff') format('woff'), /* Modern Browsers */
+               url('../resources/fonts/Lato-Regular.ttf') format('truetype');
+          font-style: normal;
+          font-weight: normal;
+          text-rendering: optimizeLegibility;
+        }
+        ${markdownStyle}
+      </style>
+      <link rel="stylesheet" href="../node_modules/highlight.js/styles/xcode.css" id="hljs-css">
+      <link rel="stylesheet" href="../resources/katex.min.css">
+    `
+    this.refs.root.contentWindow.document.body.innerHTML = markdown(value)
 
-    Array.prototype.forEach.call(anchors, anchor => {
-      anchor.removeEventListener('click', handleAnchorClick)
-      anchor.removeEventListener('mousedown', stopPropagation)
-      anchor.removeEventListener('mouseup', stopPropagation)
-    })
-    Array.prototype.forEach.call(inputs, input => {
-      input.removeEventListener('click', stopPropagation)
+    Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
+      el.addEventListener('click', goExternal)
     })
   }
 
-  handleClick (e) {
-    if (this.props.onClick) {
-      this.props.onClick(e)
-    }
-  }
-
-  handleDoubleClick (e) {
-    if (this.props.onDoubleClick) {
-      this.props.onDoubleClick(e)
-    }
-  }
-
-  handleMouseDown (e) {
-    if (this.props.onMouseDown) {
-      this.props.onMouseDown(e)
-    }
-  }
-
-  handleMouseUp (e) {
-    if (this.props.onMouseUp) {
-      this.props.onMouseUp(e)
-    }
-  }
-
-  handleMouseMove (e) {
-    if (this.props.onMouseMove) {
-      this.props.onMouseMove(e)
-    }
-  }
-
-  handleConfigApply (e, config) {
-    this.setState({
-      fontSize: config['preview-font-size'],
-      fontFamily: config['preview-font-family'],
-      lineNumber: config['preview-line-number']
-    })
+  focus () {
+    this.refs.root.focus()
   }
 
   render () {
-    let isEmpty = this.props.content.trim().length === 0
-    let content = isEmpty
-      ? '(Empty content)'
-      : this.props.content
-    content = markdown(content)
-    content = sanitizeHtml(content, sanitizeOpts)
-
+    let { className, style, tabIndex } = this.props
     return (
-      <div
-        className={'MarkdownPreview' + (this.props.className != null ? ' ' + this.props.className : '') + (isEmpty ? ' empty' : '') + (this.state.lineNumber ? ' lineNumbered' : '')}
-        onClick={e => this.handleClick(e)}
-        onDoubleClick={e => this.handleDoubleClick(e)}
-        onMouseDown={e => this.handleMouseDown(e)}
-        onMouseMove={e => this.handleMouseMove(e)}
-        onMouseUp={e => this.handleMouseUp(e)}
-        dangerouslySetInnerHTML={{__html: ' ' + content}}
-        style={{
-          fontSize: this.state.fontSize,
-          fontFamily: this.state.fontFamily.trim() + (OSX ? '' : ', meiryo, \'Microsoft YaHei\'') + ', helvetica, arial, sans-serif'
-        }}
+      <iframe className={className != null
+          ? 'MarkdownPreview ' + className
+          : 'MarkdownPreview'
+        }
+        style={style}
+        tabIndex={tabIndex}
+        ref='root'
       />
     )
   }
@@ -221,5 +88,5 @@ MarkdownPreview.propTypes = {
   onMouseDown: PropTypes.func,
   onMouseMove: PropTypes.func,
   className: PropTypes.string,
-  content: PropTypes.string
+  value: PropTypes.string
 }

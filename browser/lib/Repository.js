@@ -149,16 +149,16 @@ class Repository {
     let fetchNotes = () => {
       let noteNames = fs.readdirSync(dataPath)
       let notes = noteNames
-        .map((noteName) => {
-          let notePath = path.join(dataPath, noteName)
-
+        .map((noteName) => path.join(dataPath, noteName))
+        .filter((notePath) => CSON.isObjectPath(notePath))
+        .map((notePath) => {
           return new Promise(function (resolve, reject) {
             CSON.readFile(notePath, function (err, obj) {
               if (err != null) {
                 console.log(err)
                 return resolve(null)
               }
-              obj.key = path.basename(noteName, '.cson')
+              obj.key = path.basename(notePath, '.cson')
               return resolve(obj)
             })
           })
@@ -427,24 +427,16 @@ class Repository {
   }
 
   updateNote (noteKey, override) {
-    let note = _.find(this.notes, {key: noteKey})
-    let isNew = false
-    if (note == null) {
-      note = override
-      isNew = true
-    }
-
-    if (!this.constructor.validateNote(note)) {
+    if (!this.constructor.validateNote(override)) {
       return Promise.reject(new Error('Invalid input'))
     }
 
-    if (isNew) this.notes.push(note)
-    note.updatedAt = new Date()
-
+    override.updatedAt = new Date()
     return new Promise((resolve, reject) => {
-      CSON.writeFile(path.join(this.cached.path, 'data', note.key + '.cson'), _.omit(note, ['key']), function (err) {
+      CSON.writeFile(path.join(this.cached.path, 'data', noteKey + '.cson'), _.omit(override, ['key']), function (err) {
         if (err != null) return reject(err)
-        resolve(note)
+        override.key = noteKey
+        resolve(override)
       })
     })
   }

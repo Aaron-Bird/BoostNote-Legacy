@@ -1,14 +1,8 @@
 import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './NoteList.styl'
-import ReactDOM from 'react-dom'
-import ModeIcon from 'browser/components/ModeIcon'
 import moment from 'moment'
 import _ from 'lodash'
-
-const electron = require('electron')
-const remote = electron.remote
-const ipc = electron.ipcRenderer
 
 class NoteList extends React.Component {
   constructor (props) {
@@ -64,63 +58,56 @@ class NoteList extends React.Component {
 
   // 移動ができなかったらfalseを返す:
   selectPriorArticle () {
-    let { articles, activeArticle, dispatch } = this.props
-    let targetIndex = articles.indexOf(activeArticle) - 1
-    let targetArticle = articles[targetIndex]
-    return false
+    // let { articles, activeArticle, dispatch } = this.props
+    // let targetIndex = articles.indexOf(activeArticle) - 1
+    // let targetArticle = articles[targetIndex]
+    // return false
   }
 
   selectNextArticle () {
-    let { articles, activeArticle, dispatch } = this.props
-    let targetIndex = articles.indexOf(activeArticle) + 1
-    let targetArticle = articles[targetIndex]
+    // let { articles, activeArticle, dispatch } = this.props
+    // let targetIndex = articles.indexOf(activeArticle) + 1
+    // let targetArticle = articles[targetIndex]
 
-    if (targetArticle != null) {
-      dispatch(switchArticle(targetArticle.key))
-      return true
-    }
-    return false
-  }
-
-  handleArticleClick (article) {
-    let { dispatch } = this.props
-    return function (e) {
-      dispatch(switchArticle(article.key))
-    }
+    // if (targetArticle != null) {
+    //   dispatch(switchArticle(targetArticle.key))
+    //   return true
+    // }
+    // return false
   }
 
   handleNoteListKeyDown (e) {
     if (e.metaKey || e.ctrlKey) return true
 
-    if (e.keyCode === 65 && !e.shiftKey) {
-      e.preventDefault()
-      remote.getCurrentWebContents().send('top-new-post')
-    }
+    // if (e.keyCode === 65 && !e.shiftKey) {
+    //   e.preventDefault()
+    //   remote.getCurrentWebContents().send('top-new-post')
+    // }
 
-    if (e.keyCode === 65 && e.shiftKey) {
-      e.preventDefault()
-      remote.getCurrentWebContents().send('nav-new-folder')
-    }
+    // if (e.keyCode === 65 && e.shiftKey) {
+    //   e.preventDefault()
+    //   remote.getCurrentWebContents().send('nav-new-folder')
+    // }
 
-    if (e.keyCode === 68) {
-      e.preventDefault()
-      remote.getCurrentWebContents().send('detail-delete')
-    }
+    // if (e.keyCode === 68) {
+    //   e.preventDefault()
+    //   remote.getCurrentWebContents().send('detail-delete')
+    // }
 
-    if (e.keyCode === 84) {
-      e.preventDefault()
-      remote.getCurrentWebContents().send('detail-title')
-    }
+    // if (e.keyCode === 84) {
+    //   e.preventDefault()
+    //   remote.getCurrentWebContents().send('detail-title')
+    // }
 
-    if (e.keyCode === 69) {
-      e.preventDefault()
-      remote.getCurrentWebContents().send('detail-edit')
-    }
+    // if (e.keyCode === 69) {
+    //   e.preventDefault()
+    //   remote.getCurrentWebContents().send('detail-edit')
+    // }
 
-    if (e.keyCode === 83) {
-      e.preventDefault()
-      remote.getCurrentWebContents().send('detail-save')
-    }
+    // if (e.keyCode === 83) {
+    //   e.preventDefault()
+    //   remote.getCurrentWebContents().send('detail-save')
+    // }
 
     if (e.keyCode === 38) {
       e.preventDefault()
@@ -186,41 +173,42 @@ class NoteList extends React.Component {
   render () {
     let { location } = this.props
     let notes = this.notes = this.getNotes()
-    let noteElements = notes.map((note) => {
-      let folder = _.find(note._repository.folders, {key: note.folder})
-      let tagElements = note.tags.map((tag) => {
-        return <span key='tag'>{tag}</span>
-      })
-      let key = `${note._repository.key}-${note.key}`
-      let isActive = location.query.key === key
-      return (
-        <div styleName={isActive
-            ? 'item--active'
-            : 'item'
-          }
-          key={key}
-          onClick={(e) => this.handleNoteClick(key)(e)}
-        >
-          <div styleName='item-border'/>
-          <div styleName='item-info'>
+    let noteElements = notes
+      .map((note) => {
+        let folder = _.find(note._repository.folders, {key: note.folder})
+        let tagElements = note.tags.map((tag) => {
+          return <span key='tag'>{tag}</span>
+        })
+        let key = `${note._repository.key}-${note.key}`
+        let isActive = location.query.key === key
+        return (
+          <div styleName={isActive
+              ? 'item--active'
+              : 'item'
+            }
+            key={key}
+            onClick={(e) => this.handleNoteClick(key)(e)}
+          >
+            <div styleName='item-border'/>
+            <div styleName='item-info'>
 
-            <div styleName='item-info-left'>
-              <i className='fa fa-cube fa-fw' style={{color: folder.color}}/> {folder.name}
+              <div styleName='item-info-left'>
+                <i className='fa fa-cube fa-fw' style={{color: folder.color}}/> {folder.name}
+              </div>
+
+              <div styleName='item-info-right'>
+                {moment(note.createdAt).fromNow()}
+              </div>
+
             </div>
 
-            <div styleName='item-info-right'>
-              {moment(note.createdAt).fromNow()}
-            </div>
+            <div styleName='item-title'>{note.title}</div>
+
+            <div styleName='item-tags'><i className='fa fa-tags fa-fw'/>{tagElements.length > 0 ? tagElements : <span>Not tagged yet</span>}</div>
 
           </div>
-
-          <div styleName='item-title'>{note.title}</div>
-
-          <div styleName='item-tags'><i className='fa fa-tags fa-fw'/>{tagElements.length > 0 ? tagElements : <span>Not tagged yet</span>}</div>
-
-        </div>
-      )
-    })
+        )
+      })
 
     return (
       <div className='NoteList'

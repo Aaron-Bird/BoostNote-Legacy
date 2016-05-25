@@ -1,0 +1,38 @@
+.root
+  absolute top bottom right
+  border-width 1px 0
+  border-style solid
+  border-color $ui-borderColor
+
+.info
+  absolute top left right
+  height 50px
+  border-bottom $ui-border
+  background-color $ui-backgroundColor
+
+.info-left
+  float left
+
+.info-right
+  float right
+
+.info-right-button
+  width 34px
+  height 34px
+  border-radius 17px
+  navButtonColor()
+  border $ui-border
+  font-size 14px
+  margin 8px 2px
+  padding 0
+  &:active
+    border-color $ui-button--active-backgroundColor
+  &:hover .left-control-newPostButton-tooltip
+    display block
+
+.body
+  absolute bottom left right
+  top 50px
+
+.body-noteEditor
+  absolute top bottom left right

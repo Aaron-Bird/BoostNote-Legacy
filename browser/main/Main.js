@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import SideNav from './SideNav'
 import TopBar from './TopBar'
 import NoteList from './NoteList'
-import NoteDetail from './NoteDetail'
+import Detail from './Detail'
 import Repository from 'browser/lib/Repository'
 import StatusBar from './StatusBar'
 import _ from 'lodash'
@@ -111,8 +111,16 @@ class Main extends React.Component {
           >
             <div styleName='slider-hitbox'/>
           </div>
-          <NoteDetail
+          <Detail
             style={{left: this.state.listWidth + 1}}
+            {..._.pick(this.props, [
+              'dispatch',
+              'repositories',
+              'config',
+              'params',
+              'location'
+            ])}
+            ignorePreviewPointerEvents={this.state.isSliderFocused}
           />
         </div>
         <StatusBar
