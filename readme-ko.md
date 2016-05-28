@@ -1,16 +1,16 @@
 # Boostnote
 
-Simple opensource note app for developer.
+오픈소스 노트 앱
 
 ## Goal
 
-We just want you to enjoying writing anything. :grinning:
+그냥 글쓰는게 즐거워지셨으면 좋겠어요. :grinning:
 
-- Target OS : OSX, Windows, Linux(also mobile somewhen!)
+- 타겟 OS : OSX, Windows, Linux(나중엔 모바일까지도!)
 - Cloud : Google drive, Dropbox, One drive, iCloud...
-- Remaining opensource forever!
+- 오픈소스로 남을 것!
 
-## Inspired by
+## 영감받은 앱/서비스
 
 - Atom
 - Quiver
