@@ -103,9 +103,9 @@
 
 .root-folded
   @extend .root
-  width 44px
+  width 44px - 1
   .header, .header--active
-    width 44px
+    width 44px - 1
     text-align center
     overflow hidden
     &:hover
@@ -116,13 +116,13 @@
         width 35px
         padding-right 5px
   .header-name
-    width 44px
+    width 44px - 1
     padding-left 0
   .header-name-label
     position fixed
     display inline-block
     height 34px
-    left 44px
+    left 44px - 1
     width 0
     box-sizing border-box
     margin-left 0
@@ -142,7 +142,7 @@
     top inherit
     bottom inherit
     z-index 11
-    left 43px
+    left 44px - 1
     box-sizing border-box
     overflow hidden
   .header-control-button
@@ -153,13 +153,13 @@
     &:hover
       background-color $ui-tooltip-button--hover-backgroundColor
   .newFolderButton
-    width 44px
+    width 44px - 1
     padding 0
     &:hover .newFolderButton-label
       width 100px
   .newFolderButton-icon
     text-align center
-    width 44px
+    width 44px - 1
   .newFolderButton-label
     position fixed
     display inline-block
