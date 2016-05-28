@@ -177,7 +177,7 @@ class NoteList extends React.Component {
       .map((note) => {
         let folder = _.find(note._repository.folders, {key: note.folder})
         let tagElements = note.tags.map((tag) => {
-          return <span key='tag'>{tag}</span>
+          return <span key={tag}>{tag}</span>
         })
         let key = `${note._repository.key}-${note.key}`
         let isActive = location.query.key === key
@@ -197,7 +197,7 @@ class NoteList extends React.Component {
               </div>
 
               <div styleName='item-info-right'>
-                {moment(note.createdAt).fromNow()}
+                {moment(note.updatedAt).fromNow()}
               </div>
 
             </div>
