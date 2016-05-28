@@ -1,3 +1,5 @@
+$info-height = 80px
+
 .root
   absolute top bottom right
   border-width 1px 0
@@ -6,12 +8,21 @@
 
 .info
   absolute top left right
-  height 50px
+  height $info-height
   border-bottom $ui-border
   background-color $ui-backgroundColor
 
 .info-left
   float left
+
+.info-left-top
+  height 40px
+
+.info-left-bottom
+  height 40px
+
+.info-left-bottom-tagSelect
+  height 40px
 
 .info-right
   float right
@@ -26,13 +37,15 @@
   margin 8px 2px
   padding 0
   &:active
-    border-color $ui-button--active-backgroundColor
+    border-color $ui-button--focus-borderColor
   &:hover .left-control-newPostButton-tooltip
     display block
+  &:focus
+    border-color $ui-button--focus-borderColor
 
 .body
   absolute bottom left right
-  top 50px
+  top $info-height
 
 .body-noteEditor
   absolute top bottom left right

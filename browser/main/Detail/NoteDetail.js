@@ -3,6 +3,7 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './NoteDetail.styl'
 import MarkdownEditor from 'browser/components/MarkdownEditor'
 import queue from 'browser/main/lib/queue'
+import TagSelect from './TagSelect'
 
 class NoteDetail extends React.Component {
   constructor (props) {
@@ -15,9 +16,6 @@ class NoteDetail extends React.Component {
     this.dispatchTimer = null
   }
 
-  componentDidUpdate (prevProps, prevState) {
-  }
-
   componentWillReceiveProps (nextProps) {
     if (nextProps.note.key !== this.props.note.key) {
       if (this.state.isDispatchQueued) {
@@ -28,6 +26,7 @@ class NoteDetail extends React.Component {
         isDispatchQueued: false
       }, () => {
         this.refs.content.reload()
+        this.refs.tags.reset()
       })
     }
   }
@@ -64,6 +63,7 @@ class NoteDetail extends React.Component {
     let { note } = this.state
 
     note.content = this.refs.content.value
+    note.tags = this.refs.tags.value
 
     this.setState({
       note,
@@ -114,8 +114,21 @@ class NoteDetail extends React.Component {
       >
         <div styleName='info'>
           <div styleName='info-left'>
-            <div styleName='info-left-folderSelect'>FOLDER SELECT</div>
-            <div styleName='info-left-tagSelect'>TAG SELECT</div>
+
+            <div styleName='info-left-top'>
+              <button styleName='info-left-top-starButton'>
+                <i className='fa fa-star-o fa-fw'/>
+              </button>
+              <div styleName='info-left-top-folderSelect'>FolderSelect</div>
+            </div>
+            <div styleName='info-left-bottom'>
+              <TagSelect
+                styleName='info-left-bottom-tagSelect'
+                ref='tags'
+                value={this.state.note.tags}
+                onChange={(e) => this.handleChange(e)}
+              />
+            </div>
           </div>
           <div styleName='info-right'>
             <button styleName='info-right-button'>
