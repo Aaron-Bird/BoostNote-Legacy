@@ -7,10 +7,14 @@ import MarkdownPreview from 'browser/components/MarkdownPreview'
 class MarkdownEditor extends React.Component {
   constructor (props) {
     super(props)
-    
+
     this.state = {
       status: 'CODE'
     }
+  }
+
+  componentDidMount () {
+    this.value = this.refs.code.value
   }
 
   handleChange (e) {

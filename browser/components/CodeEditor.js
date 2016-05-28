@@ -95,6 +95,7 @@ export default class CodeEditor extends React.Component {
 
   componentDidMount () {
     let { mode, value } = this.props
+    this.value = value
     let el = ReactDOM.findDOMNode(this)
     let editor = this.editor = ace.edit(el)
     editor.$blockScrolling = Infinity
