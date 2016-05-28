@@ -125,6 +125,7 @@ function repositories (state = initialRepositories, action) {
         if (targetRepo == null) return state
 
         let targetNoteIndex = _.findIndex(targetRepo.notes, {key: action.note.key})
+        action.note.updatedAt = Date.now()
         if (targetNoteIndex > -1) {
           targetRepo.notes.splice(targetNoteIndex, 1, action.note)
         } else {
