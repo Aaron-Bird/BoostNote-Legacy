@@ -32,24 +32,29 @@ class NoteList extends React.Component {
           key: `${this.notes[0]._repository.key}-${this.notes[0].key}`
         }
       })
+      return
     }
-    // return false
-    // var index = articles.indexOf(null)
-    // var el = ReactDOM.findDOMNode(this)
-    // var li = el.querySelectorAll('.NoteList>div')[index]
 
-    // if (li == null) {
-    //   return
-    // }
+    // Auto scroll
+    let targetIndex = _.findIndex(this.notes, (note) => {
+      let splitted = location.query.key.split('-')
+      let repoKey = splitted[0]
+      let noteKey = splitted[1]
+      return repoKey === note._repository.key && noteKey === note.key
+    })
+    if (targetIndex > -1) {
+      let list = this.refs.root
+      let item = list.childNodes[targetIndex]
 
-    // var overflowBelow = el.clientHeight + el.scrollTop < li.offsetTop + li.clientHeight
-    // if (overflowBelow) {
-    //   el.scrollTop = li.offsetTop + li.clientHeight - el.clientHeight
-    // }
-    // var overflowAbove = el.scrollTop > li.offsetTop
-    // if (overflowAbove) {
-    //   el.scrollTop = li.offsetTop
-    // }
+      let overflowBelow = list.clientHeight + list.scrollTop < item.offsetTop + list.clientHeight
+      if (overflowBelow) {
+        list.scrollTop = item.offsetTop + item.clientHeight - list.clientHeight
+      }
+      let overflowAbove = list.scrollTop > item.offsetTop
+      if (overflowAbove) {
+        list.scrollTop = item.offsetTop
+      }
+    }
   }
 
   focus () {
@@ -187,12 +192,18 @@ class NoteList extends React.Component {
 
   render () {
     let { location } = this.props
-    let notes = this.notes = this.getNotes()
+    let notes = this.notes = this.getNotes().sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+
     let noteElements = notes
       .map((note) => {
         let folder = _.find(note._repository.folders, {key: note.folder})
         let tagElements = note.tags.map((tag) => {
-          return <span key={tag}>{tag}</span>
+          return (
+            <span styleName='item-tagList-item'
+              key={tag}>
+              {tag}
+            </span>
+          )
         })
         let key = `${note._repository.key}-${note.key}`
         let isActive = location.query.key === key
@@ -219,8 +230,15 @@ class NoteList extends React.Component {
 
             <div styleName='item-title'>{note.title}</div>
 
-            <div styleName='item-tags'><i className='fa fa-tags fa-fw'/>{tagElements.length > 0 ? tagElements : <span>Not tagged yet</span>}</div>
-
+            <div styleName='item-tagList'>
+              <i styleName='item-tagList-icon'
+                className='fa fa-tags fa-fw'
+              />
+              {tagElements.length > 0
+                ? tagElements
+                : <span styleName='item-tagList-empty'>Not tagged yet</span>
+              }
+            </div>
           </div>
         )
       })
@@ -228,6 +246,7 @@ class NoteList extends React.Component {
     return (
       <div className='NoteList'
         styleName='root'
+        ref='root'
         tabIndex='0'
         onKeyDown={(e) => this.handleNoteListKeyDown(e)}
         style={this.props.style}
