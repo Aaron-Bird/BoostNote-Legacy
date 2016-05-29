@@ -136,6 +136,21 @@ class NoteList extends React.Component {
       }, [])
     }
 
+    if (location.pathname.match(/\/starred/)) {
+      return repositories
+      .reduce((sum, repository) => {
+        return sum.concat(repository.starred
+          .map((starredKey) => {
+            return _.find(repository.notes, {key: starredKey})
+          })
+          .filter((note) => _.isObject(note))
+          .map((note) => {
+            note._repository = repository
+            return note
+          }))
+      }, [])
+    }
+
     let repository = _.find(repositories, {key: repositoryKey})
     if (repository == null) return []
 

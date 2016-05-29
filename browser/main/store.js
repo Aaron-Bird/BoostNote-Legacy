@@ -134,6 +134,34 @@ function repositories (state = initialRepositories, action) {
 
         return repos
       }
+    case 'STAR_NOTE':
+      {
+        let repos = state.slice()
+        let targetRepo = _.find(repos, {key: action.repository})
+
+        if (targetRepo == null) return state
+
+        let targetNoteIndex = _.findIndex(targetRepo.notes, {key: action.note})
+        if (targetNoteIndex > -1) {
+          targetRepo.starred.push(action.note)
+        } else {
+          return state
+        }
+
+        return repos
+      }
+    case 'UNSTAR_NOTE':
+      {
+        let repos = state.slice()
+        let targetRepo = _.find(repos, {key: action.repository})
+
+        if (targetRepo == null) return state
+
+        targetRepo.starred = targetRepo.starred
+          .filter((starredKey) => starredKey !== action.note)
+
+        return repos
+      }
   }
   return state
 }

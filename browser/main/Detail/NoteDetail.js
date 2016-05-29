@@ -3,7 +3,9 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './NoteDetail.styl'
 import MarkdownEditor from 'browser/components/MarkdownEditor'
 import queue from 'browser/main/lib/queue'
+import StarButton from './StarButton'
 import TagSelect from './TagSelect'
+import Repository from 'browser/lib/Repository'
 
 class NoteDetail extends React.Component {
   constructor (props) {
@@ -106,7 +108,42 @@ class NoteDetail extends React.Component {
     queue.save(repoKey, note)
   }
 
+  handleStarButtonClick (e) {
+    let { note } = this.state
+    let { dispatch } = this.props
+    let isStarred = note._repository.starred.some((starredKey) => starredKey === note.key)
+
+    if (isStarred) {
+      Repository
+        .find(note._repository.key)
+        .then((repo) => {
+          return repo.unstarNote(note.key)
+        })
+
+      dispatch({
+        type: 'UNSTAR_NOTE',
+        repository: note._repository.key,
+        note: note.key
+      })
+    } else {
+      Repository
+        .find(note._repository.key)
+        .then((repo) => {
+          return repo.starNote(note.key)
+        })
+
+      dispatch({
+        type: 'STAR_NOTE',
+        repository: note._repository.key,
+        note: note.key
+      })
+    }
+  }
+
   render () {
+    let { note } = this.state
+    let isStarred = note._repository.starred.some((starredKey) => starredKey === note.key)
+
     return (
       <div className='NoteDetail'
         style={this.props.style}
@@ -116,9 +153,10 @@ class NoteDetail extends React.Component {
           <div styleName='info-left'>
 
             <div styleName='info-left-top'>
-              <button styleName='info-left-top-starButton'>
-                <i className='fa fa-star-o fa-fw'/>
-              </button>
+              <StarButton styleName='info-left-top-starButton'
+                onClick={(e) => this.handleStarButtonClick(e)}
+                isActive={isStarred}
+              />
               <div styleName='info-left-top-folderSelect'>FolderSelect</div>
             </div>
             <div styleName='info-left-bottom'>

@@ -441,6 +441,27 @@ class Repository {
     })
   }
 
+  starNote (noteKey) {
+    let note = _.find(this.notes, {key: noteKey})
+    if (note != null) {
+      let json = this.json
+      json.starred.push(noteKey)
+
+      return this.saveJSON(json)
+    }
+  }
+
+  unstarNote (noteKey) {
+    let note = _.find(this.notes, {key: noteKey})
+    if (note != null) {
+      let json = this.json
+      json.starred = json.starred
+        .filter((starredKey) => starredKey !== noteKey)
+
+      return this.saveJSON(json)
+    }
+  }
+
   removeNote (noteKey) {
     let noteIndex = _.findIndex(this.notes, {key: noteKey})
 
@@ -473,7 +494,8 @@ class Repository {
         key: keygen(),
         name: 'general',
         color: this.randomColor()
-      }]
+      }],
+      starred: []
     }, override)
   }
 

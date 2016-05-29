@@ -1,0 +1,19 @@
+.root
+  position relative
+  color $ui-inactive-text-color
+  font-size 18px
+  text-align center
+  background-color transparent
+  border none
+  padding 0
+  transition transform 0.15s
+  &:hover
+    color $ui-text-color
+    transform rotate(-72deg)
+
+.root--active
+  @extend .root
+  color $ui-active-color
+  transform rotate(-72deg)
+  &:hover
+    color $ui-active-color
