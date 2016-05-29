@@ -446,6 +446,7 @@ class Repository {
     if (note != null) {
       let json = this.json
       json.starred.push(noteKey)
+      json.starred = _.uniq(json.starred)
 
       return this.saveJSON(json)
     }
@@ -457,6 +458,7 @@ class Repository {
       let json = this.json
       json.starred = json.starred
         .filter((starredKey) => starredKey !== noteKey)
+      json.starred = _.uniq(json.starred)
 
       return this.saveJSON(json)
     }

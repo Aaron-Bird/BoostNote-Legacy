@@ -144,6 +144,7 @@ function repositories (state = initialRepositories, action) {
         let targetNoteIndex = _.findIndex(targetRepo.notes, {key: action.note})
         if (targetNoteIndex > -1) {
           targetRepo.starred.push(action.note)
+          targetRepo.starred = _.uniq(targetRepo.starred)
         } else {
           return state
         }
@@ -159,6 +160,7 @@ function repositories (state = initialRepositories, action) {
 
         targetRepo.starred = targetRepo.starred
           .filter((starredKey) => starredKey !== action.note)
+        targetRepo.starred = _.uniq(targetRepo.starred)
 
         return repos
       }
