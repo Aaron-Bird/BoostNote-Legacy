@@ -1,19 +1,16 @@
 # Boostnote
 
-Simple opensource note app for developer.
-
-- [日本語](./readme-ja.md)
-- [한국어](./readme-ko.md)
+オープンソースノートアプリ
 
 ## Goal
 
-We just want you to enjoying writing anything. :grinning:
+単に何かを書くのが楽しくなってほしいです。 :grinning:
 
-- Target OS : OSX, Windows, Linux(also mobile somewhen!)
+- ターゲット OS : OSX, Windows, Linux(後々はモバイルも!)
 - Cloud : Google drive, Dropbox, One drive, iCloud...
-- Remaining opensource forever!
+- オープンソースで残ること!
 
-## Inspired by
+## 印象を受けたアプリ/サービス
 
 - Atom
 - Quiver
