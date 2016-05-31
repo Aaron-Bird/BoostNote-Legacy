@@ -152,6 +152,8 @@ export default class CodeEditor extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
+    let { value } = this.props
+    this.value = value
     var session = this.editor.getSession()
 
     if (prevProps.mode !== this.props.mode) {

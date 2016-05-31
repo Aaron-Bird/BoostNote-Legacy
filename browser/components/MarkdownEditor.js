@@ -17,6 +17,10 @@ class MarkdownEditor extends React.Component {
     this.value = this.refs.code.value
   }
 
+  componentDidUpdate () {
+    this.value = this.refs.code.value
+  }
+
   handleChange (e) {
     this.value = this.refs.code.value
     this.props.onChange(e)
