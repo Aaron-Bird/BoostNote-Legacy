@@ -36,10 +36,10 @@ class NoteList extends React.Component {
     }
 
     // Auto scroll
+    let splitted = location.query.key.split('-')
+    let repoKey = splitted[0]
+    let noteKey = splitted[1]
     let targetIndex = _.findIndex(this.notes, (note) => {
-      let splitted = location.query.key.split('-')
-      let repoKey = splitted[0]
-      let noteKey = splitted[1]
       return repoKey === note._repository.key && noteKey === note.key
     })
     if (targetIndex > -1) {
@@ -133,11 +133,7 @@ class NoteList extends React.Component {
     if (location.pathname.match(/\/home/)) {
       return repositories
       .reduce((sum, repository) => {
-        return sum.concat(repository.notes
-          .map((note) => {
-            note._repository = repository
-            return note
-          }))
+        return sum.concat(repository.notes)
       }, [])
     }
 
@@ -148,11 +144,7 @@ class NoteList extends React.Component {
           .map((starredKey) => {
             return _.find(repository.notes, {key: starredKey})
           })
-          .filter((note) => _.isObject(note))
-          .map((note) => {
-            note._repository = repository
-            return note
-          }))
+          .filter((note) => _.isObject(note)))
       }, [])
     }
 
@@ -162,18 +154,10 @@ class NoteList extends React.Component {
     let folder = _.find(repository.folders, {key: folderKey})
     if (folder == null) {
       return repository.notes
-        .map((note) => {
-          note._repository = repository
-          return note
-        })
     }
 
     return repository.notes
       .filter((note) => note.folder === folderKey)
-      .map((note) => {
-        note._repository = repository
-        return note
-      })
   }
 
   handleNoteClick (key) {

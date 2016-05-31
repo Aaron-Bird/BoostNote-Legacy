@@ -4,6 +4,7 @@ import _ from 'lodash'
 let tasks = []
 
 function _save (task, repoKey, note) {
+  note = Object.assign({}, note)
   delete note._repository
 
   task.status = 'process'
@@ -15,7 +16,6 @@ function _save (task, repoKey, note) {
     })
     .then((note) => {
       tasks.splice(tasks.indexOf(task), 1)
-      console.log(tasks)
       console.info('Note saved', note)
     })
     .catch((err) => {

@@ -5,6 +5,7 @@ import MarkdownEditor from 'browser/components/MarkdownEditor'
 import queue from 'browser/main/lib/queue'
 import StarButton from './StarButton'
 import TagSelect from './TagSelect'
+import FolderSelect from './FolderSelect'
 import Repository from 'browser/lib/Repository'
 
 class NoteDetail extends React.Component {
@@ -66,6 +67,7 @@ class NoteDetail extends React.Component {
 
     note.content = this.refs.content.value
     note.tags = this.refs.tags.value
+    note.folder = this.refs.folder.value
 
     this.setState({
       note,
@@ -111,6 +113,7 @@ class NoteDetail extends React.Component {
   handleStarButtonClick (e) {
     let { note } = this.state
     let { dispatch } = this.props
+
     let isStarred = note._repository.starred.some((starredKey) => starredKey === note.key)
 
     if (isStarred) {
@@ -143,6 +146,7 @@ class NoteDetail extends React.Component {
   render () {
     let { note } = this.state
     let isStarred = note._repository.starred.some((starredKey) => starredKey === note.key)
+    let folders = note._repository.folders
 
     return (
       <div className='NoteDetail'
@@ -157,7 +161,12 @@ class NoteDetail extends React.Component {
                 onClick={(e) => this.handleStarButtonClick(e)}
                 isActive={isStarred}
               />
-              <div styleName='info-left-top-folderSelect'>FolderSelect</div>
+              <FolderSelect styleName='info-left-top-folderSelect'
+                value={this.state.note.folder}
+                ref='folder'
+                folders={folders}
+                onChange={() => this.handleChange()}
+              />
             </div>
             <div styleName='info-left-bottom'>
               <TagSelect
@@ -197,6 +206,9 @@ class NoteDetail extends React.Component {
 NoteDetail.propTypes = {
   dispatch: PropTypes.func,
   repositories: PropTypes.array,
+  note: PropTypes.shape({
+
+  }),
   style: PropTypes.shape({
     left: PropTypes.number
   }),
