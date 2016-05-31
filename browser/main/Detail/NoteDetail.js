@@ -22,6 +22,7 @@ class NoteDetail extends React.Component {
   componentWillReceiveProps (nextProps) {
     if (nextProps.note.key !== this.props.note.key) {
       if (this.state.isDispatchQueued) {
+        this.cancelDispatchQueue()
         this.dispatch()
       }
       this.setState({
@@ -92,7 +93,7 @@ class NoteDetail extends React.Component {
       this.setState({
         isDispatchQueued: false
       })
-    }, 500)
+    }, 100)
   }
 
   dispatch () {
