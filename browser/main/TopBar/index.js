@@ -65,11 +65,19 @@ class TopBar extends React.Component {
         return repo.addNote(newNote)
       })
       .then((note) => {
-        let { dispatch } = this.props
+        let { dispatch, location } = this.props
+        let { router } = this.context
         dispatch({
           type: 'ADD_NOTE',
           repository: repositoryKey,
           note: note
+        })
+
+        router.push({
+          pathname: location.pathname,
+          query: {
+            key: `${note._repository.key}-${note.key}`
+          }
         })
       })
       .catch((err) => {
@@ -137,6 +145,12 @@ class TopBar extends React.Component {
       </div>
     )
   }
+}
+
+TopBar.contextTypes = {
+  router: PropTypes.shape({
+    push: PropTypes.func
+  })
 }
 
 TopBar.propTypes = {

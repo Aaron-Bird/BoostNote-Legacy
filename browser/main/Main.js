@@ -89,7 +89,8 @@ class Main extends React.Component {
             'dispatch',
             'repositories',
             'config',
-            'params'
+            'params',
+            'location'
           ])}
         />
         <div styleName={config.isSideNavFolded ? 'body--expanded' : 'body'}
