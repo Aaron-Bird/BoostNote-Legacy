@@ -61,24 +61,59 @@ class NoteList extends React.Component {
     // ReactDOM.findDOMNode(this).focus()
   }
 
-  // 移動ができなかったらfalseを返す:
-  selectPriorArticle () {
-    // let { articles, activeArticle, dispatch } = this.props
-    // let targetIndex = articles.indexOf(activeArticle) - 1
-    // let targetArticle = articles[targetIndex]
-    // return false
+  selectPriorNote () {
+    if (this.notes == null || this.notes.length === 0) {
+      return
+    }
+    let { router } = this.context
+    let { location } = this.props
+    let splitted = location.query.key.split('-')
+    let repoKey = splitted[0]
+    let noteKey = splitted[1]
+    let targetIndex = _.findIndex(this.notes, (note) => {
+      return repoKey === note._repository.key && noteKey === note.key
+    })
+
+    if (targetIndex === 0) {
+      return
+    }
+    targetIndex--
+    if (targetIndex < 0) targetIndex = 0
+
+    router.push({
+      pathname: location.pathname,
+      query: {
+        key: `${this.notes[targetIndex]._repository.key}-${this.notes[targetIndex].key}`
+      }
+    })
   }
 
-  selectNextArticle () {
-    // let { articles, activeArticle, dispatch } = this.props
-    // let targetIndex = articles.indexOf(activeArticle) + 1
-    // let targetArticle = articles[targetIndex]
+  selectNextNote () {
+    if (this.notes == null || this.notes.length === 0) {
+      return
+    }
+    let { router } = this.context
+    let { location } = this.props
+    let splitted = location.query.key.split('-')
+    let repoKey = splitted[0]
+    let noteKey = splitted[1]
+    let targetIndex = _.findIndex(this.notes, (note) => {
+      return repoKey === note._repository.key && noteKey === note.key
+    })
 
-    // if (targetArticle != null) {
-    //   dispatch(switchArticle(targetArticle.key))
-    //   return true
-    // }
-    // return false
+    if (targetIndex === this.notes.length - 1) {
+      return
+    }
+    targetIndex++
+    if (targetIndex < 0) targetIndex = 0
+    else if (targetIndex > this.notes.length - 1) targetIndex === this.notes.length - 1
+
+    router.push({
+      pathname: location.pathname,
+      query: {
+        key: `${this.notes[targetIndex]._repository.key}-${this.notes[targetIndex].key}`
+      }
+    })
   }
 
   handleNoteListKeyDown (e) {
@@ -116,12 +151,12 @@ class NoteList extends React.Component {
 
     if (e.keyCode === 38) {
       e.preventDefault()
-      this.selectPriorArticle()
+      this.selectPriorNote()
     }
 
     if (e.keyCode === 40) {
       e.preventDefault()
-      this.selectNextArticle()
+      this.selectNextNote()
     }
   }
 
