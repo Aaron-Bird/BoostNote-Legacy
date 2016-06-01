@@ -46,7 +46,7 @@ class NoteList extends React.Component {
       let list = this.refs.root
       let item = list.childNodes[targetIndex]
 
-      let overflowBelow = list.clientHeight + list.scrollTop < item.offsetTop + list.clientHeight
+      let overflowBelow = item.offsetTop + item.clientHeight - list.clientHeight - list.scrollTop > 0
       if (overflowBelow) {
         list.scrollTop = item.offsetTop + item.clientHeight - list.clientHeight
       }
