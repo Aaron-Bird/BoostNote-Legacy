@@ -38,7 +38,7 @@
     "@rokt33r/markdown-it-math": "^4.0.1",
     "@rokt33r/node-ipc": "^5.0.4",
     "@rokt33r/sanitize-html": "^1.11.2",
-    "ace": "git+ssh://git@github.com/ajaxorg/ace.git",
+    "ace": "git+ssh://git@github.com/ajaxorg/ace-builds.git",
     "devicon": "^2.0.0",
     "electron-gh-releases": "^2.0.2",
     "font-awesome": "^4.3.0",
