@@ -23,6 +23,10 @@ body
   font-size fontSize
   font-weight 400
 
+body[data-modal="open"]
+  #content *
+    overflow hidden !important
+
 button, input, select, textarea
   font-family DEFAULT_FONTS
 

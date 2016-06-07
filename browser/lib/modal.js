@@ -15,6 +15,7 @@ class ModalBase extends React.Component {
 
   close () {
     if (modalBase != null) modalBase.setState({component: null, componentProps: null, isHidden: true})
+    document.body.setAttribute('data-modal', 'close')
 
     remote.getCurrentWebContents().send('list-focus')
   }
@@ -37,6 +38,8 @@ let modalBase = ReactDOM.render(<ModalBase/>, el)
 
 export function openModal (component, props) {
   if (modalBase == null) { return }
+
+  document.body.setAttribute('data-modal', 'open')
   modalBase.setState({component: component, componentProps: props, isHidden: false})
 }
 
