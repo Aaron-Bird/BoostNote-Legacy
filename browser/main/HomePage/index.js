@@ -33,9 +33,6 @@ class HomePage extends React.Component {
 
   handleKeyDown (e) {
     if (isModalOpen()) {
-      if (e.keyCode === 13 && (OSX ? e.metaKey : e.ctrlKey)) {
-        remote.getCurrentWebContents().send('modal-confirm')
-      }
       if (e.keyCode === 27) closeModal()
       return
     }
