@@ -1,4 +1,0 @@
-[submodule "submodules/ace"]
-	path = submodules/ace
-	url = https://github.com/ajaxorg/ace-builds.git
-	branch = master
