@@ -42,6 +42,18 @@ class MarkdownEditor extends React.Component {
     })
   }
 
+  focus () {
+    if (this.state.status === 'PREVIEW') {
+      this.setState({
+        status: 'CODE'
+      }, () => {
+        this.refs.code.focus()
+      })
+    } else {
+      this.refs.code.focus()
+    }
+  }
+
   reload () {
     this.refs.code.reload()
   }

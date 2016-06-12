@@ -22,6 +22,7 @@ class Main extends React.Component {
       listWidth: config.listWidth
     }
   }
+
   componentDidMount () {
     let { dispatch } = this.props
 

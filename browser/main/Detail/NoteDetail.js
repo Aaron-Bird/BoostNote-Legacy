@@ -7,6 +7,7 @@ import StarButton from './StarButton'
 import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
 import Repository from 'browser/lib/Repository'
+import Commander from 'browser/main/lib/Commander'
 
 class NoteDetail extends React.Component {
   constructor (props) {
@@ -17,6 +18,21 @@ class NoteDetail extends React.Component {
       isDispatchQueued: false
     }
     this.dispatchTimer = null
+  }
+
+  componentDidMount () {
+    Commander.bind('note-detail', this)
+  }
+
+  componentWillUnmount () {
+    Commander.release(this)
+  }
+
+  fire (command) {
+    switch (command) {
+      case 'focus':
+        this.refs.content.focus()
+    }
   }
 
   componentWillReceiveProps (nextProps) {

@@ -12,14 +12,11 @@ class NoteList extends React.Component {
   }
 
   componentDidMount () {
-    // this.refreshTimer = setInterval(() => this.forceUpdate(), 60 * 1000)
-    // ipc.on('list-focus', this.focusHandler)
-    // this.focus()
+    this.refreshTimer = setInterval(() => this.forceUpdate(), 60 * 1000)
   }
 
   componentWillUnmount () {
-    // clearInterval(this.refreshTimer)
-    // ipc.removeListener('list-focus', this.focusHandler)
+    clearInterval(this.refreshTimer)
   }
 
   componentDidUpdate () {

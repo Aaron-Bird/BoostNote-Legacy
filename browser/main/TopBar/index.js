@@ -4,6 +4,7 @@ import styles from './TopBar.styl'
 import activityRecord from 'browser/lib/activityRecord'
 import Repository from 'browser/lib/Repository'
 import _ from 'lodash'
+import Commander from 'browser/main/lib/Commander'
 
 const OSX = window.process.platform === 'darwin'
 
@@ -61,7 +62,6 @@ class TopBar extends React.Component {
     Repository
       .find(repositoryKey)
       .then((repo) => {
-        console.log(repo)
         return repo.addNote(newNote)
       })
       .then((note) => {
@@ -79,6 +79,7 @@ class TopBar extends React.Component {
             key: `${note._repository.key}-${note.key}`
           }
         })
+        Commander.fire('note-detail:focus')
       })
       .catch((err) => {
         console.error(err)
