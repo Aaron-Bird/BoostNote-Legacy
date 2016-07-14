@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react'
 import markdown from 'browser/lib/markdown'
+import _ from 'lodash'
+import hljsTheme from 'browser/lib/hljsThemes'
 
 const markdownStyle = require('!!css!stylus?sourceMap!./markdown.styl')[0][1]
 const { shell } = require('electron')
@@ -7,6 +9,15 @@ const goExternal = function (e) {
   e.preventDefault()
   shell.openExternal(e.target.href)
 }
+
+const OSX = global.process.platform === 'darwin'
+
+const defaultFontFamily = ['helvetica', 'arial', 'sans-serif']
+if (!OSX) {
+  defaultFontFamily.unshift('\'Microsoft YaHei\'')
+  defaultFontFamily.unshift('meiryo')
+}
+const defaultCodeBlockFontFamily = ['Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', 'monospace']
 
 export default class MarkdownPreview extends React.Component {
   constructor (props) {
@@ -30,7 +41,13 @@ export default class MarkdownPreview extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    if (prevProps.value !== this.props.value) this.rewriteIframe()
+    if (prevProps.value !== this.props.value ||
+      prevProps.fontFamily !== this.props.fontFamily ||
+      prevProps.fontSize !== this.props.fontSize ||
+      prevProps.codeBlockFontFamily !== this.props.codeBlockFontFamily ||
+      prevProps.codeBlockTheme !== this.props.codeBlockTheme ||
+      prevProps.lineNumber !== this.props.lineNumber
+    ) this.rewriteIframe()
   }
 
   rewriteIframe () {
@@ -38,7 +55,15 @@ export default class MarkdownPreview extends React.Component {
       el.removeEventListener('click', goExternal)
     })
 
-    let { value } = this.props
+    let { value, fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme } = this.props
+    fontFamily = _.isString(fontFamily) && fontFamily.trim().length > 0
+      ? [fontFamily].concat(defaultFontFamily)
+      : defaultFontFamily
+    codeBlockFontFamily = _.isString(codeBlockFontFamily) && codeBlockFontFamily.trim().length > 0
+      ? [codeBlockFontFamily].concat(defaultCodeBlockFontFamily)
+      : defaultCodeBlockFontFamily
+    codeBlockTheme = hljsTheme().some((theme) => theme.name === codeBlockTheme) ? codeBlockTheme : 'xcode'
+
     this.refs.root.contentWindow.document.head.innerHTML = `
       <style>
         @font-face {
@@ -51,8 +76,20 @@ export default class MarkdownPreview extends React.Component {
           text-rendering: optimizeLegibility;
         }
         ${markdownStyle}
+        body {
+          font-family: ${fontFamily.join(', ')};
+          font-size: ${fontSize}px;
+        }
+        code {
+          font-family: ${codeBlockFontFamily.join(', ')};
+        }
+        .lineNumber {
+          ${lineNumber && 'display: block !important;'}
+          font-family: ${codeBlockFontFamily.join(', ')};
+          opacity: 0.5;
+        }
       </style>
-      <link rel="stylesheet" href="../node_modules/highlight.js/styles/xcode.css" id="hljs-css">
+      <link rel="stylesheet" href="../node_modules/highlight.js/styles/${codeBlockTheme}.css">
       <link rel="stylesheet" href="../resources/katex.min.css">
     `
     this.refs.root.contentWindow.document.body.innerHTML = markdown(value)

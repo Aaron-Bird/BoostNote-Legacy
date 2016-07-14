@@ -5,6 +5,8 @@ import _ from 'lodash'
 
 const ace = window.ace
 
+const defaultEditorFontFamily = ['Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', 'monospace']
+
 export default class CodeEditor extends React.Component {
   constructor (props) {
     super(props)
@@ -94,16 +96,16 @@ export default class CodeEditor extends React.Component {
   }
 
   componentDidMount () {
-    let { mode, value } = this.props
+    let { mode, value, theme, fontSize } = this.props
     this.value = value
     let el = ReactDOM.findDOMNode(this)
     let editor = this.editor = ace.edit(el)
     editor.$blockScrolling = Infinity
     editor.renderer.setShowGutter(true)
-    editor.setTheme('ace/theme/xcode')
+    editor.setTheme('ace/theme/' + theme)
     editor.moveCursorTo(0, 0)
     editor.setReadOnly(!!this.props.readOnly)
-    editor.setFontSize('14')
+    editor.setFontSize(fontSize)
 
     editor.on('blur', this.blurHandler)
 
@@ -135,9 +137,9 @@ export default class CodeEditor extends React.Component {
       : 'text'
     session.setMode('ace/mode/' + syntaxMode)
 
-    session.setUseSoftTabs(this.state.indentType === 'space')
-    session.setTabSize(!isNaN(this.state.indentSize) ? parseInt(this.state.indentSize, 10) : 4)
-    session.setOption('useWorker', false)
+    session.setUseSoftTabs(this.props.indentType === 'space')
+    session.setTabSize(this.props.indentSize)
+    session.setOption('useWorker', true)
     session.setUseWrapMode(true)
     session.setValue(_.isString(value) ? value : '')
 
@@ -154,7 +156,8 @@ export default class CodeEditor extends React.Component {
   componentDidUpdate (prevProps, prevState) {
     let { value } = this.props
     this.value = value
-    var session = this.editor.getSession()
+    let editor = this.editor
+    let session = this.editor.getSession()
 
     if (prevProps.mode !== this.props.mode) {
       let mode = _.find(modes, {name: this.props.mode})
@@ -163,23 +166,18 @@ export default class CodeEditor extends React.Component {
         : 'text'
       session.setMode('ace/mode' + syntaxMode)
     }
-  }
-
-  handleConfigApply (e, config) {
-    // this.setState({
-    //   fontSize: config['editor-font-size'],
-    //   fontFamily: config['editor-font-family'],
-    //   indentType: config['editor-indent-type'],
-    //   indentSize: config['editor-indent-size'],
-    //   themeSyntax: config['theme-syntax']
-    // }, function () {
-    //   var editor = this.editor
-    //   editor.setTheme('ace/theme/' + this.state.themeSyntax)
-
-    //   var session = editor.getSession()
-    //   session.setUseSoftTabs(this.state.indentType === 'space')
-    //   session.setTabSize(!isNaN(this.state.indentSize) ? parseInt(this.state.indentSize, 10) : 4)
-    // })
+    if (prevProps.theme !== this.props.theme) {
+      editor.setTheme('ace/theme/' + this.props.theme)
+    }
+    if (prevProps.fontSize !== this.props.fontSize) {
+      editor.setFontSize(this.props.fontSize)
+    }
+    if (prevProps.indentSize !== this.props.indentSize) {
+      session.setTabSize(this.props.indentSize)
+    }
+    if (prevProps.indentType !== this.props.indentType) {
+      session.setUseSoftTabs(this.props.indentType === 'space')
+    }
   }
 
   handleChange (e) {
@@ -222,8 +220,10 @@ export default class CodeEditor extends React.Component {
   }
 
   render () {
-    let { className } = this.props
-
+    let { className, fontFamily } = this.props
+    fontFamily = _.isString(fontFamily) && fontFamily.length > 0
+      ? [fontFamily].concat(defaultEditorFontFamily)
+      : defaultEditorFontFamily
     return (
       <div
         className={className == null
@@ -231,8 +231,7 @@ export default class CodeEditor extends React.Component {
           : `CodeEditor ${className}`
         }
         style={{
-          fontSize: '14px',
-          fontFamily: 'monospace'
+          fontFamily: fontFamily.join(', ')
         }}
       />
     )
@@ -249,7 +248,12 @@ CodeEditor.propTypes = {
 }
 
 CodeEditor.defaultProps = {
-  readOnly: false
+  readOnly: false,
+  theme: 'xcode',
+  fontSize: 14,
+  fontFamily: 'Monaco, Consolas',
+  indentSize: 4,
+  indentType: 'space'
 }
 
 export default CodeEditor

@@ -6,7 +6,7 @@ import SideNav from './SideNav'
 import TopBar from './TopBar'
 import NoteList from './NoteList'
 import Detail from './Detail'
-import Repository from 'browser/lib/Repository'
+import dataApi from 'browser/main/lib/dataApi'
 import StatusBar from './StatusBar'
 import _ from 'lodash'
 import ConfigManager from 'browser/main/lib/ConfigManager'
@@ -27,9 +27,13 @@ class Main extends React.Component {
     let { dispatch } = this.props
 
     // Reload all data
-    Repository.loadAll()
-      .then((allData) => {
-        dispatch({type: 'INIT_ALL', data: allData})
+    dataApi.init()
+      .then((data) => {
+        dispatch({
+          type: 'INIT_ALL',
+          storages: data.storages,
+          notes: data.notes
+        })
       })
   }
 
@@ -83,12 +87,17 @@ class Main extends React.Component {
         onMouseUp={(e) => this.handleMouseUp(e)}
       >
         <SideNav
-          {..._.pick(this.props, ['dispatch', 'repositories', 'config', 'location'])}
+          {..._.pick(this.props, [
+            'dispatch',
+            'storages',
+            'config',
+            'location'
+          ])}
         />
         <TopBar
           {..._.pick(this.props, [
             'dispatch',
-            'repositories',
+            'storages',
             'config',
             'params',
             'location'
@@ -100,7 +109,8 @@ class Main extends React.Component {
           <NoteList style={{width: this.state.listWidth}}
             {..._.pick(this.props, [
               'dispatch',
-              'repositories',
+              'storages',
+              'notes',
               'config',
               'params',
               'location'
@@ -117,7 +127,8 @@ class Main extends React.Component {
             style={{left: this.state.listWidth + 1}}
             {..._.pick(this.props, [
               'dispatch',
-              'repositories',
+              'storages',
+              'notes',
               'config',
               'params',
               'location'

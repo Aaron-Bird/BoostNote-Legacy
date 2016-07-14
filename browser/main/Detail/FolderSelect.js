@@ -128,7 +128,7 @@ class FolderSelect extends React.Component {
   }
 
   nextOption () {
-    let { folders } = this.props
+    let { storages } = this.props
     let { optionIndex } = this.state
 
     optionIndex++
@@ -184,24 +184,40 @@ class FolderSelect extends React.Component {
   }
 
   render () {
-    let { className, folders, value } = this.props
-    let currentFolder = _.find(folders, {key: value})
-    let optionList = folders.map((folder, index) => {
-      return (
-        <div styleName={index === this.state.optionIndex
-            ? 'search-optionList-item--active'
-            : 'search-optionList-item'
-          }
-          key={folder.key}
-          onClick={(e) => this.handleOptionClick(folder.key)(e)}
-        >
-          <i style={{color: folder.color}}
-            className='fa fa-fw fa-cube'
-          />&nbsp;
-          {folder.name}
-        </div>
-      )
+    let { className, storages, value } = this.props
+    let splitted = value.split('-')
+    let storageKey = splitted.shift()
+    let folderKey = splitted.shift()
+    let options = []
+    storages.forEach((storage, index) => {
+      storage.folders.forEach((folder) => {
+        options.push({
+          storage: storage,
+          folder: folder
+        })
+      })
     })
+
+    let currentOption = options.filter((option) => option.storage.key === storageKey && option.folder.key === folderKey)[0]
+
+    let optionList = options
+      .map((option, index) => {
+        return (
+          <div styleName={index === this.state.optionIndex
+              ? 'search-optionList-item--active'
+              : 'search-optionList-item'
+            }
+            key={option.storage.key + '-' + option.folder.key}
+            onClick={(e) => this.handleOptionClick(option.folder.key)(e)}
+          >
+            <span styleName='search-optionList-item-name'
+              style={{borderColor: option.folder.color}}
+            >
+              {option.storage.name}/{option.folder.name}
+            </span>
+          </div>
+        )
+      })
 
     return (
       <div className={_.isString(className)
@@ -239,10 +255,11 @@ class FolderSelect extends React.Component {
           </div>
           : <div styleName='idle'>
             <div styleName='idle-label'>
-              <i style={{color: currentFolder.color}}
-                className='fa fa-fw fa-cube'
-              />&nbsp;
-              {currentFolder.name}
+              <span styleName='idle-label-name'
+                style={{borderColor: currentOption.folder.color}}
+              >
+                {currentOption.storage.name}/{currentOption.folder.name}
+              </span>
             </div>
             <i styleName='idle-caret' className='fa fa-fw fa-caret-down'/>
           </div>

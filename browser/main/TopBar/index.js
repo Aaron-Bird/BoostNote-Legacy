@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './TopBar.styl'
 import activityRecord from 'browser/lib/activityRecord'
-import Repository from 'browser/lib/Repository'
 import _ from 'lodash'
 import Commander from 'browser/main/lib/Commander'
+import dataApi from 'browser/main/lib/dataApi'
 
 const OSX = window.process.platform === 'darwin'
 
@@ -33,63 +33,29 @@ class TopBar extends React.Component {
   }
 
   handleNewPostButtonClick (e) {
-    activityRecord.emit('ARTICLE_CREATE')
-
-    let { params, repositories } = this.props
-
-    let folderKey = params.folderKey
-    let repositoryKey = params.repositoryKey
-    if (folderKey == null) {
-      let repository = _.find(repositories, {key: repositoryKey})
-      if (repository == null) {
-        repository = repositories[0]
-      }
-      if (repository != null) {
-        repositoryKey = repository.key
-        folderKey = repository.folders[0] != null && repository.folders[0].key
-      }
-      if (folderKey == null) throw new Error('no folder exists')
-    }
-
-    let newNote = {
-      title: 'New Note',
-      content: '',
-      folder: folderKey,
-      tags: [],
-      mode: 'markdown'
-    }
-
-    Repository
-      .find(repositoryKey)
-      .then((repo) => {
-        return repo.addNote(newNote)
+    let { storages, params, dispatch } = this.props
+    let storage = _.find(storages, {key: params.storageKey})
+    if (storage == null) storage = storages[0]
+    if (storage == null) throw new Error('No storage to create a note')
+    let folder = _.find(storage.folders, {key: params.folderKey})
+    if (folder == null) folder = storage.folders[0]
+    if (folder == null) throw new Error('No folder to craete a note')
+    // activityRecord.emit('ARTICLE_CREATE')
+    console.log(storage, folder)
+    dataApi
+      .createNote(storage.key, folder.key, {
+        title: '',
+        content: ''
       })
       .then((note) => {
-        let { dispatch, location } = this.props
-        let { router } = this.context
         dispatch({
-          type: 'ADD_NOTE',
-          repository: repositoryKey,
+          type: 'CREATE_NOTE',
           note: note
         })
-
-        router.push({
-          pathname: location.pathname,
-          query: {
-            key: `${note._repository.key}-${note.key}`
-          }
-        })
-        Commander.fire('note-detail:focus')
-      })
-      .catch((err) => {
-        console.error(err)
       })
   }
 
   handleTutorialButtonClick (e) {
-  }
-
-  handleLinksButton (e) {
   }
 
   render () {
@@ -124,7 +90,7 @@ class TopBar extends React.Component {
               onClick={(e) => this.handleNewPostButtonClick(e)}>
               <i className='fa fa-plus'/>
               <span styleName='left-control-newPostButton-tooltip'>
-                New Post {OSX ? '⌘' : '^'} + n
+                New Note {OSX ? '⌘' : '^'} + n
               </span>
             </button>
           </div>
@@ -137,11 +103,7 @@ class TopBar extends React.Component {
           >
             ?<span styleName='left-control-newPostButton-tooltip'>How to use</span>
           </button>
-          <button styleName='right-linksButton'
-            onClick={(e) => this.handleLinksButton(e)}
-          >
-            <img src='../resources/app.png' width='44' height='44'/>
-          </button>
+
         </div>
       </div>
     )

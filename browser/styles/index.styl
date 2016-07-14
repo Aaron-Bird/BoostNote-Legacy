@@ -1,7 +1,7 @@
 $brand-color = #6AA5E9
 
-$danger-color = red
-$danger-lighten-color = #FFE5E6
+$danger-color = #c9302c
+$danger-lighten-color = lighten(#c9302c, 5%)
 
 // Layouts
 $statusBar-height = 24px
@@ -65,16 +65,32 @@ colorDefaultButton()
 // Primary button(Brand color)
 $primary-button-background = $brand-color
 $primary-button-background--hover = darken($brand-color, 5%)
-$primary-button-background--hover = darken($brand-color, 10%)
+$primary-button-background--active = darken($brand-color, 10%)
 
 colorPrimaryButton()
+  color white
   background-color $primary-button-background
   &:hover
     background-color $primary-button-background--hover
   &:active
     background-color $primary-button-background--active
   &:active:hover
-    background-color $primary-button-background--active
+    background-color $primary-button-background--activ
+
+// Danger button(Brand color)
+$danger-button-background = #c9302c
+$danger-button-background--hover = darken(#c9302c, 5%)
+$danger-button-background--active = darken(#c9302c, 10%)
+
+colorDangerButton()
+  color white
+  background-color $danger-button-background
+  &:hover
+    background-color $danger-button-background--hover
+  &:active
+    background-color $danger-button-background--active
+  &:active:hover
+    background-color $danger-button-background--active
 
 /**
 * Nav
@@ -101,7 +117,7 @@ navButtonColor()
 
 $modal-z-index = 1002
 $modal-background = white
-$modal-margin = 64px auto 0
+$modal-margin = 64px auto 64px
 $modal-border-radius = 5px
 
 modal()
@@ -111,3 +127,4 @@ modal()
   background-color $modal-background
   overflow hidden
   border-radius $modal-border-radius
+  box-shadow 2px 2px 10px gray

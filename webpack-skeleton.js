@@ -42,6 +42,7 @@ var config = {
     'markdown-it-checkbox',
     'season',
     'devtron',
+    'sander',
     {
       react: 'var React',
       'react-dom': 'var ReactDOM',

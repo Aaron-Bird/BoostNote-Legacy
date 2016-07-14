@@ -1,7 +1,4 @@
-@import '../vars'
-@import '../mixins/*'
 global-reset()
-@import '../theme/*'
 
 DEFAULT_FONTS = 'Lato', helvetica, arial, sans-serif
 
@@ -23,20 +20,21 @@ div, span, a, button, input, textarea
   box-sizing border-box
 
 a
-  color brandColor
+  color $brand-color
   &:hover
-    color lighten(brandColor, 5%)
+    color lighten($brand-color, 5%)
   &:visited
-    color brandColor
+    color $brand-color
 
 hr
   border-top none
-  border-bottom solid 1px borderColor
+  border-bottom solid 1px $border-color
   margin 15px 0
 
 button
   font-weight 400
   cursor pointer
+  font-size 12px
   &:focus, &.focus
     outline none
 
@@ -52,30 +50,6 @@ button
     display block
     margin-bottom 5px
 
-.block-input, .inline-input
-  border solid 1px borderColor
-  padding 0 10px
-  font-size 1em
-  height 33px
-  border-radius 5px
-  box-sizing border-box
-  &:focus, &.focus
-    border solid 1px brandBorderColor
-    outline none
-  &.circleInput
-    border-radius 16.5px
-
-.block-input
-  display block
-  width 100%
-
-.inline-input
-  display inline-block
-  margin-right 5px
-
-.relative
-  position relative
-
 textarea.block-input
   resize vertical
   height 125px
@@ -86,7 +60,7 @@ textarea.block-input
   fullsize()
 
 modalZIndex= 1000
-modalBackColor = transparentify(black, 65%)
+modalBackColor = transparentify(white, 65%)
 
 .ModalBase
   fixed top left bottom right
@@ -97,13 +71,3 @@ modalBackColor = transparentify(black, 65%)
     absolute top left bottom right
     background-color modalBackColor
     z-index modalZIndex + 1
-  .modal
-    position relative
-    width 650px
-    margin 50px auto 0
-    z-index modalZIndex + 2
-    background-color white
-    padding 15px
-    color #666666
-    border-radius 5px
-

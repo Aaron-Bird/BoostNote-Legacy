@@ -188,7 +188,6 @@ ol
   &>li>ul, &>li>ol
     margin 0
 code
-  font-family Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro, monospace
   padding 0.2em 0.4em
   background-color #f7f7f7
   border-radius 3px
@@ -199,13 +198,14 @@ code
   margin-left 2px
 pre
   padding 1em !important
-  background-color #f7f7f7 !important
+  border solid 1px alpha(borderColor, 0.5)
   border-radius 5px
   overflow-x auto
   margin 0 0 1em
   line-height 1.35
   code
     margin 0
+    background-color inherit
     padding 0
     border none
     border-radius 0
@@ -213,9 +213,9 @@ pre
       border none
       margin -5px
   &>span.lineNumber
-    font-family Monaco, Menlo, 'Ubuntu Mono', Consolas, source-code-pro, monospace
     display none
     float left
+    font-size 0.85em
     margin 0 0.5em 0 -0.5em
     border-right 1px solid
     text-align right

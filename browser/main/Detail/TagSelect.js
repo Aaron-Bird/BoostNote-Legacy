@@ -35,7 +35,9 @@ class TagSelect extends React.Component {
   removeLastTag () {
     let { value } = this.props
 
-    value = value.slice()
+    value = _.isArray(value)
+      ? value.slice()
+      : []
     value.pop()
     value = _.uniq(value)
 
@@ -60,7 +62,9 @@ class TagSelect extends React.Component {
       return
     }
 
-    value = value.slice()
+    value = _.isArray(value)
+      ? value.slice()
+      : []
     value.push(newTag)
     value = _.uniq(value)
 
@@ -93,20 +97,22 @@ class TagSelect extends React.Component {
   render () {
     let { value, className } = this.props
 
-    let tagList = value.map((tag) => {
-      return (
-        <span styleName='tag'
-          key={tag}
-        >
-          <button styleName='tag-removeButton'
-            onClick={(e) => this.handleTagRemoveButtonClick(tag)(e)}
+    let tagList = _.isArray(value)
+      ? value.map((tag) => {
+        return (
+          <span styleName='tag'
+            key={tag}
           >
-            <i className='fa fa-times fa-fw'/>
-          </button>
-          <span styleName='tag-label'>{tag}</span>
-        </span>
-      )
-    })
+            <button styleName='tag-removeButton'
+              onClick={(e) => this.handleTagRemoveButtonClick(tag)(e)}
+            >
+              <i className='fa fa-times fa-fw'/>
+            </button>
+            <span styleName='tag-label'>{tag}</span>
+          </span>
+        )
+      })
+      : []
 
     return (
       <div className={_.isString(className)
@@ -134,7 +140,7 @@ class TagSelect extends React.Component {
 
 TagSelect.propTypes = {
   className: PropTypes.string,
-  value: PropTypes.arrayOf(PropTypes.string).isRequired,
+  value: PropTypes.arrayOf(PropTypes.string),
   onChange: PropTypes.func
 
 }
