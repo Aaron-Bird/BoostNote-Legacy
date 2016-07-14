@@ -3,6 +3,8 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './InfoTab.styl'
 
 const appVersion = global.process.version
+const electron = require('electron')
+const { shell } = electron
 
 class InfoTab extends React.Component {
   constructor (props) {
@@ -10,6 +12,11 @@ class InfoTab extends React.Component {
 
     this.state = {
     }
+  }
+
+  handleLinkClick (e) {
+    shell.openExternal(e.currentTarget.href)
+    e.preventDefault()
   }
 
   render () {
@@ -25,7 +32,9 @@ class InfoTab extends React.Component {
             - License : GPLv3
           </li>
           <li>
-            - Issue Tracker : <a href='https://github.com/BoostIO/Boostnote/issues'>https://github.com/BoostIO/Boostnote/issues</a>
+            - Issue Tracker : <a href='https://github.com/BoostIO/Boostnote/issues'
+              onClick={(e) => this.handleLinkClick(e)}
+            >https://github.com/BoostIO/Boostnote/issues</a>
           </li>
         </ul>
       </div>

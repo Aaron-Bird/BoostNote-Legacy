@@ -1,14 +1,12 @@
 import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './ConfigTab.styl'
-import fetchConfig from 'browser/lib/fetchConfig'
 import hljsTheme from 'browser/lib/hljsThemes'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import store from 'browser/main/store'
 
 const electron = require('electron')
 const ipc = electron.ipcRenderer
-const remote = electron.remote
 const ace = window.ace
 
 const OSX = global.process.platform === 'darwin'
