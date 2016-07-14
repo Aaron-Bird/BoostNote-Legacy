@@ -13,23 +13,25 @@ class Detail extends React.Component {
   }
 
   render () {
-    let { repositories, location } = this.props
+    let { storages, location, notes, config } = this.props
     let note = null
     if (location.query.key != null) {
       let splitted = location.query.key.split('-')
-      let repoKey = splitted.shift()
+      let storageKey = splitted.shift()
+      let folderKey = splitted.shift()
       let noteKey = splitted.shift()
-      let repo = _.find(repositories, {key: repoKey})
-      if (_.isObject(repo) && _.isArray(repo.notes)) {
-        note = _.find(repo.notes, {key: noteKey})
-      }
+
+      note = _.find(notes, {
+        storage: storageKey,
+        folder: folderKey,
+        key: noteKey
+      })
     }
 
     if (note == null) {
       return (
-        <div className='Detail'
+        <div styleName='root'
           style={this.props.style}
-          styleName='root'
           tabIndex='0'
         >
           <div styleName='empty'>
@@ -42,9 +44,10 @@ class Detail extends React.Component {
     return (
       <NoteDetail
         note={note}
+        config={config}
         {..._.pick(this.props, [
           'dispatch',
-          'repositories',
+          'storages',
           'style',
           'ignorePreviewPointerEvents'
         ])}
@@ -55,7 +58,7 @@ class Detail extends React.Component {
 
 Detail.propTypes = {
   dispatch: PropTypes.func,
-  repositories: PropTypes.array,
+  storages: PropTypes.array,
   style: PropTypes.shape({
     left: PropTypes.number
   }),

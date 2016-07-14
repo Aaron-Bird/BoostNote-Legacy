@@ -2,43 +2,22 @@ import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './SideNav.styl'
 import { openModal } from 'browser/main/lib/modal'
-import Preferences from '../modals/Preferences'
-import RepositorySection from './RepositorySection'
-import NewRepositoryModal from '../modals/NewRepositoryModal'
+import PreferencesModal from '../modals/PreferencesModal'
 import ConfigManager from 'browser/main/lib/ConfigManager'
+import StorageItem from './StorageItem'
 
 const electron = require('electron')
 const { remote } = electron
-const Menu = remote.Menu
-const MenuItem = remote.MenuItem
 
 class SideNav extends React.Component {
   // TODO: should not use electron stuff v0.7
   handleMenuButtonClick (e) {
-    var menu = new Menu()
-    menu.append(new MenuItem({
-      label: 'Preferences',
-      click: (e) => this.handlePreferencesButtonClick(e)
-    }))
-    menu.append(new MenuItem({ type: 'separator' }))
-    menu.append(new MenuItem({
-      label: 'Mount Repository',
-      click: (e) => this.handleNewRepositoryButtonClick(e)
-    }))
-    menu.popup(remote.getCurrentWindow())
-  }
-
-  handleNewRepositoryButtonClick (e) {
-    openModal(NewRepositoryModal)
-  }
-
-  handlePreferencesButtonClick (e) {
-    openModal(Preferences)
+    openModal(PreferencesModal)
   }
 
   handleHomeButtonClick (e) {
     let { router } = this.context
-    router.push('/repositories')
+    router.push('/home')
   }
 
   handleStarredButtonClick (e) {
@@ -57,25 +36,22 @@ class SideNav extends React.Component {
   }
 
   render () {
-    let { repositories, dispatch, location, config } = this.props
+    let { storages, location, config } = this.props
 
     let isFolded = config.isSideNavFolded
     let isHomeActive = location.pathname.match(/^\/home$/)
     let isStarredActive = location.pathname.match(/^\/starred$/)
-
-    let repositorieElements = repositories
-      .map((repo) => {
-        return <RepositorySection
-          key={repo.key}
-          repository={repo}
-          dispatch={dispatch}
-          isFolded={isFolded}
-        />
-      })
+    let storageList = storages.map((storage) => {
+      return <StorageItem
+        key={storage.key}
+        storage={storage}
+        location={location}
+      />
+    })
 
     return (
       <div className='SideNav'
-        styleName={isFolded ? 'root-folded' : 'root'}
+        styleName={isFolded ? 'root--folded' : 'root'}
         tabIndex='1'
       >
         <div styleName='top'>
@@ -102,9 +78,9 @@ class SideNav extends React.Component {
           </button>
         </div>
 
-        <div styleName='repositoryList'>
-          {repositories.length > 0 ? repositorieElements : (
-            <div styleName='repositoryList-empty'>No repository mount.</div>
+        <div styleName='storageList'>
+          {storageList.length > 0 ? storageList : (
+            <div styleName='storageList-empty'>No storage mount.</div>
           )}
         </div>
 
@@ -127,7 +103,7 @@ SideNav.contextTypes = {
 
 SideNav.propTypes = {
   dispatch: PropTypes.func,
-  repositories: PropTypes.array,
+  storages: PropTypes.array,
   config: PropTypes.shape({
     isSideNavFolded: PropTypes.bool
   }),

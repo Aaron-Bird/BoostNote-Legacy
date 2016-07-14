@@ -3,7 +3,7 @@ import Main from './Main'
 import store from './store'
 import React from 'react'
 import ReactDOM from 'react-dom'
-require('!!style!css!stylus?sourceMap!../styles/main/index.styl')
+require('!!style!css!stylus?sourceMap!./global.styl')
 import activityRecord from 'browser/lib/activityRecord'
 import fetchConfig from '../lib/fetchConfig'
 import { Router, Route, IndexRoute, IndexRedirect, hashHistory } from 'react-router'
@@ -84,11 +84,10 @@ ReactDOM.render((
         <IndexRedirect to='/home'/>
         <Route path='home'/>
         <Route path='starred'/>
-        <Route path='repositories'>
+        <Route path='storages'>
           <IndexRedirect to='/home'/>
-          <Route path=':repositoryKey'>
+          <Route path=':storageKey'>
             <IndexRoute/>
-            <Route path='settings'/>
             <Route path='folders/:folderKey'/>
           </Route>
         </Route>

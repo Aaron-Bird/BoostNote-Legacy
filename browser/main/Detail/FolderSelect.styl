@@ -3,7 +3,7 @@
   border solid 1px transparent
   line-height 34px
   vertical-align middle
-  border-radius 5px
+  border-radius 2px
   transition 0.15s
   user-select none
   &:hover
@@ -26,6 +26,10 @@
   padding 0 0 0 5px
   right 20px
   overflow ellipsis
+
+.idle-label-name
+  border-left solid 4px transparent
+  padding 2px 5px
 
 .idle-caret
   absolute right top
@@ -53,11 +57,11 @@
   border $ui-border
   z-index 200
   background-color white
-  border-radius 5px
+  border-radius 2px
 
 .search-optionList-item
   height 34px
-  width 120px
+  width 250px
   box-sizing border-box
   padding 0 5px
   overflow ellipsis
@@ -72,3 +76,6 @@
   &:hover
     background-color $ui-button--active-backgroundColor
     color $ui-button--active-color
+.search-optionList-item-name
+  border-left solid 4px transparent
+  padding 2px 5px

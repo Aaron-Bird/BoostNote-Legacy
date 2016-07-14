@@ -1,176 +1,83 @@
 import { combineReducers, createStore } from 'redux'
-import _ from 'lodash'
 import { routerReducer } from 'react-router-redux'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 
-/**
- * Repositories
- * ```
- * repositories = [{
- *   key: String,
- *   name: String,
- *   path: String, // path of repository
- *   status: String, // status of repository [IDLE, LOADING, READY, ERROR]
- *   folders: {
- *     name: String,
- *     color: String
- *   },
- *   notes: [{
- *     key: String,
- *     title: String,
- *     content: String,
- *     folder: String,
- *     tags: [String],
- *     createdAt: Date,
- *     updatedAt: Date
- *   }]
- * }]
- * ```
- */
-const initialRepositories = []
-
-function repositories (state = initialRepositories, action) {
+function storages (state = [], action) {
   console.info('REDUX >> ', action)
   switch (action.type) {
     case 'INIT_ALL':
-      action.data.forEach((repo) => {
-        repo.notes.forEach((note) => {
-          note._repository = repo
-        })
-      })
-      return action.data.slice()
-    case 'ADD_REPOSITORY':
+      return action.storages
+    case 'ADD_STORAGE':
       {
-        let repos = state.slice()
+        let storages = state.slice()
 
-        repos.push(action.repository)
+        storages.push(action.storage)
 
-        return repos
-      }
-    case 'REMOVE_REPOSITORY':
-      {
-        let repos = state.slice()
-
-        let targetIndex = _.findIndex(repos, {key: action.key})
-        if (targetIndex > -1) {
-          repos.splice(targetIndex, 1)
-        }
-
-        return repos
+        return storages
       }
     case 'ADD_FOLDER':
+    case 'REMOVE_FOLDER':
+    case 'UPDATE_STORAGE':
       {
-        let repos = state.slice()
-        let targetRepo = _.find(repos, {key: action.key})
+        let storages = state.slice()
+        storages = storages
+          .filter((storage) => storage.key !== action.storage.key)
+        storages.push(action.storage)
 
-        if (targetRepo == null) return state
-
-        let targetFolderIndex = _.findIndex(targetRepo.folders, {key: action.folder.key})
-        if (targetFolderIndex < 0) {
-          targetRepo.folders.push(action.folder)
-        } else {
-          targetRepo.folders.splice(targetFolderIndex, 1, action.folder)
-        }
-
-        return repos
+        return storages
       }
-    case 'EDIT_FOLDER':
+    case 'REMOVE_STORAGE':
       {
-        let repos = state.slice()
-        let targetRepo = _.find(repos, {key: action.key})
+        let storages = state.slice()
+        storages = storages
+          .filter((storage) => storage.key !== action.key)
 
-        if (targetRepo == null) return state
-
-        let targetFolderIndex = _.findIndex(targetRepo.folders, {key: action.folder.key})
-        if (targetFolderIndex < 0) {
-          targetRepo.folders.push(action.folder)
-        } else {
-          targetRepo.folders.splice(targetFolderIndex, 1, action.folder)
-        }
-
-        return repos
+        return storages
       }
-    /**
-     *  Remove a folder from the repository
-     * {
-     *  type: 'REMOVE_FOLDER',
-     *  repository: repositoryKey,
-     *  folder: folderKey
-     * }
-     */
+  }
+  return state
+}
+
+function notes (state = [], action) {
+  switch (action.type) {
+    case 'INIT_ALL':
+      return action.notes
+    case 'ADD_STORAGE':
+      {
+        let notes = state.slice()
+
+        notes.concat(action.notes)
+
+        return notes
+      }
+    case 'REMOVE_STORAGE':
+      {
+        let notes = state.slice()
+        notes = notes
+          .filter((note) => note.storage !== action.key)
+
+        return notes
+      }
     case 'REMOVE_FOLDER':
       {
-        let repos = state.slice()
-        let targetRepo = _.find(repos, {key: action.repository})
+        let notes = state.slice()
+        notes = notes
+          .filter((note) => note.storage !== action.storage.key || note.folder !== action.key)
 
-        if (targetRepo == null) return state
-
-        let targetFolderIndex = _.findIndex(targetRepo.folders, {key: action.folder})
-        if (targetFolderIndex > -1) {
-          targetRepo.folders.splice(targetFolderIndex, 1)
-        }
-
-        return repos
+        return notes
       }
-    case 'ADD_NOTE':
+    case 'CREATE_NOTE':
       {
-        let repos = state.slice()
-        let targetRepo = _.find(repos, {key: action.repository})
-
-        if (targetRepo == null) return state
-        action.note._repository = targetRepo
-        targetRepo.notes.push(action.note)
-
-        return repos
+        let notes = state.slice()
+        notes.push(action.note)
+        return notes
       }
-    case 'SAVE_NOTE':
+    case 'UPDATE_NOTE':
       {
-        let repos = state.slice()
-        let targetRepo = _.find(repos, {key: action.repository})
-
-        if (targetRepo == null) return state
-
-        let targetNoteIndex = _.findIndex(targetRepo.notes, {key: action.note.key})
-        action.note.updatedAt = Date.now()
-        action.note._repository = targetRepo
-
-        if (targetNoteIndex > -1) {
-          targetRepo.notes.splice(targetNoteIndex, 1, action.note)
-        } else {
-          targetRepo.notes.push(action.note)
-        }
-
-        return repos
-      }
-    case 'STAR_NOTE':
-      {
-        let repos = state.slice()
-        let targetRepo = _.find(repos, {key: action.repository})
-
-        if (targetRepo == null) return state
-
-        let targetNoteIndex = _.findIndex(targetRepo.notes, {key: action.note})
-        if (targetNoteIndex > -1) {
-          targetRepo.starred.push(action.note)
-          targetRepo.starred = _.uniq(targetRepo.starred)
-        } else {
-          return state
-        }
-
-        return repos
-      }
-    case 'UNSTAR_NOTE':
-      {
-        let repos = state.slice()
-        let targetRepo = _.find(repos, {key: action.repository})
-
-        if (targetRepo == null) return state
-
-        targetRepo.starred = targetRepo.starred
-          .filter((starredKey) => starredKey !== action.note)
-        targetRepo.starred = _.uniq(targetRepo.starred)
-
-        return repos
+        let notes = state.slice()
+        notes = notes.filter((note) => note.key !== action.note.key || note.folder !== action.note.folder || note.storage !== action.note.storage)
+        notes.push(action.note)
+        return notes
       }
   }
   return state
@@ -191,12 +98,15 @@ function config (state = defaultConfig, action) {
       return Object.assign({}, state)
     case 'SET_CONFIG':
       return Object.assign({}, state, action.config)
+    case 'SET_UI':
+      return Object.assign({}, state, action.config)
   }
   return state
 }
 
 let reducer = combineReducers({
-  repositories,
+  storages,
+  notes,
   config,
   routing: routerReducer
 })

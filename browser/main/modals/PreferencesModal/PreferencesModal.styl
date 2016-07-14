@@ -1,0 +1,37 @@
+.root
+  modal()
+  max-width 540px
+  min-height 400px
+  height 80%
+  overflow hidden
+  position relative
+
+.nav
+  absolute top left right
+  height 50px
+  background-color $ui-backgroundColor
+  border-bottom solid 1px $ui-borderColor
+
+.nav-button
+  width 80px
+  height 50px
+  border none
+  background-color transparent
+  color #939395
+  font-size 14px
+  &:hover
+    color #515151
+
+.nav-button--active
+  @extend .nav-button
+  color #6AA5E9
+  &:hover
+    color #6AA5E9
+
+.nav-button-icon
+  display block
+
+.content
+  absolute left right bottom
+  top 50px
+  overflow-y auto

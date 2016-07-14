@@ -2,19 +2,26 @@ import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './NoteDetail.styl'
 import MarkdownEditor from 'browser/components/MarkdownEditor'
-import queue from 'browser/main/lib/queue'
 import StarButton from './StarButton'
 import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
-import Repository from 'browser/lib/Repository'
 import Commander from 'browser/main/lib/Commander'
+import dataApi from 'browser/main/lib/dataApi'
+
+const electron = require('electron')
+const { remote } = electron
+const Menu = remote.Menu
+const MenuItem = remote.MenuItem
 
 class NoteDetail extends React.Component {
   constructor (props) {
     super(props)
 
     this.state = {
-      note: Object.assign({}, props.note),
+      note: Object.assign({
+        title: '',
+        content: ''
+      }, props.note),
       isDispatchQueued: false
     }
     this.dispatchTimer = null
@@ -84,86 +91,74 @@ class NoteDetail extends React.Component {
 
     note.content = this.refs.content.value
     note.tags = this.refs.tags.value
-    note.folder = this.refs.folder.value
+    note.title = this.findTitle(note.content)
+    note.updatedAt = new Date()
 
     this.setState({
-      note,
-      isDispatchQueued: true
+      note
     }, () => {
-      this.queueDispatch()
+      this.save()
     })
   }
 
-  cancelDispatchQueue () {
-    if (this.dispatchTimer != null) {
-      window.clearTimeout(this.dispatchTimer)
-      this.dispatchTimer = null
-    }
-  }
+  save () {
+    let { note, dispatch } = this.props
 
-  queueDispatch () {
-    this.cancelDispatchQueue()
-
-    this.dispatchTimer = window.setTimeout(() => {
-      this.dispatch()
-      this.setState({
-        isDispatchQueued: false
-      })
-    }, 100)
-  }
-
-  dispatch () {
-    let { note } = this.state
-    note = Object.assign({}, note)
-    let repoKey = note._repository.key
-    note.title = this.findTitle(note.content)
-
-    let { dispatch } = this.props
     dispatch({
-      type: 'SAVE_NOTE',
-      repository: repoKey,
-      note: note
+      type: 'UPDATE_NOTE',
+      note: this.state.note
     })
-    queue.save(repoKey, note)
+
+    dataApi
+      .updateNote(note.storage, note.folder, note.key, this.state.note)
+  }
+
+  handleFolderChange (e) {
+
   }
 
   handleStarButtonClick (e) {
     let { note } = this.state
-    let { dispatch } = this.props
 
-    let isStarred = note._repository.starred.some((starredKey) => starredKey === note.key)
+    note.isStarred = !note.isStarred
 
-    if (isStarred) {
-      Repository
-        .find(note._repository.key)
-        .then((repo) => {
-          return repo.unstarNote(note.key)
-        })
+    this.setState({
+      note
+    }, () => {
+      this.save()
+    })
+  }
 
-      dispatch({
-        type: 'UNSTAR_NOTE',
-        repository: note._repository.key,
-        note: note.key
-      })
-    } else {
-      Repository
-        .find(note._repository.key)
-        .then((repo) => {
-          return repo.starNote(note.key)
-        })
+  exportAsFile () {
 
-      dispatch({
-        type: 'STAR_NOTE',
-        repository: note._repository.key,
-        note: note.key
-      })
-    }
+  }
+
+  handleShareButtonClick (e) {
+    let menu = new Menu()
+    menu.append(new MenuItem({
+      label: 'Export as a File',
+      click: (e) => this.handlePreferencesButtonClick(e)
+    }))
+    menu.append(new MenuItem({
+      label: 'Export to Web',
+      disabled: true,
+      click: (e) => this.handlePreferencesButtonClick(e)
+    }))
+    menu.popup(remote.getCurrentWindow())
+  }
+
+  handleContextButtonClick (e) {
+    let menu = new Menu()
+    menu.append(new MenuItem({
+      label: 'Delete',
+      click: (e) => this.handlePreferencesButtonClick(e)
+    }))
+    menu.popup(remote.getCurrentWindow())
   }
 
   render () {
+    let { storages, config } = this.props
     let { note } = this.state
-    let isStarred = note._repository.starred.some((starredKey) => starredKey === note.key)
-    let folders = note._repository.folders
 
     return (
       <div className='NoteDetail'
@@ -174,15 +169,11 @@ class NoteDetail extends React.Component {
           <div styleName='info-left'>
 
             <div styleName='info-left-top'>
-              <StarButton styleName='info-left-top-starButton'
-                onClick={(e) => this.handleStarButtonClick(e)}
-                isActive={isStarred}
-              />
               <FolderSelect styleName='info-left-top-folderSelect'
-                value={this.state.note.folder}
+                value={this.state.note.storage + '-' + this.state.note.folder}
                 ref='folder'
-                folders={folders}
-                onChange={() => this.handleChange()}
+                storages={storages}
+                onChange={(e) => this.handleFolderChange(e)}
               />
             </div>
             <div styleName='info-left-bottom'>
@@ -195,13 +186,18 @@ class NoteDetail extends React.Component {
             </div>
           </div>
           <div styleName='info-right'>
-            <button styleName='info-right-button'>
-              <i className='fa fa-clipboard fa-fw'/>
-            </button>
-            <button styleName='info-right-button'>
+            <StarButton styleName='info-right-button'
+              onClick={(e) => this.handleStarButtonClick(e)}
+              isActive={note.isStarred}
+            />
+            <button styleName='info-right-button'
+              onClick={(e) => this.handleShareButtonClick(e)}
+            >
               <i className='fa fa-share-alt fa-fw'/>
             </button>
-            <button styleName='info-right-button'>
+            <button styleName='info-right-button'
+              onClick={(e) => this.handleContextButtonClick(e)}
+            >
               <i className='fa fa-ellipsis-v'/>
             </button>
           </div>
@@ -210,6 +206,7 @@ class NoteDetail extends React.Component {
           <MarkdownEditor
             ref='content'
             styleName='body-noteEditor'
+            config={config}
             value={this.state.note.content}
             onChange={(e) => this.handleChange(e)}
             ignorePreviewPointerEvents={this.props.ignorePreviewPointerEvents}

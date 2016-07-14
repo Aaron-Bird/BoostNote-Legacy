@@ -27,19 +27,22 @@ class MarkdownEditor extends React.Component {
   }
 
   handleContextMenu (e) {
-    let newStatus = this.state.status === 'PREVIEW'
-      ? 'CODE'
-      : 'PREVIEW'
-    this.setState({
-      status: newStatus
-    }, () => {
-      if (newStatus === 'CODE') {
-        this.refs.code.focus()
-      } else {
-        this.refs.code.blur()
-        this.refs.preview.focus()
-      }
-    })
+    let { config } = this.props
+    if (config.editor.switchPreview === 'RIGHTCLICK') {
+      let newStatus = this.state.status === 'PREVIEW'
+        ? 'CODE'
+        : 'PREVIEW'
+      this.setState({
+        status: newStatus
+      }, () => {
+        if (newStatus === 'CODE') {
+          this.refs.code.focus()
+        } else {
+          this.refs.code.blur()
+          this.refs.preview.focus()
+        }
+      })
+    }
   }
 
   focus () {
@@ -59,7 +62,14 @@ class MarkdownEditor extends React.Component {
   }
 
   render () {
-    let { className, value } = this.props
+    let { className, value, config } = this.props
+    let editorFontSize = parseInt(config.editor.fontSize, 10)
+    if (!(editorFontSize > 0 && editorFontSize < 101)) editorFontSize = 14
+    let editorIndentSize = parseInt(config.editor.indentSize, 10)
+    if (!(editorFontSize > 0 && editorFontSize < 132)) editorIndentSize = 4
+
+    let previewStyle = {}
+    if (this.props.ignorePreviewPointerEvents) previewStyle.pointerEvents = 'none'
 
     return (
       <div className={className == null
@@ -72,15 +82,23 @@ class MarkdownEditor extends React.Component {
           ref='code'
           mode='markdown'
           value={value}
+          theme={config.editor.theme}
+          fontFamily={config.editor.fontFamily}
+          fontSize={editorFontSize}
+          indentType={config.editor.indentType}
+          indentSize={editorIndentSize}
           onChange={(e) => this.handleChange(e)}
         />
         <MarkdownPreview styleName={this.state.status === 'PREVIEW'
             ? 'preview'
             : 'preview--hide'
           }
-          style={this.props.ignorePreviewPointerEvents
-            ? {pointerEvents: 'none'} : {}
-          }
+          style={previewStyle}
+          fontSize={config.preview.fontSize}
+          fontFamily={config.preview.fontFamily}
+          codeBlockTheme={config.preview.theme}
+          codeBlockFontFamily={config.editor.fontFamily}
+          lineNumber={config.preview.lineNumber}
           ref='preview'
           onContextMenu={(e) => this.handleContextMenu(e)}
           tabIndex='0'

@@ -1,18 +1,18 @@
-import Repository from 'browser/lib/Repository'
+import Storage from 'browser/lib/Storage'
 import _ from 'lodash'
 
 let tasks = []
 
-function _save (task, repoKey, note) {
+function _save (task, storageKey, note) {
   note = Object.assign({}, note)
-  delete note._repository
+  delete note._storage
 
   task.status = 'process'
 
-  Repository
-    .find(repoKey)
-    .then((repo) => {
-      return repo.updateNote(note.key, note)
+  Storage
+    .find(storageKey)
+    .then((storage) => {
+      return storage.updateNote(note.key, note)
     })
     .then((note) => {
       tasks.splice(tasks.indexOf(task), 1)
@@ -25,8 +25,8 @@ function _save (task, repoKey, note) {
     })
 }
 
-const queueSaving = function (repoKey, note) {
-  let key = `${repoKey}-${note.key}`
+const queueSaving = function (storageKey, note) {
+  let key = `${storageKey}-${note.key}`
 
   let taskIndex = _.findIndex(tasks, {
     type: 'SAVE_NOTE',
@@ -47,7 +47,7 @@ const queueSaving = function (repoKey, note) {
   }
 
   task.timer = window.setTimeout(() => {
-    _save(task, repoKey, note)
+    _save(task, storageKey, note)
   }, 1500)
   tasks.push(task)
 }
