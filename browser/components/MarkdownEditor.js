@@ -96,7 +96,7 @@ class MarkdownEditor extends React.Component {
           style={previewStyle}
           fontSize={config.preview.fontSize}
           fontFamily={config.preview.fontFamily}
-          codeBlockTheme={config.preview.theme}
+          codeBlockTheme={config.preview.codeBlockTheme}
           codeBlockFontFamily={config.editor.fontFamily}
           lineNumber={config.preview.lineNumber}
           ref='preview'
