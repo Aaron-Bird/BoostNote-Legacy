@@ -213,7 +213,8 @@ class FolderSelect extends React.Component {
             <span styleName='search-optionList-item-name'
               style={{borderColor: option.folder.color}}
             >
-              {option.storage.name}/{option.folder.name}
+              {option.folder.name}
+              <span styleName='search-optionList-item-name-surfix'>in {option.storage.name}</span>
             </span>
           </div>
         )
@@ -258,7 +259,8 @@ class FolderSelect extends React.Component {
               <span styleName='idle-label-name'
                 style={{borderColor: currentOption.folder.color}}
               >
-                {currentOption.storage.name}/{currentOption.folder.name}
+                {currentOption.folder.name}
+                <span styleName='idle-label-name-surfix'>in {currentOption.storage.name}</span>
               </span>
             </div>
             <i styleName='idle-caret' className='fa fa-fw fa-caret-down'/>

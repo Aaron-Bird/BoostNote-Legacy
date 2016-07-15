@@ -213,7 +213,7 @@ class NoteList extends React.Component {
     this.notes = notes
     // this.notes = this.getNotes()
 
-    let noteElements = notes
+    let noteList = notes
       .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
       .map((note) => {
         let storage = _.find(storages, {key: note.storage})
@@ -244,7 +244,8 @@ class NoteList extends React.Component {
                 <span styleName='item-info-left-folder'
                   style={{borderColor: folder.color}}
                 >
-                  {storage.name}/{folder.name}
+                  {folder.name}
+                  <span styleName='item-info-left-folder-surfix'>in {storage.name}</span>
                 </span>
               </div>
 
@@ -277,7 +278,7 @@ class NoteList extends React.Component {
         onKeyDown={(e) => this.handleNoteListKeyDown(e)}
         style={this.props.style}
       >
-        {noteElements}
+        {noteList}
       </div>
     )
   }
