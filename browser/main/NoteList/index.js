@@ -7,8 +7,6 @@ import _ from 'lodash'
 class NoteList extends React.Component {
   constructor (props) {
     super(props)
-
-    // this.focusHandler = (e) => this.focus()
   }
 
   componentDidMount () {
@@ -34,11 +32,8 @@ class NoteList extends React.Component {
 
     // Auto scroll
     if (_.isString(location.query.key)) {
-      let splitted = location.query.key.split('/')
-      let repoKey = splitted[0]
-      let noteKey = splitted[1]
       let targetIndex = _.findIndex(this.notes, (note) => {
-        return repoKey === note.storage && noteKey === note.key
+        return note.uniqueKey === location.query.key
       })
       if (targetIndex > -1) {
         let list = this.refs.root
@@ -66,11 +61,9 @@ class NoteList extends React.Component {
     }
     let { router } = this.context
     let { location } = this.props
-    let splitted = location.query.key.split('-')
-    let repoKey = splitted[0]
-    let noteKey = splitted[1]
+
     let targetIndex = _.findIndex(this.notes, (note) => {
-      return repoKey === note.storage && noteKey === note.key
+      return note.uniqueKey === location.query.key
     })
 
     if (targetIndex === 0) {
@@ -93,11 +86,9 @@ class NoteList extends React.Component {
     }
     let { router } = this.context
     let { location } = this.props
-    let splitted = location.query.key.split('-')
-    let repoKey = splitted[0]
-    let noteKey = splitted[1]
+
     let targetIndex = _.findIndex(this.notes, (note) => {
-      return repoKey === note._repository.key && noteKey === note.key
+      return note.uniqueKey === location.query.key
     })
 
     if (targetIndex === this.notes.length - 1) {
@@ -140,7 +131,6 @@ class NoteList extends React.Component {
 
     // if (e.keyCode === 69) {
     //   e.preventDefault()
-    //   remote.getCurrentWebContents().send('detail-edit')
     // }
 
     // if (e.keyCode === 83) {
@@ -160,37 +150,29 @@ class NoteList extends React.Component {
   }
 
   getNotes () {
-    let { repositories, params, location } = this.props
-    let repositoryKey = params.repositoryKey
-    let folderKey = params.folderKey
+    let { storages, notes, params, location } = this.props
 
     if (location.pathname.match(/\/home/)) {
-      return repositories
-      .reduce((sum, repository) => {
-        return sum.concat(repository.notes)
-      }, [])
+      return notes
     }
 
     if (location.pathname.match(/\/starred/)) {
-      return repositories
-      .reduce((sum, repository) => {
-        return sum.concat(repository.starred
-          .map((starredKey) => {
-            return _.find(repository.notes, {key: starredKey})
-          })
-          .filter((note) => _.isObject(note)))
-      }, [])
+      return notes
+        .filter((note) => note.isStarred)
     }
 
-    let repository = _.find(repositories, {key: repositoryKey})
-    if (repository == null) return []
+    let storageKey = params.storageKey
+    let folderKey = params.folderKey
+    let storage = _.find(storages, {key: storageKey})
+    if (storage == null) return []
 
-    let folder = _.find(repository.folders, {key: folderKey})
+    let folder = _.find(storage.folders, {key: folderKey})
     if (folder == null) {
-      return repository.notes
+      return notes
+        .filter((note) => note.storage === storageKey)
     }
 
-    return repository.notes
+    return notes
       .filter((note) => note.folder === folderKey)
   }
 
@@ -210,11 +192,10 @@ class NoteList extends React.Component {
 
   render () {
     let { location, storages, notes } = this.props
-    this.notes = notes
-    // this.notes = this.getNotes()
+    this.notes = notes = this.getNotes()
+      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
 
     let noteList = notes
-      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
       .map((note) => {
         let storage = _.find(storages, {key: note.storage})
         let folder = _.find(storage.folders, {key: note.folder})
