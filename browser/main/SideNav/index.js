@@ -83,15 +83,16 @@ class SideNav extends React.Component {
             <div styleName='storageList-empty'>No storage mount.</div>
           )}
         </div>
-
-        <button styleName='navToggle'
-          onClick={(e) => this.handleToggleButtonClick(e)}
-        >
-          {isFolded
-            ? <i className='fa fa-angle-double-right'/>
-            : <i className='fa fa-angle-double-left'/>
-          }
-        </button>
+        {false &&
+          <button styleName='navToggle'
+            onClick={(e) => this.handleToggleButtonClick(e)}
+          >
+            {isFolded
+              ? <i className='fa fa-angle-double-right'/>
+              : <i className='fa fa-angle-double-left'/>
+            }
+          </button>
+        }
       </div>
     )
   }
