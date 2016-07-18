@@ -7,6 +7,7 @@ const markdownStyle = require('!!css!stylus?sourceMap!./markdown.styl')[0][1]
 const { shell } = require('electron')
 const goExternal = function (e) {
   e.preventDefault()
+  e.stopPropagation()
   shell.openExternal(e.target.href)
 }
 
@@ -24,20 +25,35 @@ export default class MarkdownPreview extends React.Component {
     super(props)
 
     this.contextMenuHandler = (e) => this.handleContextMenu(e)
+    this.mouseDownHandler = (e) => this.handleMouseDown(e)
+    this.mouseUpHandler = (e) => this.handleMouseUp(e)
   }
 
   handleContextMenu (e) {
     this.props.onContextMenu(e)
   }
 
+  handleMouseDown (e) {
+    if (this.props.onMouseDown != null) this.props.onMouseDown(e)
+  }
+
+  handleMouseUp (e) {
+    if (this.props.onMouseUp != null) this.props.onMouseUp(e)
+  }
+
   componentDidMount () {
     this.refs.root.setAttribute('sandbox', 'allow-same-origin')
     this.refs.root.contentWindow.document.body.addEventListener('contextmenu', this.contextMenuHandler)
     this.rewriteIframe()
+
+    this.refs.root.contentWindow.document.addEventListener('mousedown', this.mouseDownHandler)
+    this.refs.root.contentWindow.document.addEventListener('mouseup', this.mouseUpHandler)
   }
 
   componentWillUnmount () {
     this.refs.root.contentWindow.document.body.removeEventListener('contextmenu', this.contextMenuHandler)
+    this.refs.root.contentWindow.document.removeEventListener('mousedown', this.mouseDownHandler)
+    this.refs.root.contentWindow.document.removeEventListener('mouseup', this.mouseUpHandler)
   }
 
   componentDidUpdate (prevProps) {
@@ -54,6 +70,7 @@ export default class MarkdownPreview extends React.Component {
     Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
       el.removeEventListener('click', goExternal)
     })
+
 
     let { value, fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme } = this.props
     fontFamily = _.isString(fontFamily) && fontFamily.trim().length > 0
@@ -95,7 +112,7 @@ export default class MarkdownPreview extends React.Component {
     this.refs.root.contentWindow.document.body.innerHTML = markdown(value)
 
     Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
-      el.addEventListener('click', goExternal)
+      el.addEventListener('mousedown', goExternal)
     })
   }
 

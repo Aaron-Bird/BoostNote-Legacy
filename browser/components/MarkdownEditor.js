@@ -9,7 +9,7 @@ class MarkdownEditor extends React.Component {
     super(props)
 
     this.state = {
-      status: 'CODE'
+      status: 'PREVIEW'
     }
   }
 
@@ -41,6 +41,32 @@ class MarkdownEditor extends React.Component {
           this.refs.code.blur()
           this.refs.preview.focus()
         }
+      })
+    }
+  }
+
+  handleBlur (e) {
+    let { config } = this.props
+    if (config.editor.switchPreview === 'BLUR') {
+      this.setState({
+        status: 'PREVIEW'
+      }, () => {
+        this.refs.preview.focus()
+      })
+    }
+  }
+
+  handlePreviewMouseDown (e) {
+    this.previewMouseDownedAt = new Date()
+  }
+
+  handlePreviewMouseUp (e) {
+    let { config } = this.props
+    if (config.editor.switchPreview === 'BLUR' && new Date() - this.previewMouseDownedAt < 150) {
+      this.setState({
+        status: 'CODE'
+      }, () => {
+        this.refs.code.focus()
       })
     }
   }
@@ -77,6 +103,7 @@ class MarkdownEditor extends React.Component {
           : `MarkdownEditor ${className}`
         }
         onContextMenu={(e) => this.handleContextMenu(e)}
+        tabIndex='-1'
       >
         <CodeEditor styleName='codeEditor'
           ref='code'
@@ -88,6 +115,7 @@ class MarkdownEditor extends React.Component {
           indentType={config.editor.indentType}
           indentSize={editorIndentSize}
           onChange={(e) => this.handleChange(e)}
+          onBlur={(e) => this.handleBlur(e)}
         />
         <MarkdownPreview styleName={this.state.status === 'PREVIEW'
             ? 'preview'
@@ -103,6 +131,8 @@ class MarkdownEditor extends React.Component {
           onContextMenu={(e) => this.handleContextMenu(e)}
           tabIndex='0'
           value={value}
+          onMouseUp={(e) => this.handlePreviewMouseUp(e)}
+          onMouseDown={(e) => this.handlePreviewMouseDown(e)}
         />
       </div>
     )

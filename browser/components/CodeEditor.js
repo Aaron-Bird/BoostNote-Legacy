@@ -13,18 +13,19 @@ export default class CodeEditor extends React.Component {
 
     this.changeHandler = (e) => this.handleChange(e)
     this.blurHandler = (e) => {
-      if (e.relatedTarget === null) {
-        return
+      e.stopPropagation()
+      let el = e.relatedTarget
+      let isStillFocused = false
+      while (el != null) {
+        if (el === this.refs.root) {
+          isStillFocused = true
+          break
+        }
+        el = el.parentNode
       }
+      console.log(isStillFocused)
 
-      let isFocusingToSearch = e.relatedTarget.className && e.relatedTarget.className.split(' ').some((clss) => {
-        return clss === 'ace_search_field' || clss === 'ace_searchbtn' || clss === 'ace_replacebtn' || clss === 'ace_searchbtn_close' || clss === 'ace_text-input'
-      })
-      if (isFocusingToSearch) {
-        return
-      }
-
-      if (this.props.onBlur) this.props.onBlur(e)
+      if (!isStillFocused && this.props.onBlur != null) this.props.onBlur(e)
     }
 
     this.killedBuffer = ''
@@ -230,6 +231,8 @@ export default class CodeEditor extends React.Component {
           ? 'CodeEditor'
           : `CodeEditor ${className}`
         }
+        ref='root'
+        tabIndex='-1'
         style={{
           fontFamily: fontFamily.join(', ')
         }}
