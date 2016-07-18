@@ -48,10 +48,12 @@ class MarkdownEditor extends React.Component {
   handleBlur (e) {
     let { config } = this.props
     if (config.editor.switchPreview === 'BLUR') {
+      let cursorPosition = this.refs.code.getCursorPosition()
       this.setState({
         status: 'PREVIEW'
       }, () => {
         this.refs.preview.focus()
+        this.refs.preview.scrollTo(cursorPosition.row)
       })
     }
   }
@@ -62,7 +64,7 @@ class MarkdownEditor extends React.Component {
 
   handlePreviewMouseUp (e) {
     let { config } = this.props
-    if (config.editor.switchPreview === 'BLUR' && new Date() - this.previewMouseDownedAt < 150) {
+    if (config.editor.switchPreview === 'BLUR' && new Date() - this.previewMouseDownedAt < 200) {
       this.setState({
         status: 'CODE'
       }, () => {

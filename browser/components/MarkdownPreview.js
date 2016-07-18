@@ -120,6 +120,24 @@ export default class MarkdownPreview extends React.Component {
     this.refs.root.focus()
   }
 
+  getWindow () {
+    return this.refs.root.contentWindow
+  }
+
+  scrollTo (targetRow) {
+    let lineAnchors = this.getWindow().document.querySelectorAll('a.lineAnchor')
+
+    for (let index = 0; index < lineAnchors.length; index++) {
+      let lineAnchor = lineAnchors[index]
+      let row = parseInt(lineAnchor.getAttribute('data-key'))
+      if (row > targetRow) {
+        let targetAnchor = lineAnchors[index - 1]
+        this.getWindow().scrollTo(0, targetAnchor.offsetTop)
+        break
+      }
+    }
+  }
+
   render () {
     let { className, style, tabIndex } = this.props
     return (
