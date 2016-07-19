@@ -5,6 +5,8 @@ import activityRecord from 'browser/lib/activityRecord'
 import _ from 'lodash'
 import Commander from 'browser/main/lib/Commander'
 import dataApi from 'browser/main/lib/dataApi'
+import modal from 'browser/main/lib/modal'
+import NewNoteModal from 'browser/main/modals/NewNoteModal'
 
 const OSX = window.process.platform === 'darwin'
 
@@ -33,49 +35,46 @@ class TopBar extends React.Component {
   }
 
   handleNewPostButtonClick (e) {
-    let { storages, params, dispatch } = this.props
+    let { storages, params, dispatch, location } = this.props
     let storage = _.find(storages, {key: params.storageKey})
     if (storage == null) storage = storages[0]
     if (storage == null) throw new Error('No storage to create a note')
     let folder = _.find(storage.folders, {key: params.folderKey})
     if (folder == null) folder = storage.folders[0]
     if (folder == null) throw new Error('No folder to craete a note')
-    // activityRecord.emit('ARTICLE_CREATE')
-    console.log(storage, folder)
-    dataApi
-      .createNote(storage.key, folder.key, {
-        title: '',
-        content: ''
-      })
-      .then((note) => {
-        dispatch({
-          type: 'CREATE_NOTE',
-          note: note
-        })
-      })
+
+    modal.open(NewNoteModal, {
+      storage: storage.key,
+      folder: folder.key,
+      dispatch,
+      location
+    })
   }
 
   handleTutorialButtonClick (e) {
   }
 
   render () {
-    let { config } = this.props
+    let { config, style } = this.props
     return (
       <div className='TopBar'
         styleName={config.isSideNavFolded ? 'root--expanded' : 'root'}
+        style={style}
       >
-        <div styleName='left'>
-          <div styleName='left-search'>
-            <i styleName='left-search-icon' className='fa fa-search fa-fw'/>
-            <input styleName='left-search-input'
-              ref='searchInput'
-              onFocus={(e) => this.handleSearchChange(e)}
-              onBlur={(e) => this.handleSearchChange(e)}
-              value={this.state.search}
-              onChange={(e) => this.handleSearchChange(e)}
-              placeholder='Search'
-              type='text'
-            />
+        <div styleName='control'>
+          <div styleName='control-search'>
+            <i styleName='control-search-icon' className='fa fa-search fa-fw'/>
+            <div styleName='control-search-input'>
+              <input
+                ref='searchInput'
+                onFocus={(e) => this.handleSearchChange(e)}
+                onBlur={(e) => this.handleSearchChange(e)}
+                value={this.state.search}
+                onChange={(e) => this.handleSearchChange(e)}
+                placeholder='Search'
+                type='text'
+              />
+            </div>
             {this.state.search > 0 &&
               <button styleName='left-search-clearButton'
                 onClick={(e) => this.handleSearchClearButton(e)}
@@ -83,27 +82,15 @@ class TopBar extends React.Component {
                 <i className='fa fa-times'/>
               </button>
             }
-          </div>
 
-          <div styleName='left-control'>
-            <button styleName='left-control-newPostButton'
-              onClick={(e) => this.handleNewPostButtonClick(e)}>
-              <i className='fa fa-plus'/>
-              <span styleName='left-control-newPostButton-tooltip'>
-                New Note {OSX ? '⌘' : '^'} + n
-              </span>
-            </button>
           </div>
-        </div>
-
-        <div styleName='right'>
-          <button styleName='right-helpButton'
-            onClick={(e) => this.handleTutorialButtonClick(e)}
-            disabled
-          >
-            ?<span styleName='left-control-newPostButton-tooltip'>How to use</span>
+          <button styleName='control-newPostButton'
+            onClick={(e) => this.handleNewPostButtonClick(e)}>
+            <i className='fa fa-plus'/>
+            <span styleName='control-newPostButton-tooltip'>
+              New Note {OSX ? '⌘' : '^'} + n
+            </span>
           </button>
-
         </div>
       </div>
     )

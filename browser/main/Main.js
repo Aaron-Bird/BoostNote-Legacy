@@ -94,18 +94,18 @@ class Main extends React.Component {
             'location'
           ])}
         />
-        <TopBar
-          {..._.pick(this.props, [
-            'dispatch',
-            'storages',
-            'config',
-            'params',
-            'location'
-          ])}
-        />
         <div styleName={config.isSideNavFolded ? 'body--expanded' : 'body'}
           ref='body'
         >
+          <TopBar style={{width: this.state.listWidth}}
+            {..._.pick(this.props, [
+              'dispatch',
+              'storages',
+              'config',
+              'params',
+              'location'
+            ])}
+          />
           <NoteList style={{width: this.state.listWidth}}
             {..._.pick(this.props, [
               'dispatch',

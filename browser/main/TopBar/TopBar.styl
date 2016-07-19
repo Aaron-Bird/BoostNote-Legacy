@@ -1,55 +1,50 @@
 .root
-  absolute top right
-  background-color $ui-backgroundColor
-  left $sideNav-width
-  height $topBar-height -1
-  clearfix()
-
-.left
-  float left
-  height $topBar-height - 1
-  line-height $topBar-height
-
-.left-search
-  margin-top 12px
-  margin-left 25px
-  height 34px
-  width 200px
-  float left
-  border-radius 22px
   position relative
-  background-color white
-  border $ui-border
+  width 100%
+  background-color $ui-backgroundColor
+  height $topBar-height - 1
 
-.left-search-icon
-  absolute left
-  width 36px
-  height 32px
-  padding 0
+$control-height = 34px
+
+.control
+  position absolute
+  top 8px
+  left 8px
+  right 8px
+  height $control-height
+  border $ui-border
+  border-radius 20px
+  overflow hidden
+.control-search
+  absolute top left bottom
+  right 40px
+  background-color white
+
+.control-search-icon
+  absolute top bottom left
   line-height 32px
+  width 35px
   color $ui-inactive-text-color
 
-.left-search-input
+.control-search-input
+  display block
   absolute top bottom right
-  height 32px
-  left 34px
-  border none
-  outline none
-  font-size 14px
+  left 30px
+  input
+    width 100%
+    height 100%
+    outline none
+    border none
 
-.left-control
-  float left
-  margin-left 15px
-
-.left-control-newPostButton
-  width 34px
-  height 34px
-  margin-top 12px
-  border-radius 17px
+.control-newPostButton
+  display block
+  absolute top right bottom
+  width 40px
+  height $control-height - 2
   navButtonColor()
-  border $ui-border
+  border-left $ui-border
   font-size 14px
-  line-height 32px
+  line-height 28px
   padding 0
   &:active
     border-color $ui-button--active-backgroundColor
@@ -57,7 +52,7 @@
     display block
 
 
-.left-control-newPostButton-tooltip
+.control-newPostButton-tooltip
   position fixed
   line-height 1.4
   background-color $ui-tooltip-backgroundColor
@@ -70,39 +65,3 @@
   border-radius 5px
   display none
   pointer-events none
-
-.right
-  float right
-  height $topBar-height -1
-  clearfix()
-
-.right-helpButton
-  width 24px
-  height 24px
-  border-radius 12px
-  navButtonColor()
-  border $ui-border
-  line-height 22px
-  font-size 12px
-  padding 0
-  float left
-  margin-top 17px
-
-.right-linksButton
-  float left
-  height 44px
-  width 44px
-  border-radius 17px
-  background-color transparent
-  border none
-  margin-top 7px
-  margin-left 5px
-  margin-right 15px
-  opacity 0.8
-  &:hover, &:active
-    opacity 1
-
-.root--expanded
-  @extend .root
-  absolute top right
-  left $sideNav--folded-width
