@@ -102,6 +102,7 @@ class Main extends React.Component {
               'dispatch',
               'storages',
               'config',
+              'notes',
               'params',
               'location'
             ])}

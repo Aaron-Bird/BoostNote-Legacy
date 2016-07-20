@@ -7,6 +7,7 @@ import Commander from 'browser/main/lib/Commander'
 import dataApi from 'browser/main/lib/dataApi'
 import modal from 'browser/main/lib/modal'
 import NewNoteModal from 'browser/main/modals/NewNoteModal'
+import { hashHistory } from 'react-router'
 
 const OSX = window.process.platform === 'darwin'
 
@@ -15,23 +16,10 @@ class TopBar extends React.Component {
     super(props)
 
     this.state = {
-      search: ''
+      search: '',
+      searchOptions: [],
+      searchPopupOpen: false
     }
-  }
-
-  isInputFocused () {
-    return document.activeElement === this.refs.searchInput
-  }
-
-  escape () {
-  }
-
-  focusInput () {
-    this.searchInput.focus()
-  }
-
-  blurInput () {
-    this.searchInput.blur()
   }
 
   handleNewPostButtonClick (e) {
@@ -51,11 +39,98 @@ class TopBar extends React.Component {
     })
   }
 
-  handleTutorialButtonClick (e) {
+  handleSearchChange (e) {
+    this.setState({
+      search: this.refs.searchInput.value
+    })
+  }
+
+  getOptions () {
+    let { notes } = this.props
+    let { search } = this.state
+    if (search.trim().length === 0) return []
+    let searchBlocks = search.split(' ')
+    searchBlocks.forEach((block) => {
+      if (block.match(/^#.+/)) {
+        let tag = block.match(/#(.+)/)[1]
+        notes = notes.filter((note) => note.tags.some((_tag) => _tag === tag))
+      }
+      notes = notes.filter((note) => {
+        if (note.type === 'SNIPPET_NOTE') {
+          return note.description.match(block)
+        } else if (note.type === 'MARKDOWN_NOTE') {
+          return note.content.match(block)
+        }
+        return false
+      })
+    })
+
+    return notes
+  }
+
+  handleOptionClick (uniqueKey) {
+    return (e) => {
+      this.setState({
+        searchPopupOpen: false
+      }, () => {
+        let { location } = this.props
+        hashHistory.push({
+          pathname: location.pathname,
+          query: {
+            key: uniqueKey
+          }
+        })
+      })
+    }
+  }
+
+  handleSearchFocus (e) {
+    this.setState({
+      searchPopupOpen: true
+    })
+  }
+  handleSearchBlur (e) {
+    e.stopPropagation()
+
+    let el = e.relatedTarget
+    let isStillFocused = false
+    while (el != null) {
+      if (el === this.refs.search) {
+        isStillFocused = true
+        break
+      }
+      el = el.parentNode
+    }
+    if (!isStillFocused) {
+      this.setState({
+        searchPopupOpen: false
+      })
+    }
   }
 
   render () {
-    let { config, style } = this.props
+    let { config, style, storages } = this.props
+    let searchOptionList = this.getOptions()
+      .map((note) => {
+        let storage = _.find(storages, {key: note.storage})
+        let folder = _.find(storage.folders, {key: note.folder})
+        return <div styleName='control-search-optionList-item'
+          key={note.uniqueKey}
+          onClick={(e) => this.handleOptionClick(note.uniqueKey)(e)}
+        >
+          <div styleName='control-search-optionList-item-folder'
+            style={{borderColor: folder.color}}>
+            {folder.name}
+            <span styleName='control-search-optionList-item-folder-surfix'>in {storage.name}</span>
+          </div>
+          {note.type === 'SNIPPET_NOTE'
+            ? <i styleName='control-search-optionList-item-type' className='fa fa-code'/>
+            : <i styleName='control-search-optionList-item-type' className='fa fa-file-text-o'/>
+          }&nbsp;
+          {note.title}
+        </div>
+      })
+
     return (
       <div className='TopBar'
         styleName={config.isSideNavFolded ? 'root--expanded' : 'root'}
@@ -64,16 +139,27 @@ class TopBar extends React.Component {
         <div styleName='control'>
           <div styleName='control-search'>
             <i styleName='control-search-icon' className='fa fa-search fa-fw'/>
-            <div styleName='control-search-input'>
+            <div styleName='control-search-input'
+              onFocus={(e) => this.handleSearchFocus(e)}
+              onBlur={(e) => this.handleSearchBlur(e)}
+              tabIndex='-1'
+              ref='search'
+            >
               <input
                 ref='searchInput'
-                onFocus={(e) => this.handleSearchChange(e)}
-                onBlur={(e) => this.handleSearchChange(e)}
                 value={this.state.search}
                 onChange={(e) => this.handleSearchChange(e)}
                 placeholder='Search'
                 type='text'
               />
+              {this.state.searchPopupOpen &&
+                <div styleName='control-search-optionList'>
+                  {searchOptionList.length > 0
+                    ? searchOptionList
+                    : <div styleName='control-search-optionList-empty'>Empty List</div>
+                  }
+                </div>
+              }
             </div>
             {this.state.search > 0 &&
               <button styleName='left-search-clearButton'
