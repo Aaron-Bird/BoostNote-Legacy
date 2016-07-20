@@ -236,7 +236,16 @@ class NoteList extends React.Component {
 
             </div>
 
-            <div styleName='item-title'>{note.title}</div>
+            <div styleName='item-title'>
+              {note.type === 'SNIPPET_NOTE'
+                ? <i styleName='item-title-icon' className='fa fa-fw fa-code'/>
+                : <i styleName='item-title-icon' className='fa fa-fw fa-file-text-o'/>
+              }
+              {note.title.trim().length > 0
+                ? note.title
+                : <span styleName='item-title-empty'>Empty</span>
+              }
+            </div>
 
             <div styleName='item-tagList'>
               <i styleName='item-tagList-icon'

@@ -1,90 +1,9 @@
 const modes = [
-  // Major
   {
     name: 'text',
     label: 'Plain text',
     mode: 'text'
   },
-  {
-    name: 'markdown',
-    label: 'Markdown',
-    alias: ['md'],
-    mode: 'markdown'
-  },
-  {
-    name: 'javascript',
-    label: 'JavaScript',
-    alias: ['js', 'jscript', 'babel', 'es'],
-    mode: 'javascript'
-  },
-  {
-    name: 'html',
-    label: 'HTML',
-    alias: [],
-    mode: 'html'
-  },
-  {
-    name: 'css',
-    label: 'CSS',
-    alias: ['cascade', 'stylesheet'],
-    mode: 'css'
-  },
-  {
-    name: 'php',
-    label: 'PHP',
-    alias: [],
-    mode: 'php'
-  },
-  {
-    name: 'python',
-    label: 'Python',
-    alias: ['py'],
-    mode: 'python'
-  },
-  {
-    name: 'ruby',
-    label: 'Ruby',
-    alias: ['rb'],
-    mode: 'ruby'
-  },
-  {
-    name: 'java',
-    label: 'Java',
-    alias: [],
-    mode: 'java'
-  },
-  {
-    name: 'c',
-    label: 'C',
-    alias: ['c', 'h', 'clang', 'clang'],
-    mode: 'c_cpp'
-  },
-  {
-    name: 'cpp',
-    label: 'C++',
-    alias: ['cc', 'cpp', 'cxx', 'hh', 'c++', 'cplusplus'],
-    mode: 'c_cpp'
-  },
-  {
-    name: 'csharp',
-    label: 'C#',
-    alias: ['cs', 'c#'],
-    mode: 'csharp'
-  },
-  {
-    name: 'swift',
-    label: 'Swift',
-    alias: [],
-    mode: 'swift'
-  },
-  {
-    name: 'golang',
-    label: 'Go',
-    alias: ['go'],
-    mode: 'golang'
-  },
-
-  // Minor
   {
     name: 'abap',
     label: 'ABAP',
@@ -146,6 +65,12 @@ const modes = [
     mode: 'batchfile'
   },
   {
+    name: 'c',
+    label: 'C',
+    alias: ['c', 'h', 'clang', 'clang'],
+    mode: 'c_cpp'
+  },
+  {
     name: 'cirru',
     label: 'Cirru',
     alias: [],
@@ -174,6 +99,24 @@ const modes = [
     label: 'ColdFusion',
     alias: ['cfm', 'cfc'],
     mode: 'coldfusion'
+  },
+  {
+    name: 'cpp',
+    label: 'C++',
+    alias: ['cc', 'cpp', 'cxx', 'hh', 'c++', 'cplusplus'],
+    mode: 'c_cpp'
+  },
+  {
+    name: 'csharp',
+    label: 'C#',
+    alias: ['cs', 'c#'],
+    mode: 'csharp'
+  },
+  {
+    name: 'css',
+    label: 'CSS',
+    alias: ['cascade', 'stylesheet'],
+    mode: 'css'
   },
   {
     name: 'curly',
@@ -284,6 +227,12 @@ const modes = [
     mode: 'glsl'
   },
   {
+    name: 'golang',
+    label: 'Go',
+    alias: ['go'],
+    mode: 'golang'
+  },
+  {
     name: 'groovy',
     label: 'Groovy',
     alias: [],
@@ -312,6 +261,12 @@ const modes = [
     label: 'Haxe',
     alias: ['hx', 'hxml'],
     mode: 'haxe'
+  },
+  {
+    name: 'html',
+    label: 'HTML',
+    alias: [],
+    mode: 'html'
   },
   {
     name: 'html_ruby',
@@ -354,6 +309,18 @@ const modes = [
     label: 'Jade',
     alias: [],
     mode: 'jade'
+  },
+  {
+    name: 'java',
+    label: 'Java',
+    alias: [],
+    mode: 'java'
+  },
+  {
+    name: 'javascript',
+    label: 'JavaScript',
+    alias: ['js', 'jscript', 'babel', 'es'],
+    mode: 'javascript'
   },
   {
     name: 'json',
@@ -452,6 +419,12 @@ const modes = [
     mode: 'makefile'
   },
   {
+    name: 'markdown',
+    label: 'Markdown',
+    alias: ['md'],
+    mode: 'markdown'
+  },
+  {
     name: 'mask',
     label: 'Mask',
     alias: [],
@@ -530,6 +503,12 @@ const modes = [
     mode: 'pgsql'
   },
   {
+    name: 'php',
+    label: 'PHP',
+    alias: [],
+    mode: 'php'
+  },
+  {
     name: 'powershell',
     label: 'PowerShell',
     alias: ['ps1'],
@@ -560,6 +539,12 @@ const modes = [
     mode: 'protobuf'
   },
   {
+    name: 'python',
+    label: 'Python',
+    alias: ['py'],
+    mode: 'python'
+  },
+  {
     name: 'r',
     label: 'R',
     alias: ['rlang'],
@@ -570,6 +555,12 @@ const modes = [
     label: 'RDoc',
     alias: [],
     mode: 'rdoc'
+  },
+  {
+    name: 'ruby',
+    label: 'Ruby',
+    alias: ['rb'],
+    mode: 'ruby'
   },
   {
     name: 'rust',
@@ -666,6 +657,12 @@ const modes = [
     label: 'SVG',
     alias: [],
     mode: 'svg'
+  },
+  {
+    name: 'swift',
+    label: 'Swift',
+    alias: [],
+    mode: 'swift'
   },
   {
     name: 'swig',

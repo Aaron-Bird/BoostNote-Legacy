@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
-import styles from './NoteDetail.styl'
+import styles from './MarkdownNoteDetail.styl'
 import MarkdownEditor from 'browser/components/MarkdownEditor'
 import StarButton from './StarButton'
 import TagSelect from './TagSelect'
@@ -13,7 +13,7 @@ const { remote } = electron
 const Menu = remote.Menu
 const MenuItem = remote.MenuItem
 
-class NoteDetail extends React.Component {
+class MarkdownNoteDetail extends React.Component {
   constructor (props) {
     super(props)
 
@@ -217,7 +217,7 @@ class NoteDetail extends React.Component {
   }
 }
 
-NoteDetail.propTypes = {
+MarkdownNoteDetail.propTypes = {
   dispatch: PropTypes.func,
   repositories: PropTypes.array,
   note: PropTypes.shape({
@@ -229,4 +229,4 @@ NoteDetail.propTypes = {
   ignorePreviewPointerEvents: PropTypes.bool
 }
 
-export default CSSModules(NoteDetail, styles)
+export default CSSModules(MarkdownNoteDetail, styles)

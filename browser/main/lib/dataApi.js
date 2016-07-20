@@ -322,18 +322,49 @@ function removeFolder (storageKey, folderKey) {
     .then((storage) => storage.toJSON())
 }
 
-function createNote (storageKey, folderKey, input) {
+function createMarkdownNote (storageKey, folderKey, input) {
   let key = keygen()
   while (notes.some((note) => note.storage === storageKey && note.folder === folderKey && note.key === key)) {
     key = keygen()
   }
 
   let newNote = new Note(Object.assign({
-    type: 'MARKDOWN_NOTE',
     tags: [],
     title: '',
     content: ''
   }, input, {
+    type: 'MARKDOWN_NOTE',
+    storage: storageKey,
+    folder: folderKey,
+    key: key,
+    isStarred: false,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  }))
+  notes.push(newNote)
+
+  return newNote
+    .save()
+    .then(() => newNote.toJSON())
+}
+
+function createSnippetNote (storageKey, folderKey, input) {
+  let key = keygen()
+  while (notes.some((note) => note.storage === storageKey && note.folder === folderKey && note.key === key)) {
+    key = keygen()
+  }
+
+  let newNote = new Note(Object.assign({
+    tags: [],
+    title: '',
+    description: '',
+    snippets: [{
+      name: '',
+      mode: 'text',
+      content: ''
+    }]
+  }, input, {
+    type: 'SNIPPET_NOTE',
     storage: storageKey,
     folder: folderKey,
     key: key,
@@ -374,7 +405,8 @@ export default {
   createFolder,
   updateFolder,
   removeFolder,
-  createNote,
+  createMarkdownNote,
+  createSnippetNote,
   updateNote,
   removeNote
 }

@@ -71,7 +71,6 @@ export default class MarkdownPreview extends React.Component {
       el.removeEventListener('click', goExternal)
     })
 
-
     let { value, fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme } = this.props
     fontFamily = _.isString(fontFamily) && fontFamily.trim().length > 0
       ? [fontFamily].concat(defaultFontFamily)

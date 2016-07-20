@@ -1,0 +1,139 @@
+$info-height = 75px
+
+.root
+  absolute top bottom right
+  border-width 0 0 1px
+  border-style solid
+  border-color $ui-borderColor
+
+.info
+  absolute top left right
+  height $info-height
+  border-bottom $ui-border
+  background-color $ui-backgroundColor
+
+.info-left
+  float left
+  padding 0 5px
+
+.info-left-top
+  height 40px
+  line-height 40px
+
+.info-left-top-folderSelect
+  display inline-block
+  height 34px
+  width 200px
+  vertical-align middle
+
+.info-left-bottom
+  height 30px
+
+.info-left-bottom-tagSelect
+  height 30px
+  line-height 30px
+
+.info-right
+  float right
+
+.info-right-button
+  width 34px
+  height 34px
+  border-radius 17px
+  navButtonColor()
+  border $ui-border
+  font-size 14px
+  margin 8px 2px
+  padding 0
+  &:active
+    border-color $ui-button--focus-borderColor
+  &:hover .left-control-newPostButton-tooltip
+    display block
+  &:focus
+    border-color $ui-button--focus-borderColor
+
+.body
+  absolute bottom left right
+  top $info-height
+
+.body-description
+  absolute top left right
+  height 80px
+  border-bottom $ui-border
+
+.body-description-textarea
+  display block
+  height 100%
+  width 100%
+  resize none
+  border none
+  padding 10px
+
+.tabList
+  absolute left right
+  top 80px
+  height 30px
+  border-bottom $ui-border
+  display flex
+  background-color $ui-backgroundColor
+.tabList-item
+  position relative
+  flex 1
+  border-right $ui-border
+  &:hover
+    .tabList-item-deleteButton
+      color $ui-inactive-text-color
+      &:hover
+        background-color darken($ui-backgroundColor, 15%)
+      &:active
+        color white
+        background-color $ui-active-color
+.tabList-item--active
+  @extend .tabList-item
+  .tabList-item-button
+    border-color $brand-color
+.tabList-item-button
+  width 100%
+  height 100%
+  navButtonColor()
+  border-left 4px solid transparent
+.tabList-item-deleteButton
+  position absolute
+  top 5px
+  height 20px
+  right 5px
+  width 20px
+  text-align center
+  border none
+  padding 0
+  color transparent
+  background-color transparent
+  border-radius 2px
+.tabList-plusButton
+  navButtonColor()
+  width 30px
+.tabView
+  absolute left right bottom
+  top 110px
+.tabView-top
+  absolute top left right
+  height 30px
+  border-bottom $ui-border
+  display flex
+.tabView-top-name
+  flex 1
+  border none
+  padding 0 10px
+  font-size 14px
+.tabView-top-mode
+  width 110px
+  padding 0
+  border none
+  border-left $ui-border
+  colorDefaultButton()
+  color $ui-inactive-text-color
+  &:hover
+    color $ui-text-color
+.tabView-content
+  absolute left right bottom
+  top 30px

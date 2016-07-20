@@ -2,7 +2,8 @@ import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './Detail.styl'
 import _ from 'lodash'
-import NoteDetail from './NoteDetail'
+import MarkdownNoteDetail from './MarkdownNoteDetail'
+import SnippetNoteDetail from './SnippetNoteDetail'
 
 const electron = require('electron')
 
@@ -13,7 +14,7 @@ class Detail extends React.Component {
   }
 
   render () {
-    let { storages, location, notes, config } = this.props
+    let { location, notes, config } = this.props
     let note = null
     if (location.query.key != null) {
       let splitted = location.query.key.split('-')
@@ -41,8 +42,23 @@ class Detail extends React.Component {
       )
     }
 
+    if (note.type === 'SNIPPET_NOTE') {
+      return (
+        <SnippetNoteDetail
+          note={note}
+          config={config}
+          {..._.pick(this.props, [
+            'dispatch',
+            'storages',
+            'style',
+            'ignorePreviewPointerEvents'
+          ])}
+        />
+      )
+    }
+
     return (
-      <NoteDetail
+      <MarkdownNoteDetail
         note={note}
         config={config}
         {..._.pick(this.props, [
