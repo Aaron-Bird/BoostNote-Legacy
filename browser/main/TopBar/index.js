@@ -1,10 +1,7 @@
 import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './TopBar.styl'
-import activityRecord from 'browser/lib/activityRecord'
 import _ from 'lodash'
-import Commander from 'browser/main/lib/Commander'
-import dataApi from 'browser/main/lib/dataApi'
 import modal from 'browser/main/lib/modal'
 import NewNoteModal from 'browser/main/modals/NewNoteModal'
 import { hashHistory } from 'react-router'
@@ -53,16 +50,23 @@ class TopBar extends React.Component {
     searchBlocks.forEach((block) => {
       if (block.match(/^#.+/)) {
         let tag = block.match(/#(.+)/)[1]
-        notes = notes.filter((note) => note.tags.some((_tag) => _tag === tag))
+        notes = notes
+          .filter((note) => {
+            if (!_.isArray(note.tags)) return false
+            return note.tags.some((_tag) => {
+              return _tag === tag
+            })
+          })
+      } else {
+        notes = notes.filter((note) => {
+          if (note.type === 'SNIPPET_NOTE') {
+            return note.description.match(block)
+          } else if (note.type === 'MARKDOWN_NOTE') {
+            return note.content.match(block)
+          }
+          return false
+        })
       }
-      notes = notes.filter((note) => {
-        if (note.type === 'SNIPPET_NOTE') {
-          return note.description.match(block)
-        } else if (note.type === 'MARKDOWN_NOTE') {
-          return note.content.match(block)
-        }
-        return false
-      })
     })
 
     return notes
