@@ -25,7 +25,7 @@ class ConfigTab extends React.Component {
     this.handleSettingDone = () => {
       this.setState({keymapAlert: {
         type: 'success',
-        message: 'Successfully done!'
+        message: 'Successfully applied!'
       }})
     }
     this.handleSettingError = (err) => {
@@ -43,20 +43,17 @@ class ConfigTab extends React.Component {
     ipc.removeListener('APP_SETTING_ERROR', this.handleSettingError)
   }
 
-  submitHotKey () {
-    ipc.send('hotkeyUpdated', this.state.keymap)
-  }
-
-  submitConfig () {
-    ipc.send('configUpdated', this.state.config)
-  }
-
   handleSaveButtonClick (e) {
-    this.submitHotKey()
-  }
+    let newConfig = {
+      hotkey: this.state.config.hotkey
+    }
 
-  handleConfigSaveButtonClick (e) {
-    this.submitConfig()
+    ConfigManager.set(newConfig)
+
+    store.dispatch({
+      type: 'SET_UI',
+      config: newConfig
+    })
   }
 
   handleKeyDown (e) {
@@ -183,6 +180,7 @@ class ConfigTab extends React.Component {
                 ref='toggleFinder'
                 value={config.hotkey.toggleFinder}
                 type='text'
+                disabled
               />
             </div>
           </div>

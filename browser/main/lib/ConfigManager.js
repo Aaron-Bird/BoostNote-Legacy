@@ -1,6 +1,8 @@
 import _ from 'lodash'
 
 const OSX = global.process.platform === 'darwin'
+const electron = require('electron')
+const { ipcRenderer } = electron
 
 const defaultConfig = {
   zoom: 1,
@@ -64,7 +66,16 @@ function set (updates) {
   let newConfig = Object.assign({}, defaultConfig, currentConfig, updates)
   if (!validate(newConfig)) throw new Error('INVALID CONFIG')
   _save(newConfig)
+  ipcRenderer.send('CONFIG_RENEW', {
+    config: get(),
+    silent: false
+  })
 }
+
+ipcRenderer.send('CONFIG_RENEW', {
+  config: get(),
+  silent: true
+})
 
 export default {
   get,

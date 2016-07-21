@@ -37,7 +37,11 @@ button
   font-size 12px
   &:focus, &.focus
     outline none
-
+  &:disabled
+    cursor not-allowed
+input
+  &:disabled
+    cursor not-allowed
 .noSelect
   noSelect()
 

@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './InfoTab.styl'
 
-const appVersion = global.process.version
 const electron = require('electron')
-const { shell } = electron
+const { shell, remote } = electron
+const appVersion = remote.app.getVersion()
 
 class InfoTab extends React.Component {
   constructor (props) {

@@ -34,6 +34,8 @@
   border solid 1px $border-color
   border-radius 2px
   padding 0 5px
+  &:disabled
+    background-color $ui-input--disabled-backgroundColor
 
 .group-checkBoxSection
   margin-bottom 15px
@@ -47,6 +49,12 @@
   box-sizing border-box
   height 40px
   text-align right
+  :global
+    .alert
+      font-size 12px
+      line-height 30px
+      padding 0 5px
+      float right
 .group-control-leftButton
   float left
   colorDefaultButton()
