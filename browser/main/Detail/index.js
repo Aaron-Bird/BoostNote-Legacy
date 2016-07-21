@@ -4,6 +4,7 @@ import styles from './Detail.styl'
 import _ from 'lodash'
 import MarkdownNoteDetail from './MarkdownNoteDetail'
 import SnippetNoteDetail from './SnippetNoteDetail'
+import dataApi from 'browser/main/lib/dataApi'
 
 const electron = require('electron')
 
@@ -51,7 +52,8 @@ class Detail extends React.Component {
             'dispatch',
             'storages',
             'style',
-            'ignorePreviewPointerEvents'
+            'ignorePreviewPointerEvents',
+            'location'
           ])}
         />
       )
@@ -65,7 +67,8 @@ class Detail extends React.Component {
           'dispatch',
           'storages',
           'style',
-          'ignorePreviewPointerEvents'
+          'ignorePreviewPointerEvents',
+          'location'
         ])}
       />
     )

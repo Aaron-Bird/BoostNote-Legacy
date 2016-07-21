@@ -8,6 +8,7 @@ import FolderSelect from './FolderSelect'
 import Commander from 'browser/main/lib/Commander'
 import dataApi from 'browser/main/lib/dataApi'
 import modes from 'browser/lib/modes'
+import { hashHistory } from 'react-router'
 
 const electron = require('electron')
 const { remote } = electron
@@ -118,7 +119,36 @@ class SnippetNoteDetail extends React.Component {
   }
 
   handleFolderChange (e) {
+    let { note } = this.state
+    let value = this.refs.folder.value
+    let splitted = value.split('-')
+    let newStorageKey = splitted.shift()
+    let newFolderKey = splitted.shift()
 
+    dataApi
+      .moveNote(note.storage, note.folder, note.key, newStorageKey, newFolderKey)
+      .then((newNote) => {
+        this.setState({
+          isMovingNote: true,
+          note: Object.assign({}, newNote)
+        }, () => {
+          let { dispatch, location } = this.props
+          dispatch({
+            type: 'MOVE_NOTE',
+            note: note,
+            newNote: newNote
+          })
+          hashHistory.replace({
+            pathname: location.pathname,
+            query: {
+              key: newNote.uniqueKey
+            }
+          })
+          this.setState({
+            isMovingNote: false
+          })
+        })
+      })
   }
 
   handleStarButtonClick (e) {

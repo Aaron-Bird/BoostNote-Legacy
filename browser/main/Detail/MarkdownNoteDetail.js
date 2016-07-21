@@ -7,6 +7,7 @@ import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
 import Commander from 'browser/main/lib/Commander'
 import dataApi from 'browser/main/lib/dataApi'
+import { hashHistory } from 'react-router'
 
 const electron = require('electron')
 const { remote } = electron
@@ -20,9 +21,9 @@ class MarkdownNoteDetail extends React.Component {
     this.state = {
       note: Object.assign({
         title: '',
-        content: ''
-      }, props.note),
-      isDispatchQueued: false
+        content: '',
+        isMovingNote: false
+      }, props.note)
     }
     this.dispatchTimer = null
   }
@@ -43,14 +44,9 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.note.key !== this.props.note.key) {
-      if (this.state.isDispatchQueued) {
-        this.cancelDispatchQueue()
-        this.dispatch()
-      }
+    if (nextProps.note.key !== this.props.note.key && !this.isMovingNote) {
       this.setState({
-        note: Object.assign({}, nextProps.note),
-        isDispatchQueued: false
+        note: Object.assign({}, nextProps.note)
       }, () => {
         this.refs.content.reload()
         this.refs.tags.reset()
@@ -114,7 +110,36 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   handleFolderChange (e) {
+    let { note } = this.state
+    let value = this.refs.folder.value
+    let splitted = value.split('-')
+    let newStorageKey = splitted.shift()
+    let newFolderKey = splitted.shift()
 
+    dataApi
+      .moveNote(note.storage, note.folder, note.key, newStorageKey, newFolderKey)
+      .then((newNote) => {
+        this.setState({
+          isMovingNote: true,
+          note: Object.assign({}, newNote)
+        }, () => {
+          let { dispatch, location } = this.props
+          dispatch({
+            type: 'MOVE_NOTE',
+            note: note,
+            newNote: newNote
+          })
+          hashHistory.replace({
+            pathname: location.pathname,
+            query: {
+              key: newNote.uniqueKey
+            }
+          })
+          this.setState({
+            isMovingNote: false
+          })
+        })
+      })
   }
 
   handleStarButtonClick (e) {

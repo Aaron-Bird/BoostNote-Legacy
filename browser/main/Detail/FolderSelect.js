@@ -166,20 +166,20 @@ class FolderSelect extends React.Component {
     }
   }
 
-  handleOptionClick (folderKey) {
+  handleOptionClick (storageKey, folderKey) {
     return (e) => {
       e.stopPropagation()
       this.setState({
         status: 'FOCUS'
       }, () => {
-        this.setValue(folderKey)
+        this.setValue(storageKey + '-' + folderKey)
         this.refs.root.focus()
       })
     }
   }
 
-  setValue (folderKey) {
-    this.value = folderKey
+  setValue (value) {
+    this.value = value
     this.props.onChange()
   }
 
@@ -208,7 +208,7 @@ class FolderSelect extends React.Component {
               : 'search-optionList-item'
             }
             key={option.storage.key + '-' + option.folder.key}
-            onClick={(e) => this.handleOptionClick(option.folder.key)(e)}
+            onClick={(e) => this.handleOptionClick(option.storage.key, option.folder.key)(e)}
           >
             <span styleName='search-optionList-item-name'
               style={{borderColor: option.folder.color}}

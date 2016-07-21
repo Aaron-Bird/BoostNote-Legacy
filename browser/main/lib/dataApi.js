@@ -18,12 +18,15 @@ function queueSaveFolder (storageKey, folderKey) {
     clearTimeout(task.timer)
   })
   queuedTasks = queuedTasks.filter((task) => task.storage !== storageKey || task.folder !== folderKey)
-
   let newTimer = setTimeout(() => {
     let folderNotes = notes.filter((note) => note.storage === storageKey && note.folder === folderKey)
     sander
       .writeFile(path.join(storage.cache.path, folderKey, 'data.json'), JSON.stringify({
-        notes: folderNotes
+        notes: folderNotes.map((note) => {
+          let json = note.toJSON()
+          delete json.storage
+          return json
+        })
       }))
   }, 1500)
 
@@ -398,6 +401,35 @@ function removeNote (storageKey, folderKey, noteKey, input) {
 
 }
 
+function moveNote (storageKey, folderKey, noteKey, newStorageKey, newFolderKey) {
+  let note = _.find(notes, {
+    key: noteKey,
+    storage: storageKey,
+    folder: folderKey
+  })
+  if (note == null) throw new Error('Note doesn\'t exist.')
+
+  let storage = _.find(storages, {key: newStorageKey})
+  if (storage == null) throw new Error('Storage doesn\'t exist.')
+  let folder = _.find(storage.data.folders, {key: newFolderKey})
+  if (folder == null) throw new Error('Folder doesn\'t exist.')
+  note.storage = storage.key
+  note.data.storage = storage.key
+  note.folder = folder.key
+  note.data.folder = folder.key
+  let key = note.key
+  while (notes.some((note) => note.storage === storage.key && note.folder === folder.key && note.key === key)) {
+    key = keygen()
+  }
+  note.key = key
+  note.data.key = key
+  note.uniqueKey = `${note.storage}-${note.folder}-${note.key}`
+  console.log(note.uniqueKey)
+  queueSaveFolder(storageKey, folderKey)
+  return note.save()
+    .then(() => note.toJSON())
+}
+
 export default {
   init,
   addStorage,
@@ -408,5 +440,6 @@ export default {
   createMarkdownNote,
   createSnippetNote,
   updateNote,
-  removeNote
+  removeNote,
+  moveNote
 }

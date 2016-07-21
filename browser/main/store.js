@@ -79,6 +79,13 @@ function notes (state = [], action) {
         notes.push(action.note)
         return notes
       }
+    case 'MOVE_NOTE':
+      {
+        let notes = state.slice()
+        notes = notes.filter((note) => note.key !== action.note.key || note.folder !== action.note.folder || note.storage !== action.note.storage)
+        notes.push(action.newNote)
+        return notes
+      }
   }
   return state
 }
