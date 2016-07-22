@@ -25,14 +25,24 @@ class InfoTab extends React.Component {
         <div styleName='top'>
           <img styleName='icon' src='../resources/app.png' width='150' height='150'/>
           <div styleName='appId'>Boostnote {appVersion}</div>
-          <div styleName='madeBy'>Made by MAISIN&CO.</div>
+          <div styleName='description'>
+            A simple markdown/snippet note app for developer.
+          </div>
+          <div styleName='madeBy'>Made by&nbsp;
+            <a href='http://maisin.co/'
+              onClick={(e) => this.handleLinkClick(e)}
+            >MAISIN&CO.</a></div>
+          <div styleName='copyright'>Copyright 2016 MAISIN&CO. All rights reserved.</div>
         </div>
-        <ul>
+        <ul styleName='list'>
           <li>
-            - License : GPLv3
+            The codes of this app is published under GPLv3 license.
           </li>
           <li>
-            - Issue Tracker : <a href='https://github.com/BoostIO/Boostnote/issues'
+            Any kinds of feedback, creating a new issue or a pull request, would be welcomed.
+          </li>
+          <li>
+            Issue Tracker : <a href='https://github.com/BoostIO/Boostnote/issues'
               onClick={(e) => this.handleLinkClick(e)}
             >https://github.com/BoostIO/Boostnote/issues</a>
           </li>
