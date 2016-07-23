@@ -1,6 +1,8 @@
 const path = require('path')
 const ChildProcess = require('child_process')
 const packager = require('electron-packager')
+const fs = require('fs')
+const merge = require('merge-stream')
 
 const WIN = process.platform === 'win32'
 

@@ -1,0 +1,86 @@
+.root
+  modal()
+  max-width 540px
+  overflow hidden
+  position relative
+.root--loading
+  @extend .root
+  text-align center
+.spinner
+  font-size 100px
+  margin 35px auto
+  color $ui-text-color
+.loadingMessage
+  color $ui-text-color
+  margin 15px auto 35px
+.header
+  height 50px
+  font-size 18px
+  line-height 50px
+  padding 0 15px
+  background-color $ui-backgroundColor
+  border-bottom solid 1px $ui-borderColor
+  color $ui-text-color
+
+.closeButton
+  position absolute
+  top 10px
+  right 10px
+  height 30px
+  padding 0 25px
+  border $ui-border
+  border-radius 2px
+  color $ui-text-color
+  colorDefaultButton()
+
+.body
+  padding 30px
+
+.body-welcome
+  text-align center
+  margin-bottom 25px
+  font-size 32px
+  color $ui-text-color
+
+.body-description
+  font-size 14px
+  color $ui-text-color
+  text-align center
+  margin-bottom 25px
+
+.body-path
+  margin 0 auto 25px
+  width 280px
+
+.body-path-input
+  height 30px
+  vertical-align middle
+  width 250px
+  font-size 12px
+  border-style solid
+  border-width 1px 0 1px 1px
+  border-color $border-color
+  border-top-left-radius 2px
+  border-bottom-left-radius 2px
+  padding 0 5px
+
+.body-path-button
+  height 30px
+  border none
+  border-top-right-radius 2px
+  border-bottom-right-radius 2px
+  colorPrimaryButton()
+  vertical-align middle
+.body-migration
+  margin 0 auto 25px
+  text-align center
+
+.body-control
+  text-align center
+
+.body-control-createButton
+  colorPrimaryButton()
+  border none
+  border-radius 2px
+  height 40px
+  padding 0 25px

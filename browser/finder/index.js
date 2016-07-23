@@ -49,7 +49,7 @@ function notify (title, options) {
   return new window.Notification(title, options)
 }
 
-require('../styles/finder/index.styl')
+require('!!style!css!stylus?sourceMap!../styles/finder/index.styl')
 
 const FOLDER_FILTER = 'FOLDER_FILTER'
 const FOLDER_EXACT_FILTER = 'FOLDER_EXACT_FILTER'

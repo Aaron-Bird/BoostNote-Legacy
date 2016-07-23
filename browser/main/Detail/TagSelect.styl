@@ -1,0 +1,63 @@
+.root
+  position relative
+  user-select none
+
+.icon
+  display inline-block
+  width 30px
+  vertical-align middle
+  text-align center
+  color $ui-button-color
+
+.tag
+  display inline-block
+  margin 0 2px
+  vertical-align middle
+  height 20px
+  background-color white
+  border-radius 3px
+  overflow hidden
+  clearfix()
+
+.tag-removeButton
+  float left
+  height 20px
+  width 18px
+  margin 0
+  padding 0
+  border-style solid
+  border-color $ui-borderColor
+  border-width 0 0 0 3px
+  line-height 18px
+  background-color transparent
+  color $ui-button-color
+  &:hover
+    background-color $ui-button--hover-backgroundColor
+  &:active, &:active:hover
+    color $ui-button--active-color
+    background-color $ui-button--active-backgroundColor
+    border-color $ui-button--focus-borderColor
+  &:focus
+    border-color $ui-button--focus-borderColor
+
+.tag-label
+  float left
+  height 20px
+  line-height 20px
+  padding 0 6px
+
+.newTag
+  display inline-block
+  margin 0 2px
+  vertical-align middle
+  height 24px
+  box-sizing borde-box
+  border none
+  border-bottom $ui-border
+  background-color transparent
+  outline none
+  padding 0 4px
+  &:focus
+    border-color $ui-input--focus-borderColor = #369DCD
+  &:disabled
+    background-color $ui-input--disabled-backgroundColor = #DDD

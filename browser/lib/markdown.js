@@ -3,6 +3,8 @@ import emoji from 'markdown-it-emoji'
 import math from '@rokt33r/markdown-it-math'
 import hljs from 'highlight.js'
 
+const katex = window.katex
+
 function createGutter (str) {
   let lc = (str.match(/\n/g) || []).length
   let lines = []
@@ -39,10 +41,22 @@ md.use(emoji, {
 })
 md.use(math, {
   inlineRenderer: function (str) {
-    return `<span class='math'>${str}</span>`
+    let output = ''
+    try {
+      output = katex.renderToString(str.trim())
+    } catch (err) {
+      output = `<span class="katex-error">${err.message}</span>`
+    }
+    return output
   },
   blockRenderer: function (str) {
-    return `<div class='math'>${str}</div>`
+    let output = ''
+    try {
+      output = katex.renderToString(str.trim(), {displayMode: true})
+    } catch (err) {
+      output = `<div class="katex-error">${err.message}</div>`
+    }
+    return output
   }
 })
 md.use(require('markdown-it-checkbox'))

@@ -1,0 +1,253 @@
+global-reset()
+
+borderColor = #D0D0D0 // using
+highlightenBorderColor = darken(borderColor, 20%)
+invBorderColor = #404849
+brandBorderColor = #3FB399
+
+focusBorderColor = #369DCD
+
+buttonBorderColor = #4C4C4C
+
+lightButtonColor = #898989
+
+hoverBackgroundColor= transparentify(#444, 4%) // using
+
+inactiveTextColor = #888 // using
+textColor = #4D4D4D // using
+backgroundColor= white
+fontSize= 14px // using
+
+shadowColor= #C5C5C5
+
+invBackgroundColor = #4C4C4C
+invTextColor = white
+
+btnColor = #888
+btnHighlightenColor = #000
+
+brandColor = #2BAC8F
+
+popupShadow = 0 0 5px 0 #888
+
+
+tableHeadBgColor = white
+tableOddBgColor = #F9F9F9
+tableEvenBgColor = white
+
+facebookColor= #3b5998
+githubBtn= #201F1F
+
+// using
+successBackgroundColor= #E0F0D9
+successTextColor= #3E753F
+errorBackgroundColor= #F2DEDE
+errorTextColor= #A64444
+infoBackgroundColor= #D9EDF7
+infoTextColor= #34708E
+
+popupZIndex= 500
+
+body
+  font-size 16px
+  padding 15px
+  font-family helvetica, arial, sans-serif
+  line-height 1.6
+  overflow-x hidden
+  user-select all
+  .katex
+    font 400 1.2em 'KaTeX_Main'
+    line-height 1.2em
+    white-space nowrap
+    text-indent 0
+  .katex .mfrac>.vlist>span:nth-child(2)
+    top 0 !important
+  .katex-error
+    background-color errorBackgroundColor
+    color errorTextColor
+    padding 5px
+    margin -5px
+    border-radius 5px
+div.math-rendered
+  text-align center
+.math-failed
+  background-color alpha(red, 0.1)
+  color darken(red, 15%)
+  padding 5px
+  margin 5px 0
+  border-radius 5px
+sup
+  position relative
+  top -.4em
+  font-size 0.8em
+  vertical-align top
+sub
+  position relative
+  bottom -.4em
+  font-size 0.8em
+  vertical-align top
+a
+  color brandColor
+  text-decoration none
+  padding 5px
+  border-radius 5px
+  margin -5px
+  transition .1s
+  display inline-block
+  img
+    vertical-align sub
+  &:hover
+    color lighten(brandColor, 5%)
+    text-decoration underline
+    background-color alpha(#FFC95C, 0.3)
+  &:visited
+    color brandColor
+  &.lineAnchor
+    padding 0
+    margin 0
+    display block
+    font-size 0
+    height 0
+hr
+  border-top none
+  border-bottom solid 1px borderColor
+  margin 15px 0
+h1, h2, h3, h4, h5, h6
+  font-weight bold
+h1
+  font-size 2.25em
+  padding-bottom 0.3em
+  line-height 1.2em
+  border-bottom solid 1px borderColor
+  margin 1em 0 0.44em
+  &:first-child
+    margin-top 0
+h2
+  font-size 1.75em
+  padding-bottom 0.3em
+  line-height 1.225em
+  border-bottom solid 1px borderColor
+  margin 1em 0 0.57em
+  &:first-child
+    margin-top 0
+h3
+  font-size 1.5em
+  line-height 1.43em
+  margin 1em 0 0.66em
+h4
+  font-size 1.25em
+  line-height 1.4em
+  margin 1em 0 0.8em
+h5
+  font-size 1em
+  line-height 1.4em
+  margin 1em 0 1em
+h6
+  font-size 1em
+  line-height 1.4em
+  margin 1em 0 1em
+  color #777
+
+*:not(a.lineAnchor) + p, *:not(a.lineAnchor) + blockquote, *:not(a.lineAnchor) + ul, *:not(a.lineAnchor) + ol, *:not(a.lineAnchor) + pre
+  margin-top 1em
+p
+  line-height 1.6em
+  margin 0 0 1em
+  white-space pre-line
+img
+  max-width 100%
+strong, b
+  font-weight bold
+em, i
+  font-style italic
+s, del, strike
+  text-decoration line-through
+u
+  text-decoration underline
+blockquote
+  border-left solid 4px brandBorderColor
+  margin 0 0 1em
+  padding 0 25px
+ul
+  list-style-type disc
+  padding-left 2em
+  margin-bottom 1em
+  li
+    display list-item
+  &>li>ul, &>li>ol
+    margin 0
+  &>li>ul
+    list-style-type circle
+    &>li>ul
+      list-style-type square
+ol
+  list-style-type decimal
+  padding-left 2em
+  margin-bottom 1em
+  li
+    display list-item
+  &>li>ul, &>li>ol
+    margin 0
+code
+  padding 0.2em 0.4em
+  background-color #f7f7f7
+  border-radius 3px
+  font-size 0.85em
+  text-decoration none
+  margin-right 2px
+*:not(a.lineAnchor) + code
+  margin-left 2px
+pre
+  padding 0.5em !important
+  border solid 1px alpha(borderColor, 0.5)
+  border-radius 5px
+  overflow-x auto
+  margin 0 0 1em
+  line-height 1.35
+  code
+    margin 0
+    background-color inherit
+    padding 0
+    border none
+    border-radius 0
+    pre
+      border none
+      margin -5px
+  &>span.lineNumber
+    display none
+    float left
+    font-size 0.85em
+    margin 0 0.5em 0 -0.5em
+    border-right 1px solid
+    text-align right
+    &>span
+      display block
+      padding 0 .5em 0 1em
+table
+  display block
+  width 100%
+  margin 0 0 1em
+  thead
+    tr
+      background-color tableHeadBgColor
+    th
+      border-style solid
+      padding 6px 13px
+      line-height 1.6
+      border-width 1px 0 2px 1px
+      border-color borderColor
+      &:last-child
+        border-right solid 1px borderColor
+  tbody
+    tr:nth-child(2n + 1)
+      background-color tableOddBgColor
+    tr:nth-child(2n)
+      background-color tableEvenBgColor
+    td
+      border-style solid
+      padding 6px 13px
+      line-height 1.6
+      border-width 0 0 1px 1px
+      border-color borderColor
+      &:last-child
+        border-right solid 1px borderColor

@@ -1,0 +1,130 @@
+$brand-color = #6AA5E9
+
+$danger-color = #c9302c
+$danger-lighten-color = lighten(#c9302c, 5%)
+
+// Layouts
+$statusBar-height = 24px
+$sideNav-width = 200px
+$sideNav--folded-width = 44px
+$topBar-height = 50px
+
+// UI default
+$ui-text-color = #515151
+$ui-inactive-text-color = #939395
+$ui-borderColor = #D1D1D1
+$ui-backgroundColor = #FAFAFA
+$ui-border = solid 1px $ui-borderColor
+$ui-active-color = #6AA5E9
+
+// UI Button
+$ui-button-color = #939395
+$ui-button--hover-backgroundColor = rgba(126, 127, 129, 0.08)
+$ui-button--active-color = white
+$ui-button--active-backgroundColor = #6AA5E9
+$ui-button--focus-borderColor = lighten(#369DCD, 25%)
+
+// UI Tooltip
+$ui-tooltip-text-color = white
+$ui-tooltip-backgroundColor = alpha(#444, 70%)
+$ui-tooltip-button-backgroundColor = #D1D1D1
+$ui-tooltip-button--hover-backgroundColor = lighten(#D1D1D1, 30%)
+
+// UI Input
+$ui-input--focus-borderColor = #369DCD
+$ui-input--disabled-backgroundColor = #DDD
+
+/*
+* # Border
+*/
+$border-color = #D0D0D0
+$active-border-color = #369DCD
+$focus-border-color = #369DCD
+
+$default-border = solid 1px $border-color
+$active-border = solid 1px $active-border-color
+
+/**
+* # Button styles
+*/
+
+// Default button
+$default-button-background = white
+$default-button-background--hover = #e6e6e6
+$default-button-background--active = #d4d4d4
+
+colorDefaultButton()
+  background-color $default-button-background
+  &:hover
+    background-color $default-button-background--hover
+  &:active
+    background-color $default-button-background--active
+  &:active:hover
+    background-color $default-button-background--active
+
+// Primary button(Brand color)
+$primary-button-background = $brand-color
+$primary-button-background--hover = darken($brand-color, 5%)
+$primary-button-background--active = darken($brand-color, 10%)
+
+colorPrimaryButton()
+  color white
+  background-color $primary-button-background
+  &:hover
+    background-color $primary-button-background--hover
+  &:active
+    background-color $primary-button-background--active
+  &:active:hover
+    background-color $primary-button-background--activ
+
+// Danger button(Brand color)
+$danger-button-background = #c9302c
+$danger-button-background--hover = darken(#c9302c, 5%)
+$danger-button-background--active = darken(#c9302c, 10%)
+
+colorDangerButton()
+  color white
+  background-color $danger-button-background
+  &:hover
+    background-color $danger-button-background--hover
+  &:active
+    background-color $danger-button-background--active
+  &:active:hover
+    background-color $danger-button-background--active
+
+/**
+* Nav
+*/
+
+navButtonColor()
+  border none
+  color $ui-button-color
+  background-color transparent
+  transition color background-color  0.15s
+  &:hover
+    background-color $ui-button--hover-backgroundColor
+  &:active
+    background-color $ui-button--active-backgroundColor
+    color $ui-button--active-color
+  &:active, &:active:hover
+    background-color $ui-button--active-backgroundColor
+    color $ui-button--active-color
+
+/**
+* # Modal Stuff
+* These will be moved lib/modal
+*/
+
+$modal-z-index = 1002
+$modal-background = white
+$modal-margin = 64px auto 64px
+$modal-border-radius = 5px
+
+modal()
+  position relative
+  z-index $modal-z-index
+  width 100%
+  background-color $modal-background
+  overflow hidden
+  border-radius $modal-border-radius
+  box-shadow 2px 2px 10px gray

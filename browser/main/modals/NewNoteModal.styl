@@ -1,0 +1,56 @@
+.root
+  modal()
+  max-width 540px
+  overflow hidden
+  position relative
+
+.header
+  height 50px
+  font-size 18px
+  line-height 50px
+  padding 0 15px
+  background-color $ui-backgroundColor
+  border-bottom solid 1px $ui-borderColor
+  color $ui-text-color
+
+.closeButton
+  position absolute
+  top 10px
+  right 10px
+  height 30px
+  width 0 25px
+  border $ui-border
+  border-radius 2px
+  color $ui-text-color
+  colorDefaultButton()
+
+.control
+  padding 25px 15px 15px
+  text-align center
+
+.control-button
+  width 220px
+  height 220px
+  margin 0 15px
+  border $ui-border
+  border-radius 5px
+  color $ui-text-color
+  colorDefaultButton()
+  padding 10px
+  &:focus
+    colorPrimaryButton()
+
+.control-button-icon
+  font-size 50px
+  margin-bottom 15px
+
+.control-button-label
+  font-size 18px
+  line-height 32px
+.control-button-description
+  font-size 12px
+
+.description
+  color $ui-inactive-text-color
+  text-align center
+  margin-bottom 25px

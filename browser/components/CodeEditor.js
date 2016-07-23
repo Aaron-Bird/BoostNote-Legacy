@@ -2,43 +2,34 @@ import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import modes from '../lib/modes'
 import _ from 'lodash'
-import fetchConfig from '../lib/fetchConfig'
-
-const electron = require('electron')
-const remote = electron.remote
-const ipc = electron.ipcRenderer
 
 const ace = window.ace
 
-let config = fetchConfig()
-ipc.on('config-apply', function (e, newConfig) {
-  config = newConfig
-})
+const defaultEditorFontFamily = ['Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', 'monospace']
 
 export default class CodeEditor extends React.Component {
   constructor (props) {
     super(props)
 
-    this.configApplyHandler = (e, config) => this.handleConfigApply(e, config)
-    this.changeHandler = e => this.handleChange(e)
+    this.changeHandler = (e) => this.handleChange(e)
     this.blurHandler = (e) => {
-      if (e.relatedTarget === null) {
-        return
+      e.stopPropagation()
+      let el = e.relatedTarget
+      let isStillFocused = false
+      while (el != null) {
+        if (el === this.refs.root) {
+          isStillFocused = true
+          break
+        }
+        el = el.parentNode
       }
 
-      let isFocusingToSearch = e.relatedTarget.className && e.relatedTarget.className.split(' ').some(clss => {
-        return clss === 'ace_search_field' || clss === 'ace_searchbtn' || clss === 'ace_replacebtn' || clss === 'ace_searchbtn_close' || clss === 'ace_text-input'
-      })
-      if (isFocusingToSearch) {
-        return
-      }
-
-      if (this.props.onBlur) this.props.onBlur(e)
+      if (!isStillFocused && this.props.onBlur != null) this.props.onBlur(e)
     }
 
     this.killedBuffer = ''
     this.execHandler = (e) => {
-      console.log(e.command.name)
+      console.info('ACE COMMAND >> %s', e.command.name)
       switch (e.command.name) {
         case 'gotolinestart':
           e.preventDefault()
@@ -84,7 +75,7 @@ export default class CodeEditor extends React.Component {
     this.afterExecHandler = (e) => {
       switch (e.command.name) {
         case 'find':
-          Array.prototype.forEach.call(ReactDOM.findDOMNode(this).querySelectorAll('.ace_search_field, .ace_searchbtn, .ace_replacebtn, .ace_searchbtn_close'), el => {
+          Array.prototype.forEach.call(ReactDOM.findDOMNode(this).querySelectorAll('.ace_search_field, .ace_searchbtn, .ace_replacebtn, .ace_searchbtn_close'), (el) => {
             el.removeEventListener('blur', this.blurHandler)
             el.addEventListener('blur', this.blurHandler)
           })
@@ -93,11 +84,6 @@ export default class CodeEditor extends React.Component {
     }
 
     this.state = {
-      fontSize: config['editor-font-size'],
-      fontFamily: config['editor-font-family'],
-      indentType: config['editor-indent-type'],
-      indentSize: config['editor-indent-size'],
-      themeSyntax: config['theme-syntax']
     }
 
     this.silentChange = false
@@ -110,15 +96,16 @@ export default class CodeEditor extends React.Component {
   }
 
   componentDidMount () {
-    let { article } = this.props
-    var el = ReactDOM.findDOMNode(this)
-    var editor = this.editor = ace.edit(el)
+    let { mode, value, theme, fontSize } = this.props
+    this.value = value
+    let el = ReactDOM.findDOMNode(this)
+    let editor = this.editor = ace.edit(el)
     editor.$blockScrolling = Infinity
     editor.renderer.setShowGutter(true)
-    editor.setTheme('ace/theme/' + this.state.themeSyntax)
+    editor.setTheme('ace/theme/' + theme)
     editor.moveCursorTo(0, 0)
     editor.setReadOnly(!!this.props.readOnly)
-    editor.setFontSize(this.state.fontSize)
+    editor.setFontSize(fontSize)
 
     editor.on('blur', this.blurHandler)
 
@@ -132,23 +119,11 @@ export default class CodeEditor extends React.Component {
       readOnly: true
     })
     editor.commands.addCommand({
-      name: 'Emacs cursor up',
+      name: 'Emacs kill buffer',
       bindKey: {mac: 'Ctrl-Y'},
       exec: function (editor) {
         editor.insert(this.killedBuffer)
       }.bind(this),
-      readOnly: true
-    })
-    editor.commands.addCommand({
-      name: 'Focus title',
-      bindKey: {win: 'Esc', mac: 'Esc'},
-      exec: function (editor, e) {
-        let currentWindow = remote.getCurrentWebContents()
-        if (config['switch-preview'] === 'rightclick') {
-          currentWindow.send('detail-preview')
-        }
-        currentWindow.send('list-focus')
-      },
       readOnly: true
     })
 
@@ -156,25 +131,22 @@ export default class CodeEditor extends React.Component {
     editor.commands.on('afterExec', this.afterExecHandler)
 
     var session = editor.getSession()
-    let mode = _.findWhere(modes, {name: article.mode})
+    mode = _.find(modes, {name: mode})
     let syntaxMode = mode != null
       ? mode.mode
       : 'text'
     session.setMode('ace/mode/' + syntaxMode)
 
-    session.setUseSoftTabs(this.state.indentType === 'space')
-    session.setTabSize(!isNaN(this.state.indentSize) ? parseInt(this.state.indentSize, 10) : 4)
-    session.setOption('useWorker', false)
+    session.setUseSoftTabs(this.props.indentType === 'space')
+    session.setTabSize(this.props.indentSize)
+    session.setOption('useWorker', true)
     session.setUseWrapMode(true)
-    session.setValue(this.props.article.content)
+    session.setValue(_.isString(value) ? value : '')
 
     session.on('change', this.changeHandler)
-
-    ipc.on('config-apply', this.configApplyHandler)
   }
 
   componentWillUnmount () {
-    ipc.removeListener('config-apply', this.configApplyHandler)
     this.editor.getSession().removeListener('change', this.changeHandler)
     this.editor.removeListener('blur', this.blurHandler)
     this.editor.commands.removeListener('exec', this.execHandler)
@@ -182,42 +154,36 @@ export default class CodeEditor extends React.Component {
   }
 
   componentDidUpdate (prevProps, prevState) {
-    var session = this.editor.getSession()
-    if (this.props.article.key !== prevProps.article.key) {
-      session.removeListener('change', this.changeHandler)
-      session.setValue(this.props.article.content)
-      session.getUndoManager().reset()
-      session.on('change', this.changeHandler)
-    }
-    if (prevProps.article.mode !== this.props.article.mode) {
-      let mode = _.findWhere(modes, {name: this.props.article.mode})
+    let { value } = this.props
+    this.value = value
+    let editor = this.editor
+    let session = this.editor.getSession()
+
+    if (prevProps.mode !== this.props.mode) {
+      let mode = _.find(modes, {name: this.props.mode})
       let syntaxMode = mode != null
         ? mode.mode
         : 'text'
       session.setMode('ace/mode/' + syntaxMode)
     }
+    if (prevProps.theme !== this.props.theme) {
+      editor.setTheme('ace/theme/' + this.props.theme)
+    }
+    if (prevProps.fontSize !== this.props.fontSize) {
+      editor.setFontSize(this.props.fontSize)
+    }
+    if (prevProps.indentSize !== this.props.indentSize) {
+      session.setTabSize(this.props.indentSize)
+    }
+    if (prevProps.indentType !== this.props.indentType) {
+      session.setUseSoftTabs(this.props.indentType === 'space')
+    }
   }
 
-  handleConfigApply (e, config) {
-    this.setState({
-      fontSize: config['editor-font-size'],
-      fontFamily: config['editor-font-family'],
-      indentType: config['editor-indent-type'],
-      indentSize: config['editor-indent-size'],
-      themeSyntax: config['theme-syntax']
-    }, function () {
-      var editor = this.editor
-      editor.setTheme('ace/theme/' + this.state.themeSyntax)
-
-      var session = editor.getSession()
-      session.setUseSoftTabs(this.state.indentType === 'space')
-      session.setTabSize(!isNaN(this.state.indentSize) ? parseInt(this.state.indentSize, 10) : 4)
-    })
-  }
   handleChange (e) {
     if (this.props.onChange) {
-      var value = this.editor.getValue()
-      this.props.onChange(value)
+      this.value = this.editor.getValue()
+      this.props.onChange(e)
     }
   }
 
@@ -237,13 +203,37 @@ export default class CodeEditor extends React.Component {
     this.editor.scrollToLine(num, false, false)
   }
 
+  focus () {
+    this.editor.focus()
+  }
+
+  blur () {
+    this.editor.blur()
+  }
+
+  reload () {
+    let session = this.editor.getSession()
+    session.removeListener('change', this.changeHandler)
+    session.setValue(this.props.value)
+    session.getUndoManager().reset()
+    session.on('change', this.changeHandler)
+  }
+
   render () {
+    let { className, fontFamily } = this.props
+    fontFamily = _.isString(fontFamily) && fontFamily.length > 0
+      ? [fontFamily].concat(defaultEditorFontFamily)
+      : defaultEditorFontFamily
     return (
       <div
-        className={this.props.className == null ? 'CodeEditor' : 'CodeEditor ' + this.props.className}
+        className={className == null
+          ? 'CodeEditor'
+          : `CodeEditor ${className}`
+        }
+        ref='root'
+        tabIndex='-1'
         style={{
-          fontSize: this.state.fontSize,
-          fontFamily: this.state.fontFamily.trim() + ', monospace'
+          fontFamily: fontFamily.join(', ')
         }}
       />
     )
@@ -251,11 +241,8 @@ export default class CodeEditor extends React.Component {
 }
 
 CodeEditor.propTypes = {
-  article: PropTypes.shape({
-    content: PropTypes.string,
-    mode: PropTypes.string,
-    key: PropTypes.string
-  }),
+  value: PropTypes.string,
+  mode: PropTypes.string,
   className: PropTypes.string,
   onBlur: PropTypes.func,
   onChange: PropTypes.func,
@@ -263,7 +250,12 @@ CodeEditor.propTypes = {
 }
 
 CodeEditor.defaultProps = {
-  readOnly: false
+  readOnly: false,
+  theme: 'xcode',
+  fontSize: 14,
+  fontFamily: 'Monaco, Consolas',
+  indentSize: 4,
+  indentType: 'space'
 }
 
 export default CodeEditor

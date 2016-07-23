@@ -1,0 +1,90 @@
+$info-height = 75px
+
+.root
+  absolute top bottom right
+  border-width 0 0 1px
+  border-style solid
+  border-color $ui-borderColor
+
+.info
+  absolute top left right
+  height $info-height
+  border-bottom $ui-border
+  background-color $ui-backgroundColor
+
+.info-delete
+  height 80px
+  clearfix()
+
+.info-delete-message
+  height 80px
+  line-height 80px
+  padding 0 25px
+  float left
+
+.info-delete-confirmButton
+  float right
+  margin 25px 5px 0
+  height 30px
+  padding 0 25px
+  border-radius 2px
+  border none
+  color $ui-text-color
+  colorDangerButton()
+
+.info-delete-cancelButton
+  float right
+  height 30px
+  margin 25px 5px 0
+  padding 0 25px
+  border $ui-border
+  border-radius 2px
+  color $ui-text-color
+  colorDefaultButton()
+
+.info-left
+  float left
+  padding 0 5px
+
+.info-left-top
+  height 40px
+  line-height 40px
+
+.info-left-top-folderSelect
+  display inline-block
+  height 34px
+  width 200px
+  vertical-align middle
+
+.info-left-bottom
+  height 30px
+
+.info-left-bottom-tagSelect
+  height 30px
+  line-height 30px
+
+.info-right
+  float right
+
+.info-right-button
+  width 34px
+  height 34px
+  border-radius 17px
+  navButtonColor()
+  border $ui-border
+  font-size 14px
+  margin 8px 2px
+  padding 0
+  &:active
+    border-color $ui-button--focus-borderColor
+  &:hover .left-control-newPostButton-tooltip
+    display block
+  &:focus
+    border-color $ui-button--focus-borderColor
+
+.body
+  absolute bottom left right
+  top $info-height
+
+.body-noteEditor
+  absolute top bottom left right

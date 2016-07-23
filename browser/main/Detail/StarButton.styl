@@ -1,0 +1,11 @@
+.root
+  position relative
+  padding 0
+  transition transform 0.15s
+  &:hover
+    transform rotate(-72deg)
+
+.root--active
+  @extend .root
+  color $ui-active-color
+  transform rotate(-72deg)

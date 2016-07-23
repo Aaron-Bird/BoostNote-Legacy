@@ -1,0 +1,89 @@
+.root
+  width 100%
+  user-select none
+.header
+  position relative
+  height 30px
+  width 100%
+  &:hover
+    background-color $ui-button--hover-backgroundColor
+  &:active
+    .header-toggleButton
+      color white
+.header--active
+  @extend .header
+  .header-info
+    color $ui-button--active-color
+    background-color $ui-button--active-backgroundColor
+  .header-toggleButton
+    color white
+    &:active
+      color white
+
+.header-toggleButton
+  position absolute
+  left 0
+  width 25px
+  height 30px
+  padding 0
+  border none
+  color $ui-inactive-text-color
+  background-color transparent
+  &:hover
+    color $ui-text-color
+  &:active
+    color $ui-active-color
+
+.header-info
+  display block
+  width 100%
+  height 30px
+  padding-left 25px
+  padding-right 10px
+  line-height 30px
+  cursor pointer
+  font-size 14px
+  border none
+  overflow ellipsis
+  text-align left
+  background-color transparent
+  color $ui-inactive-text-color
+  &:active
+    color $ui-button--active-color
+    background-color $ui-button--active-backgroundColor
+
+.header-info-path
+  font-size 10px
+  margin 0 5px
+
+.folderList-item
+  display block
+  width 100%
+  height 3 0px
+  background-color transparent
+  color $ui-inactive-text-color
+  padding 0
+  margin 2px 0
+  text-align left
+  border none
+  font-size 14px
+  &:hover
+    background-color $ui-button--hover-backgroundColor
+  &:active
+    color $ui-button--active-color
+    background-color $ui-button--active-backgroundColor
+.folderList-item--active
+  @extend .folderList-item
+  color $ui-button--active-color
+  background-color $ui-button--active-backgroundColor
+  &:hover
+    color $ui-button--active-color
+    background-color $ui-button--active-backgroundColor
+.folderList-item-name
+  display block
+  padding 0 10px
+  height 30px
+  line-height 30px
+  border-width 0 0 0 4px
+  border-style solid
+  border-color transparent

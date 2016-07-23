@@ -1,33 +1,17 @@
 import { Provider } from 'react-redux'
-import MainPage from './MainPage'
+import Main from './Main'
 import store from './store'
 import React from 'react'
 import ReactDOM from 'react-dom'
-require('../styles/main/index.styl')
-import { openModal } from 'browser/lib/modal'
-import OSSAnnounceModal from './modal/OSSAnnounceModal'
+require('!!style!css!stylus?sourceMap!./global.styl')
 import activityRecord from 'browser/lib/activityRecord'
-import fetchConfig from '../lib/fetchConfig'
+import { Router, Route, IndexRoute, IndexRedirect, hashHistory } from 'react-router'
+import { syncHistoryWithStore } from 'react-router-redux'
+
 const electron = require('electron')
 const ipc = electron.ipcRenderer
 const path = require('path')
 const remote = electron.remote
-
-let config = fetchConfig()
-applyConfig(config)
-
-ipc.on('config-apply', function (e, newConfig) {
-  config = newConfig
-  applyConfig(config)
-})
-
-function applyConfig (config) {
-  let body = document.body
-  body.setAttribute('data-theme', config['theme-ui'])
-
-  let hljsCss = document.getElementById('hljs-css')
-  hljsCss.setAttribute('href', '../node_modules/highlight.js/styles/' + config['theme-code'] + '.css')
-}
 
 if (process.env.NODE_ENV !== 'production') {
   window.addEventListener('keydown', function (e) {
@@ -74,21 +58,26 @@ ipc.on('open-finder', function () {
 })
 
 let el = document.getElementById('content')
+const history = syncHistoryWithStore(hashHistory, store)
+
 ReactDOM.render((
-  <div>
-    <Provider store={store}>
-      <MainPage/>
-    </Provider>
-  </div>
+  <Provider store={store}>
+    <Router history={history}>
+      <Route path='/' component={Main}>
+        <IndexRedirect to='/home'/>
+        <Route path='home'/>
+        <Route path='starred'/>
+        <Route path='storages'>
+          <IndexRedirect to='/home'/>
+          <Route path=':storageKey'>
+            <IndexRoute/>
+            <Route path='folders/:folderKey'/>
+          </Route>
+        </Route>
+      </Route>
+    </Router>
+  </Provider>
 ), el, function () {
   let loadingCover = document.getElementById('loadingCover')
   loadingCover.parentNode.removeChild(loadingCover)
-  let status = JSON.parse(localStorage.getItem('status'))
-  if (status == null) status = {}
-
-  if (!status.ossAnnounceWatched) {
-    openModal(OSSAnnounceModal)
-    status.ossAnnounceWatched = true
-    localStorage.setItem('status', JSON.stringify(status))
-  }
 })
