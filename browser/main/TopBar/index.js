@@ -5,6 +5,7 @@ import _ from 'lodash'
 import modal from 'browser/main/lib/modal'
 import NewNoteModal from 'browser/main/modals/NewNoteModal'
 import { hashHistory } from 'react-router'
+import ee from 'browser/main/lib/eventEmitter'
 
 const OSX = window.process.platform === 'darwin'
 
@@ -17,6 +18,18 @@ class TopBar extends React.Component {
       searchOptions: [],
       searchPopupOpen: false
     }
+
+    this.newNoteHandler = () => {
+      this.handleNewPostButtonClick()
+    }
+  }
+
+  componentDidMount () {
+    ee.on('top:new-note', this.newNoteHandler)
+  }
+
+  componentWillUnmount () {
+    ee.off('top:new-note', this.newNoteHandler)
   }
 
   handleNewPostButtonClick (e) {

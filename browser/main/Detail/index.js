@@ -13,16 +13,21 @@ class Detail extends React.Component {
     super(props)
 
     this.focusHandler = () => {
-      this.refs.root.focus()
+      this.refs.root != null && this.refs.root.focus()
+    }
+    this.deleteHandler = () => {
+      this.refs.root != null && this.refs.root.handleDeleteMenuClick()
     }
   }
 
   componentDidMount () {
     ee.on('detail:focus', this.focusHandler)
+    ee.on('detail:delete', this.deleteHandler)
   }
 
   componentWillUnmount () {
     ee.off('detail:focus', this.focusHandler)
+    ee.off('detail:delete', this.deleteHandler)
   }
 
   render () {
@@ -46,7 +51,6 @@ class Detail extends React.Component {
         <div styleName='root'
           style={this.props.style}
           tabIndex='0'
-          ref='root'
         >
           <div styleName='empty'>
             <div styleName='empty-message'>{OSX ? 'Command(⌘)' : 'Ctrl(^)'} + N<br/>to create a new post</div>

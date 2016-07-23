@@ -38,7 +38,6 @@ var config = {
     'markdown-it-emoji',
     'fs-jetpack',
     '@rokt33r/markdown-it-math',
-    '@rokt33r/sanitize-html',
     'markdown-it-checkbox',
     'season',
     'devtron',
