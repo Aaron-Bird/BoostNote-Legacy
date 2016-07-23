@@ -4,14 +4,25 @@ import styles from './Detail.styl'
 import _ from 'lodash'
 import MarkdownNoteDetail from './MarkdownNoteDetail'
 import SnippetNoteDetail from './SnippetNoteDetail'
-import dataApi from 'browser/main/lib/dataApi'
-
-const electron = require('electron')
+import ee from 'browser/main/lib/eventEmitter'
 
 const OSX = global.process.platform === 'darwin'
 
 class Detail extends React.Component {
-  componentDidUpdate (prevProps, prevState) {
+  constructor (props) {
+    super(props)
+
+    this.focusHandler = () => {
+      this.refs.root.focus()
+    }
+  }
+
+  componentDidMount () {
+    ee.on('detail:focus', this.focusHandler)
+  }
+
+  componentWillUnmount () {
+    ee.off('detail:focus', this.focusHandler)
   }
 
   render () {
@@ -35,6 +46,7 @@ class Detail extends React.Component {
         <div styleName='root'
           style={this.props.style}
           tabIndex='0'
+          ref='root'
         >
           <div styleName='empty'>
             <div styleName='empty-message'>{OSX ? 'Command(⌘)' : 'Ctrl(^)'} + N<br/>to create a new post</div>
@@ -48,6 +60,7 @@ class Detail extends React.Component {
         <SnippetNoteDetail
           note={note}
           config={config}
+          ref='root'
           {..._.pick(this.props, [
             'dispatch',
             'storages',
@@ -63,6 +76,7 @@ class Detail extends React.Component {
       <MarkdownNoteDetail
         note={note}
         config={config}
+        ref='root'
         {..._.pick(this.props, [
           'dispatch',
           'storages',

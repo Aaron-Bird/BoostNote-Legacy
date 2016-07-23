@@ -18,6 +18,7 @@ function storages (state = [], action) {
     case 'ADD_FOLDER':
     case 'REMOVE_FOLDER':
     case 'UPDATE_STORAGE':
+    case 'RENAME_STORAGE':
       {
         let storages = state.slice()
         storages = storages
@@ -81,6 +82,12 @@ function notes (state = [], action) {
         let notes = state.slice()
         notes = notes.filter((note) => note.key !== action.note.key || note.folder !== action.note.folder || note.storage !== action.note.storage)
         notes.push(action.newNote)
+        return notes
+      }
+    case 'REMOVE_NOTE':
+      {
+        let notes = state.slice()
+        notes = notes.filter((note) => note.key !== action.note.key || note.folder !== action.note.folder || note.storage !== action.note.storage)
         return notes
       }
   }

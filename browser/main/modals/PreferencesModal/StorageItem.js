@@ -204,6 +204,14 @@ class UnstyledFolderItem extends React.Component {
 const FolderItem = CSSModules(UnstyledFolderItem, styles)
 
 class StorageItem extends React.Component {
+  constructor (props) {
+    super(props)
+
+    this.state = {
+      isLabelEditing: false
+    }
+  }
+
   handleNewFolderButtonClick (e) {
     let { storage } = this.props
     let input = {
@@ -242,6 +250,35 @@ class StorageItem extends React.Component {
       })
   }
 
+  handleLabelClick (e) {
+    let { storage } = this.props
+    this.setState({
+      isLabelEditing: true,
+      name: storage.name
+    }, () => {
+      this.refs.label.focus()
+    })
+  }
+  handleLabelChange (e) {
+    this.setState({
+      name: this.refs.label.value
+    })
+  }
+  handleLabelBlur (e) {
+    let { storage } = this.props
+    dataApi
+      .renameStorage(storage.key, this.state.name)
+      .then((storage) => {
+        store.dispatch({
+          type: 'RENAME_STORAGE',
+          storage: storage
+        })
+        this.setState({
+          isLabelEditing: false
+        })
+      })
+  }
+
   render () {
     let { storage } = this.props
     let folderList = storage.folders.map((folder) => {
@@ -253,9 +290,24 @@ class StorageItem extends React.Component {
     return (
       <div styleName='root' key={storage.key}>
         <div styleName='header'>
-          <i className='fa fa-folder-open'/>&nbsp;
-          {storage.name}&nbsp;
-          <span styleName='header-path'>({storage.path})</span>
+          {this.state.isLabelEditing
+            ? <div styleName='header-label--edit'>
+              <input styleName='header-label-input'
+                value={this.state.name}
+                ref='label'
+                onChange={(e) => this.handleLabelChange(e)}
+                onBlur={(e) => this.handleLabelBlur(e)}
+              />
+            </div>
+            : <div styleName='header-label'
+              onClick={(e) => this.handleLabelClick(e)}
+            >
+              <i className='fa fa-folder-open'/>&nbsp;
+              {storage.name}&nbsp;
+              <span styleName='header-label-path'>({storage.path})</span>&nbsp;
+              <i styleName='header-label-editButton' className='fa fa-pencil'/>
+            </div>
+          }
           <div styleName='header-control'>
             <button styleName='header-control-button'
               onClick={(e) => this.handleNewFolderButtonClick(e)}

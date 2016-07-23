@@ -10,10 +10,32 @@
   border-bottom $default-border
   margin-bottom 5px
 
-.header-path
+.header-label
+  float left
+  cursor pointer
+  &:hover
+    .header-label-editButton
+      opacity 1
+
+.header-label-path
   color $ui-inactive-text-color
   font-size 10px
   margin 0 5px
+.header-label-editButton
+  color $ui-text-color
+  opacity 0
+  transition 0.2s
+.header-label--edit
+  @extend .header-label
+
+.header-label-input
+  height 25px
+  box-sizing border-box
+  vertical-align middle
+  border $ui-border
+  border-radius 2px
+  padding 0 5px
+
 
 .header-control
   float right

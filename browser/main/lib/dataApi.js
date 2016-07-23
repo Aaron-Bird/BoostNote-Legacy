@@ -282,6 +282,15 @@ function removeStorage (key) {
   return Promise.resolve(true)
 }
 
+function renameStorage (key, name) {
+  let storage = _.find(storages, {key: key})
+  if (storage == null) throw new Error('Storage doesn\'t exist.')
+  storage.cache.name = name
+  storage.saveCache()
+
+  return Promise.resolve(storage.toJSON())
+}
+
 function migrateFromV5 (key, data) {
   let oldFolders = data.folders
   let oldArticles = data.articles
@@ -483,17 +492,31 @@ function updateNote (storageKey, folderKey, noteKey, input) {
     storage: storageKey,
     folder: folderKey
   })
-  note.data.title = input.title
-  note.data.tags = input.tags
-  note.data.content = input.content
-  note.data.updatedAt = input.updatedAt
+
+  switch (note.data.type) {
+    case 'MARKDOWN_NOTE':
+      note.data.title = input.title
+      note.data.tags = input.tags
+      note.data.content = input.content
+      note.data.updatedAt = input.updatedAt
+      break
+    case 'SNIPPET_NOTE':
+      note.data.title = input.title
+      note.data.tags = input.tags
+      note.data.description = input.description
+      note.data.snippets = input.snippets
+      note.data.updatedAt = input.updatedAt
+  }
 
   return note.save()
     .then(() => note.toJSON())
 }
 
-function removeNote (storageKey, folderKey, noteKey, input) {
+function removeNote (storageKey, folderKey, noteKey) {
+  notes = notes.filter((note) => note.storage !== storageKey || note.folder !== folderKey || note.key !== noteKey)
+  queueSaveFolder(storageKey, folderKey)
 
+  return Promise.resolve(null)
 }
 
 function moveNote (storageKey, folderKey, noteKey, newStorageKey, newFolderKey) {
@@ -529,6 +552,7 @@ export default {
   init,
   addStorage,
   removeStorage,
+  renameStorage,
   createFolder,
   updateFolder,
   removeFolder,

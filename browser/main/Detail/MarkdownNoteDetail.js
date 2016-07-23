@@ -5,9 +5,9 @@ import MarkdownEditor from 'browser/components/MarkdownEditor'
 import StarButton from './StarButton'
 import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
-import Commander from 'browser/main/lib/Commander'
 import dataApi from 'browser/main/lib/dataApi'
 import { hashHistory } from 'react-router'
+import ee from 'browser/main/lib/eventEmitter'
 
 const electron = require('electron')
 const { remote } = electron
@@ -22,31 +22,22 @@ class MarkdownNoteDetail extends React.Component {
       note: Object.assign({
         title: '',
         content: '',
-        isMovingNote: false
+        isMovingNote: false,
+        isDeleting: false
       }, props.note)
     }
     this.dispatchTimer = null
   }
 
-  componentDidMount () {
-    Commander.bind('note-detail', this)
-  }
-
-  componentWillUnmount () {
-    Commander.release(this)
-  }
-
-  fire (command) {
-    switch (command) {
-      case 'focus':
-        this.refs.content.focus()
-    }
+  focus () {
+    this.refs.content.focus()
   }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.note.key !== this.props.note.key && !this.isMovingNote) {
       this.setState({
-        note: Object.assign({}, nextProps.note)
+        note: Object.assign({}, nextProps.note),
+        isDeleting: false
       }, () => {
         this.refs.content.reload()
         this.refs.tags.reset()
@@ -176,9 +167,37 @@ class MarkdownNoteDetail extends React.Component {
     let menu = new Menu()
     menu.append(new MenuItem({
       label: 'Delete',
-      click: (e) => this.handlePreferencesButtonClick(e)
+      click: (e) => this.handleDeleteMenuClick(e)
     }))
     menu.popup(remote.getCurrentWindow())
+  }
+
+  handleDeleteMenuClick (e) {
+    this.setState({
+      isDeleting: true
+    })
+  }
+
+  handleDeleteConfirmButtonClick (e) {
+    let { note, dispatch } = this.props
+    dataApi
+      .removeNote(note.storage, note.folder, note.key)
+      .then(() => {
+        let dispatchHandler = () => {
+          dispatch({
+            type: 'REMOVE_NOTE',
+            note: note
+          })
+        }
+        ee.once('list:moved', dispatchHandler)
+        ee.emit('list:next')
+      })
+  }
+
+  handleDeleteCancelButtonClick (e) {
+    this.setState({
+      isDeleting: false
+    })
   }
 
   render () {
@@ -190,43 +209,58 @@ class MarkdownNoteDetail extends React.Component {
         style={this.props.style}
         styleName='root'
       >
-        <div styleName='info'>
-          <div styleName='info-left'>
+        {this.state.isDeleting
+          ? <div styleName='info'>
+            <div styleName='info-delete'>
 
-            <div styleName='info-left-top'>
-              <FolderSelect styleName='info-left-top-folderSelect'
-                value={this.state.note.storage + '-' + this.state.note.folder}
-                ref='folder'
-                storages={storages}
-                onChange={(e) => this.handleFolderChange(e)}
-              />
-            </div>
-            <div styleName='info-left-bottom'>
-              <TagSelect
-                styleName='info-left-bottom-tagSelect'
-                ref='tags'
-                value={this.state.note.tags}
-                onChange={(e) => this.handleChange(e)}
-              />
+              <span styleName='info-delete-message'>
+                Are you sure to delete this note?
+              </span>
+              <button styleName='info-delete-cancelButton'
+                onClick={(e) => this.handleDeleteCancelButtonClick(e)}
+              >Cancel</button>
+              <button styleName='info-delete-confirmButton'
+                onClick={(e) => this.handleDeleteConfirmButtonClick(e)}
+              >Confirm</button>
             </div>
           </div>
-          <div styleName='info-right'>
-            <StarButton styleName='info-right-button'
-              onClick={(e) => this.handleStarButtonClick(e)}
-              isActive={note.isStarred}
-            />
-            <button styleName='info-right-button'
-              onClick={(e) => this.handleShareButtonClick(e)}
-            >
-              <i className='fa fa-share-alt fa-fw'/>
-            </button>
-            <button styleName='info-right-button'
-              onClick={(e) => this.handleContextButtonClick(e)}
-            >
-              <i className='fa fa-ellipsis-v'/>
-            </button>
+          : <div styleName='info'>
+            <div styleName='info-left'>
+              <div styleName='info-left-top'>
+                <FolderSelect styleName='info-left-top-folderSelect'
+                  value={this.state.note.storage + '-' + this.state.note.folder}
+                  ref='folder'
+                  storages={storages}
+                  onChange={(e) => this.handleFolderChange(e)}
+                />
+              </div>
+              <div styleName='info-left-bottom'>
+                <TagSelect
+                  styleName='info-left-bottom-tagSelect'
+                  ref='tags'
+                  value={this.state.note.tags}
+                  onChange={(e) => this.handleChange(e)}
+                />
+              </div>
+            </div>
+            <div styleName='info-right'>
+              <StarButton styleName='info-right-button'
+                onClick={(e) => this.handleStarButtonClick(e)}
+                isActive={note.isStarred}
+              />
+              <button styleName='info-right-button'
+                onClick={(e) => this.handleShareButtonClick(e)}
+              >
+                <i className='fa fa-share-alt fa-fw'/>
+              </button>
+              <button styleName='info-right-button'
+                onClick={(e) => this.handleContextButtonClick(e)}
+              >
+                <i className='fa fa-ellipsis-v'/>
+              </button>
+            </div>
           </div>
-        </div>
+        }
         <div styleName='body'>
           <MarkdownEditor
             ref='content'

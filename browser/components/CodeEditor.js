@@ -23,7 +23,6 @@ export default class CodeEditor extends React.Component {
         }
         el = el.parentNode
       }
-      console.log(isStillFocused)
 
       if (!isStillFocused && this.props.onBlur != null) this.props.onBlur(e)
     }
@@ -165,7 +164,7 @@ export default class CodeEditor extends React.Component {
       let syntaxMode = mode != null
         ? mode.mode
         : 'text'
-      session.setMode('ace/mode' + syntaxMode)
+      session.setMode('ace/mode/' + syntaxMode)
     }
     if (prevProps.theme !== this.props.theme) {
       editor.setTheme('ace/theme/' + this.props.theme)

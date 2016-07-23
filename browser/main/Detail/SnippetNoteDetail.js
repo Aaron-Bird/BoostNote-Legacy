@@ -5,10 +5,10 @@ import CodeEditor from 'browser/components/CodeEditor'
 import StarButton from './StarButton'
 import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
-import Commander from 'browser/main/lib/Commander'
 import dataApi from 'browser/main/lib/dataApi'
 import modes from 'browser/lib/modes'
 import { hashHistory } from 'react-router'
+import ee from 'browser/main/lib/eventEmitter'
 
 const electron = require('electron')
 const { remote } = electron
@@ -25,34 +25,26 @@ class SnippetNoteDetail extends React.Component {
         description: ''
       }, props.note, {
         snippets: props.note.snippets.map((snippet) => Object.assign({}, snippet))
-      })
+      }),
+      isDeleting: false
     }
   }
 
-  componentDidMount () {
-    Commander.bind('note-detail', this)
-  }
-
-  componentWillUnmount () {
-    Commander.release(this)
-  }
-
-  fire (command) {
-    switch (command) {
-      case 'focus':
-        this.refs.description.focus()
-    }
+  focus () {
+    this.refs.description.focus()
   }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.note.key !== this.props.note.key) {
+      let nextNote = Object.assign({
+        description: ''
+      }, nextProps.note, {
+        snippets: nextProps.note.snippets.map((snippet) => Object.assign({}, snippet))
+      })
       this.setState({
         snippetIndex: 0,
-        note: Object.assign({
-          description: ''
-        }, nextProps.note, {
-          snippets: nextProps.note.snippets.map((snippet) => Object.assign({}, snippet))
-        })
+        note: nextNote,
+        isDeleting: false
       }, () => {
         let { snippets } = this.state.note
         snippets.forEach((snippet, index) => {
@@ -171,6 +163,7 @@ class SnippetNoteDetail extends React.Component {
     let menu = new Menu()
     menu.append(new MenuItem({
       label: 'Export as a File',
+      disabled: true,
       click: (e) => this.handlePreferencesButtonClick(e)
     }))
     menu.append(new MenuItem({
@@ -185,9 +178,37 @@ class SnippetNoteDetail extends React.Component {
     let menu = new Menu()
     menu.append(new MenuItem({
       label: 'Delete',
-      click: (e) => this.handlePreferencesButtonClick(e)
+      click: (e) => this.handleDeleteMenuClick(e)
     }))
     menu.popup(remote.getCurrentWindow())
+  }
+
+  handleDeleteMenuClick (e) {
+    this.setState({
+      isDeleting: true
+    })
+  }
+
+  handleDeleteConfirmButtonClick (e) {
+    let { note, dispatch } = this.props
+    dataApi
+      .removeNote(note.storage, note.folder, note.key)
+      .then(() => {
+        let dispatchHandler = () => {
+          dispatch({
+            type: 'REMOVE_NOTE',
+            note: note
+          })
+        }
+        ee.once('list:moved', dispatchHandler)
+        ee.emit('list:next')
+      })
+  }
+
+  handleDeleteCancelButtonClick (e) {
+    this.setState({
+      isDeleting: false
+    })
   }
 
   handleTabPlusButtonClick (e) {
@@ -360,43 +381,59 @@ class SnippetNoteDetail extends React.Component {
         style={this.props.style}
         styleName='root'
       >
-        <div styleName='info'>
-          <div styleName='info-left'>
+        {this.state.isDeleting
+          ? <div styleName='info'>
+            <div styleName='info-delete'>
 
-            <div styleName='info-left-top'>
-              <FolderSelect styleName='info-left-top-folderSelect'
-                value={this.state.note.storage + '-' + this.state.note.folder}
-                ref='folder'
-                storages={storages}
-                onChange={(e) => this.handleFolderChange(e)}
-              />
-            </div>
-            <div styleName='info-left-bottom'>
-              <TagSelect
-                styleName='info-left-bottom-tagSelect'
-                ref='tags'
-                value={this.state.note.tags}
-                onChange={(e) => this.handleChange(e)}
-              />
+              <span styleName='info-delete-message'>
+                Are you sure to delete this note?
+              </span>
+              <button styleName='info-delete-cancelButton'
+                onClick={(e) => this.handleDeleteCancelButtonClick(e)}
+              >Cancel</button>
+              <button styleName='info-delete-confirmButton'
+                onClick={(e) => this.handleDeleteConfirmButtonClick(e)}
+              >Confirm</button>
             </div>
           </div>
-          <div styleName='info-right'>
-            <StarButton styleName='info-right-button'
-              onClick={(e) => this.handleStarButtonClick(e)}
-              isActive={note.isStarred}
-            />
-            <button styleName='info-right-button'
-              onClick={(e) => this.handleShareButtonClick(e)}
-            >
-              <i className='fa fa-share-alt fa-fw'/>
-            </button>
-            <button styleName='info-right-button'
-              onClick={(e) => this.handleContextButtonClick(e)}
-            >
-              <i className='fa fa-ellipsis-v'/>
-            </button>
+          : <div styleName='info'>
+            <div styleName='info-left'>
+              <div styleName='info-left-top'>
+                <FolderSelect styleName='info-left-top-folderSelect'
+                  value={this.state.note.storage + '-' + this.state.note.folder}
+                  ref='folder'
+                  storages={storages}
+                  onChange={(e) => this.handleFolderChange(e)}
+                />
+              </div>
+              <div styleName='info-left-bottom'>
+                <TagSelect
+                  styleName='info-left-bottom-tagSelect'
+                  ref='tags'
+                  value={this.state.note.tags}
+                  onChange={(e) => this.handleChange(e)}
+                />
+              </div>
+            </div>
+            <div styleName='info-right'>
+              <StarButton styleName='info-right-button'
+                onClick={(e) => this.handleStarButtonClick(e)}
+                isActive={note.isStarred}
+              />
+              <button styleName='info-right-button'
+                onClick={(e) => this.handleShareButtonClick(e)}
+              >
+                <i className='fa fa-share-alt fa-fw'/>
+              </button>
+              <button styleName='info-right-button'
+                onClick={(e) => this.handleContextButtonClick(e)}
+              >
+                <i className='fa fa-ellipsis-v'/>
+              </button>
+            </div>
           </div>
-        </div>
+        }
+
         <div styleName='body'>
           <div styleName='body-description'>
             <textarea styleName='body-description-textarea'

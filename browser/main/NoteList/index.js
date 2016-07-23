@@ -3,18 +3,32 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './NoteList.styl'
 import moment from 'moment'
 import _ from 'lodash'
+import ee from 'browser/main/lib/eventEmitter'
 
 class NoteList extends React.Component {
   constructor (props) {
     super(props)
+
+    this.selectNextNoteHandler = () => {
+      console.log('fired next')
+      this.selectNextNote()
+    }
+    this.selectPriorNoteHandler = () => {
+      this.selectPriorNote()
+    }
   }
 
   componentDidMount () {
     this.refreshTimer = setInterval(() => this.forceUpdate(), 60 * 1000)
+    ee.on('list:next', this.selectNextNoteHandler)
+    ee.on('list:prior', this.selectPriorNoteHandler)
   }
 
   componentWillUnmount () {
     clearInterval(this.refreshTimer)
+
+    ee.off('list:next', this.selectNextNoteHandler)
+    ee.off('list:prior', this.selectPriorNoteHandler)
   }
 
   componentDidUpdate () {
@@ -49,10 +63,6 @@ class NoteList extends React.Component {
         }
       }
     }
-  }
-
-  focus () {
-    // ReactDOM.findDOMNode(this).focus()
   }
 
   selectPriorNote () {
@@ -104,6 +114,7 @@ class NoteList extends React.Component {
         key: this.notes[targetIndex].uniqueKey
       }
     })
+    ee.emit('list:moved')
   }
 
   handleNoteListKeyDown (e) {

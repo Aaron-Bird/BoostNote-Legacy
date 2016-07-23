@@ -3,6 +3,7 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './NewNoteModal.styl'
 import dataApi from 'browser/main/lib/dataApi'
 import { hashHistory } from 'react-router'
+import ee from 'browser/main/lib/eventEmitter'
 
 class NewNoteModal extends React.Component {
   constructor (props) {
@@ -36,6 +37,7 @@ class NewNoteModal extends React.Component {
           pathname: location.pathname,
           query: {key: note.uniqueKey}
         })
+        ee.emit('detail:focus')
         this.props.close()
       })
   }
@@ -67,6 +69,7 @@ class NewNoteModal extends React.Component {
           pathname: location.pathname,
           query: {key: note.uniqueKey}
         })
+        ee.emit('detail:focus')
         this.props.close()
       })
   }

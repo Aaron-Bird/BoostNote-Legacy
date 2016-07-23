@@ -36,7 +36,8 @@ class InitModal extends React.Component {
       migrationRequested: true,
       isLoading: true,
       data: null,
-      legacyStorageExists: false
+      legacyStorageExists: false,
+      isSending: false
     }
   }
 
@@ -86,67 +87,77 @@ class InitModal extends React.Component {
   }
 
   handleSubmitButtonClick (e) {
-    dataApi
-      .addStorage({
-        name: 'My Storage',
-        path: this.state.path
-      })
-      .then((data) => {
-        if (this.state.migrationRequested && _.isObject(this.state.data) && _.isArray(this.state.data.folders) && _.isArray(this.state.data.articles)) {
-          return dataApi.migrateFromV5(data.storage.key, this.state.data)
-        }
-        return data
-      })
-      .then((data) => {
-        store.dispatch({
-          type: 'ADD_STORAGE',
-          storage: data.storage,
-          notes: data.notes
+    this.setState({
+      isSending: true
+    }, () => {
+      dataApi
+        .addStorage({
+          name: 'My Storage',
+          path: this.state.path
         })
-
-        let defaultMarkdownNote = dataApi
-          .createMarkdownNote(data.storage.key, data.storage.folders[0].key, {
-            title: 'Welcome to Boostnote :)',
-            content: '# Welcome to Boostnote :)\nThis is a markdown note.\n\nClick to edit this note.'
-          })
-          .then((note) => {
-            store.dispatch({
-              type: 'CREATE_NOTE',
-              note: note
-            })
-          })
-        let defaultSnippetNote = dataApi
-          .createSnippetNote(data.storage.key, data.storage.folders[0].key, {
-            title: 'Snippet note example',
-            description: 'Snippet note example\nYou can store a series of snippet as a single note like Gist.',
-            snippets: [
-              {
-                name: 'example.html',
-                mode: 'html',
-                content: '<html>\n<body>\n<h1 id=\'hello\'>Hello World</h1>\n</body>\n</html>'
-              },
-              {
-                name: 'example.js',
-                mode: 'javascript',
-                content: 'var html = document.getElementById(\'hello\').innerHTML\n\nconsole.log(html)'
-              }
-            ]
-          })
-          .then((note) => {
-            store.dispatch({
-              type: 'CREATE_NOTE',
-              note: note
-            })
+        .then((data) => {
+          if (this.state.migrationRequested && _.isObject(this.state.data) && _.isArray(this.state.data.folders) && _.isArray(this.state.data.articles)) {
+            return dataApi.migrateFromV5(data.storage.key, this.state.data)
+          }
+          return data
+        })
+        .then((data) => {
+          store.dispatch({
+            type: 'ADD_STORAGE',
+            storage: data.storage,
+            notes: data.notes
           })
 
-        return Promise.resolve(defaultSnippetNote)
-          .then(defaultMarkdownNote)
-          .then(() => data.storage)
-      })
-      .then((storage) => {
-        hashHistory.push('/storages/' + storage.key)
-        this.props.close()
-      })
+          let defaultMarkdownNote = dataApi
+            .createMarkdownNote(data.storage.key, data.storage.folders[0].key, {
+              title: 'Welcome to Boostnote :)',
+              content: '# Welcome to Boostnote :)\nThis is a markdown note.\n\nClick to edit this note.'
+            })
+            .then((note) => {
+              store.dispatch({
+                type: 'CREATE_NOTE',
+                note: note
+              })
+            })
+          let defaultSnippetNote = dataApi
+            .createSnippetNote(data.storage.key, data.storage.folders[0].key, {
+              title: 'Snippet note example',
+              description: 'Snippet note example\nYou can store a series of snippet as a single note like Gist.',
+              snippets: [
+                {
+                  name: 'example.html',
+                  mode: 'html',
+                  content: '<html>\n<body>\n<h1 id=\'hello\'>Hello World</h1>\n</body>\n</html>'
+                },
+                {
+                  name: 'example.js',
+                  mode: 'javascript',
+                  content: 'var html = document.getElementById(\'hello\').innerHTML\n\nconsole.log(html)'
+                }
+              ]
+            })
+            .then((note) => {
+              store.dispatch({
+                type: 'CREATE_NOTE',
+                note: note
+              })
+            })
+
+          return Promise.resolve(defaultSnippetNote)
+            .then(defaultMarkdownNote)
+            .then(() => data.storage)
+        })
+        .then((storage) => {
+          hashHistory.push('/storages/' + storage.key)
+          this.props.close()
+        })
+        .catch((err) => {
+          this.setState({
+            isSending: false
+          })
+          throw err
+        })
+    })
   }
 
   handleMigrationRequestedChange (e) {
@@ -197,7 +208,15 @@ class InitModal extends React.Component {
           <div styleName='body-control'>
             <button styleName='body-control-createButton'
               onClick={(e) => this.handleSubmitButtonClick(e)}
-            >Let's Go!</button>
+              disabled={this.state.isSending}
+            >
+              {this.state.isSending
+                ? <span>
+                  <i className='fa fa-spin fa-spinner'/> Loading...
+                </span>
+                : 'Let\'s Go!'
+              }
+            </button>
           </div>
         </div>
 
