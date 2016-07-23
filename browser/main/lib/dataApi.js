@@ -202,8 +202,8 @@ function _saveCaches () {
 }
 
 function addStorage (input) {
-  if (!_.isString(input.path) || !input.path.match(/^\//)) {
-    return Promise.reject(new Error('Path must be absolute.'))
+  if (!_.isString(input.path)) {
+    return Promise.reject(new Error('Path must be a string.'))
   }
 
   let key = keygen()
