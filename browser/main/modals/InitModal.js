@@ -56,9 +56,6 @@ class InitModal extends React.Component {
     try {
       data = CSON.readFileSync(path.join(remote.app.getPath('userData'), 'local.json'))
     } catch (err) {
-      if (err.code === 'ENOENT') {
-        return
-      }
       console.error(err)
     }
     let newState = {
@@ -212,9 +209,12 @@ class InitModal extends React.Component {
               ...
             </button>
           </div>
-          <div styleName='body-migration'>
-            <label><input type='checkbox' checked={this.state.migrationRequested} onChange={(e) => this.handleMigrationRequestedChange(e)}/> Migrate old data from the legacy app v0.5</label>
-          </div>
+
+          {this.state.legacyStorageExists &&
+            <div styleName='body-migration'>
+              <label><input type='checkbox' checked={this.state.migrationRequested} onChange={(e) => this.handleMigrationRequestedChange(e)}/> Migrate old data from the legacy app v0.5</label>
+            </div>
+          }
 
           <div styleName='body-control'>
             <button styleName='body-control-createButton'
