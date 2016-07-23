@@ -3,6 +3,7 @@ const CSON = require('season')
 const path = require('path')
 const _ = require('lodash')
 const sander = require('sander')
+const consts = require('browser/lib/consts')
 
 let storages = []
 let notes = []
@@ -67,6 +68,7 @@ class Storage {
           let initialStorage = {
             folders: []
           }
+
           return sander.writeFile(path.join(this.cache.path, 'boostnote.json'), JSON.stringify(initialStorage))
         } else throw err
       })
@@ -127,10 +129,11 @@ function init () {
     let caches
     try {
       caches = JSON.parse(localStorage.getItem('storages'))
+      if (!_.isArray(caches)) throw new Error('Cached data is not valid.')
     } catch (e) {
       console.error(e)
       caches = []
-      localStorage.getItem('storages', JSON.stringify(caches))
+      localStorage.setItem('storages', JSON.stringify(caches))
     }
 
     return caches.map((cache) => {
@@ -236,15 +239,14 @@ function addStorage (input) {
           note.folder = folder.key
           _notes.push(Note.forge(note))
         })
-
-        notes = notes.slice().concat(_notes)
       })
 
-      return Promise.all(notes)
-        .then((notes) => {
+      return Promise.all(_notes)
+        .then((_notes) => {
+          notes = notes.concat(_notes)
           let data = {
             storage: storage,
-            notes: notes
+            notes: _notes
           }
           return isFolderRemoved
             ? storage.saveData().then(() => data)
@@ -255,6 +257,17 @@ function addStorage (input) {
       storages = storages.filter((storage) => storage.key !== data.storage.key)
       storages.push(data.storage)
       _saveCaches()
+
+      if (data.storage.data.folders.length < 1) {
+        return createFolder(data.storage.key, {
+          name: 'Default',
+          color: consts.FOLDER_COLORS[0]
+        }).then(() => data)
+      }
+
+      return data
+    })
+    .then((data) => {
       return {
         storage: data.storage.toJSON(),
         notes: data.notes.map((note) => note.toJSON())
@@ -267,6 +280,88 @@ function removeStorage (key) {
   _saveCaches()
   notes = notes.filter((note) => note.storage !== key)
   return Promise.resolve(true)
+}
+
+function migrateFromV5 (key, data) {
+  let oldFolders = data.folders
+  let oldArticles = data.articles
+  let storage = _.find(storages, {key: key})
+  if (storage == null) throw new Error('Storage doesn\'t exist.')
+
+  let migrateFolders = oldFolders.map((oldFolder) => {
+    let folderKey = keygen()
+    while (storage.data.folders.some((folder) => folder.key === folderKey)) {
+      folderKey = keygen()
+    }
+    let newFolder = {
+      key: folderKey,
+      name: oldFolder.name,
+      color: consts.FOLDER_COLORS[Math.floor(Math.random() * 7) % 7]
+    }
+    storage.data.folders.push(newFolder)
+    let articles = oldArticles.filter((article) => article.FolderKey === oldFolder.key)
+    let folderNotes = []
+    articles.forEach((article) => {
+      let noteKey = keygen()
+      while (notes.some((note) => note.storage === key && note.folder === folderKey && note.key === noteKey)) {
+        key = keygen()
+      }
+      if (article.mode === 'markdown') {
+        let newNote = new Note({
+          tags: article.tags,
+          createdAt: article.createdAt,
+          updatedAt: article.updatedAt,
+          folder: folderKey,
+          storage: key,
+          type: 'MARKDOWN_NOTE',
+          isStarred: false,
+          title: article.title,
+          content: '# ' + article.title + '\n\n' + article.content,
+          key: noteKey
+        })
+        notes.push(newNote)
+        folderNotes.push(newNote)
+      } else {
+        let newNote = new Note({
+          tags: article.tags,
+          createdAt: article.createdAt,
+          updatedAt: article.updatedAt,
+          folder: folderKey,
+          storage: key,
+          type: 'SNIPPET_NOTE',
+          isStarred: false,
+          title: article.title,
+          description: article.title,
+          key: noteKey,
+          snippets: [{
+            name: article.mode,
+            mode: article.mode,
+            content: article.content
+          }]
+        })
+        notes.push(newNote)
+        folderNotes.push(newNote)
+      }
+    })
+
+    return sander
+      .writeFile(path.join(storage.cache.path, folderKey, 'data.json'), JSON.stringify({
+        notes: folderNotes.map((note) => {
+          let json = note.toJSON()
+          delete json.storage
+          return json
+        })
+      }))
+  })
+  return Promise.all(migrateFolders)
+    .then(() => storage.saveData())
+    .then(() => {
+      return {
+        storage: storage.toJSON(),
+        notes: notes.filter((note) => note.storage === key)
+          .map((note) => note.toJSON())
+      }
+    })
 }
 
 function createFolder (key, input) {
@@ -441,5 +536,6 @@ export default {
   createSnippetNote,
   updateNote,
   removeNote,
-  moveNote
+  moveNote,
+  migrateFromV5
 }

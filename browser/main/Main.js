@@ -10,6 +10,8 @@ import dataApi from 'browser/main/lib/dataApi'
 import StatusBar from './StatusBar'
 import _ from 'lodash'
 import ConfigManager from 'browser/main/lib/ConfigManager'
+import modal from 'browser/main/lib/modal'
+import InitModal from 'browser/main/modals/InitModal'
 
 class Main extends React.Component {
   constructor (props) {
@@ -34,6 +36,10 @@ class Main extends React.Component {
           storages: data.storages,
           notes: data.notes
         })
+
+        if (data.storages.length < 1) {
+          modal.open(InitModal)
+        }
       })
   }
 

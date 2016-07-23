@@ -208,7 +208,7 @@ class StorageItem extends React.Component {
     let { storage } = this.props
     let input = {
       name: 'Untitled',
-      color: consts.FOLDER_COLORS[Math.floor(Math.random() * 7)]
+      color: consts.FOLDER_COLORS[Math.floor(Math.random() * 7) % 7]
     }
 
     dataApi.createFolder(storage.key, input)

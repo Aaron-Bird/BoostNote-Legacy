@@ -22,7 +22,7 @@ const defaultConfig = {
     fontFamily: 'Monaco, Consolas',
     indentType: 'space',
     indentSize: '4',
-    switchPreview: 'RIGHTCLICK'
+    switchPreview: 'BLUR' // Available value: RIGHTCLICK, BLUR
   },
   preview: {
     fontSize: '14',

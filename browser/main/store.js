@@ -44,10 +44,7 @@ function notes (state = [], action) {
       return action.notes
     case 'ADD_STORAGE':
       {
-        let notes = state.slice()
-
-        notes.concat(action.notes)
-
+        let notes = state.concat(action.notes)
         return notes
       }
     case 'REMOVE_STORAGE':
