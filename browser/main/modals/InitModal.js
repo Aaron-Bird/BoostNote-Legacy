@@ -68,7 +68,9 @@ class InitModal extends React.Component {
       newState.legacyStorageExists = true
       newState.data = data
     }
-    this.setState(newState)
+    this.setState(newState, () => {
+      this.refs.createButton.focus()
+    })
   }
 
   handlePathBrowseButtonClick (e) {
@@ -166,6 +168,12 @@ class InitModal extends React.Component {
     })
   }
 
+  handleKeyDown (e) {
+    if (e.keyCode === 27) {
+      this.props.close()
+    }
+  }
+
   render () {
     if (this.state.isLoading) {
       return <div styleName='root--loading'>
@@ -174,7 +182,10 @@ class InitModal extends React.Component {
       </div>
     }
     return (
-      <div styleName='root'>
+      <div styleName='root'
+        tabIndex='-1'
+        onKeyDown={(e) => this.handleKeyDown(e)}
+      >
 
         <div styleName='header'>
           <div styleName='header-title'>Initialize Storage</div>
@@ -207,6 +218,7 @@ class InitModal extends React.Component {
 
           <div styleName='body-control'>
             <button styleName='body-control-createButton'
+              ref='createButton'
               onClick={(e) => this.handleSubmitButtonClick(e)}
               disabled={this.state.isSending}
             >

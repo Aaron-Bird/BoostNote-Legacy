@@ -81,9 +81,18 @@ class NewNoteModal extends React.Component {
     }
   }
 
+  handleKeyDown (e) {
+    if (e.keyCode === 27) {
+      this.props.close()
+    }
+  }
+
   render () {
     return (
-      <div styleName='root'>
+      <div styleName='root'
+        tabIndex='-1'
+        onKeyDown={(e) => this.handleKeyDown(e)}
+      >
         <div styleName='header'>
           <div styleName='title'>New Note</div>
         </div>

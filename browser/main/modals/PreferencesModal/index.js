@@ -15,6 +15,10 @@ class Preferences extends React.Component {
     }
   }
 
+  componentDidMount () {
+    this.refs.root.focus()
+  }
+
   switchTeam (teamId) {
     this.setState({currentTeamId: teamId})
   }
@@ -49,6 +53,12 @@ class Preferences extends React.Component {
     }
   }
 
+  handleKeyDown (e) {
+    if (e.keyCode === 27) {
+      this.props.close()
+    }
+  }
+
   render () {
     let content = this.renderContent()
 
@@ -79,7 +89,11 @@ class Preferences extends React.Component {
     })
 
     return (
-      <div styleName='root'>
+      <div styleName='root'
+        ref='root'
+        tabIndex='-1'
+        onKeyDown={(e) => this.handleKeyDown(e)}
+      >
         <div styleName='nav'>
           {navButtons}
         </div>
