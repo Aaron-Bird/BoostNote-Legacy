@@ -17,6 +17,10 @@
 - Evernote
 - GitKraken
 - GitBook
+- Gist
+- Gistbox
+- Snippets Lab
+
 
 ## Using stack
 
