@@ -175,6 +175,8 @@ class MarkdownNoteDetail extends React.Component {
   handleDeleteMenuClick (e) {
     this.setState({
       isDeleting: true
+    }, () => {
+      this.refs.deleteConfirmButton.focus()
     })
   }
 
@@ -191,6 +193,7 @@ class MarkdownNoteDetail extends React.Component {
         }
         ee.once('list:moved', dispatchHandler)
         ee.emit('list:next')
+        ee.emit('list:focus')
       })
   }
 
@@ -198,6 +201,10 @@ class MarkdownNoteDetail extends React.Component {
     this.setState({
       isDeleting: false
     })
+  }
+
+  handleDeleteKeyDown (e) {
+    if (e.keyCode === 27) this.handleDeleteCancelButtonClick(e)
   }
 
   render () {
@@ -211,7 +218,10 @@ class MarkdownNoteDetail extends React.Component {
       >
         {this.state.isDeleting
           ? <div styleName='info'>
-            <div styleName='info-delete'>
+            <div styleName='info-delete'
+              tabIndex='-1'
+              onKeyDown={(e) => this.handleDeleteKeyDown(e)}
+            >
 
               <span styleName='info-delete-message'>
                 Are you sure to delete this note?
@@ -221,6 +231,7 @@ class MarkdownNoteDetail extends React.Component {
               >Cancel</button>
               <button styleName='info-delete-confirmButton'
                 onClick={(e) => this.handleDeleteConfirmButtonClick(e)}
+                ref='deleteConfirmButton'
               >Confirm</button>
             </div>
           </div>

@@ -186,6 +186,8 @@ class SnippetNoteDetail extends React.Component {
   handleDeleteMenuClick (e) {
     this.setState({
       isDeleting: true
+    }, () => {
+      this.refs.deleteConfirmButton.focus()
     })
   }
 
@@ -300,6 +302,10 @@ class SnippetNoteDetail extends React.Component {
     }
   }
 
+  handleDeleteKeyDown (e) {
+    if (e.keyCode === 27) this.handleDeleteCancelButtonClick(e)
+  }
+
   render () {
     let { storages, config } = this.props
     let { note } = this.state
@@ -383,7 +389,10 @@ class SnippetNoteDetail extends React.Component {
       >
         {this.state.isDeleting
           ? <div styleName='info'>
-            <div styleName='info-delete'>
+            <div styleName='info-delete'
+              tabIndex='-1'
+              onKeyDown={(e) => this.handleDeleteKeyDown(e)}
+            >
 
               <span styleName='info-delete-message'>
                 Are you sure to delete this note?
@@ -393,6 +402,7 @@ class SnippetNoteDetail extends React.Component {
               >Cancel</button>
               <button styleName='info-delete-confirmButton'
                 onClick={(e) => this.handleDeleteConfirmButtonClick(e)}
+                ref='deleteConfirmButton'
               >Confirm</button>
             </div>
           </div>

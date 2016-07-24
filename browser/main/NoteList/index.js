@@ -16,12 +16,16 @@ class NoteList extends React.Component {
     this.selectPriorNoteHandler = () => {
       this.selectPriorNote()
     }
+    this.focusHandler = () => {
+      this.refs.root.focus()
+    }
   }
 
   componentDidMount () {
     this.refreshTimer = setInterval(() => this.forceUpdate(), 60 * 1000)
     ee.on('list:next', this.selectNextNoteHandler)
     ee.on('list:prior', this.selectPriorNoteHandler)
+    ee.on('lost:focus', this.focusHandler)
   }
 
   componentWillUnmount () {
@@ -29,6 +33,7 @@ class NoteList extends React.Component {
 
     ee.off('list:next', this.selectNextNoteHandler)
     ee.off('list:prior', this.selectPriorNoteHandler)
+    ee.off('lost:focus', this.focusHandler)
   }
 
   componentDidUpdate () {
@@ -120,34 +125,20 @@ class NoteList extends React.Component {
   handleNoteListKeyDown (e) {
     if (e.metaKey || e.ctrlKey) return true
 
-    // if (e.keyCode === 65 && !e.shiftKey) {
-    //   e.preventDefault()
-    //   remote.getCurrentWebContents().send('top-new-post')
-    // }
+    if (e.keyCode === 65 && !e.shiftKey) {
+      e.preventDefault()
+      ee.emit('top:new-note')
+    }
 
-    // if (e.keyCode === 65 && e.shiftKey) {
-    //   e.preventDefault()
-    //   remote.getCurrentWebContents().send('nav-new-folder')
-    // }
+    if (e.keyCode === 68) {
+      e.preventDefault()
+      ee.emit('detail:delete')
+    }
 
-    // if (e.keyCode === 68) {
-    //   e.preventDefault()
-    //   remote.getCurrentWebContents().send('detail-delete')
-    // }
-
-    // if (e.keyCode === 84) {
-    //   e.preventDefault()
-    //   remote.getCurrentWebContents().send('detail-title')
-    // }
-
-    // if (e.keyCode === 69) {
-    //   e.preventDefault()
-    // }
-
-    // if (e.keyCode === 83) {
-    //   e.preventDefault()
-    //   remote.getCurrentWebContents().send('detail-save')
-    // }
+    if (e.keyCode === 69) {
+      e.preventDefault()
+      ee.emit('detail:focus')
+    }
 
     if (e.keyCode === 38) {
       e.preventDefault()
@@ -275,7 +266,7 @@ class NoteList extends React.Component {
       <div className='NoteList'
         styleName='root'
         ref='root'
-        tabIndex='0'
+        tabIndex='-1'
         onKeyDown={(e) => this.handleNoteListKeyDown(e)}
         style={this.props.style}
       >

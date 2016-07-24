@@ -63,19 +63,21 @@ class TopBar extends React.Component {
     searchBlocks.forEach((block) => {
       if (block.match(/^#.+/)) {
         let tag = block.match(/#(.+)/)[1]
+        let regExp = new RegExp(_.escapeRegExp(tag), 'i')
         notes = notes
           .filter((note) => {
             if (!_.isArray(note.tags)) return false
             return note.tags.some((_tag) => {
-              return _tag === tag
+              return _tag.match(regExp)
             })
           })
       } else {
+        let regExp = new RegExp(_.escapeRegExp(block), 'i')
         notes = notes.filter((note) => {
           if (note.type === 'SNIPPET_NOTE') {
-            return note.description.match(block)
+            return note.description.match(regExp)
           } else if (note.type === 'MARKDOWN_NOTE') {
-            return note.content.match(block)
+            return note.content.match(regExp)
           }
           return false
         })
