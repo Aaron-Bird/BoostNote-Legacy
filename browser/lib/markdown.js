@@ -60,6 +60,7 @@ md.use(math, {
   }
 })
 md.use(require('markdown-it-checkbox'))
+md.use(require('markdown-it-footnote'))
 
 let originalRenderToken = md.renderer.renderToken
 md.renderer.renderToken = function renderToken (tokens, idx, options) {
