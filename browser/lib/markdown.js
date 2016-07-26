@@ -59,22 +59,18 @@ md.use(math, {
     return output
   }
 })
-md.use(require('markdown-it-checkbox'))
 md.use(require('markdown-it-footnote'))
 
-let originalRenderToken = md.renderer.renderToken
-md.renderer.renderToken = function renderToken (tokens, idx, options) {
-  let token = tokens[idx]
-
-  let result = originalRenderToken.call(md.renderer, tokens, idx, options)
-  if (token.map != null) {
-    return result + '<a class=\'lineAnchor\' data-key=\'' + token.map[0] + '\'></a>'
-  }
-  return result
-}
+window.md = md
 
 export default function markdown (content) {
   if (content == null) content = ''
-
-  return md.render(content.toString())
+  content = content.toString()
+    .split('\n')
+    .map((line, index) => {
+      if (line.trim().length === 0) return ''
+      return line + '<a class=\'lineAnchor\' data-key=\'' + (index + 1) + '\'></a>'
+    })
+    .join('\n')
+  return md.render(content)
 }

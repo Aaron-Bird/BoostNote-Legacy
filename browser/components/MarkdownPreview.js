@@ -148,7 +148,7 @@ export default class MarkdownPreview extends React.Component {
       let row = parseInt(lineAnchor.getAttribute('data-key'))
       if (row > targetRow) {
         let targetAnchor = lineAnchors[index - 1]
-        this.getWindow().scrollTo(0, targetAnchor.offsetTop)
+        targetAnchor != null && this.getWindow().scrollTo(0, targetAnchor.offsetTop)
         break
       }
     }
