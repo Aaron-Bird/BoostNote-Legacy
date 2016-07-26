@@ -2,6 +2,7 @@ import markdownit from 'markdown-it'
 import emoji from 'markdown-it-emoji'
 import math from '@rokt33r/markdown-it-math'
 import hljs from 'highlight.js'
+import _ from 'lodash'
 
 const katex = window.katex
 
@@ -61,16 +62,24 @@ md.use(math, {
 })
 md.use(require('markdown-it-footnote'))
 
+let originalRender = md.renderer.render
+md.renderer.render = function render (tokens, options, env) {
+  tokens.forEach((token) => {
+    switch (token.type) {
+      case 'heading_open':
+      case 'paragraph_open':
+      case 'blockquote_open':
+      case 'table_open':
+        token.attrPush(['data-line', token.map[0]])
+    }
+  })
+  let result = originalRender.call(md.renderer, tokens, options, env)
+  return result
+}
 window.md = md
 
 export default function markdown (content) {
-  if (content == null) content = ''
-  content = content.toString()
-    .split('\n')
-    .map((line, index) => {
-      if (line.trim().length === 0) return ''
-      return line + '<a class=\'lineAnchor\' data-key=\'' + (index + 1) + '\'></a>'
-    })
-    .join('\n')
+  if (!_.isString(content)) content = ''
+
   return md.render(content)
 }
