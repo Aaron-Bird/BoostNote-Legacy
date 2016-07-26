@@ -22,7 +22,8 @@ export default class MarkdownPreview extends React.Component {
     this.contextMenuHandler = (e) => this.handleContextMenu(e)
     this.mouseDownHandler = (e) => this.handleMouseDown(e)
     this.mouseUpHandler = (e) => this.handleMouseUp(e)
-    this.goExternalHandler = (e) => this.handlePreviewAnchorClick(e)
+    this.anchorClickHandler = (e) => this.handlePreviewAnchorClick(e)
+    this.checkboxClickHandler = (e) => this.handleCheckboxClick(e)
   }
 
   handlePreviewAnchorClick (e) {
@@ -40,13 +41,21 @@ export default class MarkdownPreview extends React.Component {
     }
   }
 
+  handleCheckboxClick (e) {
+    this.props.onCheckboxClick(e)
+  }
+
   handleContextMenu (e) {
     this.props.onContextMenu(e)
   }
 
   handleMouseDown (e) {
-    if (e.target != null && e.target.tagName === 'A') {
-      return null
+    if (e.target != null) {
+      switch (e.target.tagName) {
+        case 'A':
+        case 'INPUT':
+          return null
+      }
     }
     if (this.props.onMouseDown != null) this.props.onMouseDown(e)
   }
@@ -85,7 +94,10 @@ export default class MarkdownPreview extends React.Component {
 
   rewriteIframe () {
     Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
-      el.removeEventListener('click', this.goExternalHandler)
+      el.removeEventListener('click', this.anchorClickHandler)
+    })
+    Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('input[type="checkbox"]'), (el) => {
+      el.removeEventListener('click', this.checkboxClickHandler)
     })
 
     let { value, fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme } = this.props
@@ -128,7 +140,10 @@ export default class MarkdownPreview extends React.Component {
     this.refs.root.contentWindow.document.body.innerHTML = markdown(value)
 
     Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
-      el.addEventListener('click', this.goExternalHandler)
+      el.addEventListener('click', this.anchorClickHandler)
+    })
+    Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('input[type="checkbox"]'), (el) => {
+      el.addEventListener('click', this.checkboxClickHandler)
     })
   }
 
@@ -141,13 +156,13 @@ export default class MarkdownPreview extends React.Component {
   }
 
   scrollTo (targetRow) {
-    let lineAnchors = this.getWindow().document.querySelectorAll('[data-line]')
+    let blocks = this.getWindow().document.querySelectorAll('body>[data-line]')
 
-    for (let index = 0; index < lineAnchors.length; index++) {
-      let lineAnchor = lineAnchors[index]
-      let row = parseInt(lineAnchor.getAttribute('data-line'))
+    for (let index = 0; index < blocks.length; index++) {
+      let block = blocks[index]
+      let row = parseInt(block.getAttribute('data-line'))
       if (row > targetRow) {
-        let targetAnchor = lineAnchors[index - 1]
+        let targetAnchor = blocks[index - 1]
         targetAnchor != null && this.getWindow().scrollTo(0, targetAnchor.offsetTop)
         break
       }

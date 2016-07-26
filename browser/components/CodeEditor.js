@@ -219,6 +219,12 @@ export default class CodeEditor extends React.Component {
     session.on('change', this.changeHandler)
   }
 
+  setValue (value) {
+    let session = this.editor.getSession()
+    session.setValue(value)
+    this.value = value
+  }
+
   render () {
     let { className, fontFamily } = this.props
     fontFamily = _.isString(fontFamily) && fontFamily.length > 0
