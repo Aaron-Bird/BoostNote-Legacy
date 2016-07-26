@@ -48,6 +48,7 @@
     "markdown-it": "^6.0.1",
     "markdown-it-checkbox": "^1.1.0",
     "markdown-it-emoji": "^1.1.1",
+    "markdown-it-footnote": "^3.0.0",
     "md5": "^2.0.0",
     "moment": "^2.10.3",
     "sander": "^0.5.1",

@@ -73,6 +73,29 @@ class MarkdownEditor extends React.Component {
     }
   }
 
+  handleCheckboxClick (e) {
+    e.preventDefault()
+    e.stopPropagation()
+    let idMatch = /checkbox-([0-9]+)/
+    let checkedMatch = /\[x\]/i
+    let uncheckedMatch = /\[ \]/
+    if (idMatch.test(e.target.getAttribute('id'))) {
+      let lineIndex = parseInt(e.target.getAttribute('id').match(idMatch)[1], 10) - 1
+      let lines = this.refs.code.value
+        .split('\n')
+
+      let targetLine = lines[lineIndex]
+
+      if (targetLine.match(checkedMatch)) {
+        lines[lineIndex] = targetLine.replace(checkedMatch, '[ ]')
+      }
+      if (targetLine.match(uncheckedMatch)) {
+        lines[lineIndex] = targetLine.replace(uncheckedMatch, '[x]')
+      }
+      this.refs.code.setValue(lines.join('\n'))
+    }
+  }
+
   focus () {
     if (this.state.status === 'PREVIEW') {
       this.setState({
@@ -135,6 +158,7 @@ class MarkdownEditor extends React.Component {
           value={value}
           onMouseUp={(e) => this.handlePreviewMouseUp(e)}
           onMouseDown={(e) => this.handlePreviewMouseDown(e)}
+          onCheckboxClick={(e) => this.handleCheckboxClick(e)}
         />
       </div>
     )

@@ -99,15 +99,17 @@ class SnippetNoteDetail extends React.Component {
   }
 
   save () {
-    let { note, dispatch } = this.props
+    clearTimeout(this.saveQueue)
+    this.saveQueue = setTimeout(() => {
+      let { note, dispatch } = this.props
+      dispatch({
+        type: 'UPDATE_NOTE',
+        note: this.state.note
+      })
 
-    dispatch({
-      type: 'UPDATE_NOTE',
-      note: this.state.note
-    })
-
-    dataApi
-      .updateNote(note.storage, note.folder, note.key, this.state.note)
+      dataApi
+        .updateNote(note.storage, note.folder, note.key, this.state.note)
+    }, 1000)
   }
 
   handleFolderChange (e) {

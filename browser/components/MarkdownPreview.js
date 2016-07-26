@@ -5,11 +5,6 @@ import hljsTheme from 'browser/lib/hljsThemes'
 
 const markdownStyle = require('!!css!stylus?sourceMap!./markdown.styl')[0][1]
 const { shell } = require('electron')
-const goExternal = function (e) {
-  e.preventDefault()
-  e.stopPropagation()
-  shell.openExternal(e.target.href)
-}
 
 const OSX = global.process.platform === 'darwin'
 
@@ -27,6 +22,27 @@ export default class MarkdownPreview extends React.Component {
     this.contextMenuHandler = (e) => this.handleContextMenu(e)
     this.mouseDownHandler = (e) => this.handleMouseDown(e)
     this.mouseUpHandler = (e) => this.handleMouseUp(e)
+    this.anchorClickHandler = (e) => this.handlePreviewAnchorClick(e)
+    this.checkboxClickHandler = (e) => this.handleCheckboxClick(e)
+  }
+
+  handlePreviewAnchorClick (e) {
+    e.preventDefault()
+    e.stopPropagation()
+
+    let href = e.target.getAttribute('href')
+    if (_.isString(href) && href.match(/^#/)) {
+      let targetElement = this.refs.root.contentWindow.document.getElementById(href.substring(1, href.length))
+      if (targetElement != null) {
+        this.getWindow().scrollTo(0, targetElement.offsetTop)
+      }
+    } else {
+      shell.openExternal(e.target.href)
+    }
+  }
+
+  handleCheckboxClick (e) {
+    this.props.onCheckboxClick(e)
   }
 
   handleContextMenu (e) {
@@ -34,10 +50,20 @@ export default class MarkdownPreview extends React.Component {
   }
 
   handleMouseDown (e) {
+    if (e.target != null) {
+      switch (e.target.tagName) {
+        case 'A':
+        case 'INPUT':
+          return null
+      }
+    }
     if (this.props.onMouseDown != null) this.props.onMouseDown(e)
   }
 
   handleMouseUp (e) {
+    if (e.target != null && e.target.tagName === 'A') {
+      return null
+    }
     if (this.props.onMouseUp != null) this.props.onMouseUp(e)
   }
 
@@ -68,7 +94,10 @@ export default class MarkdownPreview extends React.Component {
 
   rewriteIframe () {
     Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
-      el.removeEventListener('click', goExternal)
+      el.removeEventListener('click', this.anchorClickHandler)
+    })
+    Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('input[type="checkbox"]'), (el) => {
+      el.removeEventListener('click', this.checkboxClickHandler)
     })
 
     let { value, fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme } = this.props
@@ -111,7 +140,10 @@ export default class MarkdownPreview extends React.Component {
     this.refs.root.contentWindow.document.body.innerHTML = markdown(value)
 
     Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
-      el.addEventListener('mousedown', goExternal)
+      el.addEventListener('click', this.anchorClickHandler)
+    })
+    Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('input[type="checkbox"]'), (el) => {
+      el.addEventListener('click', this.checkboxClickHandler)
     })
   }
 
@@ -124,14 +156,14 @@ export default class MarkdownPreview extends React.Component {
   }
 
   scrollTo (targetRow) {
-    let lineAnchors = this.getWindow().document.querySelectorAll('a.lineAnchor')
+    let blocks = this.getWindow().document.querySelectorAll('body>[data-line]')
 
-    for (let index = 0; index < lineAnchors.length; index++) {
-      let lineAnchor = lineAnchors[index]
-      let row = parseInt(lineAnchor.getAttribute('data-key'))
+    for (let index = 0; index < blocks.length; index++) {
+      let block = blocks[index]
+      let row = parseInt(block.getAttribute('data-line'))
       if (row > targetRow) {
-        let targetAnchor = lineAnchors[index - 1]
-        this.getWindow().scrollTo(0, targetAnchor.offsetTop)
+        let targetAnchor = blocks[index - 1]
+        targetAnchor != null && this.getWindow().scrollTo(0, targetAnchor.offsetTop)
         break
       }
     }
@@ -147,6 +179,7 @@ export default class MarkdownPreview extends React.Component {
         style={style}
         tabIndex={tabIndex}
         ref='root'
+        onClick={(e) => this.handleClick(e)}
       />
     )
   }
