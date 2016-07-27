@@ -96,9 +96,9 @@ md.block.ruler.at('paragraph', function (state, startLine/*, endLine*/) {
   token.map = [ startLine, state.line ]
 
   if (state.parentType === 'list') {
-    let match = content.match(/\[( |x)\] ?(.+)/i)
+    let match = content.match(/^\[( |x)\] ?(.+)/i)
     if (match) {
-      content = `<label class='taskListItem' for='checkbox-${startLine + 1}'><input type='checkbox'${match[1] !== ' ' ? ' checked' : ''} id='checkbox-${startLine + 1}'/> ${match[2]}</label>`
+      content = `<label class='taskListItem' for='checkbox-${startLine + 1}'><input type='checkbox'${match[1] !== ' ' ? ' checked' : ''} id='checkbox-${startLine + 1}'/> ${content.substring(4, content.length)}</label>`
     }
   }
 
