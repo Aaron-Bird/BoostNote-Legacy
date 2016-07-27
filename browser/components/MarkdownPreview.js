@@ -161,9 +161,9 @@ export default class MarkdownPreview extends React.Component {
     for (let index = 0; index < blocks.length; index++) {
       let block = blocks[index]
       let row = parseInt(block.getAttribute('data-line'))
-      if (row > targetRow) {
-        let targetAnchor = blocks[index - 1]
-        targetAnchor != null && this.getWindow().scrollTo(0, targetAnchor.offsetTop)
+      if (row > targetRow || index === blocks.length - 1) {
+        block = blocks[index - 1]
+        block != null && this.getWindow().scrollTo(0, block.offsetTop)
         break
       }
     }
@@ -179,7 +179,6 @@ export default class MarkdownPreview extends React.Component {
         style={style}
         tabIndex={tabIndex}
         ref='root'
-        onClick={(e) => this.handleClick(e)}
       />
     )
   }
