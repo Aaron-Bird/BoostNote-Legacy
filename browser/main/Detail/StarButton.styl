@@ -1,11 +1,25 @@
 .root
   position relative
   padding 0
-  transition transform 0.15s
   &:hover
-    transform rotate(-72deg)
+    .icon
+      transform rotate(-72deg)
+    .tooltip
+      opacity 1
+
 
 .root--active
   @extend .root
   color $ui-active-color
-  transform rotate(-72deg)
+  .icon
+    transform rotate(-72deg)
+.icon
+  transition transform 0.15s
+
+.tooltip
+  tooltip()
+  position fixed
+  top 45px
+  right 65px
+  padding 5px
+  opacity 0

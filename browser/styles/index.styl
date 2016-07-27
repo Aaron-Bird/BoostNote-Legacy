@@ -29,6 +29,15 @@ $ui-tooltip-text-color = white
 $ui-tooltip-backgroundColor = alpha(#444, 70%)
 $ui-tooltip-button-backgroundColor = #D1D1D1
 $ui-tooltip-button--hover-backgroundColor = lighten(#D1D1D1, 30%)
+$ui-tooltip-font-size = 12px
+
+tooltip()
+  background-color $ui-tooltip-backgroundColor = alpha(#444, 70%)
+  color $ui-tooltip-text-color = white
+  font-size $ui-tooltip-font-size
+  pointer-events none
+  transition 0.1s
+
 
 // UI Input
 $ui-input--focus-borderColor = #369DCD

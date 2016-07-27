@@ -47,11 +47,13 @@ class StarButton extends React.Component {
         onMouseLeave={(e) => this.handleMouseLeave(e)}
         onClick={this.props.onClick}
       >
-        <i className={this.state.isActive || this.props.isActive
-          ? 'fa fa-star'
-          : 'fa fa-star-o'
-        }
+        <i styleName='icon'
+          className={this.state.isActive || this.props.isActive
+            ? 'fa fa-star'
+            : 'fa fa-star-o'
+          }
         />
+        <span styleName='tooltip'>Star Note</span>
       </button>
     )
   }

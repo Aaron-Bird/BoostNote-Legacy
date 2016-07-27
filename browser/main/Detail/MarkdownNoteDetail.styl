@@ -77,10 +77,17 @@ $info-height = 75px
   padding 0
   &:active
     border-color $ui-button--focus-borderColor
-  &:hover .left-control-newPostButton-tooltip
-    display block
+  &:hover .info-right-button-tooltip
+    opacity 1
   &:focus
     border-color $ui-button--focus-borderColor
+
+.info-right-button-tooltip
+  tooltip()
+  position fixed
+  top 45px
+  padding 5px
+  opacity 0
 
 .body
   absolute bottom left right

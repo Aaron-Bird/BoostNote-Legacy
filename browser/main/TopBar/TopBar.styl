@@ -88,19 +88,17 @@ $control-height = 34px
   padding 0
   &:active
     border-color $ui-button--active-backgroundColor
-  &:hover .left-control-newPostButton-tooltip
-    display block
+  &:hover .control-newPostButton-tooltip
+    opacity 1
 
 .control-newPostButton-tooltip
+  tooltip()
   position fixed
-  line-height 1.4
-  background-color $ui-tooltip-backgroundColor
-  color $ui-tooltip-text-color
-  font-size 10px
-  margin-left -25px
-  margin-top 5px
-  padding 5px
-  z-index 1
-  border-radius 5px
-  display none
   pointer-events none
+  top 45px
+  left 385px
+  z-index 10
+  padding 5px
+  line-height normal
+  opacity 0
+  transition 0.1s

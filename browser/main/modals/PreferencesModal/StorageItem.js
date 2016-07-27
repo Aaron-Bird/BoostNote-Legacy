@@ -313,16 +313,25 @@ class StorageItem extends React.Component {
               onClick={(e) => this.handleNewFolderButtonClick(e)}
             >
               <i className='fa fa-plus'/>
+              <span styleName='header-control-button-tooltip'
+                style={{left: -20}}
+              >Add Folder</span>
             </button>
             <button styleName='header-control-button'
               onClick={(e) => this.handleExternalButtonClick(e)}
             >
               <i className='fa fa-external-link'/>
+              <span styleName='header-control-button-tooltip'
+                style={{left: -50}}
+              >Open Storage folder</span>
             </button>
             <button styleName='header-control-button'
               onClick={(e) => this.handleUnlinkButtonClick(e)}
             >
               <i className='fa fa-unlink'/>
+              <span styleName='header-control-button-tooltip'
+                style={{left: -10}}
+              >Unlink</span>
             </button>
           </div>
         </div>

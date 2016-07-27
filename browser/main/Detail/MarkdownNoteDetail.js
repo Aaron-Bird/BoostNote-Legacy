@@ -263,13 +263,20 @@ class MarkdownNoteDetail extends React.Component {
               />
               <button styleName='info-right-button'
                 onClick={(e) => this.handleShareButtonClick(e)}
+                disabled
               >
                 <i className='fa fa-share-alt fa-fw'/>
+                <span styleName='info-right-button-tooltip'
+                  style={{right: 20}}
+                >Share Note</span>
               </button>
               <button styleName='info-right-button'
                 onClick={(e) => this.handleContextButtonClick(e)}
               >
                 <i className='fa fa-ellipsis-v'/>
+                <span styleName='info-right-button-tooltip'
+                  style={{right: 5}}
+                >More Options</span>
               </button>
             </div>
           </div>
