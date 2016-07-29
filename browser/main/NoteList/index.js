@@ -107,11 +107,12 @@ class NoteList extends React.Component {
     })
 
     if (targetIndex === this.notes.length - 1) {
-      return
+      targetIndex = 0
+    } else {
+      targetIndex++
+      if (targetIndex < 0) targetIndex = 0
+      else if (targetIndex > this.notes.length - 1) targetIndex === this.notes.length - 1
     }
-    targetIndex++
-    if (targetIndex < 0) targetIndex = 0
-    else if (targetIndex > this.notes.length - 1) targetIndex === this.notes.length - 1
 
     router.push({
       pathname: location.pathname,
