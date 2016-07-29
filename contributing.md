@@ -2,13 +2,7 @@
 
 > English below.
 
-## About Pull Request
-
-### やり方
-
-現状特に`dev`ブランチを用意しないつもりなので、最新VersionのブランチにPullrequestを送ってください。
-
-### Pull requsetの著作権
+## Pull requsetの著作権について
 
 Pull requestをすることはその変化分のコードの著作権をMAISIN&CO.に譲渡することに同意することになります。
 
@@ -21,13 +15,7 @@ Pull requestをすることはその変化分のコードの著作権をMAISIN&C
 
 # Contributing to Boostnote(ENG)
 
-## About Pull Request
-
-### How to
-
-Make a new PR to the branch named latest version. This is because there is no `dev` branch currently.
-
-### Copyright of Pull Request
+## About copyright of Pull Request
 
 If you make a pull request, It means you agree to transfer the copyright of the code changes to MAISIN&CO.
 
