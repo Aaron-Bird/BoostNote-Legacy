@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './SnippetNoteDetail.styl'
 import CodeEditor from 'browser/components/CodeEditor'
+import MarkdownEditor from 'browser/components/MarkdownEditor'
 import StarButton from './StarButton'
 import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
@@ -370,17 +371,26 @@ class SnippetNoteDetail extends React.Component {
             <i className='fa fa-caret-down'/>
           </button>
         </div>
-        <CodeEditor styleName='tabView-content'
-          mode={snippet.mode}
-          value={snippet.content}
-          theme={config.editor.theme}
-          fontFamily={config.editor.fontFamily}
-          fontSize={editorFontSize}
-          indentType={config.editor.indentType}
-          indentSize={editorIndentSize}
-          onChange={(e) => this.handleCodeChange(index)(e)}
-          ref={'code-' + index}
-        />
+        {snippet.mode === 'markdown'
+          ? <MarkdownEditor styleName='tabView-content'
+            value={snippet.content}
+            config={config}
+            onChange={(e) => this.handleCodeChange(index)(e)}
+            ref={'code-' + index}
+            ignorePreviewPointerEvents={this.props.ignorePreviewPointerEvents}
+          />
+          : <CodeEditor styleName='tabView-content'
+            mode={snippet.mode}
+            value={snippet.content}
+            theme={config.editor.theme}
+            fontFamily={config.editor.fontFamily}
+            fontSize={editorFontSize}
+            indentType={config.editor.indentType}
+            indentSize={editorIndentSize}
+            onChange={(e) => this.handleCodeChange(index)(e)}
+            ref={'code-' + index}
+          />
+        }
       </div>
     })
 
