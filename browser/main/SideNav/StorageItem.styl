@@ -55,7 +55,6 @@
 .header-info-path
   font-size 10px
   margin 0 5px
-
 .folderList-item
   display block
   width 100%
@@ -67,6 +66,8 @@
   text-align left
   border none
   font-size 14px
+  &:first-child
+    margin-top 0
   &:hover
     background-color $ui-button--hover-backgroundColor
   &:active
@@ -84,6 +85,50 @@
   padding 0 10px
   height 30px
   line-height 30px
-  border-width 0 0 0 4px
+  border-width 0 0 0 6px
   border-style solid
   border-color transparent
+.folderList-item-tooltip
+  tooltip()
+  position fixed
+  padding 0 10px
+  left 44px
+  z-index 10
+  pointer-events none
+  opacity 0
+  border-top-right-radius 2px
+  border-bottom-right-radius 2px
+  height 30px
+  margin-top -30px
+  line-height 30px
+.root--folded
+  @extend .root
+  .header
+    width 100%
+  .header-info
+    overflow ellipsis
+    padding 0 0 0 18px
+    &:hover .header-info--folded-tooltip
+      opacity 1
+  .header-info-path
+    display none
+  .header-toggleButton
+    width 15px
+  .header-info--folded-tooltip
+    tooltip()
+    position fixed
+    padding 0 10px
+    left 44px
+    z-index 10
+    pointer-events none
+    opacity 0
+    border-top-right-radius 2px
+    border-bottom-right-radius 2px
+  .header-info--folded-tooltip-path
+    font-size 10px
+    margin 0 5px
+  .folderList-item:hover, .folderList-item--active:hover
+    .folderList-item-tooltip
+      opacity 1
+  .folderList-item-name
+    padding-left 14px

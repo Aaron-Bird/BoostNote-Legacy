@@ -31,7 +31,7 @@ class StorageItem extends React.Component {
   }
 
   render () {
-    let { storage, location } = this.props
+    let { storage, location, isFolded } = this.props
     let folderList = storage.folders.map((folder) => {
       let isActive = location.pathname.match(new RegExp('\/storages\/' + storage.key + '\/folders\/' + folder.key))
       return <button styleName={isActive
@@ -44,15 +44,20 @@ class StorageItem extends React.Component {
         <span styleName='folderList-item-name'
           style={{borderColor: folder.color}}
         >
-          {folder.name}
+          {isFolded ? folder.name.substring(0, 1) : folder.name}
         </span>
+        {isFolded &&
+          <span styleName='folderList-item-tooltip'>
+            {folder.name}
+          </span>
+        }
       </button>
     })
 
     let isActive = location.pathname.match(new RegExp('\/storages\/' + storage.key + '$'))
 
     return (
-      <div styleName='root'
+      <div styleName={isFolded ? 'root--folded' : 'root'}
         key={storage.key}
       >
         <div styleName={isActive
@@ -72,11 +77,19 @@ class StorageItem extends React.Component {
             onClick={(e) => this.handleHeaderInfoClick(e)}
           >
             <span styleName='header-info-name'>
-              {storage.name}
+              {isFolded ? storage.name.substring(0, 1) : storage.name}
             </span>
             <span styleName='header-info-path'>
               ({storage.path})
             </span>
+            {isFolded &&
+              <span styleName='header-info--folded-tooltip'>
+                {storage.name}
+                <span styleName='header-info--folded-tooltip-path'>
+                  ({storage.path})
+                </span>
+              </span>
+            }
           </button>
         </div>
         {this.state.isOpen &&
@@ -90,6 +103,7 @@ class StorageItem extends React.Component {
 }
 
 StorageItem.propTypes = {
+  isFolded: PropTypes.bool
 }
 
 export default CSSModules(StorageItem, styles)

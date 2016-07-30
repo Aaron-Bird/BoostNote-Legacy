@@ -100,23 +100,24 @@
     width 44px - 1
     text-align center
     &:hover .menu-button-label
-      width 100px
+      opacity 1
   // TODO: extract tooltip style to a mixin
   .menu-button-label
     position fixed
     display inline-block
-    height 34px
+    height 30px
     left 44px
-    width 0
-    padding-left 0
-    margin-top -9px
+    padding 0 10px
+    margin-top -7px
     margin-left 0
     overflow ellipsis
     background-color $ui-tooltip-backgroundColor
     z-index 10
     color white
     line-height 34px
-    border-top-right-radius 5px
-    border-bottom-right-radius 5px
-    transition width 0.15s
+    border-top-right-radius 2px
+    border-bottom-right-radius 2px
+    transition opacity 0.15s
     pointer-events none
+    opacity 0
+    font-size 12px
