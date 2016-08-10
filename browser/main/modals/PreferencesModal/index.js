@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import { connect } from 'react-redux'
 import ConfigTab from './ConfigTab'
 import InfoTab from './InfoTab'
@@ -17,6 +18,8 @@ class Preferences extends React.Component {
 
   componentDidMount () {
     this.refs.root.focus()
+    const boundingBox = this.getContentBoundingBox()
+    this.setState({ boundingBox })
   }
 
   switchTeam (teamId) {
@@ -30,6 +33,7 @@ class Preferences extends React.Component {
   }
 
   renderContent () {
+    const { boundingBox } = this.state;
     let { dispatch, config, storages } = this.props
 
     switch (this.state.currentTab) {
@@ -48,6 +52,7 @@ class Preferences extends React.Component {
           <StoragesTab
             dispatch={dispatch}
             storages={storages}
+            boundingBox={boundingBox}
           />
         )
     }
@@ -57,6 +62,11 @@ class Preferences extends React.Component {
     if (e.keyCode === 27) {
       this.props.close()
     }
+  }
+
+  getContentBoundingBox () {
+    const node = ReactDOM.findDOMNode(this.refs.content)
+    return node.getBoundingClientRect();
   }
 
   render () {
@@ -97,7 +107,7 @@ class Preferences extends React.Component {
         <div styleName='nav'>
           {navButtons}
         </div>
-        <div styleName='content'>
+        <div ref='content' styleName='content'>
           {content}
         </div>
       </div>

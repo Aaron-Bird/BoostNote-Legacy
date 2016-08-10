@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './StorageItem.styl'
 import consts from 'browser/lib/consts'
@@ -18,6 +19,7 @@ class UnstyledFolderItem extends React.Component {
       status: 'IDLE',
       folder: {
         showColumnPicker: false,
+        colorPickerPos: { left: 0, top: 0 },
         color: props.color,
         name: props.name
       }
@@ -52,8 +54,22 @@ class UnstyledFolderItem extends React.Component {
   }
 
   handleColorButtonClick (e) {
-    const folder = Object.assign({}, this.state.folder, { showColumnPicker: true })
-    this.setState({ folder })
+    const folder = Object.assign({}, this.state.folder, { showColumnPicker: true, colorPickerPos: { left: 0, top: 0 } })
+    this.setState({ folder }, function() {
+      // After the color picker has been painted, re-calculate its position
+      // by comparing its dimensions to the host dimensions.
+      const { hostBoundingBox } = this.props;
+      const colorPickerNode = ReactDOM.findDOMNode(this.refs.colorPicker)
+      const colorPickerBox = colorPickerNode.getBoundingClientRect()
+      const offsetTop = hostBoundingBox.bottom - colorPickerBox.bottom
+      const folder = Object.assign({}, this.state.folder, {
+        colorPickerPos: {
+          left: 25,
+          top: offsetTop < 0 ? offsetTop - 5 : 0  // subtract 5px for aestetics
+        }
+      })
+      this.setState({ folder })
+    })
   }
 
   handleColorChange (color) {
@@ -78,6 +94,9 @@ class UnstyledFolderItem extends React.Component {
       position: 'fixed',
       top: 0, right: 0, bottom: 0, left: 0
     }
+    const pickerStyle = Object.assign({}, {
+      position: 'absolute'
+    }, this.state.folder.colorPickerPos)
     return (
       <div styleName='folderList-item'>
         <div styleName='folderList-item-left'>
@@ -88,10 +107,13 @@ class UnstyledFolderItem extends React.Component {
             <div style={ popover }>
               <div style={ cover }
                 onClick={ () => this.handleColorPickerClose() } />
-                <SketchPicker
-                  color={this.state.folder.color}
-                  onChange={ (color) => this.handleColorChange(color) }
-                  onChangeComplete={ (color) => this.handleColorChange(color) } />
+                <div style={pickerStyle}>
+                  <SketchPicker
+                    ref="colorPicker"
+                    color={this.state.folder.color}
+                    onChange={ (color) => this.handleColorChange(color) }
+                    onChangeComplete={ (color) => this.handleColorChange(color) } />
+                </div>
               </div>
           : null }
             <i className='fa fa-square'/>
@@ -154,13 +176,12 @@ class UnstyledFolderItem extends React.Component {
   }
 
   handleEditButtonClick (e) {
-    let { folder } = this.props
+    let { folder: propsFolder } = this.props
+    let { folder: stateFolder } = this.state
+    const folder = Object.assign({}, stateFolder, propsFolder)
     this.setState({
       status: 'EDIT',
-      folder: {
-        color: folder.color,
-        name: folder.name
-      }
+      folder
     }, () => {
       this.refs.nameInput.select()
     })
@@ -293,11 +314,12 @@ class StorageItem extends React.Component {
   }
 
   render () {
-    let { storage } = this.props
+    let { storage, hostBoundingBox } = this.props
     let folderList = storage.folders.map((folder) => {
       return <FolderItem key={folder.key}
         folder={folder}
         storage={storage}
+        hostBoundingBox={hostBoundingBox}
       />
     })
     return (
@@ -360,6 +382,14 @@ class StorageItem extends React.Component {
 }
 
 StorageItem.propTypes = {
+  hostBoundingBox: PropTypes.shape({
+    bottom: PropTypes.number,
+    height: PropTypes.number,
+    left: PropTypes.number,
+    right: PropTypes.number,
+    top: PropTypes.number,
+    width: PropTypes.number
+  }),
   storage: PropTypes.shape({
     key: PropTypes.string
   }),
