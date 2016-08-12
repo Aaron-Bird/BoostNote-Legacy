@@ -51,12 +51,15 @@ class StoragesTab extends React.Component {
   }
 
   renderList () {
-    let { storages } = this.props
+    let { storages, boundingBox } = this.props
 
+    if (!boundingBox) { return null }
     let storageList = storages.map((storage) => {
       return <StorageItem
         key={storage.key}
         storage={storage}
+        test={true}
+        hostBoundingBox={boundingBox}
       />
     })
     return (
@@ -217,6 +220,14 @@ class StoragesTab extends React.Component {
 }
 
 StoragesTab.propTypes = {
+  boundingBox: PropTypes.shape({
+    bottom: PropTypes.number,
+    height: PropTypes.number,
+    left: PropTypes.number,
+    right: PropTypes.number,
+    top: PropTypes.number,
+    width: PropTypes.number
+  }),
   dispatch: PropTypes.func
 }
 
