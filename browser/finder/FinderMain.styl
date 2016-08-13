@@ -1,0 +1,78 @@
+$search-height = 50px
+$nav-width = 175px
+$list-width = 250px
+
+.root
+  absolute top left right bottom
+
+.search
+  height $search-height
+  padding 10px
+  box-sizing border-box
+  border-bottom $ui-border
+  text-align center
+
+.search-input
+  height 30px
+  width 100%
+  margin 0 auto
+  font-size 18px
+  border none
+  outline none
+  text-align center
+.result
+  absolute left right bottom
+  top $search-height
+
+.result-nav
+  user-select none
+  absolute left top bottom
+  width $nav-width
+  background-color $ui-backgroundColor
+.result-nav-filter
+  margin-bottom 5px
+.result-nav-filter-option
+  height 25px
+  line-height 25px
+  padding 0 10px
+  label
+    cursor pointer
+
+.result-nav-menu
+  navButtonColor()
+  height 40px
+  padding 0 10px
+  font-size 14px
+  width 100%
+  outline none
+  text-align left
+  line-height 40px
+  box-sizing border-box
+  cursor pointer
+
+.result-nav-menu--active
+  @extend .result-nav-menu
+  background-color $ui-button--active-backgroundColor
+  color $ui-button--active-color
+  &:hover
+    background-color $ui-button--active-backgroundColor
+
+.result-nav-storageList
+  absolute bottom left right
+  top 80px + 50px + 10px
+  overflow-y auto
+
+.result-list
+  user-select none
+  absolute top bottom
+  left $nav-width
+  width $list-width
+  border-width 0 1px
+  border-style solid
+  border-color $ui-borderColor
+  box-sizing border-box
+  overflow-y auto
+
+.result-detail
+  absolute top bottom right
+  left $nav-width + $list-width

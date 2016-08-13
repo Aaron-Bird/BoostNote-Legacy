@@ -180,7 +180,6 @@ class ConfigTab extends React.Component {
                 ref='toggleFinder'
                 value={config.hotkey.toggleFinder}
                 type='text'
-                disabled
               />
             </div>
           </div>

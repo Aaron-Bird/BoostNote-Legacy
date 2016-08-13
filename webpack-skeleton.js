@@ -5,7 +5,7 @@ const NodeTargetPlugin = require('webpack/lib/node/NodeTargetPlugin')
 var config = {
   entry: {
     main: './browser/main/index.js',
-    // finder: './browser/finder/index.js'
+    finder: './browser/finder/index.js'
   },
   resolve: {
     extensions: ['', '.js', '.jsx', '.styl'],
@@ -27,6 +27,7 @@ var config = {
     ]
   },
   externals: [
+    'node-ipc',
     'electron',
     'md5',
     'superagent',

@@ -12,6 +12,7 @@ import _ from 'lodash'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import modal from 'browser/main/lib/modal'
 import InitModal from 'browser/main/modals/InitModal'
+import ipc from 'browser/main/lib/ipc'
 
 class Main extends React.Component {
   constructor (props) {
