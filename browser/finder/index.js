@@ -15,11 +15,12 @@ const { remote } = electron
 const { Menu } = remote
 
 function hideFinder () {
-  if (process.platform === 'win32') {
-    remote.getCurrentWindow().minimize()
-    return
+  let finderWindow = remote.getCurrentWindow()
+  if (global.process.platform === 'win32') {
+    finderWindow.blur()
+    finderWindow.hide()
   }
-  if (process.platform === 'darwin') {
+  if (global.process.platform === 'darwin') {
     Menu.sendActionToFirstResponder('hide:')
   }
   remote.getCurrentWindow().hide()
@@ -48,6 +49,7 @@ class FinderMain extends React.Component {
   }
 
   componentDidMount () {
+    this.refs.search.focus()
     window.addEventListener('focus', this.focusHandler)
     window.addEventListener('blur', this.blurHandler)
   }

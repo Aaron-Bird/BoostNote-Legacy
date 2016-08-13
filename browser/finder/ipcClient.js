@@ -30,12 +30,21 @@ function toggleFinder () {
       finderWindow.show()
     }
   } else {
-    if (!finderWindow.isMinimized()) {
-      finderWindow.minimize()
+    if (finderWindow.isVisible()) {
+      finderWindow.blur()
+      finderWindow.hide()
     } else {
       nodeIpc.of.node.emit('request-data')
-      finderWindow.restore()
+      finderWindow.show()
+      finderWindow.focus()
     }
+    // if (!finderWindow.isMinimized()) {
+    //   finderWindow.minimize()
+    // } else {
+    //   nodeIpc.of.node.emit('request-data')
+    //   finderWindow.restore()
+    //   finderWindow.focus()
+    // }
   }
 }
 
