@@ -15,13 +15,17 @@ class StatusBar extends React.Component {
     super(props)
 
     this.state = {
-      updateAvailable: false
+      updateReady: false
     }
   }
 
   componentDidMount () {
-    ipc.on('update-available', function (message) {
-      this.setState({updateAvailable: true})
+    ipc.on('update-ready', function (message) {
+      this.setState({
+        updateReady: true
+      }, () => {
+        this.updateApp()
+      })
     }.bind(this))
   }
 
@@ -34,7 +38,7 @@ class StatusBar extends React.Component {
     })
 
     if (index === 0) {
-      ipc.send('update-app', 'Deal with it.')
+      remote.getCurrentWindow().webContents.send('update-app')
     }
   }
 
@@ -68,9 +72,9 @@ class StatusBar extends React.Component {
         styleName='root'
       >
         <div styleName='pathname'>{location.pathname + location.search}</div>
-        {this.state.updateAvailable
+        {this.state.updateReady
           ? <button onClick={this.updateApp} styleName='update'>
-            <i styleName='update-icon' className='fa fa-cloud-download'/> Update is available!
+            <i styleName='update-icon' className='fa fa-cloud-download'/> Update is ready!
           </button>
           : null
         }
