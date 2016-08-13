@@ -36,15 +36,17 @@ We just want you to enjoying writing anything. :grinning:
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
-## Author
+## Author & Maintainer
 
 [Rokt33r(Dick Choi of MAISIN&CO.)](https://github.com/rokt33r)
 
 ## Contributors
 
+- [Kazu Yokomizo](https://github.com/kazup01)
 - [dojineko](https://github.com/dojineko)
 - [Romain Bazile](https://github.com/gromain)
 - [Bruno Paz](https://github.com/brpaz)
+- [Fabian Mueller](https://github.com/dotcs)
 
 ## Copyright & License
 
