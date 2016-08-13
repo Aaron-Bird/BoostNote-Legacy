@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react'
+import ReactDOM from 'react-dom'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './StorageItem.styl'
 import consts from 'browser/lib/consts'
@@ -8,6 +9,7 @@ import store from 'browser/main/store'
 const electron = require('electron')
 const { shell, remote } = electron
 const { Menu, MenuItem } = remote
+import { SketchPicker } from 'react-color'
 
 class UnstyledFolderItem extends React.Component {
   constructor (props) {
@@ -16,6 +18,8 @@ class UnstyledFolderItem extends React.Component {
     this.state = {
       status: 'IDLE',
       folder: {
+        showColumnPicker: false,
+        colorPickerPos: { left: 0, top: 0 },
         color: props.color,
         name: props.name
       }
@@ -50,22 +54,32 @@ class UnstyledFolderItem extends React.Component {
   }
 
   handleColorButtonClick (e) {
-    var menu = new Menu()
-
-    consts.FOLDER_COLORS.forEach((color, index) => {
-      menu.append(new MenuItem({
-        label: consts.FOLDER_COLOR_NAMES[index],
-        click: (e) => {
-          let { folder } = this.state
-          folder.color = color
-          this.setState({
-            folder
-          })
+    const folder = Object.assign({}, this.state.folder, { showColumnPicker: true, colorPickerPos: { left: 0, top: 0 } })
+    this.setState({ folder }, function() {
+      // After the color picker has been painted, re-calculate its position
+      // by comparing its dimensions to the host dimensions.
+      const { hostBoundingBox } = this.props;
+      const colorPickerNode = ReactDOM.findDOMNode(this.refs.colorPicker)
+      const colorPickerBox = colorPickerNode.getBoundingClientRect()
+      const offsetTop = hostBoundingBox.bottom - colorPickerBox.bottom
+      const folder = Object.assign({}, this.state.folder, {
+        colorPickerPos: {
+          left: 25,
+          top: offsetTop < 0 ? offsetTop - 5 : 0  // subtract 5px for aestetics
         }
-      }))
+      })
+      this.setState({ folder })
     })
+  }
 
-    menu.popup(remote.getCurrentWindow())
+  handleColorChange (color) {
+    const folder = Object.assign({}, this.state.folder, { color: color.hex })
+    this.setState({ folder })
+  }
+
+  handleColorPickerClose (event) {
+    const folder = Object.assign({}, this.state.folder, { showColumnPicker: false })
+    this.setState({ folder })
   }
 
   handleCancelButtonClick (e) {
@@ -75,12 +89,33 @@ class UnstyledFolderItem extends React.Component {
   }
 
   renderEdit (e) {
+    const popover = { position: 'absolute', zIndex: 2 }
+    const cover = {
+      position: 'fixed',
+      top: 0, right: 0, bottom: 0, left: 0
+    }
+    const pickerStyle = Object.assign({}, {
+      position: 'absolute'
+    }, this.state.folder.colorPickerPos)
     return (
       <div styleName='folderList-item'>
         <div styleName='folderList-item-left'>
           <button styleName='folderList-item-left-colorButton' style={{color: this.state.folder.color}}
-            onClick={(e) => this.handleColorButtonClick(e)}
+            onClick={(e) => !this.state.folder.showColumnPicker && this.handleColorButtonClick(e)}
           >
+          { this.state.folder.showColumnPicker ?
+            <div style={ popover }>
+              <div style={ cover }
+                onClick={ () => this.handleColorPickerClose() } />
+                <div style={pickerStyle}>
+                  <SketchPicker
+                    ref="colorPicker"
+                    color={this.state.folder.color}
+                    onChange={ (color) => this.handleColorChange(color) }
+                    onChangeComplete={ (color) => this.handleColorChange(color) } />
+                </div>
+              </div>
+          : null }
             <i className='fa fa-square'/>
           </button>
           <input styleName='folderList-item-left-nameInput'
@@ -141,13 +176,12 @@ class UnstyledFolderItem extends React.Component {
   }
 
   handleEditButtonClick (e) {
-    let { folder } = this.props
+    let { folder: propsFolder } = this.props
+    let { folder: stateFolder } = this.state
+    const folder = Object.assign({}, stateFolder, propsFolder)
     this.setState({
       status: 'EDIT',
-      folder: {
-        color: folder.color,
-        name: folder.name
-      }
+      folder
     }, () => {
       this.refs.nameInput.select()
     })
@@ -280,11 +314,12 @@ class StorageItem extends React.Component {
   }
 
   render () {
-    let { storage } = this.props
+    let { storage, hostBoundingBox } = this.props
     let folderList = storage.folders.map((folder) => {
       return <FolderItem key={folder.key}
         folder={folder}
         storage={storage}
+        hostBoundingBox={hostBoundingBox}
       />
     })
     return (
@@ -347,6 +382,14 @@ class StorageItem extends React.Component {
 }
 
 StorageItem.propTypes = {
+  hostBoundingBox: PropTypes.shape({
+    bottom: PropTypes.number,
+    height: PropTypes.number,
+    left: PropTypes.number,
+    right: PropTypes.number,
+    top: PropTypes.number,
+    width: PropTypes.number
+  }),
   storage: PropTypes.shape({
     key: PropTypes.string
   }),
