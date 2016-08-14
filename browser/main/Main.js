@@ -27,7 +27,13 @@ class Main extends React.Component {
   }
 
   componentDidMount () {
-    let { dispatch } = this.props
+    let { dispatch, config } = this.props
+
+    if (config.ui.theme === 'dark') {
+      document.body.setAttribute('data-theme', 'dark')
+    } else {
+      document.body.setAttribute('data-theme', 'default')
+    }
 
     // Reload all data
     dataApi.init()

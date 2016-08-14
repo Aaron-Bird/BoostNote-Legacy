@@ -35,3 +35,18 @@
 
 .update-icon
   color $brand-color
+
+body[data-theme="dark"]
+  .root
+    background-color $ui-dark-backgroundColor
+
+  .pathname
+    color $ui-dark-inactive-text-color
+
+  .zoom
+    border-color $ui-dark-borderColor
+
+  .update
+    navDarkButtonColor()
+    border-color $ui-dark-borderColor
+    border-left 1px solid $ui-dark-borderColor

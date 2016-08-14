@@ -113,3 +113,42 @@
   border-radius 2px
   height 30px
   padding 0 15px
+
+body[data-theme="dark"]
+  .root
+    padding 15px
+    color $ui-dark-text-color
+
+  .folderList-item
+    border-bottom $ui-dark-border
+
+  .folderList-empty
+    color $ui-dark-inactive-text-color
+
+  .list-empty
+    color $ui-dark-inactive-text-color
+  .list-control-addStorageButton
+    border-color $ui-dark-borderColor
+    colorDarkDefaultButton()
+    border-radius 2px
+
+  .addStorage-header
+    color $ui-dark-text-color
+    border-color $ui-dark-borderColor
+
+  .addStorage-body-section-name-input
+    border-color $ui-dark-borderColor
+
+  .addStorage-body-section-type-description
+    color $ui-dark-inactive-text-color
+
+  .addStorage-body-section-path-button
+    colorPrimaryButton()
+  .addStorage-body-control
+    border-color $ui-dark-borderColor
+
+  .addStorage-body-control-createButton
+    colorDarkPrimaryButton()
+  .addStorage-body-control-cancelButton
+    colorDarkDefaultButton()
+    border-color $ui-dark-borderColor

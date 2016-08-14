@@ -130,3 +130,50 @@
   @extend .folderList-item-right-button
   border none
   colorDangerButton()
+
+body[data-theme="dark"]
+  .header
+    border-color $ui-dark-borderColor
+
+  .header-label-path
+    color $ui-dark-inactive-text-color
+  .header-label-editButton
+    color $ui-dark-text-color
+
+  .header-control-button
+    colorDarkDefaultButton()
+    border-color $ui-dark-borderColor
+
+  .header-control-button-tooltip
+    tooltip()
+    position absolute
+    opacity 0
+    padding 5px
+    top 25px
+    z-index 10
+    white-space nowrap
+
+  .folderList-item
+    &:hover
+      background-color lighten($ui-dark-button--hover-backgroundColor, 5%)
+
+  .folderList-item-left-danger
+    color $danger-color
+    font-weight bold
+
+  .folderList-item-left-key
+    color $ui-dark-inactive-text-color
+
+  .folderList-item-left-colorButton
+    colorDarkDefaultButton()
+    border-color $ui-dark-borderColor
+
+  .folderList-item-right-button
+    colorDarkDefaultButton()
+    border-color $ui-dark-borderColor
+
+  .folderList-item-right-confirmButton
+    colorDarkPrimaryButton()
+
+  .folderList-item-right-dangerButton
+    colorDarkDangerButton()

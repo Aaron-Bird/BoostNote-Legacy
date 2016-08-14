@@ -174,3 +174,95 @@ $info-height = 75px
 .tabView-content
   absolute left right bottom
   top 30px
+
+body[data-theme="dark"]
+  .root
+    border-color $ui-dark-borderColor
+
+  .info
+    border-bottom-color $ui-dark-borderColor
+    background-color $ui-dark-backgroundColor
+
+  .info-delete
+    color $ui-dark-text-color
+
+  .info-delete-confirmButton
+    colorDarkDangerButton()
+    color $ui-dark-text-color
+
+  .info-delete-cancelButton
+    colorDarkDefaultButton()
+    border-color $ui-dark-borderColor
+    color $ui-dark-text-color
+
+  .info-right-button
+    navDarkButtonColor()
+    border-color $ui-dark-borderColor
+    &:active
+      border-color $ui-dark-button--focus-borderColor
+    &:hover .info-right-button-tooltip
+      opacity 1
+    &:focus
+      border-color $ui-button--focus-borderColor
+
+  .info-right-button-tooltip
+    darkTooltip()
+
+  .body-description
+    border-bottom-color $ui-dark-borderColor
+
+  .body-description-textarea
+    background-color $ui-dark-button--hover-backgroundColor
+    color white
+
+  .tabList
+    background-color $ui-button--active-backgroundColor
+    border-bottom-color $ui-dark-borderColor
+    background-color $ui-dark-backgroundColor
+
+  .tabList-item
+    border-color $ui-dark-borderColor
+    &:hover
+      background-color $ui-dark-button--hover-backgroundColor
+      .tabList-item-deleteButton
+        color $ui-dark-inactive-text-color
+        &:hover
+          background-color darken($ui-dark-button--hover-backgroundColor, 15%)
+        &:active
+          color white
+          background-color $ui-dark-button--active-backgroundColor
+  .tabList-item--active
+    border-color $ui-dark-borderColor
+    .tabList-item-button
+      border-color $brand-color
+    &:hover
+      background-color $ui-dark-button--hover-backgroundColor
+      .tabList-item-deleteButton
+        color $ui-dark-inactive-text-color
+        &:hover
+          background-color darken($ui-dark-button--hover-backgroundColor, 15%)
+        &:active
+          color white
+          background-color $ui-dark-button--active-backgroundColor
+  .tabList-item-button
+    navDarkButtonColor()
+    border-left 4px solid transparent
+  .tabList-plusButton
+    navDarkButtonColor()
+  .tabView-top
+    border-color $ui-dark-borderColor
+  .tabView-top-name
+    border-color $ui-dark-borderColor
+    color $ui-dark-text-color
+    background-color $ui-dark-button--hover-backgroundColor
+  .tabView-top-mode
+    border-color $ui-dark-borderColor
+    background-color $dark-default-button-background
+    color $ui-dark-inactive-text-color
+    &:hover
+      color $ui-dark-text-color
+      background-color $ui-dark-button--hover-backgroundColor
+    &:active
+      background-color $ui-dark-button--active-backgroundColor
+    &:active:hover
+      background-color $ui-dark-button--active-backgroundColor

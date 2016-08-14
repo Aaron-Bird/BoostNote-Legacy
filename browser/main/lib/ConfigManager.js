@@ -67,6 +67,12 @@ function set (updates) {
   if (!validate(newConfig)) throw new Error('INVALID CONFIG')
   _save(newConfig)
 
+  if (newConfig.ui.theme === 'dark') {
+    document.body.setAttribute('data-theme', 'dark')
+  } else {
+    document.body.setAttribute('data-theme', 'default')
+  }
+
   remote.getCurrentWindow().webContents.send('config-renew', {
     config: get(),
     silent: false

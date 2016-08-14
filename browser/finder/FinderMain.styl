@@ -20,6 +20,7 @@ $list-width = 250px
   border none
   outline none
   text-align center
+  background-color transparent
 .result
   absolute left right bottom
   top $search-height
@@ -76,3 +77,32 @@ $list-width = 250px
 .result-detail
   absolute top bottom right
   left $nav-width + $list-width
+
+body[data-theme="dark"]
+  .root
+    background-color $ui-dark-backgroundColor
+  .search
+    border-color $ui-dark-borderColor
+  .search-input
+    color $ui-dark-text-color
+
+  .result-nav
+    background-color $ui-dark-backgroundColor
+    label
+      color $ui-dark-text-color
+
+  .result-nav-menu
+    navDarkButtonColor()
+
+  .result-nav-menu--active
+    background-color $ui-dark-button--active-backgroundColor
+    color $ui-dark-button--active-color
+    &:hover
+      background-color $ui-dark-button--active-backgroundColor
+
+  .result-list
+    border-color $ui-dark-borderColor
+
+  .result-detail
+    absolute top bottom right
+    left $nav-width + $list-width

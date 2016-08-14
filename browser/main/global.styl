@@ -83,3 +83,7 @@ modalBackColor = transparentify(white, 65%)
     absolute top left bottom right
     background-color modalBackColor
     z-index modalZIndex + 1
+body[data-theme="dark"]
+  .ModalBase
+    .modalBack
+      background-color alpha(black, 60%)

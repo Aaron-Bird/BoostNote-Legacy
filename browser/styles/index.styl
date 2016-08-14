@@ -1,3 +1,4 @@
+// Default theme
 $brand-color = #6AA5E9
 
 $danger-color = #c9302c
@@ -137,3 +138,77 @@ modal()
   overflow hidden
   border-radius $modal-border-radius
   box-shadow 2px 2px 10px gray
+
+// Dark theme
+$ui-dark-borderColor = lighten(#21252B, 20%)
+$ui-dark-backgroundColor = darken(#21252B, 10%)
+$dark-background-color = lighten($ui-dark-backgroundColor, 10%)
+$ui-dark-text-color = #DDDDDD
+$ui-dark-button--active-color = white
+$ui-dark-button--active-backgroundColor = #6AA5E9
+$ui-dark-button--hover-backgroundColor = lighten($ui-dark-backgroundColor, 10%)
+$ui-dark-button--focus-borderColor = lighten(#369DCD, 25%)
+
+$dark-default-button-background = $ui-dark-backgroundColor
+$dark-default-button-background--hover = $ui-dark-button--hover-backgroundColor
+$dark-default-button-background--active = $ui-dark-button--active-backgroundColo
+colorDarkDefaultButton()
+  border-color $ui-dark-borderColor
+  color $ui-dark-text-color
+  background-color $dark-default-button-background
+  &:hover
+    background-color $dark-default-button-background--hover
+  &:active
+    background-color $ui-dark-button--active-backgroundColor
+  &:active:hover
+    background-color $ui-dark-button--active-backgroundColor
+
+$dark-danger-button-background = #c9302c
+$dark-danger-button-background--hover = darken(#c9302c, 5%)
+$dark-danger-button-background--active = darken(#c9302c, 10%)
+colorDarkDangerButton()
+  color white
+  background-color $dark-danger-button-background
+  &:hover
+    background-color $dark-danger-button-background--hover
+  &:active
+    background-color $dark-danger-button-background--active
+  &:active:hover
+    background-color $dark-danger-button-background--active
+
+navDarkButtonColor()
+  border none
+  color $ui-dark-button-color
+  background-color transparent
+  transition color background-color  0.15s
+  &:hover
+    color white
+    background-color $ui-dark-button--hover-backgroundColor
+  &:active
+    background-color $ui-dark-button--active-backgroundColor
+    color $ui-dark-button--active-color
+  &:active, &:active:hover
+    background-color $ui-dark-button--active-backgroundColor
+    color $ui-dark-button--active-color
+
+$ui-dark-tooltip-text-color = white
+$ui-dark-tooltip-backgroundColor = alpha(#444, 70%)
+$ui-dark-tooltip-button-backgroundColor = #D1D1D1
+$ui-dark-tooltip-button--hover-backgroundColor = lighten(#D1D1D1, 30%)
+$ui-tooltip-font-size = 12px
+
+darkTooltip()
+  background-color $ui-dark-tooltip-backgroundColor = alpha(#444, 70%)
+  color $ui-dark-tooltip-text-color = white
+  font-size $ui-dark-tooltip-font-size
+  pointer-events none
+  transition 0.1s
+
+modalDark()
+  position relative
+  z-index $modal-z-index
+  width 100%
+  background-color $ui-dark-backgroundColor
+  overflow hidden
+  border-radius $modal-border-radius
+  box-shadow 2px 2px 10px black

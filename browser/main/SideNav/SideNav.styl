@@ -122,3 +122,32 @@
     pointer-events none
     opacity 0
     font-size 12px
+
+body[data-theme="dark"]
+  .root, .root--folded
+    border-color $ui-dark-borderColor
+    background-color $ui-dark-backgroundColor
+    color $ui-dark-text-color
+
+  .top
+    border-color $ui-dark-borderColor
+
+  .top-menu
+    navDarkButtonColor()
+
+  .menu-button
+    navDarkButtonColor()
+
+  .menu-button--active
+    @extend .menu-button
+    background-color $ui-dark-button--active-backgroundColor
+    color $ui-dark-button--active-color
+    &:hover
+      background-color $ui-dark-button--active-backgroundColor
+
+  .storageList-empty
+    color $ui-dark-inactive-text-color
+
+  .navToggle
+    navDarkButtonColor()
+

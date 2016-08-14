@@ -244,3 +244,48 @@ table
       border-color borderColor
       &:last-child
         border-right solid 1px borderColor
+
+themeDarkBackground = darken(#21252B, 10%)
+themeDarkText = #DDDDDD
+themeDarkBorder = lighten(themeDarkBackground, 20%)
+themeDarkPreview = #282C34
+themeDarkTableOdd = themeDarkPreview
+themeDarkTableEven = darken(themeDarkPreview, 10%)
+themeDarkTableHead = themeDarkTableEven
+themeDarkTableBorder = themeDarkBorder
+themeDarkModalButtonDefault = themeDarkPreview
+themeDarkModalButtonDanger = #BF360C
+body[data-theme="dark"]
+  color themeDarkText
+  border-color themeDarkBorder
+  background-color themeDarkPreview
+  a:hover
+    background-color alpha(lighten(brandColor, 30%), 0.2) !important
+
+  code
+    border-color darken(themeDarkBorder, 10%)
+    background-color lighten(themeDarkPreview, 5%)
+
+  pre
+    code
+      background-color transparent
+
+  label.taskListItem
+    background-color themeDarkPreview
+  table
+    thead
+      tr
+        background-color themeDarkTableHead
+      th
+        border-color themeDarkTableBorder
+        &:last-child
+          border-right solid 1px themeDarkTableBorder
+    tbody
+      tr:nth-child(2n + 1)
+        background-color themeDarkTableOdd
+      tr:nth-child(2n)
+        background-color themeDarkTableEven
+      td
+        border-color themeDarkTableBorder
+        &:last-child
+          border-right solid 1px themeDarkTableBorder

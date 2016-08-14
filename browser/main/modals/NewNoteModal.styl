@@ -54,3 +54,28 @@
   color $ui-inactive-text-color
   text-align center
   margin-bottom 25px
+
+body[data-theme="dark"]
+  .root
+    modalDark()
+
+  .header
+    background-color $ui-dark-button--hover-backgroundColor
+    border-color $ui-dark-borderColor
+    color $ui-dark-text-color
+
+  .closeButton
+    border-color $ui-dark-borderColor
+    color $ui-dark-text-color
+    colorDarkDefaultButton()
+
+  .control-button
+    border-color $ui-dark-borderColor
+    color $ui-dark-text-color
+    background-color transparent
+    &:focus
+      colorPrimaryButton()
+
+  .description
+    color $ui-inactive-text-color
+

@@ -28,3 +28,15 @@
   left -3px
   z-index 10
   cursor col-resize
+
+
+body[data-theme="dark"]
+  .root
+    absolute top left bottom right
+
+  .slider
+    background-color $ui-dark-borderColor
+    border-color $ui-dark-borderColor
+
+  .slider--active
+    background-color $ui-button--active-backgroundColor
