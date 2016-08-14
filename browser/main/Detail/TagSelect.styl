@@ -61,3 +61,27 @@
     border-color $ui-input--focus-borderColor = #369DCD
   &:disabled
     background-color $ui-input--disabled-backgroundColor = #DDD
+
+body[data-theme="dark"]
+  .icon
+    color $ui-dark-button-color
+
+  .tag
+    background-color $ui-dark-button--hover-backgroundColor
+
+  .tag-removeButton
+    border-color $ui-button--focus-borderColor
+    background-color transparent
+    color $ui-button-color
+
+  .tag-label
+    color $ui-dark-text-color
+
+  .newTag
+    border-color $ui-dark-borderColor
+    background-color transparent
+    color $ui-dark-text-color
+    &:focus
+      border-color $ui-input--focus-borderColor = #369DCD
+    &:disabled
+      background-color $ui-input--disabled-backgroundColor = #DDD

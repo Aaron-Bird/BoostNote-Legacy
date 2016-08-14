@@ -91,3 +91,44 @@
   color $ui-inactive-text-color
   vertical-align middle
 
+body[data-theme="dark"]
+  .root
+    border-color $ui-dark-borderColor
+    background-color $ui-dark-backgroundColor
+
+  .item
+    border-color $ui-dark-borderColor
+    &:hover
+      background-color alpha($ui-active-color, 20%)
+
+  .item--active
+    @extend .item
+    .item-border
+      border-color $ui-active-color
+
+  .item-info
+    color $ui-dark-inactive-text-color
+
+  .item-info-left-folder
+    color $ui-dark-text-color
+  .item-info-left-folder-surfix
+    color $ui-dark-inactive-text-color
+
+  .item-title
+    color $ui-dark-text-color
+  .item-title-icon
+    color $ui-darkinactive-text-color
+  .item-title-empty
+    color $ui-dark-inactive-text-color
+
+  .item-tagList-icon
+    color $ui-dark-button-color
+
+  .item-tagList-item
+    border-color $ui-dark-button--focus-borderColor
+    background-color $ui-dark-button--hover-backgroundColor
+    color $ui-dark-text-color
+
+  .item-tagList-empty
+    color $ui-inactive-text-color
+    vertical-align middle

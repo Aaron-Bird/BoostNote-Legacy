@@ -84,3 +84,38 @@
   color $ui-inactive-text-color
   vertical-align middle
 
+body[data-theme="dark"]
+  .root
+    border-color $ui-dark-borderColor
+    &:hover
+      background-color alpha($ui-active-color, 20%)
+
+  .root--active
+    @extend .root
+    .border
+      border-color $ui-active-color
+
+  .info
+    color $ui-dark-inactive-text-color
+
+  .info-left-folder
+    color $ui-dark-text-color
+  .info-left-folder-surfix
+    color $ui-dark-inactive-text-color
+
+  .title
+    color $ui-dark-text-color
+  .title-icon
+    color $ui-dark-inactive-text-color
+  .title-empty
+    color $ui-dark-inactive-text-color
+
+  .tagList-icon
+    color $ui-dark-button-color
+
+  .tagList-item
+    border-color $ui-dark-button--focus-borderColor
+    background-color $ui-dark-backgroundColor
+
+  .tagList-empty
+    color $ui-dark-inactive-text-color

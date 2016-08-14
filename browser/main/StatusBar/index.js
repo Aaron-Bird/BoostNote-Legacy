@@ -74,7 +74,7 @@ class StatusBar extends React.Component {
         <div styleName='pathname'>{location.pathname + location.search}</div>
         {this.state.updateReady
           ? <button onClick={this.updateApp} styleName='update'>
-            <i styleName='update-icon' className='fa fa-cloud-download'/> Update is ready!
+            <i styleName='update-icon' className='fa fa-cloud-download'/> Ready to Update!
           </button>
           : null
         }

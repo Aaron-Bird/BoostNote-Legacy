@@ -57,3 +57,29 @@
   color $ui-button--active-color
   &:hover
     background-color $ui-button--active-backgroundColor
+
+body[data-theme="dark"]
+  .header-toggleButton
+    navDarkButtonColor()
+  .header-name
+    navDarkButtonColor()
+
+  .header-name--active
+    @extend .header-name
+    background-color $ui-button--active-backgroundColor
+    color $ui-button--active-color
+    &:hover
+      background-color $ui-button--active-backgroundColor
+
+  .folderList-item
+    navDarkButtonColor()
+    border-width 0 0 0 6px
+    border-style solid
+    border-color transparent
+
+  .folderList-item--active
+    @extend .folderList-item
+    background-color $ui-button--active-backgroundColor
+    color $ui-button--active-color
+    &:hover
+      background-color $ui-button--active-backgroundColor

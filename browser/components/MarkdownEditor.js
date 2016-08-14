@@ -147,6 +147,7 @@ class MarkdownEditor extends React.Component {
             : 'preview--hide'
           }
           style={previewStyle}
+          theme={config.ui.theme}
           fontSize={config.preview.fontSize}
           fontFamily={config.preview.fontFamily}
           codeBlockTheme={config.preview.codeBlockTheme}

@@ -29,7 +29,6 @@ $info-height = 75px
   padding 0 25px
   border-radius 2px
   border none
-  color $ui-text-color
   colorDangerButton()
 
 .info-delete-cancelButton
@@ -88,6 +87,7 @@ $info-height = 75px
   top 45px
   padding 5px
   opacity 0
+  border-radius 2px
 
 .body
   absolute bottom left right
@@ -95,3 +95,36 @@ $info-height = 75px
 
 .body-noteEditor
   absolute top bottom left right
+
+body[data-theme="dark"]
+  .root
+    border-color $ui-dark-borderColor
+
+  .info
+    border-color $ui-dark-borderColor
+    background-color $ui-dark-backgroundColor
+
+  .info-delete
+    color $ui-dark-text-color
+
+  .info-delete-confirmButton
+    colorDarkDangerButton()
+    color $ui-dark-text-color
+
+  .info-delete-cancelButton
+    colorDarkDefaultButton()
+    border-color $ui-dark-borderColor
+    color $ui-dark-text-color
+
+  .info-right-button
+    navDarkButtonColor()
+    border-color $ui-dark-borderColor
+    &:active
+      border-color $ui-dark-button--focus-borderColor
+    &:hover .info-right-button-tooltip
+      opacity 1
+    &:focus
+      border-color $ui-button--focus-borderColor
+
+  .info-right-button-tooltip
+    darkTooltip()

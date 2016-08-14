@@ -24,6 +24,7 @@
   width 150px
   text-align right
   margin-right 10px
+  font-size 14px
 .group-section-control
   flex 1
 .group-section-control-input
@@ -85,4 +86,28 @@
   p
     line-height 1.2
 
+body[data-theme="dark"]
+  .root
+    color $ui-dark-text-color
 
+  .group-header
+    color $ui-dark-text-color
+    border-color $ui-dark-borderColor
+
+  .group-header2
+    color $ui-dark-text-color
+
+  .group-section-control-input
+    border-color $ui-dark-borderColor
+
+  .group-control
+    border-color $ui-dark-borderColor
+  .group-control-leftButton
+    colorDarkDefaultButton()
+    border-color $ui-dark-borderColor
+  .group-control-rightButton
+    colorDarkPrimaryButton()
+  .group-hint
+    border-color $ui-dark-borderColor
+    background-color $ui-dark-backgroundColor
+    color $ui-dark-text-color

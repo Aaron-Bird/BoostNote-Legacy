@@ -35,3 +35,17 @@
   absolute left right bottom
   top 50px
   overflow-y auto
+
+body[data-theme="dark"]
+  .root
+    modalDark()
+
+  .nav
+    background-color $ui-dark-button--hover-backgroundColor
+    border-color $ui-dark-borderColor
+
+  .nav-button
+    background-color transparent
+    color #939395
+    &:hover
+      color $ui-dark-text-color

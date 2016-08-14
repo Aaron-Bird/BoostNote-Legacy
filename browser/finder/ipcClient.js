@@ -88,6 +88,11 @@ nodeIpc.connectTo(
 
     nodeIpc.of.node.on('config-renew', function (payload) {
       console.log('config', payload)
+      if (payload.ui.theme === 'dark') {
+        document.body.setAttribute('data-theme', 'dark')
+      } else {
+        document.body.setAttribute('data-theme', 'default')
+      }
       store.default.dispatch({
         type: 'SET_CONFIG',
         config: payload

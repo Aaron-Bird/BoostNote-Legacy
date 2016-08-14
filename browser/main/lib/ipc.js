@@ -114,6 +114,7 @@ nodeIpc.serve(
 
     nodeIpc.server.on('connect', function (socket) {
       console.log('connected')
+      nodeIpc.server.broadcast('config-renew', ConfigManager.get())
       socket.on('close', function () {
         console.log('socket dead')
       })

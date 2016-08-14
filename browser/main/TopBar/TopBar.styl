@@ -102,3 +102,65 @@ $control-height = 34px
   line-height normal
   opacity 0
   transition 0.1s
+
+body[data-theme="dark"]
+  .root, .root--expanded
+    background-color $ui-dark-backgroundColor
+
+  .control
+    border-color $ui-dark-borderColor
+  .control-search
+    background-color $dark-background-color
+
+  .control-search-icon
+    absolute top bottom left
+    line-height 32px
+    width 35px
+    color $ui-dark-inactive-text-color
+
+  .control-search-input
+    input
+      background-color $dark-background-color
+      color $ui-dark-text-color
+  .control-search-optionList
+    color white
+    background-color $ui-dark-button--hover-backgroundColor
+    border-color $ui-dark-borderColor
+    box-shadow 2px 2px 10px black
+
+  .control-search-optionList-item
+    border-color $ui-dark-borderColor
+    &:hover
+      background-color lighten($ui-dark-button--hover-backgroundColor, 15%)
+  .control-search-optionList-item-folder
+    color $ui-dark-text-color
+  .control-search-optionList-item-folder-surfix
+    font-size 10px
+    margin-left 5px
+    color $ui-inactive-text-color
+  .control-search-optionList-item-type
+    font-size 12px
+    color $ui-inactive-text-color
+    padding-right 3px
+  .control-search-optionList-empty
+    height 150px
+    color $ui-inactive-text-color
+    line-height 150px
+    text-align center
+  .control-newPostButton
+    colorDarkDefaultButton()
+    border-color $ui-dark-borderColor
+    &:active
+      border-color $ui-dark-button--active-backgroundColor
+
+  .control-newPostButton-tooltip
+    darkTooltip()
+    position fixed
+    pointer-events none
+    top 45px
+    left 385px
+    z-index 10
+    padding 5px
+    line-height normal
+    opacity 0
+    transition 0.1s

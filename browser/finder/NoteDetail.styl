@@ -31,14 +31,6 @@
   position relative
   flex 1
   border-right $ui-border
-  &:hover
-    .tabList-item-deleteButton
-      color $ui-inactive-text-color
-      &:hover
-        background-color darken($ui-backgroundColor, 15%)
-      &:active
-        color white
-        background-color $ui-active-color
 .tabList-item--active
   @extend .tabList-item
   .tabList-item-button
@@ -47,6 +39,7 @@
   width 100%
   height 29px
   navButtonColor()
+  outline none
   border-left 4px solid transparent
 .tabList-item-deleteButton
   position absolute
@@ -91,3 +84,40 @@
   box-sizing border-box
   height 100%
   width 100%
+
+body[data-theme="dark"]
+  .description
+    border-color $ui-dark-borderColor
+
+  .description-textarea
+    background-color $ui-dark-button--hover-backgroundColor
+    color white
+
+  .tabList
+    background-color $ui-button--active-backgroundColor
+    border-bottom-color $ui-dark-borderColor
+    background-color $ui-dark-backgroundColor
+  .tabList-item
+    border-color $ui-dark-borderColor
+    &:hover
+      background-color $ui-dark-button--hover-backgroundColor
+  .tabList-item--active
+    border-color $ui-dark-borderColor
+    .tabList-item-button
+      border-color $brand-color
+  .tabList-item-button
+    navDarkButtonColor()
+    border-left 4px solid transparent
+  .tabList-plusButton
+    navDarkButtonColor()
+
+  .tabView-top
+    border-color $ui-dark-borderColor
+  .tabView-top-name
+    border-color $ui-dark-borderColor
+    color $ui-dark-text-color
+    background-color $ui-dark-button--hover-backgroundColor
+  .tabView-top-mode
+    border-color $ui-dark-borderColor
+    background-color $dark-default-button-background
+    color $ui-dark-inactive-text-color

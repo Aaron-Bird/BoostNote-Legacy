@@ -88,7 +88,8 @@ export default class MarkdownPreview extends React.Component {
       prevProps.fontSize !== this.props.fontSize ||
       prevProps.codeBlockFontFamily !== this.props.codeBlockFontFamily ||
       prevProps.codeBlockTheme !== this.props.codeBlockTheme ||
-      prevProps.lineNumber !== this.props.lineNumber
+      prevProps.lineNumber !== this.props.lineNumber ||
+      prevProps.theme !== this.props.theme
     ) this.rewriteIframe()
   }
 
@@ -100,7 +101,7 @@ export default class MarkdownPreview extends React.Component {
       el.removeEventListener('click', this.checkboxClickHandler)
     })
 
-    let { value, fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme } = this.props
+    let { value, fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme, theme } = this.props
     fontFamily = _.isString(fontFamily) && fontFamily.trim().length > 0
       ? [fontFamily].concat(defaultFontFamily)
       : defaultFontFamily
@@ -137,6 +138,8 @@ export default class MarkdownPreview extends React.Component {
       <link rel="stylesheet" href="../node_modules/highlight.js/styles/${codeBlockTheme}.css">
       <link rel="stylesheet" href="../resources/katex.min.css">
     `
+
+    this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
     this.refs.root.contentWindow.document.body.innerHTML = markdown(value)
 
     Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {

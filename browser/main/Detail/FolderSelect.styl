@@ -57,10 +57,11 @@
 
 .search-optionList
   position fixed
-  border $ui-border
   z-index 200
   background-color white
   border-radius 2px
+  box-shadow 2px 2px 10px gray
+
 
 .search-optionList-item
   height 34px
@@ -86,3 +87,45 @@
   font-size 10px
   color $ui-inactive-text-color
   margin-left 5px
+
+body[data-theme="dark"]
+  .root
+    color $ui-dark-text-color
+    &:hover
+      color white
+      background-color $ui-dark-button--hover-backgroundColor
+      border-color $ui-dark-borderColor
+
+  .root--search, .root--focus
+    @extend .root
+    background-color $ui-dark-button--hover-backgroundColor
+    border-color $ui-input--focus-borderColor
+    &:hover
+      background-color $ui-dark-button--hover-backgroundColor
+      border-color $ui-input--focus-borderColor
+
+  .idle-label-name-surfix
+    color $ui-dark-inactive-text-color
+
+  .search-input
+    color white
+    background-color transparent
+    border-color $ui-dark-borderColor
+
+  .search-optionList
+    color white
+    background-color $ui-dark-button--hover-backgroundColor
+    box-shadow 2px 2px 10px black
+
+  .search-optionList-item
+    &:hover
+      background-color lighten($ui-dark-button--hover-backgroundColor, 15%)
+
+  .search-optionList-item--active
+    background-color $ui-dark-button--active-backgroundColor
+    color $ui-dark-button--active-color
+    &:hover
+      background-color $ui-dark-button--active-backgroundColor
+      color $ui-dark-button--active-color
+  .search-optionList-item-name-surfix
+    color $ui-dark-inactive-text-color
