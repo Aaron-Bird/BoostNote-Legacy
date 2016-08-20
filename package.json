@@ -12,7 +12,7 @@
     "compile": "grunt compile"
   },
   "config": {
-    "electron-version": "1.1.3"
+    "electron-version": "1.2.8"
   },
   "repository": {
     "type": "git",
@@ -70,7 +70,7 @@
     "css-loader": "^0.19.0",
     "devtron": "^1.1.0",
     "electron-packager": "^6.0.0",
-    "electron-prebuilt": "^1.1.3",
+    "electron-prebuilt": "^1.2.8",
     "electron-release": "^2.2.0",
     "grunt": "^0.4.5",
     "grunt-electron-installer": "^1.2.0",
