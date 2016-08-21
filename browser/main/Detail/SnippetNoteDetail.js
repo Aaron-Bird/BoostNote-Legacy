@@ -11,6 +11,17 @@ import modes from 'browser/lib/modes'
 import { hashHistory } from 'react-router'
 import ee from 'browser/main/lib/eventEmitter'
 
+function detectModeByFilename (filename) {
+  for (let key in modes) {
+    const mode = modes[key]
+    if (mode.match != null && mode.match.test(filename)) {
+      console.log(mode)
+      return mode.mode
+    }
+  }
+  return null
+}
+
 const electron = require('electron')
 const { remote } = electron
 const Menu = remote.Menu
@@ -251,18 +262,18 @@ class SnippetNoteDetail extends React.Component {
     }
   }
 
-  handleNameInputChange (index) {
-    return (e) => {
-      let snippets = this.state.note.snippets.slice()
-      snippets[index].name = e.target.value
-      this.state.note.snippets = snippets
+  handleNameInputChange (e, index) {
+    let snippets = this.state.note.snippets.slice()
+    snippets[index].name = e.target.value
+    let mode = detectModeByFilename(e.target.value.trim())
+    if (mode != null) snippets[index].mode = mode
+    this.state.note.snippets = snippets
 
-      this.setState({
-        note: this.state.note
-      }, () => {
-        this.save()
-      })
-    }
+    this.setState({
+      note: this.state.note
+    }, () => {
+      this.save()
+    })
   }
 
   handleModeButtonClick (index) {
@@ -359,7 +370,7 @@ class SnippetNoteDetail extends React.Component {
           <input styleName='tabView-top-name'
             placeholder='Filename including extensions...'
             value={snippet.name}
-            onChange={(e) => this.handleNameInputChange(index)(e)}
+            onChange={(e) => this.handleNameInputChange(e, index)}
           />
           <button styleName='tabView-top-mode'
             onClick={(e) => this.handleModeButtonClick(index)(e)}
