@@ -14,29 +14,27 @@ $info-height = 75px
 
 .info-delete
   height 80px
-  clearfix()
+  display flex
 
 .info-delete-message
   height 80px
   line-height 80px
   padding 0 25px
-  float left
+  overflow ellipsis
+  flex 1
 
 .info-delete-confirmButton
-  float right
   margin 25px 5px 0
+  width 80px
   height 30px
-  padding 0 25px
   border-radius 2px
   border none
-  color $ui-text-color
   colorDangerButton()
 
 .info-delete-cancelButton
-  float right
+  width 80px
   height 30px
   margin 25px 5px 0
-  padding 0 25px
   border $ui-border
   border-radius 2px
   color $ui-text-color

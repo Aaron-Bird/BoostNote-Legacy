@@ -228,13 +228,13 @@ class MarkdownNoteDetail extends React.Component {
               <span styleName='info-delete-message'>
                 Are you sure to delete this note?
               </span>
-              <button styleName='info-delete-cancelButton'
-                onClick={(e) => this.handleDeleteCancelButtonClick(e)}
-              >Cancel</button>
               <button styleName='info-delete-confirmButton'
                 onClick={(e) => this.handleDeleteConfirmButtonClick(e)}
                 ref='deleteConfirmButton'
               >Confirm</button>
+              <button styleName='info-delete-cancelButton'
+                onClick={(e) => this.handleDeleteCancelButtonClick(e)}
+              >Cancel</button>
             </div>
           </div>
           : <div styleName='info'>
