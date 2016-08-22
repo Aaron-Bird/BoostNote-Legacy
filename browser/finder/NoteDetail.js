@@ -133,7 +133,7 @@ class NoteDetail extends React.Component {
             />
             <button styleName='tabView-top-mode'
             >
-              {mode.label}
+              {mode == null ? null : mode}
             </button>
           </div>
           {snippet.mode === 'markdown'

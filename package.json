@@ -45,7 +45,6 @@
     "devicon": "^2.0.0",
     "electron-gh-releases": "^2.0.2",
     "font-awesome": "^4.3.0",
-    "fs-jetpack": "^0.7.0",
     "highlight.js": "^9.3.0",
     "lodash": "^4.11.1",
     "markdown-it": "^6.0.1",

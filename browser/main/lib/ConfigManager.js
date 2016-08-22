@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 const OSX = global.process.platform === 'darwin'
 const electron = require('electron')
-const { remote } = electron
+const { ipcRenderer } = electron
 
 const defaultConfig = {
   zoom: 1,
@@ -73,9 +73,8 @@ function set (updates) {
     document.body.setAttribute('data-theme', 'default')
   }
 
-  remote.getCurrentWindow().webContents.send('config-renew', {
-    config: get(),
-    silent: false
+  ipcRenderer.send('config-renew', {
+    config: get()
   })
 }
 
