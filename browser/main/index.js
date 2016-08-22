@@ -4,14 +4,12 @@ import store from './store'
 import React from 'react'
 import ReactDOM from 'react-dom'
 require('!!style!css!stylus?sourceMap!./global.styl')
-import activityRecord from 'browser/lib/activityRecord'
 import { Router, Route, IndexRoute, IndexRedirect, hashHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
-
+require('./lib/ipcClient')
 const electron = require('electron')
 const ipc = electron.ipcRenderer
 
-activityRecord.init()
 ipc.send('check-update', 'check-update')
 window.addEventListener('online', function () {
   ipc.send('check-update', 'check-update')

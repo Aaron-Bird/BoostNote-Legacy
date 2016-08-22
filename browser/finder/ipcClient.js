@@ -13,7 +13,7 @@ function killFinder () {
   finderWindow.removeAllListeners()
   if (global.process.platform === 'darwin') {
     // Only OSX has another app process.
-    app.quit()
+    nodeIpc.of.node.emit('quit-from-finder')
   } else {
     finderWindow.close()
   }
@@ -26,7 +26,7 @@ function toggleFinder () {
       finderWindow.hide()
       Menu.sendActionToFirstResponder('hide:')
     } else {
-      nodeIpc.of.node.emit('request-data')
+      nodeIpc.of.node.emit('request-data-from-finder')
       finderWindow.show()
     }
   } else {
@@ -34,17 +34,10 @@ function toggleFinder () {
       finderWindow.blur()
       finderWindow.hide()
     } else {
-      nodeIpc.of.node.emit('request-data')
+      nodeIpc.of.node.emit('request-data-from-finder')
       finderWindow.show()
       finderWindow.focus()
     }
-    // if (!finderWindow.isMinimized()) {
-    //   finderWindow.minimize()
-    // } else {
-    //   nodeIpc.of.node.emit('request-data')
-    //   finderWindow.restore()
-    //   finderWindow.focus()
-    // }
   }
 }
 
@@ -62,9 +55,10 @@ nodeIpc.connectTo(
       console.log('disconnected')
     })
 
-    nodeIpc.of.node.on('open-finder', function (payload) {
+    nodeIpc.of.node.on('open-finder', function () {
       toggleFinder()
     })
+
     ipcRenderer.on('open-finder-from-tray', function () {
       toggleFinder()
     })
@@ -87,15 +81,15 @@ nodeIpc.connectTo(
     })
 
     nodeIpc.of.node.on('config-renew', function (payload) {
-      console.log('config', payload)
-      if (payload.ui.theme === 'dark') {
+      const { config } = payload
+      if (config.ui.theme === 'dark') {
         document.body.setAttribute('data-theme', 'dark')
       } else {
         document.body.setAttribute('data-theme', 'default')
       }
       store.default.dispatch({
         type: 'SET_CONFIG',
-        config: payload
+        config: config
       })
     })
 
