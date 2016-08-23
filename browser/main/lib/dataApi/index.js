@@ -131,6 +131,7 @@ function init () {
       caches = JSON.parse(localStorage.getItem('storages'))
       if (!_.isArray(caches)) throw new Error('Cached data is not valid.')
     } catch (e) {
+      throw e
       console.error(e)
       caches = []
       localStorage.setItem('storages', JSON.stringify(caches))
@@ -548,7 +549,7 @@ function moveNote (storageKey, folderKey, noteKey, newStorageKey, newFolderKey) 
     .then(() => note.toJSON())
 }
 
-export default {
+module.exports = {
   init,
   addStorage,
   removeStorage,
