@@ -2,6 +2,14 @@
 
 Simple opensource note app for developer.
 
+You can use the issue tracker of this repository for
+- asking a question about Boostnote
+- giving a feedback about Boostnote and its future plan
+- reporting a bug of Boostnote
+- wanting to contribute Boostnote
+
+We have a slack if you want to ingage us deeply, ask @rokt33r to join.
+
 - [日本語](./readme-ja.md)
 - [한국어](./readme-ko.md)
 
@@ -35,6 +43,10 @@ We just want you to enjoying writing anything. :grinning:
 ## Codestyle
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+
+## Development
+
+- [Build](docs/build.md)
 
 ## Author & Maintainer
 

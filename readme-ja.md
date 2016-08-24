@@ -2,6 +2,12 @@
 
 オープンソースノートアプリ
 
+次の用務がある場合にはIssue trackerを利用してください。
+- Boostnoteに関して質問したい時
+- Boostnoteや計画事項にフィードバックがしたい時
+- Boostnoteにバグを報告したい時
+- Boostnoteに寄与したい時
+
 ## Goal
 
 単に何かを書くのが楽しくなってほしいです。 :grinning:
@@ -33,6 +39,10 @@
 ## Codestyle
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
+
+## Development
+
+- [Build](docs/build.md)
 
 ## Author & Maintainer
 
