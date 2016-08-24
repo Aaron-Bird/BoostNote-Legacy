@@ -1,5 +1,7 @@
 # Boostnote
 
+![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/17916067/dba66be4-69ea-11e6-9217-1ae3062c53ae.png)
+
 Simple opensource note app for developer.
 
 You can use the issue tracker of this repository for
