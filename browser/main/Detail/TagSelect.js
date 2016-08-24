@@ -22,6 +22,10 @@ class TagSelect extends React.Component {
 
   handleNewTagInputKeyDown (e) {
     switch (e.keyCode) {
+      case 9:
+        e.preventDefault()
+        this.submitTag()
+        break
       case 13:
         this.submitTag()
         break
