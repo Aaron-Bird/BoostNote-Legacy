@@ -10,7 +10,7 @@
     "postinstall": "npm run vendor",
     "vendor": "oh-my-cdn",
     "compile": "grunt compile",
-    "test": "ava"
+    "test": "NODE_ENV=test ava"
   },
   "config": {
     "electron-version": "1.2.8"

@@ -7,33 +7,21 @@ global.navigator = window.navigator
 
 const Storage = require('dom-storage')
 const localStorage = window.localStorage = global.localStorage = new Storage(null, { strict: true })
-const sander = require('sander')
 const path = require('path')
 const crypto = require('crypto')
 
-const dummyStoragePath = path.join(__dirname, '..', 'sandbox')
-const dummyRawStorage = {
-  name: 'test',
-  key: crypto.randomBytes(6).toString('hex'),
-  path: dummyStoragePath
-}
-
-test.serial('fetch storages and notes', (t) => {
-  const boostnoteJSONPath = path.join(dummyStoragePath, 'boostnote.json')
-  const dummyFolderKey = crypto.randomBytes(6).toString('hex')
-  const dummyFolders = [{
-    key: dummyFolderKey,
+test.serial('Fetch storages and notes', (t) => {
+  const dummyStoragePath = path.join(__dirname, '..', 'dummy/dummyStorage')
+  const dummyRawStorage = {
     name: 'test1',
-    color: '#f55'
-  }]
-  const dummyFolderDataJSONPath = path.join(dummyStoragePath, dummyFolderKey, 'data.json')
-  const dummyNotesJSONString = sander.readFileSync(path.join(__dirname, '../dummy/data.json'))
+    key: crypto.randomBytes(6).toString('hex'),
+    path: dummyStoragePath
+  }
+  const dummyFolderKey = 'fc6ba88e8ecf'
 
   return Promise.resolve()
     .then(function before () {
       localStorage.setItem('storages', JSON.stringify([dummyRawStorage]))
-      sander.writeFileSync(boostnoteJSONPath, JSON.stringify({folders: dummyFolders}))
-      sander.writeFileSync(dummyFolderDataJSONPath, dummyNotesJSONString)
     })
     .then(function test () {
       return init()
@@ -54,12 +42,16 @@ test.serial('fetch storages and notes', (t) => {
     })
     .then(function after () {
       localStorage.clear()
-      sander.unlinkSync(boostnoteJSONPath)
-      sander.unlinkSync(dummyFolderDataJSONPath)
     })
 })
 
-test.serial('Fetch storages. case: storage folder doesnt exist.', (t) => {
+test.serial('If storage path is a empty folder, return metadata with empty folder array and empty note array.', (t) => {
+  const emptyFolderPath = path.join(__dirname, '..', 'dummy/empty')
+  const dummyRawStorage = {
+    name: 'test2',
+    key: crypto.randomBytes(6).toString('hex'),
+    path: emptyFolderPath
+  }
   return Promise.resolve()
     .then(function before () {
       localStorage.setItem('storages', JSON.stringify([dummyRawStorage]))

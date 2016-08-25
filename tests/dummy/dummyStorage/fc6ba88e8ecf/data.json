@@ -1,0 +1,24 @@
+{
+  "notes": [
+      {
+        "tags": [],
+        "title": "Footnote test",
+        "content": "# Footnote test\n\ntest test",
+        "type": "MARKDOWN_NOTE",
+        "key": "93c6ac2a7953",
+        "isStarred": false,
+        "createdAt": "2016-07-25T16:19:55.620Z",
+        "updatedAt": "2016-07-26T08:00:11.326Z"
+      },
+      {
+        "tags": [],
+        "title": "Checkbox test",
+        "content": "# Checkbox test\n\n- [x] Task1\n- [ ] Task2\n- [ ] Task3\n\n",
+        "type": "MARKDOWN_NOTE",
+        "key": "4568d84331d9",
+        "isStarred": false,
+        "createdAt": "2016-07-25T16:58:43.685Z",
+        "updatedAt": "2016-08-21T06:14:50.381Z"
+      }
+    ]
+}
