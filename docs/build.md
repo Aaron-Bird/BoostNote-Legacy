@@ -1,5 +1,7 @@
 # Build
 
+You must use Node LTS v4.\*.\* to build Boostnote.
+
 ## Development
 
 We use Webpack HMR to develope Boostnote.

@@ -1,5 +1,7 @@
 # Build
 
+ビルドするためにはNode LTS v4.\*.\*が必要です。
+
 ## 開発
 
 Webpack HRMを使います。
