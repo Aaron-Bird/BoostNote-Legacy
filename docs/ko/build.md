@@ -1,7 +1,5 @@
 # Build
 
-빌드하기 위해선 Node LTS v4.\*.\* 가 필요합니다.
-
 ## 개발
 
 Webpack HRM을 개발을 위해 사용합니다.
