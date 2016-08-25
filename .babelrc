@@ -7,12 +7,7 @@
     "test": {
       "presets": ["react", "es2015"],
       "plugins": [
-        [
-          "module-alias",
-          [
-            { "src": "./browser", "expose": "browser" }
-          ]
-        ]
+        [ "babel-plugin-webpack-alias", { "config": "${PWD}/webpack.config.js" } ]
       ]
     }
   }
