@@ -2,7 +2,7 @@
 
 > English below.
 
-## Pull requsetの著作権について
+## Pull requestの著作権について
 
 Pull requestをすることはその変化分のコードの著作権をMAISIN&CO.に譲渡することに同意することになります。
 
