@@ -3,6 +3,15 @@ const _ = require('lodash')
 const sander = require('sander')
 const path = require('path')
 
+/**
+ * @return {Object} all storages and notes
+ * ```
+ * {
+ *   storages: [...],
+ *   notes: [...]
+ * }
+ * ```
+ */
 function init () {
   let fetchStorages = function () {
     let rawStorages

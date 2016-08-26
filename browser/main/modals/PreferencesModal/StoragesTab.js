@@ -58,7 +58,6 @@ class StoragesTab extends React.Component {
       return <StorageItem
         key={storage.key}
         storage={storage}
-        test={true}
         hostBoundingBox={boundingBox}
       />
     })
