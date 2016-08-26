@@ -10,7 +10,7 @@ You can use the issue tracker of this repository for
 - reporting a bug of Boostnote
 - wanting to contribute Boostnote
 
-We have a slack if you want to ingage us deeply, ask @rokt33r to join.
+We have a slack if you want to engage us deeply, ask @rokt33r to join.
 
 - [日本語](./readme-ja.md)
 - [한국어](./readme-ko.md)
