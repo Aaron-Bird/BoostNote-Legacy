@@ -40,7 +40,8 @@ function addStorage (input) {
 
   return Promise.resolve(newStorage)
     .then(resolveStorageData)
-    .then(function saveMetadataToLocalStorage () {
+    .then(function saveMetadataToLocalStorage (resolvedStorage) {
+      newStorage = resolvedStorage
       rawStorages.push({
         key: newStorage.key,
         type: newStorage.type,

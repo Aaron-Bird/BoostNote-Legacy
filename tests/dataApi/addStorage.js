@@ -12,6 +12,7 @@ const TestDummy = require('../fixtures/TestDummy')
 const sander = require('sander')
 const _ = require('lodash')
 const os = require('os')
+const CSON = require('season')
 
 const v1StoragePath = path.join(os.tmpdir(), 'test/addStorage-v1-storage')
 // const legacyStoragePath = path.join(os.tmpdir(), 'test/addStorage-legacy-storage')
@@ -42,6 +43,8 @@ test.serial('Add Storage', (t) => {
       t.is(storage.name, input.name)
       t.is(storage.type, input.type)
       t.is(storage.path, input.path)
+      t.is(storage.version, '1.0')
+      t.is(storage.folders.length, t.context.v1StorageData.json.folders.length)
 
       // Check data.notes
       t.is(notes.length, t.context.v1StorageData.notes.length)
@@ -54,6 +57,12 @@ test.serial('Add Storage', (t) => {
       t.is(cacheData.name, input.name)
       t.is(cacheData.type, input.type)
       t.is(cacheData.path, input.path)
+
+      // Check boostnote.json
+      let jsonData = CSON.readFileSync(path.join(storage.path, 'boostnote.json'))
+      t.true(_.isArray(jsonData.folders))
+      t.is(jsonData.version, '1.0')
+      t.is(jsonData.folders.length, t.context.v1StorageData.json.folders.length)
     })
 })
 
