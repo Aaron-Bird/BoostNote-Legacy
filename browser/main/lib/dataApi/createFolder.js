@@ -1,11 +1,8 @@
 const _ = require('lodash')
-const sander = require('sander')
 const keygen = require('browser/lib/keygen')
 const path = require('path')
-
-const defaultDataJSON = {
-  notes: []
-}
+const resolveStorageData = require('./resolveStorageData')
+const CSON = require('season')
 
 /**
  * @param {String} storageKey
@@ -17,7 +14,12 @@ const defaultDataJSON = {
  * }
  * ```
  *
- * @return {key}
+ * @return {Object}
+ * ```
+ * {
+ *   storage: Object
+ * }
+ * ```
  */
 function createFolder (storageKey, input) {
   let rawStorages
@@ -36,49 +38,24 @@ function createFolder (storageKey, input) {
     return Promise.reject(e)
   }
 
-  const storageData = Object.assign({}, targetStorage)
-
-  const boostnoteJSONPath = path.join(targetStorage.path, 'boostnote.json')
-  return Promise.resolve()
-    .then(function fetchBoostnoteJSON () {
-      return sander.readFile(boostnoteJSONPath)
-    })
-    .then(function updateBoostnoteJSON (data) {
-      let boostnoteJSON
-      // If `boostnote.json` is invalid, reset `boostnote.json`.
-      try {
-        boostnoteJSON = JSON.parse(data)
-        if (!_.isArray(boostnoteJSON.folders)) throw new Error('the value of `folders` must be array')
-      } catch (err) {
-        boostnoteJSON = {
-          folders: []
-        }
-      }
-
+  return resolveStorageData(targetStorage)
+    .then(function createFolder (storage) {
       let key = keygen()
-      while (boostnoteJSON.folders.some((folder) => folder.key === key)) {
+      while (storage.folders.some((folder) => folder.key === key)) {
         key = keygen()
       }
-
       let newFolder = {
         key,
         color: input.color,
         name: input.name
       }
-      boostnoteJSON.folders.push(newFolder)
 
-      storageData.folders = boostnoteJSON.folders
+      storage.folders.push(newFolder)
 
-      return sander.writeFile(boostnoteJSONPath, JSON.stringify(boostnoteJSON))
-        .then(() => newFolder)
-    })
-    .then(function createDataJSON (newFolder) {
-      const folderDirPath = path.join(targetStorage.path, newFolder.key)
-      return sander.writeFile(folderDirPath, 'data.json', JSON.stringify(defaultDataJSON))
-    })
-    .then(function returnData () {
+      CSON.writeFileSync(path.join(storage.path, 'boostnote.json'), _.pick(storage, ['folders', 'version']))
+
       return {
-        storage: storageData
+        storage
       }
     })
 }

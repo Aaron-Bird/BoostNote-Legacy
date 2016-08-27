@@ -1,6 +1,5 @@
 const test = require('ava')
 const createFolder = require('browser/main/lib/dataApi/createFolder')
-const sander = require('sander')
 
 global.document = require('jsdom').jsdom('<body></body>')
 global.window = document.defaultView
@@ -9,50 +8,38 @@ global.navigator = window.navigator
 const Storage = require('dom-storage')
 const localStorage = window.localStorage = global.localStorage = new Storage(null, { strict: true })
 const path = require('path')
-const crypto = require('crypto')
 const _ = require('lodash')
+const TestDummy = require('../fixtures/TestDummy')
+const sander = require('sander')
+const os = require('os')
+const CSON = require('season')
 
-function copyFile (filePath, targetPath) {
-  return sander.readFile(filePath)
-    .then(function writeFile (data) {
-      return sander.writeFile(targetPath, data.toString())
-    })
-}
+const storagePath = path.join(os.tmpdir(), 'test/rename-storage')
 
-const dummyStoragePath = path.join(__dirname, '..', 'dummy/dummyStorage')
-const targetPath = path.join(__dirname, '../sandbox/test-add-folder')
-const dummyRawStorage = {
-  name: 'test1',
-  key: crypto.randomBytes(6).toString('hex'),
-  path: targetPath
-}
-test.before(function () {
-  localStorage.setItem('storages', JSON.stringify([dummyRawStorage]))
-
-  return copyFile(path.join(dummyStoragePath, 'boostnote.json'), path.join(targetPath, 'boostnote.json'))
+test.beforeEach((t) => {
+  t.context.storage = TestDummy.dummyStorage(storagePath)
+  localStorage.setItem('storages', JSON.stringify([t.context.storage.cache]))
 })
-const input = {
-  name: 'test folder',
-  color: '#FF5555'
-}
 
-test('Add note to storage', (t) => {
-  return createFolder(dummyRawStorage.key, input)
+test.serial('Create a folder', (t) => {
+  const stoargeKey = t.context.storage.cache.key
+  const input = {
+    name: 'created',
+    color: '#ff5555'
+  }
+  return Promise.resolve()
+    .then(function doTest () {
+      return createFolder(stoargeKey, input)
+    })
     .then(function assert (data) {
-      t.not(data.storage, null)
-
-      let targetFolder = _.find(data.storage.folders, {
-        name: input.name,
-        color: input.color
-      })
-
-      t.not(targetFolder, null)
-
-      t.true(sander.statSync(path.join(targetPath, targetFolder.key)).isDirectory())
+      t.true(_.find(data.storage.folders, input) != null)
+      let jsonData = CSON.readFileSync(path.join(data.storage.path, 'boostnote.json'))
+      console.log(path.join(data.storage.path, 'boostnote.json'))
+      t.true(_.find(jsonData.folders, input) != null)
     })
 })
 
-test.after.always(function () {
+test.after(function after () {
   localStorage.clear()
-  sander.rimrafSync(targetPath)
+  sander.rimrafSync(storagePath)
 })
