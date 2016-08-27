@@ -1,11 +1,7 @@
 const _ = require('lodash')
 const keygen = require('browser/lib/keygen')
-const sander = require('sander')
-const path = require('path')
-
-const defaultBoostnoteJSON = {
-  folders: []
-}
+const resolveStorageData = require('./resolveStorageData')
+const resolveStorageNotes = require('./resolveStorageNotes')
 
 /**
  * @param {Object}
@@ -42,30 +38,8 @@ function addStorage (input) {
     path: input.path
   }
 
-  const boostnoteJSONPath = path.join(newStorage.path, 'boostnote.json')
-
   return Promise.resolve(newStorage)
-    .then(function resolveBoostnoteJSON () {
-      return sander.readFile(boostnoteJSONPath)
-        .then(function checkBoostnoteJSONExists (data) {
-          let parsedData = JSON.parse(data.toString())
-          if (!_.isArray(parsedData.folders)) throw new Error('`folders` must be array.')
-
-          newStorage.folders = parsedData.folders
-            .filter(function takeOnlyValidKey (folder) {
-              return _.isString(folder.key)
-            })
-          return newStorage
-        })
-        .catch(function tryToRewriteNewBoostnoteJSON (err) {
-          return sander
-            .writeFile(boostnoteJSONPath, JSON.stringify(defaultBoostnoteJSON))
-            .then(function () {
-              newStorage.folders = defaultBoostnoteJSON.folders
-              return newStorage
-            })
-        })
-    })
+    .then(resolveStorageData)
     .then(function saveMetadataToLocalStorage () {
       rawStorages.push({
         key: newStorage.key,
@@ -75,36 +49,9 @@ function addStorage (input) {
       })
 
       localStorage.setItem('storages', JSON.stringify(rawStorages))
+      return newStorage
     })
-    .then(function fetchNotes () {
-      var folderNotes = newStorage.folders
-        .map(function fetchNotesFromEachFolder (folder) {
-          var folderDataJSONPath = path.join(newStorage.path, folder.key, 'data.json')
-          return sander.readFile(folderDataJSONPath)
-            .then(function parseData (rawData) {
-              return JSON.parse(rawData)
-            })
-            .then(function validateNotes (data) {
-              if (!_.isArray(data.notes)) throw new Error('Invalid data.json')
-              return data.notes
-                .map(function (note) {
-                  note.folder = folder.key
-                  note.storage = newStorage.key
-                  return note
-                })
-            })
-            .catch(function rewriteNotes (err) {
-              console.error(err)
-              return []
-            })
-        })
-      return Promise.all(folderNotes)
-        .then(function reduceFolderNotes (folderNotes) {
-          return folderNotes.reduce(function (sum, notes) {
-            return sum.concat(notes)
-          }, [])
-        })
-    })
+    .then(resolveStorageNotes)
     .then(function returnValue (notes) {
       return {
         storage: newStorage,
