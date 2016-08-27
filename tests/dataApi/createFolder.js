@@ -14,7 +14,7 @@ const sander = require('sander')
 const os = require('os')
 const CSON = require('season')
 
-const storagePath = path.join(os.tmpdir(), 'test/rename-storage')
+const storagePath = path.join(os.tmpdir(), 'test/create-folder')
 
 test.beforeEach((t) => {
   t.context.storage = TestDummy.dummyStorage(storagePath)

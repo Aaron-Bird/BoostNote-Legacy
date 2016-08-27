@@ -76,11 +76,14 @@ function dummyNote (override = {}) {
  * @param  {Object}
  * ```
  * {
- *   json: {folders: []},
+ *   json: {
+ *    folders: []
+ *    version: String(enum:'1.0')
+ *   },
  *   cache: {
  *     key: String,
  *     name: String,
- *     type: String(enum:FILESYSTEM),
+ *     type: String(enum:'FILESYSTEM'),
  *     path: String
  *   },
  *   notes: []
