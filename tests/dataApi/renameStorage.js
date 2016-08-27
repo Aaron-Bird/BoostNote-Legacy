@@ -10,29 +10,29 @@ const localStorage = window.localStorage = global.localStorage = new Storage(nul
 const path = require('path')
 const crypto = require('crypto')
 const _ = require('lodash')
+const TestDummy = require('../fixtures/TestDummy')
+const sander = require('sander')
+const os = require('os')
 
-test('Rename a storage', (t) => {
-  const dummyStoragePath = path.join(__dirname, '..', 'dummy/dummyStorage')
-  const dummyStorageKey = crypto.randomBytes(6).toString('hex')
-  const dummyRawStorage = {
-    name: 'test1',
-    key: dummyStorageKey,
-    path: dummyStoragePath
-  }
+const storagePath = path.join(os.tmpdir(), 'test/rename-storage')
+test.beforeEach((t) => {
+  t.context.storage = TestDummy.dummyStorage(storagePath)
+  localStorage.setItem('storages', JSON.stringify([t.context.storage.cache]))
+})
 
+test.serial('Rename a storage', (t) => {
+  const stoargeKey = t.context.storage.cache.key
   return Promise.resolve()
-    .then(function before () {
-      localStorage.setItem('storages', JSON.stringify([dummyRawStorage]))
-    })
-    .then(function test () {
-      return renameStorage(dummyStorageKey, 'test2')
+    .then(function doTest () {
+      return renameStorage(stoargeKey, 'changed')
     })
     .then(function assert (data) {
-      let rawStorages = JSON.parse(localStorage.getItem('storages'))
-      t.true(_.find(rawStorages, {key: dummyStorageKey}).name === 'test2')
+      let cachedStorageList = JSON.parse(localStorage.getItem('storages'))
+      t.true(_.find(cachedStorageList, {key: stoargeKey}).name === 'changed')
     })
 })
 
 test.after(function after () {
   localStorage.clear()
+  sander.rimrafSync(storagePath)
 })
