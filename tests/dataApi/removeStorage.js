@@ -8,23 +8,22 @@ global.navigator = window.navigator
 const Storage = require('dom-storage')
 const localStorage = window.localStorage = global.localStorage = new Storage(null, { strict: true })
 const path = require('path')
-const crypto = require('crypto')
+const TestDummy = require('../fixtures/TestDummy')
+const sander = require('sander')
+const os = require('os')
+
+const storagePath = path.join(os.tmpdir(), 'test/remove-storage')
+
+test.beforeEach((t) => {
+  t.context.storage = TestDummy.dummyStorage(storagePath)
+  localStorage.setItem('storages', JSON.stringify([t.context.storage.cache]))
+})
 
 test('Remove a storage', (t) => {
-  const dummyStoragePath = path.join(__dirname, '..', 'dummy/dummyStorage')
-  const dummyStorageKey = crypto.randomBytes(6).toString('hex')
-  const dummyRawStorage = {
-    name: 'test1',
-    key: dummyStorageKey,
-    path: dummyStoragePath
-  }
-
+  const stoargeKey = t.context.storage.cache.key
   return Promise.resolve()
-    .then(function before () {
-      localStorage.setItem('storages', JSON.stringify([dummyRawStorage]))
-    })
-    .then(function test () {
-      return removeStorage(dummyStorageKey)
+    .then(function doTest () {
+      return removeStorage(stoargeKey)
     })
     .then(function assert (data) {
       t.is(JSON.parse(localStorage.getItem('storages')).length, 0)
@@ -33,4 +32,5 @@ test('Remove a storage', (t) => {
 
 test.after(function after () {
   localStorage.clear()
+  sander.rimrafSync(storagePath)
 })
