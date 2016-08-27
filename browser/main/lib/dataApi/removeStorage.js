@@ -22,7 +22,9 @@ function removeStorage (key) {
 
   localStorage.setItem('storages', JSON.stringify(rawStorages))
 
-  return Promise.resolve(key)
+  return Promise.resolve({
+    storageKey: key
+  })
 }
 
 module.exports = removeStorage

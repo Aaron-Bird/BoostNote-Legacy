@@ -13,7 +13,7 @@ const sander = require('sander')
  * ```
  * {
  *   storage: Object,
- *   folder: folderKey
+ *   folderKey: String
  * }
  * ```
  */
@@ -67,7 +67,7 @@ function deleteFolder (storageKey, folderKey) {
 
       return {
         storage,
-        folder: folderKey
+        folderKey
       }
     })
 }
