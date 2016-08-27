@@ -263,5 +263,3 @@ CodeEditor.defaultProps = {
   indentSize: 4,
   indentType: 'space'
 }
-
-export default CodeEditor
