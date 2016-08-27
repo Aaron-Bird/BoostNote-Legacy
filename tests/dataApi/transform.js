@@ -14,10 +14,11 @@ const CSON = require('season')
 const _ = require('lodash')
 const os = require('os')
 
-const dummyStoragePath = path.join(os.tmpdir(), 'sandbox/transform-test-storage')
+const dummyStoragePath = path.join(os.tmpdir(), 'test/transform-test-storage')
 
 test.beforeEach((t) => {
   let dummyData = t.context.dummyData = TestDummy.dummyLegacyStorage(dummyStoragePath)
+  console.log('init count', dummyData.notes.length)
   localStorage.setItem('storages', JSON.stringify([dummyData.cache]))
 })
 
@@ -34,6 +35,7 @@ test.serial('Transform legacy storage into v1 storage', (t) => {
       let dummyData = t.context.dummyData
       let noteDirPath = path.join(dummyStoragePath, 'notes')
       let fileList = sander.readdirSync(noteDirPath)
+      t.is(dummyData.notes.length, fileList.length)
       let noteMap = fileList
         .map((filePath) => {
           return CSON.readFileSync(path.join(noteDirPath, filePath))

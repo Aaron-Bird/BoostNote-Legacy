@@ -95,12 +95,13 @@ function dummyStorage (storagePath, override = {}) {
   var cacheData = override.cache != null
     ? override.cache
     : {}
-  if (cacheData.key == null) cacheData.key = key
+  if (cacheData.key == null) cacheData.key = keygen()
   if (cacheData.name == null) cacheData.name = faker.random.word()
+  if (cacheData.type == null) cacheData.type = 'FILESYSTEM'
+  cacheData.path = storagePath
 
   sander.writeFileSync(path.join(storagePath, 'boostnote.json'), JSON.stringify(jsonData))
   var notesData = []
-  console.log(notesData)
   var noteCount = Math.floor((Math.random() * 15)) + 1
   for (var i = 0; i < noteCount; i++) {
     var key = keygen()
@@ -133,17 +134,20 @@ function dummyLegacyStorage (storagePath, override = {}) {
   var cacheData = override.cache != null
     ? override.cache
     : {}
-  if (cacheData.key == null) cacheData.key = key
+  if (cacheData.key == null) cacheData.key = keygen()
   if (cacheData.name == null) cacheData.name = faker.random.word()
+  if (cacheData.type == null) cacheData.type = 'FILESYSTEM'
+  cacheData.path = storagePath
 
   sander.writeFileSync(path.join(storagePath, 'boostnote.json'), JSON.stringify(jsonData))
 
+  var notesData = []
   for (var j = 0; j < jsonData.folders.length; j++) {
+    var folderNotes = []
     var noteCount = Math.floor((Math.random() * 5)) + 1
-    var notesData = []
     for (var i = 0; i < noteCount; i++) {
       var key = keygen(6)
-      while (notesData.some((note) => note.key === key)) {
+      while (folderNotes.some((note) => note.key === key)) {
         key = keygen(6)
       }
 
@@ -151,10 +155,10 @@ function dummyLegacyStorage (storagePath, override = {}) {
         key,
         folder: jsonData.folders[j].key
       })
-      notesData.push(noteData)
+      folderNotes.push(noteData)
     }
-
-    CSON.writeFileSync(path.join(storagePath, jsonData.folders[j].key, 'data.json'), {notes: notesData.map((note) => _.omit(note, ['folder']))})
+    notesData = notesData.concat(folderNotes)
+    CSON.writeFileSync(path.join(storagePath, jsonData.folders[j].key, 'data.json'), {notes: folderNotes.map((note) => _.omit(note, ['folder']))})
   }
 
   return {
