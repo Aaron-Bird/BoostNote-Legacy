@@ -20,10 +20,10 @@ test.beforeEach((t) => {
 })
 
 test('Remove a storage', (t) => {
-  const stoargeKey = t.context.storage.cache.key
+  const storageKey = t.context.storage.cache.key
   return Promise.resolve()
     .then(function doTest () {
-      return removeStorage(stoargeKey)
+      return removeStorage(storageKey)
     })
     .then(function assert (data) {
       t.is(JSON.parse(localStorage.getItem('storages')).length, 0)

@@ -21,8 +21,8 @@ test.beforeEach((t) => {
   localStorage.setItem('storages', JSON.stringify([t.context.storage.cache]))
 })
 
-test.serial('Create a folder', (t) => {
-  const stoargeKey = t.context.storage.cache.key
+test.serial('Update a folder', (t) => {
+  const storageKey = t.context.storage.cache.key
   const folderKey = t.context.storage.json.folders[0].key
   const input = {
     name: 'changed',
@@ -30,7 +30,7 @@ test.serial('Create a folder', (t) => {
   }
   return Promise.resolve()
     .then(function doTest () {
-      return updateFolder(stoargeKey, folderKey, input)
+      return updateFolder(storageKey, folderKey, input)
     })
     .then(function assert (data) {
       t.true(_.find(data.storage.folders, input) != null)

@@ -21,13 +21,13 @@ test.beforeEach((t) => {
   localStorage.setItem('storages', JSON.stringify([t.context.storage.cache]))
 })
 
-test.serial('Create a folder', (t) => {
-  const stoargeKey = t.context.storage.cache.key
+test.serial('Delete a folder', (t) => {
+  const storageKey = t.context.storage.cache.key
   const folderKey = t.context.storage.json.folders[0].key
 
   return Promise.resolve()
     .then(function doTest () {
-      return deleteFolder(stoargeKey, folderKey)
+      return deleteFolder(storageKey, folderKey)
     })
     .then(function assert (data) {
       t.true(_.find(data.storage.folders, {key: folderKey}) == null)

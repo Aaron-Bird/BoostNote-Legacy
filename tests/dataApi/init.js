@@ -35,7 +35,7 @@ test.beforeEach((t) => {
   localStorage.setItem('storages', JSON.stringify([t.context.v1StorageData.cache, t.context.legacyStorageData.cache, t.context.emptyStorageData.cache]))
 })
 
-test.serial('Fetch storages and notes', (t) => {
+test.serial('Initialize All Storages', (t) => {
   const { v1StorageData, legacyStorageData, emptyStorageData } = t.context
   return Promise.resolve()
     .then(function test () {

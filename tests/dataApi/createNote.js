@@ -8,7 +8,6 @@ global.navigator = window.navigator
 const Storage = require('dom-storage')
 const localStorage = window.localStorage = global.localStorage = new Storage(null, { strict: true })
 const path = require('path')
-const _ = require('lodash')
 const TestDummy = require('../fixtures/TestDummy')
 const sander = require('sander')
 const os = require('os')
@@ -23,7 +22,7 @@ test.beforeEach((t) => {
 })
 
 test.serial('Create a note', (t) => {
-  const stoargeKey = t.context.storage.cache.key
+  const storageKey = t.context.storage.cache.key
   const folderKey = t.context.storage.json.folders[0].key
 
   const input1 = {
@@ -50,14 +49,15 @@ test.serial('Create a note', (t) => {
   return Promise.resolve()
     .then(function doTest () {
       return Promise.all([
-        createNote(stoargeKey, input1),
-        createNote(stoargeKey, input2)
+        createNote(storageKey, input1),
+        createNote(storageKey, input2)
       ])
     })
     .then(function assert (data) {
       let data1 = data[0]
       let data2 = data[1]
 
+      t.is(storageKey, data1.storage)
       let jsonData1 = CSON.readFileSync(path.join(storagePath, 'notes', data1.key + '.cson'))
       t.is(input1.title, data1.title)
       t.is(input1.title, jsonData1.title)
@@ -72,6 +72,7 @@ test.serial('Create a note', (t) => {
       t.is(input1.snippets[0].name, data1.snippets[0].name)
       t.is(input1.snippets[0].name, jsonData1.snippets[0].name)
 
+      t.is(storageKey, data2.storage)
       let jsonData2 = CSON.readFileSync(path.join(storagePath, 'notes', data2.key + '.cson'))
       t.is(input2.title, data2.title)
       t.is(input2.title, jsonData2.title)

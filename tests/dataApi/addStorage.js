@@ -24,7 +24,7 @@ test.beforeEach((t) => {
   localStorage.setItem('storages', JSON.stringify([]))
 })
 
-test.serial('add a initialized storage', (t) => {
+test.serial('Add Storage', (t) => {
   const input = {
     type: 'FILESYSTEM',
     name: 'add-storage1',

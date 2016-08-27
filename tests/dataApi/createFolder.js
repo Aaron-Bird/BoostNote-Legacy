@@ -22,14 +22,14 @@ test.beforeEach((t) => {
 })
 
 test.serial('Create a folder', (t) => {
-  const stoargeKey = t.context.storage.cache.key
+  const storageKey = t.context.storage.cache.key
   const input = {
     name: 'created',
     color: '#ff5555'
   }
   return Promise.resolve()
     .then(function doTest () {
-      return createFolder(stoargeKey, input)
+      return createFolder(storageKey, input)
     })
     .then(function assert (data) {
       t.true(_.find(data.storage.folders, input) != null)

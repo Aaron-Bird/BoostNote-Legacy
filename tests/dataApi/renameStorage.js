@@ -21,14 +21,14 @@ test.beforeEach((t) => {
 })
 
 test.serial('Rename a storage', (t) => {
-  const stoargeKey = t.context.storage.cache.key
+  const storageKey = t.context.storage.cache.key
   return Promise.resolve()
     .then(function doTest () {
-      return renameStorage(stoargeKey, 'changed')
+      return renameStorage(storageKey, 'changed')
     })
     .then(function assert (data) {
       let cachedStorageList = JSON.parse(localStorage.getItem('storages'))
-      t.true(_.find(cachedStorageList, {key: stoargeKey}).name === 'changed')
+      t.true(_.find(cachedStorageList, {key: storageKey}).name === 'changed')
     })
 })
 
