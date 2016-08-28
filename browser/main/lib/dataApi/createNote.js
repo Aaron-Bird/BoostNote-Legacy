@@ -59,6 +59,7 @@ function createNote (storageKey, input) {
       while (!isUnique) {
         try {
           sander.statSync(path.join(storage.path, 'notes', key + '.cson'))
+          key = keygen()
         } catch (err) {
           if (err.code === 'ENOENT') {
             isUnique = true

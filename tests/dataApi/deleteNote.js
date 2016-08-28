@@ -22,7 +22,7 @@ test.beforeEach((t) => {
   localStorage.setItem('storages', JSON.stringify([t.context.storage.cache]))
 })
 
-test.serial('Create a note', (t) => {
+test.serial('Delete a note', (t) => {
   const storageKey = t.context.storage.cache.key
   const folderKey = t.context.storage.json.folders[0].key
 
