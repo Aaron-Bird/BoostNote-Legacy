@@ -184,12 +184,12 @@ class FolderSelect extends React.Component {
   }
 
   render () {
-    let { className, storages, value } = this.props
+    let { className, data, value } = this.props
     let splitted = value.split('-')
     let storageKey = splitted.shift()
     let folderKey = splitted.shift()
     let options = []
-    storages.forEach((storage, index) => {
+    data.storageMap.forEach((storage, index) => {
       storage.folders.forEach((folder) => {
         options.push({
           storage: storage,

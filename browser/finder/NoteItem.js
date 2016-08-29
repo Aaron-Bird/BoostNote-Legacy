@@ -34,7 +34,7 @@ class NoteItem extends React.Component {
           ? 'root--active'
           : 'root'
         }
-        key={note.uniqueKey}
+        key={note.storage + '-' + note.key}
         onClick={(e) => this.handleClick(e)}
       >
         <div styleName='border'/>

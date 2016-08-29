@@ -101,7 +101,7 @@ class Main extends React.Component {
         <SideNav
           {..._.pick(this.props, [
             'dispatch',
-            'storages',
+            'data',
             'config',
             'location'
           ])}
@@ -112,9 +112,8 @@ class Main extends React.Component {
           <TopBar style={{width: this.state.listWidth}}
             {..._.pick(this.props, [
               'dispatch',
-              'storages',
               'config',
-              'notes',
+              'data',
               'params',
               'location'
             ])}
@@ -122,8 +121,7 @@ class Main extends React.Component {
           <NoteList style={{width: this.state.listWidth}}
             {..._.pick(this.props, [
               'dispatch',
-              'storages',
-              'notes',
+              'data',
               'config',
               'params',
               'location'
@@ -140,8 +138,7 @@ class Main extends React.Component {
             style={{left: this.state.listWidth + 1}}
             {..._.pick(this.props, [
               'dispatch',
-              'storages',
-              'notes',
+              'data',
               'config',
               'params',
               'location'
@@ -159,7 +156,7 @@ class Main extends React.Component {
 
 Main.propTypes = {
   dispatch: PropTypes.func,
-  repositories: PropTypes.array
+  data: PropTypes.shape({}).isRequired
 }
 
 export default connect((x) => x)(CSSModules(Main, styles))

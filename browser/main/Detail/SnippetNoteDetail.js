@@ -48,6 +48,7 @@ class SnippetNoteDetail extends React.Component {
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.note.key !== this.props.note.key) {
+      if (this.saveQueue != null) this.saveNow()
       let nextNote = Object.assign({
         description: ''
       }, nextProps.note, {
@@ -65,6 +66,10 @@ class SnippetNoteDetail extends React.Component {
         this.refs.tags.reset()
       })
     }
+  }
+
+  componentWillUnmount () {
+    if (this.saveQueue != null) this.saveNow()
   }
 
   findTitle (value) {
@@ -113,15 +118,23 @@ class SnippetNoteDetail extends React.Component {
   save () {
     clearTimeout(this.saveQueue)
     this.saveQueue = setTimeout(() => {
-      let { note, dispatch } = this.props
-      dispatch({
-        type: 'UPDATE_NOTE',
-        note: this.state.note
-      })
-
-      dataApi
-        .updateNote(note.storage, note.folder, note.key, this.state.note)
+      this.saveNow()
     }, 1000)
+  }
+
+  saveNow () {
+    let { note, dispatch } = this.props
+    clearTimeout(this.saveQueue)
+    this.saveQueue = null
+
+    dataApi
+      .updateNote(note.storage, note.key, this.state.note)
+      .then((note) => {
+        dispatch({
+          type: 'UPDATE_NOTE',
+          note: note
+        })
+      })
   }
 
   handleFolderChange (e) {
@@ -132,7 +145,7 @@ class SnippetNoteDetail extends React.Component {
     let newFolderKey = splitted.shift()
 
     dataApi
-      .moveNote(note.storage, note.folder, note.key, newStorageKey, newFolderKey)
+      .moveNote(note.storage, note.key, newStorageKey, newFolderKey)
       .then((newNote) => {
         this.setState({
           isMovingNote: true,
@@ -141,13 +154,13 @@ class SnippetNoteDetail extends React.Component {
           let { dispatch, location } = this.props
           dispatch({
             type: 'MOVE_NOTE',
-            note: note,
-            newNote: newNote
+            originNote: note,
+            note: newNote
           })
           hashHistory.replace({
             pathname: location.pathname,
             query: {
-              key: newNote.uniqueKey
+              key: newNote.storage + '-' + newNote.key
             }
           })
           this.setState({
@@ -321,7 +334,7 @@ class SnippetNoteDetail extends React.Component {
   }
 
   render () {
-    let { storages, config } = this.props
+    let { data, config } = this.props
     let { note } = this.state
 
     let editorFontSize = parseInt(config.editor.fontSize, 10)
@@ -434,7 +447,7 @@ class SnippetNoteDetail extends React.Component {
                 <FolderSelect styleName='info-left-top-folderSelect'
                   value={this.state.note.storage + '-' + this.state.note.folder}
                   ref='folder'
-                  storages={storages}
+                  data={data}
                   onChange={(e) => this.handleFolderChange(e)}
                 />
               </div>

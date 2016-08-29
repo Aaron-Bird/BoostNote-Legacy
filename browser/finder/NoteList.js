@@ -64,7 +64,7 @@ class NoteList extends React.Component {
         return (
           <NoteItem
             note={note}
-            key={`${note.storage}-${note.folder}-${note.key}`}
+            key={`${note.storage}-${note.key}`}
             storage={storage}
             folder={folder}
             isActive={index === _index}
