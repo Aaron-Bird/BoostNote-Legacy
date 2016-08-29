@@ -42,12 +42,12 @@ test.serial('Move a note', (t) => {
       let data1 = data[0]
       let data2 = data[1]
 
-      let jsonData1 = CSON.readFileSync(path.join(storagePath, 'notes', data1.note.key + '.cson'))
+      let jsonData1 = CSON.readFileSync(path.join(storagePath, 'notes', data1.key + '.cson'))
 
       t.is(jsonData1.folder, folderKey1)
       t.is(jsonData1.title, note1.title)
 
-      let jsonData2 = CSON.readFileSync(path.join(storagePath2, 'notes', data2.note.key + '.cson'))
+      let jsonData2 = CSON.readFileSync(path.join(storagePath2, 'notes', data2.key + '.cson'))
       t.is(jsonData2.folder, folderKey2)
       t.is(jsonData2.title, note2.title)
       try {

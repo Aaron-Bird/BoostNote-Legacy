@@ -65,15 +65,13 @@ function moveNote (storageKey, noteKey, newStorageKey, newFolderKey) {
           noteData.folder = newFolderKey
           noteData.key = newNoteKey
           noteData.storage = newStorageKey
+          noteData.updatedAt = new Date()
+
           return noteData
         })
         .then(function writeAndReturn (noteData) {
           CSON.writeFileSync(path.join(newStorage.path, 'notes', noteData.key + '.cson'), _.omit(noteData, ['key', 'storage']))
-          return {
-            oldStorageKey: storageKey,
-            oldNoteKey: noteKey,
-            note: noteData
-          }
+          return noteData
         })
         .then(function deleteOldNote (data) {
           if (storageKey !== newStorageKey) {
