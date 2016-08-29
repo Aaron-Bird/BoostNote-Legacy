@@ -1,5 +1,5 @@
 const test = require('ava')
-const transform = require('browser/main/lib/dataApi/transform')
+const migrateFromV6Storage = require('browser/main/lib/dataApi/migrateFromV6Storage')
 
 global.document = require('jsdom').jsdom('<body></body>')
 global.window = document.defaultView
@@ -14,7 +14,7 @@ const CSON = require('season')
 const _ = require('lodash')
 const os = require('os')
 
-const dummyStoragePath = path.join(os.tmpdir(), 'test/transform-test-storage')
+const dummyStoragePath = path.join(os.tmpdir(), 'test/migrate-test-storage')
 
 test.beforeEach((t) => {
   let dummyData = t.context.dummyData = TestDummy.dummyLegacyStorage(dummyStoragePath)
@@ -22,16 +22,16 @@ test.beforeEach((t) => {
   localStorage.setItem('storages', JSON.stringify([dummyData.cache]))
 })
 
-test.serial('Transform legacy storage into v1 storage', (t) => {
+test.serial('Migrate legacy storage into v1 storage', (t) => {
   return Promise.resolve()
     .then(function test () {
-      return transform(dummyStoragePath)
+      return migrateFromV6Storage(dummyStoragePath)
     })
     .then(function assert (data) {
       // Check the result. It must be true if succeed.
       t.true(data)
 
-      // Check all notes transformed.
+      // Check all notes migrated.
       let dummyData = t.context.dummyData
       let noteDirPath = path.join(dummyStoragePath, 'notes')
       let fileList = sander.readdirSync(noteDirPath)

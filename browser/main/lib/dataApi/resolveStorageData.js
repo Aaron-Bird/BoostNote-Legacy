@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const path = require('path')
 const CSON = require('season')
-const transform = require('./transform')
+const migrateFromV6Storage = require('./migrateFromV6Storage')
 
 function resolveStorageData (storageCache) {
   let storage = {
@@ -32,7 +32,7 @@ function resolveStorageData (storageCache) {
     return Promise.resolve(storage)
   }
   console.log('Transform Legacy storage', storage.path)
-  return transform(storage.path)
+  return migrateFromV6Storage(storage.path)
     .then(() => storage)
 }
 

@@ -4,7 +4,7 @@ const keygen = require('browser/lib/keygen')
 const _ = require('lodash')
 const CSON = require('season')
 
-function transform (storagePath) {
+function migrateFromV5Storage (storagePath) {
   var boostnoteJSONPath = path.join(storagePath, 'boostnote.json')
   return Promise.resolve()
     .then(function readBoostnoteJSON () {
@@ -81,5 +81,5 @@ function transform (storagePath) {
     })
 }
 
-module.exports = transform
+module.exports = migrateFromV5Storage
 
