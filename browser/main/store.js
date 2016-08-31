@@ -263,7 +263,46 @@ function data (state = defaultDataMap(), action) {
       }
     case 'DELETE_NOTE':
       {
+        let uniqueKey = action.storageKey + '-' + action.noteKey
+        let targetNote = state.noteMap.get(uniqueKey)
 
+        state = Object.assign({}, state)
+
+        // From storageNoteMap
+        state.storeageNoteMap = new Map(state.storeageNoteMap)
+        let noteSet = state.storeageNoteMap.get(targetNote.storage)
+        noteSet = new Set(noteSet)
+        noteSet.delete(uniqueKey)
+        state.storeageNoteMap.set(targetNote.storage, noteSet)
+
+        if (targetNote != null) {
+          // From isStarred
+          if (targetNote.isStarred) {
+            state.starredSet = new Set(state.starredSet)
+            state.starredSet.delete(uniqueKey)
+          }
+
+          // From folderNoteMap
+          let folderKey = targetNote.storage + '-' + targetNote.folder
+          state.folderNoteMap = new Map(state.folderNoteMap)
+          let folderSet = state.folderNoteMap.get(folderKey)
+          folderSet = new Set(folderSet)
+          folderSet.delete(uniqueKey)
+          state.folderNoteMap.set(folderKey, folderSet)
+
+          // From tagMap
+          if (targetNote.tags.length > 0) {
+            state.tagNoteMap = new Map(state.tagNoteMap)
+            targetNote.tags.forEach((tag) => {
+              let noteSet = state.tagNoteMap.get(tag)
+              noteSet = new Set(noteSet)
+              noteSet.delete(uniqueKey)
+              state.tagNoteMap.set(tag, noteSet)
+            })
+          }
+        }
+        state.noteMap = new Map(state.noteMap)
+        state.noteMap.delete(uniqueKey)
         return state
       }
   }
