@@ -33,8 +33,8 @@ class Preferences extends React.Component {
   }
 
   renderContent () {
-    const { boundingBox } = this.state;
-    let { dispatch, config, storages } = this.props
+    const { boundingBox } = this.state
+    let { dispatch, config, data } = this.props
 
     switch (this.state.currentTab) {
       case 'INFO':
@@ -51,7 +51,7 @@ class Preferences extends React.Component {
         return (
           <StoragesTab
             dispatch={dispatch}
-            storages={storages}
+            data={data}
             boundingBox={boundingBox}
           />
         )
@@ -66,7 +66,7 @@ class Preferences extends React.Component {
 
   getContentBoundingBox () {
     const node = ReactDOM.findDOMNode(this.refs.content)
-    return node.getBoundingClientRect();
+    return node.getBoundingClientRect()
   }
 
   render () {

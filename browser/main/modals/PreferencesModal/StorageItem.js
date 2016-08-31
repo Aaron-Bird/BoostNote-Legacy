@@ -55,10 +55,10 @@ class UnstyledFolderItem extends React.Component {
 
   handleColorButtonClick (e) {
     const folder = Object.assign({}, this.state.folder, { showColumnPicker: true, colorPickerPos: { left: 0, top: 0 } })
-    this.setState({ folder }, function() {
+    this.setState({ folder }, function () {
       // After the color picker has been painted, re-calculate its position
       // by comparing its dimensions to the host dimensions.
-      const { hostBoundingBox } = this.props;
+      const { hostBoundingBox } = this.props
       const colorPickerNode = ReactDOM.findDOMNode(this.refs.colorPicker)
       const colorPickerBox = colorPickerNode.getBoundingClientRect()
       const offsetTop = hostBoundingBox.bottom - colorPickerBox.bottom
@@ -103,19 +103,22 @@ class UnstyledFolderItem extends React.Component {
           <button styleName='folderList-item-left-colorButton' style={{color: this.state.folder.color}}
             onClick={(e) => !this.state.folder.showColumnPicker && this.handleColorButtonClick(e)}
           >
-          { this.state.folder.showColumnPicker ?
-            <div style={ popover }>
-              <div style={ cover }
-                onClick={ () => this.handleColorPickerClose() } />
+            {this.state.folder.showColumnPicker
+              ? <div style={popover}>
+                <div style={cover}
+                  onClick={() => this.handleColorPickerClose()}
+                />
                 <div style={pickerStyle}>
                   <SketchPicker
-                    ref="colorPicker"
+                    ref='colorPicker'
                     color={this.state.folder.color}
-                    onChange={ (color) => this.handleColorChange(color) }
-                    onChangeComplete={ (color) => this.handleColorChange(color) } />
+                    onChange={(color) => this.handleColorChange(color)}
+                    onChangeComplete={(color) => this.handleColorChange(color)}
+                  />
                 </div>
               </div>
-          : null }
+              : null
+            }
             <i className='fa fa-square'/>
           </button>
           <input styleName='folderList-item-left-nameInput'
