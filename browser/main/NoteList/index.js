@@ -78,7 +78,7 @@ class NoteList extends React.Component {
     let { location } = this.props
 
     let targetIndex = _.findIndex(this.notes, (note) => {
-      return note.uniqueKey === location.query.key
+      return note.storage + '-' + note.key === location.query.key
     })
 
     if (targetIndex === 0) {
@@ -90,7 +90,7 @@ class NoteList extends React.Component {
     router.push({
       pathname: location.pathname,
       query: {
-        key: this.notes[targetIndex].uniqueKey
+        key: this.notes[targetIndex].storage + '-' + this.notes[targetIndex].key
       }
     })
   }
@@ -103,7 +103,7 @@ class NoteList extends React.Component {
     let { location } = this.props
 
     let targetIndex = _.findIndex(this.notes, (note) => {
-      return note.uniqueKey === location.query.key
+      return note.storage + '-' + note.key === location.query.key
     })
 
     if (targetIndex === this.notes.length - 1) {
@@ -117,7 +117,7 @@ class NoteList extends React.Component {
     router.push({
       pathname: location.pathname,
       query: {
-        key: this.notes[targetIndex].uniqueKey
+        key: this.notes[targetIndex].storage + '-' + this.notes[targetIndex].key
       }
     })
     ee.emit('list:moved')
