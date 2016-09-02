@@ -178,8 +178,11 @@ class NoteList extends React.Component {
 
     let folderNoteKeyList = data.folderNoteMap
       .get(storage.key + '-' + folder.key)
-    return folderNoteKeyList
-      .map((uniqueKey) => data.noteMap.get(uniqueKey))
+
+    return folderNoteKeyList != null
+      ? folderNoteKeyList
+        .map((uniqueKey) => data.noteMap.get(uniqueKey))
+      : []
   }
 
   handleNoteClick (uniqueKey) {

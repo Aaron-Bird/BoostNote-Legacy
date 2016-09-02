@@ -51,10 +51,10 @@ class StoragesTab extends React.Component {
   }
 
   renderList () {
-    let { storages, boundingBox } = this.props
+    let { data, boundingBox } = this.props
 
     if (!boundingBox) { return null }
-    let storageList = storages.map((storage) => {
+    let storageList = data.storageMap.map((storage) => {
       return <StorageItem
         key={storage.key}
         storage={storage}

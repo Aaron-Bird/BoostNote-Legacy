@@ -40,12 +40,12 @@ function data (state = defaultDataMap(), action) {
         }
         storageNoteList.add(uniqueKey)
 
-        let folderNoteList = state.folderNoteMap.get(folderKey)
-        if (folderNoteList == null) {
-          folderNoteList = new Set(folderNoteList)
-          state.folderNoteMap.set(folderKey, folderNoteList)
+        let folderNoteSet = state.folderNoteMap.get(folderKey)
+        if (folderNoteSet == null) {
+          folderNoteSet = new Set(folderNoteSet)
+          state.folderNoteMap.set(folderKey, folderNoteSet)
         }
-        folderNoteList.add(uniqueKey)
+        folderNoteSet.add(uniqueKey)
 
         note.tags.forEach((tag) => {
           let tagNoteList = state.tagNoteMap.get(tag)
@@ -80,19 +80,19 @@ function data (state = defaultDataMap(), action) {
         // Update storageNoteMap if oldNote doesn't exist
         if (oldNote == null) {
           state.storeageNoteMap = new Map(state.storeageNoteMap)
-          let noteSet = state.storeageNoteMap.get(note.storage)
-          noteSet = new Set(noteSet)
-          noteSet.add(uniqueKey)
-          state.folderNoteMap.set(folderKey, noteSet)
+          let storageNoteSet = state.storeageNoteMap.get(note.storage)
+          storageNoteSet = new Set(storageNoteSet)
+          storageNoteSet.add(uniqueKey)
+          state.storeageNoteMap.set(note.storage, storageNoteSet)
         }
 
         // Update foldermap if folder changed or post created
         if (oldNote == null || oldNote.folder !== note.folder) {
           state.folderNoteMap = new Map(state.folderNoteMap)
-          let folderNoteList = state.folderNoteMap.get(folderKey)
-          folderNoteList = new Set(folderNoteList)
-          folderNoteList.add(uniqueKey)
-          state.folderNoteMap.set(folderKey, folderNoteList)
+          let folderNoteSet = state.folderNoteMap.get(folderKey)
+          folderNoteSet = new Set(folderNoteSet)
+          folderNoteSet.add(uniqueKey)
+          state.folderNoteMap.set(folderKey, folderNoteSet)
 
           if (oldNote != null) {
             let oldFolderKey = oldNote.storage + '-' + oldNote.folder
@@ -305,6 +305,61 @@ function data (state = defaultDataMap(), action) {
         state.noteMap.delete(uniqueKey)
         return state
       }
+    case 'UPDATE_FOLDER':
+      {
+        state = Object.assign({}, state)
+        state.storageMap = new Map(state.storageMap)
+        state.storageMap.set(action.storage.key, action.storage)
+      }
+      return state
+    case 'DELETE_FOLDER':
+      {
+        state = Object.assign({}, state)
+        state.storageMap = new Map(state.storageMap)
+        state.storageMap.set(action.storage.key, action.storage)
+
+        // Get note list from folder-note map
+        // and delete note set from folder-note map
+        let folderKey = action.storage.key + '-' + action.folderKey
+        let noteSet = state.folderNoteMap.get(folderKey)
+        state.folderNoteMap = new Map(state.folderNoteMap)
+        state.folderNoteMap.delete(folderKey)
+
+        state.noteMap = new Map(state.noteMap)
+        state.storageNoteMap = new Map(state.storageNoteMap)
+        let storageNoteSet = state.storageNoteMap.get(action.storage.key)
+        storageNoteSet = new Set(storageNoteSet)
+        storageNoteSet.delete()
+        noteSet.forEach(function handleNoteKey (noteKey) {
+          // Get note from noteMap
+          let note = state.noteMap.get(noteKey)
+          if (note != null) {
+            state.noteMap.delete(noteKey)
+
+            // From storageSet
+            let storageNoteSet = state.storageNoteMap.get(note.storage)
+            storageNoteSet = new Set(storageNoteSet)
+            state.storageNoteMap.set(note.storage, storageNoteSet)
+            storageNoteSet.delete(noteKey)
+
+            // From starredSet
+            if (note.isStarred) {
+              state.starredSet = new Set(state.starredSet)
+              state.starredSet.delete(noteKey)
+            }
+
+            // Delete key from tag map
+            state.tagNoteMap = new Map(state.tagNoteMap)
+            note.tags.forEach((tag) => {
+              let tagNoteSet = state.tagNoteMap.get(tag)
+              tagNoteSet = new Set(tagNoteSet)
+              state.tagNoteMap.set(tag, tagNoteSet)
+              tagNoteSet.delete(noteKey)
+            })
+          }
+        })
+      }
+      return state
   }
   return state
 }

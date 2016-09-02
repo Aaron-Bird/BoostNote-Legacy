@@ -7,8 +7,7 @@ import dataApi from 'browser/main/lib/dataApi'
 import store from 'browser/main/store'
 
 const electron = require('electron')
-const { shell, remote } = electron
-const { Menu, MenuItem } = remote
+const { shell } = electron
 import { SketchPicker } from 'react-color'
 
 class UnstyledFolderItem extends React.Component {
@@ -42,10 +41,10 @@ class UnstyledFolderItem extends React.Component {
         color: this.state.folder.color,
         name: this.state.folder.name
       })
-      .then((storage) => {
+      .then((data) => {
         store.dispatch({
-          type: 'UPDATE_STORAGE',
-          storage: storage
+          type: 'UPDATE_FOLDER',
+          storage: data.storage
         })
         this.setState({
           status: 'IDLE'
@@ -146,12 +145,12 @@ class UnstyledFolderItem extends React.Component {
   handleDeleteConfirmButtonClick (e) {
     let { storage, folder } = this.props
     dataApi
-      .removeFolder(storage.key, folder.key)
-      .then((storage) => {
+      .deleteFolder(storage.key, folder.key)
+      .then((data) => {
         store.dispatch({
-          type: 'REMOVE_FOLDER',
-          key: folder.key,
-          storage: storage
+          type: 'DELETE_FOLDER',
+          storage: data.storage,
+          folderKey: data.folderKey
         })
       })
   }
@@ -257,10 +256,10 @@ class StorageItem extends React.Component {
     }
 
     dataApi.createFolder(storage.key, input)
-      .then((storage) => {
+      .then((data) => {
         store.dispatch({
-          type: 'ADD_FOLDER',
-          storage: storage
+          type: 'UPDATE_FOLDER',
+          storage: data.storage
         })
       })
       .catch((err) => {

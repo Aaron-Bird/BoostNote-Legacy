@@ -58,7 +58,7 @@ class MutableSet {
   }
 
   forEach (...args) {
-    return this._map.forEach(...args)
+    return this._set.forEach(...args)
   }
 
   [Symbol.iterator] () {
