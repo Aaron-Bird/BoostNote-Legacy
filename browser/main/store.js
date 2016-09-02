@@ -329,7 +329,7 @@ function data (state = defaultDataMap(), action) {
         state.storageNoteMap = new Map(state.storageNoteMap)
         let storageNoteSet = state.storageNoteMap.get(action.storage.key)
         storageNoteSet = new Set(storageNoteSet)
-        storageNoteSet.delete()
+        state.storageNoteMap.set(action.storage.key, storageNoteSet)
         noteSet.forEach(function handleNoteKey (noteKey) {
           // Get note from noteMap
           let note = state.noteMap.get(noteKey)
@@ -337,9 +337,6 @@ function data (state = defaultDataMap(), action) {
             state.noteMap.delete(noteKey)
 
             // From storageSet
-            let storageNoteSet = state.storageNoteMap.get(note.storage)
-            storageNoteSet = new Set(storageNoteSet)
-            state.storageNoteMap.set(note.storage, storageNoteSet)
             storageNoteSet.delete(noteKey)
 
             // From starredSet
