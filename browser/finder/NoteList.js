@@ -54,12 +54,12 @@ class NoteList extends React.Component {
   }
 
   render () {
-    let { storages, notes, index } = this.props
+    let { storageMap, notes, index } = this.props
 
     let notesList = notes
       .slice(0, 10 + 10 * this.state.range)
       .map((note, _index) => {
-        let storage = _.find(storages, {key: note.storage})
+        let storage = storageMap[note.storage]
         let folder = _.find(storage.folders, {key: note.folder})
         return (
           <NoteItem

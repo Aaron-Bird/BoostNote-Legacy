@@ -217,31 +217,49 @@ class FinderMain extends React.Component {
   }
 
   render () {
-    let { storages, notes, config } = this.props
+    let { data, config } = this.props
     let { filter, search } = this.state
-    let storageList = storages
-      .map((storage) => <StorageSection
-        filter={filter}
-        storage={storage}
-        key={storage.key}
-        handleStorageButtonClick={(e, storage) => this.handleStorageButtonClick(e, storage)}
-        handleFolderButtonClick={(e, storage, folder) => this.handleFolderButtonClick(e, storage, folder)}
-      />)
+    let storageList = []
+    for (let key in data.storageMap) {
+      let storage = data.storageMap[key]
+      let item = (
+        <StorageSection
+          filter={filter}
+          storage={storage}
+          key={storage.key}
+          handleStorageButtonClick={(e, storage) => this.handleStorageButtonClick(e, storage)}
+          handleFolderButtonClick={(e, storage, folder) => this.handleFolderButtonClick(e, storage, folder)}
+        />
+      )
+      storageList.push(item)
+    }
+    let notes = []
+    let noteIds
+
+    switch (filter.type) {
+      case 'STORAGE':
+        noteIds = data.storageNoteMap[filter.storage]
+        break
+      case 'FOLDER':
+        noteIds = data.folderNoteMap[filter.storage + '-' + filter.folder]
+        break
+      case 'STARRED':
+        noteIds = data.starredSet
+    }
+    if (noteIds != null) {
+      noteIds.forEach((id) => {
+        notes.push(data.noteMap[id])
+      })
+    } else {
+      for (let key in data.noteMap) {
+        notes.push(data.noteMap[key])
+      }
+    }
+
     if (!filter.includeSnippet && filter.includeMarkdown) {
       notes = notes.filter((note) => note.type === 'MARKDOWN_NOTE')
     } else if (filter.includeSnippet && !filter.includeMarkdown) {
       notes = notes.filter((note) => note.type === 'SNIPPET_NOTE')
-    }
-
-    switch (filter.type) {
-      case 'STORAGE':
-        notes = notes.filter((note) => note.storage === filter.storage)
-        break
-      case 'FOLDER':
-        notes = notes.filter((note) => note.storage === filter.storage && note.folder === filter.folder)
-        break
-      case 'STARRED':
-        notes = notes.filter((note) => note.isStarred)
     }
 
     if (search.trim().length > 0) {
@@ -302,7 +320,7 @@ class FinderMain extends React.Component {
             </div>
           </div>
           <NoteList styleName='result-list'
-            storages={storages}
+            storageMap={data.storageMap}
             notes={notes}
             ref='list'
             search={search}
@@ -323,14 +341,6 @@ class FinderMain extends React.Component {
 }
 
 FinderMain.propTypes = {
-  articles: PropTypes.array,
-  activeArticle: PropTypes.shape({
-    key: PropTypes.string,
-    tags: PropTypes.array,
-    title: PropTypes.string,
-    content: PropTypes.string
-  }),
-  status: PropTypes.shape(),
   dispatch: PropTypes.func
 }
 

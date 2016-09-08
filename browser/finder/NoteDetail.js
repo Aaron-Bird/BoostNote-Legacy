@@ -115,6 +115,7 @@ class NoteDetail extends React.Component {
           </button>
         </div>
       })
+
       let viewList = note.snippets.map((snippet, index) => {
         let isActive = this.state.snippetIndex === index
         let mode = snippet.mode === 'text'
@@ -133,7 +134,7 @@ class NoteDetail extends React.Component {
             />
             <button styleName='tabView-top-mode'
             >
-              {mode == null ? null : mode}
+              {mode == null ? null : mode.mode}
             </button>
           </div>
           {snippet.mode === 'markdown'

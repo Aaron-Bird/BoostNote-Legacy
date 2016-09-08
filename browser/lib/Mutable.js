@@ -38,15 +38,22 @@ class MutableMap {
     }
     return result
   }
+
+  toJS () {
+    let result = {}
+    for (let [key, value] of this._map) {
+      if (value instanceof MutableSet || value instanceof MutableMap) {
+        value = value.toJS()
+      }
+      result[key] = value
+    }
+    return result
+  }
 }
 
 class MutableSet {
   constructor (iterable) {
-    if (iterable instanceof MutableSet) {
-      this._set = new Set(iterable._set)
-    } else {
-      this._set = new Set(iterable)
-    }
+    this._set = new Set(iterable)
   }
 
   add (...args) {

@@ -27,10 +27,15 @@ nodeIpc.connectTo(
 
     nodeIpc.of.node.on('request-data-from-finder', function () {
       console.log('throttle')
-      var data = store.getState()
+      var { data } = store.getState()
+      console.log(data.starredSet.toJS())
       nodeIpc.of.node.emit('throttle-data', {
-        storages: data.storages,
-        notes: data.notes
+        storageMap: data.storageMap.toJS(),
+        noteMap: data.noteMap.toJS(),
+        starredSet: data.starredSet.toJS(),
+        storageNoteMap: data.storageNoteMap.toJS(),
+        folderNoteMap: data.folderNoteMap.toJS(),
+        tagNoteMap: data.tagNoteMap.toJS()
       })
     })
   }
