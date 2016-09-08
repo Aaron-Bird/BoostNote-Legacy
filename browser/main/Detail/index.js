@@ -31,19 +31,14 @@ class Detail extends React.Component {
   }
 
   render () {
-    let { location, notes, config } = this.props
+    let { location, data, config } = this.props
     let note = null
     if (location.query.key != null) {
       let splitted = location.query.key.split('-')
       let storageKey = splitted.shift()
-      let folderKey = splitted.shift()
       let noteKey = splitted.shift()
 
-      note = _.find(notes, {
-        storage: storageKey,
-        folder: folderKey,
-        key: noteKey
-      })
+      note = data.noteMap.get(storageKey + '-' + noteKey)
     }
 
     if (note == null) {
@@ -67,7 +62,7 @@ class Detail extends React.Component {
           ref='root'
           {..._.pick(this.props, [
             'dispatch',
-            'storages',
+            'data',
             'style',
             'ignorePreviewPointerEvents',
             'location'
@@ -83,7 +78,7 @@ class Detail extends React.Component {
         ref='root'
         {..._.pick(this.props, [
           'dispatch',
-          'storages',
+          'data',
           'style',
           'ignorePreviewPointerEvents',
           'location'
@@ -95,7 +90,6 @@ class Detail extends React.Component {
 
 Detail.propTypes = {
   dispatch: PropTypes.func,
-  storages: PropTypes.array,
   style: PropTypes.shape({
     left: PropTypes.number
   }),

@@ -1,0 +1,122 @@
+const resolveStorageData = require('./resolveStorageData')
+const _ = require('lodash')
+const path = require('path')
+const CSON = require('season')
+
+function validateInput (input) {
+  let validatedInput = {}
+
+  if (input.tags != null) {
+    if (!_.isArray(input.tags)) validatedInput.tags = []
+    validatedInput.tags = input.tags
+      .filter((tag) => _.isString(tag) && tag.trim().length > 0)
+  }
+
+  if (input.title != null) {
+    if (!_.isString(input.title)) validatedInput.title = ''
+    else validatedInput.title = input.title
+  }
+
+  if (input.isStarred != null) {
+    validatedInput.isStarred = !!input.isStarred
+  }
+
+  validatedInput.type = input.type
+  switch (input.type) {
+    case 'MARKDOWN_NOTE':
+      if (input.content != null) {
+        if (!_.isString(input.content)) validatedInput.content = ''
+        else validatedInput.content = input.content
+      }
+      return input
+    case 'SNIPPET_NOTE':
+      if (input.description != null) {
+        if (!_.isString(input.description)) validatedInput.description = ''
+        else validatedInput.description = input.description
+      }
+      if (input.snippets != null) {
+        if (!_.isArray(input.snippets)) {
+          validatedInput.snippets = [{
+            name: '',
+            mode: 'text',
+            content: ''
+          }]
+        } else {
+          validatedInput.snippets = input.snippets
+        }
+        validatedInput.snippets.filter((snippet) => {
+          if (!_.isString(snippet.name)) return false
+          if (!_.isString(snippet.mode)) return false
+          if (!_.isString(snippet.content)) return false
+          return true
+        })
+      }
+      return validatedInput
+    default:
+      throw new Error('Invalid type: only MARKDOWN_NOTE and SNIPPET_NOTE are available.')
+  }
+}
+
+function updateNote (storageKey, noteKey, input) {
+  let targetStorage
+  try {
+    if (input == null) throw new Error('No input found.')
+    input = validateInput(input)
+
+    let cachedStorageList = JSON.parse(localStorage.getItem('storages'))
+    if (!_.isArray(cachedStorageList)) throw new Error('Target storage doesn\'t exist.')
+
+    targetStorage = _.find(cachedStorageList, {key: storageKey})
+    if (targetStorage == null) throw new Error('Target storage doesn\'t exist.')
+  } catch (e) {
+    return Promise.reject(e)
+  }
+
+  return resolveStorageData(targetStorage)
+    .then(function saveNote (storage) {
+      let noteData
+      let notePath = path.join(storage.path, 'notes', noteKey + '.cson')
+      try {
+        noteData = CSON.readFileSync(notePath)
+      } catch (err) {
+        console.warn('Failed to find note cson', err)
+        noteData = input.type === 'SNIPPET_NOTE'
+          ? {
+            type: 'SNIPPET_NOTE',
+            description: [],
+            snippets: [{
+              name: '',
+              mode: 'text',
+              content: ''
+            }]
+          }
+          : {
+            type: 'MARKDOWN_NOTE',
+            content: ''
+          }
+        noteData.title = ''
+        if (storage.folders.length === 0) throw new Error('Failed to restore note: No folder exists.')
+        noteData.folder = storage.folders[0].key
+        noteData.createdAt = new Date()
+        noteData.updatedAt = new Date()
+        noteData.isStarred = false
+        noteData.tags = []
+      }
+
+      if (noteData.type === 'SNIPPET_NOTE') {
+        noteData.title
+      }
+
+      Object.assign(noteData, input, {
+        key: noteKey,
+        updatedAt: new Date(),
+        storage: storageKey
+      })
+
+      CSON.writeFileSync(path.join(storage.path, 'notes', noteKey + '.cson'), _.omit(noteData, ['key', 'storage']))
+
+      return noteData
+    })
+}
+
+module.exports = updateNote

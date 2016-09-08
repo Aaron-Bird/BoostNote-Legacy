@@ -24,23 +24,26 @@ class NewNoteModal extends React.Component {
   handleMarkdownNoteButtonClick (e) {
     let { storage, folder, dispatch, location } = this.props
     dataApi
-      .createMarkdownNote(storage, folder, {
+      .createNote(storage, {
+        type: 'MARKDOWN_NOTE',
+        folder: folder,
         title: '',
         content: ''
       })
       .then((note) => {
         dispatch({
-          type: 'CREATE_NOTE',
+          type: 'UPDATE_NOTE',
           note: note
         })
         hashHistory.push({
           pathname: location.pathname,
-          query: {key: note.uniqueKey}
+          query: {key: note.storage + '-' + note.key}
         })
         ee.emit('detail:focus')
         this.props.close()
       })
   }
+
   handleMarkdownNoteButtonKeyDown (e) {
     if (e.keyCode === 9) {
       e.preventDefault()
@@ -50,8 +53,11 @@ class NewNoteModal extends React.Component {
 
   handleSnippetNoteButtonClick (e) {
     let { storage, folder, dispatch, location } = this.props
+
     dataApi
-      .createSnippetNote(storage, folder, {
+      .createNote(storage, {
+        type: 'SNIPPET_NOTE',
+        folder: folder,
         title: '',
         description: '',
         snippets: [{
@@ -62,12 +68,12 @@ class NewNoteModal extends React.Component {
       })
       .then((note) => {
         dispatch({
-          type: 'CREATE_NOTE',
+          type: 'UPDATE_NOTE',
           note: note
         })
         hashHistory.push({
           pathname: location.pathname,
-          query: {key: note.uniqueKey}
+          query: {key: note.storage + '-' + note.key}
         })
         ee.emit('detail:focus')
         this.props.close()

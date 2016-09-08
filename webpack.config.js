@@ -24,7 +24,7 @@ var config = Object.assign({}, skeleton, {
     publicPath: 'http://localhost:8080/assets/'
   },
   debug: true,
-  devtool: 'eval-source-map'
+  devtool: 'cheap-module-eval-source-map'
 })
 
 module.exports = config

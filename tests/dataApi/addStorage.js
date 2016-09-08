@@ -8,86 +8,65 @@ global.navigator = window.navigator
 const Storage = require('dom-storage')
 const localStorage = window.localStorage = global.localStorage = new Storage(null, { strict: true })
 const path = require('path')
+const TestDummy = require('../fixtures/TestDummy')
 const sander = require('sander')
 const _ = require('lodash')
+const os = require('os')
+const CSON = require('season')
 
-function copyFile (filePath, targetPath) {
-  return sander.readFile(filePath)
-    .then(function writeFile (data) {
-      return sander.writeFile(targetPath, data.toString())
-    })
-}
+const v1StoragePath = path.join(os.tmpdir(), 'test/addStorage-v1-storage')
+// const legacyStoragePath = path.join(os.tmpdir(), 'test/addStorage-legacy-storage')
+// const emptyDirPath = path.join(os.tmpdir(), 'test/addStorage-empty-storage')
 
-test('add a initialized storage', (t) => {
-  const dummyStoragePath = path.join(__dirname, '../dummy/dummyStorage')
-  const targetPath = path.join(__dirname, '../sandbox/test-add-storage1')
+test.beforeEach((t) => {
+  t.context.v1StorageData = TestDummy.dummyStorage(v1StoragePath)
+  // t.context.legacyStorageData = TestDummy.dummyLegacyStorage(legacyStoragePath)
+
+  localStorage.setItem('storages', JSON.stringify([]))
+})
+
+test.serial('Add Storage', (t) => {
   const input = {
     type: 'FILESYSTEM',
-    name: 'test-add-storage1',
-    path: targetPath
+    name: 'add-storage1',
+    path: v1StoragePath
   }
   return Promise.resolve()
-    .then(function before () {
-      localStorage.setItem('storages', JSON.stringify([]))
-
-      sander.rimrafSync(targetPath)
-      return copyFile(path.join(dummyStoragePath, 'boostnote.json'), path.join(targetPath, 'boostnote.json'))
-        .then(() => {
-          return copyFile(path.join(dummyStoragePath, 'fc6ba88e8ecf/data.json'), path.join(targetPath, 'fc6ba88e8ecf/data.json'))
-        })
-    })
-    .then(function doTest (data) {
+    .then(function doTest () {
       return addStorage(input)
     })
     .then(function validateResult (data) {
-      const { storage, notes } = data
+      let { storage, notes } = data
 
+      // Check data.storage
       t.true(_.isString(storage.key))
-      t.is(storage.name, 'test-add-storage1')
-      t.true(_.isArray(storage.folders))
-      t.is(storage.folders.length, 1)
-      t.true(_.isArray(notes))
-      t.is(notes.length, 2)
-      t.is(notes[0].folder, 'fc6ba88e8ecf')
-      t.is(notes[0].storage, storage.key)
-    })
-    .then(function after () {
-      localStorage.clear()
-      sander.rimrafSync(targetPath)
+      t.is(storage.name, input.name)
+      t.is(storage.type, input.type)
+      t.is(storage.path, input.path)
+      t.is(storage.version, '1.0')
+      t.is(storage.folders.length, t.context.v1StorageData.json.folders.length)
+
+      // Check data.notes
+      t.is(notes.length, t.context.v1StorageData.notes.length)
+      notes.forEach(function validateNote (note) {
+        t.is(note.storage, storage.key)
+      })
+
+      // Check localStorage
+      let cacheData = _.find(JSON.parse(localStorage.getItem('storages')), {key: data.storage.key})
+      t.is(cacheData.name, input.name)
+      t.is(cacheData.type, input.type)
+      t.is(cacheData.path, input.path)
+
+      // Check boostnote.json
+      let jsonData = CSON.readFileSync(path.join(storage.path, 'boostnote.json'))
+      t.true(_.isArray(jsonData.folders))
+      t.is(jsonData.version, '1.0')
+      t.is(jsonData.folders.length, t.context.v1StorageData.json.folders.length)
     })
 })
 
-test('add a fresh storage', (t) => {
-  const targetPath = path.join(__dirname, '../sandbox/test-add-storage2')
-  const input = {
-    type: 'FILESYSTEM',
-    name: 'test-add-storage2',
-    path: targetPath
-  }
-  return Promise.resolve()
-    .then(function before () {
-      localStorage.setItem('storages', JSON.stringify([]))
-
-      sander.rimrafSync(targetPath)
-    })
-    .then(function doTest (data) {
-      return addStorage(input)
-    })
-    .then(function validateResult (data) {
-      const { storage, notes } = data
-
-      t.true(_.isString(storage.key))
-      t.is(storage.name, 'test-add-storage2')
-      t.true(_.isArray(storage.folders))
-      t.is(storage.folders.length, 0)
-
-      t.true(_.isArray(notes))
-      t.is(notes.length, 0)
-
-      t.true(sander.statSync(path.join(targetPath, 'boostnote.json')).isFile())
-    })
-    .then(function after () {
-      localStorage.clear()
-      sander.rimrafSync(targetPath)
-    })
+test.after.always(() => {
+  localStorage.clear()
+  sander.rimrafSync(v1StoragePath)
 })

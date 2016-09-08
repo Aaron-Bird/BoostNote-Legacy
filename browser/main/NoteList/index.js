@@ -43,7 +43,7 @@ class NoteList extends React.Component {
       router.replace({
         pathname: location.pathname,
         query: {
-          key: this.notes[0].uniqueKey
+          key: this.notes[0].storage + '-' + this.notes[0].key
         }
       })
       return
@@ -52,7 +52,7 @@ class NoteList extends React.Component {
     // Auto scroll
     if (_.isString(location.query.key)) {
       let targetIndex = _.findIndex(this.notes, (note) => {
-        return note.uniqueKey === location.query.key
+        return note != null && note.storage + '-' + note.key === location.query.key
       })
       if (targetIndex > -1) {
         let list = this.refs.root
@@ -78,7 +78,7 @@ class NoteList extends React.Component {
     let { location } = this.props
 
     let targetIndex = _.findIndex(this.notes, (note) => {
-      return note.uniqueKey === location.query.key
+      return note.storage + '-' + note.key === location.query.key
     })
 
     if (targetIndex === 0) {
@@ -90,7 +90,7 @@ class NoteList extends React.Component {
     router.push({
       pathname: location.pathname,
       query: {
-        key: this.notes[targetIndex].uniqueKey
+        key: this.notes[targetIndex].storage + '-' + this.notes[targetIndex].key
       }
     })
   }
@@ -103,7 +103,7 @@ class NoteList extends React.Component {
     let { location } = this.props
 
     let targetIndex = _.findIndex(this.notes, (note) => {
-      return note.uniqueKey === location.query.key
+      return note.storage + '-' + note.key === location.query.key
     })
 
     if (targetIndex === this.notes.length - 1) {
@@ -117,7 +117,7 @@ class NoteList extends React.Component {
     router.push({
       pathname: location.pathname,
       query: {
-        key: this.notes[targetIndex].uniqueKey
+        key: this.notes[targetIndex].storage + '-' + this.notes[targetIndex].key
       }
     })
     ee.emit('list:moved')
@@ -153,30 +153,36 @@ class NoteList extends React.Component {
   }
 
   getNotes () {
-    let { storages, notes, params, location } = this.props
+    let { data, params, location } = this.props
 
     if (location.pathname.match(/\/home/)) {
-      return notes
+      return data.noteMap.map((note) => note)
     }
 
     if (location.pathname.match(/\/starred/)) {
-      return notes
-        .filter((note) => note.isStarred)
+      return data.starredSet.toJS()
+        .map((uniqueKey) => data.noteMap.get(uniqueKey))
     }
 
     let storageKey = params.storageKey
     let folderKey = params.folderKey
-    let storage = _.find(storages, {key: storageKey})
+    let storage = data.storageMap.get(storageKey)
     if (storage == null) return []
 
     let folder = _.find(storage.folders, {key: folderKey})
     if (folder == null) {
-      return notes
-        .filter((note) => note.storage === storageKey)
+      return data.storageNoteMap
+      .get(storage.key)
+      .map((uniqueKey) => data.noteMap.get(uniqueKey))
     }
 
-    return notes
-      .filter((note) => note.folder === folderKey)
+    let folderNoteKeyList = data.folderNoteMap
+      .get(storage.key + '-' + folder.key)
+
+    return folderNoteKeyList != null
+      ? folderNoteKeyList
+        .map((uniqueKey) => data.noteMap.get(uniqueKey))
+      : []
   }
 
   handleNoteClick (uniqueKey) {
@@ -194,13 +200,14 @@ class NoteList extends React.Component {
   }
 
   render () {
-    let { location, storages, notes } = this.props
+    let { location, data, notes } = this.props
     this.notes = notes = this.getNotes()
       .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
 
     let noteList = notes
       .map((note) => {
-        let storage = _.find(storages, {key: note.storage})
+        if (note == null) return null
+        let storage = data.storageMap.get(note.storage)
         let folder = _.find(storage.folders, {key: note.folder})
         let tagElements = _.isArray(note.tags)
           ? note.tags.map((tag) => {
@@ -212,14 +219,14 @@ class NoteList extends React.Component {
             )
           })
           : []
-        let isActive = location.query.key === note.uniqueKey
+        let isActive = location.query.key === note.storage + '-' + note.key
         return (
           <div styleName={isActive
               ? 'item--active'
               : 'item'
             }
-            key={note.uniqueKey}
-            onClick={(e) => this.handleNoteClick(note.uniqueKey)(e)}
+            key={note.storage + '-' + note.key}
+            onClick={(e) => this.handleNoteClick(note.storage + '-' + note.key)(e)}
           >
             <div styleName='item-border'/>
             <div styleName='item-info'>

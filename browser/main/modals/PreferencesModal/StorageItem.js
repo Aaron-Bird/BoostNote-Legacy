@@ -7,8 +7,7 @@ import dataApi from 'browser/main/lib/dataApi'
 import store from 'browser/main/store'
 
 const electron = require('electron')
-const { shell, remote } = electron
-const { Menu, MenuItem } = remote
+const { shell } = electron
 import { SketchPicker } from 'react-color'
 
 class UnstyledFolderItem extends React.Component {
@@ -42,10 +41,10 @@ class UnstyledFolderItem extends React.Component {
         color: this.state.folder.color,
         name: this.state.folder.name
       })
-      .then((storage) => {
+      .then((data) => {
         store.dispatch({
-          type: 'UPDATE_STORAGE',
-          storage: storage
+          type: 'UPDATE_FOLDER',
+          storage: data.storage
         })
         this.setState({
           status: 'IDLE'
@@ -55,10 +54,10 @@ class UnstyledFolderItem extends React.Component {
 
   handleColorButtonClick (e) {
     const folder = Object.assign({}, this.state.folder, { showColumnPicker: true, colorPickerPos: { left: 0, top: 0 } })
-    this.setState({ folder }, function() {
+    this.setState({ folder }, function () {
       // After the color picker has been painted, re-calculate its position
       // by comparing its dimensions to the host dimensions.
-      const { hostBoundingBox } = this.props;
+      const { hostBoundingBox } = this.props
       const colorPickerNode = ReactDOM.findDOMNode(this.refs.colorPicker)
       const colorPickerBox = colorPickerNode.getBoundingClientRect()
       const offsetTop = hostBoundingBox.bottom - colorPickerBox.bottom
@@ -103,19 +102,22 @@ class UnstyledFolderItem extends React.Component {
           <button styleName='folderList-item-left-colorButton' style={{color: this.state.folder.color}}
             onClick={(e) => !this.state.folder.showColumnPicker && this.handleColorButtonClick(e)}
           >
-          { this.state.folder.showColumnPicker ?
-            <div style={ popover }>
-              <div style={ cover }
-                onClick={ () => this.handleColorPickerClose() } />
+            {this.state.folder.showColumnPicker
+              ? <div style={popover}>
+                <div style={cover}
+                  onClick={() => this.handleColorPickerClose()}
+                />
                 <div style={pickerStyle}>
                   <SketchPicker
-                    ref="colorPicker"
+                    ref='colorPicker'
                     color={this.state.folder.color}
-                    onChange={ (color) => this.handleColorChange(color) }
-                    onChangeComplete={ (color) => this.handleColorChange(color) } />
+                    onChange={(color) => this.handleColorChange(color)}
+                    onChangeComplete={(color) => this.handleColorChange(color)}
+                  />
                 </div>
               </div>
-          : null }
+              : null
+            }
             <i className='fa fa-square'/>
           </button>
           <input styleName='folderList-item-left-nameInput'
@@ -143,12 +145,12 @@ class UnstyledFolderItem extends React.Component {
   handleDeleteConfirmButtonClick (e) {
     let { storage, folder } = this.props
     dataApi
-      .removeFolder(storage.key, folder.key)
-      .then((storage) => {
+      .deleteFolder(storage.key, folder.key)
+      .then((data) => {
         store.dispatch({
-          type: 'REMOVE_FOLDER',
-          key: folder.key,
-          storage: storage
+          type: 'DELETE_FOLDER',
+          storage: data.storage,
+          folderKey: data.folderKey
         })
       })
   }
@@ -254,10 +256,10 @@ class StorageItem extends React.Component {
     }
 
     dataApi.createFolder(storage.key, input)
-      .then((storage) => {
+      .then((data) => {
         store.dispatch({
-          type: 'ADD_FOLDER',
-          storage: storage
+          type: 'UPDATE_FOLDER',
+          storage: data.storage
         })
       })
       .catch((err) => {
@@ -276,11 +278,11 @@ class StorageItem extends React.Component {
       .then(() => {
         store.dispatch({
           type: 'REMOVE_STORAGE',
-          key: storage.key
+          storageKey: storage.key
         })
       })
       .catch((err) => {
-        console.error(err)
+        throw err
       })
   }
 

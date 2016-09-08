@@ -33,9 +33,16 @@ class TopBar extends React.Component {
   }
 
   handleNewPostButtonClick (e) {
-    let { storages, params, dispatch, location } = this.props
-    let storage = _.find(storages, {key: params.storageKey})
-    if (storage == null) storage = storages[0]
+    let { data, params, dispatch, location } = this.props
+    let storage = data.storageMap.get(params.storageKey)
+
+    // Find first storage
+    if (storage == null) {
+      for (let kv of data.storageMap) {
+        storage = kv[1]
+        break
+      }
+    }
     if (storage == null) throw new Error('No storage to create a note')
     let folder = _.find(storage.folders, {key: params.folderKey})
     if (folder == null) folder = storage.folders[0]
