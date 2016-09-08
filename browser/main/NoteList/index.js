@@ -171,7 +171,7 @@ class NoteList extends React.Component {
 
     let folder = _.find(storage.folders, {key: folderKey})
     if (folder == null) {
-      return data.storeageNoteMap
+      return data.storageNoteMap
       .get(storage.key)
       .map((uniqueKey) => data.noteMap.get(uniqueKey))
     }

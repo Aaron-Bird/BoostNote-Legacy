@@ -278,11 +278,11 @@ class StorageItem extends React.Component {
       .then(() => {
         store.dispatch({
           type: 'REMOVE_STORAGE',
-          key: storage.key
+          storageKey: storage.key
         })
       })
       .catch((err) => {
-        console.error(err)
+        throw err
       })
   }
 
