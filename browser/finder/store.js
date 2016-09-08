@@ -30,17 +30,20 @@ const defaultConfig = {
   }
 }
 
-function storages (state = [], action) {
-  switch (action.type) {
-    case 'THROTTLE_DATA':
-      state = action.storages
-  }
-  return state
+let defaultData = {
+  storageMap: {},
+  noteMap: {},
+  starredSet: [],
+  storageNoteMap: {},
+  folderNoteMap: {},
+  tagNoteMap: {}
 }
-function notes (state = [], action) {
+
+function data (state = defaultData, action) {
   switch (action.type) {
     case 'THROTTLE_DATA':
-      state = action.notes
+      console.log(action)
+      state = action.data
   }
   return state
 }
@@ -66,8 +69,7 @@ function config (state = defaultConfig, action) {
 }
 
 let reducer = combineReducers({
-  storages,
-  notes,
+  data,
   config,
   routing: routerReducer
 })

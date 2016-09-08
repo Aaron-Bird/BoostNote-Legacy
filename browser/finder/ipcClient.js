@@ -75,8 +75,7 @@ nodeIpc.connectTo(
       console.log('Received data from Main renderer')
       store.default.dispatch({
         type: 'THROTTLE_DATA',
-        storages: payload.storages,
-        notes: payload.notes
+        data: payload
       })
     })
 
