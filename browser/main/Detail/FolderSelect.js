@@ -200,6 +200,11 @@ class FolderSelect extends React.Component {
 
     let currentOption = options.filter((option) => option.storage.key === storageKey && option.folder.key === folderKey)[0]
 
+    if (this.state.search.trim().length > 0) {
+      let filter = new RegExp('^' + _.escapeRegExp(this.state.search), 'i')
+      options = options.filter((option) => filter.test(option.folder.name))
+    }
+
     let optionList = options
       .map((option, index) => {
         return (
