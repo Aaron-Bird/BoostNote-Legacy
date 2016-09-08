@@ -19,6 +19,10 @@ class NoteList extends React.Component {
     this.focusHandler = () => {
       this.refs.root.focus()
     }
+
+    this.state = {
+      range: 0
+    }
   }
 
   componentDidMount () {
@@ -26,6 +30,29 @@ class NoteList extends React.Component {
     ee.on('list:next', this.selectNextNoteHandler)
     ee.on('list:prior', this.selectPriorNoteHandler)
     ee.on('lost:focus', this.focusHandler)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.location.pathname !== this.props.location.pathname) {
+      this.resetScroll()
+    }
+  }
+
+  resetScroll () {
+    this.refs.root.scrollTop = 0
+    this.setState({
+      range: 0
+    })
+  }
+
+  handleScroll (e) {
+    let notes = this.notes
+
+    if (e.target.offsetHeight + e.target.scrollTop > e.target.scrollHeight - 250 && notes.length > this.state.range * 10 + 10) {
+      this.setState({
+        range: this.state.range + 1
+      })
+    }
   }
 
   componentWillUnmount () {
@@ -36,7 +63,7 @@ class NoteList extends React.Component {
     ee.off('lost:focus', this.focusHandler)
   }
 
-  componentDidUpdate () {
+  componentDidUpdate (prevProps) {
     let { location } = this.props
     if (this.notes.length > 0 && location.query.key == null) {
       let { router } = this.context
@@ -50,7 +77,7 @@ class NoteList extends React.Component {
     }
 
     // Auto scroll
-    if (_.isString(location.query.key)) {
+    if (_.isString(location.query.key) && prevProps.location.query.key !== location.query.key) {
       let targetIndex = _.findIndex(this.notes, (note) => {
         return note != null && note.storage + '-' + note.key === location.query.key
       })
@@ -204,7 +231,7 @@ class NoteList extends React.Component {
     this.notes = notes = this.getNotes()
       .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
 
-    let noteList = notes
+    let noteList = notes.slice(0, 10 + 10 * this.state.range)
       .map((note) => {
         if (note == null) return null
         let storage = data.storageMap.get(note.storage)
@@ -277,6 +304,7 @@ class NoteList extends React.Component {
         tabIndex='-1'
         onKeyDown={(e) => this.handleNoteListKeyDown(e)}
         style={this.props.style}
+        onScroll={(e) => this.handleScroll(e)}
       >
         {noteList}
       </div>
