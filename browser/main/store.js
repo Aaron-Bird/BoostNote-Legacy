@@ -357,6 +357,49 @@ function data (state = defaultDataMap(), action) {
         })
       }
       return state
+    case 'ADD_STORAGE':
+      state = Object.assign({}, state)
+      state.storageMap = new Map(state.storageMap)
+      state.storageMap.set(action.storage.key, action.storage)
+
+      state.noteMap = new Map(state.noteMap)
+      state.storageNoteMap = new Map(state.storageNoteMap)
+      state.storageNoteMap.set(action.storage.key, new Set())
+      state.folderNoteMap = new Map(state.folderNoteMap)
+      state.tagNoteMap = new Map(state.tagNoteMap)
+      action.notes.forEach((note) => {
+        let uniqueKey = note.storage + '-' + note.key
+        let folderKey = note.storage + '-' + note.folder
+        state.noteMap.set(uniqueKey, note)
+
+        if (note.isStarred) {
+          state.starredSet.add(uniqueKey)
+        }
+
+        let storageNoteList = state.storageNoteMap.get(note.storage)
+        if (storageNoteList == null) {
+          storageNoteList = new Set(storageNoteList)
+          state.storageNoteMap.set(note.storage, storageNoteList)
+        }
+        storageNoteList.add(uniqueKey)
+
+        let folderNoteSet = state.folderNoteMap.get(folderKey)
+        if (folderNoteSet == null) {
+          folderNoteSet = new Set(folderNoteSet)
+          state.folderNoteMap.set(folderKey, folderNoteSet)
+        }
+        folderNoteSet.add(uniqueKey)
+
+        note.tags.forEach((tag) => {
+          let tagNoteSet = state.tagNoteMap.get(tag)
+          if (tagNoteSet == null) {
+            tagNoteSet = new Set(tagNoteSet)
+            state.tagNoteMap.set(tag, tagNoteSet)
+          }
+          tagNoteSet.add(uniqueKey)
+        })
+      })
+      return state
     case 'REMOVE_STORAGE':
       state = Object.assign({}, state)
       let storage = state.storageMap.get(action.storageKey)
