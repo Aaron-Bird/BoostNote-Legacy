@@ -439,6 +439,11 @@ function data (state = defaultDataMap(), action) {
         })
       }
       return state
+    case 'RENAME_STORAGE':
+      state = Object.assign({}, state)
+      state.storageMap = new Map(state.storageMap)
+      state.storageMap.set(action.storage.key, action.storage)
+      return state
   }
   return state
 }
