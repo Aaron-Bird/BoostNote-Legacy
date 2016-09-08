@@ -8,6 +8,7 @@ const defaultConfig = {
   zoom: 1,
   isSideNavFolded: false,
   listWidth: 250,
+  navWidth: 200,
   hotkey: {
     toggleFinder: OSX ? 'Cmd + Alt + S' : 'Super + Alt + S',
     toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E'

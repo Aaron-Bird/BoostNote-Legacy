@@ -50,11 +50,13 @@ class SideNav extends React.Component {
         isFolded={isFolded}
       />
     })
-
+    let style = {}
+    if (!isFolded) style.width = this.props.width
     return (
       <div className='SideNav'
         styleName={isFolded ? 'root--folded' : 'root'}
         tabIndex='1'
+        style={style}
       >
         <div styleName='top'>
           <button styleName='top-menu'

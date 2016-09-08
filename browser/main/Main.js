@@ -20,8 +20,10 @@ class Main extends React.Component {
     let { config } = props
 
     this.state = {
-      isSliderFocused: false,
-      listWidth: config.listWidth
+      isRightSliderFocused: false,
+      listWidth: config.listWidth,
+      navWidth: config.listWidth,
+      isLeftSliderFocused: false
     }
   }
 
@@ -49,17 +51,24 @@ class Main extends React.Component {
       })
   }
 
-  handleSlideMouseDown (e) {
+  handleLeftSlideMouseDown (e) {
     e.preventDefault()
     this.setState({
-      isSliderFocused: true
+      isLeftSliderFocused: true
+    })
+  }
+
+  handleRightSlideMouseDown (e) {
+    e.preventDefault()
+    this.setState({
+      isRightSliderFocused: true
     })
   }
 
   handleMouseUp (e) {
-    if (this.state.isSliderFocused) {
+    if (this.state.isRightSliderFocused) {
       this.setState({
-        isSliderFocused: false
+        isRightSliderFocused: false
       }, () => {
         let { dispatch } = this.props
         let newListWidth = this.state.listWidth
@@ -71,10 +80,24 @@ class Main extends React.Component {
         })
       })
     }
+    if (this.state.isLeftSliderFocused) {
+      this.setState({
+        isLeftSliderFocused: false
+      }, () => {
+        let { dispatch } = this.props
+        let navWidth = this.state.navWidth
+        // TODO: ConfigManager should dispatch itself.
+        ConfigManager.set({listWidth: navWidth})
+        dispatch({
+          type: 'SET_NAV_WIDTH',
+          listWidth: navWidth
+        })
+      })
+    }
   }
 
   handleMouseMove (e) {
-    if (this.state.isSliderFocused) {
+    if (this.state.isRightSliderFocused) {
       let offset = this.refs.body.getBoundingClientRect().left
       let newListWidth = e.pageX - offset
       if (newListWidth < 10) {
@@ -84,6 +107,17 @@ class Main extends React.Component {
       }
       this.setState({
         listWidth: newListWidth
+      })
+    }
+    if (this.state.isLeftSliderFocused) {
+      let navWidth = e.pageX
+      if (navWidth < 80) {
+        navWidth = 80
+      } else if (navWidth > 600) {
+        navWidth = 600
+      }
+      this.setState({
+        navWidth: navWidth
       })
     }
   }
@@ -105,9 +139,20 @@ class Main extends React.Component {
             'config',
             'location'
           ])}
+          width={this.state.navWidth}
         />
+        {!config.isSideNavFolded &&
+          <div styleName={this.state.isLeftSliderFocused ? 'slider--active' : 'slider'}
+            style={{left: this.state.navWidth - 1}}
+            onMouseDown={(e) => this.handleLeftSlideMouseDown(e)}
+            draggable='false'
+          >
+            <div styleName='slider-hitbox'/>
+          </div>
+        }
         <div styleName={config.isSideNavFolded ? 'body--expanded' : 'body'}
           ref='body'
+          style={{left: config.isSideNavFolded ? 44 : this.state.navWidth}}
         >
           <TopBar style={{width: this.state.listWidth}}
             {..._.pick(this.props, [
@@ -127,9 +172,9 @@ class Main extends React.Component {
               'location'
             ])}
           />
-          <div styleName={this.state.isSliderFocused ? 'slider--active' : 'slider'}
+          <div styleName={this.state.isRightSliderFocused ? 'slider--active' : 'slider'}
             style={{left: this.state.listWidth}}
-            onMouseDown={(e) => this.handleSlideMouseDown(e)}
+            onMouseDown={(e) => this.handleRightSlideMouseDown(e)}
             draggable='false'
           >
             <div styleName='slider-hitbox'/>
@@ -143,7 +188,7 @@ class Main extends React.Component {
               'params',
               'location'
             ])}
-            ignorePreviewPointerEvents={this.state.isSliderFocused}
+            ignorePreviewPointerEvents={this.state.isRightSliderFocused}
           />
         </div>
         <StatusBar
