@@ -63,8 +63,9 @@ class TopBar extends React.Component {
   }
 
   getOptions () {
-    let { notes } = this.props
+    let { data } = this.props
     let { search } = this.state
+    let notes = data.noteMap.map((note) => note)
     if (search.trim().length === 0) return []
     let searchBlocks = search.split(' ')
     searchBlocks.forEach((block) => {
@@ -135,14 +136,14 @@ class TopBar extends React.Component {
   }
 
   render () {
-    let { config, style, storages } = this.props
+    let { config, style, data } = this.props
     let searchOptionList = this.getOptions()
       .map((note) => {
-        let storage = _.find(storages, {key: note.storage})
+        let storage = data.storageMap.get(note.storage)
         let folder = _.find(storage.folders, {key: note.folder})
         return <div styleName='control-search-optionList-item'
-          key={note.uniqueKey}
-          onClick={(e) => this.handleOptionClick(note.uniqueKey)(e)}
+          key={note.storage + '-' + note.key}
+          onClick={(e) => this.handleOptionClick(note.storage + '-' + note.key)(e)}
         >
           <div styleName='control-search-optionList-item-folder'
             style={{borderColor: folder.color}}>
