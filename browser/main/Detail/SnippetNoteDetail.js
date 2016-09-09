@@ -247,25 +247,37 @@ class SnippetNoteDetail extends React.Component {
     })
   }
 
-  handleTabButtonClick (index) {
-    return (e) => {
-      this.setState({
-        snippetIndex: index
-      })
+  handleTabButtonClick (e, index) {
+    this.setState({
+      snippetIndex: index
+    })
+  }
+
+  handleTabDeleteButtonClick (e, index) {
+    if (this.state.note.snippets.length > 1) {
+      if (this.state.note.snippets[index].content.trim().length > 0) {
+        let dialogIndex = dialog.showMessageBox(remote.getCurrentWindow(), {
+          type: 'warning',
+          message: 'Delete a snippet',
+          detail: 'This work cannot be undone.',
+          buttons: ['Confirm', 'Cancel']
+        })
+        if (dialogIndex === 0) {
+          this.deleteSnippetByIndex(index)
+        }
+      } else {
+        this.deleteSnippetByIndex(index)
+      }
     }
   }
 
-  handleTabDeleteButtonClick (index) {
-    return (e) => {
-      if (this.state.note.snippets.length > 1) {
-        let snippets = this.state.note.snippets.slice()
-        snippets.splice(index, 1)
-        this.state.note.snippets = snippets
-        this.setState({
-          note: this.state.note
-        })
-      }
-    }
+  deleteSnippetByIndex (index) {
+    let snippets = this.state.note.snippets.slice()
+    snippets.splice(index, 1)
+    this.state.note.snippets = snippets
+    this.setState({
+      note: this.state.note
+    })
   }
 
   handleNameInputChange (e, index) {
@@ -344,7 +356,7 @@ class SnippetNoteDetail extends React.Component {
         key={index}
       >
         <button styleName='tabList-item-button'
-          onClick={(e) => this.handleTabButtonClick(index)(e)}
+          onClick={(e) => this.handleTabButtonClick(e, index)}
         >
           {snippet.name.trim().length > 0
             ? snippet.name
@@ -355,7 +367,7 @@ class SnippetNoteDetail extends React.Component {
         </button>
         {note.snippets.length > 1 &&
           <button styleName='tabList-item-deleteButton'
-            onClick={(e) => this.handleTabDeleteButtonClick(index)(e)}
+            onClick={(e) => this.handleTabDeleteButtonClick(e, index)}
           >
             <i className='fa fa-times'/>
           </button>
