@@ -53,6 +53,10 @@ function get () {
 
   try {
     config = Object.assign({}, defaultConfig, JSON.parse(config))
+    config.hotkey = Object.assign({}, defaultConfig.hotkey, config.hotkey)
+    config.ui = Object.assign({}, defaultConfig.ui, config.ui)
+    config.editor = Object.assign({}, defaultConfig.editor, config.editor)
+    config.preview = Object.assign({}, defaultConfig.preview, config.preview)
     if (!validate(config)) throw new Error('INVALID CONFIG')
   } catch (err) {
     console.warn('Boostnote resets the malformed configuration.')

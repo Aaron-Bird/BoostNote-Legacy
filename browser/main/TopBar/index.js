@@ -47,6 +47,7 @@ class TopBar extends React.Component {
         this.createNote('SNIPPET_NOTE')
         break
       case 'ALWAYS_ASK':
+      default:
         let { dispatch, location } = this.props
         let { storage, folder } = this.resolveTargetFolder()
 
@@ -181,7 +182,7 @@ class TopBar extends React.Component {
         {
           type: 'radio',
           label: 'Markdown Note',
-          checked: config .ui.defaultNote === 'MARKDOWN_NOTE',
+          checked: config.ui.defaultNote === 'MARKDOWN_NOTE',
           click: (e) => this.setDefaultNote('MARKDOWN_NOTE')
         },
         {
