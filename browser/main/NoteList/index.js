@@ -203,9 +203,11 @@ class NoteList extends React.Component {
 
     let folder = _.find(storage.folders, {key: folderKey})
     if (folder == null) {
-      return data.storageNoteMap
-      .get(storage.key)
-      .map((uniqueKey) => data.noteMap.get(uniqueKey))
+      let storageNoteSet = data.storageNoteMap
+        .get(storage.key)
+      if (storageNoteSet == null) storageNoteSet = []
+      return storageNoteSet
+        .map((uniqueKey) => data.noteMap.get(uniqueKey))
     }
 
     let folderNoteKeyList = data.folderNoteMap
