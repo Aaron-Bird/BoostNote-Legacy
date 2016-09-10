@@ -96,7 +96,7 @@ class InitModal extends React.Component {
         })
         .then((data) => {
           if (this.state.migrationRequested && _.isObject(this.state.data) && _.isArray(this.state.data.folders) && _.isArray(this.state.data.articles)) {
-            return dataApi.migrateFromV5(data.storage.key, this.state.data)
+            return dataApi.migrateFromV5Storage(data.storage.key, this.state.data)
           }
           return data
         })
