@@ -4,6 +4,10 @@ import styles from './NoteList.styl'
 import moment from 'moment'
 import _ from 'lodash'
 import ee from 'browser/main/lib/eventEmitter'
+import dataApi from 'browser/main/lib/dataApi'
+
+const { remote } = require('electron')
+const { Menu, MenuItem, dialog } = remote
 
 class NoteList extends React.Component {
   constructor (props) {
@@ -19,6 +23,10 @@ class NoteList extends React.Component {
     this.focusHandler = () => {
       this.refs.root.focus()
     }
+
+    this.state = {
+      range: 0
+    }
   }
 
   componentDidMount () {
@@ -26,6 +34,29 @@ class NoteList extends React.Component {
     ee.on('list:next', this.selectNextNoteHandler)
     ee.on('list:prior', this.selectPriorNoteHandler)
     ee.on('lost:focus', this.focusHandler)
+  }
+
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.location.pathname !== this.props.location.pathname) {
+      this.resetScroll()
+    }
+  }
+
+  resetScroll () {
+    this.refs.root.scrollTop = 0
+    this.setState({
+      range: 0
+    })
+  }
+
+  handleScroll (e) {
+    let notes = this.notes
+
+    if (e.target.offsetHeight + e.target.scrollTop > e.target.scrollHeight - 250 && notes.length > this.state.range * 10 + 10) {
+      this.setState({
+        range: this.state.range + 1
+      })
+    }
   }
 
   componentWillUnmount () {
@@ -36,7 +67,7 @@ class NoteList extends React.Component {
     ee.off('lost:focus', this.focusHandler)
   }
 
-  componentDidUpdate () {
+  componentDidUpdate (prevProps) {
     let { location } = this.props
     if (this.notes.length > 0 && location.query.key == null) {
       let { router } = this.context
@@ -50,13 +81,14 @@ class NoteList extends React.Component {
     }
 
     // Auto scroll
-    if (_.isString(location.query.key)) {
+    if (_.isString(location.query.key) && prevProps.location.query.key !== location.query.key) {
       let targetIndex = _.findIndex(this.notes, (note) => {
         return note != null && note.storage + '-' + note.key === location.query.key
       })
       if (targetIndex > -1) {
         let list = this.refs.root
         let item = list.childNodes[targetIndex]
+        if (item == null) return false
 
         let overflowBelow = item.offsetTop + item.clientHeight - list.clientHeight - list.scrollTop > 0
         if (overflowBelow) {
@@ -185,17 +217,58 @@ class NoteList extends React.Component {
       : []
   }
 
-  handleNoteClick (uniqueKey) {
-    return (e) => {
-      let { router } = this.context
-      let { location } = this.props
+  handleNoteClick (e, uniqueKey) {
+    let { router } = this.context
+    let { location } = this.props
 
-      router.push({
-        pathname: location.pathname,
-        query: {
-          key: uniqueKey
-        }
-      })
+    router.push({
+      pathname: location.pathname,
+      query: {
+        key: uniqueKey
+      }
+    })
+  }
+
+  handleNoteContextMenu (e, uniqueKey) {
+    let menu = new Menu()
+    menu.append(new MenuItem({
+      label: 'Delete Note',
+      click: (e) => this.handleDeleteNote(e, uniqueKey)
+    }))
+    menu.popup()
+  }
+
+  handleDeleteNote (e, uniqueKey) {
+    let index = dialog.showMessageBox(remote.getCurrentWindow(), {
+      type: 'warning',
+      message: 'Delete a note',
+      detail: 'This work cannot be undone.',
+      buttons: ['Confirm', 'Cancel']
+    })
+    if (index === 0) {
+      let { dispatch, location } = this.props
+      let splitted = uniqueKey.split('-')
+      let storageKey = splitted.shift()
+      let noteKey = splitted.shift()
+
+      dataApi
+        .deleteNote(storageKey, noteKey)
+        .then((data) => {
+          let dispatchHandler = () => {
+            dispatch({
+              type: 'DELETE_NOTE',
+              storageKey: data.storageKey,
+              noteKey: data.noteKey
+            })
+          }
+
+          if (location.query.key === uniqueKey) {
+            ee.once('list:moved', dispatchHandler)
+            ee.emit('list:next')
+          } else {
+            dispatchHandler()
+          }
+        })
     }
   }
 
@@ -204,7 +277,7 @@ class NoteList extends React.Component {
     this.notes = notes = this.getNotes()
       .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
 
-    let noteList = notes
+    let noteList = notes.slice(0, 10 + 10 * this.state.range)
       .map((note) => {
         if (note == null) return null
         let storage = data.storageMap.get(note.storage)
@@ -226,7 +299,8 @@ class NoteList extends React.Component {
               : 'item'
             }
             key={note.storage + '-' + note.key}
-            onClick={(e) => this.handleNoteClick(note.storage + '-' + note.key)(e)}
+            onClick={(e) => this.handleNoteClick(e, note.storage + '-' + note.key)}
+            onContextMenu={(e) => this.handleNoteContextMenu(e, note.storage + '-' + note.key)}
           >
             <div styleName='item-border'/>
             <div styleName='item-info'>
@@ -277,6 +351,7 @@ class NoteList extends React.Component {
         tabIndex='-1'
         onKeyDown={(e) => this.handleNoteListKeyDown(e)}
         style={this.props.style}
+        onScroll={(e) => this.handleScroll(e)}
       >
         {noteList}
       </div>

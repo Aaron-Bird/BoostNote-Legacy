@@ -8,6 +8,7 @@ import FolderSelect from './FolderSelect'
 import dataApi from 'browser/main/lib/dataApi'
 import { hashHistory } from 'react-router'
 import ee from 'browser/main/lib/eventEmitter'
+import markdown from 'browser/lib/markdown'
 
 const electron = require('electron')
 const { remote } = electron
@@ -71,6 +72,8 @@ class MarkdownNoteDetail extends React.Component {
         title = ''
       }
     }
+
+    title = markdown.strip(title)
 
     return title
   }

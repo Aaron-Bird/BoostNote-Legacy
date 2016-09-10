@@ -35,6 +35,10 @@ class UnstyledFolderItem extends React.Component {
   }
 
   handleConfirmButtonClick (e) {
+    this.confirm()
+  }
+
+  confirm () {
     let { storage, folder } = this.props
     dataApi
       .updateFolder(storage.key, folder.key, {
@@ -87,6 +91,17 @@ class UnstyledFolderItem extends React.Component {
     })
   }
 
+  handleFolderItemBlur (e) {
+    let el = e.relatedTarget
+    while (el != null) {
+      if (el === this.refs.root) {
+        return false
+      }
+      el = el.parentNode
+    }
+    this.confirm()
+  }
+
   renderEdit (e) {
     const popover = { position: 'absolute', zIndex: 2 }
     const cover = {
@@ -97,7 +112,11 @@ class UnstyledFolderItem extends React.Component {
       position: 'absolute'
     }, this.state.folder.colorPickerPos)
     return (
-      <div styleName='folderList-item'>
+      <div styleName='folderList-item'
+        onBlur={(e) => this.handleFolderItemBlur(e)}
+        tabIndex='-1'
+        ref='root'
+      >
         <div styleName='folderList-item-left'>
           <button styleName='folderList-item-left-colorButton' style={{color: this.state.folder.color}}
             onClick={(e) => !this.state.folder.showColumnPicker && this.handleColorButtonClick(e)}

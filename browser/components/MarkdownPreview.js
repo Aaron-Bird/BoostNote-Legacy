@@ -140,7 +140,7 @@ export default class MarkdownPreview extends React.Component {
     `
 
     this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
-    this.refs.root.contentWindow.document.body.innerHTML = markdown(value)
+    this.refs.root.contentWindow.document.body.innerHTML = markdown.render(value)
 
     Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
       el.addEventListener('click', this.anchorClickHandler)

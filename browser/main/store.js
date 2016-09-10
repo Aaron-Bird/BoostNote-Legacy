@@ -461,6 +461,9 @@ function config (state = defaultConfig, action) {
     case 'SET_LIST_WIDTH':
       state.listWidth = action.listWidth
       return Object.assign({}, state)
+    case 'SET_NAV_WIDTH':
+      state.navWidth = action.navWidth
+      return Object.assign({}, state)
     case 'SET_CONFIG':
       return Object.assign({}, state, action.config)
     case 'SET_UI':

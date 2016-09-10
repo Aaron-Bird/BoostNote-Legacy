@@ -15,10 +15,13 @@ $control-height = 34px
   border $ui-border
   border-radius 20px
   overflow hidden
+  display flex
+
 .control-search
-  absolute top left bottom
-  right 40px
+  height 32px
+  flex 1
   background-color white
+  position relative
 
 .control-search-icon
   absolute top bottom left
@@ -76,10 +79,24 @@ $control-height = 34px
   color $ui-inactive-text-color
   line-height 150px
   text-align center
+
+.control-contextButton
+  display block
+  width 20px
+  height $control-height - 2
+  navButtonColor()
+  border-left $ui-border
+  font-size 14px
+  line-height 28px
+  padding 0
+  &:active
+    border-color $ui-button--active-backgroundColor
+  &:hover .control-newPostButton-tooltip
+    opacity 1
+
 .control-newPostButton
   display block
-  absolute top right bottom
-  width 40px
+  width 36px
   height $control-height - 2
   navButtonColor()
   border-left $ui-border
@@ -143,10 +160,9 @@ body[data-theme="dark"]
     color $ui-inactive-text-color
     padding-right 3px
   .control-search-optionList-empty
-    height 150px
     color $ui-inactive-text-color
-    line-height 150px
-    text-align center
+
+  .control-contextButton,
   .control-newPostButton
     colorDarkDefaultButton()
     border-color $ui-dark-borderColor
@@ -155,12 +171,3 @@ body[data-theme="dark"]
 
   .control-newPostButton-tooltip
     darkTooltip()
-    position fixed
-    pointer-events none
-    top 45px
-    left 385px
-    z-index 10
-    padding 5px
-    line-height normal
-    opacity 0
-    transition 0.1s

@@ -8,13 +8,15 @@ const defaultConfig = {
   zoom: 1,
   isSideNavFolded: false,
   listWidth: 250,
+  navWidth: 200,
   hotkey: {
     toggleFinder: OSX ? 'Cmd + Alt + S' : 'Super + Alt + S',
     toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E'
   },
   ui: {
     theme: 'default',
-    disableDirectWrite: false
+    disableDirectWrite: false,
+    defaultNote: 'ALWAYS_ASK' // 'ALWAYS_ASK', 'SNIPPET_NOTE', 'MARKDOWN_NOTE'
   },
   editor: {
     theme: 'xcode',
