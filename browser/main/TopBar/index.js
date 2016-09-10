@@ -6,8 +6,12 @@ import modal from 'browser/main/lib/modal'
 import NewNoteModal from 'browser/main/modals/NewNoteModal'
 import { hashHistory } from 'react-router'
 import ee from 'browser/main/lib/eventEmitter'
+import ConfigManager from 'browser/main/lib/ConfigManager'
+import dataApi from 'browser/main/lib/dataApi'
 
 const OSX = window.process.platform === 'darwin'
+const { remote } = require('electron')
+const { Menu, MenuItem } = remote
 
 class TopBar extends React.Component {
   constructor (props) {
@@ -33,7 +37,30 @@ class TopBar extends React.Component {
   }
 
   handleNewPostButtonClick (e) {
-    let { data, params, dispatch, location } = this.props
+    let { config } = this.props
+
+    switch (config.ui.defaultNote) {
+      case 'MARKDOWN_NOTE':
+        this.createNote('MARKDOWN_NOTE')
+        break
+      case 'SNIPPET_NOTE':
+        this.createNote('SNIPPET_NOTE')
+        break
+      case 'ALWAYS_ASK':
+        let { dispatch, location } = this.props
+        let { storage, folder } = this.resolveTargetFolder()
+
+        modal.open(NewNoteModal, {
+          storage: storage.key,
+          folder: folder.key,
+          dispatch,
+          location
+        })
+    }
+  }
+
+  resolveTargetFolder () {
+    let { data, params } = this.props
     let storage = data.storageMap.get(params.storageKey)
 
     // Find first storage
@@ -48,12 +75,10 @@ class TopBar extends React.Component {
     if (folder == null) folder = storage.folders[0]
     if (folder == null) throw new Error('No folder to craete a note')
 
-    modal.open(NewNoteModal, {
-      storage: storage.key,
-      folder: folder.key,
-      dispatch,
-      location
-    })
+    return {
+      storage,
+      folder
+    }
   }
 
   handleSearchChange (e) {
@@ -135,6 +160,101 @@ class TopBar extends React.Component {
     }
   }
 
+  handleContextButtonClick (e) {
+    let { config } = this.props
+
+    let menu = new Menu()
+    menu.append(new MenuItem({
+      label: 'Create Markdown Note',
+      click: (e) => this.createNote('MARKDOWN_NOTE')
+    }))
+    menu.append(new MenuItem({
+      label: 'Create Snippet Note',
+      click: (e) => this.createNote('SNIPPET_NOTE')
+    }))
+    menu.append(new MenuItem({
+      type: 'separator'
+    }))
+    menu.append(new MenuItem({
+      label: 'Change Default Note',
+      submenu: [
+        {
+          type: 'radio',
+          label: 'Markdown Note',
+          checked: config .ui.defaultNote === 'MARKDOWN_NOTE',
+          click: (e) => this.setDefaultNote('MARKDOWN_NOTE')
+        },
+        {
+          type: 'radio',
+          label: 'Snippet Note',
+          checked: config.ui.defaultNote === 'SNIPPET_NOTE',
+          click: (e) => this.setDefaultNote('SNIPPET_NOTE')
+        },
+        {
+          type: 'radio',
+          label: 'Always Ask',
+          checked: config.ui.defaultNote === 'ALWAYS_ASK',
+          click: (e) => this.setDefaultNote('ALWAYS_ASK')
+        }
+      ]
+    }))
+    menu.popup(remote.getCurrentWindow())
+  }
+
+  createNote (noteType) {
+    let { dispatch, location } = this.props
+    if (noteType !== 'MARKDOWN_NOTE' && noteType !== 'SNIPPET_NOTE') throw new Error('Invalid note type.')
+
+    let { storage, folder } = this.resolveTargetFolder()
+
+    let newNote = noteType === 'MARKDOWN_NOTE'
+      ? {
+        type: 'MARKDOWN_NOTE',
+        folder: folder.key,
+        title: '',
+        content: ''
+      }
+      : {
+        type: 'SNIPPET_NOTE',
+        folder: folder.key,
+        title: '',
+        description: '',
+        snippets: [{
+          name: '',
+          mode: 'text',
+          content: ''
+        }]
+      }
+
+    dataApi
+      .createNote(storage.key, newNote)
+      .then((note) => {
+        dispatch({
+          type: 'UPDATE_NOTE',
+          note: note
+        })
+        hashHistory.push({
+          pathname: location.pathname,
+          query: {key: note.storage + '-' + note.key}
+        })
+        ee.emit('detail:focus')
+      })
+  }
+
+  setDefaultNote (defaultNote) {
+    let { config, dispatch } = this.props
+    let ui = Object.assign(config.ui)
+    ui.defaultNote = defaultNote
+    ConfigManager.set({
+      ui
+    })
+
+    dispatch({
+      type: 'SET_UI',
+      config: ConfigManager.get()
+    })
+  }
+
   render () {
     let { config, style, data } = this.props
     let searchOptionList = this.getOptions()
@@ -203,6 +323,11 @@ class TopBar extends React.Component {
             <span styleName='control-newPostButton-tooltip'>
               New Note {OSX ? '⌘' : '^'} + n
             </span>
+          </button>
+          <button styleName='control-contextButton'
+            onClick={(e) => this.handleContextButtonClick(e)}
+          >
+            <i className='fa fa-caret-down'/>
           </button>
         </div>
       </div>

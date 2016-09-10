@@ -15,7 +15,8 @@ const defaultConfig = {
   },
   ui: {
     theme: 'default',
-    disableDirectWrite: false
+    disableDirectWrite: false,
+    defaultNote: 'ALWAYS_ASK' // 'ALWAYS_ASK', 'SNIPPET_NOTE', 'MARKDOWN_NOTE'
   },
   editor: {
     theme: 'xcode',
