@@ -108,18 +108,22 @@ class InitModal extends React.Component {
           })
 
           let defaultMarkdownNote = dataApi
-            .createMarkdownNote(data.storage.key, data.storage.folders[0].key, {
+            .createNote(data.storage.key, {
+              type: 'MARKDOWN_NOTE',
+              folder: data.storage.folders[0].key,
               title: 'Welcome to Boostnote :)',
               content: '# Welcome to Boostnote :)\nThis is a markdown note.\n\nClick to edit this note.'
             })
             .then((note) => {
               store.dispatch({
-                type: 'CREATE_NOTE',
+                type: 'UPDATE_NOTE',
                 note: note
               })
             })
           let defaultSnippetNote = dataApi
-            .createSnippetNote(data.storage.key, data.storage.folders[0].key, {
+            .createNote(data.storage.key, {
+              type: 'SNIPPET_NOTE',
+              folder: data.storage.folders[0].key,
               title: 'Snippet note example',
               description: 'Snippet note example\nYou can store a series of snippet as a single note like Gist.',
               snippets: [
@@ -137,7 +141,7 @@ class InitModal extends React.Component {
             })
             .then((note) => {
               store.dispatch({
-                type: 'CREATE_NOTE',
+                type: 'UPDATE_NOTE',
                 note: note
               })
             })
