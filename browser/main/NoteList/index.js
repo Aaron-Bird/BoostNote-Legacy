@@ -4,6 +4,10 @@ import styles from './NoteList.styl'
 import moment from 'moment'
 import _ from 'lodash'
 import ee from 'browser/main/lib/eventEmitter'
+import dataApi from 'browser/main/lib/dataApi'
+
+const { remote } = require('electron')
+const { Menu, MenuItem, dialog } = remote
 
 class NoteList extends React.Component {
   constructor (props) {
@@ -213,17 +217,58 @@ class NoteList extends React.Component {
       : []
   }
 
-  handleNoteClick (uniqueKey) {
-    return (e) => {
-      let { router } = this.context
-      let { location } = this.props
+  handleNoteClick (e, uniqueKey) {
+    let { router } = this.context
+    let { location } = this.props
 
-      router.push({
-        pathname: location.pathname,
-        query: {
-          key: uniqueKey
-        }
-      })
+    router.push({
+      pathname: location.pathname,
+      query: {
+        key: uniqueKey
+      }
+    })
+  }
+
+  handleNoteContextMenu (e, uniqueKey) {
+    let menu = new Menu()
+    menu.append(new MenuItem({
+      label: 'Delete Note',
+      click: (e) => this.handleDeleteNote(e, uniqueKey)
+    }))
+    menu.popup()
+  }
+
+  handleDeleteNote (e, uniqueKey) {
+    let index = dialog.showMessageBox(remote.getCurrentWindow(), {
+      type: 'warning',
+      message: 'Delete a note',
+      detail: 'This work cannot be undone.',
+      buttons: ['Confirm', 'Cancel']
+    })
+    if (index === 0) {
+      let { dispatch, location } = this.props
+      let splitted = uniqueKey.split('-')
+      let storageKey = splitted.shift()
+      let noteKey = splitted.shift()
+
+      dataApi
+        .deleteNote(storageKey, noteKey)
+        .then((data) => {
+          let dispatchHandler = () => {
+            dispatch({
+              type: 'DELETE_NOTE',
+              storageKey: data.storageKey,
+              noteKey: data.noteKey
+            })
+          }
+
+          if (location.query.key === uniqueKey) {
+            ee.once('list:moved', dispatchHandler)
+            ee.emit('list:next')
+          } else {
+            dispatchHandler()
+          }
+        })
     }
   }
 
@@ -254,7 +299,8 @@ class NoteList extends React.Component {
               : 'item'
             }
             key={note.storage + '-' + note.key}
-            onClick={(e) => this.handleNoteClick(note.storage + '-' + note.key)(e)}
+            onClick={(e) => this.handleNoteClick(e, note.storage + '-' + note.key)}
+            onContextMenu={(e) => this.handleNoteContextMenu(e, note.storage + '-' + note.key)}
           >
             <div styleName='item-border'/>
             <div styleName='item-info'>
