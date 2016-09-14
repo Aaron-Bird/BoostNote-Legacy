@@ -57,7 +57,7 @@ class TagSelect extends React.Component {
 
   submitTag () {
     let { value } = this.props
-    let newTag = this.refs.newTag.value.trim()
+    let newTag = this.refs.newTag.value.trim().replace(/ +/g, '_')
 
     if (newTag.length <= 0) {
       this.setState({
