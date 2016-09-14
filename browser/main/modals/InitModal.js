@@ -5,6 +5,7 @@ import dataApi from 'browser/main/lib/dataApi'
 import store from 'browser/main/store'
 import { hashHistory } from 'react-router'
 import _ from 'lodash'
+import keygen from 'browser/lib/keygen'
 
 const CSON = require('season')
 const path = require('path')
@@ -101,6 +102,24 @@ class InitModal extends React.Component {
           return data
         })
         .then((data) => {
+          if (data.storage.folders[0] != null) {
+            return data
+          } else {
+            return dataApi
+              .createFolder(data.storage.key, {
+                color: '#6AA5E9',
+                name: 'Default'
+              })
+              .then((_data) => {
+                return {
+                  storage: _data.storage,
+                  notes: data.notes
+                }
+              })
+          }
+        })
+        .then((data) => {
+          console.log(data)
           store.dispatch({
             type: 'ADD_STORAGE',
             storage: data.storage,
