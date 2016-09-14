@@ -69,14 +69,14 @@ function _flush () {
         let events = _fetch()
         events = events.concat(spliced)
         localStorage.setItem('events', JSON.stringify(events))
+      } else {
+        _flush()
       }
-      console.log('batched ', errs.length)
-      _flush()
     })
   }
 }
 
-setInterval(_flush, 1000 * 60 * 10)
+setInterval(_flush, 1000 * 60 * 60)
 
 function track (name, properties) {
   properties = Object.assign({}, properties, {
