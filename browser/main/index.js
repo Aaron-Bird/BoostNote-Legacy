@@ -7,6 +7,7 @@ require('!!style!css!stylus?sourceMap!./global.styl')
 import { Router, Route, IndexRoute, IndexRedirect, hashHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 require('./lib/ipcClient')
+
 const electron = require('electron')
 const ipc = electron.ipcRenderer
 

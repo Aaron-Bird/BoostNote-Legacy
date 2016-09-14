@@ -42,6 +42,7 @@ var config = {
     'markdown-it-checkbox',
     'season',
     'devtron',
+    'mixpanel',
     {
       react: 'var React',
       'react-dom': 'var ReactDOM',

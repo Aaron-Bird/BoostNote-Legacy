@@ -12,6 +12,11 @@ import _ from 'lodash'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import modal from 'browser/main/lib/modal'
 import InitModal from 'browser/main/modals/InitModal'
+import mixpanel from 'browser/main/lib/mixpanel'
+
+function focused () {
+  mixpanel.track('MAIN_FOCUSED')
+}
 
 class Main extends React.Component {
   constructor (props) {
@@ -49,6 +54,12 @@ class Main extends React.Component {
           modal.open(InitModal)
         }
       })
+
+    window.addEventListener('focus', focused)
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('focus', focused)
   }
 
   handleLeftSlideMouseDown (e) {
