@@ -17,16 +17,21 @@ class StatusBar extends React.Component {
     this.state = {
       updateReady: false
     }
-  }
-
-  componentDidMount () {
-    ipc.on('update-ready', function (message) {
+    this.updateReadyHandler = (message) => {
       this.setState({
         updateReady: true
       }, () => {
         this.updateApp()
       })
-    }.bind(this))
+    }
+  }
+
+  componentDidMount () {
+    ipc.on('update-ready', this.updateReadyHandler)
+  }
+
+  componentWillUnmount () {
+    ipc.removeListener('update-ready', this.updateReadyHandler)
   }
 
   updateApp () {
@@ -38,7 +43,7 @@ class StatusBar extends React.Component {
     })
 
     if (index === 0) {
-      remote.getCurrentWindow().webContents.send('update-app')
+      ipc.send('update-app-confirm')
     }
   }
 
