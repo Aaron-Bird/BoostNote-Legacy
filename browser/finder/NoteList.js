@@ -57,6 +57,7 @@ class NoteList extends React.Component {
     let { storageMap, notes, index } = this.props
 
     let notesList = notes
+      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
       .slice(0, 10 + 10 * this.state.range)
       .map((note, _index) => {
         let storage = storageMap[note.storage]
