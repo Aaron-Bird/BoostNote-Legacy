@@ -42,6 +42,17 @@ function _keep (name, properties) {
   localStorage.setItem('events', JSON.stringify(events))
 }
 
+function _keepUnique (name, properties) {
+  let events = _fetch()
+  properties.time = new Date()
+  events = events.filter((event) => event.name !== name)
+  events.push({
+    name,
+    properties
+  })
+  localStorage.setItem('events', JSON.stringify(events))
+}
+
 function _flush () {
   let events = _fetch()
   let spliced = events.splice(0, 50)
@@ -79,10 +90,19 @@ function _flush () {
 setInterval(_flush, 1000 * 60 * 60)
 
 function track (name, properties) {
-  properties = Object.assign({}, properties, {
-    distinct_id: _getClientKey()
-  })
-  _keep(name, properties)
+  switch (name) {
+    case 'MAIN_FOCUSED':
+      properties = Object.assign({}, properties, {
+        distinct_id: _getClientKey()
+      })
+      _keepUnique(name, properties)
+      break
+    default:
+      properties = Object.assign({}, properties, {
+        distinct_id: _getClientKey()
+      })
+      _keep(name, properties)
+  }
 }
 
 module.exports = {
