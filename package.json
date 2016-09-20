@@ -3,6 +3,7 @@
   "version": "0.6.6",
   "description": "Boostnote",
   "main": "index.js",
+  "license": "GPL-3.0",
   "scripts": {
     "start": "electron ./index.js",
     "hot": "electron ./index.js --hot",
