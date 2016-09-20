@@ -1,5 +1,5 @@
 const _ = require('lodash')
-
+const resolveStorageData = require('./resolveStorageData')
 /**
  * @param {String} key
  * @param {String} name
@@ -23,7 +23,9 @@ function renameStorage (key, name) {
   targetStorage.name = name
   localStorage.setItem('storages', JSON.stringify(cachedStorageList))
 
-  return Promise.resolve(targetStorage)
+  targetStorage.path
+
+  return resolveStorageData(targetStorage)
 }
 
 module.exports = renameStorage

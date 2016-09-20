@@ -319,14 +319,15 @@ class StorageItem extends React.Component {
       name: this.refs.label.value
     })
   }
+
   handleLabelBlur (e) {
     let { storage } = this.props
     dataApi
       .renameStorage(storage.key, this.state.name)
-      .then((storage) => {
+      .then((_storage) => {
         store.dispatch({
           type: 'RENAME_STORAGE',
-          storage: storage
+          storage: _storage
         })
         this.setState({
           isLabelEditing: false
