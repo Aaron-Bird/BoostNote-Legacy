@@ -2,7 +2,9 @@ const _ = require('lodash')
 const keygen = require('browser/lib/keygen')
 const resolveStorageData = require('./resolveStorageData')
 const resolveStorageNotes = require('./resolveStorageNotes')
-
+const consts = require('browser/lib/consts')
+const path = require('path')
+const CSON = require('season')
 /**
  * @param {Object}
  * name, path, type
@@ -52,7 +54,26 @@ function addStorage (input) {
       localStorage.setItem('storages', JSON.stringify(rawStorages))
       return newStorage
     })
-    .then(resolveStorageNotes)
+    .then(function (storage) {
+      return resolveStorageNotes(storage)
+        .then((notes) => {
+          let unknownCount = 0
+          notes.forEach((note) => {
+            if (!storage.folders.some((folder) => note.folder === folder.key)) {
+              unknownCount++
+              storage.folders.push({
+                key: note.folder,
+                color: consts.FOLDER_COLORS[(unknownCount - 1) % 7],
+                name: 'Unknown ' + unknownCount
+              })
+            }
+          })
+          if (unknownCount > 0) {
+            CSON.writeFileSync(path.join(storage.path, 'boostnote.json'), _.pick(storage, ['folders', 'version']))
+          }
+          return notes
+        })
+    })
     .then(function returnValue (notes) {
       return {
         storage: newStorage,

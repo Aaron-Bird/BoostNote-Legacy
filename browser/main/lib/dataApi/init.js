@@ -2,6 +2,9 @@
 const _ = require('lodash')
 const resolveStorageData = require('./resolveStorageData')
 const resolveStorageNotes = require('./resolveStorageNotes')
+const consts = require('browser/lib/consts')
+const path = require('path')
+const CSON = require('season')
 /**
  * @return {Object} all storages and notes
  * ```
@@ -33,7 +36,26 @@ function init () {
 
   let fetchNotes = function (storages) {
     let findNotesFromEachStorage = storages
-      .map(resolveStorageNotes)
+      .map((storage) => {
+        return resolveStorageNotes(storage)
+          .then((notes) => {
+            let unknownCount = 0
+            notes.forEach((note) => {
+              if (!storage.folders.some((folder) => note.folder === folder.key)) {
+                unknownCount++
+                storage.folders.push({
+                  key: note.folder,
+                  color: consts.FOLDER_COLORS[(unknownCount - 1) % 7],
+                  name: 'Unknown ' + unknownCount
+                })
+              }
+            })
+            if (unknownCount > 0) {
+              CSON.writeFileSync(path.join(storage.path, 'boostnote.json'), _.pick(storage, ['folders', 'version']))
+            }
+            return notes
+          })
+      })
     return Promise.all(findNotesFromEachStorage)
       .then(function concatNoteGroup (noteGroups) {
         return noteGroups.reduce(function (sum, group) {
