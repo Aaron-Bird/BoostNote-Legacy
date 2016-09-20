@@ -17,6 +17,9 @@ function resolveStorageNotes (storage) {
     notePathList = []
   }
   let notes = notePathList
+    .filter(function filterOnlyCSONFile (notePath) {
+      return /\.cson$/.test(notePath)
+    })
     .map(function parseCSONFile (notePath) {
       let data = CSON.readFileSync(path.join(notesDirPath, notePath))
       data.key = path.basename(notePath, '.cson')
