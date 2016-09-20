@@ -1,6 +1,7 @@
 # Boostnote
 
-![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/17916067/dba66be4-69ea-11e6-9217-1ae3062c53ae.png)
+![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/18662404/3aa42396-7f55-11e6-88bf-f4ec6505ee8f.png)
+![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/18662139/f491adac-7f53-11e6-8631-2a447af9f36a.png)
 
 Simple opensource note app for developer.
 
