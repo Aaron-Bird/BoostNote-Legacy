@@ -1,8 +1,11 @@
+import store from 'browser/main/store'
+
 const _ = require('lodash')
 const keygen = require('browser/lib/keygen')
 const Mixpanel = require('mixpanel')
 const mixpanel = Mixpanel.init('7a0aca437d72dfd07cbcbf58d3b61f27', {key: 'fde4fd23f4d550f1b646bcd7d4374b1f'})
 const moment = require('moment')
+const electron = require('electron')
 
 function _getClientKey () {
   let clientKey = localStorage.getItem('clientKey')
@@ -83,6 +86,13 @@ function _flush () {
       } else {
         _flush()
       }
+    })
+
+    let state = store.getState()
+    mixpanel.people.set(_getClientKey(), {
+      storage_count: state.data.storageMap.size,
+      note_count: state.data.noteMap.size,
+      version: electron.remote.app.getVersion()
     })
   }
 }

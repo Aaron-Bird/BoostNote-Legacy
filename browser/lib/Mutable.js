@@ -1,6 +1,12 @@
 class MutableMap {
   constructor (iterable) {
     this._map = new Map(iterable)
+    Object.defineProperty(this, 'size', {
+      get: () => this._map.size,
+      set: function (value) {
+        this['size'] = value
+      }
+    })
   }
 
   get (...args) {
@@ -54,6 +60,12 @@ class MutableMap {
 class MutableSet {
   constructor (iterable) {
     this._set = new Set(iterable)
+    Object.defineProperty(this, 'size', {
+      get: () => this._map.size,
+      set: function (value) {
+        this['size'] = value
+      }
+    })
   }
 
   add (...args) {
