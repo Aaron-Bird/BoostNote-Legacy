@@ -10,6 +10,10 @@ const { Menu, MenuItem, dialog } = remote
 
 const zoomOptions = [0.8, 0.9, 1, 1.1, 1.2, 1.3]
 
+function notify (...args) {
+  return new window.Notification(...args)
+}
+
 class StatusBar extends React.Component {
   constructor (props) {
     super(props)
@@ -21,17 +25,27 @@ class StatusBar extends React.Component {
       this.setState({
         updateReady: true
       }, () => {
+        notify('Update ready!', {
+          body: 'New Boostnote is ready to be installed.'
+        })
         this.updateApp()
+      })
+    }
+    this.updateFoundHandler = (message) => {
+      notify('Update found!', {
+        body: 'Preparing to update...'
       })
     }
   }
 
   componentDidMount () {
     ipc.on('update-ready', this.updateReadyHandler)
+    ipc.on('update-found', this.updateFoundHandler)
   }
 
   componentWillUnmount () {
     ipc.removeListener('update-ready', this.updateReadyHandler)
+    ipc.removeListener('update-found', this.updateFoundHandler)
   }
 
   updateApp () {
