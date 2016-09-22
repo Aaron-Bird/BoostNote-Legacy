@@ -136,7 +136,7 @@ export default class MarkdownPreview extends React.Component {
         }
       </style>
       <link rel="stylesheet" href="../node_modules/highlight.js/styles/${codeBlockTheme}.css">
-      <link rel="stylesheet" href="../resources/katex.min.css">
+      <link rel="stylesheet" href="../compiled/katex-style.css">
     `
 
     this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
