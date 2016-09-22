@@ -2,7 +2,7 @@ const _ = require('lodash')
 const keygen = require('browser/lib/keygen')
 const resolveStorageData = require('./resolveStorageData')
 const consts = require('browser/lib/consts')
-const CSON = require('season')
+const CSON = require('@rokt33r/season')
 const path = require('path')
 const sander = require('sander')
 

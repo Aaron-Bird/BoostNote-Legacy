@@ -1,7 +1,7 @@
 const resolveStorageData = require('./resolveStorageData')
 const _ = require('lodash')
 const path = require('path')
-const CSON = require('season')
+const CSON = require('@rokt33r/season')
 
 function validateInput (input) {
   let validatedInput = {}
@@ -14,7 +14,7 @@ function validateInput (input) {
 
   if (input.title != null) {
     if (!_.isString(input.title)) validatedInput.title = ''
-    else validatedInput.title = input.title.replace(/[\u2028]+/g, '')
+    else validatedInput.title = input.title
   }
 
   if (input.isStarred != null) {
@@ -26,13 +26,13 @@ function validateInput (input) {
     case 'MARKDOWN_NOTE':
       if (input.content != null) {
         if (!_.isString(input.content)) validatedInput.content = ''
-        else validatedInput.content = input.content.replace(/[\u2028]+/g, '')
+        else validatedInput.content = input.content
       }
       return validatedInput
     case 'SNIPPET_NOTE':
       if (input.description != null) {
         if (!_.isString(input.description)) validatedInput.description = ''
-        else validatedInput.description = input.description.replace(/[\u2028]+/g, '')
+        else validatedInput.description = input.description
       }
       if (input.snippets != null) {
         if (!_.isArray(input.snippets)) {
@@ -50,12 +50,6 @@ function validateInput (input) {
             if (!_.isString(snippet.mode)) return false
             if (!_.isString(snippet.content)) return false
             return true
-          })
-          .map((snippet) => {
-            snippet.name = snippet.name.replace(/[\u2028]+/g, '')
-            snippet.mode = snippet.mode.replace(/[\u2028]+/g, '')
-            snippet.content = snippet.content.replace(/[\u2028]+/g, '')
-            return snippet
           })
       }
       return validatedInput

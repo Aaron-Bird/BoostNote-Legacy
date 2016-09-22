@@ -2,7 +2,7 @@ const _ = require('lodash')
 const keygen = require('browser/lib/keygen')
 const path = require('path')
 const resolveStorageData = require('./resolveStorageData')
-const CSON = require('season')
+const CSON = require('@rokt33r/season')
 
 /**
  * @param {String} storageKey

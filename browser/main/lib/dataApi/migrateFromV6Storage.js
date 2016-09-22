@@ -2,7 +2,7 @@ const path = require('path')
 const sander = require('sander')
 const keygen = require('browser/lib/keygen')
 const _ = require('lodash')
-const CSON = require('season')
+const CSON = require('@rokt33r/season')
 
 function migrateFromV5Storage (storagePath) {
   var boostnoteJSONPath = path.join(storagePath, 'boostnote.json')
@@ -45,10 +45,6 @@ function migrateFromV5Storage (storagePath) {
               console.warn('Failed to fetch notes from ', folderDataJSONPath, err)
               return []
             })
-            .then(function deleteFolderDir (data) {
-              sander.rimrafSync(path.join(storagePath, folder.key))
-              return data
-            })
         })
 
       return Promise.all(fetchNotesFromEachFolder)
@@ -58,22 +54,30 @@ function migrateFromV5Storage (storagePath) {
               return sum.concat(notes)
             }, [])
         })
-    })
-    .then(function saveNotes (notes) {
-      notes.forEach(function renewKey (note) {
-        var newKey = keygen()
-        while (notes.some((_note) => _note.key === newKey)) {
-          newKey = keygen()
-        }
-        note.key = newKey
-      })
+        .then(function saveNotes (notes) {
+          notes.forEach(function renewKey (note) {
+            var newKey = keygen()
+            while (notes.some((_note) => _note.key === newKey)) {
+              newKey = keygen()
+            }
+            note.key = newKey
+          })
 
-      const noteDirPath = path.join(storagePath, 'notes')
-      notes
-        .map(function saveNote (note) {
-          CSON.writeFileSync(path.join(noteDirPath, note.key) + '.cson', note)
+          const noteDirPath = path.join(storagePath, 'notes')
+          notes
+            .map(function saveNote (note) {
+              CSON.writeFileSync(path.join(noteDirPath, note.key) + '.cson', note)
+            })
+          return true
         })
-      return true
+        .then(function deleteFolderDir (check) {
+          if (check) {
+            boostnoteJSONData.folders.forEach((folder) => {
+              sander.rimrafSync(path.join(storagePath, folder.key))
+            })
+          }
+          return check
+        })
     })
     .catch(function handleError (err) {
       console.warn(err)

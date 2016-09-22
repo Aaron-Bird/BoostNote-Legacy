@@ -3,7 +3,7 @@ const resolveStorageData = require('./resolveStorageData')
 const _ = require('lodash')
 const keygen = require('browser/lib/keygen')
 const path = require('path')
-const CSON = require('season')
+const CSON = require('@rokt33r/season')
 
 function validateInput (input) {
   if (!_.isArray(input.tags)) input.tags = []

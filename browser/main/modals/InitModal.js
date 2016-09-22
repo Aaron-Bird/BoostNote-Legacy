@@ -7,7 +7,7 @@ import { hashHistory } from 'react-router'
 import _ from 'lodash'
 import keygen from 'browser/lib/keygen'
 
-const CSON = require('season')
+const CSON = require('@rokt33r/season')
 const path = require('path')
 const electron = require('electron')
 const { remote } = electron

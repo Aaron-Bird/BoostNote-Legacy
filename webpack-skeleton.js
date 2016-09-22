@@ -40,9 +40,9 @@ var config = {
     'fs-jetpack',
     '@rokt33r/markdown-it-math',
     'markdown-it-checkbox',
-    'season',
     'devtron',
     'mixpanel',
+    '@rokt33r/season',
     {
       react: 'var React',
       'react-dom': 'var ReactDOM',

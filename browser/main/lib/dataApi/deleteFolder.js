@@ -2,7 +2,7 @@ const _ = require('lodash')
 const path = require('path')
 const resolveStorageData = require('./resolveStorageData')
 const resolveStorageNotes = require('./resolveStorageNotes')
-const CSON = require('season')
+const CSON = require('@rokt33r/season')
 const sander = require('sander')
 
 /**

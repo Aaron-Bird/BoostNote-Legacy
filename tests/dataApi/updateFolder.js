@@ -12,7 +12,7 @@ const _ = require('lodash')
 const TestDummy = require('../fixtures/TestDummy')
 const sander = require('sander')
 const os = require('os')
-const CSON = require('season')
+const CSON = require('@rokt33r/season')
 
 const storagePath = path.join(os.tmpdir(), 'test/update-folder')
 
