@@ -19,7 +19,7 @@ Then, we have to run the app.
 ```
 npm run hot
 ```
-> Actually the app can be start with `npm start@. However, the app will use the compiled script.
+> Actually the app can be start with `npm start`. However, the app will use the compiled script.
 
 By this, webpack will watch the code changes and apply it automatically.
 
