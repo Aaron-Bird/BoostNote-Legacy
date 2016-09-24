@@ -3,7 +3,15 @@
 ## Development
 
 We use Webpack HMR to develop Boostnote.
-You can use this command to use our configuration
+You can use following commands to use default configuration at the top of project directory.
+
+Install requirement packages.
+
+```
+$ npm install
+```
+
+Build codes.
 
 ```
 $ npm run webpack
