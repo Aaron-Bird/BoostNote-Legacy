@@ -3,10 +3,18 @@
 ## Development
 
 We use Webpack HMR to develop Boostnote.
-You can use this command to use our configuration
+You can use following commands to use default configuration at the top of project directory.
+
+Install requirement packages.
 
 ```
-npm run webpack
+$ npm install
+```
+
+Build codes.
+
+```
+$ npm run webpack
 ```
 
 After a few seconds, you will see this message.
@@ -17,9 +25,9 @@ webpack: bundle is now VALID.
 
 Then, we have to run the app.
 ```
-npm run hot
+$ npm run hot
 ```
-> Actually the app can be start with `npm start@. However, the app will use the compiled script.
+> Actually the app can be start with `npm start`. However, the app will use the compiled script.
 
 By this, webpack will watch the code changes and apply it automatically.
 
