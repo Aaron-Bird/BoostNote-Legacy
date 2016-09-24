@@ -6,7 +6,7 @@ We use Webpack HMR to develop Boostnote.
 You can use this command to use our configuration
 
 ```
-npm run webpack
+$ npm run webpack
 ```
 
 After a few seconds, you will see this message.
@@ -17,7 +17,7 @@ webpack: bundle is now VALID.
 
 Then, we have to run the app.
 ```
-npm run hot
+$ npm run hot
 ```
 > Actually the app can be start with `npm start`. However, the app will use the compiled script.
 
