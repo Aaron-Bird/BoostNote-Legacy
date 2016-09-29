@@ -1,5 +1,7 @@
 # Boostnote
 
+> We launched [Boostnote store](#goods)!! :tada:
+
 ![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/18662404/3aa42396-7f55-11e6-88bf-f4ec6505ee8f.png)
 ![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/18662139/f491adac-7f53-11e6-8631-2a447af9f36a.png)
 
@@ -50,6 +52,15 @@ We just want you to enjoying writing anything. :grinning:
 ## Development
 
 - [Build](docs/build.md)
+
+## Goods
+
+<img src="https://b00st.io/images/t3.png" width="250"/>
+<img src="https://b00st.io/images/t1.png" width="250"/>
+
+We're currently selling some goods from [Boostnote store](https://boostnote.paintory.com/).
+
+The product can be sent anywhere in the world. This store is powered by [Paintory](https://paintory.com/)
 
 ## Author & Maintainer
 
