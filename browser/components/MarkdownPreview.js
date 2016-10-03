@@ -192,7 +192,6 @@ MarkdownPreview.propTypes = {
   onDoubleClick: PropTypes.func,
   onMouseUp: PropTypes.func,
   onMouseDown: PropTypes.func,
-  onMouseMove: PropTypes.func,
   className: PropTypes.string,
   value: PropTypes.string
 }

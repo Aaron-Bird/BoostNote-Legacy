@@ -87,3 +87,16 @@ body[data-theme="dark"]
   .ModalBase
     .modalBack
       background-color alpha(black, 60%)
+
+.CodeMirror
+  font-family inherit !important
+  line-height 1.4em
+  height 100%
+.CodeMirror-focused .CodeMirror-selected
+  background #B1D7FE
+.CodeMirror-line::selection, .CodeMirror-line > span::selection, .CodeMirror-line > span > span::selection
+  background #B1D7FE
+.CodeMirror-line::-moz-selection, .CodeMirror-line > span::-moz-selection, .CodeMirror-line > span > span::-moz-selection
+  background #B1D7FE
+::selection
+  background #B1D7FE

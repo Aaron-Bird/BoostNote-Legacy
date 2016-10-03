@@ -86,6 +86,18 @@ nodeIpc.connectTo(
       } else {
         document.body.setAttribute('data-theme', 'default')
       }
+
+      let editorTheme = document.getElementById('editorTheme')
+      if (editorTheme == null) {
+        editorTheme = document.createElement('link')
+        editorTheme.setAttribute('id', 'editorTheme')
+        editorTheme.setAttribute('rel', 'stylesheet')
+        document.head.appendChild(editorTheme)
+      }
+      if (config.editor.theme !== 'default') {
+        editorTheme.setAttribute('href', '../node_modules/codemirror/theme/' + config.editor.theme + '.css')
+      }
+
       store.default.dispatch({
         type: 'SET_CONFIG',
         config: config

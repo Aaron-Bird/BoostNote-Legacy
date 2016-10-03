@@ -4,12 +4,26 @@ import styles from './NoteDetail.styl'
 import MarkdownPreview from 'browser/components/MarkdownPreview'
 import MarkdownEditor from 'browser/components/MarkdownEditor'
 import CodeEditor from 'browser/components/CodeEditor'
-import modes from 'browser/lib/modes'
+import CodeMirror from 'codemirror'
 
 const electron = require('electron')
 const { clipboard } = electron
 const path = require('path')
 
+function pass (name) {
+  switch (name) {
+    case 'ejs':
+      return 'Embedded Javascript'
+    case 'html_ruby':
+      return 'Embedded Ruby'
+    case 'objectivec':
+      return 'Objective C'
+    case 'text':
+      return 'Plain Text'
+    default:
+      return name
+  }
+}
 function notify (title, options) {
   if (global.process.platform === 'win32') {
     options.icon = path.join('file://', global.__dirname, '../../resources/app.png')
@@ -118,9 +132,9 @@ class NoteDetail extends React.Component {
 
       let viewList = note.snippets.map((snippet, index) => {
         let isActive = this.state.snippetIndex === index
-        let mode = snippet.mode === 'text'
-          ? null
-          : modes.filter((mode) => mode.name === snippet.mode)[0]
+
+        let syntax = CodeMirror.findModeByName(pass(snippet.mode))
+        if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
 
         return <div styleName='tabView'
           key={index}
@@ -134,7 +148,10 @@ class NoteDetail extends React.Component {
             />
             <button styleName='tabView-top-mode'
             >
-              {mode == null ? null : mode.mode}
+              {snippet.mode == null
+                ? 'Not selected'
+                : syntax.name
+              }&nbsp;
             </button>
           </div>
           {snippet.mode === 'markdown'

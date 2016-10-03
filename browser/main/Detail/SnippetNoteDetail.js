@@ -7,19 +7,23 @@ import StarButton from './StarButton'
 import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
 import dataApi from 'browser/main/lib/dataApi'
-import modes from 'browser/lib/modes'
 import { hashHistory } from 'react-router'
 import ee from 'browser/main/lib/eventEmitter'
+import CodeMirror from 'codemirror'
 
-function detectModeByFilename (filename) {
-  for (let key in modes) {
-    const mode = modes[key]
-    if (mode.match != null && mode.match.test(filename)) {
-      console.log(mode)
-      return mode.mode
-    }
+function pass (name) {
+  switch (name) {
+    case 'ejs':
+      return 'Embedded Javascript'
+    case 'html_ruby':
+      return 'Embedded Ruby'
+    case 'objectivec':
+      return 'Objective C'
+    case 'text':
+      return 'Plain Text'
+    default:
+      return name
   }
-  return null
 }
 
 const electron = require('electron')
@@ -283,8 +287,8 @@ class SnippetNoteDetail extends React.Component {
   handleNameInputChange (e, index) {
     let snippets = this.state.note.snippets.slice()
     snippets[index].name = e.target.value
-    let mode = detectModeByFilename(e.target.value.trim())
-    if (mode != null) snippets[index].mode = mode
+    // let mode = detectModeByFilename(e.target.value.trim())
+    // if (mode != null) snippets[index].mode = mode
     this.state.note.snippets = snippets
 
     this.setState({
@@ -297,9 +301,9 @@ class SnippetNoteDetail extends React.Component {
   handleModeButtonClick (index) {
     return (e) => {
       let menu = new Menu()
-      modes.forEach((mode) => {
+      CodeMirror.modeInfo.forEach((mode) => {
         menu.append(new MenuItem({
-          label: mode.label,
+          label: mode.name,
           click: (e) => this.handleModeOptionClick(index, mode.name)(e)
         }))
       })
@@ -376,9 +380,9 @@ class SnippetNoteDetail extends React.Component {
     })
     let viewList = note.snippets.map((snippet, index) => {
       let isActive = this.state.snippetIndex === index
-      let mode = snippet.mode === 'text'
-        ? null
-        : modes.filter((mode) => mode.name === snippet.mode)[0]
+
+      let syntax = CodeMirror.findModeByName(pass(snippet.mode))
+      if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
 
       return <div styleName='tabView'
         key={index}
@@ -393,9 +397,9 @@ class SnippetNoteDetail extends React.Component {
           <button styleName='tabView-top-mode'
             onClick={(e) => this.handleModeButtonClick(index)(e)}
           >
-            {mode == null
+            {snippet.mode == null
               ? 'Select Syntax...'
-              : mode.label
+              : syntax.name
             }&nbsp;
             <i className='fa fa-caret-down'/>
           </button>

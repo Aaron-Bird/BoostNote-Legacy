@@ -4,6 +4,8 @@ const OSX = global.process.platform === 'darwin'
 const electron = require('electron')
 const { ipcRenderer } = electron
 
+let isInitialized = false
+
 const defaultConfig = {
   zoom: 1,
   isSideNavFolded: false,
@@ -19,11 +21,11 @@ const defaultConfig = {
     defaultNote: 'ALWAYS_ASK' // 'ALWAYS_ASK', 'SNIPPET_NOTE', 'MARKDOWN_NOTE'
   },
   editor: {
-    theme: 'xcode',
+    theme: 'default',
     fontSize: '14',
     fontFamily: 'Monaco, Consolas',
     indentType: 'space',
-    indentSize: '4',
+    indentSize: '2',
     switchPreview: 'BLUR' // Available value: RIGHTCLICK, BLUR
   },
   preview: {
@@ -64,6 +66,20 @@ function get () {
     _save(config)
   }
 
+  if (!isInitialized) {
+    isInitialized = true
+    let editorTheme = document.getElementById('editorTheme')
+    if (editorTheme == null) {
+      editorTheme = document.createElement('link')
+      editorTheme.setAttribute('id', 'editorTheme')
+      editorTheme.setAttribute('rel', 'stylesheet')
+      document.head.appendChild(editorTheme)
+    }
+    if (config.editor.theme !== 'default') {
+      editorTheme.setAttribute('href', '../node_modules/codemirror/theme/' + config.editor.theme + '.css')
+    }
+  }
+
   return config
 }
 
@@ -78,6 +94,15 @@ function set (updates) {
   } else {
     document.body.setAttribute('data-theme', 'default')
   }
+
+  let editorTheme = document.getElementById('editorTheme')
+  if (editorTheme == null) {
+    editorTheme = document.createElement('link')
+    editorTheme.setAttribute('id', 'editorTheme')
+    editorTheme.setAttribute('rel', 'stylesheet')
+    document.head.appendChild(editorTheme)
+  }
+  editorTheme.setAttribute('href', '../node_modules/codemirror/theme/' + newConfig.editor.theme + '.css')
 
   ipcRenderer.send('config-renew', {
     config: get()

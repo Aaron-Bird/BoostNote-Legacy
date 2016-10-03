@@ -21,10 +21,15 @@ function resolveStorageNotes (storage) {
       return /\.cson$/.test(notePath)
     })
     .map(function parseCSONFile (notePath) {
-      let data = CSON.readFileSync(path.join(notesDirPath, notePath))
-      data.key = path.basename(notePath, '.cson')
-      data.storage = storage.key
-      return data
+      try {
+        let data = CSON.readFileSync(path.join(notesDirPath, notePath))
+        data.key = path.basename(notePath, '.cson')
+        data.storage = storage.key
+        return data
+      } catch (err) {
+        console.error(notePath)
+        throw err
+      }
     })
 
   return Promise.resolve(notes)
