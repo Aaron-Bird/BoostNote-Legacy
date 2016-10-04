@@ -3,6 +3,7 @@ const { remote, ipcRenderer } = require('electron')
 const { app, Menu } = remote
 const path = require('path')
 const store = require('./store')
+const consts = require('browser/lib/consts')
 
 nodeIpc.config.id = 'finder'
 nodeIpc.config.retry = 1500
@@ -94,6 +95,11 @@ nodeIpc.connectTo(
         editorTheme.setAttribute('rel', 'stylesheet')
         document.head.appendChild(editorTheme)
       }
+
+      config.editor.theme = consts.THEMES.some((theme) => theme === config.editor.theme)
+        ? config.editor.theme
+        : 'default'
+
       if (config.editor.theme !== 'default') {
         editorTheme.setAttribute('href', '../node_modules/codemirror/theme/' + config.editor.theme + '.css')
       }

@@ -3,6 +3,7 @@ import _ from 'lodash'
 const OSX = global.process.platform === 'darwin'
 const electron = require('electron')
 const { ipcRenderer } = electron
+const consts = require('browser/lib/consts')
 
 let isInitialized = false
 
@@ -75,6 +76,11 @@ function get () {
       editorTheme.setAttribute('rel', 'stylesheet')
       document.head.appendChild(editorTheme)
     }
+
+    config.editor.theme = consts.THEMES.some((theme) => theme === config.editor.theme)
+      ? config.editor.theme
+      : 'default'
+
     if (config.editor.theme !== 'default') {
       editorTheme.setAttribute('href', '../node_modules/codemirror/theme/' + config.editor.theme + '.css')
     }
@@ -102,7 +108,13 @@ function set (updates) {
     editorTheme.setAttribute('rel', 'stylesheet')
     document.head.appendChild(editorTheme)
   }
-  editorTheme.setAttribute('href', '../node_modules/codemirror/theme/' + newConfig.editor.theme + '.css')
+  let newTheme = consts.THEMES.some((theme) => theme === newConfig.editor.theme)
+    ? newConfig.editor.theme
+    : 'default'
+
+  if (newTheme !== 'default') {
+    editorTheme.setAttribute('href', '../node_modules/codemirror/theme/' + newTheme + '.css')
+  }
 
   ipcRenderer.send('config-renew', {
     config: get()
