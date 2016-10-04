@@ -287,8 +287,9 @@ class SnippetNoteDetail extends React.Component {
   handleNameInputChange (e, index) {
     let snippets = this.state.note.snippets.slice()
     snippets[index].name = e.target.value
-    // let mode = detectModeByFilename(e.target.value.trim())
-    // if (mode != null) snippets[index].mode = mode
+    let syntax = CodeMirror.findModeByFileName(e.target.value.trim())
+    let mode = syntax != null ? syntax.name : null
+    if (mode != null) snippets[index].mode = mode
     this.state.note.snippets = snippets
 
     this.setState({
