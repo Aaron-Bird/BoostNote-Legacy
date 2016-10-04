@@ -25,6 +25,10 @@ document.addEventListener('dragover', function (e) {
   e.stopPropagation()
 })
 
+if (process.env !== 'production') {
+  require('devtron').install()
+}
+
 let el = document.getElementById('content')
 const history = syncHistoryWithStore(hashHistory, store)
 
