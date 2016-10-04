@@ -39,30 +39,21 @@ export default class CodeEditor extends React.Component {
     }
   }
 
-  componentWillReceiveProps (nextProps) {
-    // if (nextProps.readOnly !== this.props.readOnly) {
-    //   this.editor.setReadOnly(!!nextProps.readOnly)
-    // }
-  }
-
   componentDidMount () {
     this.editor = CodeMirror(this.refs.root, {
       value: this.props.value,
       lineNumbers: true,
       lineWrapping: true,
-      theme: this.props.theme
+      theme: this.props.theme,
+      indentUnit: this.props.indentSize,
+      tabSize: this.props.indentSize,
+      indentWithTabs: this.props.indentType !== 'space'
     })
+
     this.setMode(this.props.mode)
+
     this.editor.on('blur', this.blurHandler)
     this.editor.on('change', this.changeHandler)
-    // editor.setTheme('ace/theme/' + theme)
-    // editor.setReadOnly(!!this.props.readOnly)
-
-    // this.editor.setTabSize(this.props.indentSize)
-    // this.editor.setTabSize(this.props.indentSize)
-    // session.setUseSoftTabs(this.props.indentType === 'space')
-    // session.setTabSize(this.props.indentSize)
-    // session.setUseWrapMode(true)
   }
 
   componentWillUnmount () {
@@ -86,15 +77,17 @@ export default class CodeEditor extends React.Component {
       needRefresh = true
     }
 
+    if (prevProps.indentSize !== this.props.indentSize) {
+      this.editor.setOption('indentUnit', this.props.indentSize)
+      this.editor.setOption('tabSize', this.props.indentSize)
+    }
+    if (prevProps.indentType !== this.props.indentType) {
+      this.editor.setOption('indentWithTabs', this.props.indentType !== 'space')
+    }
+
     if (needRefresh) {
       this.editor.refresh()
     }
-    // if (prevProps.indentSize !== this.props.indentSize) {
-    //   session.setTabSize(this.props.indentSize)
-    // }
-    // if (prevProps.indentType !== this.props.indentType) {
-    //   session.setUseSoftTabs(this.props.indentType === 'space')
-    // }
   }
 
   setMode (mode) {
