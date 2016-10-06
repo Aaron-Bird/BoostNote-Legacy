@@ -1,5 +1,10 @@
 # Boostnote
 
+> [Boostnote store](#goods)가 생겼습니다!! :tada: 그리고,[Pateron](https://www.patreon.com/boostnote)에서도 저희를 지원 하실 수 있습니다.!
+
+![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/18662404/3aa42396-7f55-11e6-88bf-f4ec6505ee8f.png)
+![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/18662139/f491adac-7f53-11e6-8631-2a447af9f36a.png)
+
 오픈소스 노트 앱
 
 다음과 같은 용무가 있는 경우 이슈트래커를 이용해 주세요.
@@ -44,6 +49,19 @@
 ## Development
 
 - [Build](docs/build.md)
+
+## Goods
+
+<img src="https://b00st.io/images/t3.png" width="250"/>
+<img src="https://b00st.io/images/t1.png" width="250"/>
+
+[Boostnote store](https://boostnote.paintory.com/)에서 몇가지 상품들을 팔고있습니다.
+
+전세계 어디든 배송 가능합니다. 이 스토어는 [Paintory](https://paintory.com/)에서 제공됩니다.
+
+## Donation
+
+[Pateron page](https://www.patreon.com/boostnote)에서 기부 하실 수 있습니다.
 
 ## Author & Maintainer
 
