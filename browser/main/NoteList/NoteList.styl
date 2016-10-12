@@ -33,12 +33,15 @@
   border none
   color $ui-inactive-text-color
   &:hover
+    color $ui-text-color
     .control-button-tooltip
       opacity 1
 
 .control-button--active
   @extend .control-button
   color $ui-active-color
+  &:hover
+    color $ui-active-color
 
 .control-button-tooltip
   tooltip()
@@ -202,3 +205,9 @@ body[data-theme="dark"]
     border-color $ui-dark-borderColor
   .control-sortBy-select
     color $ui-dark-text-color
+
+  .control-button
+    color $ui-dark-inactive-text-color
+    &:hover
+      color $ui-dark-text-color
+
