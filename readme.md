@@ -26,6 +26,8 @@ We just want you to enjoying writing anything. :grinning:
 - Cloud : Google drive, Dropbox, One drive, iCloud...
 - Remaining opensource forever!
 
+Check planned features [here](https://github.com/BoostIO/Boostnote/issues/68)!
+
 ## Inspired by
 
 - Atom
