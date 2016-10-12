@@ -27,20 +27,24 @@
   border-bottom $ui-border
   display flex
   background-color $ui-backgroundColor
+
 .tabList-item
   position relative
   flex 1
   border-right $ui-border
+
 .tabList-item--active
   @extend .tabList-item
   .tabList-item-button
     border-color $brand-color
+
 .tabList-item-button
   width 100%
   height 29px
   navButtonColor()
   outline none
   border-left 4px solid transparent
+
 .tabList-item-deleteButton
   position absolute
   top 5px

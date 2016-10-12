@@ -7,11 +7,13 @@ const consts = require('browser/lib/consts')
 
 let isInitialized = false
 
-const defaultConfig = {
+export const DEFAULT_CONFIG = {
   zoom: 1,
   isSideNavFolded: false,
   listWidth: 250,
   navWidth: 200,
+  sortBy: 'UPDATED_AT', // 'CREATED_AT', 'UPDATED_AT', 'APLHABETICAL'
+  listStyle: 'DEFAULT', // 'DEFAULT', 'SMALL'
   hotkey: {
     toggleFinder: OSX ? 'Cmd + Alt + S' : 'Super + Alt + S',
     toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E'
@@ -55,15 +57,15 @@ function get () {
   let config = window.localStorage.getItem('config')
 
   try {
-    config = Object.assign({}, defaultConfig, JSON.parse(config))
-    config.hotkey = Object.assign({}, defaultConfig.hotkey, config.hotkey)
-    config.ui = Object.assign({}, defaultConfig.ui, config.ui)
-    config.editor = Object.assign({}, defaultConfig.editor, config.editor)
-    config.preview = Object.assign({}, defaultConfig.preview, config.preview)
+    config = Object.assign({}, DEFAULT_CONFIG, JSON.parse(config))
+    config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, config.hotkey)
+    config.ui = Object.assign({}, DEFAULT_CONFIG.ui, config.ui)
+    config.editor = Object.assign({}, DEFAULT_CONFIG.editor, config.editor)
+    config.preview = Object.assign({}, DEFAULT_CONFIG.preview, config.preview)
     if (!validate(config)) throw new Error('INVALID CONFIG')
   } catch (err) {
     console.warn('Boostnote resets the malformed configuration.')
-    config = defaultConfig
+    config = DEFAULT_CONFIG
     _save(config)
   }
 
@@ -91,7 +93,7 @@ function get () {
 
 function set (updates) {
   let currentConfig = get()
-  let newConfig = Object.assign({}, defaultConfig, currentConfig, updates)
+  let newConfig = Object.assign({}, DEFAULT_CONFIG, currentConfig, updates)
   if (!validate(newConfig)) throw new Error('INVALID CONFIG')
   _save(newConfig)
 

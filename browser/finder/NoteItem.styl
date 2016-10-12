@@ -1,18 +1,33 @@
 .root
   position relative
-  height 80px
   border-bottom $ui-border
-  padding 0 5px
+  padding 2px 5px
   user-select none
   cursor pointer
   transition background-color 0.15s
   &:hover
-    background-color alpha($ui-active-color, 10%)
+    background-color alpha($ui-active-color, 20%)
 
 .root--active
   @extend .root
-  .border
-    border-color $ui-active-color
+  background-color $ui-active-color
+  &:hover
+    background-color $ui-active-color
+  color white
+  .info-left-folder
+  .info-left-folder-surfix
+  .title
+  .title-icon
+  .title-empty
+  .bottom-tagIcon
+  .bottom-tagList-item
+  .bottom-tagList-empty
+  .bottom-time
+    color white
+  .bottom-tagList-item
+    color white
+    background-color transparent
+
 
 .border
   absolute top bottom left right
@@ -22,11 +37,11 @@
   transition 0.15s
 
 .info
-  height 30px
+  height 20px
   clearfix()
   font-size 12px
   color $ui-inactive-text-color
-  line-height 30px
+  line-height 20px
   overflow-y hidden
 
 .info-left
@@ -45,77 +60,120 @@
   float right
 
 .title
+  height 24px
+  box-sizing border-box
+  line-height 24px
   height 20px
   line-height 20px
   padding 0 5px 0 0
-  font-weight bold
   overflow ellipsis
   color $ui-text-color
+
 .title-icon
   font-size 12px
   color $ui-inactive-text-color
   padding-right 3px
+
 .title-empty
   font-weight normal
   color $ui-inactive-text-color
 
-.tagList
-  height 30px
+.bottom
+  margin-top 2px
+  height 20px
   font-size 12px
-  line-height 30px
+  line-height 20px
   overflow ellipsis
+  display flex
 
-.tagList-icon
+.bottom-tagIcon
   vertical-align middle
   color $ui-button-color
+  height 20px
+  line-height 20px
 
-.tagList-item
+.bottom-tagList
+  flex 1
+  overflow ellipsis
+  line-height 20px
+
+.bottom-tagList-item
   margin 0 4px
   padding 0 4px
   height 20px
+  box-sizing border-box
   border-radius 3px
   vertical-align middle
   border-style solid
   border-color $ui-button--focus-borderColor
   border-width 0 0 0 3px
   background-color $ui-backgroundColor
+  color $ui-text-color
+  transition 0.15s
 
-.tagList-empty
+.bottom-tagList-empty
   color $ui-inactive-text-color
   vertical-align middle
+  font-size 10px
+
+.bottom-time
+  color $ui-inactive-text-color
+  margin-left 5px
+  font-size 10px
 
 body[data-theme="dark"]
   .root
     border-color $ui-dark-borderColor
-    &:hover
-      background-color alpha($ui-active-color, 20%)
 
   .root--active
     @extend .root
-    .border
-      border-color $ui-active-color
+    border-color $ui-dark-borderColor
+    &:hover
+      background-color $ui-active-color
+    .info-left-folder
+    .info-left-folder-surfix
+    .title
+    .title-icon
+    .title-empty
+    .bottom-tagIcon
+    .bottom-tagList-item
+    .bottom-tagList-empty
+    .bottom-time
+      color white
+    .bottom-tagList-item
+      color white
+      background-color transparent
 
   .info
     color $ui-dark-inactive-text-color
 
   .info-left-folder
     color $ui-dark-text-color
+
   .info-left-folder-surfix
     color $ui-dark-inactive-text-color
 
   .title
     color $ui-dark-text-color
+
   .title-icon
     color $ui-dark-inactive-text-color
+
   .title-empty
     color $ui-dark-inactive-text-color
 
-  .tagList-icon
+  .tagList-empty
+    color $ui-dark-inactive-text-color
+
+  .bottom-tagIcon
     color $ui-dark-button-color
 
-  .tagList-item
-    border-color $ui-dark-button--focus-borderColor
+  .bottom-tagList-item
+    color $ui-dark-text-color
     background-color $ui-dark-backgroundColor
 
-  .tagList-empty
+  .bottom-tagList-empty
+    color $ui-dark-inactive-text-color
+
+  .bottom-time
     color $ui-dark-inactive-text-color

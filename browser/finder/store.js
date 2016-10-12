@@ -1,34 +1,6 @@
 import { combineReducers, createStore } from 'redux'
 import { routerReducer } from 'react-router-redux'
-
-const OSX = global.process.platform === 'darwin'
-const defaultConfig = {
-  zoom: 1,
-  isSideNavFolded: false,
-  listWidth: 250,
-  hotkey: {
-    toggleFinder: OSX ? 'Cmd + Alt + S' : 'Super + Alt + S',
-    toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E'
-  },
-  ui: {
-    theme: 'default',
-    disableDirectWrite: false
-  },
-  editor: {
-    theme: 'xcode',
-    fontSize: '14',
-    fontFamily: 'Monaco, Consolas',
-    indentType: 'space',
-    indentSize: '4',
-    switchPreview: 'BLUR' // Available value: RIGHTCLICK, BLUR
-  },
-  preview: {
-    fontSize: '14',
-    fontFamily: 'Lato',
-    codeBlockTheme: 'xcode',
-    lineNumber: true
-  }
-}
+import { DEFAULT_CONFIG } from 'browser/main/lib/ConfigManager'
 
 let defaultData = {
   storageMap: {},
@@ -48,7 +20,7 @@ function data (state = defaultData, action) {
   return state
 }
 
-function config (state = defaultConfig, action) {
+function config (state = DEFAULT_CONFIG, action) {
   switch (action.type) {
     case 'INIT_CONFIG':
     case 'SET_CONFIG':

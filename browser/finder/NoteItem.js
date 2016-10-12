@@ -22,7 +22,7 @@ class NoteItem extends React.Component {
     let tagList = _.isArray(note.tags)
       ? note.tags.map((tag) => {
         return (
-          <span styleName='item-tagList-item'
+          <span styleName='bottom-tagList-item'
             key={tag}>
             {tag}
           </span>
@@ -37,9 +37,7 @@ class NoteItem extends React.Component {
         key={note.storage + '-' + note.key}
         onClick={(e) => this.handleClick(e)}
       >
-        <div styleName='border'/>
         <div styleName='info'>
-
           <div styleName='info-left'>
             <span styleName='info-left-folder'
               style={{borderColor: folder.color}}
@@ -48,11 +46,6 @@ class NoteItem extends React.Component {
               <span styleName='info-left-folder-surfix'>in {storage.name}</span>
             </span>
           </div>
-
-          <div styleName='info-right'>
-            {moment(note.updatedAt).fromNow()}
-          </div>
-
         </div>
 
         <div styleName='title'>
@@ -66,14 +59,20 @@ class NoteItem extends React.Component {
           }
         </div>
 
-        <div styleName='tagList'>
-          <i styleName='tagList-icon'
+        <div styleName='bottom'>
+          <i styleName='bottom-tagIcon'
             className='fa fa-tags fa-fw'
           />
-          {tagList.length > 0
-            ? tagList
-            : <span styleName='tagList-empty'>Not tagged yet</span>
-          }
+          <div styleName='bottom-tagList'>
+            {tagList.length > 0
+              ? tagList
+              : <span styleName='bottom-tagList-empty'>Not tagged yet</span>
+            }
+          </div>
+
+          <div styleName='bottom-time'>
+            {moment(note.updatedAt).fromNow()}
+          </div>
         </div>
       </div>
     )

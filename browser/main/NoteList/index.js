@@ -5,9 +5,22 @@ import moment from 'moment'
 import _ from 'lodash'
 import ee from 'browser/main/lib/eventEmitter'
 import dataApi from 'browser/main/lib/dataApi'
+import ConfigManager from 'browser/main/lib/ConfigManager'
 
 const { remote } = require('electron')
 const { Menu, MenuItem, dialog } = remote
+
+function sortByCreatedAt (a, b) {
+  return new Date(b.createdAt) - new Date(a.createdAt)
+}
+
+function sortByAlphabetical (a, b) {
+  return a.title.localeCompare(b.title)
+}
+
+function sortByUpdatedAt (a, b) {
+  return new Date(b.updatedAt) - new Date(a.updatedAt)
+}
 
 class NoteList extends React.Component {
   constructor (props) {
@@ -21,7 +34,7 @@ class NoteList extends React.Component {
       this.selectPriorNote()
     }
     this.focusHandler = () => {
-      this.refs.root.focus()
+      this.refs.list.focus()
     }
 
     this.state = {
@@ -43,7 +56,7 @@ class NoteList extends React.Component {
   }
 
   resetScroll () {
-    this.refs.root.scrollTop = 0
+    this.refs.list.scrollTop = 0
     this.setState({
       range: 0
     })
@@ -52,7 +65,7 @@ class NoteList extends React.Component {
   handleScroll (e) {
     let notes = this.notes
 
-    if (e.target.offsetHeight + e.target.scrollTop > e.target.scrollHeight - 250 && notes.length > this.state.range * 10 + 10) {
+    if (e.target.offsetHeight + e.target.scrollTop > e.target.scrollHeight - 250 && notes.length > this.state.range * 20 + 20) {
       this.setState({
         range: this.state.range + 1
       })
@@ -86,7 +99,7 @@ class NoteList extends React.Component {
         return note != null && note.storage + '-' + note.key === location.query.key
       })
       if (targetIndex > -1) {
-        let list = this.refs.root
+        let list = this.refs.list
         let item = list.childNodes[targetIndex]
         if (item == null) return false
 
@@ -274,20 +287,51 @@ class NoteList extends React.Component {
     }
   }
 
-  render () {
-    let { location, data, notes } = this.props
-    this.notes = notes = this.getNotes()
-      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+  handleSortByChange (e) {
+    let { dispatch } = this.props
 
-    let noteList = notes.slice(0, 10 + 10 * this.state.range)
+    let config = {
+      sortBy: e.target.value
+    }
+
+    ConfigManager.set(config)
+    dispatch({
+      type: 'SET_CONFIG',
+      config
+    })
+  }
+
+  handleListStyleButtonClick (e, style) {
+    let { dispatch } = this.props
+
+    let config = {
+      listStyle: style
+    }
+
+    ConfigManager.set(config)
+    dispatch({
+      type: 'SET_CONFIG',
+      config
+    })
+  }
+
+  render () {
+    let { location, notes, config } = this.props
+    let sortFunc = config.sortBy === 'CREATED_AT'
+      ? sortByCreatedAt
+      : config.sortBy === 'ALPHABETICAL'
+      ? sortByAlphabetical
+      : sortByUpdatedAt
+    this.notes = notes = this.getNotes()
+      .sort(sortFunc)
+
+    let noteList = notes.slice(0, 20 + 20 * this.state.range)
       .map((note) => {
         if (note == null) return null
-        let storage = data.storageMap.get(note.storage)
-        let folder = _.find(storage.folders, {key: note.folder})
         let tagElements = _.isArray(note.tags)
           ? note.tags.map((tag) => {
             return (
-              <span styleName='item-tagList-item'
+              <span styleName='item-bottom-tagList-item'
                 key={tag}>
                 {tag}
               </span>
@@ -304,24 +348,6 @@ class NoteList extends React.Component {
             onClick={(e) => this.handleNoteClick(e, note.storage + '-' + note.key)}
             onContextMenu={(e) => this.handleNoteContextMenu(e, note.storage + '-' + note.key)}
           >
-            <div styleName='item-border'/>
-            <div styleName='item-info'>
-
-              <div styleName='item-info-left'>
-                <span styleName='item-info-left-folder'
-                  style={{borderColor: folder.color}}
-                >
-                  {folder.name}
-                  <span styleName='item-info-left-folder-surfix'>in {storage.name}</span>
-                </span>
-              </div>
-
-              <div styleName='item-info-right'>
-                {moment(note.updatedAt).fromNow()}
-              </div>
-
-            </div>
-
             <div styleName='item-title'>
               {note.type === 'SNIPPET_NOTE'
                 ? <i styleName='item-title-icon' className='fa fa-fw fa-code'/>
@@ -333,15 +359,23 @@ class NoteList extends React.Component {
               }
             </div>
 
-            <div styleName='item-tagList'>
-              <i styleName='item-tagList-icon'
-                className='fa fa-tags fa-fw'
-              />
-              {tagElements.length > 0
-                ? tagElements
-                : <span styleName='item-tagList-empty'>Not tagged yet</span>
-              }
-            </div>
+            {config.listStyle === 'DEFAULT' &&
+              <div styleName='item-bottom'>
+                <i styleName='item-bottom-tagIcon'
+                  className='fa fa-tags fa-fw'
+                />
+                <div styleName='item-bottom-tagList'>
+                  {tagElements.length > 0
+                    ? tagElements
+                    : <span styleName='item-bottom-tagList-empty'>Not tagged yet</span>
+                  }
+                </div>
+
+                <div styleName='item-bottom-time'>
+                  {moment(config.sortBy === 'CREATED_AT' ? note.createdAt : note.updatedAt).fromNow()}
+                </div>
+              </div>
+            }
           </div>
         )
       })
@@ -349,13 +383,51 @@ class NoteList extends React.Component {
     return (
       <div className='NoteList'
         styleName='root'
-        ref='root'
-        tabIndex='-1'
-        onKeyDown={(e) => this.handleNoteListKeyDown(e)}
         style={this.props.style}
-        onScroll={(e) => this.handleScroll(e)}
       >
-        {noteList}
+        <div styleName='control'>
+          <div styleName='control-sortBy'>
+            Sort by
+            <select styleName='control-sortBy-select'
+              value={config.sortBy}
+              onChange={(e) => this.handleSortByChange(e)}
+            >
+              <option value='UPDATED_AT'>Updated Time</option>
+              <option value='CREATED_AT'>Created Time</option>
+              <option value='ALPHABETICAL'>Alphabetical</option>
+            </select>
+          </div>
+          <button styleName={config.listStyle === 'DEFAULT'
+              ? 'control-button--active'
+              : 'control-button'
+            }
+            onClick={(e) => this.handleListStyleButtonClick(e, 'DEFAULT')}
+          >
+            <i className='fa fa-th-list'/>
+            <span styleName='control-button-tooltip'>
+              Default Size
+            </span>
+          </button>
+          <button styleName={config.listStyle === 'SMALL'
+              ? 'control-button--active'
+              : 'control-button'
+            }
+            onClick={(e) => this.handleListStyleButtonClick(e, 'SMALL')}
+          >
+            <i className='fa fa-list'/>
+            <span styleName='control-button-tooltip'>
+              Small Size
+            </span>
+          </button>
+        </div>
+        <div styleName='list'
+          ref='list'
+          tabIndex='-1'
+          onKeyDown={(e) => this.handleNoteListKeyDown(e)}
+          onScroll={(e) => this.handleScroll(e)}
+        >
+          {noteList}
+        </div>
       </div>
     )
   }
