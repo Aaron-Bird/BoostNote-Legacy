@@ -48,7 +48,13 @@ class StorageSection extends React.Component {
         <div styleName='header'>
           <button styleName='header-toggleButton'
             onClick={(e) => this.handleToggleButtonClick(e)}
-          ><i className='fa fa-caret-down'/></button>
+          >
+            <i className={this.state.isOpen
+                ? 'fa fa-caret-down'
+                : 'fa fa-caret-right'
+              }
+            />
+          </button>
           <button styleName={filter.type === 'STORAGE' && filter.storage === storage.key
               ? 'header-name--active'
               : 'header-name'

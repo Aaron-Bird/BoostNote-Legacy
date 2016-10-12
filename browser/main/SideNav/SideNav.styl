@@ -25,11 +25,11 @@
   overflow ellipsis
 
 .menu
-  margin-top 15px
+  margin 0
 
 .menu-button
   navButtonColor()
-  height 44px
+  height 32px
   padding 0 10px
   font-size 14px
   width 100%
@@ -48,8 +48,8 @@
 
 .storageList
   absolute left right
-  bottom 44px
-  top 178px
+  bottom 32px
+  top 120px
   overflow-y auto
 
 .storageList-empty
@@ -86,9 +86,9 @@
     position fixed
     display inline-block
     height 30px
-    left 44px
+    left 32px
     padding 0 10px
-    margin-top -7px
+    margin-top -8px
     opacity 0
     margin-left 0
     overflow hidden
@@ -105,20 +105,20 @@
     &:hover .menu-button-label
       transition opacity 0.15s
       opacity 1
-  // TODO: extract tooltip style to a mixin
+
   .menu-button-label
     position fixed
     display inline-block
-    height 30px
+    height 32px
     left 44px
     padding 0 10px
-    margin-top -7px
+    margin-top -8px
     margin-left 0
     overflow ellipsis
     background-color $ui-tooltip-backgroundColor
     z-index 10
     color white
-    line-height 34px
+    line-height 32px
     border-top-right-radius 2px
     border-bottom-right-radius 2px
     pointer-events none
