@@ -61,7 +61,7 @@ class MutableSet {
   constructor (iterable) {
     this._set = new Set(iterable)
     Object.defineProperty(this, 'size', {
-      get: () => this._map.size,
+      get: () => this._set.size,
       set: function (value) {
         this['size'] = value
       }

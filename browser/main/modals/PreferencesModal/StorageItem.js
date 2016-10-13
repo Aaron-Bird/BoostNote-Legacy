@@ -6,8 +6,8 @@ import consts from 'browser/lib/consts'
 import dataApi from 'browser/main/lib/dataApi'
 import store from 'browser/main/store'
 
-const electron = require('electron')
-const { shell } = electron
+const { shell, remote } = require('electron')
+const { dialog } = remote
 import { SketchPicker } from 'react-color'
 
 class UnstyledFolderItem extends React.Component {
@@ -292,17 +292,26 @@ class StorageItem extends React.Component {
   }
 
   handleUnlinkButtonClick (e) {
-    let { storage } = this.props
-    dataApi.removeStorage(storage.key)
-      .then(() => {
-        store.dispatch({
-          type: 'REMOVE_STORAGE',
-          storageKey: storage.key
+    let index = dialog.showMessageBox(remote.getCurrentWindow(), {
+      type: 'warning',
+      message: 'Unlink Storage',
+      detail: 'This work just detatches a storage from Boostnote. (Any data won\'t be deleted.)',
+      buttons: ['Confirm', 'Cancel']
+    })
+
+    if (index === 0) {
+      let { storage, dispatch } = this.props
+      dataApi.removeStorage(storage.key)
+        .then(() => {
+          dispatch({
+            type: 'REMOVE_STORAGE',
+            storageKey: storage.key
+          })
         })
-      })
-      .catch((err) => {
-        throw err
-      })
+        .catch((err) => {
+          throw err
+        })
+    }
   }
 
   handleLabelClick (e) {

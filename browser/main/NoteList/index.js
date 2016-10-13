@@ -38,7 +38,6 @@ class NoteList extends React.Component {
     }
 
     this.state = {
-      range: 0
     }
   }
 
@@ -57,19 +56,6 @@ class NoteList extends React.Component {
 
   resetScroll () {
     this.refs.list.scrollTop = 0
-    this.setState({
-      range: 0
-    })
-  }
-
-  handleScroll (e) {
-    let notes = this.notes
-
-    if (e.target.offsetHeight + e.target.scrollTop > e.target.scrollHeight - 250 && notes.length > this.state.range * 20 + 20) {
-      this.setState({
-        range: this.state.range + 1
-      })
-    }
   }
 
   componentWillUnmount () {
@@ -82,6 +68,7 @@ class NoteList extends React.Component {
 
   componentDidUpdate (prevProps) {
     let { location } = this.props
+
     if (this.notes.length > 0 && location.query.key == null) {
       let { router } = this.context
       router.replace({
@@ -325,7 +312,7 @@ class NoteList extends React.Component {
     this.notes = notes = this.getNotes()
       .sort(sortFunc)
 
-    let noteList = notes.slice(0, 20 + 20 * this.state.range)
+    let noteList = notes
       .map((note) => {
         if (note == null) return null
         let tagElements = _.isArray(note.tags)
@@ -424,7 +411,6 @@ class NoteList extends React.Component {
           ref='list'
           tabIndex='-1'
           onKeyDown={(e) => this.handleNoteListKeyDown(e)}
-          onScroll={(e) => this.handleScroll(e)}
         >
           {noteList}
         </div>

@@ -36,7 +36,7 @@ class SideNav extends React.Component {
   }
 
   render () {
-    let { data, location, config } = this.props
+    let { data, location, config, dispatch } = this.props
 
     let isFolded = config.isSideNavFolded
     let isHomeActive = location.pathname.match(/^\/home$/)
@@ -46,8 +46,10 @@ class SideNav extends React.Component {
       return <StorageItem
         key={storage.key}
         storage={storage}
+        data={data}
         location={location}
         isFolded={isFolded}
+        dispatch={dispatch}
       />
     })
     let style = {}
