@@ -68,7 +68,6 @@ colorDefaultButton()
   &:hover
     background-color $default-button-background--hover
   &:active
-    background-color $default-button-background--active
   &:active:hover
     background-color $default-button-background--active
 
@@ -83,9 +82,8 @@ colorPrimaryButton()
   &:hover
     background-color $primary-button-background--hover
   &:active
-    background-color $primary-button-background--active
   &:active:hover
-    background-color $primary-button-background--activ
+    background-color $primary-button-background--active
 
 // Danger button(Brand color)
 $danger-button-background = #c9302c
@@ -98,7 +96,6 @@ colorDangerButton()
   &:hover
     background-color $danger-button-background--hover
   &:active
-    background-color $danger-button-background--active
   &:active:hover
     background-color $danger-button-background--active
 
@@ -113,9 +110,6 @@ navButtonColor()
   transition color background-color  0.15s
   &:hover
     background-color $ui-button--hover-backgroundColor
-  &:active
-    background-color $ui-button--active-backgroundColor
-    color $ui-button--active-color
   &:active, &:active:hover
     background-color $ui-button--active-backgroundColor
     color $ui-button--active-color
@@ -159,7 +153,6 @@ colorDarkDefaultButton()
   &:hover
     background-color $dark-default-button-background--hover
   &:active
-    background-color $ui-dark-button--active-backgroundColor
   &:active:hover
     background-color $ui-dark-button--active-backgroundColor
 
@@ -172,7 +165,6 @@ colorDarkDangerButton()
   &:hover
     background-color $dark-danger-button-background--hover
   &:active
-    background-color $dark-danger-button-background--active
   &:active:hover
     background-color $dark-danger-button-background--active
 
@@ -180,14 +172,12 @@ navDarkButtonColor()
   border none
   color $ui-dark-button-color
   background-color transparent
-  transition color background-color  0.15s
+  transition color background-color 0.15s
   &:hover
     color white
     background-color $ui-dark-button--hover-backgroundColor
   &:active
-    background-color $ui-dark-button--active-backgroundColor
-    color $ui-dark-button--active-color
-  &:active, &:active:hover
+  &:active:hover
     background-color $ui-dark-button--active-backgroundColor
     color $ui-dark-button--active-color
 

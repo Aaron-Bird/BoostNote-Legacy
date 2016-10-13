@@ -81,13 +81,14 @@ class NoteList extends React.Component {
     }
 
     // Auto scroll
-    if (_.isString(location.query.key) && prevProps.location.query.key !== location.query.key) {
+    if (_.isString(location.query.key) && prevProps.location.query.key === location.query.key) {
       let targetIndex = _.findIndex(this.notes, (note) => {
         return note != null && note.storage + '-' + note.key === location.query.key
       })
       if (targetIndex > -1) {
         let list = this.refs.list
         let item = list.childNodes[targetIndex]
+
         if (item == null) return false
 
         let overflowBelow = item.offsetTop + item.clientHeight - list.clientHeight - list.scrollTop > 0

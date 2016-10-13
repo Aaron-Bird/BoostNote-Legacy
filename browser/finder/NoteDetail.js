@@ -140,20 +140,6 @@ class NoteDetail extends React.Component {
           key={index}
           style={{zIndex: isActive ? 5 : 4}}
         >
-          <div styleName='tabView-top'>
-            <input styleName='tabView-top-name'
-              placeholder='Filename including extensions...'
-              value={snippet.name}
-              readOnly
-            />
-            <button styleName='tabView-top-mode'
-            >
-              {snippet.mode == null
-                ? 'Not selected'
-                : syntax.name
-              }&nbsp;
-            </button>
-          </div>
           {snippet.mode === 'markdown'
             ? <MarkdownEditor styleName='tabView-content'
               config={config}

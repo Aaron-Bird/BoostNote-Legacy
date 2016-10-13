@@ -10,6 +10,7 @@ import dataApi from 'browser/main/lib/dataApi'
 import { hashHistory } from 'react-router'
 import ee from 'browser/main/lib/eventEmitter'
 import CodeMirror from 'codemirror'
+import SnippetTab from './SnippetTab'
 
 function pass (name) {
   switch (name) {
@@ -238,6 +239,10 @@ class SnippetNoteDetail extends React.Component {
   }
 
   handleTabPlusButtonClick (e) {
+    this.addSnippet()
+  }
+
+  addSnippet () {
     let { note } = this.state
 
     note.snippets = note.snippets.concat([{
@@ -245,9 +250,13 @@ class SnippetNoteDetail extends React.Component {
       mode: 'text',
       content: ''
     }])
+    let snippetIndex = note.snippets.length - 1
 
     this.setState({
-      note
+      note,
+      snippetIndex
+    }, () => {
+      this.refs['tab-' + snippetIndex].startRenaming()
     })
   }
 
@@ -279,15 +288,19 @@ class SnippetNoteDetail extends React.Component {
     let snippets = this.state.note.snippets.slice()
     snippets.splice(index, 1)
     this.state.note.snippets = snippets
+    let snippetIndex = this.state.snippetIndex >= snippets.length
+      ? snippets.length - 1
+      : this.state.snippetIndex
     this.setState({
-      note: this.state.note
+      note: this.state.note,
+      snippetIndex
     })
   }
 
-  handleNameInputChange (e, index) {
+  renameSnippetByIndex (index, name) {
     let snippets = this.state.note.snippets.slice()
-    snippets[index].name = e.target.value
-    let syntax = CodeMirror.findModeByFileName(e.target.value.trim())
+    snippets[index].name = name
+    let syntax = CodeMirror.findModeByFileName(name.trim())
     let mode = syntax != null ? syntax.name : null
     if (mode != null) snippets[index].mode = mode
     this.state.note.snippets = snippets
@@ -339,8 +352,62 @@ class SnippetNoteDetail extends React.Component {
     }
   }
 
-  handleDeleteKeyDown (e) {
-    if (e.keyCode === 27) this.handleDeleteCancelButtonClick(e)
+  handleKeyDown (e) {
+    switch (e.keyCode) {
+      case 9:
+        if (e.ctrlKey && !e.shiftKey) {
+          e.preventDefault()
+          this.jumpNextTab()
+        } else if (e.ctrlKey && e.shiftKey) {
+          e.preventDefault()
+          this.jumpPrevTab()
+        } else if (!e.ctrlKey && !e.shiftKey && e.target === this.refs.description) {
+          e.preventDefault()
+          this.focusEditor()
+        }
+        break
+      case 76:
+        let shouldFocus = global.process.platform === 'darwin'
+          ? e.metaKey
+          : e.ctrlKey
+        if (shouldFocus) {
+          e.preventDefault()
+          this.focus()
+        }
+        break
+      case 84:
+        {
+          let shouldFocus = global.process.platform === 'darwin'
+            ? e.metaKey
+            : e.ctrlKey
+          if (e.shouldFocus) {
+            e.preventDefault()
+            this.addSnippet()
+          }
+        }
+    }
+
+  }
+
+  jumpNextTab () {
+    this.setState({
+      snippetIndex: (this.state.snippetIndex + 1) % this.state.note.snippets.length
+    }, () => {
+      this.focusEditor()
+    })
+  }
+
+  jumpPrevTab () {
+    this.setState({
+      snippetIndex: (this.state.snippetIndex - 1 + this.state.note.snippets.length) % this.state.note.snippets.length
+    }, () => {
+      this.focusEditor()
+    })
+  }
+
+  focusEditor () {
+    console.log('code-' + this.state.snippetIndex)
+    this.refs['code-' + this.state.snippetIndex].focus()
   }
 
   render () {
@@ -354,31 +421,19 @@ class SnippetNoteDetail extends React.Component {
 
     let tabList = note.snippets.map((snippet, index) => {
       let isActive = this.state.snippetIndex === index
-      return <div styleName={isActive
-          ? 'tabList-item--active'
-          : 'tabList-item'
-        }
+
+      return <SnippetTab
         key={index}
-      >
-        <button styleName='tabList-item-button'
-          onClick={(e) => this.handleTabButtonClick(e, index)}
-        >
-          {snippet.name.trim().length > 0
-            ? snippet.name
-            : <span styleName='tabList-item-unnamed'>
-              Unnamed
-            </span>
-          }
-        </button>
-        {note.snippets.length > 1 &&
-          <button styleName='tabList-item-deleteButton'
-            onClick={(e) => this.handleTabDeleteButtonClick(e, index)}
-          >
-            <i className='fa fa-times'/>
-          </button>
-        }
-      </div>
+        ref={'tab-' + index}
+        snippet={snippet}
+        isActive={isActive}
+        onClick={(e) => this.handleTabButtonClick(e, index)}
+        onDelete={(e) => this.handleTabDeleteButtonClick(e, index)}
+        onRename={(name) => this.renameSnippetByIndex(index, name)}
+        isDeletable={note.snippets.length > 1}
+      />
     })
+
     let viewList = note.snippets.map((snippet, index) => {
       let isActive = this.state.snippetIndex === index
 
@@ -389,22 +444,6 @@ class SnippetNoteDetail extends React.Component {
         key={index}
         style={{zIndex: isActive ? 5 : 4}}
       >
-        <div styleName='tabView-top'>
-          <input styleName='tabView-top-name'
-            placeholder='Filename including extensions...'
-            value={snippet.name}
-            onChange={(e) => this.handleNameInputChange(e, index)}
-          />
-          <button styleName='tabView-top-mode'
-            onClick={(e) => this.handleModeButtonClick(index)(e)}
-          >
-            {snippet.mode == null
-              ? 'Select Syntax...'
-              : syntax.name
-            }&nbsp;
-            <i className='fa fa-caret-down'/>
-          </button>
-        </div>
         {snippet.mode === 'markdown'
           ? <MarkdownEditor styleName='tabView-content'
             value={snippet.content}
@@ -432,6 +471,7 @@ class SnippetNoteDetail extends React.Component {
       <div className='NoteDetail'
         style={this.props.style}
         styleName='root'
+        onKeyDown={(e) => this.handleKeyDown(e)}
       >
         <div styleName='info'>
           <div styleName='info-left'>
@@ -478,8 +518,8 @@ class SnippetNoteDetail extends React.Component {
         </div>
 
         <div styleName='body'>
-          <div styleName='body-description'>
-            <textarea styleName='body-description-textarea'
+          <div styleName='description'>
+            <textarea
               style={{
                 fontFamily: config.preview.fontFamily,
                 fontSize: parseInt(config.preview.fontSize, 10)
@@ -491,8 +531,10 @@ class SnippetNoteDetail extends React.Component {
             />
           </div>
           <div styleName='tabList'>
-            {tabList}
-            <button styleName='tabList-plusButton'
+            <div styleName='list'>
+              {tabList}
+            </div>
+            <button styleName='plusButton'
               onClick={(e) => this.handleTabPlusButtonClick(e)}
             >
               <i className='fa fa-plus'/>

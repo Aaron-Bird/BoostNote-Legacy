@@ -32,6 +32,9 @@
   background-color transparent
   border none
   color $ui-inactive-text-color
+  transition 0.15s
+  &:active, &:active:hover
+    color $ui-active-color
   &:hover
     color $ui-text-color
     .control-button-tooltip
@@ -67,11 +70,24 @@
   cursor pointer
   transition background-color 0.15s
   &:hover
-    background-color alpha($ui-active-color, 10%)
+    background-color alpha($ui-active-color, 20%)
+  &:active
+    background-color $ui-active-color
+    color white
+    .item-title
+    .item-title-empty
+    .item-title-icon
+    .item-bottom-tagIcon
+    .item-bottom-tagList-empty
+    .item-bottom-time
+      color white
+    .item-bottom-tagList-item
+      background-color transparent
+      color white
 
 .item--active
   @extend .item
-  background-color alpha($ui-active-color, 100%)
+  background-color $ui-active-color
   color white
   .item-title
   .item-title-empty
@@ -84,7 +100,7 @@
     background-color transparent
     color white
   &:hover
-    background-color alpha($ui-active-color, 100%)
+    background-color $ui-active-color
 
 .item-border
   absolute top bottom left right
@@ -174,7 +190,7 @@ body[data-theme="dark"]
     .item-bottom-tagList-empty
       color white
     &:hover
-      background-color alpha($ui-active-color, 100%)
+      background-color $ui-active-color
 
   .item-title
     color $ui-dark-text-color
