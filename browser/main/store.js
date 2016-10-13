@@ -330,31 +330,34 @@ function data (state = defaultDataMap(), action) {
         let storageNoteSet = state.storageNoteMap.get(action.storage.key)
         storageNoteSet = new Set(storageNoteSet)
         state.storageNoteMap.set(action.storage.key, storageNoteSet)
-        noteSet.forEach(function handleNoteKey (noteKey) {
-          // Get note from noteMap
-          let note = state.noteMap.get(noteKey)
-          if (note != null) {
-            state.noteMap.delete(noteKey)
 
-            // From storageSet
-            storageNoteSet.delete(noteKey)
+        if (noteSet != null) {
+          noteSet.forEach(function handleNoteKey (noteKey) {
+            // Get note from noteMap
+            let note = state.noteMap.get(noteKey)
+            if (note != null) {
+              state.noteMap.delete(noteKey)
 
-            // From starredSet
-            if (note.isStarred) {
-              state.starredSet = new Set(state.starredSet)
-              state.starredSet.delete(noteKey)
+              // From storageSet
+              storageNoteSet.delete(noteKey)
+
+              // From starredSet
+              if (note.isStarred) {
+                state.starredSet = new Set(state.starredSet)
+                state.starredSet.delete(noteKey)
+              }
+
+              // Delete key from tag map
+              state.tagNoteMap = new Map(state.tagNoteMap)
+              note.tags.forEach((tag) => {
+                let tagNoteSet = state.tagNoteMap.get(tag)
+                tagNoteSet = new Set(tagNoteSet)
+                state.tagNoteMap.set(tag, tagNoteSet)
+                tagNoteSet.delete(noteKey)
+              })
             }
-
-            // Delete key from tag map
-            state.tagNoteMap = new Map(state.tagNoteMap)
-            note.tags.forEach((tag) => {
-              let tagNoteSet = state.tagNoteMap.get(tag)
-              tagNoteSet = new Set(tagNoteSet)
-              state.tagNoteMap.set(tag, tagNoteSet)
-              tagNoteSet.delete(noteKey)
-            })
-          }
-        })
+          })
+        }
       }
       return state
     case 'ADD_STORAGE':

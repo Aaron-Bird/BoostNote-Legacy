@@ -98,8 +98,8 @@ export default class CodeEditor extends React.Component {
   }
 
   handleChange (e) {
+    this.value = this.editor.getValue()
     if (this.props.onChange) {
-      this.value = this.editor.getValue()
       this.props.onChange(e)
     }
   }
@@ -121,6 +121,7 @@ export default class CodeEditor extends React.Component {
   reload () {
     // Change event shouldn't be fired when switch note
     this.editor.off('change', this.changeHandler)
+    this.value = this.props.value
     this.editor.setValue(this.props.value)
     this.editor.clearHistory()
     this.editor.on('change', this.changeHandler)

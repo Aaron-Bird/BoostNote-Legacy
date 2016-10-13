@@ -16,6 +16,7 @@ class StorageSection extends React.Component {
       isOpen: !this.state.isOpen
     })
   }
+
   handleHeaderClick (e) {
     let { storage } = this.props
     this.props.handleStorageButtonClick(e, storage.key)
