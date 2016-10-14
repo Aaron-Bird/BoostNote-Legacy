@@ -266,6 +266,8 @@ class FinderMain extends React.Component {
       let needle = new RegExp(_.escapeRegExp(search.trim()), 'i')
       notes = notes.filter((note) => note.title.match(needle))
     }
+    notes = notes
+      .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
 
     let activeNote = notes[this.state.index]
     this.noteCount = notes.length
