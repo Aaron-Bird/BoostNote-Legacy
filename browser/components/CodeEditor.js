@@ -93,7 +93,8 @@ export default class CodeEditor extends React.Component {
   setMode (mode) {
     let syntax = CodeMirror.findModeByName(pass(mode))
     if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
-    this.editor.setOption('mode', syntax.mode)
+
+    this.editor.setOption('mode', syntax.mime)
     CodeMirror.autoLoadMode(this.editor, syntax.mode)
   }
 
