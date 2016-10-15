@@ -93,7 +93,7 @@
     "react-input-autosize": "^1.1.0",
     "react-router": "^2.4.0",
     "react-router-redux": "^4.0.4",
-    "standard": "^6.0.8",
+    "standard": "^8.4.0",
     "style-loader": "^0.12.4",
     "stylus": "^0.52.4",
     "stylus-loader": "^2.3.1",
