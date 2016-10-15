@@ -475,9 +475,24 @@ function config (state = defaultConfig, action) {
   return state
 }
 
+const defaultStatus = {
+  updateReady: false
+}
+
+function status (state = defaultStatus, action) {
+  switch (action.type) {
+    case 'UPDATE_AVAILABLE':
+      return Object.assign({}, defaultStatus, {
+        updateReady: true
+      })
+  }
+  return state
+}
+
 let reducer = combineReducers({
   data,
   config,
+  status,
   routing: routerReducer
 })
 

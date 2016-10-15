@@ -45,7 +45,7 @@ class NoteList extends React.Component {
     this.refreshTimer = setInterval(() => this.forceUpdate(), 60 * 1000)
     ee.on('list:next', this.selectNextNoteHandler)
     ee.on('list:prior', this.selectPriorNoteHandler)
-    ee.on('lost:focus', this.focusHandler)
+    ee.on('list:focus', this.focusHandler)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -63,7 +63,7 @@ class NoteList extends React.Component {
 
     ee.off('list:next', this.selectNextNoteHandler)
     ee.off('list:prior', this.selectPriorNoteHandler)
-    ee.off('lost:focus', this.focusHandler)
+    ee.off('list:focus', this.focusHandler)
   }
 
   componentDidUpdate (prevProps) {

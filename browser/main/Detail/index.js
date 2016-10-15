@@ -5,6 +5,7 @@ import _ from 'lodash'
 import MarkdownNoteDetail from './MarkdownNoteDetail'
 import SnippetNoteDetail from './SnippetNoteDetail'
 import ee from 'browser/main/lib/eventEmitter'
+import StatusBar from '../StatusBar'
 
 const OSX = global.process.platform === 'darwin'
 
@@ -48,8 +49,11 @@ class Detail extends React.Component {
           tabIndex='0'
         >
           <div styleName='empty'>
-            <div styleName='empty-message'>{OSX ? 'Command(⌘)' : 'Ctrl(^)'} + N<br/>to create a new post</div>
+            <div styleName='empty-message'>{OSX ? 'Command(⌘)' : 'Ctrl(^)'} + N<br />to create a new post</div>
           </div>
+          <StatusBar
+            {..._.pick(this.props, ['config', 'location', 'dispatch'])}
+          />
         </div>
       )
     }

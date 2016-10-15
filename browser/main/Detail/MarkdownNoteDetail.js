@@ -9,6 +9,8 @@ import dataApi from 'browser/main/lib/dataApi'
 import { hashHistory } from 'react-router'
 import ee from 'browser/main/lib/eventEmitter'
 import markdown from 'browser/lib/markdown'
+import StatusBar from '../StatusBar'
+import _ from 'lodash'
 
 const electron = require('electron')
 const { remote } = electron
@@ -253,7 +255,7 @@ class MarkdownNoteDetail extends React.Component {
               onClick={(e) => this.handleShareButtonClick(e)}
               disabled
             >
-              <i className='fa fa-share-alt fa-fw'/>
+              <i className='fa fa-share-alt fa-fw' />
               <span styleName='info-right-button-tooltip'
                 style={{right: 20}}
               >Share Note</span>
@@ -261,7 +263,7 @@ class MarkdownNoteDetail extends React.Component {
             <button styleName='info-right-button'
               onClick={(e) => this.handleContextButtonClick(e)}
             >
-              <i className='fa fa-ellipsis-v'/>
+              <i className='fa fa-ellipsis-v' />
               <span styleName='info-right-button-tooltip'
                 style={{right: 5}}
               >More Options</span>
@@ -279,6 +281,10 @@ class MarkdownNoteDetail extends React.Component {
             ignorePreviewPointerEvents={this.props.ignorePreviewPointerEvents}
           />
         </div>
+
+        <StatusBar
+          {..._.pick(this.props, ['config', 'location', 'dispatch'])}
+        />
       </div>
     )
   }

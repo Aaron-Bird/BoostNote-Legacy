@@ -2,30 +2,31 @@
   absolute bottom left right
   height $statusBar-height - 1
   background-color $ui-backgroundColor
+  border-top $ui-border
+  display flex
 
-.pathname
-  absolute left
+.blank
+  flex 1
+
+.help
+  navButtonColor()
   height 24px
-  overflow ellipsis
-  right 185px
-  line-height 24px
-  font-size 12px
-  padding 0 15px
-  color $ui-inactive-text-color
+  width 24px
+  border-width 0 0 0 1px
+  border-style solid
+  border-color $ui-borderColor
+  &:active .update-icon
+    color white
 
 .zoom
   navButtonColor()
-  absolute right
   height 24px
-  width 60px
   border-width 0 1px
   border-style solid
   border-color $ui-borderColor
 
 .update
   navButtonColor()
-  position absolute
-  right 60px
   height 24px
   border-width 0 0 0 1px
   border-style solid
@@ -40,11 +41,13 @@ body[data-theme="dark"]
   .root
     background-color $ui-dark-backgroundColor
 
-  .pathname
-    color $ui-dark-inactive-text-color
-
   .zoom
     border-color $ui-dark-borderColor
+
+  .help
+    navButtonColor()
+    border-color $ui-dark-borderColor
+    border-left 1px solid $ui-dark-borderColor
 
   .update
     navDarkButtonColor()

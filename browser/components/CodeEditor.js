@@ -47,7 +47,23 @@ export default class CodeEditor extends React.Component {
       theme: this.props.theme,
       indentUnit: this.props.indentSize,
       tabSize: this.props.indentSize,
-      indentWithTabs: this.props.indentType !== 'space'
+      indentWithTabs: this.props.indentType !== 'space',
+      keyMap: 'sublime',
+      extraKeys: {
+        Tab: function (cm) {
+          if (cm.somethingSelected()) cm.indentSelection('add')
+          else {
+            if (cm.getOption('indentWithTabs')) {
+              cm.execCommand('insertTab')
+            } else {
+              cm.execCommand('insertSoftTab')
+            }
+          }
+        },
+        'Cmd-T': function (cm) {
+          // Do nothing
+        }
+      }
     })
 
     this.setMode(this.props.mode)

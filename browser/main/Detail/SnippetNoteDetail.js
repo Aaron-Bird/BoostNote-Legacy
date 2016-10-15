@@ -11,6 +11,9 @@ import { hashHistory } from 'react-router'
 import ee from 'browser/main/lib/eventEmitter'
 import CodeMirror from 'codemirror'
 import SnippetTab from './SnippetTab'
+import StatusBar from '../StatusBar'
+import context from 'browser/lib/context'
+import ConfigManager from 'browser/main/lib/ConfigManager'
 
 function pass (name) {
   switch (name) {
@@ -44,10 +47,6 @@ class SnippetNoteDetail extends React.Component {
         snippets: props.note.snippets.map((snippet) => Object.assign({}, snippet))
       })
     }
-  }
-
-  focus () {
-    this.refs.description.focus()
   }
 
   componentWillReceiveProps (nextProps) {
@@ -205,12 +204,10 @@ class SnippetNoteDetail extends React.Component {
   }
 
   handleContextButtonClick (e) {
-    let menu = new Menu()
-    menu.append(new MenuItem({
+    context.popup([{
       label: 'Delete',
       click: (e) => this.handleDeleteMenuClick(e)
-    }))
-    menu.popup(remote.getCurrentWindow())
+    }])
   }
 
   handleDeleteMenuClick (e) {
@@ -240,24 +237,6 @@ class SnippetNoteDetail extends React.Component {
 
   handleTabPlusButtonClick (e) {
     this.addSnippet()
-  }
-
-  addSnippet () {
-    let { note } = this.state
-
-    note.snippets = note.snippets.concat([{
-      name: '',
-      mode: 'text',
-      content: ''
-    }])
-    let snippetIndex = note.snippets.length - 1
-
-    this.setState({
-      note,
-      snippetIndex
-    }, () => {
-      this.refs['tab-' + snippetIndex].startRenaming()
-    })
   }
 
   handleTabButtonClick (e, index) {
@@ -312,19 +291,6 @@ class SnippetNoteDetail extends React.Component {
     })
   }
 
-  handleModeButtonClick (index) {
-    return (e) => {
-      let menu = new Menu()
-      CodeMirror.modeInfo.forEach((mode) => {
-        menu.append(new MenuItem({
-          label: mode.name,
-          click: (e) => this.handleModeOptionClick(index, mode.name)(e)
-        }))
-      })
-      menu.popup(remote.getCurrentWindow())
-    }
-  }
-
   handleModeOptionClick (index, name) {
     return (e) => {
       let snippets = this.state.note.snippets.slice()
@@ -367,26 +333,123 @@ class SnippetNoteDetail extends React.Component {
         }
         break
       case 76:
-        let shouldFocus = global.process.platform === 'darwin'
-          ? e.metaKey
-          : e.ctrlKey
-        if (shouldFocus) {
-          e.preventDefault()
-          this.focus()
+        {
+          let isSuper = global.process.platform === 'darwin'
+            ? e.metaKey
+            : e.ctrlKey
+          if (isSuper) {
+            e.preventDefault()
+            this.focus()
+          }
         }
         break
       case 84:
         {
-          let shouldFocus = global.process.platform === 'darwin'
+          let isSuper = global.process.platform === 'darwin'
             ? e.metaKey
             : e.ctrlKey
-          if (e.shouldFocus) {
+          if (isSuper) {
             e.preventDefault()
             this.addSnippet()
           }
         }
+        break
     }
+  }
 
+  handleModeButtonClick (e, index) {
+    let menu = new Menu()
+    CodeMirror.modeInfo.forEach((mode) => {
+      menu.append(new MenuItem({
+        label: mode.name,
+        click: (e) => this.handleModeOptionClick(index, mode.name)(e)
+      }))
+    })
+    menu.popup(remote.getCurrentWindow())
+  }
+
+  handleIndentTypeButtonClick (e) {
+    context.popup([
+      {
+        label: 'tab',
+        click: (e) => this.handleIndentTypeItemClick(e, 'tab')
+      },
+      {
+        label: 'space',
+        click: (e) => this.handleIndentTypeItemClick(e, 'space')
+      }
+    ])
+  }
+
+  handleIndentSizeButtonClick (e) {
+    context.popup([
+      {
+        label: '2',
+        click: (e) => this.handleIndentSizeItemClick(e, 2)
+      },
+      {
+        label: '4',
+        click: (e) => this.handleIndentSizeItemClick(e, 4)
+      },
+      {
+        label: '8',
+        click: (e) => this.handleIndentSizeItemClick(e, 8)
+      }
+    ])
+  }
+
+  handleIndentSizeItemClick (e, indentSize) {
+    let { config, dispatch } = this.props
+    let editor = Object.assign({}, config.editor, {
+      indentSize
+    })
+    ConfigManager.set({
+      editor
+    })
+    dispatch({
+      type: 'SET_CONFIG',
+      config: {
+        editor
+      }
+    })
+  }
+
+  handleIndentTypeItemClick (e, indentType) {
+    let { config, dispatch } = this.props
+    let editor = Object.assign({}, config.editor, {
+      indentType
+    })
+    ConfigManager.set({
+      editor
+    })
+    dispatch({
+      type: 'SET_CONFIG',
+      config: {
+        editor
+      }
+    })
+  }
+
+  focus () {
+    this.refs.description.focus()
+  }
+
+  addSnippet () {
+    let { note } = this.state
+
+    note.snippets = note.snippets.concat([{
+      name: '',
+      mode: 'Plain Text',
+      content: ''
+    }])
+    let snippetIndex = note.snippets.length - 1
+
+    this.setState({
+      note,
+      snippetIndex
+    }, () => {
+      this.refs['tab-' + snippetIndex].startRenaming()
+    })
   }
 
   jumpNextTab () {
@@ -542,6 +605,34 @@ class SnippetNoteDetail extends React.Component {
           </div>
           {viewList}
         </div>
+
+        <div styleName='override'>
+          <button
+            onClick={(e) => this.handleModeButtonClick(e, this.state.snippetIndex)}
+          >
+            {this.state.note.snippets[this.state.snippetIndex].mode == null
+              ? 'Select Syntax...'
+              : this.state.note.snippets[this.state.snippetIndex].mode
+            }&nbsp;
+            <i className='fa fa-caret-down'/>
+          </button>
+          <button
+            onClick={(e) => this.handleIndentTypeButtonClick(e)}
+          >
+            Indent: {config.editor.indentType}&nbsp;
+            <i className='fa fa-caret-down'/>
+          </button>
+          <button
+            onClick={(e) => this.handleIndentSizeButtonClick(e)}
+          >
+            size: {config.editor.indentSize}&nbsp;
+            <i className='fa fa-caret-down'/>
+          </button>
+        </div>
+
+        <StatusBar
+          {..._.pick(this.props, ['config', 'location', 'dispatch'])}
+        />
       </div>
     )
   }

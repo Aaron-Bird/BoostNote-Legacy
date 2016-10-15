@@ -4,50 +4,12 @@ import styles from './StatusBar.styl'
 import ZoomManager from 'browser/main/lib/ZoomManager'
 
 const electron = require('electron')
-const ipc = electron.ipcRenderer
-const { remote } = electron
+const { remote, ipcRenderer } = electron
 const { Menu, MenuItem, dialog } = remote
 
 const zoomOptions = [0.8, 0.9, 1, 1.1, 1.2, 1.3]
 
-function notify (...args) {
-  return new window.Notification(...args)
-}
-
 class StatusBar extends React.Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      updateReady: false
-    }
-    this.updateReadyHandler = (message) => {
-      this.setState({
-        updateReady: true
-      }, () => {
-        notify('Update ready!', {
-          body: 'New Boostnote is ready to be installed.'
-        })
-        this.updateApp()
-      })
-    }
-    this.updateFoundHandler = (message) => {
-      notify('Update found!', {
-        body: 'Preparing to update...'
-      })
-    }
-  }
-
-  componentDidMount () {
-    ipc.on('update-ready', this.updateReadyHandler)
-    ipc.on('update-found', this.updateFoundHandler)
-  }
-
-  componentWillUnmount () {
-    ipc.removeListener('update-ready', this.updateReadyHandler)
-    ipc.removeListener('update-found', this.updateFoundHandler)
-  }
-
   updateApp () {
     let index = dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
@@ -57,7 +19,7 @@ class StatusBar extends React.Component {
     })
 
     if (index === 0) {
-      ipc.send('update-app-confirm')
+      ipcRenderer.send('update-app-confirm')
     }
   }
 
@@ -84,28 +46,38 @@ class StatusBar extends React.Component {
   }
 
   render () {
-    let { config, location } = this.props
+    let { config, status } = this.context
 
     return (
       <div className='StatusBar'
         styleName='root'
       >
-        <div styleName='pathname'>{location.pathname + location.search}</div>
-        {this.state.updateReady
+        <div styleName='blank' />
+        {status.updateReady
           ? <button onClick={this.updateApp} styleName='update'>
-            <i styleName='update-icon' className='fa fa-cloud-download'/> Ready to Update!
+            <i styleName='update-icon' className='fa fa-cloud-download' /> Ready to Update!
           </button>
           : null
         }
+        <button styleName='help'>
+          <i className='fa fa-info-circle' />
+        </button>
         <button styleName='zoom'
           onClick={(e) => this.handleZoomButtonClick(e)}
         >
-          <i className='fa fa-search-plus'/>&nbsp;
+          <i className='fa fa-search-plus' />&nbsp;
           {Math.floor(config.zoom * 100)}%
         </button>
       </div>
     )
   }
+}
+
+StatusBar.contextTypes = {
+  status: PropTypes.shape({
+    updateReady: PropTypes.bool.isRequired
+  }).isRequired,
+  config: PropTypes.shape({}).isRequired
 }
 
 StatusBar.propTypes = {

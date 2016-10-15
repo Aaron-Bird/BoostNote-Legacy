@@ -59,8 +59,9 @@ $info-height = 75px
   opacity 0
 
 .body
-  absolute bottom left right
+  absolute left right
   top $info-height
+  bottom $statusBar-height
 
 .body .description
   absolute top left right
@@ -100,6 +101,19 @@ $info-height = 75px
 
 .tabView-content
   absolute top left right bottom
+
+.override
+  absolute bottom left
+  height 23px
+  z-index 1
+  button
+    navButtonColor()
+    height 24px
+    border-width 0 1px 0 0
+    border-style solid
+    border-color $ui-borderColor
+    &:active .update-icon
+      color white
 
 body[data-theme="dark"]
   .root
@@ -151,15 +165,3 @@ body[data-theme="dark"]
 
   .tabList .plusButton
     navDarkButtonColor()
-
-  .tabView-top-mode
-    border-color $ui-dark-borderColor
-    background-color $dark-default-button-background
-    color $ui-dark-inactive-text-color
-    &:hover
-      color $ui-dark-text-color
-      background-color $ui-dark-button--hover-backgroundColor
-    &:active
-      background-color $ui-dark-button--active-backgroundColor
-    &:active:hover
-      background-color $ui-dark-button--active-backgroundColor

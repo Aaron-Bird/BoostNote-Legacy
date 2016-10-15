@@ -7,7 +7,6 @@ import TopBar from './TopBar'
 import NoteList from './NoteList'
 import Detail from './Detail'
 import dataApi from 'browser/main/lib/dataApi'
-import StatusBar from './StatusBar'
 import _ from 'lodash'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import modal from 'browser/main/lib/modal'
@@ -29,6 +28,15 @@ class Main extends React.Component {
       listWidth: config.listWidth,
       navWidth: config.listWidth,
       isLeftSliderFocused: false
+    }
+  }
+
+  getChildContext () {
+    let { status, config } = this.props
+
+    return {
+      status,
+      config
     }
   }
 
@@ -188,7 +196,7 @@ class Main extends React.Component {
             onMouseDown={(e) => this.handleRightSlideMouseDown(e)}
             draggable='false'
           >
-            <div styleName='slider-hitbox'/>
+            <div styleName='slider-hitbox' />
           </div>
           <Detail
             style={{left: this.state.listWidth + 1}}
@@ -202,12 +210,16 @@ class Main extends React.Component {
             ignorePreviewPointerEvents={this.state.isRightSliderFocused}
           />
         </div>
-        <StatusBar
-          {..._.pick(this.props, ['config', 'location', 'dispatch'])}
-        />
       </div>
     )
   }
+}
+
+Main.childContextTypes = {
+  status: PropTypes.shape({
+    updateReady: PropTypes.bool.isRequired
+  }).isRequired,
+  config: PropTypes.shape({}).isRequired
 }
 
 Main.propTypes = {
