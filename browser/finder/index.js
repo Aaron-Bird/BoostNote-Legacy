@@ -10,6 +10,8 @@ import StorageSection from './StorageSection'
 import NoteList from './NoteList'
 import NoteDetail from './NoteDetail'
 require('!!style!css!stylus?sourceMap!../main/global.styl')
+require('../lib/customMeta')
+
 const electron = require('electron')
 const { remote } = electron
 const { Menu } = remote
