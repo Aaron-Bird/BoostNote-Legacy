@@ -132,7 +132,7 @@ class MarkdownEditor extends React.Component {
       >
         <CodeEditor styleName='codeEditor'
           ref='code'
-          mode='markdown'
+          mode='GitHub Flavored Markdown'
           value={value}
           theme={config.editor.theme}
           fontFamily={config.editor.fontFamily}
