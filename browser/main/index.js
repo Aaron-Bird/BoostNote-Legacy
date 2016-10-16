@@ -7,6 +7,7 @@ require('!!style!css!stylus?sourceMap!./global.styl')
 import { Router, Route, IndexRoute, IndexRedirect, hashHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 require('./lib/ipcClient')
+require('../lib/customMeta')
 
 const electron = require('electron')
 
@@ -85,6 +86,8 @@ ReactDOM.render((
 
   ipcRenderer.send('update-check', 'check-update')
   window.addEventListener('online', function () {
-    ipcRenderer.send('update-check', 'check-update')
+    if (!store.getState().status.updateReady) {
+      ipcRenderer.send('update-check', 'check-update')
+    }
   })
 })
