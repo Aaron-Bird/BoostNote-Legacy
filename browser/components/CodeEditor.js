@@ -50,6 +50,7 @@ export default class CodeEditor extends React.Component {
       tabSize: this.props.indentSize,
       indentWithTabs: this.props.indentType !== 'space',
       keyMap: 'sublime',
+      inputStyle: 'contenteditable',
       extraKeys: {
         Tab: function (cm) {
           if (cm.somethingSelected()) cm.indentSelection('add')
