@@ -1,6 +1,6 @@
 .root
   absolute bottom left right
-  height $statusBar-height - 1
+  height $statusBar-height
   background-color $ui-backgroundColor
   border-top $ui-border
   display flex
@@ -40,6 +40,7 @@
 body[data-theme="dark"]
   .root
     background-color $ui-dark-backgroundColor
+    border-color $ui-dark-borderColor
 
   .zoom
     border-color $ui-dark-borderColor
