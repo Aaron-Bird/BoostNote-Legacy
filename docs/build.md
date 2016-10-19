@@ -29,6 +29,11 @@ $ npm run hot
 ```
 > Actually the app can be start with `npm start`. However, the app will use the compiled script.
 
+If the app gets stuck on load, you may need to run the following.
+```
+$ npm run vendor
+```
+
 By this, webpack will watch the code changes and apply it automatically.
 
 > ### Notice
