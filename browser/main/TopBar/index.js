@@ -74,7 +74,7 @@ class TopBar extends React.Component {
     if (storage == null) throw new Error('No storage to create a note')
     let folder = _.find(storage.folders, {key: params.folderKey})
     if (folder == null) folder = storage.folders[0]
-    if (folder == null) throw new Error('No folder to craete a note')
+    if (folder == null) throw new Error('No folder to create a note')
 
     return {
       storage,
