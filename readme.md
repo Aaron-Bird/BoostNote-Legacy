@@ -81,6 +81,8 @@ Also, We've been approved [Open collective](https://opencollective.com/boostnote
 - [Bruno Paz](https://github.com/brpaz)
 - [Fabian Mueller](https://github.com/dotcs)
 - [Yoshihisa Mochihara](https://github.com/yosmoc)
+- [Mike Resoli](https://github.com/mikeres0)
+- [tjado](https://github.com/tejado)
 
 ## Copyright & License
 

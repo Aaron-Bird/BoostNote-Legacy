@@ -73,6 +73,9 @@
 - [Romain Bazile](https://github.com/gromain)
 - [Bruno Paz](https://github.com/brpaz)
 - [Fabian Mueller](https://github.com/dotcs)
+- [Yoshihisa Mochihara](https://github.com/yosmoc)
+- [Mike Resoli](https://github.com/mikeres0)
+- [tjado](https://github.com/tejado)
 
 ## Copyright & License
 
