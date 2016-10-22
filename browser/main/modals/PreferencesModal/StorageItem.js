@@ -300,10 +300,10 @@ class StorageItem extends React.Component {
     })
 
     if (index === 0) {
-      let { storage, dispatch } = this.props
+      let { storage } = this.props
       dataApi.removeStorage(storage.key)
         .then(() => {
-          dispatch({
+          store.dispatch({
             type: 'REMOVE_STORAGE',
             storageKey: storage.key
           })
