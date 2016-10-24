@@ -1,18 +1,14 @@
 <h1 align="center">
-  <br>
+
   <a href="https://github.com/BoostIO/Boostnote"><img src="http://b00st.io/assets/img/logo.png" alt="Boostnote" width="180"></a>
   <br>
   Boostnote
   <br>
 </h1>
-
 <h4 align="center">Note app built for developers. </h4>
-<br>
 <h5 align="center">macOS, Windows and Linux</h5>
-
 <h5 align="center">Built with Electron, React + Redux, Webpack and CSSModules</h5>
-
----
+<br>
 
 > We launched our [Boostnote store](#goods)!! :tada: Also, you can support us via [Patreon](https://www.patreon.com/boostnote) and [Open collective](https://opencollective.com/boostnote)!
 
