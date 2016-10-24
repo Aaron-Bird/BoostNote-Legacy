@@ -114,6 +114,7 @@ class MarkdownEditor extends React.Component {
 
   render () {
     let { className, value, config } = this.props
+
     let editorFontSize = parseInt(config.editor.fontSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 101)) editorFontSize = 14
     let editorIndentSize = parseInt(config.editor.indentSize, 10)
@@ -153,6 +154,7 @@ class MarkdownEditor extends React.Component {
           codeBlockTheme={config.preview.codeBlockTheme}
           codeBlockFontFamily={config.editor.fontFamily}
           lineNumber={config.preview.lineNumber}
+          indentSize={editorIndentSize}
           ref='preview'
           onContextMenu={(e) => this.handleContextMenu(e)}
           tabIndex='0'

@@ -35,7 +35,6 @@ var config = {
     'lodash',
     'markdown-it',
     'moment',
-    'highlight.js',
     'markdown-it-emoji',
     'fs-jetpack',
     '@rokt33r/markdown-it-math',

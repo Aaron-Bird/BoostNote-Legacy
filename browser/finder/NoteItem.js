@@ -50,8 +50,8 @@ class NoteItem extends React.Component {
 
         <div styleName='title'>
           {note.type === 'SNIPPET_NOTE'
-            ? <i styleName='title-icon' className='fa fa-fw fa-code'/>
-            : <i styleName='title-icon' className='fa fa-fw fa-file-text-o'/>
+            ? <i styleName='title-icon' className='fa fa-fw fa-code' />
+            : <i styleName='title-icon' className='fa fa-fw fa-file-text-o' />
           }
           {note.title.trim().length > 0
             ? note.title

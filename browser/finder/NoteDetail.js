@@ -185,11 +185,13 @@ class NoteDetail extends React.Component {
 
     return (
       <MarkdownPreview styleName='root'
+        theme={config.ui.theme}
         fontSize={config.preview.fontSize}
         fontFamily={config.preview.fontFamily}
         codeBlockTheme={config.preview.codeBlockTheme}
         codeBlockFontFamily={config.editor.fontFamily}
         lineNumber={config.preview.lineNumber}
+        indentSize={editorIndentSize}
         value={note.content}
       />
     )

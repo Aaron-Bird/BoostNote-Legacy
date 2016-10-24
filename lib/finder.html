@@ -8,7 +8,6 @@
 
 
   <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css" media="screen" charset="utf-8">
-  <link rel="stylesheet" href="../node_modules/highlight.js/styles/xcode.css" id="hljs-css">
   <link rel="shortcut icon" href="favicon.ico">
   <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
 
@@ -43,12 +42,12 @@
     const electron = require('electron')
     electron.webFrame.setZoomLevelLimits(1, 1)
     const _ = require('lodash')
-    var scriptUrl = _.find(electron.remote.process.argv, a => a === '--hot')
+    var scriptUrl = _.find(electron.remote.process.argv, (a) => a === '--hot')
       ? 'http://localhost:8080/assets/finder.js'
       : '../compiled/finder.js'
-    var scriptEl=document.createElement('script')
-    scriptEl.setAttribute("type","text/javascript")
-    scriptEl.setAttribute("src", scriptUrl)
+    var scriptEl = document.createElement('script')
+    scriptEl.setAttribute('type', 'text/javascript')
+    scriptEl.setAttribute('src', scriptUrl)
     document.body.appendChild(scriptEl)
   </script>
 </body>

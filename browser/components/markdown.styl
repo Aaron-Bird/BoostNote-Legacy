@@ -191,7 +191,7 @@ code
   padding 0.2em 0.4em
   background-color #f7f7f7
   border-radius 3px
-  font-size 0.85em
+  font-size 1em
   text-decoration none
   margin-right 2px
 pre
@@ -200,26 +200,36 @@ pre
   border-radius 5px
   overflow-x auto
   margin 0 0 1em
-  line-height 1.35
+  display flex
+  line-height 1.4em
+  &.CodeMirror
+    height initial
+    &>code
+      flex 1
+      overflow-x auto
   code
-    margin 0
     background-color inherit
+    margin 0
     padding 0
     border none
     border-radius 0
-    pre
-      border none
-      margin -5px
   &>span.lineNumber
     display none
-    float left
-    font-size 0.85em
-    margin 0 0.5em 0 -0.5em
+    font-size 1em
+    padding 0.5em 0
+    margin -0.5em 0.5em -0.5em -0.5em
     border-right 1px solid
     text-align right
+    border-top-left-radius 4px
+    border-bottom-left-radius 4px
+    &.CodeMirror-gutters
+      position initial
+      top initial
+      left initial
+      min-height 0 !important
     &>span
       display block
-      padding 0 .5em 0 1em
+      padding 0 .5em 0
 table
   display block
   width 100%

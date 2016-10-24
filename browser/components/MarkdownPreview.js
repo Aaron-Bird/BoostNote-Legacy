@@ -1,11 +1,45 @@
 import React, { PropTypes } from 'react'
 import markdown from 'browser/lib/markdown'
 import _ from 'lodash'
-import hljsTheme from 'browser/lib/hljsThemes'
+import CodeMirror from 'codemirror'
+import consts from 'browser/lib/consts'
+
+const { remote } = require('electron')
+const { app } = remote
+const path = require('path')
 
 const markdownStyle = require('!!css!stylus?sourceMap!./markdown.styl')[0][1]
-const { shell } = require('electron')
+const appPath = 'file://' + (process.env.NODE_ENV === 'production'
+  ? app.getAppPath()
+  : path.resolve())
 
+function buildStyle (fontFamily, fontSize, codeBlockFontFamily, lineNumber) {
+  return `
+@font-face {
+  font-family: 'Lato';
+  src: url('${appPath}/resources/fonts/Lato-Regular.woff2') format('woff2'), /* Modern Browsers */
+       url('${appPath}/resources/fonts/Lato-Regular.woff') format('woff'), /* Modern Browsers */
+       url('${appPath}/resources/fonts/Lato-Regular.ttf') format('truetype');
+  font-style: normal;
+  font-weight: normal;
+  text-rendering: optimizeLegibility;
+}
+${markdownStyle}
+body {
+  font-family: ${fontFamily.join(', ')};
+  font-size: ${fontSize}px;
+}
+code {
+  font-family: ${codeBlockFontFamily.join(', ')};
+}
+.lineNumber {
+  ${lineNumber && 'display: block !important;'}
+  font-family: ${codeBlockFontFamily.join(', ')};
+}
+`
+}
+
+const { shell } = require('electron')
 const OSX = global.process.platform === 'darwin'
 
 const defaultFontFamily = ['helvetica', 'arial', 'sans-serif']
@@ -68,9 +102,17 @@ export default class MarkdownPreview extends React.Component {
   }
 
   componentDidMount () {
-    this.refs.root.setAttribute('sandbox', 'allow-same-origin')
+    this.refs.root.setAttribute('sandbox', 'allow-scripts')
     this.refs.root.contentWindow.document.body.addEventListener('contextmenu', this.contextMenuHandler)
+
+    this.refs.root.contentWindow.document.head.innerHTML = `
+      <style id='style'></style>
+      <link rel="stylesheet" href="${appPath}/compiled/katex-style.css">
+      <link rel="stylesheet" href="${appPath}/node_modules/codemirror/lib/codemirror.css">
+      <link rel="stylesheet" id="codeTheme">
+    `
     this.rewriteIframe()
+    this.applyStyle()
 
     this.refs.root.contentWindow.document.addEventListener('mousedown', this.mouseDownHandler)
     this.refs.root.contentWindow.document.addEventListener('mouseup', this.mouseUpHandler)
@@ -83,14 +125,36 @@ export default class MarkdownPreview extends React.Component {
   }
 
   componentDidUpdate (prevProps) {
-    if (prevProps.value !== this.props.value ||
-      prevProps.fontFamily !== this.props.fontFamily ||
+    if (prevProps.value !== this.props.value) this.rewriteIframe()
+    if (prevProps.fontFamily !== this.props.fontFamily ||
       prevProps.fontSize !== this.props.fontSize ||
       prevProps.codeBlockFontFamily !== this.props.codeBlockFontFamily ||
       prevProps.codeBlockTheme !== this.props.codeBlockTheme ||
       prevProps.lineNumber !== this.props.lineNumber ||
-      prevProps.theme !== this.props.theme
-    ) this.rewriteIframe()
+      prevProps.theme !== this.props.theme) {
+      this.applyStyle()
+      this.rewriteIframe()
+    }
+  }
+
+  applyStyle () {
+    let { fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme } = this.props
+    fontFamily = _.isString(fontFamily) && fontFamily.trim().length > 0
+      ? [fontFamily].concat(defaultFontFamily)
+      : defaultFontFamily
+    codeBlockFontFamily = _.isString(codeBlockFontFamily) && codeBlockFontFamily.trim().length > 0
+      ? [codeBlockFontFamily].concat(defaultCodeBlockFontFamily)
+      : defaultCodeBlockFontFamily
+
+    this.setCodeTheme(codeBlockTheme)
+    this.getWindow().document.getElementById('style').innerHTML = buildStyle(fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme, lineNumber)
+  }
+
+  setCodeTheme (theme) {
+    theme = consts.THEMES.some((_theme) => _theme === theme)
+      ? theme
+      : 'default'
+    this.getWindow().document.getElementById('codeTheme').href = `${appPath}/node_modules/codemirror/theme/${theme}.css`
   }
 
   rewriteIframe () {
@@ -101,43 +165,7 @@ export default class MarkdownPreview extends React.Component {
       el.removeEventListener('click', this.checkboxClickHandler)
     })
 
-    let { value, fontFamily, fontSize, codeBlockFontFamily, lineNumber, codeBlockTheme, theme } = this.props
-    fontFamily = _.isString(fontFamily) && fontFamily.trim().length > 0
-      ? [fontFamily].concat(defaultFontFamily)
-      : defaultFontFamily
-    codeBlockFontFamily = _.isString(codeBlockFontFamily) && codeBlockFontFamily.trim().length > 0
-      ? [codeBlockFontFamily].concat(defaultCodeBlockFontFamily)
-      : defaultCodeBlockFontFamily
-    codeBlockTheme = hljsTheme().some((theme) => theme.name === codeBlockTheme) ? codeBlockTheme : 'xcode'
-
-    this.refs.root.contentWindow.document.head.innerHTML = `
-      <style>
-        @font-face {
-          font-family: 'Lato';
-          src: url('../resources/fonts/Lato-Regular.woff2') format('woff2'), /* Modern Browsers */
-               url('../resources/fonts/Lato-Regular.woff') format('woff'), /* Modern Browsers */
-               url('../resources/fonts/Lato-Regular.ttf') format('truetype');
-          font-style: normal;
-          font-weight: normal;
-          text-rendering: optimizeLegibility;
-        }
-        ${markdownStyle}
-        body {
-          font-family: ${fontFamily.join(', ')};
-          font-size: ${fontSize}px;
-        }
-        code {
-          font-family: ${codeBlockFontFamily.join(', ')};
-        }
-        .lineNumber {
-          ${lineNumber && 'display: block !important;'}
-          font-family: ${codeBlockFontFamily.join(', ')};
-          opacity: 0.5;
-        }
-      </style>
-      <link rel="stylesheet" href="../node_modules/highlight.js/styles/${codeBlockTheme}.css">
-      <link rel="stylesheet" href="../compiled/katex-style.css">
-    `
+    let { value, theme, indentSize, codeBlockTheme } = this.props
 
     this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
     this.refs.root.contentWindow.document.body.innerHTML = markdown.render(value)
@@ -145,8 +173,26 @@ export default class MarkdownPreview extends React.Component {
     Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
       el.addEventListener('click', this.anchorClickHandler)
     })
+
     Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('input[type="checkbox"]'), (el) => {
       el.addEventListener('click', this.checkboxClickHandler)
+    })
+
+    codeBlockTheme = consts.THEMES.some((_theme) => _theme === codeBlockTheme)
+      ? codeBlockTheme
+      : 'default'
+
+    Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('.code code'), (el) => {
+      let syntax = CodeMirror.findModeByName(el.className)
+      if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
+      CodeMirror.requireMode(syntax.mode, () => {
+        let content = el.innerHTML
+        el.innerHTML = ''
+        el.parentNode.className += ` cm-s-${codeBlockTheme} CodeMirror`
+        CodeMirror.runMode(content, syntax.mime, el, {
+          tabSize: indentSize
+        })
+      })
     })
   }
 

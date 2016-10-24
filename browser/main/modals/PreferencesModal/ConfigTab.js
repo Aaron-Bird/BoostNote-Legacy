@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './ConfigTab.styl'
-import hljsTheme from 'browser/lib/hljsThemes'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import store from 'browser/main/store'
 import consts from 'browser/lib/consts'
@@ -154,7 +153,6 @@ class ConfigTab extends React.Component {
       </p>
       : null
     let themes = consts.THEMES
-    let hljsThemeList = hljsTheme()
     let { config } = this.state
 
     return (
@@ -369,8 +367,8 @@ class ConfigTab extends React.Component {
                 onChange={(e) => this.handleUIChange(e)}
               >
                 {
-                  hljsThemeList.map((theme) => {
-                    return (<option value={theme.name} key={theme.name}>{theme.caption}</option>)
+                  themes.map((theme) => {
+                    return (<option value={theme} key={theme}>{theme}</option>)
                   })
                 }
               </select>

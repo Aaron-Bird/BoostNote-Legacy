@@ -37,6 +37,9 @@ export default class CodeEditor extends React.Component {
       }
       this.props.onBlur != null && this.props.onBlur(e)
     }
+    this.loadStyleHandler = (e) => {
+      this.editor.refresh()
+    }
   }
 
   componentDidMount () {
@@ -72,11 +75,16 @@ export default class CodeEditor extends React.Component {
 
     this.editor.on('blur', this.blurHandler)
     this.editor.on('change', this.changeHandler)
+
+    let editorTheme = document.getElementById('editorTheme')
+    editorTheme.addEventListener('load', this.loadStyleHandler)
   }
 
   componentWillUnmount () {
     this.editor.off('blur', this.blurHandler)
     this.editor.off('change', this.changeHandler)
+    let editorTheme = document.getElementById('editorTheme')
+    editorTheme.removeEventListener('load', this.loadStyleHandler)
   }
 
   componentDidUpdate (prevProps, prevState) {
@@ -86,7 +94,7 @@ export default class CodeEditor extends React.Component {
     }
     if (prevProps.theme !== this.props.theme) {
       this.editor.setOption('theme', this.props.theme)
-      needRefresh = true
+      // editor should be refreshed after css loaded
     }
     if (prevProps.fontSize !== this.props.fontSize) {
       needRefresh = true
