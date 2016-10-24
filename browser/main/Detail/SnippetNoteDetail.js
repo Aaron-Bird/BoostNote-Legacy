@@ -507,7 +507,7 @@ class SnippetNoteDetail extends React.Component {
         key={index}
         style={{zIndex: isActive ? 5 : 4}}
       >
-        {snippet.mode === 'markdown'
+        {snippet.mode === 'Markdown' || snippet.mode === 'GitHub Flavored Markdown'
           ? <MarkdownEditor styleName='tabView-content'
             value={snippet.content}
             config={config}
