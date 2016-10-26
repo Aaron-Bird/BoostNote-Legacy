@@ -20,6 +20,7 @@ function decodeHTMLEntities (text) {
 
   return text
 }
+
 const { remote } = require('electron')
 const { app } = remote
 const path = require('path')
@@ -175,10 +176,10 @@ export default class MarkdownPreview extends React.Component {
   }
 
   rewriteIframe () {
-    Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
+    _.forEach(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
       el.removeEventListener('click', this.anchorClickHandler)
     })
-    Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('input[type="checkbox"]'), (el) => {
+    _.forEach(this.refs.root.contentWindow.document.querySelectorAll('input[type="checkbox"]'), (el) => {
       el.removeEventListener('click', this.checkboxClickHandler)
     })
 
@@ -187,11 +188,11 @@ export default class MarkdownPreview extends React.Component {
     this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
     this.refs.root.contentWindow.document.body.innerHTML = markdown.render(value)
 
-    Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
+    _.forEach(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
       el.addEventListener('click', this.anchorClickHandler)
     })
 
-    Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('input[type="checkbox"]'), (el) => {
+    _.forEach(this.refs.root.contentWindow.document.querySelectorAll('input[type="checkbox"]'), (el) => {
       el.addEventListener('click', this.checkboxClickHandler)
     })
 
@@ -199,19 +200,18 @@ export default class MarkdownPreview extends React.Component {
       ? codeBlockTheme
       : 'default'
 
-    Array.prototype.forEach
-      .call(this.refs.root.contentWindow.document.querySelectorAll('.code code'), (el) => {
-        let syntax = CodeMirror.findModeByName(el.className)
-        if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
-        CodeMirror.requireMode(syntax.mode, () => {
-          let content = el.innerHTML
-          el.innerHTML = ''
-          el.parentNode.className += ` cm-s-${codeBlockTheme} CodeMirror`
-          CodeMirror.runMode(content, syntax.mime, el, {
-            tabSize: indentSize
-          })
+    _.forEach(this.refs.root.contentWindow.document.querySelectorAll('.code code'), (el) => {
+      let syntax = CodeMirror.findModeByName(el.className)
+      if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
+      CodeMirror.requireMode(syntax.mode, () => {
+        let content = el.innerHTML
+        el.innerHTML = ''
+        el.parentNode.className += ` cm-s-${codeBlockTheme} CodeMirror`
+        CodeMirror.runMode(content, syntax.mime, el, {
+          tabSize: indentSize
         })
       })
+    })
     let opts = {}
     if (this.props.theme === 'dark') {
       opts['font-color'] = '#DDD'
@@ -219,20 +219,19 @@ export default class MarkdownPreview extends React.Component {
       opts['element-color'] = '#DDD'
       opts['fill'] = '#3A404C'
     }
-    Array.prototype.forEach
-      .call(this.refs.root.contentWindow.document.querySelectorAll('.flowchart'), (el) => {
-        Raphael.setWindow(this.getWindow())
-        try {
-          let diagram = flowchart.parse(decodeHTMLEntities(el.innerHTML))
-          el.innerHTML = ''
-          diagram.drawSVG(el, opts)
-          Array.prototype.forEach.call(el.querySelectorAll('a'), (el) => {
-            el.addEventListener('click', this.anchorClickHandler)
-          })
-        } catch (e) {
-          console.error(e)
-        }
-      })
+    _.forEach(this.refs.root.contentWindow.document.querySelectorAll('.flowchart'), (el) => {
+      Raphael.setWindow(this.getWindow())
+      try {
+        let diagram = flowchart.parse(decodeHTMLEntities(el.innerHTML))
+        el.innerHTML = ''
+        diagram.drawSVG(el, opts)
+        _.forEach(el.querySelectorAll('a'), (el) => {
+          el.addEventListener('click', this.anchorClickHandler)
+        })
+      } catch (e) {
+        console.error(e)
+      }
+    })
   }
 
   focus () {
