@@ -202,6 +202,9 @@ pre
   margin 0 0 1em
   display flex
   line-height 1.4em
+  &.flowchart
+    display flex
+    justify-content center
   &.CodeMirror
     height initial
     &>code
@@ -279,7 +282,7 @@ body[data-theme="dark"]
 
   code
     border-color darken(themeDarkBorder, 10%)
-    background-color lighten(themeDarkPreview, 5%)
+    background-color lighten(themeDarkPreview, 10%)
 
   pre
     border-color lighten(#21252B, 20%)

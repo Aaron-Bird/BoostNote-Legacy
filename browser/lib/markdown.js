@@ -20,6 +20,9 @@ var md = markdownit({
   html: true,
   xhtmlOut: true,
   highlight: function (str, lang) {
+    if (lang === 'flowchart') {
+      return `<pre class="flowchart">${str}</pre>`
+    }
     return '<pre class="code">' +
     createGutter(str) +
     '<code class="' + lang + '">' +

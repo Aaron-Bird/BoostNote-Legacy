@@ -47,7 +47,9 @@ var config = {
       'react-dom': 'var ReactDOM',
       'react-redux': 'var ReactRedux',
       'codemirror': 'var CodeMirror',
-      'redux': 'var Redux'
+      'redux': 'var Redux',
+      'raphael': 'var Raphael',
+      'flowchart': 'var flowchart'
     }
   ]
 }

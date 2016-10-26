@@ -3,7 +3,23 @@ import markdown from 'browser/lib/markdown'
 import _ from 'lodash'
 import CodeMirror from 'codemirror'
 import consts from 'browser/lib/consts'
+import Raphael from 'raphael'
+import flowchart from 'flowchart'
 
+function decodeHTMLEntities (text) {
+  var entities = [
+    ['apos', '\''],
+    ['amp', '&'],
+    ['lt', '<'],
+    ['gt', '>']
+  ]
+
+  for (var i = 0, max = entities.length; i < max; ++i) {
+    text = text.replace(new RegExp('&' + entities[i][0] + ';', 'g'), entities[i][1])
+  }
+
+  return text
+}
 const { remote } = require('electron')
 const { app } = remote
 const path = require('path')
@@ -64,14 +80,15 @@ export default class MarkdownPreview extends React.Component {
     e.preventDefault()
     e.stopPropagation()
 
-    let href = e.target.getAttribute('href')
+    let anchor = e.target.closest('a')
+    let href = anchor.getAttribute('href')
     if (_.isString(href) && href.match(/^#/)) {
       let targetElement = this.refs.root.contentWindow.document.getElementById(href.substring(1, href.length))
       if (targetElement != null) {
         this.getWindow().scrollTo(0, targetElement.offsetTop)
       }
     } else {
-      shell.openExternal(e.target.href)
+      shell.openExternal(href)
     }
   }
 
@@ -182,18 +199,40 @@ export default class MarkdownPreview extends React.Component {
       ? codeBlockTheme
       : 'default'
 
-    Array.prototype.forEach.call(this.refs.root.contentWindow.document.querySelectorAll('.code code'), (el) => {
-      let syntax = CodeMirror.findModeByName(el.className)
-      if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
-      CodeMirror.requireMode(syntax.mode, () => {
-        let content = el.innerHTML
-        el.innerHTML = ''
-        el.parentNode.className += ` cm-s-${codeBlockTheme} CodeMirror`
-        CodeMirror.runMode(content, syntax.mime, el, {
-          tabSize: indentSize
+    Array.prototype.forEach
+      .call(this.refs.root.contentWindow.document.querySelectorAll('.code code'), (el) => {
+        let syntax = CodeMirror.findModeByName(el.className)
+        if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
+        CodeMirror.requireMode(syntax.mode, () => {
+          let content = el.innerHTML
+          el.innerHTML = ''
+          el.parentNode.className += ` cm-s-${codeBlockTheme} CodeMirror`
+          CodeMirror.runMode(content, syntax.mime, el, {
+            tabSize: indentSize
+          })
         })
       })
-    })
+    let opts = {}
+    if (this.props.theme === 'dark') {
+      opts['font-color'] = '#DDD'
+      opts['line-color'] = '#DDD'
+      opts['element-color'] = '#DDD'
+      opts['fill'] = '#3A404C'
+    }
+    Array.prototype.forEach
+      .call(this.refs.root.contentWindow.document.querySelectorAll('.flowchart'), (el) => {
+        Raphael.setWindow(this.getWindow())
+        try {
+          let diagram = flowchart.parse(decodeHTMLEntities(el.innerHTML))
+          el.innerHTML = ''
+          diagram.drawSVG(el, opts)
+          Array.prototype.forEach.call(el.querySelectorAll('a'), (el) => {
+            el.addEventListener('click', this.anchorClickHandler)
+          })
+        } catch (e) {
+          console.error(e)
+        }
+      })
   }
 
   focus () {
