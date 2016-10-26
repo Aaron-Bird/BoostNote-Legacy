@@ -9,7 +9,8 @@ class MarkdownEditor extends React.Component {
     super(props)
 
     this.state = {
-      status: 'PREVIEW'
+      status: 'PREVIEW',
+      renderValue: props.value
     }
   }
 
@@ -19,6 +20,33 @@ class MarkdownEditor extends React.Component {
 
   componentDidUpdate () {
     this.value = this.refs.code.value
+  }
+
+  componentWillReceiveProps (props) {
+    if (props.value !== this.props.value) {
+      this.queueRendering(props.value)
+    }
+  }
+
+  componentWillUnmount () {
+    this.cancelQueue()
+  }
+
+  queueRendering (value) {
+    clearTimeout(this.renderTimer)
+    this.renderTimer = setTimeout(() => {
+      this.renderPreview(value)
+    }, 500)
+  }
+
+  cancelQueue () {
+    clearTimeout(this.renderTimer)
+  }
+
+  renderPreview (value) {
+    this.setState({
+      renderValue: value
+    })
   }
 
   handleChange (e) {
@@ -110,6 +138,8 @@ class MarkdownEditor extends React.Component {
 
   reload () {
     this.refs.code.reload()
+    this.cancelQueue()
+    this.renderPreview(this.props.value)
   }
 
   render () {
@@ -158,7 +188,7 @@ class MarkdownEditor extends React.Component {
           ref='preview'
           onContextMenu={(e) => this.handleContextMenu(e)}
           tabIndex='0'
-          value={value}
+          value={this.state.renderValue}
           onMouseUp={(e) => this.handlePreviewMouseUp(e)}
           onMouseDown={(e) => this.handlePreviewMouseDown(e)}
           onCheckboxClick={(e) => this.handleCheckboxClick(e)}
