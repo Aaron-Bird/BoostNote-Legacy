@@ -23,6 +23,9 @@ var md = markdownit({
     if (lang === 'flowchart') {
       return `<pre class="flowchart">${str}</pre>`
     }
+    if (lang === 'sequence') {
+      return `<pre class="sequence">${str}</pre>`
+    }
     return '<pre class="code">' +
     createGutter(str) +
     '<code class="' + lang + '">' +
@@ -132,13 +135,13 @@ function strip (input) {
       .replace(/`{3}.*\n/g, '')
       .replace(/<(.*?)>/g, '$1')
       .replace(/^[=\-]{2,}\s*$/g, '')
-      .replace(/\[\^.+?\](\: .*?$)?/g, '')
+      .replace(/\[\^.+?\](: .*?$)?/g, '')
       .replace(/\s{0,2}\[.*?\]: .*?$/g, '')
-      .replace(/\!\[.*?\][\[\(].*?[\]\)]/g, '')
+      .replace(/!\[.*?\][\[\(].*?[\]\)]/g, '')
       .replace(/\[(.*?)\][\[\(].*?[\]\)]/g, '$1')
       .replace(/>/g, '')
       .replace(/^\s{1,2}\[(.*?)\]: (\S+)( ".*?")?\s*$/g, '')
-      .replace(/^\#{1,6}\s*([^#]*)\s*(\#{1,6})?/gm, '$1')
+      .replace(/^#{1,6}\s*([^#]*)\s*(#{1,6})?/gm, '$1')
       .replace(/([\*_]{1,3})(\S.*?\S)\1/g, '$2')
       .replace(/(`{3,})(.*?)\1/gm, '$2')
       .replace(/^-{3,}\s*$/g, '')

@@ -68,6 +68,12 @@ body
     padding 5px
     margin -5px
     border-radius 5px
+  .flowchart-error, .sequence-error
+    background-color errorBackgroundColor
+    color errorTextColor
+    padding 5px
+    border-radius 5px
+    justify-content left
 li
   label.taskListItem
     margin-left -2em
@@ -202,9 +208,10 @@ pre
   margin 0 0 1em
   display flex
   line-height 1.4em
-  &.flowchart
+  &.flowchart, &.sequence
     display flex
     justify-content center
+    background-color white
   &.CodeMirror
     height initial
     &>code

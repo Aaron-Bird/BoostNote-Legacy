@@ -5,6 +5,7 @@ import CodeMirror from 'codemirror'
 import consts from 'browser/lib/consts'
 import Raphael from 'raphael'
 import flowchart from 'flowchart'
+import SequenceDiagram from 'sequence-diagram'
 
 function decodeHTMLEntities (text) {
   var entities = [
@@ -213,12 +214,12 @@ export default class MarkdownPreview extends React.Component {
       })
     })
     let opts = {}
-    if (this.props.theme === 'dark') {
-      opts['font-color'] = '#DDD'
-      opts['line-color'] = '#DDD'
-      opts['element-color'] = '#DDD'
-      opts['fill'] = '#3A404C'
-    }
+    // if (this.props.theme === 'dark') {
+    //   opts['font-color'] = '#DDD'
+    //   opts['line-color'] = '#DDD'
+    //   opts['element-color'] = '#DDD'
+    //   opts['fill'] = '#3A404C'
+    // }
     _.forEach(this.refs.root.contentWindow.document.querySelectorAll('.flowchart'), (el) => {
       Raphael.setWindow(this.getWindow())
       try {
@@ -230,6 +231,24 @@ export default class MarkdownPreview extends React.Component {
         })
       } catch (e) {
         console.error(e)
+        el.className = 'flowchart-error'
+        el.innerHTML = 'Flowchart parse error: ' + e.message
+      }
+    })
+
+    _.forEach(this.refs.root.contentWindow.document.querySelectorAll('.sequence'), (el) => {
+      Raphael.setWindow(this.getWindow())
+      try {
+        let diagram = SequenceDiagram.parse(decodeHTMLEntities(el.innerHTML))
+        el.innerHTML = ''
+        diagram.drawSVG(el, {theme: 'simple'})
+        _.forEach(el.querySelectorAll('a'), (el) => {
+          el.addEventListener('click', this.anchorClickHandler)
+        })
+      } catch (e) {
+        console.error(e)
+        el.className = 'sequence-error'
+        el.innerHTML = 'Sequence diagram parse error: ' + e.message
       }
     })
   }

@@ -49,7 +49,8 @@ var config = {
       'codemirror': 'var CodeMirror',
       'redux': 'var Redux',
       'raphael': 'var Raphael',
-      'flowchart': 'var flowchart'
+      'flowchart': 'var flowchart',
+      'sequence-diagram': 'var Diagram'
     }
   ]
 }

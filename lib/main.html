@@ -63,6 +63,10 @@
 
   <script src="../compiled/raphael.js"></script>
   <script src="../compiled/flowchart.js"></script>
+  <script>
+    window._ = require('lodash')
+  </script>
+  <script src="../compiled/sequence-diagram.js"></script>
 
   <script src="../compiled/katex.js"></script>
   <script src="../compiled/react.js"></script>
@@ -72,8 +76,7 @@
   <script type='text/javascript'>
     const electron = require('electron')
     electron.webFrame.setZoomLevelLimits(1, 1)
-    const _ = require('lodash')
-    var scriptUrl = _.find(electron.remote.process.argv, (a) => a === '--hot')
+    var scriptUrl = window._.find(electron.remote.process.argv, (a) => a === '--hot')
       ? 'http://localhost:8080/assets/main.js'
       : '../compiled/main.js'
     var scriptEl = document.createElement('script')
