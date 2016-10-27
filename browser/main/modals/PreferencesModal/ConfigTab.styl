@@ -86,6 +86,10 @@
   p
     line-height 1.2
 
+colorDarkControl()
+  border-color $ui-dark-borderColor
+  background-color $ui-dark-backgroundColor
+  color $ui-dark-text-color
 body[data-theme="dark"]
   .root
     color $ui-dark-text-color
@@ -108,11 +112,7 @@ body[data-theme="dark"]
   .group-control-rightButton
     colorDarkPrimaryButton()
   .group-hint
-    border-color $ui-dark-borderColor
-    background-color $ui-dark-backgroundColor
-    color $ui-dark-text-color
+    colorDarkControl()
   .group-section-control
     select, .group-section-control-input
-      border-color $ui-dark-borderColor
-      background-color $ui-dark-backgroundColor
-      color $ui-dark-text-color
+      colorDarkControl()
