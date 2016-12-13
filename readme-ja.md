@@ -1,6 +1,6 @@
 # Boostnote
 
-> [Boostnote store](#goods)をはじめました!! :tada: そして、[Pateron](https://www.patreon.com/boostnote)からも私達を支援することができます!
+> [Boostnote store](https://boostnote.paintory.com/)をはじめました!! :tada: そして、[Pateron](https://www.patreon.com/boostnote)からも私達を支援することができます!
 
 ![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/18662404/3aa42396-7f55-11e6-88bf-f4ec6505ee8f.png)
 ![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/18662139/f491adac-7f53-11e6-8631-2a447af9f36a.png)

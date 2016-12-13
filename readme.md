@@ -10,7 +10,7 @@
 <h5 align="center">Built with Electron, React + Redux, Webpack and CSSModules</h5>
 <h1> </h1>
 
-> We launched our [Boostnote store](#goods)!! :tada: Also, you can support us via [Patreon](https://www.patreon.com/boostnote) and [Open collective](https://opencollective.com/boostnote)!
+> We launched our [Boostnote store](https://boostnote.paintory.com/)!! :tada: Also, you can support us via [Patreon](https://www.patreon.com/boostnote) and [Open collective](https://opencollective.com/boostnote)!
 
 ![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/18662404/3aa42396-7f55-11e6-88bf-f4ec6505ee8f.png)
 ![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/18662139/f491adac-7f53-11e6-8631-2a447af9f36a.png)
