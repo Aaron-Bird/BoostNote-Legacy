@@ -46,7 +46,7 @@ By this, webpack will watch the code changes and apply it automatically.
 We use Grunt.
 Acutal deploy can be run by `grunt`. However, you shouldn't use because the default task is including codesign and authenticode.
 
-So, we prepare a script which just make an excutable file.
+So, we prepare a script which just make an executable file.
 
 ```
 grunt pre-build
