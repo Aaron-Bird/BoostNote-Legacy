@@ -9,6 +9,6 @@
     "katex-style": "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.css",
     "raphael": "https://raw.githubusercontent.com/DmitryBaranovskiy/raphael/master/raphael.js",
     "flowchart": "https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.3/flowchart.js",
-    "sequence-diagram": "https://cdn.rawgit.com/bramp/js-sequence-diagrams/master/build/sequence-diagram-min.js"
+    "sequence-diagram": "https://cdn.rawgit.com/bramp/js-sequence-diagrams/master/dist/sequence-diagram-min.js"
   }
 }
