@@ -1,5 +1,5 @@
 <h1 align="center">
-  <a href="https://github.com/BoostIO/Boostnote"><img src="http://b00st.io/assets/img/logo.png" alt="Boostnote" width="180"></a>
+  <a href="https://github.com/BoostIO/Boostnote"><img src="./resources/app.png" alt="Boostnote" width="180"></a>
   <br>
   Boostnote
   <br>
@@ -12,8 +12,7 @@
 
 > We launched our [Boostnote store](https://boostnote.paintory.com/)!! :tada: Also, you can support us via [Patreon](https://www.patreon.com/boostnote) and [Open collective](https://opencollective.com/boostnote)!
 
-![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/18662404/3aa42396-7f55-11e6-88bf-f4ec6505ee8f.png)
-![Boostnote app screenshot](https://cloud.githubusercontent.com/assets/5865853/18662139/f491adac-7f53-11e6-8631-2a447af9f36a.png)
+![Boostnote app screenshot](./resources/repository/top.png)
 
 [日本語](./readme-ja.md) - [한국어](./readme-ko.md)
 

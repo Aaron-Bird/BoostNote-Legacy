@@ -1,6 +1,6 @@
 {
   "name": "boost",
-  "version": "0.7.5",
+  "version": "0.8.0",
   "description": "Boostnote",
   "main": "index.js",
   "license": "GPL-3.0",
@@ -52,6 +52,7 @@
     "electron-gh-releases": "^2.0.2",
     "font-awesome": "^4.3.0",
     "immutable": "^3.8.1",
+    "js-sequence-diagrams": "^1000000.0.6",
     "lodash": "^4.11.1",
     "markdown-it": "^6.0.1",
     "markdown-it-checkbox": "^1.1.0",
