@@ -20,6 +20,32 @@
 .menu-button-label
   margin-left 5px
 
+.menu--folded
+  @extend .menu
+  .menu-button, .menu-button--active
+    text-align center
+    &:hover .menu-button-label
+      transition opacity 0.15s
+      opacity 1
+  .menu-button-label
+    position fixed
+    display inline-block
+    height 32px
+    left 44px
+    padding 0 10px
+    margin-top -8px
+    margin-left 0
+    overflow ellipsis
+    background-color $ui-tooltip-backgroundColor
+    z-index 10
+    color white
+    line-height 32px
+    border-top-right-radius 2px
+    border-bottom-right-radius 2px
+    pointer-events none
+    opacity 0
+    font-size 12px
+
 body[data-theme="dark"]
   .menu-button
     navDarkButtonColor()

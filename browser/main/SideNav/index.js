@@ -71,6 +71,7 @@ class SideNav extends React.Component {
         </div>
 
         <SideNavFilter
+          isFolded={isFolded}
           isHomeActive={isHomeActive}
           handleAllNotesButtonClick={(e) => this.handleHomeButtonClick(e)}
           isStarredActive={isStarredActive}

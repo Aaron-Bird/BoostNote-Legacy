@@ -6,6 +6,7 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './SideNavFilter.styl'
 
 /**
+ * @param {boolean} isFolded
  * @param {boolean} isHomeActive
  * @param {Function} handleAllNotesButtonClick
  * @param {boolean} isStarredActive
@@ -13,9 +14,10 @@ import styles from './SideNavFilter.styl'
  * @return {React.Component}
  */
 const SideNavFilter = ({
-  isHomeActive, handleAllNotesButtonClick, isStarredActive, handleStarredButtonClick
+  isFolded, isHomeActive, handleAllNotesButtonClick,
+  isStarredActive, handleStarredButtonClick
 }) => (
-  <div styleName='menu'>
+  <div styleName={ isFolded ? 'menu--folded' : 'menu' }>
     <button styleName={isHomeActive ? 'menu-button--active' : 'menu-button'}
       onClick={handleAllNotesButtonClick}
     >
@@ -32,6 +34,7 @@ const SideNavFilter = ({
 )
 
 SideNavFilter.propTypes = {
+  isFolded: PropTypes.bool,
   isHomeActive: PropTypes.bool.isRequired,
   handleAllNotesButtonClick: PropTypes.func.isRequired,
   isStarredActive: PropTypes.bool.isRequired,
