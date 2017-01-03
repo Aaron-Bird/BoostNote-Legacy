@@ -39,7 +39,7 @@ class InfoTab extends React.Component {
             <a href='http://maisin.co/'
               onClick={(e) => this.handleLinkClick(e)}
             >MAISIN&CO.</a></div>
-          <div styleName='copyright'>Copyright 2016 MAISIN&CO. All rights reserved.</div>
+          <div styleName='copyright'>Copyright 2017 MAISIN&CO. All rights reserved.</div>
         </div>
         <ul styleName='list'>
           <li>
