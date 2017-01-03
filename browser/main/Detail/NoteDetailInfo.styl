@@ -34,7 +34,12 @@ $info-margin-under-border = 27px
     color $ui-button--active-color
 
 .info-right
-  float right
+  position absolute
+  right 0
+  top 0
+  background $ui-noteDetail-backgroundColor
+  bottom 1px
+  padding-left 30px
 
 .info-right-button
   width 34px
@@ -67,6 +72,9 @@ body[data-theme="dark"]
     colorDarkDefaultButton()
     border-color $ui-dark-borderColor
     color $ui-dark-text-color
+
+  .info-right
+    background-color $ui-dark-noteDetail-backgroundColor
 
   .info-right-button
     navDarkButtonColor()
