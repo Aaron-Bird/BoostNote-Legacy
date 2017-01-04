@@ -50,8 +50,8 @@
 
 ## Goods
 
-<img src="https://b00st.io/images/t3.png" width="250"/>
-<img src="https://b00st.io/images/t1.png" width="250"/>
+<img src="https://boostnote.io/images/t3.png" width="250"/>
+<img src="https://boostnote.io/images/t1.png" width="250"/>
 
 [Boostnote store](https://boostnote.paintory.com/)から幾つかのグッズを販売しています。
 

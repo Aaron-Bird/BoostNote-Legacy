@@ -41,8 +41,8 @@ If you want to join our dev Slack group ask @rokt33r.
 - Snippets Lab
 
 ## Store
-<img src="https://b00st.io/images/t3.png" width="250"/>
-<img src="https://b00st.io/images/t1.png" width="250"/>
+<img src="https://boostnote.io/images/t3.png" width="250"/>
+<img src="https://boostnote.io/images/t1.png" width="250"/>
 
 We're selling Boostnote goods on the [Boostnote store](https://boostnote.paintory.com/).
 
