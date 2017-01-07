@@ -21,6 +21,7 @@
 * Open sourced forever!
 
 See upcoming features and bug fixes [here](https://github.com/BoostIO/Boostnote/issues/68)
+
 ## Feedback
 Please use the [issue tracker](https://github.com/BoostIO/Boostnote/issues) for questions, bug reporting and contribution information.
 
@@ -30,15 +31,6 @@ If you want to join our dev Slack group ask @rokt33r.
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
-## Inspirations
-- Atom
-- Quiver
-- Evernote
-- GitKraken
-- GitBook
-- Gist
-- Gistbox
-- Snippets Lab
 
 ## Store
 <img src="https://b00st.io/images/t3.png" width="250"/>
@@ -53,10 +45,12 @@ Products are shipped worldwide. Powered by [Paintory](https://paintory.com/)
 * [Open collective](https://opencollective.com/boostnote)
 
 ## Author & Maintainer
-[Rokt33r(Dick Choi of MAISIN&CO.)](https://github.com/rokt33r)
+- [Rokt33r](https://github.com/rokt33r)
+- [sota1235](https://github.com/sota1235)
+- [Kohei TAKATA](https://github.com/kohei-takata)
+- [Kazu Yokomizo](https://github.com/kazup01)
 
 ## Contributors
-- [Kazu Yokomizo](https://github.com/kazup01)
 - [dojineko](https://github.com/dojineko)
 - [Romain Bazile](https://github.com/gromain)
 - [Bruno Paz](https://github.com/brpaz)
@@ -64,9 +58,8 @@ Products are shipped worldwide. Powered by [Paintory](https://paintory.com/)
 - [Yoshihisa Mochihara](https://github.com/yosmoc)
 - [Mike Resoli](https://github.com/mikeres0)
 - [tjado](https://github.com/tejado)
-- [sota1235](https://github.com/sota1235)
 
 ## Copyright & License
-Copyright (C) 2016 MAISIN&CO.
+Copyright (C) 2017 Maisin&Co.
 
 [GPL v3](./LICENSE).
