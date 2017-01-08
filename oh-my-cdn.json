@@ -1,6 +1,0 @@
-{
-  "directory": "compiled",
-  "targets": {
-    "flowchart": "https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.3/flowchart.js"
-  }
-}
