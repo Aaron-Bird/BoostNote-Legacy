@@ -5,7 +5,7 @@
   <br>
   <br>
 </h1>
-<h4 align="center">Note app built for developers. </h4>
+<h4 align="center">Note-taking app for developers. </h4>
 <h5 align="center">macOS, Windows and Linux</h5>
 <h5 align="center">Built with Electron, React + Redux, Webpack and CSSModules</h5>
 <h1> </h1>
@@ -17,16 +17,15 @@
 [日本語](./readme-ja.md) - [한국어](./readme-ko.md)
 
 ## Goals
-* We want our users to enjoying writing _anything_. :grinning:
-* Open sourced forever!
+* We want you to enjoy writing. :grinning:
+* Open source forever!
 
-See upcoming features and bug fixes [here](https://github.com/BoostIO/Boostnote/issues/68)
+See upcoming features and bug fixes [here](https://github.com/BoostIO/Boostnote/wiki/Requested-features)
 ## Feedback
 Please use the [issue tracker](https://github.com/BoostIO/Boostnote/issues) for questions, bug reporting and contribution information.
 
 ## Development
-If you want to join our dev Slack group ask @rokt33r.
-**[Build instructions](docs/build.md)**
+[Build instructions](docs/build.md)
 
 [![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
 
