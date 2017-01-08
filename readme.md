@@ -20,7 +20,7 @@
 * We want you to enjoy writing. :grinning:
 * Open source forever!
 
-See upcoming features and bug fixes [here](https://github.com/BoostIO/Boostnote/wiki/Requested-features)
+See upcoming features and bug fixes [here](https://github.com/BoostIO/Boostnote/wiki/List-of-the-requested-features.)
 
 ## Feedback
 Please use the [issue tracker](https://github.com/BoostIO/Boostnote/issues) for questions, bug reporting and contribution information.
