@@ -6,7 +6,7 @@
 ![Boostnote app screenshot](./resources/repository/top.png)
 
 
-**ロードマップ・リクエスト一覧は[こちら](https://github.com/BoostIO/Boostnote/wiki/Requested-features)です！**
+**ロードマップ・リクエスト一覧は[こちら](https://github.com/BoostIO/Boostnote/wiki/List-of-the-requested-features)です！**
 皆さんからのプルリクをお待ちしています！
 
 以下のような場合には、Issue trackerを利用してください。
