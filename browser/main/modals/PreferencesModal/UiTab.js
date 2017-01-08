@@ -34,7 +34,8 @@ class UiTab extends React.Component {
       fontFamily: this.refs.editorFontFamily.value,
       indentType: this.refs.editorIndentType.value,
       indentSize: this.refs.editorIndentSize.value,
-      switchPreview: this.refs.editorSwitchPreview.value
+      switchPreview: this.refs.editorSwitchPreview.value,
+      keyMap: this.refs.editorKeyMap.value
     }
     config.preview = {
       fontSize: this.refs.previewFontSize.value,
@@ -181,6 +182,22 @@ class UiTab extends React.Component {
               </select>
             </div>
           </div>
+
+          <div styleName='group-section'>
+            <div styleName='group-section-label'>
+              Editor Keymap
+            </div>
+            <div styleName='group-section-control'>
+              <select value={config.editor.keyMap}
+                ref='editorKeyMap'
+                onChange={(e) => this.handleUIChange(e)}
+              >
+                <option value='sublime'>default</option>
+                <option value='vim'>vim</option>
+              </select>
+            </div>
+          </div>
+
           <div styleName='group-header2'>Preview</div>
           <div styleName='group-section'>
             <div styleName='group-section-label'>
