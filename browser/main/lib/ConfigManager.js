@@ -34,7 +34,7 @@ export const DEFAULT_CONFIG = {
   preview: {
     fontSize: '14',
     fontFamily: 'Lato',
-    codeBlockTheme: 'xcode',
+    codeBlockTheme: 'elegant',
     lineNumber: true
   }
 }

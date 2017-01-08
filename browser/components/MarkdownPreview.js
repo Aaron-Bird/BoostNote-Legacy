@@ -184,9 +184,9 @@ export default class MarkdownPreview extends React.Component {
   }
 
   setCodeTheme (theme) {
-    theme = consts.THEMES.some((_theme) => _theme === theme)
+    theme = consts.THEMES.some((_theme) => _theme === theme) && theme !== 'default'
       ? theme
-      : 'default'
+      : 'elegant'
     this.getWindow().document.getElementById('codeTheme').href = `${appPath}/node_modules/codemirror/theme/${theme}.css`
   }
 
