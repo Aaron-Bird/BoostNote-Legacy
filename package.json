@@ -8,8 +8,6 @@
     "start": "electron ./index.js",
     "hot": "electron ./index.js --hot",
     "webpack": "webpack-dev-server --hot --inline --config webpack.config.js",
-    "postinstall": "npm run vendor",
-    "vendor": "oh-my-cdn",
     "compile": "grunt compile",
     "test": "PWD=$(pwd) NODE_ENV=test ava"
   },
