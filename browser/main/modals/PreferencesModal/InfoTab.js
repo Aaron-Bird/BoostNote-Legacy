@@ -26,7 +26,7 @@ class InfoTab extends React.Component {
 
         <div styleName='top'>
           <div styleName='icon-space'>
-            <img styleName='icon' src='../resources/app.png' width='92' height='92'/>
+            <img styleName='icon' src='../resources/app.png' width='92' height='92' />
             <div styleName='icon-right'>
               <div styleName='appId'>Boostnote {appVersion}</div>
               <div styleName='description'>
@@ -34,7 +34,7 @@ class InfoTab extends React.Component {
               </div>
             </div>
           </div>
-          <div styleName='clear'></div>
+          <div styleName='clear' />
           <div styleName='madeBy'>Made by&nbsp;
             <a href='http://maisin.co/'
               onClick={(e) => this.handleLinkClick(e)}

@@ -112,7 +112,7 @@ class Main extends React.Component {
         ConfigManager.set({ navWidth })
         dispatch({
           type: 'SET_NAV_WIDTH',
-          navWidth,
+          navWidth
         })
       })
     }
@@ -169,7 +169,7 @@ class Main extends React.Component {
             onMouseDown={(e) => this.handleLeftSlideMouseDown(e)}
             draggable='false'
           >
-            <div styleName='slider-hitbox'/>
+            <div styleName='slider-hitbox' />
           </div>
         }
         <div styleName={config.isSideNavFolded ? 'body--expanded' : 'body'}

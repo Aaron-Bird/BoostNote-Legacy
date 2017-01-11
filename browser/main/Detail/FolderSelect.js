@@ -268,7 +268,7 @@ class FolderSelect extends React.Component {
                 <span styleName='idle-label-name-surfix'>in {currentOption.storage.name}</span>
               </span>
             </div>
-            <i styleName='idle-caret' className='fa fa-fw fa-caret-down'/>
+            <i styleName='idle-caret' className='fa fa-fw fa-caret-down' />
           </div>
         }
 

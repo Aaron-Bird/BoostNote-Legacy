@@ -65,7 +65,7 @@ class SideNav extends React.Component {
           <button styleName='top-menu'
             onClick={(e) => this.handleMenuButtonClick(e)}
           >
-            <i className='fa fa-navicon fa-fw'/>
+            <i className='fa fa-navicon fa-fw' />
             <span styleName='top-menu-label'>Menu</span>
           </button>
         </div>
@@ -87,8 +87,8 @@ class SideNav extends React.Component {
           onClick={(e) => this.handleToggleButtonClick(e)}
         >
           {isFolded
-            ? <i className='fa fa-angle-double-right'/>
-            : <i className='fa fa-angle-double-left'/>
+            ? <i className='fa fa-angle-double-right' />
+            : <i className='fa fa-angle-double-left' />
           }
         </button>
       </div>

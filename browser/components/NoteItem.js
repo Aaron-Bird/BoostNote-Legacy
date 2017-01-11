@@ -91,10 +91,10 @@ NoteItem.propTypes = {
     type: PropTypes.string.isRequired,
     title: PropTypes.string.isrequired,
     tags: PropTypes.array,
-    isStarred: PropTypes.bool.isRequired,
+    isStarred: PropTypes.bool.isRequired
   }),
   handleNoteClick: PropTypes.func.isRequired,
-  handleNoteContextMenu: PropTypes.func.isRequired,
+  handleNoteContextMenu: PropTypes.func.isRequired
 }
 
 export default CSSModules(NoteItem, styles)

@@ -181,7 +181,7 @@ class StorageItem extends React.Component {
             <button styleName='header-addFolderButton'
               onClick={(e) => this.handleAddFolderButtonClick(e)}
             >
-              <i className='fa fa-plus'/>
+              <i className='fa fa-plus' />
             </button>
           }
 

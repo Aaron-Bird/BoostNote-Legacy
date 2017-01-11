@@ -72,7 +72,7 @@ class StoragesTab extends React.Component {
           <button styleName='list-control-addStorageButton'
             onClick={(e) => this.handleAddStorageButton(e)}
           >
-            <i className='fa fa-plus'/> Add Storage
+            <i className='fa fa-plus' /> Add Storage
           </button>
         </div>
       </div>

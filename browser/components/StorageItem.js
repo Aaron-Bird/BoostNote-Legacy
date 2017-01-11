@@ -52,7 +52,7 @@ StorageItem.propTypes = {
   folderName: PropTypes.string.isRequired,
   folderColor: PropTypes.string,
   isFolded: PropTypes.bool.isRequired,
-  noteCount: PropTypes.number,
+  noteCount: PropTypes.number
 }
 
 export default CSSModules(StorageItem, styles)

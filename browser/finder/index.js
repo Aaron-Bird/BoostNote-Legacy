@@ -351,7 +351,7 @@ function refreshData () {
 
 ReactDOM.render((
   <Provider store={store}>
-    <Finder/>
+    <Finder />
   </Provider>
 ), document.getElementById('content'), function () {
   refreshData()

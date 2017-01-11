@@ -150,7 +150,7 @@ class HotkeyTab extends React.Component {
 }
 
 HotkeyTab.propTypes = {
-  dispatch: PropTypes.func,
+  dispatch: PropTypes.func
 }
 
 export default CSSModules(HotkeyTab, styles)

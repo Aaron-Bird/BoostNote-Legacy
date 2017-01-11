@@ -117,7 +117,7 @@ class SnippetTab extends React.Component {
           <button styleName='deleteButton'
             onClick={(e) => this.handleDeleteButtonClick(e)}
           >
-            <i className='fa fa-times'/>
+            <i className='fa fa-times' />
           </button>
         }
       </div>

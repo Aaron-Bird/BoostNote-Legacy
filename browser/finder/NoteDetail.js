@@ -97,9 +97,7 @@ class NoteDetail extends React.Component {
     let { note, config } = this.props
     if (note == null) {
       return (
-        <div styleName='root'>
-
-        </div>
+        <div styleName='root' />
       )
     }
 

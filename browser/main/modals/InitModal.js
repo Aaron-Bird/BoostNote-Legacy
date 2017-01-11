@@ -197,7 +197,7 @@ class InitModal extends React.Component {
   render () {
     if (this.state.isLoading) {
       return <div styleName='root--loading'>
-        <i styleName='spinner' className='fa fa-spin fa-spinner'/>
+        <i styleName='spinner' className='fa fa-spin fa-spinner' />
         <div styleName='loadingMessage'>Preparing initialization...</div>
       </div>
     }
@@ -235,7 +235,7 @@ class InitModal extends React.Component {
 
           {this.state.legacyStorageExists &&
             <div styleName='body-migration'>
-              <label><input type='checkbox' checked={this.state.migrationRequested} onChange={(e) => this.handleMigrationRequestedChange(e)}/> Migrate old data from the legacy app v0.5</label>
+              <label><input type='checkbox' checked={this.state.migrationRequested} onChange={(e) => this.handleMigrationRequestedChange(e)} /> Migrate old data from the legacy app v0.5</label>
             </div>
           }
 
@@ -247,7 +247,7 @@ class InitModal extends React.Component {
             >
               {this.state.isSending
                 ? <span>
-                  <i className='fa fa-spin fa-spinner'/> Loading...
+                  <i className='fa fa-spin fa-spinner' /> Loading...
                 </span>
                 : 'Let\'s Go!'
               }

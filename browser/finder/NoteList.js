@@ -59,7 +59,6 @@ class NoteList extends React.Component {
     let notesList = notes
       .slice(0, 10 + 10 * this.state.range)
       .map((note, _index) => {
-
         const isActive = (index === _index)
         const key = `${note.storage}-${note.key}`
         const dateDisplay = moment(note.updatedAt).fromNow()

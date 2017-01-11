@@ -376,7 +376,7 @@ class NoteList extends React.Component {
             }
             onClick={(e) => this.handleListStyleButtonClick(e, 'DEFAULT')}
           >
-            <i className='fa fa-th-large'/>
+            <i className='fa fa-th-large' />
           </button>
           <button styleName={config.listStyle === 'SMALL'
               ? 'control-button--active'
@@ -384,7 +384,7 @@ class NoteList extends React.Component {
             }
             onClick={(e) => this.handleListStyleButtonClick(e, 'SMALL')}
           >
-            <i className='fa fa-list-ul'/>
+            <i className='fa fa-list-ul' />
           </button>
         </div>
         <div styleName='list'

@@ -538,7 +538,7 @@ class SnippetNoteDetail extends React.Component {
             <button styleName='info-right-button'
               onClick={(e) => this.handleContextButtonClick(e)}
             >
-              <i className='fa fa-ellipsis-v'/>
+              <i className='fa fa-ellipsis-v' />
             </button>
           </div>
         </div>
@@ -563,7 +563,7 @@ class SnippetNoteDetail extends React.Component {
             <button styleName='plusButton'
               onClick={(e) => this.handleTabPlusButtonClick(e)}
             >
-              <i className='fa fa-plus'/>
+              <i className='fa fa-plus' />
             </button>
           </div>
           {viewList}
@@ -577,19 +577,19 @@ class SnippetNoteDetail extends React.Component {
               ? 'Select Syntax...'
               : this.state.note.snippets[this.state.snippetIndex].mode
             }&nbsp;
-            <i className='fa fa-caret-down'/>
+            <i className='fa fa-caret-down' />
           </button>
           <button
             onClick={(e) => this.handleIndentTypeButtonClick(e)}
           >
             Indent: {config.editor.indentType}&nbsp;
-            <i className='fa fa-caret-down'/>
+            <i className='fa fa-caret-down' />
           </button>
           <button
             onClick={(e) => this.handleIndentSizeButtonClick(e)}
           >
             size: {config.editor.indentSize}&nbsp;
-            <i className='fa fa-caret-down'/>
+            <i className='fa fa-caret-down' />
           </button>
         </div>
 

@@ -114,8 +114,8 @@ class NewNoteModal extends React.Component {
           >
             <i styleName='control-button-icon'
               className='fa fa-file-text-o'
-            /><br/>
-            <span styleName='control-button-label'>Markdown Note</span><br/>
+            /><br />
+            <span styleName='control-button-label'>Markdown Note</span><br />
             <span styleName='control-button-description'>It is good for any type of documents. Check List, Code block and Latex block are available.</span>
           </button>
 
@@ -126,14 +126,14 @@ class NewNoteModal extends React.Component {
           >
             <i styleName='control-button-icon'
               className='fa fa-code'
-            /><br/>
-            <span styleName='control-button-label'>Snippet Note</span><br/>
+            /><br />
+            <span styleName='control-button-label'>Snippet Note</span><br />
             <span styleName='control-button-description'>This format is specialized on managing snippets like Gist. Multiple snippets can be grouped as a note.
             </span>
           </button>
 
         </div>
-        <div styleName='description'><i className='fa fa-arrows-h'/> Tab to switch format</div>
+        <div styleName='description'><i className='fa fa-arrows-h' /> Tab to switch format</div>
 
       </div>
     )
