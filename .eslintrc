@@ -1,0 +1,6 @@
+{
+  "extends": ["standard", "standard-jsx"],
+  "rules": {
+    "no-useless-escape": 0
+  }
+}

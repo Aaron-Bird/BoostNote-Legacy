@@ -7,9 +7,6 @@ import ConfigManager from 'browser/main/lib/ConfigManager'
 import StorageItem from './StorageItem'
 import SideNavFilter from 'browser/components/SideNavFilter'
 
-const electron = require('electron')
-const { remote } = electron
-
 class SideNav extends React.Component {
   // TODO: should not use electron stuff v0.7
   handleMenuButtonClick (e) {
@@ -65,7 +62,7 @@ class SideNav extends React.Component {
           <button styleName='top-menu'
             onClick={(e) => this.handleMenuButtonClick(e)}
           >
-            <i className='fa fa-navicon fa-fw'/>
+            <i className='fa fa-navicon fa-fw' />
             <span styleName='top-menu-label'>Menu</span>
           </button>
         </div>
@@ -87,8 +84,8 @@ class SideNav extends React.Component {
           onClick={(e) => this.handleToggleButtonClick(e)}
         >
           {isFolded
-            ? <i className='fa fa-angle-double-right'/>
-            : <i className='fa fa-angle-double-left'/>
+            ? <i className='fa fa-angle-double-right' />
+            : <i className='fa fa-angle-double-left' />
           }
         </button>
       </div>

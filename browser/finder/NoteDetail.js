@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './NoteDetail.styl'
 import MarkdownPreview from 'browser/components/MarkdownPreview'
@@ -97,9 +97,7 @@ class NoteDetail extends React.Component {
     let { note, config } = this.props
     if (note == null) {
       return (
-        <div styleName='root'>
-
-        </div>
+        <div styleName='root' />
       )
     }
 

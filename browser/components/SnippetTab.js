@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './SnippetTab.styl'
 import context from 'browser/lib/context'
@@ -117,7 +117,7 @@ class SnippetTab extends React.Component {
           <button styleName='deleteButton'
             onClick={(e) => this.handleDeleteButtonClick(e)}
           >
-            <i className='fa fa-times'/>
+            <i className='fa fa-times' />
           </button>
         }
       </div>

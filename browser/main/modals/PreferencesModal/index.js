@@ -43,7 +43,7 @@ class Preferences extends React.Component {
 
     switch (this.state.currentTab) {
       case 'INFO':
-        return <InfoTab/>
+        return <InfoTab />
       case 'HOTKEY':
         return (
           <HotkeyTab
@@ -86,9 +86,9 @@ class Preferences extends React.Component {
 
     let tabs = [
       {target: 'STORAGES', label: 'Storages'},
-      {target: 'HOTKEY',   label: 'Hotkey'},
-      {target: 'UI',       label: 'UI'},
-      {target: 'INFO',     label: 'Info'}
+      {target: 'HOTKEY', label: 'Hotkey'},
+      {target: 'UI', label: 'UI'},
+      {target: 'INFO', label: 'Info'}
     ]
 
     let navButtons = tabs.map((tab) => {

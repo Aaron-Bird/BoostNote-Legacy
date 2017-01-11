@@ -10,8 +10,6 @@ import ConfigManager from 'browser/main/lib/ConfigManager'
 import dataApi from 'browser/main/lib/dataApi'
 
 const OSX = window.process.platform === 'darwin'
-const { remote } = require('electron')
-const { Menu, MenuItem } = remote
 
 class TopBar extends React.Component {
   constructor (props) {
@@ -71,10 +69,10 @@ class TopBar extends React.Component {
         break
       }
     }
-    if (storage == null) alert('No storage to create a note')
+    if (storage == null) window.alert('No storage to create a note')
     let folder = _.find(storage.folders, {key: params.folderKey})
     if (folder == null) folder = storage.folders[0]
-    if (folder == null) alert('No folder to create a note')
+    if (folder == null) window.alert('No folder to create a note')
 
     return {
       storage,
@@ -262,8 +260,8 @@ class TopBar extends React.Component {
             <span styleName='control-search-optionList-item-folder-surfix'>in {storage.name}</span>
           </div>
           {note.type === 'SNIPPET_NOTE'
-            ? <i styleName='control-search-optionList-item-type' className='fa fa-code'/>
-            : <i styleName='control-search-optionList-item-type' className='fa fa-file-text-o'/>
+            ? <i styleName='control-search-optionList-item-type' className='fa fa-code' />
+            : <i styleName='control-search-optionList-item-type' className='fa fa-file-text-o' />
           }&nbsp;
           {note.title}
         </div>
@@ -276,7 +274,7 @@ class TopBar extends React.Component {
       >
         <div styleName='control'>
           <div styleName='control-search'>
-            <i styleName='control-search-icon' className='fa fa-search fa-fw'/>
+            <i styleName='control-search-icon' className='fa fa-search fa-fw' />
             <div styleName='control-search-input'
               onFocus={(e) => this.handleSearchFocus(e)}
               onBlur={(e) => this.handleSearchBlur(e)}
@@ -303,14 +301,14 @@ class TopBar extends React.Component {
               <button styleName='left-search-clearButton'
                 onClick={(e) => this.handleSearchClearButton(e)}
               >
-                <i className='fa fa-times'/>
+                <i className='fa fa-times' />
               </button>
             }
 
           </div>
           <button styleName='control-newPostButton'
             onClick={(e) => this.handleNewPostButtonClick(e)}>
-            <i className='fa fa-plus'/>
+            <i className='fa fa-plus' />
             <span styleName='control-newPostButton-tooltip'>
               Make a Note {OSX ? '⌘' : '^'} + n
             </span>

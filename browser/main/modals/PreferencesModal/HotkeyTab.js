@@ -7,8 +7,6 @@ import store from 'browser/main/store'
 const electron = require('electron')
 const ipc = electron.ipcRenderer
 
-const OSX = global.process.platform === 'darwin'
-
 class HotkeyTab extends React.Component {
   constructor (props) {
     super(props)
@@ -150,7 +148,7 @@ class HotkeyTab extends React.Component {
 }
 
 HotkeyTab.propTypes = {
-  dispatch: PropTypes.func,
+  dispatch: PropTypes.func
 }
 
 export default CSSModules(HotkeyTab, styles)

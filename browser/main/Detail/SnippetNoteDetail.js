@@ -14,6 +14,7 @@ import SnippetTab from 'browser/components/SnippetTab'
 import StatusBar from '../StatusBar'
 import context from 'browser/lib/context'
 import ConfigManager from 'browser/main/lib/ConfigManager'
+import _ from 'lodash'
 
 function pass (name) {
   switch (name) {
@@ -459,7 +460,7 @@ class SnippetNoteDetail extends React.Component {
   }
 
   render () {
-    let { data, config } = this.props
+    let { config } = this.props
     let { note } = this.state
 
     let editorFontSize = parseInt(config.editor.fontSize, 10)
@@ -538,7 +539,7 @@ class SnippetNoteDetail extends React.Component {
             <button styleName='info-right-button'
               onClick={(e) => this.handleContextButtonClick(e)}
             >
-              <i className='fa fa-ellipsis-v'/>
+              <i className='fa fa-ellipsis-v' />
             </button>
           </div>
         </div>
@@ -563,7 +564,7 @@ class SnippetNoteDetail extends React.Component {
             <button styleName='plusButton'
               onClick={(e) => this.handleTabPlusButtonClick(e)}
             >
-              <i className='fa fa-plus'/>
+              <i className='fa fa-plus' />
             </button>
           </div>
           {viewList}
@@ -577,19 +578,19 @@ class SnippetNoteDetail extends React.Component {
               ? 'Select Syntax...'
               : this.state.note.snippets[this.state.snippetIndex].mode
             }&nbsp;
-            <i className='fa fa-caret-down'/>
+            <i className='fa fa-caret-down' />
           </button>
           <button
             onClick={(e) => this.handleIndentTypeButtonClick(e)}
           >
             Indent: {config.editor.indentType}&nbsp;
-            <i className='fa fa-caret-down'/>
+            <i className='fa fa-caret-down' />
           </button>
           <button
             onClick={(e) => this.handleIndentSizeButtonClick(e)}
           >
             size: {config.editor.indentSize}&nbsp;
-            <i className='fa fa-caret-down'/>
+            <i className='fa fa-caret-down' />
           </button>
         </div>
 
