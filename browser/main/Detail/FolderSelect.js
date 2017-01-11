@@ -128,8 +128,8 @@ class FolderSelect extends React.Component {
   }
 
   nextOption () {
-    let { storages } = this.props
     let { optionIndex } = this.state
+    let { folders } = this.props
 
     optionIndex++
     if (optionIndex >= folders.length) optionIndex = 0

@@ -10,8 +10,6 @@ import ConfigManager from 'browser/main/lib/ConfigManager'
 import dataApi from 'browser/main/lib/dataApi'
 
 const OSX = window.process.platform === 'darwin'
-const { remote } = require('electron')
-const { Menu, MenuItem } = remote
 
 class TopBar extends React.Component {
   constructor (props) {
@@ -71,10 +69,10 @@ class TopBar extends React.Component {
         break
       }
     }
-    if (storage == null) alert('No storage to create a note')
+    if (storage == null) window.alert('No storage to create a note')
     let folder = _.find(storage.folders, {key: params.folderKey})
     if (folder == null) folder = storage.folders[0]
-    if (folder == null) alert('No folder to create a note')
+    if (folder == null) window.alert('No folder to create a note')
 
     return {
       storage,

@@ -27,8 +27,8 @@ const StorageItem = ({
     onClick={handleButtonClick}
     onContextMenu={handleContextMenu}
   >
-    <span styleName={isFolded ?
-      'folderList-item-name--folded' : 'folderList-item-name'
+    <span styleName={isFolded
+      ? 'folderList-item-name--folded' : 'folderList-item-name'
     }
       style={{borderColor: folderColor}}
     >

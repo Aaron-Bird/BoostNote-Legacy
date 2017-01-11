@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import NoteItem from 'browser/components/NoteItem'
 import moment from 'moment'
 
@@ -54,7 +54,7 @@ class NoteList extends React.Component {
   }
 
   render () {
-    let { storageMap, notes, index } = this.props
+    let { notes, index } = this.props
 
     let notesList = notes
       .slice(0, 10 + 10 * this.state.range)

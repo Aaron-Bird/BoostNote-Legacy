@@ -12,7 +12,6 @@ const TestDummy = require('../fixtures/TestDummy')
 const sander = require('sander')
 const os = require('os')
 const CSON = require('@rokt33r/season')
-const faker = require('faker')
 
 const storagePath = path.join(os.tmpdir(), 'test/move-note')
 const storagePath2 = path.join(os.tmpdir(), 'test/move-note2')

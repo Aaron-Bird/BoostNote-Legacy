@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './StorageSection.styl'
 import StorageItem from 'browser/components/StorageItem'

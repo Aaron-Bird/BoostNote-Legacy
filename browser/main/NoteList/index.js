@@ -324,8 +324,8 @@ class NoteList extends React.Component {
         const isDefault = config.listStyle === 'DEFAULT'
         const isActive = location.query.key === note.storage + '-' + note.key
         const dateDisplay = moment(
-          config.sortBy === 'CREATED_AT' ?
-            note.createdAt : note.updatedAt
+          config.sortBy === 'CREATED_AT'
+            ? note.createdAt : note.updatedAt
         ).fromNow()
         const key = `${note.storage}-${note.key}`
 

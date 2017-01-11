@@ -1,11 +1,10 @@
-import React, { PropTypes } from 'react'
+import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './InitModal.styl'
 import dataApi from 'browser/main/lib/dataApi'
 import store from 'browser/main/store'
 import { hashHistory } from 'react-router'
 import _ from 'lodash'
-import keygen from 'browser/lib/keygen'
 
 const CSON = require('@rokt33r/season')
 const path = require('path')

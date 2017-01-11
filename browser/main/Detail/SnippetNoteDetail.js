@@ -14,6 +14,7 @@ import SnippetTab from 'browser/components/SnippetTab'
 import StatusBar from '../StatusBar'
 import context from 'browser/lib/context'
 import ConfigManager from 'browser/main/lib/ConfigManager'
+import _ from 'lodash'
 
 function pass (name) {
   switch (name) {
@@ -459,7 +460,7 @@ class SnippetNoteDetail extends React.Component {
   }
 
   render () {
-    let { data, config } = this.props
+    let { config } = this.props
     let { note } = this.state
 
     let editorFontSize = parseInt(config.editor.fontSize, 10)

@@ -7,9 +7,6 @@ import ConfigManager from 'browser/main/lib/ConfigManager'
 import StorageItem from './StorageItem'
 import SideNavFilter from 'browser/components/SideNavFilter'
 
-const electron = require('electron')
-const { remote } = electron
-
 class SideNav extends React.Component {
   // TODO: should not use electron stuff v0.7
   handleMenuButtonClick (e) {
