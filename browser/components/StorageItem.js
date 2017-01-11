@@ -27,8 +27,8 @@ const StorageItem = ({
     onClick={handleButtonClick}
     onContextMenu={handleContextMenu}
   >
-    <span styleName={isFolded ?
-      'folderList-item-name--folded' : 'folderList-item-name'
+    <span styleName={isFolded
+      ? 'folderList-item-name--folded' : 'folderList-item-name'
     }
       style={{borderColor: folderColor}}
     >
@@ -52,7 +52,7 @@ StorageItem.propTypes = {
   folderName: PropTypes.string.isRequired,
   folderColor: PropTypes.string,
   isFolded: PropTypes.bool.isRequired,
-  noteCount: PropTypes.number,
+  noteCount: PropTypes.number
 }
 
 export default CSSModules(StorageItem, styles)

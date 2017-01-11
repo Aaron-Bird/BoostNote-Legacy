@@ -5,9 +5,6 @@ import ConfigManager from 'browser/main/lib/ConfigManager'
 import store from 'browser/main/store'
 import consts from 'browser/lib/consts'
 
-const electron = require('electron')
-const ipc = electron.ipcRenderer
-
 const OSX = global.process.platform === 'darwin'
 
 class UiTab extends React.Component {

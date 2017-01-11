@@ -5,16 +5,16 @@ const packager = require('electron-packager')
 const WIN = process.platform === 'win32'
 
 module.exports = function (grunt) {
-  var auth_code
+  var authCode
   try {
-    auth_code = grunt.file.readJSON('secret/auth_code.json')
+    authCode = grunt.file.readJSON('secret/auth_code.json')
   } catch (e) {
     if (e.origError.code === 'ENOENT') {
       console.warn('secret/auth_code.json is not found. CodeSigning is not available.')
     }
   }
-  const OSX_COMMON_NAME = auth_code != null ? auth_code.OSX_COMMON_NAME : ''
-  const WIN_CERT_PASSWORD = auth_code != null ? auth_code.WIN_CERT_PASSWORD : ''
+  const OSX_COMMON_NAME = authCode != null ? authCode.OSX_COMMON_NAME : ''
+  const WIN_CERT_PASSWORD = authCode != null ? authCode.WIN_CERT_PASSWORD : ''
 
   var initConfig = {
     pkg: grunt.file.readJSON('package.json'),

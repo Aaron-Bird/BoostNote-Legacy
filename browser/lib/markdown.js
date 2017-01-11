@@ -58,7 +58,7 @@ md.use(math, {
 })
 md.use(require('markdown-it-footnote'))
 // Override task item
-md.block.ruler.at('paragraph', function (state, startLine/*, endLine*/) {
+md.block.ruler.at('paragraph', function (state, startLine/*, endLine */) {
   let content, terminate, i, l, token
   let nextLine = startLine + 1
   let terminatorRules = state.md.block.ruler.getRules('paragraph')

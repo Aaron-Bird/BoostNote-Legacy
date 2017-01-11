@@ -21,7 +21,7 @@ const LastUpdatedString = ({ date }) => {
 }
 
 LastUpdatedString.propTypes = {
-  date: PropTypes.string,
+  date: PropTypes.string
 }
 
 export default CSSModules(LastUpdatedString, styles)

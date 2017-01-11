@@ -106,7 +106,10 @@ class UnstyledFolderItem extends React.Component {
     const popover = { position: 'absolute', zIndex: 2 }
     const cover = {
       position: 'fixed',
-      top: 0, right: 0, bottom: 0, left: 0
+      top: 0,
+      right: 0,
+      bottom: 0,
+      left: 0
     }
     const pickerStyle = Object.assign({}, {
       position: 'absolute'
@@ -137,7 +140,7 @@ class UnstyledFolderItem extends React.Component {
               </div>
               : null
             }
-            <i className='fa fa-square'/>
+            <i className='fa fa-square' />
           </button>
           <input styleName='folderList-item-left-nameInput'
             value={this.state.folder.name}
@@ -368,17 +371,17 @@ class StorageItem extends React.Component {
             : <div styleName='header-label'
               onClick={(e) => this.handleLabelClick(e)}
             >
-              <i className='fa fa-folder-open'/>&nbsp;
+              <i className='fa fa-folder-open' />&nbsp;
               {storage.name}&nbsp;
               <span styleName='header-label-path'>({storage.path})</span>&nbsp;
-              <i styleName='header-label-editButton' className='fa fa-pencil'/>
+              <i styleName='header-label-editButton' className='fa fa-pencil' />
             </div>
           }
           <div styleName='header-control'>
             <button styleName='header-control-button'
               onClick={(e) => this.handleNewFolderButtonClick(e)}
             >
-              <i className='fa fa-plus'/>
+              <i className='fa fa-plus' />
               <span styleName='header-control-button-tooltip'
                 style={{left: -20}}
               >Add Folder</span>
@@ -386,7 +389,7 @@ class StorageItem extends React.Component {
             <button styleName='header-control-button'
               onClick={(e) => this.handleExternalButtonClick(e)}
             >
-              <i className='fa fa-external-link'/>
+              <i className='fa fa-external-link' />
               <span styleName='header-control-button-tooltip'
                 style={{left: -50}}
               >Open Storage folder</span>
@@ -394,7 +397,7 @@ class StorageItem extends React.Component {
             <button styleName='header-control-button'
               onClick={(e) => this.handleUnlinkButtonClick(e)}
             >
-              <i className='fa fa-unlink'/>
+              <i className='fa fa-unlink' />
               <span styleName='header-control-button-tooltip'
                 style={{left: -10}}
               >Unlink</span>

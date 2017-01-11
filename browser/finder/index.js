@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 import { connect, Provider } from 'react-redux'
 import _ from 'lodash'
-import ipc from './ipcClient'
 import store from './store'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './FinderMain.styl'
@@ -351,7 +350,7 @@ function refreshData () {
 
 ReactDOM.render((
   <Provider store={store}>
-    <Finder/>
+    <Finder />
   </Provider>
 ), document.getElementById('content'), function () {
   refreshData()

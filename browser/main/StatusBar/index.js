@@ -59,9 +59,9 @@ class StatusBar extends React.Component {
           </button>
           : null
         }
-        {/*<button styleName='help'>
+        {/* <button styleName='help'>
           <i className='fa fa-info-circle' />
-        </button>*/}
+        </button> */}
         <button styleName='zoom'
           onClick={(e) => this.handleZoomButtonClick(e)}
         >

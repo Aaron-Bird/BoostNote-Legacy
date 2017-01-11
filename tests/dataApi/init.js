@@ -36,7 +36,7 @@ test.beforeEach((t) => {
 })
 
 test.serial('Initialize All Storages', (t) => {
-  const { v1StorageData, legacyStorageData, emptyStorageData } = t.context
+  const { v1StorageData, legacyStorageData } = t.context
   return Promise.resolve()
     .then(function test () {
       return init()

@@ -10,6 +10,8 @@
 <h5 align="center">Built with Electron, React + Redux, Webpack and CSSModules</h5>
 <h1> </h1>
 
+[![Build Status](https://travis-ci.org/BoostIO/Boostnote.svg?branch=master)](https://travis-ci.org/BoostIO/Boostnote)
+
 > We launched our [Boostnote store](https://boostnote.paintory.com/)!! :tada: Also, you can support us via [Patreon](https://www.patreon.com/boostnote) and [Open collective](https://opencollective.com/boostnote)!
 
 ![Boostnote app screenshot](./resources/repository/top.png)

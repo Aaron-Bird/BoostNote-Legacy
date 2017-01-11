@@ -205,7 +205,7 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   render () {
-    let { data, config } = this.props
+    let { config } = this.props
     let { note } = this.state
 
     return (

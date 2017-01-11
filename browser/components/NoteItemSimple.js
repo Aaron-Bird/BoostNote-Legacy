@@ -40,10 +40,10 @@ NoteItemSimple.propTypes = {
     storage: PropTypes.string.isRequired,
     key: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    title: PropTypes.string.isrequired,
+    title: PropTypes.string.isrequired
   }),
   handleNoteClick: PropTypes.func.isRequired,
-  handleNoteContextMenu: PropTypes.func.isRequired,
+  handleNoteContextMenu: PropTypes.func.isRequired
 }
 
 export default CSSModules(NoteItemSimple, styles)

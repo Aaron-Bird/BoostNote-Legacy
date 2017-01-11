@@ -12,7 +12,7 @@ export default class ProfileImage extends React.Component {
         className={className}
         width={this.props.size}
         height={this.props.size}
-        src={src}/>
+        src={src} />
     )
   }
 }
