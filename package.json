@@ -9,7 +9,8 @@
     "hot": "electron ./index.js --hot",
     "webpack": "webpack-dev-server --hot --inline --config webpack.config.js",
     "compile": "grunt compile",
-    "test": "PWD=$(pwd) NODE_ENV=test ava"
+    "test": "PWD=$(pwd) NODE_ENV=test ava",
+    "lint": "standard"
   },
   "config": {
     "electron-version": "1.2.8"
