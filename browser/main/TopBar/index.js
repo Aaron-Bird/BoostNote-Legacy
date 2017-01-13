@@ -251,7 +251,11 @@ class TopBar extends React.Component {
   }
 
   handleFocusSearch () {
-    this.refs.search.childNodes[0].focus()
+    if (this.state.searchPopupOpen) {
+      this.refs.search.childNodes[0].blur()
+    } else {
+      this.refs.search.childNodes[0].focus()
+    }
   }
 
   render () {
