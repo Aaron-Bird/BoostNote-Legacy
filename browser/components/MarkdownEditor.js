@@ -142,6 +142,12 @@ class MarkdownEditor extends React.Component {
     this.renderPreview(this.props.value)
   }
 
+  handleKeyDown(e) {
+    if (this.state.status === 'CODE' && e.key == 'Escape') {
+      document.activeElement.blur()
+    }
+  }
+
   render () {
     let { className, value, config } = this.props
 
@@ -160,6 +166,7 @@ class MarkdownEditor extends React.Component {
         }
         onContextMenu={(e) => this.handleContextMenu(e)}
         tabIndex='-1'
+        onKeyDown={(e) => this.handleKeyDown(e)}
       >
         <CodeEditor styleName='codeEditor'
           ref='code'
