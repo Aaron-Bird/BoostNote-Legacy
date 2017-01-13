@@ -24,14 +24,20 @@ class TopBar extends React.Component {
     this.newNoteHandler = () => {
       this.handleNewPostButtonClick()
     }
+
+    this.focusSearchHandler = () => {
+      this.handleFocusSearch()
+    }
   }
 
   componentDidMount () {
     ee.on('top:new-note', this.newNoteHandler)
+    ee.on('top:focus-search', this.focusSearchHandler)
   }
 
   componentWillUnmount () {
     ee.off('top:new-note', this.newNoteHandler)
+    ee.off('top:focus-search', this.focusSearchHandler)
   }
 
   handleNewPostButtonClick (e) {
@@ -244,6 +250,10 @@ class TopBar extends React.Component {
     })
   }
 
+  handleFocusSearch () {
+    this.refs.search.childNodes[0].focus()
+  }
+
   render () {
     let { config, style, data } = this.props
     let searchOptionList = this.getOptions()
@@ -287,6 +297,7 @@ class TopBar extends React.Component {
                 onChange={(e) => this.handleSearchChange(e)}
                 placeholder='Search'
                 type='text'
+                id='Search'
               />
               {this.state.searchPopupOpen &&
                 <div styleName='control-search-optionList'>
