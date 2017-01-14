@@ -117,11 +117,6 @@
     "grunt-electron-installer-debian": "^0.2.0"
   },
   "optional": false,
-  "standard": {
-    "globals": [
-      "localStorage"
-    ]
-  },
   "ava": {
     "files": [
       "tests/**/*-test.js"
