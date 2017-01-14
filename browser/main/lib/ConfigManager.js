@@ -25,6 +25,7 @@ export const DEFAULT_CONFIG = {
   },
   editor: {
     theme: 'default',
+    keyMap: 'sublime',
     fontSize: '14',
     fontFamily: 'Monaco, Consolas',
     indentType: 'space',

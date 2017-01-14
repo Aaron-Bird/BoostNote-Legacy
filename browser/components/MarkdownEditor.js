@@ -166,6 +166,7 @@ class MarkdownEditor extends React.Component {
           mode='GitHub Flavored Markdown'
           value={value}
           theme={config.editor.theme}
+          keyMap={config.editor.keyMap}
           fontFamily={config.editor.fontFamily}
           fontSize={editorFontSize}
           indentType={config.editor.indentType}
@@ -179,6 +180,7 @@ class MarkdownEditor extends React.Component {
           }
           style={previewStyle}
           theme={config.ui.theme}
+          keyMap={config.editor.keyMap}
           fontSize={config.preview.fontSize}
           fontFamily={config.preview.fontFamily}
           codeBlockTheme={config.preview.codeBlockTheme}

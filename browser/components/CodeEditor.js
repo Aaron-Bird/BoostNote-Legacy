@@ -52,7 +52,7 @@ export default class CodeEditor extends React.Component {
       indentUnit: this.props.indentSize,
       tabSize: this.props.indentSize,
       indentWithTabs: this.props.indentType !== 'space',
-      keyMap: 'sublime',
+      keyMap: this.props.keyMap,
       inputStyle: 'textarea',
       extraKeys: {
         Tab: function (cm) {
@@ -100,6 +100,9 @@ export default class CodeEditor extends React.Component {
       needRefresh = true
     }
     if (prevProps.fontFamily !== this.props.fontFamily) {
+      needRefresh = true
+    }
+    if (prevProps.keyMap !== this.props.keyMap) {
       needRefresh = true
     }
 
@@ -194,6 +197,7 @@ CodeEditor.propTypes = {
 CodeEditor.defaultProps = {
   readOnly: false,
   theme: 'xcode',
+  keyMap: 'sublime',
   fontSize: 14,
   fontFamily: 'Monaco, Consolas',
   indentSize: 4,
