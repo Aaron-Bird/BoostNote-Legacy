@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './StatusBar.styl'
 import ZoomManager from 'browser/main/lib/ZoomManager'
+import LastUpdatedString from '../Detail/LastUpdatedString'
 
 const electron = require('electron')
 const { remote, ipcRenderer } = electron
@@ -52,22 +53,23 @@ class StatusBar extends React.Component {
       <div className='StatusBar'
         styleName='root'
       >
-        <div styleName='blank' />
-        {status.updateReady
-          ? <button onClick={this.updateApp} styleName='update'>
-            <i styleName='update-icon' className='fa fa-cloud-download' /> Ready to Update!
-          </button>
-          : null
-        }
-        {/* <button styleName='help'>
-          <i className='fa fa-info-circle' />
-        </button> */}
         <button styleName='zoom'
           onClick={(e) => this.handleZoomButtonClick(e)}
         >
           <i className='fa fa-search-plus' />&nbsp;
           {Math.floor(config.zoom * 100)}%
         </button>
+
+        <div styleName='blank' />
+
+        {status.updateReady
+          ? <button onClick={this.updateApp} styleName='update'>
+            <i styleName='update-icon' className='fa fa-cloud-download' /> Ready to Update!
+            </button>
+          : null
+        }
+
+        <LastUpdatedString date={this.props.date} />
       </div>
     )
   }
@@ -77,7 +79,8 @@ StatusBar.contextTypes = {
   status: PropTypes.shape({
     updateReady: PropTypes.bool.isRequired
   }).isRequired,
-  config: PropTypes.shape({}).isRequired
+  config: PropTypes.shape({}).isRequired,
+  date: PropTypes.string
 }
 
 StatusBar.propTypes = {

@@ -4,7 +4,7 @@ import styles from './MarkdownNoteDetail.styl'
 import MarkdownEditor from 'browser/components/MarkdownEditor'
 import StarButton from './StarButton'
 import TagSelect from './TagSelect'
-import LastUpdatedString from './LastUpdatedString'
+import FolderSelect from './FolderSelect'
 import dataApi from 'browser/main/lib/dataApi'
 import { hashHistory } from 'react-router'
 import ee from 'browser/main/lib/eventEmitter'
@@ -205,7 +205,7 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   render () {
-    let { config } = this.props
+    let { data, config } = this.props
     let { note } = this.state
 
     return (
@@ -219,6 +219,15 @@ class MarkdownNoteDetail extends React.Component {
               onClick={(e) => this.handleStarButtonClick(e)}
               isActive={note.isStarred}
             />
+            <div styleName='info-left-top'>
+              <FolderSelect styleName='info-left-top-folderSelect'
+                value={this.state.note.storage + '-' + this.state.note.folder}
+                ref='folder'
+                data={data}
+                onChange={(e) => this.handleFolderChange(e)}
+              />
+            </div>
+
             <TagSelect
               ref='tags'
               value={this.state.note.tags}
@@ -226,7 +235,6 @@ class MarkdownNoteDetail extends React.Component {
             />
           </div>
           <div styleName='info-right'>
-            <LastUpdatedString date={note.updatedAt} />
             <button styleName='info-right-button'
               onClick={(e) => this.handleContextButtonClick(e)}
             >
@@ -248,6 +256,7 @@ class MarkdownNoteDetail extends React.Component {
 
         <StatusBar
           {..._.pick(this.props, ['config', 'location', 'dispatch'])}
+          date={note.updatedAt}
         />
       </div>
     )
