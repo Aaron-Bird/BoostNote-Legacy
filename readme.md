@@ -25,7 +25,7 @@
 
 ## More Information
 * Website: http://boostnote.io/
-* Roadmap(upcoming features and bug fixes): https://goo.gl/Mdu44q
+* Roadmap(upcoming features and bug fixes): https://github.com/BoostIO/Boostnote/wiki/List-of-the-requested-features
 * Boostnote Shop(Products are shipped to all over the world :+1:): https://boostnote.paintory.com/
 * Donation: [Patreon](https://www.patreon.com/boostnote)
 * Development: https://github.com/BoostIO/Boostnote/blob/master/docs/build.md
