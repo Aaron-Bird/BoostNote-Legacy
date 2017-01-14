@@ -22,12 +22,14 @@
 [Great contributors](https://github.com/BoostIO/Boostnote/graphs/contributors) :tada:
 
 
-### More Information
-* Roadmap(upcoming features and bug fixes) https://goo.gl/Mdu44q
-* Boostnote Shop(Products are shipped to all over the world :+1:) https://boostnote.paintory.com/
-* Donation through [Patreon](https://www.patreon.com/boostnote)
+## More Information
+* Website: http://boostnote.io/
+* Roadmap(upcoming features and bug fixes): https://goo.gl/Mdu44q
+* Boostnote Shop(Products are shipped to all over the world :+1:): https://boostnote.paintory.com/
+* Donation: [Patreon](https://www.patreon.com/boostnote)
+* Development: https://github.com/BoostIO/Boostnote/blob/master/docs/build.md
+* Copyright (C) 2017 Maisin&Co.
 
-### Copyright & License
-Copyright (C) 2017 Maisin&Co.
+## License
 
 [GPL v3](./LICENSE).
