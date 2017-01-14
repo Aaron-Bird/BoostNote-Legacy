@@ -29,4 +29,7 @@
 * Donation: [Patreon](https://www.patreon.com/boostnote)
 * Development: https://github.com/BoostIO/Boostnote/blob/master/docs/build.md
 * Copyright (C) 2017 Maisin&Co.
-* License: [GPL v3](./LICENSE).
+
+## License
+
+[GPL v3](./LICENSE).
