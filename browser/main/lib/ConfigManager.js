@@ -16,7 +16,10 @@ export const DEFAULT_CONFIG = {
   listStyle: 'DEFAULT', // 'DEFAULT', 'SMALL'
   hotkey: {
     toggleFinder: OSX ? 'Cmd + Alt + S' : 'Super + Alt + S',
-    toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E'
+    toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E',
+    noteHandlerKey: {
+      escapeFromEditor: ['Control', 'e']
+    }
   },
   ui: {
     theme: 'default',
