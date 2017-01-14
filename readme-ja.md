@@ -1,77 +1,36 @@
-# Boostnote
-
-> [Boostnote shop](https://boostnote.paintory.com/)をはじめました!! :tada: 
-そして、[Pateron](https://www.patreon.com/boostnote)からも私達を支援することができます!
+<h1 align="center">
+  <a href="https://github.com/BoostIO/Boostnote"><img src="./resources/app.png" alt="Boostnote" width="180"></a>
+  <br>
+  Boostnote
+  <br>
+  <br>
+</h1>
+<h4 align="center">クールなプログラマーの為の、オープンソースのノートアプリ </h4>
+<h5 align="center">macOS, Windows, Linuxで利用できます。</h5>
+<h5 align="center">Built with Electron, React + Redux, Webpack and CSSModules</h5>
 
 ![Boostnote app screenshot](./resources/repository/top.png)
 
-
-**ロードマップ・リクエスト一覧は[こちら](https://github.com/BoostIO/Boostnote/wiki/List-of-the-requested-features)です！**
-皆さんからのプルリクをお待ちしています！
-
-以下のような場合には、Issue trackerを利用してください。
-- Boostnoteに関して質問したい時
-- Boostnoteや計画事項にフィードバックがしたい時
-- Boostnoteにバグを報告したい時
-
-
-## Goal
-
-書くことが楽しくなって欲しいです。 :grinning:
-
-- ターゲット OS : OSX, Windows, Linux(後々はモバイルも!)
-- Cloud : Google drive, Dropbox, One drive, iCloud...
-- オープンソースで残ること!
-
-
-## Using stack
-
-- Electron
-- React
-- Webpack
-- Redux
-- CSSModules
-
-## Codestyle
-
-[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/feross/standard)
-
-## Development
-
-- [Build](docs/build.md)
-
-## Goods
-
-<img src="https://boostnote.io/images/t3.png" width="250"/>
-<img src="https://boostnote.io/images/t1.png" width="250"/>
-
-[Boostnote shop](https://boostnote.paintory.com/)から幾つかのグッズを販売しています。
-
-商品は全世界どこへでも届ける事が出来ます！
-
-## Donation
-
-寄付は[Pateron page](https://www.patreon.com/boostnote)からできます。
+[![Build Status](https://travis-ci.org/BoostIO/Boostnote.svg?branch=master)](https://travis-ci.org/BoostIO/Boostnote)
 
 ## Author & Maintainer
-
 - [Rokt33r](https://github.com/rokt33r)
 - [sota1235](https://github.com/sota1235)
 - [Kohei TAKATA](https://github.com/kohei-takata)
 - [Kazu Yokomizo](https://github.com/kazup01)
 
 ## Contributors
+[Great contributors](https://github.com/BoostIO/Boostnote/graphs/contributors) :tada:
 
-- [dojineko](https://github.com/dojineko)
-- [Romain Bazile](https://github.com/gromain)
-- [Bruno Paz](https://github.com/brpaz)
-- [Fabian Mueller](https://github.com/dotcs)
-- [Yoshihisa Mochihara](https://github.com/yosmoc)
-- [Mike Resoli](https://github.com/mikeres0)
-- [tjado](https://github.com/tejado)
 
-## Copyright & License
+## More Information
+* Website: http://boostnote.io/
+* Roadmap(upcoming features and bug fixes): https://github.com/BoostIO/Boostnote/wiki/List-of-the-requested-features
+* Boostnote Shop(Products are shipped to all over the world :+1:): https://boostnote.paintory.com/
+* Donation: [Patreon](https://www.patreon.com/boostnote)
+* Development: https://github.com/BoostIO/Boostnote/blob/master/docs/build.md
+* Copyright (C) 2017 Maisin&Co.
 
-Copyright (C) 2017 Maisin&Co.
+## License
 
 [GPL v3](./LICENSE).
