@@ -11,6 +11,7 @@
 
 ![Boostnote app screenshot](./resources/repository/top.png)
 
+[![Build Status](https://travis-ci.org/BoostIO/Boostnote.svg?branch=master)](https://travis-ci.org/BoostIO/Boostnote)
 
 ## Author & Maintainer
 - [Rokt33r](https://github.com/rokt33r)
