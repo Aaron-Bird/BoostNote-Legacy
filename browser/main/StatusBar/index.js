@@ -52,19 +52,21 @@ class StatusBar extends React.Component {
       <div className='StatusBar'
         styleName='root'
       >
-        <div styleName='blank' />
-        {status.updateReady
-          ? <button onClick={this.updateApp} styleName='update'>
-            <i styleName='update-icon' className='fa fa-cloud-download' /> Ready to Update!
-          </button>
-          : null
-        }
         <button styleName='zoom'
           onClick={(e) => this.handleZoomButtonClick(e)}
         >
           <i className='fa fa-search-plus' />&nbsp;
           {Math.floor(config.zoom * 100)}%
         </button>
+
+        <div styleName='blank' />
+
+        {status.updateReady
+          ? <button onClick={this.updateApp} styleName='update'>
+            <i styleName='update-icon' className='fa fa-cloud-download' /> Ready to Update!
+            </button>
+          : null
+        }
       </div>
     )
   }
