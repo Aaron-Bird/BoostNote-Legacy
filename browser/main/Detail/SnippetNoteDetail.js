@@ -5,7 +5,6 @@ import CodeEditor from 'browser/components/CodeEditor'
 import MarkdownEditor from 'browser/components/MarkdownEditor'
 import StarButton from './StarButton'
 import TagSelect from './TagSelect'
-import LastUpdatedString from './LastUpdatedString'
 import dataApi from 'browser/main/lib/dataApi'
 import { hashHistory } from 'react-router'
 import ee from 'browser/main/lib/eventEmitter'
@@ -535,7 +534,6 @@ class SnippetNoteDetail extends React.Component {
             />
           </div>
           <div styleName='info-right'>
-            <LastUpdatedString date={note.updatedAt} />
             <button styleName='info-right-button'
               onClick={(e) => this.handleContextButtonClick(e)}
             >
@@ -596,6 +594,7 @@ class SnippetNoteDetail extends React.Component {
 
         <StatusBar
           {..._.pick(this.props, ['config', 'location', 'dispatch'])}
+          date={note.updatedAt}
         />
       </div>
     )
