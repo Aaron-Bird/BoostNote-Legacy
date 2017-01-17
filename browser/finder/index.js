@@ -48,19 +48,28 @@ class FinderMain extends React.Component {
     }
 
     this.focusHandler = (e) => this.handleWindowFocus(e)
+    this.blurHandler = (e) => this.handleWindowBlur(e)
   }
 
   componentDidMount () {
     this.refs.search.focus()
     window.addEventListener('focus', this.focusHandler)
+    window.addEventListener('blur', this.blurHandler)
   }
 
   componentWillUnmount () {
     window.removeEventListener('focus', this.focusHandler)
+    window.removeEventListener('blur', this.blurHandler)
   }
 
   handleWindowFocus (e) {
     this.refs.search.focus()
+  }
+
+  handleWindowBlur (e) {
+    this.setState({
+      search: '',
+    })
   }
 
   handleKeyDown (e) {
