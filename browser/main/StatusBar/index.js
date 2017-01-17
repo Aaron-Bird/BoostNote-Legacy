@@ -8,7 +8,7 @@ const electron = require('electron')
 const { remote, ipcRenderer } = electron
 const { Menu, MenuItem, dialog } = remote
 
-const zoomOptions = [0.8, 0.9, 1, 1.1, 1.2, 1.3]
+const zoomOptions = [0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0]
 
 class StatusBar extends React.Component {
   updateApp () {
