@@ -6,7 +6,7 @@ import consts from 'browser/lib/consts'
 import Raphael from 'raphael'
 import flowchart from 'flowchart'
 import SequenceDiagram from 'js-sequence-diagrams'
-import ee from 'browser/main/lib/eventEmitter'
+import eventEmitter from 'browser/main/lib/eventEmitter'
 import fs from 'fs'
 
 function decodeHTMLEntities (text) {
@@ -27,7 +27,7 @@ function decodeHTMLEntities (text) {
 const { remote } = require('electron')
 const { app } = remote
 const path = require('path')
-const dialog = remote.require('electron').dialog
+const dialog = remote.dialog
 
 const markdownStyle = require('!!css!stylus?sourceMap!./markdown.styl')[0][1]
 const appPath = 'file://' + (process.env.NODE_ENV === 'production'
@@ -157,7 +157,9 @@ export default class MarkdownPreview extends React.Component {
     dialog.showSaveDialog(remote.getCurrentWindow(), options,
     (filename) => {
       if (filename) {
-        fs.writeFile(filename, this.props.value, () => {})
+        fs.writeFile(filename, this.props.value, (err) => {
+          if (err) throw err
+        })
       }
     })
   }
@@ -177,16 +179,16 @@ export default class MarkdownPreview extends React.Component {
 
     this.refs.root.contentWindow.document.addEventListener('mousedown', this.mouseDownHandler)
     this.refs.root.contentWindow.document.addEventListener('mouseup', this.mouseUpHandler)
-    ee.on('export:save-text', this.saveAsTextHandler)
-    ee.on('export:save-md', this.saveAsMdHandler)
+    eventEmitter.on('export:save-text', this.saveAsTextHandler)
+    eventEmitter.on('export:save-md', this.saveAsMdHandler)
   }
 
   componentWillUnmount () {
     this.refs.root.contentWindow.document.body.removeEventListener('contextmenu', this.contextMenuHandler)
     this.refs.root.contentWindow.document.removeEventListener('mousedown', this.mouseDownHandler)
     this.refs.root.contentWindow.document.removeEventListener('mouseup', this.mouseUpHandler)
-    ee.off('export:save-text', this.saveAsTextHandler)
-    ee.off('export:save-md', this.saveAsMdHandler)
+    eventEmitter.off('export:save-text', this.saveAsTextHandler)
+    eventEmitter.off('export:save-md', this.saveAsMdHandler)
   }
 
   componentDidUpdate (prevProps) {
