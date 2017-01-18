@@ -163,6 +163,18 @@ export default class CodeEditor extends React.Component {
     this.editor.setCursor(cursor)
   }
 
+  handleDrop (e) {
+    e.preventDefault()
+    let path = e.dataTransfer.files[0].path
+    let filename = path.match(".+/(.+?)\.[a-z]+([\?#;].*)?$")[1]
+    let imageMd = "![" + filename + "](" + path + ")"
+    this.insertImage(this.editor.getInputField(), imageMd)
+  }
+
+  insertImage (textarea, imageMd) {
+    textarea.value = textarea.value.substr(0, textarea.selectionStart) + imageMd + textarea.value.substr(textarea.selectionEnd)
+  }
+
   render () {
     let { className, fontFamily, fontSize } = this.props
     fontFamily = _.isString(fontFamily) && fontFamily.length > 0
@@ -180,6 +192,7 @@ export default class CodeEditor extends React.Component {
           fontFamily: fontFamily.join(', '),
           fontSize: fontSize
         }}
+        onDrop={(e) => this.handleDrop(e)}
       />
     )
   }
