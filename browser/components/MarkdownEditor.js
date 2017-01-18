@@ -10,11 +10,10 @@ class MarkdownEditor extends React.Component {
 
     this.hotkey = props.config.hotkey
 
-    this.keyPressed = []
-
     this.state = {
       status: 'PREVIEW',
-      renderValue: props.value
+      renderValue: props.value,
+      keyPressed: {}
     }
   }
 
@@ -147,16 +146,23 @@ class MarkdownEditor extends React.Component {
   }
 
   handleKeyDown(e) {
-    this.keyPressed[e.key] = true
-    let isNoteHandlerKey = (el) => { return this.keyPressed[el] }
+    let newKeyPressed = this.state.keyPressed
+    newKeyPressed[e.key] = true
+    this.setState({keyPressed: newKeyPressed})
+    let isNoteHandlerKey = (el) => { return this.state.keyPressed[el] }
     if (this.state.status === 'CODE' && this.hotkey.noteHandlerKey.escapeFromEditor.every(isNoteHandlerKey)) {
       document.activeElement.blur()
-      this.hotkey.noteHandlerKey.escapeFromEditor.forEach((el) => {this.keyPressed[el] = false})
+      this.hotkey.noteHandlerKey.escapeFromEditor.forEach((el) => {
+        newKeyPressed[e.key] = false
+        this.setState({keyPressed: newKeyPressed})
+      })
     }
   }
 
   handleKeyUp (e) {
-    this.keyPressed[e.key] = false
+    let newKeyPressed = this.state.keyPressed
+    newKeyPressed[e.key] = false
+    this.setState({keyPressed: newKeyPressed})
   }
 
   render () {

@@ -26,7 +26,7 @@ class TopBar extends React.Component {
     }
 
     this.focusSearchHandler = () => {
-      this.handleFocusSearch()
+      this.handleOnSearchFocus()
     }
   }
 
@@ -250,7 +250,7 @@ class TopBar extends React.Component {
     })
   }
 
-  handleFocusSearch () {
+  handleOnSearchFocus () {
     if (this.state.searchPopupOpen) {
       this.refs.search.childNodes[0].blur()
     } else {
@@ -301,7 +301,6 @@ class TopBar extends React.Component {
                 onChange={(e) => this.handleSearchChange(e)}
                 placeholder='Search'
                 type='text'
-                id='Search'
               />
               {this.state.searchPopupOpen &&
                 <div styleName='control-search-optionList'>
