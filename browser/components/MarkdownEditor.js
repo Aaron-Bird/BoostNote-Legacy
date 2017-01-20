@@ -146,23 +146,21 @@ class MarkdownEditor extends React.Component {
   }
 
   handleKeyDown(e) {
-    let newKeyPressed = this.state.keyPressed
-    newKeyPressed[e.key] = true
-    this.setState({keyPressed: newKeyPressed})
+    const keyPressed = Object.assign(this.state.keyPressed, {
+      [e.key]: true
+    })
+    this.setState({ keyPressed })
     let isNoteHandlerKey = (el) => { return this.state.keyPressed[el] }
     if (this.state.status === 'CODE' && this.hotkey.noteHandlerKey.escapeFromEditor.every(isNoteHandlerKey)) {
       document.activeElement.blur()
-      this.hotkey.noteHandlerKey.escapeFromEditor.forEach((el) => {
-        newKeyPressed[e.key] = false
-        this.setState({keyPressed: newKeyPressed})
-      })
     }
   }
 
   handleKeyUp (e) {
-    let newKeyPressed = this.state.keyPressed
-    newKeyPressed[e.key] = false
-    this.setState({keyPressed: newKeyPressed})
+    const keyPressed = Object.assign(this.state.keyPressed, {
+      [e.key]: false
+    })
+    this.setState({ keyPressed })
   }
 
   render () {
