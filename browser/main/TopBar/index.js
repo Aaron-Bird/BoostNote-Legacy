@@ -24,14 +24,20 @@ class TopBar extends React.Component {
     this.newNoteHandler = () => {
       this.handleNewPostButtonClick()
     }
+
+    this.focusSearchHandler = () => {
+      this.handleOnSearchFocus()
+    }
   }
 
   componentDidMount () {
     ee.on('top:new-note', this.newNoteHandler)
+    ee.on('top:focus-search', this.focusSearchHandler)
   }
 
   componentWillUnmount () {
     ee.off('top:new-note', this.newNoteHandler)
+    ee.off('top:focus-search', this.focusSearchHandler)
   }
 
   handleNewPostButtonClick (e) {
@@ -242,6 +248,14 @@ class TopBar extends React.Component {
       type: 'SET_UI',
       config: ConfigManager.get()
     })
+  }
+
+  handleOnSearchFocus () {
+    if (this.state.searchPopupOpen) {
+      this.refs.search.childNodes[0].blur()
+    } else {
+      this.refs.search.childNodes[0].focus()
+    }
   }
 
   render () {

@@ -8,9 +8,12 @@ class MarkdownEditor extends React.Component {
   constructor (props) {
     super(props)
 
+    this.hotkey = props.config.hotkey
+
     this.state = {
       status: 'PREVIEW',
-      renderValue: props.value
+      renderValue: props.value,
+      keyPressed: {}
     }
   }
 
@@ -142,6 +145,24 @@ class MarkdownEditor extends React.Component {
     this.renderPreview(this.props.value)
   }
 
+  handleKeyDown(e) {
+    const keyPressed = Object.assign(this.state.keyPressed, {
+      [e.key]: true
+    })
+    this.setState({ keyPressed })
+    let isNoteHandlerKey = (el) => { return this.state.keyPressed[el] }
+    if (this.state.status === 'CODE' && this.hotkey.noteHandlerKey.escapeFromEditor.every(isNoteHandlerKey)) {
+      document.activeElement.blur()
+    }
+  }
+
+  handleKeyUp (e) {
+    const keyPressed = Object.assign(this.state.keyPressed, {
+      [e.key]: false
+    })
+    this.setState({ keyPressed })
+  }
+
   render () {
     let { className, value, config } = this.props
 
@@ -160,6 +181,8 @@ class MarkdownEditor extends React.Component {
         }
         onContextMenu={(e) => this.handleContextMenu(e)}
         tabIndex='-1'
+        onKeyDown={(e) => this.handleKeyDown(e)}
+        onKeyUp={(e) => this.handleKeyUp(e)}
       >
         <CodeEditor styleName='codeEditor'
           ref='code'
