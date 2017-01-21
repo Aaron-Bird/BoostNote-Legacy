@@ -67,12 +67,8 @@ class FinderMain extends React.Component {
   }
 
   handleWindowBlur (e) {
-    let { filter } = this.state
-    filter.type = 'ALL'
     this.setState({
       search: '',
-      filter,
-      index: 0
     })
   }
 
