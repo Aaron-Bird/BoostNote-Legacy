@@ -312,8 +312,8 @@ class NoteList extends React.Component {
 
   alertIfSnippet() {
     let { location } = this.props
-    let targetIndex = _.findIndex(this.notes, (note) => {
-      return note.storage + '-' + note.key === location.query.key
+    const targetIndex = _.findIndex(this.notes, (note) => {
+      return `${note.storage}-${note.key}` === location.query.key
     })
     if (this.notes[targetIndex].type === 'SNIPPET_NOTE') {
       dialog.showMessageBox(remote.getCurrentWindow(), {
