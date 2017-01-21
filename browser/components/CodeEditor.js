@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react'
 import _ from 'lodash'
 import CodeMirror from 'codemirror'
+import path from 'path'
 
 CodeMirror.modeURL = '../node_modules/codemirror/mode/%N/%N.js'
 
@@ -163,15 +164,16 @@ export default class CodeEditor extends React.Component {
     this.editor.setCursor(cursor)
   }
 
-  handleDrop (e) {
+  handleDropImage (e) {
     e.preventDefault()
-    let path = e.dataTransfer.files[0].path
-    let filename = path.match(".+/(.+?)\.[a-z]+([\?#;].*)?$")[1]
-    let imageMd = "![" + filename + "](" + path + ")"
-    this.insertImage(this.editor.getInputField(), imageMd)
+    let imagePath = e.dataTransfer.files[0].path
+    let filename = path.basename(imagePath)
+    let imageMd = `![${filename}](${imagePath})`
+    this.insertImage(imageMd)
   }
 
-  insertImage (textarea, imageMd) {
+  insertImage (imageMd) {
+    const textarea = this.editor.getInputField()
     textarea.value = textarea.value.substr(0, textarea.selectionStart) + imageMd + textarea.value.substr(textarea.selectionEnd)
   }
 
@@ -192,7 +194,7 @@ export default class CodeEditor extends React.Component {
           fontFamily: fontFamily.join(', '),
           fontSize: fontSize
         }}
-        onDrop={(e) => this.handleDrop(e)}
+        onDrop={(e) => this.handleDropImage(e)}
       />
     )
   }
