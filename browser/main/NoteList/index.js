@@ -38,6 +38,9 @@ class NoteList extends React.Component {
     this.focusHandler = () => {
       this.refs.list.focus()
     }
+    this.alertIfSnippetHnalder = () => {
+      this.alertIfSnippet()
+    }
 
     this.state = {
     }
@@ -48,6 +51,7 @@ class NoteList extends React.Component {
     ee.on('list:next', this.selectNextNoteHandler)
     ee.on('list:prior', this.selectPriorNoteHandler)
     ee.on('list:focus', this.focusHandler)
+    ee.on('list:isMarkdownNote', this.alertIfSnippetHnalder)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -66,6 +70,7 @@ class NoteList extends React.Component {
     ee.off('list:next', this.selectNextNoteHandler)
     ee.off('list:prior', this.selectPriorNoteHandler)
     ee.off('list:focus', this.focusHandler)
+    ee.off('list:isMarkdownNote', this.alertIfSnippetHnalder)
   }
 
   componentDidUpdate (prevProps) {
@@ -303,6 +308,20 @@ class NoteList extends React.Component {
       type: 'SET_CONFIG',
       config
     })
+  }
+
+  alertIfSnippet() {
+    let { location } = this.props
+    const targetIndex = _.findIndex(this.notes, (note) => {
+      return `${note.storage}-${note.key}` === location.query.key
+    })
+    if (this.notes[targetIndex].type === 'SNIPPET_NOTE') {
+      dialog.showMessageBox(remote.getCurrentWindow(), {
+        type: 'warning',
+        message: 'Sorry!',
+        detail: 'md/text import is available only a markdown note.'
+      })
+    }
   }
 
   render () {

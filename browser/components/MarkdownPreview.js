@@ -6,6 +6,8 @@ import consts from 'browser/lib/consts'
 import Raphael from 'raphael'
 import flowchart from 'flowchart'
 import SequenceDiagram from 'js-sequence-diagrams'
+import eventEmitter from 'browser/main/lib/eventEmitter'
+import fs from 'fs'
 
 function decodeHTMLEntities (text) {
   var entities = [
@@ -25,6 +27,7 @@ function decodeHTMLEntities (text) {
 const { remote } = require('electron')
 const { app } = remote
 const path = require('path')
+const dialog = remote.dialog
 
 const markdownStyle = require('!!css!stylus?sourceMap!./markdown.styl')[0][1]
 const appPath = 'file://' + (process.env.NODE_ENV === 'production'
@@ -90,6 +93,8 @@ export default class MarkdownPreview extends React.Component {
     this.mouseUpHandler = (e) => this.handleMouseUp(e)
     this.anchorClickHandler = (e) => this.handlePreviewAnchorClick(e)
     this.checkboxClickHandler = (e) => this.handleCheckboxClick(e)
+    this.saveAsTextHandler = () => this.handleSaveAsText()
+    this.saveAsMdHandler = () => this.handleSaveAsMd()
   }
 
   handlePreviewAnchorClick (e) {
@@ -134,6 +139,31 @@ export default class MarkdownPreview extends React.Component {
     if (this.props.onMouseUp != null) this.props.onMouseUp(e)
   }
 
+  handleSaveAsText () {
+    this.exportAsDocument('txt')
+  }
+
+  handleSaveAsMd () {
+    this.exportAsDocument('md')
+  }
+
+  exportAsDocument (fileType) {
+    const options = {
+      filters: [
+        { name: 'Documents', extensions: [fileType]}
+      ],
+      properties: ['openFile', 'createDirectory']
+    }
+    dialog.showSaveDialog(remote.getCurrentWindow(), options,
+    (filename) => {
+      if (filename) {
+        fs.writeFile(filename, this.props.value, (err) => {
+          if (err) throw err
+        })
+      }
+    })
+  }
+
   componentDidMount () {
     this.refs.root.setAttribute('sandbox', 'allow-scripts')
     this.refs.root.contentWindow.document.body.addEventListener('contextmenu', this.contextMenuHandler)
@@ -149,12 +179,16 @@ export default class MarkdownPreview extends React.Component {
 
     this.refs.root.contentWindow.document.addEventListener('mousedown', this.mouseDownHandler)
     this.refs.root.contentWindow.document.addEventListener('mouseup', this.mouseUpHandler)
+    eventEmitter.on('export:save-text', this.saveAsTextHandler)
+    eventEmitter.on('export:save-md', this.saveAsMdHandler)
   }
 
   componentWillUnmount () {
     this.refs.root.contentWindow.document.body.removeEventListener('contextmenu', this.contextMenuHandler)
     this.refs.root.contentWindow.document.removeEventListener('mousedown', this.mouseDownHandler)
     this.refs.root.contentWindow.document.removeEventListener('mouseup', this.mouseUpHandler)
+    eventEmitter.off('export:save-text', this.saveAsTextHandler)
+    eventEmitter.off('export:save-md', this.saveAsMdHandler)
   }
 
   componentDidUpdate (prevProps) {
