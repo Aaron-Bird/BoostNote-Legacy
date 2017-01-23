@@ -18,7 +18,7 @@ export const DEFAULT_CONFIG = {
     toggleFinder: OSX ? 'Cmd + Alt + S' : 'Super + Alt + S',
     toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E',
     noteHandlerKey: {
-      escapeFromEditor: ['Control', 'e']
+      escapeFromEditor: ['Control', 'w']
     }
   },
   ui: {
