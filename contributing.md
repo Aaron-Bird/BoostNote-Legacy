@@ -1,4 +1,4 @@
-# Contributing to Boostnote(English)
+# Contributing to Boostnote
 
 ## About copyright of Pull Request
 
