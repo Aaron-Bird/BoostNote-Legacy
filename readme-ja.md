@@ -17,6 +17,7 @@
 - [Rokt33r](https://github.com/rokt33r)
 - [sota1235](https://github.com/sota1235)
 - [Kohei TAKATA](https://github.com/kohei-takata)
+- [asmsuechan](https://github.com/asmsuechan)
 - [Kazu Yokomizo](https://github.com/kazup01)
 
 ## Contributors
