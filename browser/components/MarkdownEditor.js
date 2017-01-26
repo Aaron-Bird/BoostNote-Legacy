@@ -77,6 +77,7 @@ class MarkdownEditor extends React.Component {
   }
 
   handleBlur (e) {
+    this.setState({ keyPressed: [] })
     let { config } = this.props
     if (config.editor.switchPreview === 'BLUR') {
       let cursorPosition = this.refs.code.editor.getCursor()
