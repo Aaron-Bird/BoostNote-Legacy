@@ -4,6 +4,7 @@ import styles from './ConfigTab.styl'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import store from 'browser/main/store'
 import consts from 'browser/lib/consts'
+import CheckHighlghtEditor from '../PreferencesModal/CheckHighlightEditor'
 
 const OSX = global.process.platform === 'darwin'
 
@@ -18,7 +19,6 @@ class UiTab extends React.Component {
 
   handleUIChange (e) {
     let { config } = this.state
-
     config.ui = {
       theme: this.refs.uiTheme.value,
       disableDirectWrite: this.refs.uiD2w != null
@@ -62,7 +62,6 @@ class UiTab extends React.Component {
   render () {
     const themes = consts.THEMES
     const { config } = this.state
-
     return (
       <div styleName='root'>
         <div styleName='group'>
@@ -113,6 +112,11 @@ class UiTab extends React.Component {
                   })
                 }
               </select>
+              <CheckHighlghtEditor
+                  value="var a = 3"
+                  ref='code'
+                  theme={this.state.config.editor.theme}
+              />
             </div>
           </div>
           <div styleName='group-section'>
