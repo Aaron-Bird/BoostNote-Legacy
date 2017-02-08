@@ -255,7 +255,7 @@ export default class MarkdownPreview extends React.Component {
       let syntax = CodeMirror.findModeByName(el.className)
       if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
       CodeMirror.requireMode(syntax.mode, () => {
-        let content = el.innerHTML
+        let content = decodeHTMLEntities(el.innerHTML)
         el.innerHTML = ''
         el.parentNode.className += ` cm-s-${codeBlockTheme} CodeMirror`
         CodeMirror.runMode(content, syntax.mime, el, {
