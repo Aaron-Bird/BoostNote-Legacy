@@ -15,7 +15,7 @@ class MarkdownEditor extends React.Component {
       status: 'PREVIEW',
       renderValue: props.value,
       keyPressed: {},
-      locked: false
+      isLocked: false
     }
 
     this.lockEditorCode = () => this.handleLockEditor()
@@ -74,18 +74,17 @@ class MarkdownEditor extends React.Component {
       }, () => {
         if (newStatus === 'CODE') {
           this.refs.code.focus()
-          eventEmitter.emit('topbar:lock')
         } else {
           this.refs.code.blur()
           this.refs.preview.focus()
-          eventEmitter.emit('topbar:lock')
         }
+        eventEmitter.emit('topbar:showlockbutton')
       })
     }
   }
 
   handleBlur (e) {
-    if (this.state.locked) return
+    if (this.state.isLocked) return
     this.setState({ keyPressed: [] })
     let { config } = this.props
     if (config.editor.switchPreview === 'BLUR') {
@@ -95,8 +94,8 @@ class MarkdownEditor extends React.Component {
       }, () => {
         this.refs.preview.focus()
         this.refs.preview.scrollTo(cursorPosition.line)
-        eventEmitter.emit('topbar:lock')
       })
+      eventEmitter.emit('topbar:showlockbutton')
     }
   }
 
@@ -111,8 +110,8 @@ class MarkdownEditor extends React.Component {
         status: 'CODE'
       }, () => {
         this.refs.code.focus()
-        eventEmitter.emit('topbar:lock')
       })
+      eventEmitter.emit('topbar:showlockbutton')
     }
   }
 
@@ -144,13 +143,12 @@ class MarkdownEditor extends React.Component {
       this.setState({
         status: 'CODE'
       }, () => {
-        eventEmitter.emit('topbar:lock')
         this.refs.code.focus()
       })
     } else {
-      eventEmitter.emit('topbar:lock')
       this.refs.code.focus()
     }
+    eventEmitter.emit('topbar:showlockbutton')
   }
 
   reload () {
@@ -165,7 +163,7 @@ class MarkdownEditor extends React.Component {
     })
     this.setState({ keyPressed })
     let isNoteHandlerKey = (el) => { return this.state.keyPressed[el] }
-    if (!this.state.locked && this.state.status === 'CODE' && this.escapeFromEditor.every(isNoteHandlerKey)) {
+    if (!this.state.isLocked && this.state.status === 'CODE' && this.escapeFromEditor.every(isNoteHandlerKey)) {
       document.activeElement.blur()
     }
   }
@@ -178,7 +176,7 @@ class MarkdownEditor extends React.Component {
   }
 
   handleLockEditor () {
-    this.setState({ locked: !this.state.locked })
+    this.setState({ isLocked: !this.state.isLocked })
   }
 
   render () {

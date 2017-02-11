@@ -27,7 +27,7 @@ class MarkdownNoteDetail extends React.Component {
         content: ''
       }, props.note),
       editorStatus: false,
-      locked: false
+      isLocked: false
     }
     this.dispatchTimer = null
 
@@ -39,7 +39,7 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   componentDidMount () {
-    ee.on('topbar:lock', this.showLockButton)
+    ee.on('topbar:showlockbutton', this.showLockButton)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -212,14 +212,14 @@ class MarkdownNoteDetail extends React.Component {
     }
   }
 
-  handleLockButtonClick () {
-    this.focus()
+  handleLockButtonMouseDown (e) {
+    e.preventDefault()
     ee.emit('editor:lock')
-    this.setState({ locked: !this.state.locked })
+    this.setState({ isLocked: !this.state.isLocked })
   }
 
   toggleLockButton () {
-    return this.state.locked ? 'fa-lock' : 'fa-unlock-alt'
+    return this.state.isLocked ? 'fa-lock' : 'fa-unlock-alt'
   }
 
   handleDeleteKeyDown (e) {
@@ -271,7 +271,7 @@ class MarkdownNoteDetail extends React.Component {
                 return(
                   <button styleName='info-right-button'
                     onFocus={(e) => this.handleFocus(e)}
-                    onClick={(e) => this.handleLockButtonClick(e)}
+                    onMouseDown={(e) => this.handleLockButtonMouseDown(e)}
                   >
                     <i className={faClassName}/>
                   </button>
