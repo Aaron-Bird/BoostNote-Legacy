@@ -19,13 +19,11 @@ class MarkdownEditor extends React.Component {
     }
 
     this.lockEditorCode = () => this.handleLockEditor()
-    this.getEditorStatus = () => this.handleGetEditorStatus()
   }
 
   componentDidMount () {
     this.value = this.refs.code.value
     eventEmitter.on('editor:lock', this.lockEditorCode)
-    eventEmitter.on('editor:status', this.getEditorStatus)
   }
 
   componentDidUpdate () {
@@ -41,7 +39,6 @@ class MarkdownEditor extends React.Component {
   componentWillUnmount () {
     this.cancelQueue()
     eventEmitter.off('editor:lock', this.lockEditorCode)
-    eventEmitter.off('editor:status', this.getEditorStatus)
   }
 
   queueRendering (value) {
@@ -94,6 +91,7 @@ class MarkdownEditor extends React.Component {
       this.setState({
         status: 'PREVIEW'
       }, () => {
+        eventEmitter.emit('topbar:lock')
         this.refs.preview.focus()
         this.refs.preview.scrollTo(cursorPosition.line)
       })
@@ -143,6 +141,7 @@ class MarkdownEditor extends React.Component {
       this.setState({
         status: 'CODE'
       }, () => {
+        eventEmitter.emit('topbar:lock')
         this.refs.code.focus()
       })
     } else {

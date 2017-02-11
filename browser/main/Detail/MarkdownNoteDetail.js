@@ -26,13 +26,20 @@ class MarkdownNoteDetail extends React.Component {
         title: '',
         content: ''
       }, props.note),
+      isCODE: false,
       locked: false
     }
     this.dispatchTimer = null
+
+    this.showLockButton = () => this.handleShowLockButton()
   }
 
   focus () {
     this.refs.content.focus()
+  }
+
+  componentDidMount () {
+    ee.on('topbar:lock', this.showLockButton)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -49,6 +56,10 @@ class MarkdownNoteDetail extends React.Component {
 
   componentWillUnmount () {
     if (this.saveQueue != null) this.saveNow()
+  }
+
+  componentDidUnmount () {
+    ee.off('topbar:lock', this.showLockButton)
   }
 
   findTitle (value) {
@@ -215,6 +226,10 @@ class MarkdownNoteDetail extends React.Component {
     if (e.keyCode === 27) this.handleDeleteCancelButtonClick(e)
   }
 
+  handleShowLockButton () {
+    this.setState({isCODE: !this.state.isCODE})
+  }
+
   render () {
     let { data, config } = this.props
     let { note } = this.state
@@ -247,10 +262,8 @@ class MarkdownNoteDetail extends React.Component {
           </div>
           <div styleName='info-right'>
             {(() => {
-              // TODO: get a state of MarkdownEditor somehow
-              const editorStatus='CODE'
               let faClassName=`fa ${this.toggleLockButton()}`
-              if (editorStatus === 'CODE') {
+              if (this.state.isCODE) {
                 return(
                   <button styleName='info-right-button'
                     onClick={(e) => this.handleLockButtonClick(e)}
