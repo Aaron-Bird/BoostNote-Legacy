@@ -26,7 +26,7 @@ class MarkdownNoteDetail extends React.Component {
         title: '',
         content: ''
       }, props.note),
-      isCODE: false,
+      editorStatus: false,
       locked: false
     }
     this.dispatchTimer = null
@@ -213,8 +213,8 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   handleLockButtonClick () {
-    ee.emit('editor:lock')
     this.focus()
+    ee.emit('editor:lock')
     this.setState({ locked: !this.state.locked })
   }
 
@@ -227,7 +227,11 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   handleShowLockButton () {
-    this.setState({isCODE: !this.state.isCODE})
+    this.setState({editorStatus: this.refs.content.state.status})
+  }
+
+  handleFocus (e) {
+    this.focus()
   }
 
   render () {
@@ -263,9 +267,10 @@ class MarkdownNoteDetail extends React.Component {
           <div styleName='info-right'>
             {(() => {
               let faClassName=`fa ${this.toggleLockButton()}`
-              if (this.state.isCODE) {
+              if (this.state.editorStatus === 'CODE') {
                 return(
                   <button styleName='info-right-button'
+                    onFocus={(e) => this.handleFocus(e)}
                     onClick={(e) => this.handleLockButtonClick(e)}
                   >
                     <i className={faClassName}/>

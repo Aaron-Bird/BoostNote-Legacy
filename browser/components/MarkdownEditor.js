@@ -74,9 +74,11 @@ class MarkdownEditor extends React.Component {
       }, () => {
         if (newStatus === 'CODE') {
           this.refs.code.focus()
+          eventEmitter.emit('topbar:lock')
         } else {
           this.refs.code.blur()
           this.refs.preview.focus()
+          eventEmitter.emit('topbar:lock')
         }
       })
     }
@@ -91,9 +93,9 @@ class MarkdownEditor extends React.Component {
       this.setState({
         status: 'PREVIEW'
       }, () => {
-        eventEmitter.emit('topbar:lock')
         this.refs.preview.focus()
         this.refs.preview.scrollTo(cursorPosition.line)
+        eventEmitter.emit('topbar:lock')
       })
     }
   }
@@ -109,6 +111,7 @@ class MarkdownEditor extends React.Component {
         status: 'CODE'
       }, () => {
         this.refs.code.focus()
+        eventEmitter.emit('topbar:lock')
       })
     }
   }
@@ -145,6 +148,7 @@ class MarkdownEditor extends React.Component {
         this.refs.code.focus()
       })
     } else {
+      eventEmitter.emit('topbar:lock')
       this.refs.code.focus()
     }
   }
