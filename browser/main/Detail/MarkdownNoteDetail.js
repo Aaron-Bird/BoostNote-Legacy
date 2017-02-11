@@ -25,7 +25,8 @@ class MarkdownNoteDetail extends React.Component {
       note: Object.assign({
         title: '',
         content: ''
-      }, props.note)
+      }, props.note),
+      locked: false
     }
     this.dispatchTimer = null
   }
@@ -200,6 +201,16 @@ class MarkdownNoteDetail extends React.Component {
     }
   }
 
+  handleLockButtonClick () {
+    ee.emit('editor:lock')
+    this.focus()
+    this.setState({ locked: !this.state.locked })
+  }
+
+  toggleLockButton () {
+    return this.state.locked ? 'fa-lock' : 'fa-unlock-alt'
+  }
+
   handleDeleteKeyDown (e) {
     if (e.keyCode === 27) this.handleDeleteCancelButtonClick(e)
   }
@@ -235,6 +246,20 @@ class MarkdownNoteDetail extends React.Component {
             />
           </div>
           <div styleName='info-right'>
+            {(() => {
+              // TODO: get a state of MarkdownEditor somehow
+              const editorStatus='CODE'
+              let faClassName=`fa ${this.toggleLockButton()}`
+              if (editorStatus === 'CODE') {
+                return(
+                  <button styleName='info-right-button'
+                    onClick={(e) => this.handleLockButtonClick(e)}
+                  >
+                    <i className={faClassName}/>
+                  </button>
+                )
+              }
+            })()}
             <button styleName='info-right-button'
               onClick={(e) => this.handleContextButtonClick(e)}
             >

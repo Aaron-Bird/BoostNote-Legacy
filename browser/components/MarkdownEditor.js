@@ -3,6 +3,7 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './MarkdownEditor.styl'
 import CodeEditor from 'browser/components/CodeEditor'
 import MarkdownPreview from 'browser/components/MarkdownPreview'
+import eventEmitter from 'browser/main/lib/eventEmitter'
 
 class MarkdownEditor extends React.Component {
   constructor (props) {
@@ -13,12 +14,18 @@ class MarkdownEditor extends React.Component {
     this.state = {
       status: 'PREVIEW',
       renderValue: props.value,
-      keyPressed: {}
+      keyPressed: {},
+      locked: false
     }
+
+    this.lockEditorCode = () => this.handleLockEditor()
+    this.getEditorStatus = () => this.handleGetEditorStatus()
   }
 
   componentDidMount () {
     this.value = this.refs.code.value
+    eventEmitter.on('editor:lock', this.lockEditorCode)
+    eventEmitter.on('editor:status', this.getEditorStatus)
   }
 
   componentDidUpdate () {
@@ -33,6 +40,8 @@ class MarkdownEditor extends React.Component {
 
   componentWillUnmount () {
     this.cancelQueue()
+    eventEmitter.off('editor:lock', this.lockEditorCode)
+    eventEmitter.off('editor:status', this.getEditorStatus)
   }
 
   queueRendering (value) {
@@ -77,6 +86,7 @@ class MarkdownEditor extends React.Component {
   }
 
   handleBlur (e) {
+    if (this.state.locked) return
     this.setState({ keyPressed: [] })
     let { config } = this.props
     if (config.editor.switchPreview === 'BLUR') {
@@ -152,7 +162,7 @@ class MarkdownEditor extends React.Component {
     })
     this.setState({ keyPressed })
     let isNoteHandlerKey = (el) => { return this.state.keyPressed[el] }
-    if (this.state.status === 'CODE' && this.escapeFromEditor.every(isNoteHandlerKey)) {
+    if (!this.state.locked && this.state.status === 'CODE' && this.escapeFromEditor.every(isNoteHandlerKey)) {
       document.activeElement.blur()
     }
   }
@@ -162,6 +172,10 @@ class MarkdownEditor extends React.Component {
       [e.key]: false
     })
     this.setState({ keyPressed })
+  }
+
+  handleLockEditor () {
+    this.setState({ locked: !this.state.locked })
   }
 
   render () {
