@@ -57,17 +57,35 @@ export default class CodeEditor extends React.Component {
       inputStyle: 'textarea',
       extraKeys: {
         Tab: function (cm) {
+          let cursor = cm.getCursor()
+          let line = cm.getLine(cursor.line)
           if (cm.somethingSelected()) cm.indentSelection('add')
           else {
-            if (cm.getOption('indentWithTabs')) {
-              cm.execCommand('insertTab')
+            let tabs = cm.getOption('indentWithTabs')
+            if (line.trimLeft() === '- ' || line.trimLeft() === '* ') {
+              cm.execCommand('goLineStart')
+              if (tabs) cm.execCommand('insertTab'); else cm.execCommand('insertSoftTab')
+              cm.execCommand('goLineEnd')
             } else {
-              cm.execCommand('insertSoftTab')
+              if (tabs) cm.execCommand('insertTab'); else cm.execCommand('insertSoftTab')
             }
           }
         },
         'Cmd-T': function (cm) {
           // Do nothing
+        },
+        Enter: function (cm) {
+          let cursor = cm.getCursor()
+          let line = cm.getLine(cursor.line)
+          let dash = line.trim().startsWith('- ')
+          if ((line.trim().startsWith('- ') || line.trim().startsWith('* '))) {
+            cm.execCommand('newlineAndIndent')
+            let range = {line: cursor.line + 1, ch: cm.getLine(cursor.line + 1).length}
+            console.log(range)
+            if (dash) cm.replaceRange('- ', range); else cm.replaceRange('* ', range)
+          } else {
+            cm.execCommand('newlineAndIndent')
+          }
         }
       }
     })
