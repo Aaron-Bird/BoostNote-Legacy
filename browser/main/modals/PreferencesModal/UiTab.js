@@ -4,7 +4,7 @@ import styles from './ConfigTab.styl'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import store from 'browser/main/store'
 import consts from 'browser/lib/consts'
-import CheckHighlghtEditor from '../PreferencesModal/CheckHighlightEditor'
+import CodeMirror from 'react-codemirror'
 
 const OSX = global.process.platform === 'darwin'
 
@@ -13,12 +13,28 @@ class UiTab extends React.Component {
     super(props)
 
     this.state = {
-      config: props.config
+      config: props.config,
+      options: {
+        lineNumbers: true,
+        theme: props.config.editor.theme,
+        readOnly: true,
+        mode: 'javascript'
+      },
+        code: ' function iamHappy(happy) {\n\tif(happy){\n\t  console.log("I am Happy!")\n\t}else{\n\t  console.log("I am not Happy!")\n\t}\n};'
     }
   }
 
   handleUIChange (e) {
-    let { config } = this.state
+    let { config, options } = this.state
+    let checkHighLight = document.getElementById('checkHighLight')
+
+    if (checkHighLight == null) {
+      checkHighLight = document.createElement('link')
+      checkHighLight.setAttribute('id', 'checkHighLight')
+      checkHighLight.setAttribute('rel', 'stylesheet')
+      document.head.appendChild(checkHighLight)
+    }
+
     config.ui = {
       theme: this.refs.uiTheme.value,
       disableDirectWrite: this.refs.uiD2w != null
@@ -41,7 +57,23 @@ class UiTab extends React.Component {
       lineNumber: this.refs.previewLineNumber.checked
     }
 
+
+
+    let newOptions = {
+      lineNumbers: true,
+      theme: config.editor.theme,
+      readOnly: true,
+      mode: 'javascript'
+    }
+
+    if (newOptions.theme !== options.theme) {
+      checkHighLight.setAttribute('href', '../node_modules/codemirror/theme/' + newOptions.theme + '.css')
+    }
+
+    this.setState({options: newOptions})
+
     this.setState({ config })
+
   }
 
   handleSaveUIClick (e) {
@@ -61,7 +93,7 @@ class UiTab extends React.Component {
 
   render () {
     const themes = consts.THEMES
-    const { config } = this.state
+    const { config, options } = this.state
     return (
       <div styleName='root'>
         <div styleName='group'>
@@ -112,11 +144,9 @@ class UiTab extends React.Component {
                   })
                 }
               </select>
-              <CheckHighlghtEditor
-                  value="var a = 3"
-                  ref='code'
-                  theme={this.state.config.editor.theme}
-              />
+              <div styleName='code-mirror'>
+                <CodeMirror value={this.state.code} options={options}/>
+              </div>
             </div>
           </div>
           <div styleName='group-section'>
