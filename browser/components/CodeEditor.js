@@ -86,10 +86,14 @@ export default class CodeEditor extends React.Component {
           const cursor = cm.getCursor()
           const line = cm.getLine(cursor.line)
           const dash = line.trim().startsWith('- ')
-          if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
+          const numberedListRegex = /(\d+)\. .+/
+          const match = line.trim().match(numberedListRegex)
+          if (line.trim().startsWith('- ') || line.trim().startsWith('* ') || match) {
             cm.execCommand('newlineAndIndent')
             const range = {line: cursor.line + 1, ch: cm.getLine(cursor.line + 1).length}
-            if (dash) {
+            if (match) {
+              cm.replaceRange((parseInt(match[1]) + 1) + '. ', range)
+            } else if (dash) {
               cm.replaceRange('- ', range)
             } else {
               cm.replaceRange('* ', range)
