@@ -201,13 +201,13 @@ export default class CodeEditor extends React.Component {
     e.preventDefault()
     let imagePath = e.dataTransfer.files[0].path
     let filename = path.basename(imagePath)
-    let imageMd = `![${filename}](${imagePath})`
+    let imageMd = `![${encodeURI(filename)}](${encodeURI(imagePath)})`
     this.insertImage(imageMd)
   }
 
   insertImage (imageMd) {
-    const textarea = this.editor.getInputField()
-    textarea.value = textarea.value.substr(0, textarea.selectionStart) + imageMd + textarea.value.substr(textarea.selectionEnd)
+    const cm = this.editor
+    cm.setValue(cm.getValue() + imageMd)
   }
 
   render () {
