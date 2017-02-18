@@ -14,66 +14,52 @@ class UiTab extends React.Component {
 
     this.state = {
       config: props.config,
-      options: {
-        lineNumbers: true,
-        theme: props.config.editor.theme,
-        readOnly: true,
-        mode: 'javascript'
-      },
-        code: ' function iamHappy(happy) {\n\tif(happy){\n\t  console.log("I am Happy!")\n\t}else{\n\t  console.log("I am not Happy!")\n\t}\n};'
+      codemirrorTheme: props.config.editor.theme
     }
   }
 
   handleUIChange (e) {
-    let { config, options } = this.state
+    let { codemirrorTheme } = this.state
     let checkHighLight = document.getElementById('checkHighLight')
 
-    if (checkHighLight == null) {
+    if (checkHighLight === null) {
       checkHighLight = document.createElement('link')
       checkHighLight.setAttribute('id', 'checkHighLight')
       checkHighLight.setAttribute('rel', 'stylesheet')
       document.head.appendChild(checkHighLight)
     }
 
-    config.ui = {
-      theme: this.refs.uiTheme.value,
-      disableDirectWrite: this.refs.uiD2w != null
-        ? this.refs.uiD2w.checked
-        : false
-    }
-    config.editor = {
-      theme: this.refs.editorTheme.value,
-      fontSize: this.refs.editorFontSize.value,
-      fontFamily: this.refs.editorFontFamily.value,
-      indentType: this.refs.editorIndentType.value,
-      indentSize: this.refs.editorIndentSize.value,
-      switchPreview: this.refs.editorSwitchPreview.value,
-      keyMap: this.refs.editorKeyMap.value
-    }
-    config.preview = {
-      fontSize: this.refs.previewFontSize.value,
-      fontFamily: this.refs.previewFontFamily.value,
-      codeBlockTheme: this.refs.previewCodeBlockTheme.value,
-      lineNumber: this.refs.previewLineNumber.checked
-    }
-
-
-
-    let newOptions = {
-      lineNumbers: true,
-      theme: config.editor.theme,
-      readOnly: true,
-      mode: 'javascript'
+    const newConfig = {
+      ui: {
+        theme: this.refs.uiTheme.value,
+        disableDirectWrite: this.refs.uiD2w != null
+          ? this.refs.uiD2w.checked
+          : false
+      },
+      editor: {
+        theme: this.refs.editorTheme.value,
+        fontSize: this.refs.editorFontSize.value,
+        fontFamily: this.refs.editorFontFamily.value,
+        indentType: this.refs.editorIndentType.value,
+        indentSize: this.refs.editorIndentSize.value,
+        switchPreview: this.refs.editorSwitchPreview.value,
+        keyMap: this.refs.editorKeyMap.value
+      },
+      preview: {
+        fontSize: this.refs.previewFontSize.value,
+        fontFamily: this.refs.previewFontFamily.value,
+        codeBlockTheme: this.refs.previewCodeBlockTheme.value,
+        lineNumber: this.refs.previewLineNumber.checked
+      }
     }
 
-    if (newOptions.theme !== options.theme) {
-      checkHighLight.setAttribute('href', '../node_modules/codemirror/theme/' + newOptions.theme + '.css')
+    const newCodemirrorTheme = this.refs.editorTheme.value
+
+    if (newCodemirrorTheme !== codemirrorTheme) {
+      checkHighLight.setAttribute('href', '../node_modules/codemirror/theme/' + newCodemirrorTheme + '.css')
     }
 
-    this.setState({options: newOptions})
-
-    this.setState({ config })
-
+    this.setState({ config: newConfig, codemirrorTheme: newCodemirrorTheme })
   }
 
   handleSaveUIClick (e) {
@@ -93,7 +79,8 @@ class UiTab extends React.Component {
 
   render () {
     const themes = consts.THEMES
-    const { config, options } = this.state
+    const { config, codemirrorTheme } = this.state
+    const codemirrorSampleCode = 'function iamHappy (happy) {\n\tif (happy) {\n\t  console.log("I am Happy!")\n\t} else {\n\t  console.log("I am not Happy!")\n\t}\n};'
     return (
       <div styleName='root'>
         <div styleName='group'>
@@ -145,7 +132,7 @@ class UiTab extends React.Component {
                 }
               </select>
               <div styleName='code-mirror'>
-                <CodeMirror value={this.state.code} options={options}/>
+                <CodeMirror value={codemirrorSampleCode} options={{ lineNumbers: true, readOnly: true, mode: 'javascript', theme: codemirrorTheme }} />
               </div>
             </div>
           </div>
