@@ -31,7 +31,7 @@ class MarkdownNoteDetail extends React.Component {
     }
     this.dispatchTimer = null
 
-    this.showLockButton = () => this.handleShowLockButton()
+    this.showLockButton = this.handleShowLockButton.bind(this)
   }
 
   focus () {
@@ -218,7 +218,7 @@ class MarkdownNoteDetail extends React.Component {
     this.setState({ isLocked: !this.state.isLocked })
   }
 
-  toggleLockButton () {
+  getToggleLockButton () {
     return this.state.isLocked ? 'fa-lock' : 'fa-unlock-alt'
   }
 
@@ -266,17 +266,17 @@ class MarkdownNoteDetail extends React.Component {
           </div>
           <div styleName='info-right'>
             {(() => {
-              let faClassName=`fa ${this.toggleLockButton()}`
-              if (this.state.editorStatus === 'CODE') {
-                return(
-                  <button styleName='info-right-button'
-                    onFocus={(e) => this.handleFocus(e)}
-                    onMouseDown={(e) => this.handleLockButtonMouseDown(e)}
-                  >
-                    <i className={faClassName}/>
-                  </button>
-                )
-              }
+              const faClassName=`fa ${this.getToggleLockButton()}`
+              const lockButtonComponent =
+                <button styleName='info-right-button'
+                  onFocus={(e) => this.handleFocus(e)}
+                  onMouseDown={(e) => this.handleLockButtonMouseDown(e)}
+                >
+                  <i className={faClassName}/>
+                </button>
+              return (
+                this.state.editorStatus === 'CODE' ? lockButtonComponent : ''
+              )
             })()}
             <button styleName='info-right-button'
               onClick={(e) => this.handleContextButtonClick(e)}
