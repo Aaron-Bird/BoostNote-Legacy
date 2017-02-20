@@ -173,8 +173,8 @@ export default class CodeEditor extends React.Component {
   }
 
   insertImage (imageMd) {
-    const cm = this.editor
-    cm.setValue(cm.getValue() + imageMd)
+    const textarea = this.editor.getInputField()
+    textarea.value = textarea.value.substr(0, textarea.selectionStart) + imageMd + textarea.value.substr(textarea.selectionEnd)
   }
 
   render () {
