@@ -4,16 +4,18 @@ const _ = require('lodash')
 const sander = require('sander')
 
 function copyImage (filePath, storageKey) {
-  let targetStorage
-  try {
-    const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
-    if (!_.isArray(cachedStorageList)) throw new Error('Target storage doesn\'t exist.')
+  const targetStorage = (() => {
+    try {
+      const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
+      if (!_.isArray(cachedStorageList)) throw new Error('Target storage doesn\'t exist.')
 
-    targetStorage = _.find(cachedStorageList, {key: storageKey})
-    if (targetStorage == null) throw new Error('Target storage doesn\'t exist.')
-  } catch (e) {
-    return Promise.reject(e)
-  }
+      const storage = _.find(cachedStorageList, {key: storageKey})
+      if (storage == null) throw new Error('Target storage doesn\'t exist.')
+      return storage
+    } catch (e) {
+      return Promise.reject(e)
+    }
+  })()
 
   return new Promise((resolve, reject) => {
     try {
