@@ -3,6 +3,12 @@ const path = require('path')
 const _ = require('lodash')
 const sander = require('sander')
 
+/**
+ * @description To copy an image and return the path.
+ * @param {String} filePath
+ * @param {String} storageKey
+ * @return {String} an image path
+ */
 function copyImage (filePath, storageKey) {
   const targetStorage = (() => {
     try {
