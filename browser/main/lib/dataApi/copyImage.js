@@ -6,7 +6,7 @@ const sander = require('sander')
 function copyImage (filePath, storageKey) {
   let targetStorage
   try {
-    let cachedStorageList = JSON.parse(localStorage.getItem('storages'))
+    const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
     if (!_.isArray(cachedStorageList)) throw new Error('Target storage doesn\'t exist.')
 
     targetStorage = _.find(cachedStorageList, {key: storageKey})
