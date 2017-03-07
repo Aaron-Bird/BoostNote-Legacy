@@ -25,13 +25,21 @@ class MarkdownNoteDetail extends React.Component {
       note: Object.assign({
         title: '',
         content: ''
-      }, props.note)
+      }, props.note),
+      editorStatus: false,
+      isLocked: false
     }
     this.dispatchTimer = null
+
+    this.showLockButton = this.handleShowLockButton.bind(this)
   }
 
   focus () {
     this.refs.content.focus()
+  }
+
+  componentDidMount () {
+    ee.on('topbar:showlockbutton', this.showLockButton)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -48,6 +56,10 @@ class MarkdownNoteDetail extends React.Component {
 
   componentWillUnmount () {
     if (this.saveQueue != null) this.saveNow()
+  }
+
+  componentDidUnmount () {
+    ee.off('topbar:lock', this.showLockButton)
   }
 
   findTitle (value) {
@@ -200,8 +212,26 @@ class MarkdownNoteDetail extends React.Component {
     }
   }
 
+  handleLockButtonMouseDown (e) {
+    e.preventDefault()
+    ee.emit('editor:lock')
+    this.setState({ isLocked: !this.state.isLocked })
+  }
+
+  getToggleLockButton () {
+    return this.state.isLocked ? 'fa-lock' : 'fa-unlock-alt'
+  }
+
   handleDeleteKeyDown (e) {
     if (e.keyCode === 27) this.handleDeleteCancelButtonClick(e)
+  }
+
+  handleShowLockButton () {
+    this.setState({editorStatus: this.refs.content.state.status})
+  }
+
+  handleFocus (e) {
+    this.focus()
   }
 
   render () {
@@ -235,6 +265,19 @@ class MarkdownNoteDetail extends React.Component {
             />
           </div>
           <div styleName='info-right'>
+            {(() => {
+              const faClassName=`fa ${this.getToggleLockButton()}`
+              const lockButtonComponent =
+                <button styleName='info-right-button'
+                  onFocus={(e) => this.handleFocus(e)}
+                  onMouseDown={(e) => this.handleLockButtonMouseDown(e)}
+                >
+                  <i className={faClassName}/>
+                </button>
+              return (
+                this.state.editorStatus === 'CODE' ? lockButtonComponent : ''
+              )
+            })()}
             <button styleName='info-right-button'
               onClick={(e) => this.handleContextButtonClick(e)}
             >
