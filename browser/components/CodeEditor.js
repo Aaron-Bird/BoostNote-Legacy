@@ -166,15 +166,15 @@ export default class CodeEditor extends React.Component {
 
   handleDropImage (e) {
     e.preventDefault()
-    let imagePath = e.dataTransfer.files[0].path
-    let filename = path.basename(imagePath)
-    let imageMd = `![${encodeURI(filename)}](${encodeURI(imagePath)})`
+    const imagePath = e.dataTransfer.files[0].path
+    const filename = path.basename(imagePath)
+    const imageMd = `![${encodeURI(filename)}](${encodeURI(imagePath)})`
     this.insertImage(imageMd)
   }
 
   insertImage (imageMd) {
-    const cm = this.editor
-    cm.setValue(cm.getValue() + imageMd)
+    const textarea = this.editor.getInputField()
+    textarea.value = textarea.value.substr(0, textarea.selectionStart) + imageMd + textarea.value.substr(textarea.selectionEnd)
   }
 
   render () {

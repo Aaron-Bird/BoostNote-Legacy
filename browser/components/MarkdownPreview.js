@@ -181,6 +181,8 @@ export default class MarkdownPreview extends React.Component {
 
     this.refs.root.contentWindow.document.addEventListener('mousedown', this.mouseDownHandler)
     this.refs.root.contentWindow.document.addEventListener('mouseup', this.mouseUpHandler)
+    this.refs.root.contentWindow.document.addEventListener('drop', this.preventImageDroppedHandler)
+    this.refs.root.contentWindow.document.addEventListener('dragover', this.preventImageDroppedHandler)
     eventEmitter.on('export:save-text', this.saveAsTextHandler)
     eventEmitter.on('export:save-md', this.saveAsMdHandler)
   }
@@ -189,6 +191,8 @@ export default class MarkdownPreview extends React.Component {
     this.refs.root.contentWindow.document.body.removeEventListener('contextmenu', this.contextMenuHandler)
     this.refs.root.contentWindow.document.removeEventListener('mousedown', this.mouseDownHandler)
     this.refs.root.contentWindow.document.removeEventListener('mouseup', this.mouseUpHandler)
+    this.refs.root.contentWindow.document.removeEventListener('drop', this.preventImageDroppedHandler)
+    this.refs.root.contentWindow.document.removeEventListener('dragover', this.preventImageDroppedHandler)
     eventEmitter.off('export:save-text', this.saveAsTextHandler)
     eventEmitter.off('export:save-md', this.saveAsMdHandler)
   }
@@ -323,6 +327,11 @@ export default class MarkdownPreview extends React.Component {
         break
       }
     }
+  }
+
+  preventImageDroppedHandler(e) {
+    e.preventDefault()
+    e.stopPropagation()
   }
 
   render () {
