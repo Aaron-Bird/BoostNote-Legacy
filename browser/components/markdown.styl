@@ -54,7 +54,6 @@ body
   font-family helvetica, arial, sans-serif
   line-height 1.6
   overflow-x hidden
-  user-select all
   background-color $ui-noteDetail-backgroundColor
   .katex
     font 400 1.2em 'KaTeX_Main'
@@ -78,7 +77,6 @@ body
 li
   label.taskListItem
     margin-left -2em
-    background-color white
 div.math-rendered
   text-align center
 .math-failed
@@ -184,6 +182,8 @@ ul
     list-style-type circle
     &>li>ul
       list-style-type square
+ul.markdownIt-TOC, ul.markdownIt-TOC ul
+  list-style-type none
 ol
   list-style-type decimal
   padding-left 2em
