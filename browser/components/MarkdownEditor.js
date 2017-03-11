@@ -180,7 +180,7 @@ class MarkdownEditor extends React.Component {
   }
 
   render () {
-    let { className, value, config } = this.props
+    let { className, value, config, storageKey } = this.props
 
     let editorFontSize = parseInt(config.editor.fontSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 101)) editorFontSize = 14
@@ -210,6 +210,7 @@ class MarkdownEditor extends React.Component {
           fontSize={editorFontSize}
           indentType={config.editor.indentType}
           indentSize={editorIndentSize}
+          storageKey={storageKey}
           onChange={(e) => this.handleChange(e)}
           onBlur={(e) => this.handleBlur(e)}
         />

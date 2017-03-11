@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import _ from 'lodash'
 import CodeMirror from 'codemirror'
 import path from 'path'
+import copyImage from 'browser/main/lib/dataApi/copyImage'
 
 CodeMirror.modeURL = '../node_modules/codemirror/mode/%N/%N.js'
 
@@ -166,9 +167,13 @@ export default class CodeEditor extends React.Component {
 
   handleDropImage (e) {
     e.preventDefault()
-    const imagePath = e.dataTransfer.files[0].path
-    const filename = path.basename(imagePath)
-    const imageMd = `![${encodeURI(filename)}](${encodeURI(imagePath)})`
+    let imagePath = e.dataTransfer.files[0].path
+    let filename = path.basename(imagePath)
+    const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
+    const storagePath = _.find(cachedStorageList, {key: this.props.storageKey})
+
+    copyImage(imagePath, this.props.storageKey)
+    const imageMd = `![${encodeURI(filename)}](${storagePath.path}/images/${encodeURI(filename)})`
     this.insertImage(imageMd)
   }
 
