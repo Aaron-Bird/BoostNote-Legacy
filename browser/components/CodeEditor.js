@@ -167,11 +167,11 @@ export default class CodeEditor extends React.Component {
 
   handleDropImage (e) {
     e.preventDefault()
-    let imagePath = e.dataTransfer.files[0].path
-    let filename = path.basename(imagePath)
+    const imagePath = e.dataTransfer.files[0].path
+    const filename = path.basename(imagePath)
 
     copyImage(imagePath, this.props.storageKey).then((imagePathInTheStorage) => {
-      let imageMd = `![${encodeURI(filename)}](${imagePathInTheStorage})`
+      const imageMd = `![${encodeURI(filename)}](${imagePathInTheStorage})`
       this.insertImageMd(imageMd)
     })
   }
