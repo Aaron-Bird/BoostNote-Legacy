@@ -15,13 +15,19 @@ function copyImage (filePath, storageKey) {
     return Promise.reject(e)
   }
 
-  //return resolveStorageData(targetStorage)
-
-  const inputImage = fs.createReadStream(filePath)
-  const imageName = path.basename(filePath)
-  sander.mkdirSync(`${targetStorage.path}/images`)
-  const outputImage = fs.createWriteStream(path.join(targetStorage.path, 'images', imageName))
-  inputImage.pipe(outputImage)
+  return new Promise((resolve, reject) => {
+    try {
+      const inputImage = fs.createReadStream(filePath)
+      const imageName = path.basename(filePath)
+      sander.mkdirSync(`${targetStorage.path}/images`)
+      const outputImage = fs.createWriteStream(path.join(targetStorage.path, 'images', imageName))
+      inputImage.pipe(outputImage)
+      resolve(`${encodeURI(targetStorage.path)}/images/${encodeURI(imageName)}`)
+    }
+    catch(e) {
+      return reject(e)
+    }
+  })
 }
 
 module.exports = copyImage

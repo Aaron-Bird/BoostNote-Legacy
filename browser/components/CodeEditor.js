@@ -169,17 +169,16 @@ export default class CodeEditor extends React.Component {
     e.preventDefault()
     let imagePath = e.dataTransfer.files[0].path
     let filename = path.basename(imagePath)
-    const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
-    const storagePath = _.find(cachedStorageList, {key: this.props.storageKey})
 
-    copyImage(imagePath, this.props.storageKey)
-    const imageMd = `![${encodeURI(filename)}](${storagePath.path}/images/${encodeURI(filename)})`
-    this.insertImage(imageMd)
+    copyImage(imagePath, this.props.storageKey).then((imagePathInTheStorage) => {
+      let imageMd = `![${encodeURI(filename)}](${imagePathInTheStorage})`
+      this.insertImageMd(imageMd)
+    })
   }
 
-  insertImage (imageMd) {
-    const textarea = this.editor.getInputField()
-    textarea.value = textarea.value.substr(0, textarea.selectionStart) + imageMd + textarea.value.substr(textarea.selectionEnd)
+  insertImageMd (imageMd) {
+    const cm = this.editor
+    cm.setValue(cm.getValue() + imageMd)
   }
 
   render () {
