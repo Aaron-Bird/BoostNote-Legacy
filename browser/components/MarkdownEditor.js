@@ -179,19 +179,19 @@ class MarkdownEditor extends React.Component {
     }
   }
 
-  addMdAndMoveCaretToCenter (md) {
+  addMdAndMoveCaretToCenter (mdElement) {
     const currentCaret = this.refs.code.editor.getCursor()
     const cmDoc = this.refs.code.editor.getDoc()
-    cmDoc.replaceRange(md, currentCaret)
-    this.refs.code.editor.setCursor({line: currentCaret.line, ch: currentCaret.ch + md.length/2})
+    cmDoc.replaceRange(mdElement, currentCaret)
+    this.refs.code.editor.setCursor({line: currentCaret.line, ch: currentCaret.ch + mdElement.length/2})
   }
 
-  addMdBetweenWord (md) {
+  addMdBetweenWord (mdElement) {
     const currentCaret = this.refs.code.editor.getCursor()
     const word = this.refs.code.editor.findWordAt(currentCaret)
     const cmDoc = this.refs.code.editor.getDoc()
-    cmDoc.replaceRange(md, word.anchor)
-    cmDoc.replaceRange(md, { line: word.head.line, ch: word.head.ch + md.length })
+    cmDoc.replaceRange(mdElement, word.anchor)
+    cmDoc.replaceRange(mdElement, { line: word.head.line, ch: word.head.ch + mdElement.length })
   }
 
   handleKeyUp (e) {
