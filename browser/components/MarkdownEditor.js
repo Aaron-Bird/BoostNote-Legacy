@@ -160,6 +160,7 @@ class MarkdownEditor extends React.Component {
   }
 
   handleKeyDown(e) {
+    if (this.state.status !== 'CODE') return false
     const keyPressed = Object.assign(this.state.keyPressed, {
       [e.key]: true
     })
@@ -168,7 +169,7 @@ class MarkdownEditor extends React.Component {
     if (!this.state.isLocked && this.state.status === 'CODE' && this.escapeFromEditor.every(isNoteHandlerKey)) {
       document.activeElement.blur()
     }
-    if (this.state.status === 'CODE' && this.supportBold.every(isNoteHandlerKey)) {
+    if (this.supportBold.every(isNoteHandlerKey)) {
       this.addMdAndMoveCaretToCenter('****')
     }
   }
