@@ -2,6 +2,6 @@
   "extends": ["standard", "standard-jsx"],
   "rules": {
     "no-useless-escape": 0,
-    "prefer-const": "error"
+    "prefer-const": "warn"
   }
 }
