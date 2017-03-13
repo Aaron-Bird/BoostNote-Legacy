@@ -1,7 +1,7 @@
 import markdownit from 'markdown-it'
 import emoji from 'markdown-it-emoji'
 import math from '@rokt33r/markdown-it-math'
-import tocAndAnchor from "markdown-it-toc-and-anchor"
+import tocAndAnchor from 'markdown-it-toc-and-anchor'
 import _ from 'lodash'
 
 const katex = window.katex

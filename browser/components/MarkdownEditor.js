@@ -157,7 +157,7 @@ class MarkdownEditor extends React.Component {
     this.renderPreview(this.props.value)
   }
 
-  handleKeyDown(e) {
+  handleKeyDown (e) {
     const keyPressed = Object.assign(this.state.keyPressed, {
       [e.key]: true
     })

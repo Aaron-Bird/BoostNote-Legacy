@@ -266,13 +266,13 @@ class MarkdownNoteDetail extends React.Component {
           </div>
           <div styleName='info-right'>
             {(() => {
-              const faClassName=`fa ${this.getToggleLockButton()}`
+              const faClassName = `fa ${this.getToggleLockButton()}`
               const lockButtonComponent =
                 <button styleName='info-right-button'
                   onFocus={(e) => this.handleFocus(e)}
                   onMouseDown={(e) => this.handleLockButtonMouseDown(e)}
                 >
-                  <i className={faClassName}/>
+                  <i className={faClassName} />
                 </button>
               return (
                 this.state.editorStatus === 'CODE' ? lockButtonComponent : ''

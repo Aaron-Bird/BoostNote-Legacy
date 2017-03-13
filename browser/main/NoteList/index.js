@@ -310,7 +310,7 @@ class NoteList extends React.Component {
     })
   }
 
-  alertIfSnippet() {
+  alertIfSnippet () {
     let { location } = this.props
     const targetIndex = _.findIndex(this.notes, (note) => {
       return `${note.storage}-${note.key}` === location.query.key
