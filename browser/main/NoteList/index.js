@@ -339,7 +339,7 @@ class NoteList extends React.Component {
     let { router } = this.context
     let { location } = this.props
 
-    let targetIndex = 0
+    const targetIndex = 0
 
     router.push({
       pathname: location.pathname,
