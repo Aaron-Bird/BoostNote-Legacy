@@ -259,6 +259,8 @@ class SnippetNoteDetail extends React.Component {
     this.setState({
       note: this.state.note,
       snippetIndex
+    }, () => {
+      this.save()
     })
   }
 
