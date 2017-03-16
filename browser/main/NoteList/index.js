@@ -38,7 +38,7 @@ class NoteList extends React.Component {
     this.focusHandler = () => {
       this.refs.list.focus()
     }
-    this.alertIfSnippetHnalder = () => {
+    this.alertIfSnippetHandler = () => {
       this.alertIfSnippet()
     }
 
@@ -51,7 +51,7 @@ class NoteList extends React.Component {
     ee.on('list:next', this.selectNextNoteHandler)
     ee.on('list:prior', this.selectPriorNoteHandler)
     ee.on('list:focus', this.focusHandler)
-    ee.on('list:isMarkdownNote', this.alertIfSnippetHnalder)
+    ee.on('list:isMarkdownNote', this.alertIfSnippetHandler)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -70,7 +70,7 @@ class NoteList extends React.Component {
     ee.off('list:next', this.selectNextNoteHandler)
     ee.off('list:prior', this.selectPriorNoteHandler)
     ee.off('list:focus', this.focusHandler)
-    ee.off('list:isMarkdownNote', this.alertIfSnippetHnalder)
+    ee.off('list:isMarkdownNote', this.alertIfSnippetHandler)
   }
 
   componentDidUpdate (prevProps) {
