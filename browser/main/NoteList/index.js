@@ -377,7 +377,7 @@ class NoteList extends React.Component {
       filters: [
         { name: 'Documents', extensions: ['md', 'txt']}
       ],
-      properties: ['openFile']
+      properties: ['openFile', 'multiSelections']
     }
 
     const targetIndex = _.findIndex(this.notes, (note) => {
