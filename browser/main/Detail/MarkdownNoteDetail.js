@@ -31,7 +31,7 @@ class MarkdownNoteDetail extends React.Component {
     }
     this.dispatchTimer = null
 
-    this.showLockButton = this.handleShowLockButton.bind(this)
+    this.toggleLockButton = this.handleToggleLockButton.bind(this)
   }
 
   focus () {
@@ -39,7 +39,7 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   componentDidMount () {
-    ee.on('topbar:showlockbutton', this.showLockButton)
+    ee.on('topbar:togglelockbutton', this.toggleLockButton)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -59,7 +59,7 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   componentDidUnmount () {
-    ee.off('topbar:lock', this.showLockButton)
+    ee.off('topbar:togglelockbutton', this.toggleLockButton)
   }
 
   findTitle (value) {
@@ -230,7 +230,7 @@ class MarkdownNoteDetail extends React.Component {
     if (e.keyCode === 27) this.handleDeleteCancelButtonClick(e)
   }
 
-  handleShowLockButton () {
+  handleToggleLockButton () {
     this.setState({editorStatus: this.refs.content.state.status})
   }
 

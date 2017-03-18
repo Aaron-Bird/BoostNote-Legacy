@@ -82,7 +82,7 @@ class MarkdownEditor extends React.Component {
           this.refs.code.blur()
           this.refs.preview.focus()
         }
-        eventEmitter.emit('topbar:showlockbutton')
+        eventEmitter.emit('topbar:togglelockbutton')
       })
     }
   }
@@ -99,7 +99,7 @@ class MarkdownEditor extends React.Component {
         this.refs.preview.focus()
         this.refs.preview.scrollTo(cursorPosition.line)
       })
-      eventEmitter.emit('topbar:showlockbutton')
+      eventEmitter.emit('topbar:togglelockbutton')
     }
   }
 
@@ -115,7 +115,7 @@ class MarkdownEditor extends React.Component {
       }, () => {
         this.refs.code.focus()
       })
-      eventEmitter.emit('topbar:showlockbutton')
+      eventEmitter.emit('topbar:togglelockbutton')
     }
   }
 
@@ -152,7 +152,7 @@ class MarkdownEditor extends React.Component {
     } else {
       this.refs.code.focus()
     }
-    eventEmitter.emit('topbar:showlockbutton')
+    eventEmitter.emit('topbar:togglelockbutton')
   }
 
   reload () {
