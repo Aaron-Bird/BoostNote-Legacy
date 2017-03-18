@@ -243,6 +243,10 @@ export default class MarkdownPreview extends React.Component {
     this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
     this.refs.root.contentWindow.document.body.innerHTML = markdown.render(value)
 
+    _.forEach(this.refs.root.contentWindow.document.querySelectorAll('.taskListItem'), (el) => {
+      el.parentNode.parentNode.style.listStyleType = 'none'
+    })
+
     _.forEach(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
       el.addEventListener('click', this.anchorClickHandler)
     })
