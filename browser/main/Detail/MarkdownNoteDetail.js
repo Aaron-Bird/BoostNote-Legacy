@@ -231,7 +231,7 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   handleToggleLockButton () {
-    if (this.refs.content.state.status === 'CODE') {
+    if (this.props.config.editor.switchPreview === 'BLUR' && this.refs.content.state.status === 'CODE') {
       this.setState({isLockButtonShown: true})
     } else {
       this.setState({isLockButtonShown: false})
