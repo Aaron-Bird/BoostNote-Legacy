@@ -69,7 +69,8 @@ export default class CodeEditor extends React.Component {
         'Cmd-T': function (cm) {
           // Do nothing
         }
-      }
+      },
+      dragDrop: false
     })
 
     this.setMode(this.props.mode)
