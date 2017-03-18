@@ -219,6 +219,7 @@ class MarkdownNoteDetail extends React.Component {
     e.preventDefault()
     ee.emit('editor:lock')
     this.setState({ isLocked: !this.state.isLocked })
+    if (this.state.isLocked) this.focus()
   }
 
   getToggleLockButton () {
