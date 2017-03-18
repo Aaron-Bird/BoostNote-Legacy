@@ -276,11 +276,14 @@ class MarkdownNoteDetail extends React.Component {
             {(() => {
               const faClassName=`fa ${this.getToggleLockButton()}`
               const lockButtonComponent =
-                <button styleName='info-right-button'
+                <button styleName='control-lockButton'
                   onFocus={(e) => this.handleFocus(e)}
                   onMouseDown={(e) => this.handleLockButtonMouseDown(e)}
                 >
                   <i className={faClassName}/>
+                  <span styleName='control-lockButton-tooltip'>
+                  {this.state.isLocked ? 'Unlock' : 'Lock'}
+                  </span>
                 </button>
               return (
                 this.state.isLockButtonShown ? lockButtonComponent : ''

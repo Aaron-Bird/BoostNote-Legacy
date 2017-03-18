@@ -9,6 +9,34 @@
   background-color $ui-noteDetail-backgroundColor
   box-shadow $note-detail-box-shadow
 
+.control-lockButton
+  width 34px
+  height 34px
+  border-radius 17px
+  font-size 14px
+  margin 13px 7px
+  padding-top 7px
+  border none
+  color $ui-button-color
+  fill $ui-button-color
+  background-color transparent
+  &:active
+    border-color $ui-button--active-backgroundColor
+  &:hover .control-lockButton-tooltip
+    opacity 1
+
+.control-lockButton-tooltip
+  tooltip()
+  position fixed
+  pointer-events none
+  top 50px
+  z-index 200
+  padding 5px
+  line-height normal
+  border-radius 2px
+  opacity 0
+  transition 0.1s
+
 .body
   absolute left right
   left $note-detail-left-margin
@@ -24,3 +52,13 @@ body[data-theme="dark"]
     border-color $ui-dark-borderColor
     background-color $ui-dark-noteDetail-backgroundColor
     box-shadow none
+
+  .control-lockButton
+    colorDarkDefaultButton()
+    border-color $ui-dark-borderColor
+    background-color $ui-dark-noteList-backgroundColor
+    &:active
+      border-color $ui-dark-button--active-backgroundColor
+
+  .control-lockButton-tooltip
+    darkTooltip()
