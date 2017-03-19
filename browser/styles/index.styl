@@ -151,6 +151,7 @@ $ui-dark-button--active-color = white
 $ui-dark-button--active-backgroundColor = #6AA5E9
 $ui-dark-button--hover-backgroundColor = lighten($ui-dark-backgroundColor, 10%)
 $ui-dark-button--focus-borderColor = lighten(#369DCD, 25%)
+$ui-dark-topbar-button-color = #939395
 
 $dark-default-button-background = $ui-dark-backgroundColor
 $dark-default-button-background--hover = $ui-dark-button--hover-backgroundColor
@@ -189,6 +190,16 @@ navDarkButtonColor()
   &:active:hover
     background-color $ui-dark-button--active-backgroundColor
     color $ui-dark-button--active-color
+
+colorDarkTopBarButton()
+  border-color $ui-dark-borderColor
+  color $ui-dark-topbar-button-color
+  background-color $dark-default-button-background
+  &:hover
+    background-color $dark-default-button-background--hover
+  &:active
+  &:active:hover
+    background-color $ui-dark-button--active-backgroundColor
 
 $ui-dark-tooltip-text-color = white
 $ui-dark-tooltip-backgroundColor = alpha(#444, 70%)

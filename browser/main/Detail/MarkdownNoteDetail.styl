@@ -75,7 +75,7 @@ body[data-theme="dark"]
     box-shadow none
 
   .control-lockButton
-    colorDarkDefaultButton()
+    colorDarkTopBarButton()
     border-color $ui-dark-borderColor
     background-color $ui-dark-noteList-backgroundColor
     &:active
@@ -85,8 +85,9 @@ body[data-theme="dark"]
     darkTooltip()
 
   .control-trashButton
-    navDarkButtonColor()
+    colorDarkTopBarButton()
     border-color $ui-dark-borderColor
+    background-color $ui-dark-noteList-backgroundColor
     &:active
       border-color $ui-dark-button--focus-borderColor
     &:focus
