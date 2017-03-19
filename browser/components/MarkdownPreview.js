@@ -24,6 +24,21 @@ function decodeHTMLEntities (text) {
   return text
 }
 
+function encodeHTMLEntities (text) {
+  var entities = [
+    ['\'', 'apos'],
+    ['&', 'amp'],
+    ['<', 'lt'],
+    ['>', 'gt']
+  ]
+
+  for (var i = 0, max = entities.length; i < max; ++i) {
+    text = text.replace(entities[i][0], '&' + entities[i][1] + ';')
+  }
+
+  return text
+}
+
 const { remote } = require('electron')
 const { app } = remote
 const path = require('path')
@@ -241,7 +256,7 @@ export default class MarkdownPreview extends React.Component {
     let { value, theme, indentSize, codeBlockTheme } = this.props
 
     this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
-    this.refs.root.contentWindow.document.body.innerHTML = markdown.render(value)
+    this.refs.root.contentWindow.document.body.innerHTML = markdown.render(encodeHTMLEntities(value))
 
     _.forEach(this.refs.root.contentWindow.document.querySelectorAll('.taskListItem'), (el) => {
       el.parentNode.parentNode.style.listStyleType = 'none'
