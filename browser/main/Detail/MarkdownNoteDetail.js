@@ -230,8 +230,9 @@ class MarkdownNoteDetail extends React.Component {
     if (e.keyCode === 27) this.handleDeleteCancelButtonClick(e)
   }
 
-  handleToggleLockButton () {
-    if (this.props.config.editor.switchPreview === 'BLUR' && this.refs.content.state.status === 'CODE') {
+  handleToggleLockButton (event, noteStatus) {
+    // first argument event is not used
+    if (this.props.config.editor.switchPreview === 'BLUR' && noteStatus === 'CODE') {
       this.setState({isLockButtonShown: true})
     } else {
       this.setState({isLockButtonShown: false})
