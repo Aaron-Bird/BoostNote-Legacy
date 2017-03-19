@@ -10,29 +10,20 @@ const sander = require('sander')
  * @return {String} an image path
  */
 function copyImage (filePath, storageKey) {
-  const targetStorage = (() => {
+  return new Promise((resolve, reject) => {
     try {
       const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
       if (!_.isArray(cachedStorageList)) throw new Error('Target storage doesn\'t exist.')
-
       const storage = _.find(cachedStorageList, {key: storageKey})
-      if (storage == null) throw new Error('Target storage doesn\'t exist.')
-      return storage
-    } catch (e) {
-      return Promise.reject(e)
-    }
-  })()
+      if (storage === undefined) throw new Error('Target storage doesn\'t exist.')
+      const targetStorage = storage
 
-  return new Promise((resolve, reject) => {
-    try {
       const inputImage = fs.createReadStream(filePath)
       const imageName = path.basename(filePath)
-      sander.mkdirSync(`${targetStorage.path}/images`)
       const outputImage = fs.createWriteStream(path.join(targetStorage.path, 'images', imageName))
       inputImage.pipe(outputImage)
       resolve(`${encodeURI(targetStorage.path)}/images/${encodeURI(imageName)}`)
-    }
-    catch(e) {
+    } catch (e) {
       return reject(e)
     }
   })
