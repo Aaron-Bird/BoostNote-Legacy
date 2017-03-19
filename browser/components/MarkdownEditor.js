@@ -11,6 +11,10 @@ class MarkdownEditor extends React.Component {
 
     this.escapeFromEditor = ['Control', 'w']
 
+    this.supportMdBold = ['Control', 'b']
+
+    this.supportMdWordBold = ['Control', ':']
+
     this.state = {
       status: 'PREVIEW',
       renderValue: props.value,
@@ -158,6 +162,7 @@ class MarkdownEditor extends React.Component {
   }
 
   handleKeyDown(e) {
+    if (this.state.status !== 'CODE') return false
     const keyPressed = Object.assign(this.state.keyPressed, {
       [e.key]: true
     })
@@ -166,6 +171,27 @@ class MarkdownEditor extends React.Component {
     if (!this.state.isLocked && this.state.status === 'CODE' && this.escapeFromEditor.every(isNoteHandlerKey)) {
       document.activeElement.blur()
     }
+    if (this.supportMdBold.every(isNoteHandlerKey)) {
+      this.addMdAndMoveCaretToCenter('****')
+    }
+    if (this.supportMdWordBold.every(isNoteHandlerKey)) {
+      this.addMdBetweenWord('**')
+    }
+  }
+
+  addMdAndMoveCaretToCenter (mdElement) {
+    const currentCaret = this.refs.code.editor.getCursor()
+    const cmDoc = this.refs.code.editor.getDoc()
+    cmDoc.replaceRange(mdElement, currentCaret)
+    this.refs.code.editor.setCursor({line: currentCaret.line, ch: currentCaret.ch + mdElement.length/2})
+  }
+
+  addMdBetweenWord (mdElement) {
+    const currentCaret = this.refs.code.editor.getCursor()
+    const word = this.refs.code.editor.findWordAt(currentCaret)
+    const cmDoc = this.refs.code.editor.getDoc()
+    cmDoc.replaceRange(mdElement, word.anchor)
+    cmDoc.replaceRange(mdElement, { line: word.head.line, ch: word.head.ch + mdElement.length })
   }
 
   handleKeyUp (e) {
