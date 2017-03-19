@@ -333,7 +333,7 @@ class NoteList extends React.Component {
   }
 
   jumpToTop() {
-    if (this.notes == null || this.notes.length === 0) {
+    if (this.notes === null || this.notes.length === 0) {
       return
     }
     let { router } = this.context
