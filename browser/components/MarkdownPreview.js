@@ -258,7 +258,15 @@ export default class MarkdownPreview extends React.Component {
     let { value, theme, indentSize, codeBlockTheme } = this.props
 
     this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
-    this.refs.root.contentWindow.document.body.innerHTML = markdown.render(encodeHTMLEntities(value))
+
+    const codeBlocks = value.match(/(```)(.|[\n])*?(```)/g)
+    if (codeBlocks.length > 0) {
+      codeBlocks.forEach((codeBlock) => {
+        const encodedCodeBlock = encodeHTMLEntities(codeBlock)
+        value = value.replace(codeBlock, encodedCodeBlock)
+      })
+    }
+    this.refs.root.contentWindow.document.body.innerHTML = markdown.render(value)
 
     _.forEach(this.refs.root.contentWindow.document.querySelectorAll('.taskListItem'), (el) => {
       el.parentNode.parentNode.style.listStyleType = 'none'
