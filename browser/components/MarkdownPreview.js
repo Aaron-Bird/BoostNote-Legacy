@@ -14,7 +14,8 @@ function decodeHTMLEntities (text) {
     ['apos', '\''],
     ['amp', '&'],
     ['lt', '<'],
-    ['gt', '>']
+    ['gt', '>'],
+    ['#63', '?']
   ]
 
   for (var i = 0, max = entities.length; i < max; ++i) {
@@ -29,7 +30,8 @@ function encodeHTMLEntities (text) {
     ['\'', 'apos'],
     ['&', 'amp'],
     ['<', 'lt'],
-    ['>', 'gt']
+    ['>', 'gt'],
+    ['?', '#63']
   ]
 
   for (var i = 0, max = entities.length; i < max; ++i) {
