@@ -290,7 +290,7 @@ class MarkdownNoteDetail extends React.Component {
                 this.state.isLockButtonShown ? lockButtonComponent : ''
               )
             })()}
-            <button styleName='info-right-button'
+            <button styleName='control-trashButton'
               onClick={(e) => this.handleContextButtonClick(e)}
             >
               <svg height="17px" id="Capa_1" style={{"enableBackground":"new 0 0 753.23 753.23"}} width="17px" version="1.1" viewBox="0 0 753.23 753.23" x="0px" y="0px" xmlSpace="preserve">
