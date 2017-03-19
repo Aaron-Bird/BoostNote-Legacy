@@ -22,8 +22,10 @@
   background-color transparent
   &:active
     border-color $ui-button--active-backgroundColor
-  &:hover .control-lockButton-tooltip
-    opacity 1
+  &:hover
+    background-color $ui-button--hover-backgroundColor
+    .control-lockButton-tooltip
+      opacity 1
 
 .control-lockButton-tooltip
   tooltip()
