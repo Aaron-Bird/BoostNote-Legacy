@@ -197,8 +197,11 @@ colorDarkTopBarButton()
   &:hover
     background-color $dark-default-button-background--hover
   &:active
+    border-color $ui-dark-button--focus-borderColor
   &:active:hover
     background-color $ui-dark-button--active-backgroundColor
+  &:focus
+    border-color $ui-button--focus-borderColor
 
 $ui-dark-tooltip-text-color = white
 $ui-dark-tooltip-backgroundColor = alpha(#444, 70%)
