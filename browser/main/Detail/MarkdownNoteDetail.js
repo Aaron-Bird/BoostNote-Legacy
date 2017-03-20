@@ -26,12 +26,12 @@ class MarkdownNoteDetail extends React.Component {
         title: '',
         content: ''
       }, props.note),
-      editorStatus: false,
+      isLockButtonShown: false,
       isLocked: false
     }
     this.dispatchTimer = null
 
-    this.showLockButton = this.handleShowLockButton.bind(this)
+    this.toggleLockButton = this.handleToggleLockButton.bind(this)
   }
 
   focus () {
@@ -39,7 +39,7 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   componentDidMount () {
-    ee.on('topbar:showlockbutton', this.showLockButton)
+    ee.on('topbar:togglelockbutton', this.toggleLockButton)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -59,7 +59,7 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   componentDidUnmount () {
-    ee.off('topbar:lock', this.showLockButton)
+    ee.off('topbar:togglelockbutton', this.toggleLockButton)
   }
 
   findTitle (value) {
@@ -219,6 +219,7 @@ class MarkdownNoteDetail extends React.Component {
     e.preventDefault()
     ee.emit('editor:lock')
     this.setState({ isLocked: !this.state.isLocked })
+    if (this.state.isLocked) this.focus()
   }
 
   getToggleLockButton () {
@@ -229,8 +230,13 @@ class MarkdownNoteDetail extends React.Component {
     if (e.keyCode === 27) this.handleDeleteCancelButtonClick(e)
   }
 
-  handleShowLockButton () {
-    this.setState({editorStatus: this.refs.content.state.status})
+  handleToggleLockButton (event, noteStatus) {
+    // first argument event is not used
+    if (this.props.config.editor.switchPreview === 'BLUR' && noteStatus === 'CODE') {
+      this.setState({isLockButtonShown: true})
+    } else {
+      this.setState({isLockButtonShown: false})
+    }
   }
 
   handleFocus (e) {
@@ -271,17 +277,20 @@ class MarkdownNoteDetail extends React.Component {
             {(() => {
               const faClassName=`fa ${this.getToggleLockButton()}`
               const lockButtonComponent =
-                <button styleName='info-right-button'
+                <button styleName='control-lockButton'
                   onFocus={(e) => this.handleFocus(e)}
                   onMouseDown={(e) => this.handleLockButtonMouseDown(e)}
                 >
-                  <i className={faClassName}/>
+                  <i className={faClassName} styleName='lock-button'/>
+                  <span styleName='control-lockButton-tooltip'>
+                  {this.state.isLocked ? 'Unlock' : 'Lock'}
+                  </span>
                 </button>
               return (
-                this.state.editorStatus === 'CODE' ? lockButtonComponent : ''
+                this.state.isLockButtonShown ? lockButtonComponent : ''
               )
             })()}
-            <button styleName='info-right-button'
+            <button styleName='control-trashButton'
               onClick={(e) => this.handleContextButtonClick(e)}
             >
               <svg height="17px" id="Capa_1" style={{"enableBackground":"new 0 0 753.23 753.23"}} width="17px" version="1.1" viewBox="0 0 753.23 753.23" x="0px" y="0px" xmlSpace="preserve">
