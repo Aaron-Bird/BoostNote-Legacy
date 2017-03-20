@@ -62,7 +62,7 @@ export default class CodeEditor extends React.Component {
           if (cm.somethingSelected()) cm.indentSelection('add')
           else {
             const tabs = cm.getOption('indentWithTabs')
-            if (line.trimLeft() === '- ' || line.trimLeft() === '* ') {
+            if (line.trimLeft() === '- ' || line.trimLeft() === '* ' || line.trimLeft() === '+ ') {
               cm.execCommand('goLineStart')
               if (tabs) {
                 cm.execCommand('insertTab')
@@ -85,18 +85,30 @@ export default class CodeEditor extends React.Component {
         Enter: (cm) => {
           const cursor = cm.getCursor()
           const line = cm.getLine(cursor.line)
-          const dash = line.trim().startsWith('- ')
-          const numberedListRegex = /(\d+)\. .+/
+          let bulletType;
+          if (line.trim().startsWith('- ')) {
+            bulletType = 1 // dash
+          } else if (line.trim().startsWith('* ')) {
+            bulletType = 2 // star
+          } else if (line.trim().startsWith('+ ')) {
+            bulletType = 3 // plus
+          } else {
+            bulletType = 0 // not a bullet
+          }
+          console.log(bulletType);
+          const numberedListRegex = /^(\d+)\. .+/
           const match = line.trim().match(numberedListRegex)
-          if (line.trim().startsWith('- ') || line.trim().startsWith('* ') || match) {
+          if (bulletType !== 0 || match) {
             cm.execCommand('newlineAndIndent')
             const range = {line: cursor.line + 1, ch: cm.getLine(cursor.line + 1).length}
             if (match) {
               cm.replaceRange((parseInt(match[1]) + 1) + '. ', range)
-            } else if (dash) {
+            } else if (bulletType === 1) {
               cm.replaceRange('- ', range)
-            } else {
+            } else if (bulletType === 2) {
               cm.replaceRange('* ', range)
+            } else if (bulletType === 3) {
+              cm.replaceRange('+ ', range)
             }
           } else {
             cm.execCommand('newlineAndIndent')
