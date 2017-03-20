@@ -139,6 +139,24 @@ modal()
   border-radius $modal-border-radius
   box-shadow 2px 2px 10px gray
 
+topBarButtonLight()
+  width 34px
+  height 34px
+  border-radius 17px
+  font-size 14px
+  margin 13px 7px
+  padding-top 7px
+  border none
+  color $ui-button-color
+  fill $ui-button-color
+  background-color transparent
+  &:active
+    border-color $ui-button--active-backgroundColor
+  &:hover
+    background-color $ui-button--hover-backgroundColor
+    .control-lockButton-tooltip
+      opacity 1
+
 // Dark theme
 $ui-dark-borderColor = lighten(#21252B, 20%)
 $ui-dark-backgroundColor = #1D1D1D
@@ -191,7 +209,7 @@ navDarkButtonColor()
     background-color $ui-dark-button--active-backgroundColor
     color $ui-dark-button--active-color
 
-colorDarkTopBarButton()
+topBarButtonDark()
   border-color $ui-dark-borderColor
   color $ui-dark-topbar-button-color
   &:hover

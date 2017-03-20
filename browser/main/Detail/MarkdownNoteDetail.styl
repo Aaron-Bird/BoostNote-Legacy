@@ -13,22 +13,7 @@
   padding-bottom 3px
 
 .control-lockButton
-  width 34px
-  height 34px
-  border-radius 17px
-  font-size 14px
-  margin 13px 7px
-  padding-top 7px
-  border none
-  color $ui-button-color
-  fill $ui-button-color
-  background-color transparent
-  &:active
-    border-color $ui-button--active-backgroundColor
-  &:hover
-    background-color $ui-button--hover-backgroundColor
-    .control-lockButton-tooltip
-      opacity 1
+  topBarButtonLight()
 
 .control-lockButton-tooltip
   tooltip()
@@ -44,19 +29,7 @@
 
 .control-trashButton
   float right
-  width 34px
-  height 34px
-  border-radius 17px
-  font-size 14px
-  margin 13px 7px
-  padding-top 7px 
-  border none
-  color $ui-button-color
-  fill $ui-button-color
-  background-color transparent
-  &:hover
-    opacity 1
-    background-color $ui-button--hover-backgroundColor
+  topBarButtonLight()
 
 .body
   absolute left right
@@ -75,10 +48,10 @@ body[data-theme="dark"]
     box-shadow none
 
   .control-lockButton
-    colorDarkTopBarButton()
+    topBarButtonDark()
 
   .control-lockButton-tooltip
     darkTooltip()
 
   .control-trashButton
-    colorDarkTopBarButton()
+    topBarButtonDark()

@@ -70,19 +70,7 @@
 
 .control-trashButton
   float right
-  width 34px
-  height 34px
-  border-radius 17px
-  font-size 14px
-  margin 13px 7px
-  padding-top 7px 
-  border none
-  color $ui-button-color
-  fill $ui-button-color
-  background-color transparent
-  &:hover
-    opacity 1
-    background-color $ui-button--hover-backgroundColor
+  topBarButtonLight()
 
 body[data-theme="dark"]
   .root
@@ -111,4 +99,4 @@ body[data-theme="dark"]
       border-color $ui-dark-borderColor
 
   .control-trashButton
-    colorDarkTopBarButton()
+    topBarButtonDark()
