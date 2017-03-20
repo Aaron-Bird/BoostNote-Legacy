@@ -95,7 +95,6 @@ export default class CodeEditor extends React.Component {
           } else {
             bulletType = 0 // not a bullet
           }
-          console.log(bulletType);
           const numberedListRegex = /^(\d+)\. .+/
           const match = line.trim().match(numberedListRegex)
           if (bulletType !== 0 || match) {
