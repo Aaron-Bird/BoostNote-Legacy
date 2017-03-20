@@ -68,6 +68,22 @@
     &:active .update-icon
       color white
 
+.control-trashButton
+  float right
+  width 34px
+  height 34px
+  border-radius 17px
+  font-size 14px
+  margin 13px 7px
+  padding-top 7px 
+  border none
+  color $ui-button-color
+  fill $ui-button-color
+  background-color transparent
+  &:hover
+    opacity 1
+    background-color $ui-button--hover-backgroundColor
+
 body[data-theme="dark"]
   .root
     border-color $ui-dark-borderColor
@@ -93,3 +109,11 @@ body[data-theme="dark"]
   .override
     button
       border-color $ui-dark-borderColor
+
+  .control-trashButton
+    colorDarkTopBarButton()
+    border-color $ui-dark-borderColor
+    &:active
+      border-color $ui-dark-button--focus-borderColor
+    &:focus
+      border-color $ui-button--focus-borderColor
