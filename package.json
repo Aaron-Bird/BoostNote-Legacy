@@ -11,7 +11,7 @@
     "compile": "grunt compile",
     "test": "PWD=$(pwd) NODE_ENV=test ava",
     "fix": "npm run lint --fix",
-    "lint": "eslint ./**/*.js"
+    "lint": "eslint ."
   },
   "config": {
     "electron-version": "1.2.8"

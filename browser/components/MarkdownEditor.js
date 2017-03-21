@@ -161,7 +161,7 @@ class MarkdownEditor extends React.Component {
     this.renderPreview(this.props.value)
   }
 
-  handleKeyDown(e) {
+  handleKeyDown (e) {
     if (this.state.status !== 'CODE') return false
     const keyPressed = Object.assign(this.state.keyPressed, {
       [e.key]: true
@@ -183,7 +183,7 @@ class MarkdownEditor extends React.Component {
     const currentCaret = this.refs.code.editor.getCursor()
     const cmDoc = this.refs.code.editor.getDoc()
     cmDoc.replaceRange(mdElement, currentCaret)
-    this.refs.code.editor.setCursor({line: currentCaret.line, ch: currentCaret.ch + mdElement.length/2})
+    this.refs.code.editor.setCursor({ line: currentCaret.line, ch: currentCaret.ch + mdElement.length / 2 })
   }
 
   addMdBetweenWord (mdElement) {

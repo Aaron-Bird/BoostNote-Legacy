@@ -86,7 +86,7 @@ export default class CodeEditor extends React.Component {
         Enter: (cm) => {
           const cursor = cm.getCursor()
           const line = cm.getLine(cursor.line)
-          let bulletType;
+          let bulletType
           if (line.trim().startsWith('- ')) {
             bulletType = 1 // dash
           } else if (line.trim().startsWith('* ')) {
