@@ -332,7 +332,7 @@ class NoteList extends React.Component {
     }
   }
 
-  jumpToTop() {
+  jumpToTop () {
     if (this.notes === null || this.notes.length === 0) {
       return
     }
