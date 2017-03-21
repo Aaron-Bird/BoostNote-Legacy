@@ -139,6 +139,24 @@ modal()
   border-radius $modal-border-radius
   box-shadow 2px 2px 10px gray
 
+topBarButtonLight()
+  width 34px
+  height 34px
+  border-radius 17px
+  font-size 14px
+  margin 13px 7px
+  padding-top 7px
+  border none
+  color $ui-button-color
+  fill $ui-button-color
+  background-color transparent
+  &:active
+    border-color $ui-button--active-backgroundColor
+  &:hover
+    background-color $ui-button--hover-backgroundColor
+    .control-lockButton-tooltip
+      opacity 1
+
 // Dark theme
 $ui-dark-borderColor = lighten(#21252B, 20%)
 $ui-dark-backgroundColor = #1D1D1D
@@ -151,6 +169,7 @@ $ui-dark-button--active-color = white
 $ui-dark-button--active-backgroundColor = #6AA5E9
 $ui-dark-button--hover-backgroundColor = lighten($ui-dark-backgroundColor, 10%)
 $ui-dark-button--focus-borderColor = lighten(#369DCD, 25%)
+$ui-dark-topbar-button-color = #939395
 
 $dark-default-button-background = $ui-dark-backgroundColor
 $dark-default-button-background--hover = $ui-dark-button--hover-backgroundColor
@@ -189,6 +208,18 @@ navDarkButtonColor()
   &:active:hover
     background-color $ui-dark-button--active-backgroundColor
     color $ui-dark-button--active-color
+
+topBarButtonDark()
+  border-color $ui-dark-borderColor
+  color $ui-dark-topbar-button-color
+  &:hover
+    background-color $dark-default-button-background--hover
+  &:active
+    border-color $ui-dark-button--focus-borderColor
+  &:active:hover
+    background-color $ui-dark-button--active-backgroundColor
+  &:focus
+    border-color $ui-button--focus-borderColor
 
 $ui-dark-tooltip-text-color = white
 $ui-dark-tooltip-backgroundColor = alpha(#444, 70%)

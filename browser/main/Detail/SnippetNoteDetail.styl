@@ -68,6 +68,10 @@
     &:active .update-icon
       color white
 
+.control-trashButton
+  float right
+  topBarButtonLight()
+
 body[data-theme="dark"]
   .root
     border-color $ui-dark-borderColor
@@ -93,3 +97,6 @@ body[data-theme="dark"]
   .override
     button
       border-color $ui-dark-borderColor
+
+  .control-trashButton
+    topBarButtonDark()

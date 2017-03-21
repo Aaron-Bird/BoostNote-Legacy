@@ -1,6 +1,6 @@
 {
   "name": "boost",
-  "version": "0.8.6",
+  "version": "0.8.7",
   "description": "Boostnote",
   "main": "index.js",
   "license": "GPL-3.0",
@@ -61,7 +61,6 @@
     "markdown-it-checkbox": "^1.1.0",
     "markdown-it-emoji": "^1.1.1",
     "markdown-it-footnote": "^3.0.0",
-    "markdown-it-toc-and-anchor": "^4.1.1",
     "md5": "^2.0.0",
     "mixpanel": "^0.4.1",
     "moment": "^2.10.3",

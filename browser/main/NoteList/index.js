@@ -38,8 +38,12 @@ class NoteList extends React.Component {
     this.focusHandler = () => {
       this.refs.list.focus()
     }
-    this.alertIfSnippetHnalder = () => {
+    this.alertIfSnippetHandler = () => {
       this.alertIfSnippet()
+    }
+
+    this.jumpToTopHandler = () => {
+      this.jumpToTop()
     }
 
     this.state = {
@@ -51,7 +55,9 @@ class NoteList extends React.Component {
     ee.on('list:next', this.selectNextNoteHandler)
     ee.on('list:prior', this.selectPriorNoteHandler)
     ee.on('list:focus', this.focusHandler)
-    ee.on('list:isMarkdownNote', this.alertIfSnippetHnalder)
+    ee.on('list:isMarkdownNote', this.alertIfSnippetHandler)
+    ee.on('list:top', this.jumpToTopHandler)
+    ee.on('list:jumpToTop', this.jumpToTopHandler)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -70,7 +76,9 @@ class NoteList extends React.Component {
     ee.off('list:next', this.selectNextNoteHandler)
     ee.off('list:prior', this.selectPriorNoteHandler)
     ee.off('list:focus', this.focusHandler)
-    ee.off('list:isMarkdownNote', this.alertIfSnippetHnalder)
+    ee.off('list:isMarkdownNote', this.alertIfSnippetHandler)
+    ee.off('list:top', this.jumpToTopHandler)
+    ee.off('list:jumpToTop', this.jumpToTopHandler)
   }
 
   componentDidUpdate (prevProps) {
@@ -322,6 +330,23 @@ class NoteList extends React.Component {
         detail: 'md/text import is available only a markdown note.'
       })
     }
+  }
+
+  jumpToTop() {
+    if (this.notes === null || this.notes.length === 0) {
+      return
+    }
+    let { router } = this.context
+    let { location } = this.props
+
+    const targetIndex = 0
+
+    router.push({
+      pathname: location.pathname,
+      query: {
+        key: this.notes[targetIndex].storage + '-' + this.notes[targetIndex].key
+      }
+    })
   }
 
   render () {
