@@ -23,6 +23,9 @@
 ## Contributors
 [Great contributors](https://github.com/BoostIO/Boostnote/graphs/contributors) :tada:
 
+## slack group
+Let's talk about Boostnote's feature, request, Japanese gourmet and things like that🍣 <br>
+https://boostnote-group.slack.com/shared_invite/MTU3ODcwNzY1ODk0LTE0OTAwNjQ0NTYtMjY4NTYwOTdmYQ
 
 ## More Information
 * Website: http://boostnote.io/
