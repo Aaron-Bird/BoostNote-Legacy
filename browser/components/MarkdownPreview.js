@@ -35,7 +35,7 @@ function encodeHTMLEntities (text) {
   ]
 
   entities.forEach((entity) => {
-    text = text.replace(entity[0], `&${entity[1]};`)
+    text = text.replace(new RegExp(entity[0], 'g'), `&${entity[1]};`)
   })
   return text
 }
