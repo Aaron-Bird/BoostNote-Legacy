@@ -35,7 +35,7 @@ function encodeHTMLEntities (text) {
   ]
 
   for (let i = 0; i < entities.length; ++i) {
-    text = text.replace(entities[i][0], '&' + entities[i][1] + ';')
+    text = text.replace(entities[i][0], `&${entities[i][1]};`)
   }
 
   return text
