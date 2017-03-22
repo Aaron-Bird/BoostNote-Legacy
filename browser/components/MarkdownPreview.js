@@ -26,7 +26,7 @@ function decodeHTMLEntities (text) {
 }
 
 function encodeHTMLEntities (text) {
-  var entities = [
+  const entities = [
     ['\'', 'apos'],
     ['&', 'amp'],
     ['<', 'lt'],
@@ -34,7 +34,7 @@ function encodeHTMLEntities (text) {
     ['?', '#63']
   ]
 
-  for (var i = 0, max = entities.length; i < max; ++i) {
+  for (let i = 0; i < entities.length; ++i) {
     text = text.replace(entities[i][0], '&' + entities[i][1] + ';')
   }
 
