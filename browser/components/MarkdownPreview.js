@@ -34,10 +34,9 @@ function encodeHTMLEntities (text) {
     ['?', '#63']
   ]
 
-  for (let i = 0; i < entities.length; ++i) {
-    text = text.replace(entities[i][0], `&${entities[i][1]};`)
-  }
-
+  entities.forEach((entity) => {
+    text = text.replace(entity[0], `&${entity[1]};`)
+  })
   return text
 }
 
