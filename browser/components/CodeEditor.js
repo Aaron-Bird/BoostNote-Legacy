@@ -201,6 +201,7 @@ export default class CodeEditor extends React.Component {
     this.editor.setValue(this.props.value)
     this.editor.clearHistory()
     this.editor.on('change', this.changeHandler)
+    this.editor.refresh()
   }
 
   setValue (value) {

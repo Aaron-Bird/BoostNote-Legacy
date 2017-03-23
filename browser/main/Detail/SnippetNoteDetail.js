@@ -250,17 +250,15 @@ class SnippetNoteDetail extends React.Component {
   }
 
   deleteSnippetByIndex (index) {
-    let snippets = this.state.note.snippets.slice()
+    const snippets = this.state.note.snippets.slice()
     snippets.splice(index, 1)
-    this.state.note.snippets = snippets
-    let snippetIndex = this.state.snippetIndex >= snippets.length
+    const note = Object.assign({}, this.state.note, {snippets})
+    const snippetIndex = this.state.snippetIndex >= snippets.length
       ? snippets.length - 1
       : this.state.snippetIndex
-    this.setState({
-      note: this.state.note,
-      snippetIndex
-    }, () => {
+    this.setState({ note, snippetIndex }, () => {
       this.save()
+      this.refs['code-' + this.state.snippetIndex].reload()
     })
   }
 
