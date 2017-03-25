@@ -4,22 +4,26 @@ import styles from './ConfigTab.styl'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import store from 'browser/main/store'
 import consts from 'browser/lib/consts'
-import CodeMirror from 'react-codemirror'
+import ReactCodeMirror from 'react-codemirror'
+import CodeMirror from 'codemirror'
 
 const OSX = global.process.platform === 'darwin'
 
 class UiTab extends React.Component {
   constructor (props) {
     super(props)
-
     this.state = {
       config: props.config,
       codemirrorTheme: props.config.editor.theme
     }
   }
 
+  componentWillMount () {
+    CodeMirror.autoLoadMode(ReactCodeMirror, 'javascript')
+  }
+
   handleUIChange (e) {
-    let { codemirrorTheme } = this.state
+    const { codemirrorTheme } = this.state
     let checkHighLight = document.getElementById('checkHighLight')
 
     if (checkHighLight === null) {
@@ -56,7 +60,7 @@ class UiTab extends React.Component {
     const newCodemirrorTheme = this.refs.editorTheme.value
 
     if (newCodemirrorTheme !== codemirrorTheme) {
-      checkHighLight.setAttribute('href', '../node_modules/codemirror/theme/' + newCodemirrorTheme + '.css')
+      checkHighLight.setAttribute('href', `../node_modules/codemirror/theme/${newCodemirrorTheme}.css`)
     }
 
     this.setState({ config: newConfig, codemirrorTheme: newCodemirrorTheme })
@@ -132,7 +136,7 @@ class UiTab extends React.Component {
                 }
               </select>
               <div styleName='code-mirror'>
-                <CodeMirror value={codemirrorSampleCode} options={{ lineNumbers: true, readOnly: true, mode: 'javascript', theme: codemirrorTheme }} />
+                <ReactCodeMirror value={codemirrorSampleCode} options={{ lineNumbers: true, readOnly: true, mode: 'javascript', theme: codemirrorTheme }} />
               </div>
             </div>
           </div>
