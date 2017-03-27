@@ -189,14 +189,7 @@ class SnippetNoteDetail extends React.Component {
 
   }
 
-  handleContextButtonClick (e) {
-    context.popup([{
-      label: 'Delete',
-      click: (e) => this.handleDeleteMenuClick(e)
-    }])
-  }
-
-  handleDeleteMenuClick (e) {
+  handleDeleteButtonClick (e) {
     let index = dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
       message: 'Delete a note',
@@ -546,7 +539,7 @@ class SnippetNoteDetail extends React.Component {
           </div>
           <div styleName='info-right'>
             <button styleName='control-trashButton'
-              onClick={(e) => this.handleContextButtonClick(e)}
+              onClick={(e) => this.handleDeleteButtonClick(e)}
             >
               <svg height='17px' id='Capa_1' style={{enableBackground: 'new 0 0 753.23 753.23'}} width='17px' version='1.1' viewBox='0 0 753.23 753.23' x='0px' y='0px' xmlSpace='preserve'>
                 <g>
