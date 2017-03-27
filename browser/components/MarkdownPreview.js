@@ -261,8 +261,7 @@ export default class MarkdownPreview extends React.Component {
     const codeBlocks = value.match(/(```)(.|[\n])*?(```)/g)
     if (codeBlocks !== null && codeBlocks.length > 0) {
       codeBlocks.forEach((codeBlock) => {
-        const encodedCodeBlock = encodeHTMLEntities(codeBlock)
-        value = value.replace(codeBlock, encodedCodeBlock)
+        value = value.replace(codeBlock, encodeHTMLEntities(codeBlock))
       })
     }
     this.refs.root.contentWindow.document.body.innerHTML = markdown.render(value)
