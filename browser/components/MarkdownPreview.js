@@ -259,7 +259,7 @@ export default class MarkdownPreview extends React.Component {
     this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
 
     const codeBlocks = value.match(/(```)(.|[\n])*?(```)/g)
-    if (codeBlocks !== null && codeBlocks.length > 0) {
+    if (codeBlocks !== null) {
       codeBlocks.forEach((codeBlock) => {
         value = value.replace(codeBlock, encodeHTMLEntities(codeBlock))
       })
