@@ -10,7 +10,7 @@ Developer Toolsの切り替え方法はこちらです:
 何かエラーが起きた場合 `console`にエラーメッセージが表示されます。
 
 ## デバッグ
-このように、 `debugger`をコード中にブレークポイントとして挟むのがいい方法だと思います。
+例えば、 `debugger`をコード中にブレークポイントとして挟む方法があります。
 
 ![debugger](https://cloud.githubusercontent.com/assets/11307908/24343879/9459efea-127d-11e7-9943-f60bf7f66d4a.png)
 

@@ -10,7 +10,7 @@ The Developer Tools is like this:
 When errors occur, the error messages are displayed at the `console`.
 
 ## Debugging
-I assume to put `debugger` as a breakpoint into the code is a good way to debug like this:
+For example, there is a way to put `debugger` as a breakpoint into the code like this:
 
 ![debugger](https://cloud.githubusercontent.com/assets/11307908/24343879/9459efea-127d-11e7-9943-f60bf7f66d4a.png)
 
