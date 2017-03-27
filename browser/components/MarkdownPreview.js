@@ -15,7 +15,7 @@ function decodeHTMLEntities (text) {
     ['amp', '&'],
     ['lt', '<'],
     ['gt', '>'],
-    ['#63', '?']
+    ['#63', '\\?']
   ]
 
   for (var i = 0, max = entities.length; i < max; ++i) {
@@ -31,7 +31,7 @@ function encodeHTMLEntities (text) {
     ['&', 'amp'],
     ['<', 'lt'],
     ['>', 'gt'],
-    ['?', '#63']
+    ['\\?', '#63']
   ]
 
   entities.forEach((entity) => {
