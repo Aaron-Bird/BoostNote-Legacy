@@ -14,11 +14,12 @@ import { isNumber } from 'lodash'
  * @param {string} folderColor
  * @param {boolean} isFolded
  * @param {number} noteCount
+ * @param {Function} handleDrop
  * @return {React.Component}
  */
 const StorageItem = ({
   isActive, handleButtonClick, handleContextMenu, folderName,
-  folderColor, isFolded, noteCount
+  folderColor, isFolded, noteCount, handleDrop
 }) => (
   <button styleName={isActive
       ? 'folderList-item--active'
@@ -26,6 +27,7 @@ const StorageItem = ({
     }
     onClick={handleButtonClick}
     onContextMenu={handleContextMenu}
+    onDrop={handleDrop}
   >
     <span styleName={isFolded
       ? 'folderList-item-name--folded' : 'folderList-item-name'

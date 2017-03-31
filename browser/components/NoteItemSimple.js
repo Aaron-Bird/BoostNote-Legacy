@@ -11,8 +11,9 @@ import styles from './NoteItemSimple.styl'
  * @param {Object} note
  * @param {Function} handleNoteClick
  * @param {Function} handleNoteContextMenu
+ * @param {Function} handleDragStart
  */
-const NoteItemSimple = ({ isActive, note, handleNoteClick, handleNoteContextMenu }) => (
+const NoteItemSimple = ({ isActive, note, handleNoteClick, handleNoteContextMenum, handleDragStart }) => (
   <div styleName={isActive
       ? 'item-simple--active'
       : 'item-simple'
@@ -20,6 +21,8 @@ const NoteItemSimple = ({ isActive, note, handleNoteClick, handleNoteContextMenu
     key={`${note.storage}-${note.key}`}
     onClick={e => handleNoteClick(e, `${note.storage}-${note.key}`)}
     onContextMenu={e => handleNoteContextMenu(e, `${note.storage}-${note.key}`)}
+    onDragStart={e => handleDragStart(e, note)}
+    draggable="true"
   >
     <div styleName='item-simple-title'>
       {note.type === 'SNIPPET_NOTE'
@@ -43,7 +46,8 @@ NoteItemSimple.propTypes = {
     title: PropTypes.string.isrequired
   }),
   handleNoteClick: PropTypes.func.isRequired,
-  handleNoteContextMenu: PropTypes.func.isRequired
+  handleNoteContextMenu: PropTypes.func.isRequired,
+  handleDragStart: PropTypes.func.isRequired
 }
 
 export default CSSModules(NoteItemSimple, styles)

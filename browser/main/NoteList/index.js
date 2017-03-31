@@ -349,8 +349,13 @@ class NoteList extends React.Component {
     })
   }
 
+  handleDragStart (e, note) {
+    const noteData = JSON.stringify(note)
+    e.dataTransfer.setData("note", noteData)
+  }
+
   render () {
-    let { location, notes, config } = this.props
+    let { location, notes, config, dispatch } = this.props
     let sortFunc = config.sortBy === 'CREATED_AT'
       ? sortByCreatedAt
       : config.sortBy === 'ALPHABETICAL'
@@ -382,6 +387,7 @@ class NoteList extends React.Component {
               key={key}
               handleNoteClick={this.handleNoteClick.bind(this)}
               handleNoteContextMenu={this.handleNoteContextMenu.bind(this)}
+              handleDragStart={this.handleDragStart.bind(this)}
             />
           )
         }
@@ -393,6 +399,7 @@ class NoteList extends React.Component {
             key={key}
             handleNoteClick={this.handleNoteClick.bind(this)}
             handleNoteContextMenu={this.handleNoteContextMenu.bind(this)}
+            handleDragStart={this.handleDragStart.bind(this)}
           />
         )
       })

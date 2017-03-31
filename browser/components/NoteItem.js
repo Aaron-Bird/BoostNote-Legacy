@@ -40,9 +40,10 @@ const TagElementList = (tags) => {
  * @param {Object} note
  * @param {Function} handleNoteClick
  * @param {Function} handleNoteContextMenu
+ * @param {Function} handleDragStart
  * @param {string} dateDisplay
  */
-const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleNoteContextMenu }) => (
+const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleNoteContextMenu, handleDragStart}) => (
   <div styleName={isActive
       ? 'item--active'
       : 'item'
@@ -50,6 +51,8 @@ const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleNoteCont
     key={`${note.storage}-${note.key}`}
     onClick={e => handleNoteClick(e, `${note.storage}-${note.key}`)}
     onContextMenu={e => handleNoteContextMenu(e, `${note.storage}-${note.key}`)}
+    onDragStart={e => handleDragStart(e, note)}
+    draggable="true"
   >
     <div styleName='item-wrapper'>
       <div styleName='item-bottom-time'>{dateDisplay}</div>
@@ -94,7 +97,9 @@ NoteItem.propTypes = {
     isStarred: PropTypes.bool.isRequired
   }),
   handleNoteClick: PropTypes.func.isRequired,
-  handleNoteContextMenu: PropTypes.func.isRequired
+  handleNoteContextMenu: PropTypes.func.isRequired,
+  handleDragStart: PropTypes.func.isRequired,
+  handleDragEnd: PropTypes.func.isRequired
 }
 
 export default CSSModules(NoteItem, styles)
