@@ -132,7 +132,19 @@ class StorageItem extends React.Component {
     }
   }
 
+  handleDragEnter (e) {
+    e.dataTransfer.setData("defaultColor", e.target.style.backgroundColor)
+    e.target.style.backgroundColor = "rgba(129, 130, 131, 0.08)"
+  }
+
+  handleDragLeave (e) {
+    e.target.style.opacity = "1"
+    e.target.style.backgroundColor = e.dataTransfer.getData("defaultColor")
+  }
+
   handleDrop (e, storage, folder, dispatch, location) {
+    e.target.style.opacity = "1"
+    e.target.style.backgroundColor = e.dataTransfer.getData("defaultColor")
     const noteData = JSON.parse(e.dataTransfer.getData("note"))
     if (folder.key !== noteData.folder) {
       dataApi
@@ -197,6 +209,8 @@ class StorageItem extends React.Component {
           isFolded={isFolded}
           noteCount={noteCount}
           handleDrop={(e) => this.handleDrop(e, storage, folder, dispatch, location)}
+          handleDragEnter={this.handleDragEnter}
+          handleDragLeave={this.handleDragLeave}
         />
       )
     })
