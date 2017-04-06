@@ -26,6 +26,8 @@ $control-height = 30px
   padding 0
   border none
   background-color transparent
+  outline none
+  cursor pointer
   font-size 10px
 
 .control-button
@@ -67,4 +69,8 @@ body[data-theme="dark"]
     color $ui-dark-inactive-text-color
     &:hover
       color $ui-dark-text-color
-
+  
+  .control-button--active
+    color $ui-dark-text-color
+    &:active
+      color $ui-dark-text-color

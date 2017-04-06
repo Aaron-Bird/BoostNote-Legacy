@@ -63,20 +63,20 @@ body[data-theme="dark"]
     border-color $ui-dark-borderColor
     background-color $ui-dark-noteList-backgroundColor
     &:active
-      background-color $ui-active-color
+      background-color $ui-dark-button--active-backgroundColor
     &:hover
-      background-color alpha($ui-active-color, 20%)
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
 
   .item-simple--active
     @extend .item-simple
     border-color $ui-dark-borderColor
-    background-color $ui-active-color
+    background-color $ui-dark-button--active-backgroundColor
     .item-simple-title
     .item-simple-title-empty
       color white
       border-color transparent
     &:hover
-      background-color $ui-active-color
+      background-color $ui-dark-button--active-backgroundColor
 
   .item-simple-title
     color $ui-dark-text-color

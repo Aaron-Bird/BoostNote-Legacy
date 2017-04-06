@@ -127,9 +127,9 @@ body[data-theme="dark"]
     border-color $ui-dark-borderColor
     background-color $ui-dark-noteList-backgroundColor
     &:active
-      background-color $ui-active-color
+      background-color $ui-dark-button--active-backgroundColor
     &:hover
-      background-color alpha($ui-active-color, 20%)
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
 
   .item-wrapper
     border-color $ui-dark-borderColor
@@ -137,7 +137,7 @@ body[data-theme="dark"]
   .item--active
     @extend .item
     border-color $ui-dark-borderColor
-    background-color $ui-active-color
+    background-color $ui-dark-button--active-backgroundColor
     .item-wrapper
       border-color transparent
     .item-title
@@ -148,7 +148,7 @@ body[data-theme="dark"]
     .item-bottom-tagList-empty
       color white
     &:hover
-      background-color $ui-active-color
+      background-color $ui-dark-button--active-backgroundColor
 
   .item-title
     color $ui-dark-text-color
