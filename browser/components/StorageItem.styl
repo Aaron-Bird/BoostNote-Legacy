@@ -33,7 +33,7 @@
 .folderList-item-name
   display block
   flex 1
-  padding 0 30px
+  padding 0 15px
   height 26px
   line-height 26px
   border-width 0 0 0 3px
@@ -68,3 +68,23 @@
 .folderList-item-name--folded
   @extend .folderList-item-name
   padding-left 12px
+
+
+body[data-theme="dark"]
+  .folderList-item
+    &:hover
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+      color $ui-button--active-color
+    &:active
+      color $ui-button--active-color
+      background-color $ui-dark-button--active-backgroundColor
+
+  .folderList-item--active
+    @extend .folderList-item
+    color $ui-button--active-color
+    background-color $ui-dark-button--active-backgroundColor
+    &:active
+      background-color $ui-dark-button--active-backgroundColor
+    &:hover
+      color $ui-button--active-color
+      background-color $ui-dark-button--active-backgroundColor
