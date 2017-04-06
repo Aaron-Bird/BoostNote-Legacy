@@ -22,7 +22,7 @@ const NoteItemSimple = ({ isActive, note, handleNoteClick, handleNoteContextMenu
     onClick={e => handleNoteClick(e, `${note.storage}-${note.key}`)}
     onContextMenu={e => handleNoteContextMenu(e, `${note.storage}-${note.key}`)}
     onDragStart={e => handleDragStart(e, note)}
-    draggable="true"
+    draggable='true'
   >
     <div styleName='item-simple-title'>
       {note.type === 'SNIPPET_NOTE'

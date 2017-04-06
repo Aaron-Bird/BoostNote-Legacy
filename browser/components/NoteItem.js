@@ -43,7 +43,7 @@ const TagElementList = (tags) => {
  * @param {Function} handleDragStart
  * @param {string} dateDisplay
  */
-const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleNoteContextMenu, handleDragStart}) => (
+const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleNoteContextMenu, handleDragStart }) => (
   <div styleName={isActive
       ? 'item--active'
       : 'item'
@@ -52,7 +52,7 @@ const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleNoteCont
     onClick={e => handleNoteClick(e, `${note.storage}-${note.key}`)}
     onContextMenu={e => handleNoteContextMenu(e, `${note.storage}-${note.key}`)}
     onDragStart={e => handleDragStart(e, note)}
-    draggable="true"
+    draggable='true'
   >
     <div styleName='item-wrapper'>
       <div styleName='item-bottom-time'>{dateDisplay}</div>

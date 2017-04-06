@@ -351,7 +351,7 @@ class NoteList extends React.Component {
 
   handleDragStart (e, note) {
     const noteData = JSON.stringify(note)
-    e.dataTransfer.setData("note", noteData)
+    e.dataTransfer.setData('note', noteData)
   }
 
   render () {
