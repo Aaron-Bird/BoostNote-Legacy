@@ -8,16 +8,16 @@ You can use following commands to use default configuration at the top of projec
 Install requirement packages.
 
 ```
-$ npm install
+$ yarn
 ```
 
 Build codes and run.
 
 ```
-$ npm run dev-start
+$ yarn run dev-start
 ```
 
-This command runs `npm run webpack` and `npm run hot` in parallel. It means it is the same thing to run those commands in 2 terminals.
+This command runs `yarn run webpack` and `yarn run hot` in parallel. It means it is the same thing to run those commands in 2 terminals.
 
 And webpack will watch the code changes and apply it automatically.
 

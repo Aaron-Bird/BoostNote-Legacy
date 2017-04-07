@@ -8,16 +8,16 @@ Webpack HRMを使います。
 依存するパッケージをインストールします。
 
 ```
-$ npm install
+$ yarn
 ```
 
 ビルドして実行します。
 
 ```
-$ npm run dev-start
+$ yarn run dev-start
 ```
 
-このコマンドは `npm run webpack` と `npm run hot`を並列に実行します。つまりこのコマンドは2つのターミナルで同時にこれらのコマンドを実行するのと同じことです。
+このコマンドは `yarn run webpack` と `yarn run hot`を並列に実行します。つまりこのコマンドは2つのターミナルで同時にこれらのコマンドを実行するのと同じことです。
 
 そして、Webpackが自動的にコードの変更を確認し、それを適用してくれるようになります。
 
