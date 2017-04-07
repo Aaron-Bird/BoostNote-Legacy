@@ -3,6 +3,12 @@
 
 .menu-button
   navButtonColor()
+  &:active
+    background-color alpha($ui-button--active-backgroundColor, 20%)
+    color $ui-text-color
+  &:hover
+    background-color alpha($ui-button--active-backgroundColor, 20%)
+    color $ui-text-color
   height 32px
   padding 0 15px
   font-size 12px
@@ -12,10 +18,11 @@
 
 .menu-button--active
   @extend .menu-button
+  color $ui-text-color
   background-color $ui-button--active-backgroundColor
-  color $ui-button--active-color
   &:hover
     background-color $ui-button--active-backgroundColor
+    color $ui-text-color
 
 .menu-button-label
   margin-left 5px

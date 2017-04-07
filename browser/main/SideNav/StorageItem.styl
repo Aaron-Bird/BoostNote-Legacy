@@ -9,26 +9,27 @@
   margin-bottom 5px
   transition 0.15s
   &:hover
+    color $ui-text-color
     background-color $ui-button--hover-backgroundColor
   &:active
     .header-toggleButton
     .header-addFolderButton
-      color white
+      color $ui-text-color
       &:active
-        color $ui-active-color
+        color $ui-text-color
 
 .header--active
   @extend .header
   .header-info
-    color $ui-button--active-color
+    color $ui-text-color
     background-color $ui-button--active-backgroundColor
   .header-toggleButton
   .header-addFolderButton
-    color white
+    color $ui-text-color
     &:active
     &:hover
     &:hover:active
-      color white
+      color $ui-text-color
 
 .header-toggleButton
   position absolute
@@ -42,7 +43,7 @@
   &:hover
     color $ui-text-color
   &:active
-    color $ui-active-color
+    color $ui-text-color
 
 .header-info
   display block
