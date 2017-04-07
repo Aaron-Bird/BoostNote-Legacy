@@ -13,7 +13,7 @@ import styles from './NoteItem.styl'
  */
 const TagElement = ({ tagName }) => (
   <span styleName='item-bottom-tagList-item' key={tagName}>
-    {tagName}
+    #{tagName}
   </span>
 )
 
