@@ -13,19 +13,18 @@ $control-height = 30px
   background-color $ui-noteList-backgroundColor
   transition background-color 0.15s
   &:hover
-    background-color alpha($ui-active-color, 20%)
+    background-color alpha($ui-button--active-backgroundColor, 40%)
   &:active
-    background-color $ui-active-color
-    color white
+    background-color $ui-button--active-backgroundColor
+    color $ui-text-color
     .item-title
     .item-title-empty
     .item-bottom-tagList-empty
     .item-bottom-time
     .item-title-icon
-      color white
     .item-bottom-tagList-item
       background-color transparent
-      color white
+      color $ui-text-color
 
 .item-wrapper
   padding 15px 0
@@ -33,21 +32,21 @@ $control-height = 30px
 
 .item--active
   @extend .item
-  background-color $ui-active-color
-  color white
+  background-color $ui-button--active-backgroundColor
+  color $ui-text-color
   .item-title
   .item-title-empty
   .item-bottom-tagList-empty
   .item-bottom-time
   .item-title-icon
-    color white
+    color $ui-text-color
   .item-bottom-tagList-item
     background-color transparent
-    color white
+    color $ui-text-color
   .item-wrapper
     border-color transparent
   &:hover
-    background-color $ui-active-color
+    background-color $ui-button--active-backgroundColor
 
 .item-title
   font-size 12px
@@ -57,7 +56,7 @@ $control-height = 30px
   padding-top 5px
   padding-bottom 20px
   overflow ellipsis
-  color $ui-text-color
+  color $ui-inactive-text-color
 
 .item-title-icon
   position absolute
