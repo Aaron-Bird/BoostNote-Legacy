@@ -11,7 +11,7 @@ $control-height = 30px
   user-select none
   cursor pointer
   background-color $ui-noteList-backgroundColor
-  transition background-color 0.15s
+  transition background-color 0.2s
   &:hover
     background-color alpha($ui-button--active-backgroundColor, 40%)
   &:active
@@ -141,6 +141,10 @@ body[data-theme="dark"]
       border-color transparent
     .item-title
       color white
+    .item-title-icon
+      color white
+    .item-bottom-time
+      color white
     .item-bottom-tagList-item
       background-color transparent
       color white
@@ -150,13 +154,13 @@ body[data-theme="dark"]
       background-color $ui-dark-button--active-backgroundColor
 
   .item-title
-    color $ui-dark-text-color
+    color $ui-inactive-text-color
 
   .item-title-icon
-    color $ui-darkinactive-text-color
+    color $ui-inactive-text-color
 
   .item-title-empty
-    color $ui-dark-inactive-text-color
+    color $ui-inactive-text-color
 
   .item-bottom-tagList-item
     background-color $ui-dark-tag-backgroundColor
