@@ -91,6 +91,19 @@ colorPrimaryButton()
   &:active:hover
     background-color $primary-button-background--active
 
+// Dark Primary button(Brand color)
+$dark-primary-button-background = alpha(#3A404C, 80%)
+$dark-primary-button-background--hover = #3A404C
+$dark-primary-button-background--active = #3A404C
+colorDarkPrimaryButton()
+  color white
+  background-color $dark-primary-button-background
+  &:hover
+    background-color $dark-primary-button-background--hover
+  &:active
+  &:active:hover
+    background-color $dark-primary-button-background--active
+
 // Danger button(Brand color)
 $danger-button-background = #c9302c
 $danger-button-background--hover = darken(#c9302c, 5%)
