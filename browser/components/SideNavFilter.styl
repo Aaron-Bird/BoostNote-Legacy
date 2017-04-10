@@ -55,14 +55,15 @@
 
 body[data-theme="dark"]
   .menu-button
-    navDarkButtonColor()
     &:active
       background-color $ui-dark-button--active-backgroundColor
+      color $ui-dark-text-color
     &:hover
       background-color alpha($ui-dark-button--active-backgroundColor, 20%)
-      color $ui-button--active-color
+      color $ui-dark-text-color
   .menu-button--active
-    color $ui-dark-button--active-color
+    color $ui-dark-text-color
     background-color $ui-dark-button--active-backgroundColor
     &:active
       background-color $ui-dark-button--active-backgroundColor
+      color $ui-dark-text-color

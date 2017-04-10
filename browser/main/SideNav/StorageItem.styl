@@ -53,7 +53,7 @@
   padding-right 10px
   line-height 26px
   cursor pointer
-  font-size 14px
+  font-size 13px
   border none
   overflow ellipsis
   text-align left
@@ -109,21 +109,36 @@
     margin 0 5px
 
 body[data-theme="dark"]
-  .header
+.header
+  &:hover
+    color $ui-dark-text-color
+    background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+  &:active
+    .header-toggleButton
+    .header-addFolderButton
+      &:active
+        color $ui-dark-text-color
+
+.header-info
     &:hover
       background-color alpha($ui-dark-button--active-backgroundColor, 20%)
-      color $ui-button--active-color
+      color $ui-dark-text-color
     &:active
-      color $ui-button--active-color
-      background-color $ui-dark-button--active-backgroundColor
+      .header-toggleButton
+      .header-addFolderButton
+        &:active
+          color $ui-dark-text-color
 
-  .header--active
-    @extend .header
-    .header-info
-      color $ui-button--active-color
-      background-color $ui-dark-button--active-backgroundColor
+.header--active
+  @extend .header
+  .header-info
+    color $ui-dark-text-color
+    background-color $ui-dark-button--active-backgroundColor
+  .header-toggleButton
+  .header-addFolderButton
+    color $ui-dark-text-color
     &:active
-      background-color $ui-dark-button--active-backgroundColor
-    &:hover
-      color $ui-button--active-color
-      background-color $ui-dark-button--active-backgroundColor
+      .header-toggleButton
+      .header-addFolderButton
+        &:active
+          color $ui-dark-text-color

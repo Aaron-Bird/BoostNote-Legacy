@@ -117,10 +117,9 @@ body[data-theme="dark"]
   .top-menu
     navDarkButtonColor()
     &:active
-      background-color $ui-dark-button--active-backgroundColor
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
     &:hover
       background-color alpha($ui-dark-button--active-backgroundColor, 20%)
-      color $ui-button--active-color
 
   .storageList-empty
     color $ui-dark-inactive-text-color
