@@ -7,7 +7,7 @@ $control-height = 30px
 
 .item
   position relative
-  padding 0 25px
+  padding 0 20px
   user-select none
   cursor pointer
   background-color $ui-noteList-backgroundColor
@@ -48,21 +48,19 @@ $control-height = 30px
   &:hover
     background-color $ui-button--active-backgroundColor
 
-.item-title
+.item-title-icon
+  position relative
   font-size 12px
-  height 40px
-  box-sizing border-box
-  line-height 24px
-  padding-top 5px
-  padding-bottom 20px
-  overflow ellipsis
   color $ui-inactive-text-color
 
-.item-title-icon
-  position absolute
-  top 15px
-  right 25px
-  font-size 12px
+.item-title
+  font-size 13px
+  position relative
+  top -12px
+  left 20px
+  padding-right 15px
+  padding-bottom 4px
+  overflow ellipsis
   color $ui-inactive-text-color
 
 .item-title-empty
@@ -83,6 +81,7 @@ $control-height = 30px
   flex 1
   overflow ellipsis
   line-height 20px
+  padding-left 2px
 
 .item-bottom-tagList-item
   font-size 10px
@@ -96,19 +95,17 @@ $control-height = 30px
   color $ui-inactive-text-color
 
 .item-bottom-tagList-empty
-  color $ui-inactive-text-color
-  vertical-align middle
-  font-size 10px
-  margin-left 5px
 
 .item-bottom-time
   color $ui-inactive-text-color
   font-size 10px
+  padding-left 2px
+  padding-bottom 2px
 
 .item-star
   position absolute
-  top 20px
-  right 29px
+  top 19px
+  left 5px
   width 34px
   height 34px
   color $ui-favorite-star-button-color
