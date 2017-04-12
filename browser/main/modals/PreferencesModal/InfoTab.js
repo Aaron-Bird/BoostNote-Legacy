@@ -34,24 +34,33 @@ class InfoTab extends React.Component {
               </div>
             </div>
           </div>
-          <div styleName='clear' />
-          <div styleName='madeBy'>Made by&nbsp;
-            <a href='http://maisin.co/'
-              onClick={(e) => this.handleLinkClick(e)}
-            >MAISIN&CO.</a></div>
-          <div styleName='copyright'>© 2017 MAISIN&CO.</div>
         </div>
         <ul styleName='list'>
           <li>
-            The codes of this app is published under GPLv3 license.
-          </li>
-          <li>
-            Let us hear your feedback🙌
-          </li>
-          <li>
-            GitHub Issue : <a href='https://github.com/BoostIO/Boostnote/issues'
+            <a href='https://boostnote.io'
               onClick={(e) => this.handleLinkClick(e)}
-            >https://github.com/BoostIO/Boostnote/issues</a>
+            >Website</a>
+          </li>
+          <li>
+            <a href='https://boostnote.paintory.com/'
+              onClick={(e) => this.handleLinkClick(e)}
+            >Boostnote Shop</a>: Products are shipped to all over the world 🌏
+          </li>
+          <li>
+            <a href='https://www.patreon.com/boostnote'
+              onClick={(e) => this.handleLinkClick(e)}
+            >Donation via Patreon</a>: Thank you for your support 🎉
+          </li>
+          <li>
+            <a href='https://github.com/BoostIO/Boostnote/issues'
+              onClick={(e) => this.handleLinkClick(e)}
+            >GitHub Issue</a>: Let us hear your feedback 🙌
+          </li>
+          <li styleName="cc">
+            Copyright (C) 2017 Maisin&Co.
+          </li>
+          <li styleName="cc">
+            License: GPL v3
           </li>
         </ul>
       </div>
