@@ -10,26 +10,27 @@
   transition 0.15s
   &:hover
     color $ui-text-color
-    background-color $ui-button--hover-backgroundColor
+    background-color alpha($ui-button--hover-backgroundColor, 20%)
   &:active
+    .header-info
     .header-toggleButton
     .header-addFolderButton
       color $ui-text-color
-      &:active
-        color $ui-text-color
+      background-color $ui-button--hover-backgroundColor
 
 .header--active
   @extend .header
   .header-info
     color $ui-text-color
-    background-color $ui-button--active-backgroundColor
+    background-color $ui-button--hover-backgroundColor
   .header-toggleButton
   .header-addFolderButton
     color $ui-text-color
     &:active
-    &:hover
-    &:hover:active
-      color $ui-text-color
+      .header-toggleButton
+      .header-addFolderButton
+        &:active
+          color $ui-text-color
 
 .header-toggleButton
   position absolute
@@ -40,10 +41,6 @@
   border none
   color $ui-inactive-text-color
   background-color transparent
-  &:hover
-    color $ui-text-color
-  &:active
-    color $ui-text-color
 
 .header-info
   display block
@@ -59,9 +56,12 @@
   text-align left
   background-color transparent
   color $ui-inactive-text-color
+  &:hover
+    background-color alpha($ui-button--hover-backgroundColor, 20%)
   &:active
-    color $ui-button--active-color
-    background-color $ui-button--active-backgroundColor
+    .header-toggleButton
+    .header-addFolderButton
+      color $ui-text-color
 
 .header-info-path
   font-size 10px
@@ -76,10 +76,6 @@
   border none
   color $ui-inactive-text-color
   background-color transparent
-  &:hover
-    color $ui-text-color
-  &:active
-    color $ui-active-color
 
 .root--folded
   @extend .root
@@ -114,20 +110,19 @@ body[data-theme="dark"]
     color $ui-dark-text-color
     background-color alpha($ui-dark-button--active-backgroundColor, 20%)
   &:active
+    .header-info
     .header-toggleButton
     .header-addFolderButton
-      &:active
-        color $ui-dark-text-color
+      color $ui-dark-text-color
+      background-color $ui-dark-button--active-backgroundColor
 
 .header-info
     &:hover
       background-color alpha($ui-dark-button--active-backgroundColor, 20%)
-      color $ui-dark-text-color
     &:active
       .header-toggleButton
       .header-addFolderButton
-        &:active
-          color $ui-dark-text-color
+        color $ui-dark-text-color
 
 .header--active
   @extend .header
