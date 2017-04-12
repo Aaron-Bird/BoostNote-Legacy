@@ -106,34 +106,29 @@
 
 body[data-theme="dark"]
 .header
-  &:hover
-    color $ui-dark-text-color
-    background-color alpha($ui-dark-button--active-backgroundColor, 20%)
   &:active
+    color $ui-dark-text-color
+    background-color $ui-dark-button--active-backgroundColor
+
+.header
+  &:hover
     .header-info
     .header-toggleButton
     .header-addFolderButton
       color $ui-dark-text-color
       background-color $ui-dark-button--active-backgroundColor
 
-.header-info
-    &:hover
-      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
-    &:active
-      .header-toggleButton
-      .header-addFolderButton
-        color $ui-dark-text-color
-
 .header--active
-  @extend .header
   .header-info
-    color $ui-dark-text-color
-    background-color $ui-dark-button--active-backgroundColor
   .header-toggleButton
   .header-addFolderButton
     color $ui-dark-text-color
-    &:active
-      .header-toggleButton
-      .header-addFolderButton
-        &:active
-          color $ui-dark-text-color
+    background-color $ui-dark-button--active-backgroundColor
+
+.header--active
+  &:active
+    .header-info
+    .header-toggleButton
+    .header-addFolderButton
+      color $ui-dark-text-color
+      background-color $ui-dark-button--active-backgroundColor
