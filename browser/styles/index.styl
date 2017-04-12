@@ -129,9 +129,9 @@ navButtonColor()
   background-color transparent
   transition color background-color  0.15s
   &:hover
-    background-color $ui-button--hover-backgroundColor
+    background-color alpha($ui-button--active-backgroundColor, 20%)
   &:active, &:active:hover
-    background-color $ui-button--active-backgroundColor
+    background-color alpha($ui-button--active-backgroundColor, 20%)
     color $ui-button--active-color
 
 /**

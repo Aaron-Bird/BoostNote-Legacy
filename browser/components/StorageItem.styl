@@ -18,7 +18,8 @@
     margin-top 0
   &:hover
     color $ui-text-color
-    background-color $ui-button--hover-backgroundColor
+    background-color alpha($ui-button--active-backgroundColor, 20%)
+    transition background-color 0.15s
   &:active
     color $ui-text-color
     background-color $ui-button--active-backgroundColor
