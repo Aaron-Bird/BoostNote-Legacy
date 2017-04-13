@@ -83,13 +83,13 @@ $primary-button-background--hover = darken($brand-color, 5%)
 $primary-button-background--active = darken($brand-color, 10%)
 
 colorPrimaryButton()
-  color white
-  background-color $primary-button-background
+  color $ui-text-color
+  background-color $default-button-background--hover
   &:hover
-    background-color $primary-button-background--hover
+    background-color $default-button-background--active
   &:active
   &:active:hover
-    background-color $primary-button-background--active
+    background-color $default-button-background--active
 
 // Dark Primary button(Brand color)
 $dark-primary-button-background = alpha(#3A404C, 80%)
