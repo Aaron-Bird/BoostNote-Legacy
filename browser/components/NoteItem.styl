@@ -123,8 +123,20 @@ body[data-theme="dark"]
     background-color $ui-dark-noteList-backgroundColor
     &:active
       background-color $ui-dark-button--active-backgroundColor
+      .item-title
+      .item-title-icon
+      .item-bottom-time
+      .item-bottom-tagList-item
+        transition 0.15s
+        color $ui-dark-text-color
     &:hover
       background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+      .item-title
+      .item-title-icon
+      .item-bottom-time
+      .item-bottom-tagList-item
+        transition 0.15s
+        color $ui-dark-text-color
   
   .item-wrapper
     border-color $ui-dark-borderColor
@@ -135,9 +147,7 @@ body[data-theme="dark"]
     .item-wrapper
       border-color transparent
     .item-title
-      color $ui-dark-text-color
     .item-title-icon
-      color $ui-dark-text-color
     .item-bottom-time
       color $ui-dark-text-color
     .item-bottom-tagList-item
