@@ -8,41 +8,37 @@
   width 100%
   margin-bottom 5px
   transition 0.15s
-  &:hover
-    color $ui-text-color
-    background-color alpha($ui-button--hover-backgroundColor, 20%)
-  &:active
-    .header-info
-    .header-toggleButton
-    .header-addFolderButton
-      color $ui-text-color
-      background-color $ui-button--hover-backgroundColor
 
 .header--active
-  @extend .header
+  background-color $ui-button--active-backgroundColor
+  transition color background-color  0.15s
+
+.header--active
+  .header-toggleButton
+    color $ui-text-color
+
+.header--active
   .header-info
     color $ui-text-color
-    background-color $ui-button--hover-backgroundColor
-  .header-toggleButton
+
+.header--active
   .header-addFolderButton
     color $ui-text-color
-    &:active
-      .header-toggleButton
-      .header-addFolderButton
-        &:active
-          color $ui-text-color
 
 .header-toggleButton
+  navButtonColor()
   position absolute
   left 0
   width 25px
   height 26px
   padding 0
   border none
-  color $ui-inactive-text-color
-  background-color transparent
+  &:hover
+    background-color transparent
+    color $ui-text-color
 
 .header-info
+  navButtonColor()
   display block
   width 100%
   height 30px
@@ -54,28 +50,22 @@
   border none
   overflow ellipsis
   text-align left
-  background-color transparent
-  color $ui-inactive-text-color
-  &:hover
-    background-color alpha($ui-button--hover-backgroundColor, 20%)
-  &:active
-    .header-toggleButton
-    .header-addFolderButton
-      color $ui-text-color
 
 .header-info-path
   font-size 10px
   margin 0 5px
 
 .header-addFolderButton
+  navButtonColor()
   position absolute
   right 0
   width 25px
   height 26px
   padding 0
   border none
-  color $ui-inactive-text-color
-  background-color transparent
+  &:hover
+    background-color transparent
+    color $ui-text-color
 
 .root--folded
   @extend .root
@@ -105,30 +95,38 @@
     margin 0 5px
 
 body[data-theme="dark"]
-.header
-  &:active
-    color $ui-dark-text-color
+  .header--active
     background-color $ui-dark-button--active-backgroundColor
+    transition color background-color  0.15s
 
-.header
-  &:hover
-    .header-info
+  .header--active
     .header-toggleButton
-    .header-addFolderButton
+      color $ui-dark-text-color
+
+  .header--active
+    .header-info
       color $ui-dark-text-color
       background-color $ui-dark-button--active-backgroundColor
+      &:active
+        color $ui-dark-text-color
+        background-color $ui-dark-button--active-backgroundColor  
 
-.header--active
-  .header-info
+  .header--active
+    .header-addFolderButton
+      color $ui-dark-text-color
+
   .header-toggleButton
-  .header-addFolderButton
-    color $ui-dark-text-color
-    background-color $ui-dark-button--active-backgroundColor
+    &:hover
+      color $ui-dark-text-color
 
-.header--active
-  &:active
-    .header-info
-    .header-toggleButton
-    .header-addFolderButton
+  .header-info
+    &:hover
+      color $ui-dark-text-color
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+    &:active, &:active:hover
       color $ui-dark-text-color
       background-color $ui-dark-button--active-backgroundColor
+
+  .header-addFolderButton
+    &:hover
+      color $ui-dark-text-color
