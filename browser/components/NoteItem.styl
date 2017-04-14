@@ -14,16 +14,20 @@ $control-height = 30px
   transition background-color 0.2s
   &:hover
     background-color alpha($ui-button--active-backgroundColor, 40%)
+    .item-title
+    .item-title-icon
+    .item-bottom-time
+    .item-bottom-tagList-item
+      transition 0.15s
+      color $ui-text-color
   &:active
     background-color $ui-button--active-backgroundColor
     color $ui-text-color
     .item-title
-    .item-title-empty
-    .item-bottom-tagList-empty
-    .item-bottom-time
     .item-title-icon
+    .item-bottom-time
     .item-bottom-tagList-item
-      background-color transparent
+      transition 0.15s
       color $ui-text-color
 
 .item-wrapper
