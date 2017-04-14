@@ -17,10 +17,9 @@
   text-align left
   &:hover
     color $ui-text-color
-    background-color $ui-button--hover-backgroundColor
-  &:active
+  &:active, &:active:hover
     color $ui-text-color
-    background-color $ui-button--active-backgroundColor
+    background-color alpha($ui-button--active-backgroundColor, 20%)
 
 .top-menu-label
   margin-left 5px
