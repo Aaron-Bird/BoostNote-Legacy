@@ -71,7 +71,7 @@ const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleNoteCont
         <div styleName='item-bottom-tagList'>
           {note.tags.length > 0
             ? TagElementList(note.tags)
-            : <span styleName='item-bottom-tagList-empty'></span>
+            : <span styleName='item-bottom-tagList-empty' />
           }
         </div>
       </div>

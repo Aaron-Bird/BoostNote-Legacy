@@ -56,10 +56,10 @@ class InfoTab extends React.Component {
               onClick={(e) => this.handleLinkClick(e)}
             >GitHub Issue</a>: Let us hear your feedback 🙌
           </li>
-          <li styleName="cc">
+          <li styleName='cc'>
             Copyright (C) 2017 Maisin&Co.
           </li>
-          <li styleName="cc">
+          <li styleName='cc'>
             License: GPL v3
           </li>
         </ul>
