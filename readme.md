@@ -28,11 +28,11 @@ Let's talk about Boostnote's feature, request, Japanese gourmet and things like 
 [Join us](https://boostnote-group.slack.com/shared_invite/MTY3MzY5Mjc4ODk3LTE0OTE5Njg0NjEtNzg2MzUwOTY3NQ)
 
 ## More Information
-* Website: http://boostnote.io/
-* Roadmap(upcoming features and bug fixes): https://github.com/BoostIO/Boostnote/wiki/List-of-the-requested-features
-* Boostnote Shop(Products are shipped to all over the world :+1:): https://boostnote.paintory.com/
-* Donation: [Patreon](https://www.patreon.com/boostnote)
-* Development: https://github.com/BoostIO/Boostnote/blob/master/docs/build.md
+* [Website](https://boostnote.io)
+* [Boostnote Shop](https://boostnote.paintory.com/) : Products are shipped to all over the world 🌏
+* [Donation via Patreon](https://www.patreon.com/boostnote) : Thank you for your support 🎉
+* [GitHub Issue](https://github.com/BoostIO/Boostnote/issues) : Let us hear your feedback 🙌
+* [Development](https://github.com/BoostIO/Boostnote/blob/master/docs/build.md)
 * Copyright (C) 2017 Maisin&Co.
 
 ## License
