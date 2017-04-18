@@ -44,17 +44,22 @@ class InfoTab extends React.Component {
           <li>
             <a href='https://boostnote.paintory.com/'
               onClick={(e) => this.handleLinkClick(e)}
-            >Boostnote Shop</a>: Products are shipped to all over the world 🌏
+            >Boostnote Shop</a> : Products are shipped to all over the world 🌏
           </li>
           <li>
             <a href='https://www.patreon.com/boostnote'
               onClick={(e) => this.handleLinkClick(e)}
-            >Donation via Patreon</a>: Thank you for your support 🎉
+            >Donate via Patreon</a> : Thank you for your support 🎉
           </li>
           <li>
             <a href='https://github.com/BoostIO/Boostnote/issues'
               onClick={(e) => this.handleLinkClick(e)}
-            >GitHub Issue</a>: Let us hear your feedback 🙌
+            >GitHub Issues</a> : We'd love to hear your feedback 🙌
+          </li>
+          <li>
+            <a href='https://github.com/BoostIO/Boostnote/blob/master/docs/build.md'
+              onClick={(e) => this.handleLinkClick(e)}
+            >Development</a> : Development configurations for Boostnote 🚀
           </li>
           <li styleName='cc'>
             Copyright (C) 2017 Maisin&Co.
