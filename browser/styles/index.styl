@@ -127,15 +127,15 @@ navButtonColor()
   border none
   color $ui-button-color
   background-color transparent
-  transition color background-color  0.15s
+  transition 0.15s
   &:hover
     background-color alpha($ui-button--active-backgroundColor, 20%)
-    transition color background-color  0.15s
+    transition  0.15s
     color $ui-text-color
   &:active, &:active:hover
     background-color $ui-button--active-backgroundColor
     color $ui-text-color
-    transition color background-color  0.15s
+    transition 0.15s
 /**
 * # Modal Stuff
 * These will be moved lib/modal
@@ -217,12 +217,14 @@ navDarkButtonColor()
   border none
   color $ui-dark-button-color
   background-color transparent
-  transition color background-color 0.15s
+  transition 0.15s
   &:hover
     color $ui-dark-text-color
     background-color $ui-dark-button--hover-backgroundColor
+    transition 0.15s
   &:active
   &:active:hover
+    transition 0.15s
     color $ui-dark-text-color
 
 topBarButtonDark()
