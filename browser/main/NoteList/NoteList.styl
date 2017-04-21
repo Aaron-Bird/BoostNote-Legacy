@@ -20,8 +20,8 @@ $control-height = 30px
   padding-left 25px
 
 .control-sortBy-select
-  margin-left 0
-  font-size 12px
+  appearance: none;
+  margin-left 3px
   color $ui-inactive-text-color
   padding 0
   border none
@@ -60,10 +60,11 @@ body[data-theme="dark"]
 
   .control
     background-color $ui-dark-noteList-backgroundColor
-
-  .control
-    background-color $ui-dark-noteList-backgroundColor
     border-color $ui-dark-borderColor
+
+  .control-sortBy-select
+    &:hover
+      background-color white
 
   .control-button
     color $ui-dark-inactive-text-color

@@ -404,7 +404,7 @@ class NoteList extends React.Component {
       >
         <div styleName='control'>
           <div styleName='control-sortBy'>
-            Sort by
+            <i className='fa fa-bolt' />
             <select styleName='control-sortBy-select'
               value={config.sortBy}
               onChange={(e) => this.handleSortByChange(e)}
