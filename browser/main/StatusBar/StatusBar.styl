@@ -5,7 +5,6 @@
   height $statusBar-height
   background-color $ui-noteDetail-backgroundColor
   display flex
-  box-shadow $note-detail-box-shadow
 
 .blank
   flex 1
@@ -44,6 +43,10 @@ body[data-theme="dark"]
 
   .zoom
     border-color $ui-dark-borderColor
+    &:hover
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+      transition 0.15s
+      color $ui-dark-text-color
 
   .help
     navButtonColor()

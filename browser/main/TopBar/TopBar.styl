@@ -145,7 +145,7 @@ body[data-theme="dark"]
   .control-search-optionList-item
     border-color $ui-dark-borderColor
     &:hover
-      background-color lighten($ui-dark-button--hover-backgroundColor, 15%)
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
   .control-search-optionList-item-folder
     color $ui-dark-text-color
   .control-search-optionList-item-folder-surfix
@@ -160,10 +160,14 @@ body[data-theme="dark"]
     color $ui-inactive-text-color
 
   .control-newPostButton
-    colorDarkDefaultButton()
+    color $ui-inactive-text-color
     border-color $ui-dark-borderColor
     background-color $ui-dark-noteList-backgroundColor
+    &:hover
+      transition 0.15s
+      color $ui-dark-text-color
     &:active
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
       border-color $ui-dark-button--active-backgroundColor
 
   .control-newPostButton-tooltip

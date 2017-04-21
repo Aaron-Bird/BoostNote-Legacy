@@ -12,11 +12,27 @@
 
 .menu-button--active
   @extend .menu-button
-  color $ui-text-color
+  color #e74c3c
   background-color $ui-button--active-backgroundColor
+  .menu-button-label
+    color $ui-text-color
   &:hover
     background-color $ui-button--active-backgroundColor
+    color #e74c3c
+    .menu-button-label
+      color $ui-text-color
+
+.menu-button-star--active
+  @extend .menu-button
+  color #F9BF3B
+  background-color $ui-button--active-backgroundColor
+  .menu-button-label
     color $ui-text-color
+  &:hover
+    background-color $ui-button--active-backgroundColor
+    color #F9BF3B
+    .menu-button-label
+      color $ui-text-color
 
 .menu-button-label
   margin-left 5px
@@ -55,9 +71,25 @@ body[data-theme="dark"]
     &:hover
       background-color alpha($ui-dark-button--active-backgroundColor, 20%)
       color $ui-dark-text-color
+
   .menu-button--active
-    color $ui-dark-text-color
+    color #c0392b
     background-color $ui-dark-button--active-backgroundColor
-    &:active
-      background-color $ui-dark-button--active-backgroundColor
+    .menu-button-label
       color $ui-dark-text-color
+    &:hover
+      background-color $ui-dark-button--active-backgroundColor
+      color #c0392b
+      .menu-button-label
+        color $ui-dark-text-color
+
+  .menu-button-star--active
+    color $ui-favorite-star-button-color
+    background-color $ui-dark-button--active-backgroundColor
+    .menu-button-label
+      color $ui-dark-text-color
+    &:hover
+      background-color $ui-dark-button--active-backgroundColor
+      color $ui-favorite-star-button-color
+      .menu-button-label
+        color $ui-dark-text-color
