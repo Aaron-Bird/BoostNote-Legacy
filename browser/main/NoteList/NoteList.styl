@@ -29,6 +29,9 @@ $control-height = 30px
   outline none
   cursor pointer
   font-size 10px
+  &:hover
+    transition 0.2s
+    color $ui-text-color
 
 .control-button
   width 25px
@@ -64,7 +67,8 @@ body[data-theme="dark"]
 
   .control-sortBy-select
     &:hover
-      background-color white
+      transition 0.2s
+      color $ui-dark-text-color
 
   .control-button
     color $ui-dark-inactive-text-color
