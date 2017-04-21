@@ -45,7 +45,7 @@ $control-height = 30px
   .item-title-icon
     color $ui-text-color
   .item-bottom-tagList-item
-    background-color transparent
+    background-color alpha(white, 0.6)
     color $ui-text-color
   .item-wrapper
     border-color transparent
@@ -93,9 +93,10 @@ $control-height = 30px
   padding 0
   height 20px
   box-sizing border-box
-  border-radius 20px
+  border-radius 2px
+  padding 1px 2px
   vertical-align middle
-  background-color transparent
+  background-color white
   color $ui-inactive-text-color
 
 .item-bottom-time
@@ -153,7 +154,7 @@ body[data-theme="dark"]
     .item-bottom-time
       color $ui-dark-text-color
     .item-bottom-tagList-item
-      background-color transparent
+      background-color alpha(white, 10%)
       color $ui-dark-text-color
 
   .item-title
@@ -166,7 +167,7 @@ body[data-theme="dark"]
     color $ui-inactive-text-color
 
   .item-bottom-tagList-item
-    background-color transparent
+    background-color alpha($ui-dark-button--active-backgroundColor, 40%)
     color $ui-inactive-text-color
 
   .item-bottom-tagList-empty
