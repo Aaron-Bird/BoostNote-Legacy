@@ -17,8 +17,10 @@ $control-height = 30px
     .item-title
     .item-title-icon
     .item-bottom-time
-    .item-bottom-tagList-item
       transition 0.15s
+      color $ui-text-color
+    .item-bottom-tagList-item
+      background-color alpha(white, 0.6)
       color $ui-text-color
   &:active
     background-color $ui-button--active-backgroundColor
@@ -26,8 +28,10 @@ $control-height = 30px
     .item-title
     .item-title-icon
     .item-bottom-time
-    .item-bottom-tagList-item
       transition 0.15s
+      color $ui-text-color
+    .item-bottom-tagList-item
+      background-color alpha(white, 0.6)
       color $ui-text-color
 
 .item-wrapper
@@ -124,23 +128,31 @@ body[data-theme="dark"]
   .item
     border-color $ui-dark-borderColor
     background-color $ui-dark-noteList-backgroundColor
-    &:active
-      background-color $ui-dark-button--active-backgroundColor
-      .item-title
-      .item-title-icon
-      .item-bottom-time
-      .item-bottom-tagList-item
-        transition 0.15s
-        color $ui-dark-text-color
     &:hover
+      transition 0.15s
       background-color alpha($ui-dark-button--active-backgroundColor, 20%)
       .item-title
       .item-title-icon
       .item-bottom-time
-      .item-bottom-tagList-item
         transition 0.15s
         color $ui-dark-text-color
-  
+      .item-bottom-tagList-item
+        transition 0.15s
+        background-color alpha($ui-dark-button--active-backgroundColor, 40%)
+        color $ui-dark-text-color
+    &:active
+      transition 0.15s
+      background-color $ui-dark-button--active-backgroundColor
+      .item-title
+      .item-title-icon
+      .item-bottom-time
+        transition 0.15s
+        color $ui-dark-text-color
+      .item-bottom-tagList-item
+        transition 0.15s
+        background-color alpha(white, 10%)
+        color $ui-dark-text-color  
+
   .item-wrapper
     border-color $ui-dark-borderColor
 
