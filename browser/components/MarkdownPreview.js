@@ -8,37 +8,7 @@ import flowchart from 'flowchart'
 import SequenceDiagram from 'js-sequence-diagrams'
 import eventEmitter from 'browser/main/lib/eventEmitter'
 import fs from 'fs'
-
-function decodeHTMLEntities (text) {
-  var entities = [
-    ['apos', '\''],
-    ['amp', '&'],
-    ['lt', '<'],
-    ['gt', '>'],
-    ['#63', '\\?']
-  ]
-
-  for (var i = 0, max = entities.length; i < max; ++i) {
-    text = text.replace(new RegExp('&' + entities[i][0] + ';', 'g'), entities[i][1])
-  }
-
-  return text
-}
-
-function encodeHTMLEntities (text) {
-  const entities = [
-    ['\'', 'apos'],
-    ['&', 'amp'],
-    ['<', 'lt'],
-    ['>', 'gt'],
-    ['\\?', '#63']
-  ]
-
-  entities.forEach((entity) => {
-    text = text.replace(new RegExp(entity[0], 'g'), `&${entity[1]};`)
-  })
-  return text
-}
+import htmlTextHelper from 'browser/lib/htmlTextHelper'
 
 const { remote } = require('electron')
 const { app } = remote
@@ -261,7 +231,7 @@ export default class MarkdownPreview extends React.Component {
     const codeBlocks = value.match(/(```)(.|[\n])*?(```)/g)
     if (codeBlocks !== null) {
       codeBlocks.forEach((codeBlock) => {
-        value = value.replace(codeBlock, encodeHTMLEntities(codeBlock))
+        value = value.replace(codeBlock, htmlTextHelper.encodeEntities(codeBlock))
       })
     }
     this.refs.root.contentWindow.document.body.innerHTML = markdown.render(value)
@@ -286,7 +256,7 @@ export default class MarkdownPreview extends React.Component {
       let syntax = CodeMirror.findModeByName(el.className)
       if (syntax == null) syntax = CodeMirror.findModeByName('Plain Text')
       CodeMirror.requireMode(syntax.mode, () => {
-        let content = decodeHTMLEntities(el.innerHTML)
+        let content = htmlTextHelper.decodeEntities(el.innerHTML)
         el.innerHTML = ''
         el.parentNode.className += ` cm-s-${codeBlockTheme} CodeMirror`
         CodeMirror.runMode(content, syntax.mime, el, {
@@ -304,7 +274,7 @@ export default class MarkdownPreview extends React.Component {
     _.forEach(this.refs.root.contentWindow.document.querySelectorAll('.flowchart'), (el) => {
       Raphael.setWindow(this.getWindow())
       try {
-        let diagram = flowchart.parse(decodeHTMLEntities(el.innerHTML))
+        let diagram = flowchart.parse(htmlTextHelper.decodeEntities(el.innerHTML))
         el.innerHTML = ''
         diagram.drawSVG(el, opts)
         _.forEach(el.querySelectorAll('a'), (el) => {
@@ -320,7 +290,7 @@ export default class MarkdownPreview extends React.Component {
     _.forEach(this.refs.root.contentWindow.document.querySelectorAll('.sequence'), (el) => {
       Raphael.setWindow(this.getWindow())
       try {
-        let diagram = SequenceDiagram.parse(decodeHTMLEntities(el.innerHTML))
+        let diagram = SequenceDiagram.parse(htmlTextHelper.decodeEntities(el.innerHTML))
         el.innerHTML = ''
         diagram.drawSVG(el, {theme: 'simple'})
         _.forEach(el.querySelectorAll('a'), (el) => {
