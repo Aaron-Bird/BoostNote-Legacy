@@ -13,7 +13,7 @@
 
 [![Build Status](https://travis-ci.org/BoostIO/Boostnote.svg?branch=master)](https://travis-ci.org/BoostIO/Boostnote)
 
-## Author & Maintainer
+## Authors & Maintainers
 - [Rokt33r](https://github.com/rokt33r)
 - [sota1235](https://github.com/sota1235)
 - [Kohei TAKATA](https://github.com/kohei-takata)
@@ -23,16 +23,16 @@
 ## Contributors
 [Great contributors](https://github.com/BoostIO/Boostnote/graphs/contributors) :tada:
 
-## slack group
-Let's talk about Boostnote's feature, request, Japanese gourmet and things like that🍣 <br>
-[Join us](https://boostnote-group.slack.com/shared_invite/MTU5OTMwNjMyNjQxLTE0OTA2NzkyNzktYzkzYmZhYjk0Nw)
+## Slack Group
+Let's talk about Boostnote's great features, new feature requests and things like Japanese gourmet. 🍣 <br>
+[Join us](https://boostnote-group.slack.com/shared_invite/MTcxMjIwODk5Mzk3LTE0OTI1NjQxNDUtMTkwZTBjOWFkMg)
 
 ## More Information
-* Website: http://boostnote.io/
-* Roadmap(upcoming features and bug fixes): https://github.com/BoostIO/Boostnote/wiki/List-of-the-requested-features
-* Boostnote Shop(Products are shipped to all over the world :+1:): https://boostnote.paintory.com/
-* Donation: [Patreon](https://www.patreon.com/boostnote)
-* Development: https://github.com/BoostIO/Boostnote/blob/master/docs/build.md
+* [Website](https://boostnote.io)
+* [Boostnote Shop](https://boostnote.paintory.com/) : Products are shipped to all over the world 🌏
+* [Donate via Patreon](https://www.patreon.com/boostnote) : Thank you for your support 🎉
+* [GitHub Issues](https://github.com/BoostIO/Boostnote/issues) : We'd love to hear your feedback 🙌
+* [Development](https://github.com/BoostIO/Boostnote/blob/master/docs/build.md) : Development configurations for Boostnote 🚀
 * Copyright (C) 2017 Maisin&Co.
 
 ## License
