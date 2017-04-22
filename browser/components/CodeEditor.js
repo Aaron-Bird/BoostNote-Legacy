@@ -83,37 +83,7 @@ export default class CodeEditor extends React.Component {
         'Cmd-T': function (cm) {
           // Do nothing
         },
-        Enter: (cm) => {
-          const cursor = cm.getCursor()
-          const line = cm.getLine(cursor.line)
-          let bulletType
-          if (line.trim().startsWith('- ')) {
-            bulletType = 1 // dash
-          } else if (line.trim().startsWith('* ')) {
-            bulletType = 2 // star
-          } else if (line.trim().startsWith('+ ')) {
-            bulletType = 3 // plus
-          } else {
-            bulletType = 0 // not a bullet
-          }
-          const numberedListRegex = /^(\d+)\. .+/
-          const match = line.trim().match(numberedListRegex)
-          if (bulletType !== 0 || match) {
-            cm.execCommand('newlineAndIndent')
-            const range = {line: cursor.line + 1, ch: cm.getLine(cursor.line + 1).length}
-            if (match) {
-              cm.replaceRange((parseInt(match[1]) + 1) + '. ', range)
-            } else if (bulletType === 1) {
-              cm.replaceRange('- ', range)
-            } else if (bulletType === 2) {
-              cm.replaceRange('* ', range)
-            } else if (bulletType === 3) {
-              cm.replaceRange('+ ', range)
-            }
-          } else {
-            cm.execCommand('newlineAndIndent')
-          }
-        }
+        Enter: 'newlineAndIndentContinueMarkdownList'
       }
     })
 
