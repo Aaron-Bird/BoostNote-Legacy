@@ -26,7 +26,6 @@ export function decodeEntities (text) {
 export function encodeEntities (text) {
   const entities = [
     ['\'', 'apos'],
-    ['&', 'amp'],
     ['<', 'lt'],
     ['>', 'gt'],
     ['\\?', '#63']
