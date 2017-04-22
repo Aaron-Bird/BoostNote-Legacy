@@ -175,8 +175,9 @@ class MarkdownEditor extends React.Component {
   }
 
   addMdAroundWord (mdElement) {
-    if (this.refs.code.editor.getSelection())
+    if (this.refs.code.editor.getSelection()) {
       return this.addMdAroundSelection(mdElement)
+    }
     const currentCaret = this.refs.code.editor.getCursor()
     const word = this.refs.code.editor.findWordAt(currentCaret)
     const cmDoc = this.refs.code.editor.getDoc()
