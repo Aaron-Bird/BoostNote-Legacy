@@ -54,7 +54,7 @@ class InfoTab extends React.Component {
           <li>
             <a href='https://github.com/BoostIO/Boostnote/issues'
               onClick={(e) => this.handleLinkClick(e)}
-            >GitHub Issue</a>: Let us hear your feedback 🙌
+            >GitHub Issues</a>: We'd love to hear your feedback 🙌
           </li>
           <li styleName='cc'>
             Copyright (C) 2017 Maisin&Co.
