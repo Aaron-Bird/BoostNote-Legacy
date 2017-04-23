@@ -39,5 +39,5 @@ export function encodeEntities (text) {
 
 export default {
   decodeEntities,
-  encodeEntities,
+  encodeEntities
 }
