@@ -147,7 +147,7 @@ class StorageItem extends React.Component {
     e.target.style.backgroundColor = e.dataTransfer.getData('defaultColor')
     const noteData = JSON.parse(e.dataTransfer.getData('note'))
     const newNoteData = Object.assign({}, noteData, {storage: storage, folder: folder.key})
-    if(folder.key === noteData.folder) return
+    if (folder.key === noteData.folder) return
     dataApi
      .createNote(storage.key, newNoteData)
      .then((note) => {
@@ -155,27 +155,27 @@ class StorageItem extends React.Component {
         .deleteNote(noteData.storage, noteData.key)
          .then((data) => {
            let dispatchHandler = () => {
-              dispatch({
-                type: 'DELETE_NOTE',
-                storageKey: data.storageKey,
-                noteKey: data.noteKey
-              })
-            }
-            eventEmitter.once('list:moved', dispatchHandler)
-            eventEmitter.emit('list:next')
+             dispatch({
+               type: 'DELETE_NOTE',
+               storageKey: data.storageKey,
+               noteKey: data.noteKey
+             })
+           }
+           eventEmitter.once('list:moved', dispatchHandler)
+           eventEmitter.emit('list:next')
           })
           .catch((err) => {
             console.error(err)
           })
        dispatch({
          type: 'UPDATE_NOTE',
-          note: note
+         note: note
           })
-          hashHistory.push({
-            pathname: location.pathname,
-            query: {key: note.storage + '-' + note.key}
-          })
+       hashHistory.push({
+         pathname: location.pathname,
+         query: {key: note.storage + '-' + note.key}
        })
+     })
   }
 
   render () {
