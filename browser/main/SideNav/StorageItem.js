@@ -148,10 +148,25 @@ class StorageItem extends React.Component {
     const noteData = JSON.parse(e.dataTransfer.getData('note'))
     const newNoteData = Object.assign({}, noteData, {storage: storage, folder: folder.key})
     if(folder.key === noteData.folder) return
-    console.log(location)
     dataApi
      .createNote(storage.key, newNoteData)
      .then((note) => {
+       dataApi
+        .deleteNote(noteData.storage, noteData.key)
+         .then((data) => {
+           let dispatchHandler = () => {
+              dispatch({
+                type: 'DELETE_NOTE',
+                storageKey: data.storageKey,
+                noteKey: data.noteKey
+              })
+            }
+            eventEmitter.once('list:moved', dispatchHandler)
+            eventEmitter.emit('list:next')
+          })
+          .catch((err) => {
+            console.error(err)
+          })
        dispatch({
          type: 'UPDATE_NOTE',
           note: note
@@ -160,39 +175,24 @@ class StorageItem extends React.Component {
             pathname: location.pathname,
             query: {key: note.storage + '-' + note.key}
           })
-        })
-
-    dataApi
-     .deleteNote(noteData.storage, noteData.key)
-      .then((data) => {
-        let dispatchHandler = () => {
-          dispatch({
-            type: 'DELETE_NOTE',
-            storageKey: data.storageKey,
-            noteKey: data.noteKey
-          })
-        }
-        eventEmitter.once('list:moved', dispatchHandler)
-        eventEmitter.emit('list:next')
-      })
-
+       })
   }
 
-      render () {
-        let { storage, location, isFolded, data, dispatch } = this.props
-        let { folderNoteMap } = data
-        let folderList = storage.folders.map((folder) => {
-          let isActive = !!(location.pathname.match(new RegExp('\/storages\/' + storage.key + '\/folders\/' + folder.key)))
-          let noteSet = folderNoteMap.get(storage.key + '-' + folder.key)
+  render () {
+    let { storage, location, isFolded, data, dispatch } = this.props
+    let { folderNoteMap } = data
+    let folderList = storage.folders.map((folder) => {
+      let isActive = !!(location.pathname.match(new RegExp('\/storages\/' + storage.key + '\/folders\/' + folder.key)))
+      let noteSet = folderNoteMap.get(storage.key + '-' + folder.key)
 
-          let noteCount = noteSet != null
-            ? noteSet.size
-            : 0
-          return (
-            <StorageItemChild
-              key={folder.key}
-              isActive={isActive}
-              handleButtonClick={(e) => this.handleFolderButtonClick(folder.key)(e)}
+      let noteCount = noteSet != null
+        ? noteSet.size
+        : 0
+      return (
+        <StorageItemChild
+          key={folder.key}
+          isActive={isActive}
+          handleButtonClick={(e) => this.handleFolderButtonClick(folder.key)(e)}
           handleContextMenu={(e) => this.handleFolderButtonContextMenu(e, folder)}
           folderName={folder.name}
           folderColor={folder.color}
