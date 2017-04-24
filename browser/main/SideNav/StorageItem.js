@@ -7,7 +7,7 @@ import CreateFolderModal from 'browser/main/modals/CreateFolderModal'
 import RenameFolderModal from 'browser/main/modals/RenameFolderModal'
 import dataApi from 'browser/main/lib/dataApi'
 import StorageItemChild from 'browser/components/StorageItem'
-import ee from 'browser/main/lib/eventEmitter'
+import eventEmitter from 'browser/main/lib/eventEmitter'
 
 const { remote } = require('electron')
 const { Menu, MenuItem, dialog } = remote
@@ -146,63 +146,53 @@ class StorageItem extends React.Component {
     e.target.style.opacity = '1'
     e.target.style.backgroundColor = e.dataTransfer.getData('defaultColor')
     const noteData = JSON.parse(e.dataTransfer.getData('note'))
-    if (folder.key !== noteData.folder) {
-      dataApi
-       .createNote(storage.key, {
-         content: noteData.content,
-         createdAt: noteData.createdAt,
-         folder: folder.key,
-         isStarred: noteData.isStarred,
-         storage: storage,
-         title: noteData.title,
-         tags: noteData.tags,
-         type: noteData.type,
-         updatedAt: noteData.updatedAt,
-         description: noteData.description,
-         snippets: noteData.snippets
-       })
-       .then((note) => {
-         dispatch({
-           type: 'UPDATE_NOTE',
-           note: note
-         })
-         hashHistory.push({
-           pathname: location.pathname,
-           query: {key: note.storage + '-' + note.key}
-         })
-       })
-
-      dataApi
-        .deleteNote(noteData.storage, noteData.key)
-        .then((data) => {
-          let dispatchHandler = () => {
-            dispatch({
-              type: 'DELETE_NOTE',
-              storageKey: data.storageKey,
-              noteKey: data.noteKey
-            })
-          }
-          ee.once('list:moved', dispatchHandler)
-          ee.emit('list:next')
+    const newNoteData = Object.assign({}, noteData, {storage: storage, folder: folder.key})
+    if(folder.key === noteData.folder) return
+    console.log(location)
+    dataApi
+     .createNote(storage.key, newNoteData)
+     .then((note) => {
+       dispatch({
+         type: 'UPDATE_NOTE',
+          note: note
+          })
+          hashHistory.push({
+            pathname: location.pathname,
+            query: {key: note.storage + '-' + note.key}
+          })
         })
-    }
+
+    dataApi
+     .deleteNote(noteData.storage, noteData.key)
+      .then((data) => {
+        let dispatchHandler = () => {
+          dispatch({
+            type: 'DELETE_NOTE',
+            storageKey: data.storageKey,
+            noteKey: data.noteKey
+          })
+        }
+        eventEmitter.once('list:moved', dispatchHandler)
+        eventEmitter.emit('list:next')
+      })
+
   }
 
-  render () {
-    let { storage, location, isFolded, data, dispatch } = this.props
-    let { folderNoteMap } = data
-    let folderList = storage.folders.map((folder) => {
-      let isActive = !!(location.pathname.match(new RegExp('\/storages\/' + storage.key + '\/folders\/' + folder.key)))
-      let noteSet = folderNoteMap.get(storage.key + '-' + folder.key)
+      render () {
+        let { storage, location, isFolded, data, dispatch } = this.props
+        let { folderNoteMap } = data
+        let folderList = storage.folders.map((folder) => {
+          let isActive = !!(location.pathname.match(new RegExp('\/storages\/' + storage.key + '\/folders\/' + folder.key)))
+          let noteSet = folderNoteMap.get(storage.key + '-' + folder.key)
 
-      let noteCount = noteSet != null
-        ? noteSet.size
-        : 0
-      return (
-        <StorageItemChild
-          key={folder.key}
-          isActive={isActive}
-          handleButtonClick={(e) => this.handleFolderButtonClick(folder.key)(e)}
+          let noteCount = noteSet != null
+            ? noteSet.size
+            : 0
+          return (
+            <StorageItemChild
+              key={folder.key}
+              isActive={isActive}
+              handleButtonClick={(e) => this.handleFolderButtonClick(folder.key)(e)}
           handleContextMenu={(e) => this.handleFolderButtonContextMenu(e, folder)}
           folderName={folder.name}
           folderColor={folder.color}
