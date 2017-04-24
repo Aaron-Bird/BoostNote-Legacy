@@ -163,14 +163,14 @@ class StorageItem extends React.Component {
            }
            eventEmitter.once('list:moved', dispatchHandler)
            eventEmitter.emit('list:next')
-          })
+         })
           .catch((err) => {
             console.error(err)
           })
        dispatch({
          type: 'UPDATE_NOTE',
          note: note
-          })
+       })
        hashHistory.push({
          pathname: location.pathname,
          query: {key: note.storage + '-' + note.key}
