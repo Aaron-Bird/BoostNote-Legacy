@@ -3,8 +3,16 @@ import {Application} from 'spectron'
 import path from 'path'
 
 test.beforeEach(async t => {
+  const boostnotePath = ((platform) => {
+    switch (platform) {
+      case 'darwin':
+        return path.join('..', '..', 'dist', 'Boostnote-darwin-x64', 'Boostnote.app', 'Contents', 'MacOS', 'Boostnote')
+      case 'linux':
+        return path.join('..', '..', 'dist', 'Boostnote-linux-x64', 'Boostnote')
+    }
+  })(process.platform)
   t.context.app = new Application({
-    path: path.join('..', '..', 'dist', 'Boostnote-darwin-x64', 'Boostnote.app', 'Contents', 'MacOS', 'Boostnote')
+    path: boostnotePath
   })
 
   await t.context.app.start()
