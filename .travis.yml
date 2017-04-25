@@ -1,11 +1,14 @@
 language: node_js
+os:
+  - linux
+  - osx
 node_js:
   - 'stable'
   - 'lts/*'
 before_script:
   - 'npm install grunt-cli -g'
   - 'export DISPLAY=:99.0'
-  - 'sh -e /etc/init.d/xvfb start'
+  - 'if [ ${TRAVIS_OS_NAME} = "linux" ]; then sh -e /etc/init.d/xvfb start; fi'
   - 'sleep 3'
 script:
   - 'npm run lint'
