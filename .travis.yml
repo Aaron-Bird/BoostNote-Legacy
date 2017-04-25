@@ -7,5 +7,10 @@ before_script:
   - 'export DISPLAY=:99.0'
   - 'sh -e /etc/init.d/xvfb start'
   - 'sleep 3'
-
-script: npm run lint && npm run test && grunt pre-build && npm run test:e2e
+script:
+  - 'npm run lint'
+  - 'npm run test'
+  - 'if [ ${TRAVIS_NODE_VERSION} = "stable" ]; then
+      grunt pre-build;
+      npm run test:e2e;
+    fi'
