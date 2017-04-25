@@ -261,7 +261,6 @@ module.exports = function (grunt) {
         break
       case 'linux':
         grunt.task.run(['compile', 'pack:linux'])
-        break
     }
   })
 
