@@ -73,7 +73,11 @@ class MarkdownNoteDetail extends React.Component {
       if (trimmedLine.match('```')) {
         isMarkdownInCode = !isMarkdownInCode
       } else if (isMarkdownInCode === false && (trimmedLine.match(/^# +/) || trimmedNextLine.match('='))) {
-        title = trimmedLine.substring(1, trimmedLine.length).trim()
+        if (trimmedNextLine.match('=')) {
+          title = trimmedLine.substring(0, trimmedLine.length).trim()
+        } else {
+          title = trimmedLine.substring(1, trimmedLine.length).trim()
+        }
         break
       }
     }
