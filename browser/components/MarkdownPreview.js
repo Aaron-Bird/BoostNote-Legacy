@@ -73,6 +73,10 @@ h2 {
   padding-bottom: 0.2em;
   margin: 1em 0 0.37em;
 }
+
+body p {
+  white-space: normal;
+}
 `
 }
 
