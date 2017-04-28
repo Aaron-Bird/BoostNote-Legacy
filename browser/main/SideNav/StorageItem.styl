@@ -60,11 +60,13 @@
   position absolute
   right 0
   width 25px
-  height 26px
+  height 25px
   padding 0
   border none
+  margin-right 5px
+  border-radius 50%
   &:hover
-    background-color transparent
+    background-color alpha($ui-button--active-backgroundColor, 40%)
     color $ui-text-color
 
 .root--folded
@@ -130,3 +132,7 @@ body[data-theme="dark"]
   .header-addFolderButton
     &:hover
       color $ui-dark-text-color
+      background-color alpha($ui-dark-button--active-backgroundColor, 60%)
+    &:active, &:active:hover
+      color $ui-dark-text-color
+      background-color $ui-dark-button--active-backgroundColor
