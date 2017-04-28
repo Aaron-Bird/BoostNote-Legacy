@@ -22,6 +22,8 @@ $control-height = 30px
     .item-bottom-tagList-item
       background-color alpha(white, 0.6)
       color $ui-text-color
+    .item-star
+      color $ui-favorite-star-button-color
   &:active
     background-color $ui-button--active-backgroundColor
     color $ui-text-color
@@ -53,6 +55,8 @@ $control-height = 30px
     color $ui-text-color
   .item-wrapper
     border-color transparent
+  .item-star
+    color $ui-favorite-star-button-color
   &:hover
     background-color $ui-button--active-backgroundColor
 
@@ -111,11 +115,11 @@ $control-height = 30px
 
 .item-star
   position absolute
-  top 19px
+  top 34px
   left 5px
   width 34px
   height 34px
-  color $ui-favorite-star-button-color
+  color alpha($ui-favorite-star-button-color, 60%)
   font-size 12px
   padding 0
   border-radius 17px
