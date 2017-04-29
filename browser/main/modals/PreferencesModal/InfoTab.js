@@ -47,9 +47,9 @@ class InfoTab extends React.Component {
             >Boostnote Shop</a> : Products are shipped to all over the world 🌏
           </li>
           <li>
-            <a href='https://www.patreon.com/boostnote'
+            <a href='https://salt.bountysource.com/teams/boostnote'
               onClick={(e) => this.handleLinkClick(e)}
-            >Donate via Patreon</a> : Thank you for your support 🎉
+            >Donate via Bountysource</a> : Thank you for your support 🎉
           </li>
           <li>
             <a href='https://github.com/BoostIO/Boostnote/issues'
