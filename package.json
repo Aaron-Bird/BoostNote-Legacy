@@ -1,7 +1,8 @@
 {
-  "name": "Boostnote",
+  "name": "boost",
   "version": "0.8.9",
   "main": "index.js",
+  "description": "Boostnote",
   "license": "GPL-3.0",
   "scripts": {
     "start": "electron ./index.js",
