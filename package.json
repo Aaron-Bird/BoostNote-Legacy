@@ -10,6 +10,7 @@
     "webpack": "webpack-dev-server --hot --inline --config webpack.config.js",
     "compile": "grunt compile",
     "test": "PWD=$(pwd) NODE_ENV=test ava",
+    "test:e2e": "NODE_ENV=test ava tests/e2e/*",
     "fix": "npm run lint --fix",
     "lint": "eslint .",
     "dev-start": "concurrently --kill-others \"npm run webpack\" \"npm run hot\""
@@ -73,6 +74,7 @@
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "sander": "^0.5.1",
+    "spectron": "^3.6.2",
     "superagent": "^1.2.0",
     "superagent-promise": "^1.0.3"
   },
