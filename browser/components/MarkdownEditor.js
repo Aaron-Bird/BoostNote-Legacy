@@ -9,10 +9,10 @@ class MarkdownEditor extends React.Component {
   constructor (props) {
     super(props)
 
-    //char codes for ctrl + w
+    // char codes for ctrl + w
     this.escapeFromEditor = [17, 87]
 
-    //ctrl + shift + ;
+    // ctrl + shift + ;
     this.supportMdSelectionBold = [16, 17, 186]
 
     this.state = {
@@ -89,7 +89,7 @@ class MarkdownEditor extends React.Component {
 
   handleBlur (e) {
     if (this.state.isLocked) return
-    this.setState({ keyPressed: new Set()})
+    this.setState({ keyPressed: new Set() })
     let { config } = this.props
     if (config.editor.switchPreview === 'BLUR') {
       let cursorPosition = this.refs.code.editor.getCursor()
@@ -167,10 +167,9 @@ class MarkdownEditor extends React.Component {
     keyPressed.add(e.keyCode)
     this.setState({ keyPressed })
     let isNoteHandlerKey = (el) => { return keyPressed.has(el) }
-    if (keyPressed.size === this.escapeFromEditor.length 
-      && !this.state.isLocked 
-      && this.state.status === 'CODE' 
-      && this.escapeFromEditor.every(isNoteHandlerKey)) {
+    if (keyPressed.size === this.escapeFromEditor.length && 
+        !this.state.isLocked && this.state.status === 'CODE' &&
+        this.escapeFromEditor.every(isNoteHandlerKey)) {
       document.activeElement.blur()
     }
     if (keyPressed.size === this.supportMdSelectionBold.length && this.supportMdSelectionBold.every(isNoteHandlerKey)) {
