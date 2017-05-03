@@ -9,14 +9,16 @@ class MarkdownEditor extends React.Component {
   constructor (props) {
     super(props)
 
-    this.escapeFromEditor = ['Control', 'w']
+    //char codes for ctrl + w
+    this.escapeFromEditor = [17, 87]
 
-    this.supportMdSelectionBold = ['Control', ':']
+    //ctrl + shift + ;
+    this.supportMdSelectionBold = [16, 17, 186]
 
     this.state = {
       status: 'PREVIEW',
       renderValue: props.value,
-      keyPressed: {},
+      keyPressed: new Set(),
       isLocked: false
     }
 
@@ -87,7 +89,7 @@ class MarkdownEditor extends React.Component {
 
   handleBlur (e) {
     if (this.state.isLocked) return
-    this.setState({ keyPressed: [] })
+    this.setState({ keyPressed: new Set()})
     let { config } = this.props
     if (config.editor.switchPreview === 'BLUR') {
       let cursorPosition = this.refs.code.editor.getCursor()
@@ -161,11 +163,10 @@ class MarkdownEditor extends React.Component {
 
   handleKeyDown (e) {
     if (this.state.status !== 'CODE') return false
-    const keyPressed = Object.assign(this.state.keyPressed, {
-      [e.key]: true
-    })
+    const keyPressed = this.state.keyPressed
+    keyPressed.add(e.keyCode)
     this.setState({ keyPressed })
-    let isNoteHandlerKey = (el) => { return this.state.keyPressed[el] }
+    let isNoteHandlerKey = (el) => { return keyPressed.has(el) }
     if (!this.state.isLocked && this.state.status === 'CODE' && this.escapeFromEditor.every(isNoteHandlerKey)) {
       document.activeElement.blur()
     }
@@ -190,9 +191,8 @@ class MarkdownEditor extends React.Component {
   }
 
   handleKeyUp (e) {
-    const keyPressed = Object.assign(this.state.keyPressed, {
-      [e.key]: false
-    })
+    const keyPressed = this.state.keyPressed
+    keyPressed.delete(e.keyCode)
     this.setState({ keyPressed })
   }
 
