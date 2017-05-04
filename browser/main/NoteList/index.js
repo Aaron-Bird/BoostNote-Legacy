@@ -381,7 +381,7 @@ class NoteList extends React.Component {
     }
 
     const targetIndex = _.findIndex(this.notes, (note) => {
-      return note != null && note.storage + '-' + note.key === location.query.key
+      return note !== null && `${note.storage}-${note.key}` === location.query.key
     })
 
     const storageKey = this.notes[targetIndex].storage
@@ -407,7 +407,7 @@ class NoteList extends React.Component {
             })
             hashHistory.push({
               pathname: location.pathname,
-              query: {key: note.storage + '-' + note.key}
+              query: {key: `${note.storage}-${note.key}`}
             })
           })
         })
