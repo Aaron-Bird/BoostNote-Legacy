@@ -1,0 +1,22 @@
+/**
+ * @fileoverview Unit test for browser/lib/findTitle
+ */
+
+const test = require('ava')
+const findNoteTitle = require('browser/lib/findNoteTitle')
+
+// Unit test
+test('findNoteTitle#find  should return a correct title (string)', t => {
+  // [input, expected]
+  const testCases = [
+    ['# hoge\nhoge', 'hoge'],
+    ['# hoge_hoge_hoge', 'hoge_hoge_hoge'],
+    ['```\n# hoge\n```\n# fuga', 'fuga']
+  ]
+
+  testCases.forEach(testCase => {
+    const [input, expected] = testCase
+    t.is(findNoteTitle.find(input), expected, `Test for find() input: ${input} expected: ${expected}`)
+  })
+})
+
