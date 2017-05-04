@@ -4,8 +4,14 @@
 .codeEditor
   absolute top bottom left right
 
+.hide
+  z-index 0
+  opacity 0
+  pointer-events none
+
 .codeEditor--hide
   @extend .codeEditor
+  @extend .hide
 
 .preview
   display block
@@ -17,7 +23,5 @@
 
 .preview--hide
   @extend .preview
-  z-index 0
-  opacity 0
-  pointer-events none
+  @extend .hide
 
