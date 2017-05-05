@@ -13,7 +13,7 @@ export function find (value) {
     }
   }
 
-  if (title == null) {
+  if (title === null) {
     title = ''
     for (let i = 0; i < splitted.length; i++) {
       let trimmedLine = splitted[i].trim()
