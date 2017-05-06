@@ -3,7 +3,7 @@
  */
 
 const test = require('ava')
-const findNoteTitle = require('browser/lib/findNoteTitle')
+const { findNoteTitle } = require('browser/lib/findNoteTitle')
 
 // Unit test
 test('findNoteTitle#find  should return a correct title (string)', t => {
@@ -16,7 +16,7 @@ test('findNoteTitle#find  should return a correct title (string)', t => {
 
   testCases.forEach(testCase => {
     const [input, expected] = testCase
-    t.is(findNoteTitle.find(input), expected, `Test for find() input: ${input} expected: ${expected}`)
+    t.is(findNoteTitle(input), expected, `Test for find() input: ${input} expected: ${expected}`)
   })
 })
 
