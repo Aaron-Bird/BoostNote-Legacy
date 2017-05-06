@@ -15,7 +15,7 @@ import StatusBar from '../StatusBar'
 import context from 'browser/lib/context'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import _ from 'lodash'
-import findNoteTitle from 'browser/lib/findNoteTitle'
+import { findNoteTitle } from 'browser/lib/findNoteTitle'
 
 function pass (name) {
   switch (name) {
@@ -82,7 +82,7 @@ class SnippetNoteDetail extends React.Component {
     note.tags = this.refs.tags.value
     note.description = this.refs.description.value
     note.updatedAt = new Date()
-    note.title = findNoteTitle.find(note.description)
+    note.title = findNoteTitle(note.description)
 
     this.setState({
       note

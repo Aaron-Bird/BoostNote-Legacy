@@ -12,7 +12,7 @@ import ee from 'browser/main/lib/eventEmitter'
 import markdown from 'browser/lib/markdown'
 import StatusBar from '../StatusBar'
 import _ from 'lodash'
-import findNoteTitle from 'browser/lib/findNoteTitle'
+import { findNoteTitle } from 'browser/lib/findNoteTitle'
 
 const electron = require('electron')
 const { remote } = electron
@@ -87,7 +87,7 @@ class MarkdownNoteDetail extends React.Component {
 
     note.content = this.refs.content.value
     note.tags = this.refs.tags.value
-    note.title = markdown.strip(findNoteTitle.find(note.content))
+    note.title = markdown.strip(findNoteTitle(note.content))
     note.updatedAt = new Date()
 
     this.setState({

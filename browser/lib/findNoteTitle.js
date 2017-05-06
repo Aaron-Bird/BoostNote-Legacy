@@ -1,4 +1,4 @@
-export function find (value) {
+export function findNoteTitle (value) {
   let splitted = value.split('\n')
   let title = null
   let isMarkdownInCode = false
@@ -28,5 +28,5 @@ export function find (value) {
 }
 
 export default {
-  find
+  findNoteTitle
 }
