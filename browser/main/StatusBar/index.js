@@ -48,7 +48,8 @@ class StatusBar extends React.Component {
 
   render () {
     let { config, status } = this.context
-    const { location } = this.props
+    const { location, type } = this.props
+    const styleName = type === 'MARKDOWN_NOTE' ? 'note-hash-md' : 'note-hash-snippet'
 
     return (
       <div className='StatusBar'
@@ -61,7 +62,7 @@ class StatusBar extends React.Component {
           {Math.floor(config.zoom * 100)}%
         </button>
 
-        <div styleName='note-hash'>#{location.query.key}</div>
+        <div styleName={styleName}>#{location.query.key}</div>
         <div styleName='blank' />
 
         {status.updateReady
