@@ -103,10 +103,10 @@ class MarkdownNoteDetail extends React.Component {
 
     for (let i = 0; i < splitted.length; i++) {
       let trimmedLine = splitted[i].trim()
-      if (trimmedLine.match(/^- \[\s|x\] ./)) {
+      if (trimmedLine.match(/^[\+\-\*] \[\s|x\] ./)) {
         numberOfTodo++
       }
-      if (trimmedLine.match(/^- \[x\] ./)) {
+      if (trimmedLine.match(/^[\+\-\*] \[x\] ./)) {
         numberOfCompletedTodo++
       }
     }
