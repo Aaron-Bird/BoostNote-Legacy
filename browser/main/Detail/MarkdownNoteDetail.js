@@ -96,20 +96,20 @@ class MarkdownNoteDetail extends React.Component {
     return title
   }
 
-  getPercentageOfCompleteTodo (value) {
-    let splitted = value.split('\n')
+  getPercentageOfCompleteTodo (noteContent) {
+    let splitted = noteContent.split('\n')
     let numberOfTodo = 0
     let numberOfCompletedTodo = 0
 
-    for (let i = 0; i < splitted.length; i++) {
-      let trimmedLine = splitted[i].trim()
+    splitted.forEach((line) => {
+      let trimmedLine = line.trim()
       if (trimmedLine.match(/^[\+\-\*] \[\s|x\] ./)) {
         numberOfTodo++
       }
       if (trimmedLine.match(/^[\+\-\*] \[x\] ./)) {
         numberOfCompletedTodo++
       }
-    }
+    })
 
     return Math.floor(numberOfCompletedTodo / numberOfTodo * 100)
   }
