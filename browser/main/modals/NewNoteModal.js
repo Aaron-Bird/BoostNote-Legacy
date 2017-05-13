@@ -4,6 +4,7 @@ import styles from './NewNoteModal.styl'
 import dataApi from 'browser/main/lib/dataApi'
 import { hashHistory } from 'react-router'
 import ee from 'browser/main/lib/eventEmitter'
+import ModalEscButton from 'browser/components/ModalEscButton'
 
 class NewNoteModal extends React.Component {
   constructor (props) {
@@ -102,11 +103,7 @@ class NewNoteModal extends React.Component {
         <div styleName='header'>
           <div styleName='title'>Make a Note</div>
         </div>
-        <button styleName='closeButton' onClick={(e) => this.handleCloseButtonClick(e)}>
-          <div styleName='close-mark'>×</div>
-          <div styleName='close-text'>esc</div>
-        </button>
-
+        <ModalEscButton handleEscButtonClick={(e) => this.handleCloseButtonClick(e)} />
         <div styleName='control'>
           <button styleName='control-button'
             onClick={(e) => this.handleMarkdownNoteButtonClick(e)}

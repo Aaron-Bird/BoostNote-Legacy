@@ -5,6 +5,7 @@ import HotkeyTab from './HotkeyTab'
 import UiTab from './UiTab'
 import InfoTab from './InfoTab'
 import StoragesTab from './StoragesTab'
+import ModalEscButton from 'browser/components/ModalEscButton'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './PreferencesModal.styl'
 
@@ -117,10 +118,7 @@ class Preferences extends React.Component {
         <div styleName='top-bar'>
           <p>Your menu for Boostnote</p>
         </div>
-        <button styleName='top-bar-close' onClick={(e) => this.handleEscButtonClick(e)}>
-          <div styleName='top-bar-close-mark'>×</div>
-          <div styleName='top-bar-close-text'>esc</div>
-        </button>
+        <ModalEscButton handleEscButtonClick={(e) => this.handleEscButtonClick(e)} />
         <div styleName='nav'>
           {navButtons}
         </div>

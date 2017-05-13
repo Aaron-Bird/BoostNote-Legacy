@@ -3,6 +3,7 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './RenameFolderModal.styl'
 import dataApi from 'browser/main/lib/dataApi'
 import store from 'browser/main/store'
+import ModalEscButton from 'browser/components/ModalEscButton'
 
 class RenameFolderModal extends React.Component {
   constructor (props) {
@@ -72,9 +73,7 @@ class RenameFolderModal extends React.Component {
         <div styleName='header'>
           <div styleName='title'>Rename Folder</div>
         </div>
-        <button styleName='closeButton'
-          onClick={(e) => this.handleCloseButtonClick(e)}
-        >Close</button>
+        <ModalEscButton handleEscButtonClick={(e) => this.handleCloseButtonClick(e)} />
 
         <div styleName='control'>
           <input styleName='control-input'
