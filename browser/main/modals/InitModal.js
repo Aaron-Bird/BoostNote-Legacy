@@ -5,6 +5,7 @@ import dataApi from 'browser/main/lib/dataApi'
 import store from 'browser/main/store'
 import { hashHistory } from 'react-router'
 import _ from 'lodash'
+import ModalEscButton from 'browser/components/ModalEscButton'
 
 const CSON = require('@rokt33r/season')
 const path = require('path')
@@ -199,6 +200,7 @@ class InitModal extends React.Component {
         <div styleName='header'>
           <div styleName='header-title'>Initialize Storage</div>
         </div>
+        <ModalEscButton handleEscButtonClick={(e) => this.handleCloseButtonClick(e)} />
         <div styleName='body'>
           <div styleName='body-welcome'>
             Welcome!

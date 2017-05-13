@@ -4,6 +4,7 @@ import styles from './CreateFolderModal.styl'
 import dataApi from 'browser/main/lib/dataApi'
 import store from 'browser/main/store'
 import consts from 'browser/lib/consts'
+import ModalEscButton from 'browser/components/ModalEscButton'
 
 class CreateFolderModal extends React.Component {
   constructor (props) {
@@ -77,11 +78,7 @@ class CreateFolderModal extends React.Component {
         <div styleName='header'>
           <div styleName='title'>Create new folder</div>
         </div>
-        <button styleName='close' onClick={(e) => this.handleCloseButtonClick(e)}>
-          <div styleName='close-mark'>×</div>
-          <div styleName='close-text'>esc</div>
-        </button>
-
+      <ModalEscButton handleEscButtonClick={(e) => this.handleCloseButtonClick(e)} />
         <div styleName='control'>
           <div styleName='control-folder'>
             <div styleName='control-folder-label'>Folder name</div>
