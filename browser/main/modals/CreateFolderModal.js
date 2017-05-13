@@ -78,7 +78,7 @@ class CreateFolderModal extends React.Component {
         <div styleName='header'>
           <div styleName='title'>Create new folder</div>
         </div>
-      <ModalEscButton handleEscButtonClick={(e) => this.handleCloseButtonClick(e)} />
+        <ModalEscButton handleEscButtonClick={(e) => this.handleCloseButtonClick(e)} />
         <div styleName='control'>
           <div styleName='control-folder'>
             <div styleName='control-folder-label'>Folder name</div>
