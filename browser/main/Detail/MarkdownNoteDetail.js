@@ -66,10 +66,10 @@ class MarkdownNoteDetail extends React.Component {
     let splitted = value.split('\n')
     let title = null
     let isMarkdownInCode = false
-1
-    for (let i = 0; i < splitted.length; i++) {
-      let trimmedLine = splitted[i].trim()
-      let trimmedNextLine = typeof splitted[i + 1] === 'undefined' ? '' : splitted[i + 1].trim()
+
+    splitted.forEach((line, index) => {
+      let trimmedLine = line.trim()
+      let trimmedNextLine = typeof splitted[index + 1] === 'undefined' ? '' : splitted[index + 1].trim()
       if (trimmedLine.match('```')) {
         isMarkdownInCode = !isMarkdownInCode
       } else if (isMarkdownInCode === false && (trimmedLine.match(/^# +/) || trimmedNextLine.match('='))) {
@@ -78,9 +78,9 @@ class MarkdownNoteDetail extends React.Component {
         } else {
           title = trimmedLine.substring(1, trimmedLine.length).trim()
         }
-        break
+        return
       }
-    }
+    })
 
     if (title == null) {
       for (let i = 0; i < splitted.length; i++) {
