@@ -153,20 +153,20 @@ class StorageItem extends React.Component {
      .then((note) => {
        dataApi
         .deleteNote(noteData.storage, noteData.key)
-         .then((data) => {
-           let dispatchHandler = () => {
-             dispatch({
-               type: 'DELETE_NOTE',
-               storageKey: data.storageKey,
-               noteKey: data.noteKey
-             })
-           }
-           eventEmitter.once('list:moved', dispatchHandler)
-           eventEmitter.emit('list:next')
+        .then((data) => {
+          let dispatchHandler = () => {
+            dispatch({
+              type: 'DELETE_NOTE',
+              storageKey: data.storageKey,
+              noteKey: data.noteKey
+            })
+          }
+          eventEmitter.once('list:moved', dispatchHandler)
+          eventEmitter.emit('list:next')
+        })
+         .catch((err) => {
+           console.error(err)
          })
-          .catch((err) => {
-            console.error(err)
-          })
        dispatch({
          type: 'UPDATE_NOTE',
          note: note
