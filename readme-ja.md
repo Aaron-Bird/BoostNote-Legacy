@@ -25,7 +25,7 @@
 
 ## slack group
 私たちにはslack groupもあります！世界中のプログラマー達と、Boostnoteについてディスカッションをしましょう！ <br>
-[こちらから](https://boostnote-group.slack.com/shared_invite/MTgwMDk4NzMzMDg4LTE0OTQzMzQwNTgtYTM2Yzg1ZmQ0MA)
+[こちらから](https://boostnote-group.slack.com/shared_invite/MTg0MzM5MTE3MzQ0LTE0OTUwOTQxMTItNDVkM2MzNmUxOQ)
 
 ## More Information
 * Website: http://boostnote.io/
