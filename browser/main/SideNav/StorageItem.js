@@ -173,7 +173,7 @@ class StorageItem extends React.Component {
        })
        hashHistory.push({
          pathname: location.pathname,
-         query: {key: note.storage + '-' + note.key}
+         query: {key: `${note.storage}-${note.key}`}
        })
      })
   }
