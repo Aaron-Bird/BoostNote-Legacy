@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './MarkdownNoteDetail.styl'
 import MarkdownEditor from 'browser/components/MarkdownEditor'
+import TodoListPercentage from 'browser/components/TodoListPercentage'
 import StarButton from './StarButton'
 import TagSelect from './TagSelect'
 import FolderSelect from './FolderSelect'
@@ -93,6 +94,24 @@ class MarkdownNoteDetail extends React.Component {
     title = markdown.strip(title)
 
     return title
+  }
+
+  getPercentageOfCompleteTodo (noteContent) {
+    let splitted = noteContent.split('\n')
+    let numberOfTodo = 0
+    let numberOfCompletedTodo = 0
+
+    splitted.forEach((line) => {
+      let trimmedLine = line.trim()
+      if (trimmedLine.match(/^[\+\-\*] \[\s|x\] ./)) {
+        numberOfTodo++
+      }
+      if (trimmedLine.match(/^[\+\-\*] \[x\] ./)) {
+        numberOfCompletedTodo++
+      }
+    })
+
+    return Math.floor(numberOfCompletedTodo / numberOfTodo * 100)
   }
 
   handleChange (e) {
@@ -262,6 +281,9 @@ class MarkdownNoteDetail extends React.Component {
               ref='tags'
               value={this.state.note.tags}
               onChange={(e) => this.handleChange(e)}
+            />
+            <TodoListPercentage
+              percentageOfTodo={this.getPercentageOfCompleteTodo(note.content)}
             />
           </div>
           <div styleName='info-right'>
