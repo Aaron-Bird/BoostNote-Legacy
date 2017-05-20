@@ -68,15 +68,20 @@ class MarkdownNoteDetail extends React.Component {
     let title = null
     let isMarkdownInCode = false
 
-    for (let i = 0; i < splitted.length; i++) {
-      let trimmedLine = splitted[i].trim()
+    splitted.some((line, index) => {
+      let trimmedLine = line.trim()
+      let trimmedNextLine = splitted[index + 1] === undefined ? '' : splitted[index + 1].trim()
       if (trimmedLine.match('```')) {
         isMarkdownInCode = !isMarkdownInCode
-      } else if (isMarkdownInCode === false && trimmedLine.match(/^# +/)) {
-        title = trimmedLine.substring(1, trimmedLine.length).trim()
-        break
+      } else if (isMarkdownInCode === false && (trimmedLine.match(/^# +/) || trimmedNextLine.match('='))) {
+        if (trimmedNextLine.match('=')) {
+          title = trimmedLine.substring(0, trimmedLine.length).trim()
+        } else {
+          title = trimmedLine.substring(1, trimmedLine.length).trim()
+        }
+        return true
       }
-    }
+    })
 
     if (title == null) {
       for (let i = 0; i < splitted.length; i++) {
