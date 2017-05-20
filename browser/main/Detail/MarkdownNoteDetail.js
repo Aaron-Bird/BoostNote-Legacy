@@ -67,7 +67,7 @@ class MarkdownNoteDetail extends React.Component {
     let title = null
     let isMarkdownInCode = false
 
-    splitted.forEach((line, index) => {
+    splitted.some((line, index) => {
       let trimmedLine = line.trim()
       let trimmedNextLine = splitted[index + 1] === undefined ? '' : splitted[index + 1].trim()
       if (trimmedLine.match('```')) {
@@ -78,7 +78,7 @@ class MarkdownNoteDetail extends React.Component {
         } else {
           title = trimmedLine.substring(1, trimmedLine.length).trim()
         }
-        return
+        return true
       }
     })
 
