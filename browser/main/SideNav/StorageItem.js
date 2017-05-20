@@ -7,6 +7,7 @@ import CreateFolderModal from 'browser/main/modals/CreateFolderModal'
 import RenameFolderModal from 'browser/main/modals/RenameFolderModal'
 import dataApi from 'browser/main/lib/dataApi'
 import StorageItemChild from 'browser/components/StorageItem'
+import eventEmitter from 'browser/main/lib/eventEmitter'
 
 const { remote } = require('electron')
 const { Menu, MenuItem, dialog } = remote
@@ -131,8 +132,54 @@ class StorageItem extends React.Component {
     }
   }
 
+  handleDragEnter (e) {
+    e.dataTransfer.setData('defaultColor', e.target.style.backgroundColor)
+    e.target.style.backgroundColor = 'rgba(129, 130, 131, 0.08)'
+  }
+
+  handleDragLeave (e) {
+    e.target.style.opacity = '1'
+    e.target.style.backgroundColor = e.dataTransfer.getData('defaultColor')
+  }
+
+  handleDrop (e, storage, folder, dispatch, location) {
+    e.target.style.opacity = '1'
+    e.target.style.backgroundColor = e.dataTransfer.getData('defaultColor')
+    const noteData = JSON.parse(e.dataTransfer.getData('note'))
+    const newNoteData = Object.assign({}, noteData, {storage: storage, folder: folder.key})
+    if (folder.key === noteData.folder) return
+    dataApi
+     .createNote(storage.key, newNoteData)
+     .then((note) => {
+       dataApi
+        .deleteNote(noteData.storage, noteData.key)
+        .then((data) => {
+          let dispatchHandler = () => {
+            dispatch({
+              type: 'DELETE_NOTE',
+              storageKey: data.storageKey,
+              noteKey: data.noteKey
+            })
+          }
+          eventEmitter.once('list:moved', dispatchHandler)
+          eventEmitter.emit('list:next')
+        })
+         .catch((err) => {
+           console.error(err)
+         })
+       dispatch({
+         type: 'UPDATE_NOTE',
+         note: note
+       })
+       hashHistory.push({
+         pathname: location.pathname,
+         query: {key: `${note.storage}-${note.key}`}
+       })
+     })
+  }
+
   render () {
-    let { storage, location, isFolded, data } = this.props
+    let { storage, location, isFolded, data, dispatch } = this.props
     let { folderNoteMap } = data
     let folderList = storage.folders.map((folder) => {
       let isActive = !!(location.pathname.match(new RegExp('\/storages\/' + storage.key + '\/folders\/' + folder.key)))
@@ -151,6 +198,9 @@ class StorageItem extends React.Component {
           folderColor={folder.color}
           isFolded={isFolded}
           noteCount={noteCount}
+          handleDrop={(e) => this.handleDrop(e, storage, folder, dispatch, location)}
+          handleDragEnter={this.handleDragEnter}
+          handleDragLeave={this.handleDragLeave}
         />
       )
     })
