@@ -19,16 +19,14 @@ export function findNoteTitle (value) {
   })
 
   if (title == null) {
-    for (let i = 0; i < splitted.length; i++) {
-      let trimmedLine = splitted[i].trim()
+    title = ''
+    splitted.some((line, index) => {
+      let trimmedLine = splitted[index].trim()
       if (trimmedLine.length > 0) {
         title = trimmedLine
-        break
+        return true
       }
-    }
-    if (title == null) {
-      title = ''
-    }
+    })
   }
 
   return title
