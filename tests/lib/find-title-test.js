@@ -13,7 +13,7 @@ test('findNoteTitle#find  should return a correct title (string)', t => {
     ['# hoge_hoge_hoge', 'hoge_hoge_hoge'],
     ['```\n# hoge\n```\n# fuga', 'fuga'],
     ['```\n# hoge\n```', '```'],
-    ['hoge', 'hoge'],
+    ['hoge', 'hoge']
   ]
 
   testCases.forEach(testCase => {
