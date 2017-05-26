@@ -102,6 +102,7 @@
     "grunt-electron-installer": "^1.2.0",
     "history": "^1.17.0",
     "jsdom": "^9.4.2",
+    "markdown-it-imsize": "^2.0.1",
     "merge-stream": "^1.0.0",
     "nib": "^1.1.0",
     "react-color": "^2.2.2",
