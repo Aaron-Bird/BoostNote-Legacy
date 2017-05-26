@@ -25,7 +25,7 @@
 
 ## Slack Group
 Let's talk about Boostnote's great features, new feature requests and things like Japanese gourmet. 🍣 <br>
-[Join us](https://boostnote-group.slack.com/shared_invite/MTg0MzM5MTE3MzQ0LTE0OTUwOTQxMTItNDVkM2MzNmUxOQ)
+[Join us](https://join.slack.com/boostnote-group/shared_invite/MTg5MjAyMjc4MTM1LTE0OTU3NzQ1NDktMTMxZDQ3ZTAxZg)
 
 ## More Information
 * [Website](https://boostnote.io)
