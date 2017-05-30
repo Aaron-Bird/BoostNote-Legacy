@@ -214,7 +214,7 @@ class NoteList extends React.Component {
     }
 
     if (location.pathname.match(/\/searched/)) {
-      return searchFromNotes(this.props.data, document.getElementsByClassName('TopBar__control-search-input___browser-main-TopBar-')[0].childNodes[0].value)
+      return searchFromNotes(this.props.data, document.getElementsByClassName('searchInput')[0].value)
     }
 
     let storageKey = params.storageKey

@@ -218,6 +218,7 @@ class TopBar extends React.Component {
                 onChange={(e) => this.handleSearchChange(e)}
                 placeholder='Search'
                 type='text'
+                className='searchInput'
               />
             </div>
             {this.state.search > 0 &&
