@@ -270,7 +270,7 @@ table
         border-right solid 1px borderColor
 
 themeDarkBackground = darken(#21252B, 10%)
-themeDarkText = #DDDDDD
+themeDarkText = #f9f9f9
 themeDarkBorder = lighten(themeDarkBackground, 20%)
 themeDarkPreview = $ui-dark-noteDetail-backgroundColor
 themeDarkTableOdd = themeDarkPreview
@@ -288,8 +288,9 @@ body[data-theme="dark"]
     background-color alpha(lighten(brandColor, 30%), 0.2) !important
 
   code
+    color #EA6730
     border-color darken(themeDarkBorder, 10%)
-    background-color lighten(themeDarkPreview, 10%)
+    background-color lighten(themeDarkPreview, 5%)
 
   pre
     border-color lighten(#21252B, 20%)
