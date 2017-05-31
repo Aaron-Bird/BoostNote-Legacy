@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-export default function searchFromNotes(data, search){
+export default function searchFromNotes (data, search) {
   let notes = data.noteMap.map((note) => note)
   if (search.trim().length === 0) return []
   let searchBlocks = search.split(' ')
@@ -14,7 +14,7 @@ export default function searchFromNotes(data, search){
   return notes
 }
 
-function findByTag(notes, block){
+function findByTag (notes, block) {
   const tag = block.match(/#(.+)/)[1]
   let regExp = new RegExp(_.escapeRegExp(tag), 'i')
   return notes.filter((note) => {
@@ -25,7 +25,7 @@ function findByTag(notes, block){
   })
 }
 
-function findByWord(notes, block){
+function findByWord (notes, block) {
   let regExp = new RegExp(_.escapeRegExp(block), 'i')
   return notes.filter((note) => {
     if (_.isArray(note.tags) && note.tags.some((_tag) => {
