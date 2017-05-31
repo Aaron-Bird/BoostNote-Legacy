@@ -22,7 +22,7 @@ test.afterEach.always(async t => {
   await t.context.app.stop()
 })
 
-test(async t => {
+test('Measure BrowserWindow status with await', async t => {
   const app = t.context.app
   await app.client.waitUntilWindowLoaded()
 
@@ -36,4 +36,10 @@ test(async t => {
   const {width, height} = await win.getBounds()
   t.true(width > 0)
   t.true(height > 0)
+})
+
+test('', async t => {
+  const app = t.context.app
+  await app.client.click('.TopBar__control-newPostButton___browser-main-TopBar-')
+  await app.client.click('.NewNoteModal__close-mark___browser-main-modals-')
 })
