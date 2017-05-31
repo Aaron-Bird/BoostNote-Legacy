@@ -6,8 +6,7 @@ export default function searchFromNotes(data, search){
   let searchBlocks = search.split(' ')
   searchBlocks.forEach((block) => {
     if (block.match(/^#.+/)) {
-      const tag = block.match(/#(.+)/)[1]
-      notes = findByTag(notes, tag)
+      notes = findByTag(notes, block)
     } else {
       notes = findByWord(notes, block)
     }
@@ -15,7 +14,8 @@ export default function searchFromNotes(data, search){
   return notes
 }
 
-function findByTag(notes, tag){
+function findByTag(notes, block){
+  const tag = block.match(/#(.+)/)[1]
   let regExp = new RegExp(_.escapeRegExp(tag), 'i')
   return notes.filter((note) => {
     if (!_.isArray(note.tags)) return false
