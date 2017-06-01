@@ -2,7 +2,9 @@ import test from 'ava'
 import {Application} from 'spectron'
 import path from 'path'
 
-test.beforeEach(async t => {
+let app = null
+
+test.before(async t => {
   const boostnotePath = ((platform) => {
     switch (platform) {
       case 'darwin':
@@ -11,19 +13,18 @@ test.beforeEach(async t => {
         return path.join('..', '..', 'dist', 'Boostnote-linux-x64', 'Boostnote')
     }
   })(process.platform)
-  t.context.app = new Application({
+  app = new Application({
     path: boostnotePath
   })
 
-  await t.context.app.start()
+  await app.start()
 })
 
-test.afterEach.always(async t => {
-  await t.context.app.stop()
+test.after.always(async t => {
+  await app.stop()
 })
 
 test('Measure BrowserWindow status with await', async t => {
-  const app = t.context.app
   await app.client.waitUntilWindowLoaded()
 
   const win = app.browserWindow
@@ -38,8 +39,7 @@ test('Measure BrowserWindow status with await', async t => {
   t.true(height > 0)
 })
 
-test('', async t => {
-  const app = t.context.app
+test('Modal can be opened and closed', async t => {
   await app.client.click('.TopBar__control-newPostButton___browser-main-TopBar-')
   await app.client.click('.NewNoteModal__close-mark___browser-main-modals-')
 })
