@@ -5,7 +5,7 @@ import path from 'path'
 let app = null
 
 const modalOpenButton = '.TopBar__control-newPostButton___browser-main-TopBar-'
-const modalCloseButton = '.NewNoteModal__close-mark___browser-main-modals-'
+const modalCloseButton = '.ModalEscButton__esc-mark___browser-components-'
 const noteCreateButton = '.NewNoteModal__control-button___browser-main-modals-'
 const currentNoteItem = '.NoteItem__item--active___browser-components-'
 const noteDetail = '.MarkdownNoteDetail__body___browser-main-Detail-'
@@ -30,7 +30,7 @@ test.after.always(async t => {
   await app.stop()
 })
 
-test('Measure BrowserWindow status with await', async t => {
+test.serial('Measure BrowserWindow status with await', async t => {
   await app.client.waitUntilWindowLoaded()
 
   const win = app.browserWindow
