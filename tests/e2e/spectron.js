@@ -2,6 +2,7 @@ import test from 'ava'
 import {Application} from 'spectron'
 import path from 'path'
 
+const sleep = time => new Promise(resolve => setTimeout(resolve, time))
 let app = null
 
 const modalOpenButton = '.TopBar__control-newPostButton___browser-main-TopBar-'
@@ -62,4 +63,9 @@ test.serial('NoteList can be clicked', async t => {
 test.serial('A sentence can be inputted', async t => {
   const input = 'this is a text'
   await app.client.click(noteDetail).webContents.insertText(input)
+  const editorValue = await app.client.click(noteDetail)
+                      .webContents.selectAll()
+                      .webContents.copy()
+                      .electron.clipboard.readText()
+  t.is(editorValue, input)
 })
