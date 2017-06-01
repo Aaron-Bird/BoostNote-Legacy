@@ -4,6 +4,12 @@ import path from 'path'
 
 let app = null
 
+const modalOpenButton = '.TopBar__control-newPostButton___browser-main-TopBar-'
+const modalCloseButton = '.NewNoteModal__close-mark___browser-main-modals-'
+const noteCreateButton = '.NewNoteModal__control-button___browser-main-modals-'
+const currentNoteItem = '.NoteItem__item--active___browser-components-'
+const noteDetail = '.MarkdownNoteDetail__body___browser-main-Detail-'
+
 test.before(async t => {
   const boostnotePath = ((platform) => {
     switch (platform) {
@@ -39,7 +45,21 @@ test('Measure BrowserWindow status with await', async t => {
   t.true(height > 0)
 })
 
-test('Modal can be opened and closed', async t => {
-  await app.client.click('.TopBar__control-newPostButton___browser-main-TopBar-')
-  await app.client.click('.NewNoteModal__close-mark___browser-main-modals-')
+test.serial('Modal can be opened and closed', async t => {
+  await app.client.click(modalOpenButton)
+  await app.client.click(modalCloseButton)
+})
+
+test.serial('Modal can be opened and a note can be created', async t => {
+  await app.client.click(modalOpenButton)
+  await app.client.click(noteCreateButton)
+})
+
+test.serial('NoteList can be clicked', async t => {
+  await app.client.click(currentNoteItem)
+})
+
+test.serial('A sentence can be inputted', async t => {
+  const input = 'this is a text'
+  await app.client.click(noteDetail).webContents.insertText(input)
 })
