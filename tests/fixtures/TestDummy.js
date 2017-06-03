@@ -175,5 +175,6 @@ module.exports = {
   dummyFolder,
   dummyBoostnoteJSONData,
   dummyStorage,
-  dummyLegacyStorage
+  dummyLegacyStorage,
+  dummyNote
 }
