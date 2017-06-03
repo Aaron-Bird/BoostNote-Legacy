@@ -3,14 +3,14 @@ import searchFromNotes from 'browser/lib/search'
 import { dummyNote } from '../fixtures/TestDummy'
 import _ from 'lodash'
 
-const pickContents = (notes) => notes.map((note) => { return note.content } )
+const pickContents = (notes) => notes.map((note) => { return note.content })
 
 let noteList = { noteMap: [] }
 let note1, note2
 
 test.before(t => {
-  const data1 = { type: 'MARKDOWN_NOTE', content: 'content1', tags: ['tag1'], }
-  const data2 = { type: 'MARKDOWN_NOTE', content: 'content1\ncontent2', tags: ['tag1', 'tag2'], }
+  const data1 = { type: 'MARKDOWN_NOTE', content: 'content1', tags: ['tag1'] }
+  const data2 = { type: 'MARKDOWN_NOTE', content: 'content1\ncontent2', tags: ['tag1', 'tag2'] }
   note1 = dummyNote(data1)
   note2 = dummyNote(data2)
 
@@ -19,7 +19,7 @@ test.before(t => {
 
 test('it can find notes by tags or words', t => {
   // [input, expected content (Array)]
-  const testCases= [
+  const testCases = [
     ['#tag1', [note1.content, note2.content]],
     ['#tag1 #tag2', [note2.content]],
     ['#tag1 #tag2 #tag3', []],
