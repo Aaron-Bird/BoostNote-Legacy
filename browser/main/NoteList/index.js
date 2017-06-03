@@ -8,6 +8,7 @@ import dataApi from 'browser/main/lib/dataApi'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import NoteItem from 'browser/components/NoteItem'
 import NoteItemSimple from 'browser/components/NoteItemSimple'
+import searchFromNotes from 'browser/lib/search'
 
 const { remote } = require('electron')
 const { Menu, MenuItem, dialog } = remote
@@ -210,6 +211,10 @@ class NoteList extends React.Component {
     if (location.pathname.match(/\/starred/)) {
       return data.starredSet.toJS()
         .map((uniqueKey) => data.noteMap.get(uniqueKey))
+    }
+
+    if (location.pathname.match(/\/searched/)) {
+      return searchFromNotes(this.props.data, document.getElementsByClassName('searchInput')[0].value)
     }
 
     let storageKey = params.storageKey
