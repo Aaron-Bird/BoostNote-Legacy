@@ -28,7 +28,6 @@ function resolveStorageNotes (storage) {
         return data
       } catch (err) {
         console.error(notePath)
-        throw err
       }
     })
 

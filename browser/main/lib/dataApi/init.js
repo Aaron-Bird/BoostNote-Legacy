@@ -41,7 +41,7 @@ function init () {
           .then((notes) => {
             let unknownCount = 0
             notes.forEach((note) => {
-              if (!storage.folders.some((folder) => note.folder === folder.key)) {
+              if (note && !storage.folders.some((folder) => note.folder === folder.key)) {
                 unknownCount++
                 storage.folders.push({
                   key: note.folder,
