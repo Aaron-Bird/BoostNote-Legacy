@@ -4,7 +4,7 @@
 * npm: 4.x
 * node: 7.x
 
-You have to use `npm v4.x`, `v5.x` is not supported.
+You should use `npm v4.x` because `$ grand pre-build` fails on `v5.x`.
 
 ## Development
 
