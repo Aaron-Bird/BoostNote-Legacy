@@ -330,6 +330,7 @@ class MarkdownNoteDetail extends React.Component {
             styleName='body-noteEditor'
             config={config}
             value={this.state.note.content}
+            storageKey={this.state.note.storage}
             onChange={(e) => this.handleChange(e)}
             ignorePreviewPointerEvents={this.props.ignorePreviewPointerEvents}
           />

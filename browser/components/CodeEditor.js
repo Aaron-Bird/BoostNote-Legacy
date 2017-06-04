@@ -2,6 +2,7 @@ import React, { PropTypes } from 'react'
 import _ from 'lodash'
 import CodeMirror from 'codemirror'
 import path from 'path'
+import copyImage from 'browser/main/lib/dataApi/copyImage'
 
 CodeMirror.modeURL = '../node_modules/codemirror/mode/%N/%N.js'
 
@@ -184,13 +185,16 @@ export default class CodeEditor extends React.Component {
     e.preventDefault()
     const imagePath = e.dataTransfer.files[0].path
     const filename = path.basename(imagePath)
-    const imageMd = `![${encodeURI(filename)}](${encodeURI(imagePath)})`
-    this.insertImage(imageMd)
+
+    copyImage(imagePath, this.props.storageKey).then((imagePathInTheStorage) => {
+      const imageMd = `![${encodeURI(filename)}](${imagePathInTheStorage})`
+      this.insertImageMd(imageMd)
+    })
   }
 
-  insertImage (imageMd) {
-    const textarea = this.editor.getInputField()
-    textarea.value = textarea.value.substr(0, textarea.selectionStart) + imageMd + textarea.value.substr(textarea.selectionEnd)
+  insertImageMd (imageMd) {
+    const cm = this.editor
+    cm.setValue(cm.getValue() + imageMd)
   }
 
   render () {
