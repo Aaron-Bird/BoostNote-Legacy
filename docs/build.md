@@ -1,5 +1,11 @@
 # Build
 
+## Environments
+* npm: 4.x
+* node: 7.x
+
+You should use `npm v4.x` because `$ grand pre-build` fails on `v5.x`.
+
 ## Development
 
 We use Webpack HMR to develop Boostnote.
