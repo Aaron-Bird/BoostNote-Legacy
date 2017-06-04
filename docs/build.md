@@ -1,5 +1,11 @@
 # Build
 
+## Environments
+* npm: 4.x
+* node: 7.x
+
+You have to use `npm v4.x`, `v5.x` is not supported.
+
 ## Development
 
 We use Webpack HMR to develop Boostnote.
