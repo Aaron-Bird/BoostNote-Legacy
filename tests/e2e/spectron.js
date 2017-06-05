@@ -2,16 +2,7 @@ import test from 'ava'
 import {Application} from 'spectron'
 import path from 'path'
 
-const sleep = time => new Promise(resolve => setTimeout(resolve, time))
-let app = null
-
-const modalOpenButton = '.TopBar__control-newPostButton___browser-main-TopBar-'
-const modalCloseButton = '.ModalEscButton__esc-mark___browser-components-'
-const noteCreateButton = '.NewNoteModal__control-button___browser-main-modals-'
-const currentNoteItem = '.NoteItem__item--active___browser-components-'
-const noteDetail = '.MarkdownNoteDetail__body___browser-main-Detail-'
-
-test.before(async t => {
+test.beforeEach(async t => {
   const boostnotePath = ((platform) => {
     switch (platform) {
       case 'darwin':
@@ -20,18 +11,19 @@ test.before(async t => {
         return path.join('..', '..', 'dist', 'Boostnote-linux-x64', 'Boostnote')
     }
   })(process.platform)
-  app = new Application({
+  t.context.app = new Application({
     path: boostnotePath
   })
 
-  await app.start()
+  await t.context.app.start()
 })
 
-test.after.always(async t => {
-  await app.stop()
+test.afterEach.always(async t => {
+  await t.context.app.stop()
 })
 
-test.serial('Measure BrowserWindow status with await', async t => {
+test(async t => {
+  const app = t.context.app
   await app.client.waitUntilWindowLoaded()
 
   const win = app.browserWindow
@@ -44,28 +36,4 @@ test.serial('Measure BrowserWindow status with await', async t => {
   const {width, height} = await win.getBounds()
   t.true(width > 0)
   t.true(height > 0)
-})
-
-test.serial('Modal can be opened and closed', async t => {
-  await app.client.click(modalOpenButton)
-  await app.client.click(modalCloseButton)
-})
-
-test.serial('Modal can be opened and a note can be created', async t => {
-  await app.client.click(modalOpenButton)
-  await app.client.click(noteCreateButton)
-})
-
-test.serial('NoteList can be clicked', async t => {
-  await app.client.click(currentNoteItem)
-})
-
-test.serial('A sentence can be inputted', async t => {
-  const input = 'this is a text'
-  await app.client.click(noteDetail).webContents.insertText(input)
-  const editorValue = await app.client.click(noteDetail)
-                      .webContents.selectAll()
-                      .webContents.copy()
-                      .electron.clipboard.readText()
-  t.is(editorValue, input)
 })
