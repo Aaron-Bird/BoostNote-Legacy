@@ -48,21 +48,23 @@ code {
 }
 
 .clipboardButton {
-  color: #939395;
-  fill: #939395;
-  border-radius: 17px;
-  font-size: 14px;
-  margin: 13px 7px;
-  padding-top: 5px;
+  color: rgba(147,147,149,0.8);;
+  fill: rgba(147,147,149,1);;
+  border-radius: 50%;
+  margin: 7px;
   border: none;
   background-color: transparent;
   outline: none;
-  height: 34px;
-  width: 34px;
+  height: 32px;
+  width: 32px;
+  cursor: pointer;
 }
 
 .clipboardButton:hover {
-  background-color: #D9D9D9;
+  transition: 0.2s;
+  color: #939395;
+  fill: #939395;
+  background-color: rgba(0,0,0,0.1);
 }
 
 h1, h2 {
@@ -281,7 +283,7 @@ export default class MarkdownPreview extends React.Component {
       CodeMirror.requireMode(syntax.mode, () => {
         let content = htmlTextHelper.decodeEntities(el.innerHTML)
         const copyIcon = document.createElement('i')
-        copyIcon.innerHTML = '<button class="clipboardButton"><svg width="14" height="14" viewBox="0 0 1792 1792" ><path d="M768 1664h896v-640h-416q-40 0-68-28t-28-68v-416h-384v1152zm256-1440v-64q0-13-9.5-22.5t-22.5-9.5h-704q-13 0-22.5 9.5t-9.5 22.5v64q0 13 9.5 22.5t22.5 9.5h704q13 0 22.5-9.5t9.5-22.5zm256 672h299l-299-299v299zm512 128v672q0 40-28 68t-68 28h-960q-40 0-68-28t-28-68v-160h-544q-40 0-68-28t-28-68v-1344q0-40 28-68t68-28h1088q40 0 68 28t28 68v328q21 13 36 28l408 408q28 28 48 76t20 88z"/></svg></button>'
+        copyIcon.innerHTML = '<button class="clipboardButton"><svg width="13" height="13" viewBox="0 0 1792 1792" ><path d="M768 1664h896v-640h-416q-40 0-68-28t-28-68v-416h-384v1152zm256-1440v-64q0-13-9.5-22.5t-22.5-9.5h-704q-13 0-22.5 9.5t-9.5 22.5v64q0 13 9.5 22.5t22.5 9.5h704q13 0 22.5-9.5t9.5-22.5zm256 672h299l-299-299v299zm512 128v672q0 40-28 68t-68 28h-960q-40 0-68-28t-28-68v-160h-544q-40 0-68-28t-28-68v-1344q0-40 28-68t68-28h1088q40 0 68 28t28 68v328q21 13 36 28l408 408q28 28 48 76t20 88z"/></svg></button>'
         copyIcon.onclick = (e) => {
           copy(content)
         }
