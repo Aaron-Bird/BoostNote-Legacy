@@ -332,7 +332,8 @@ class NoteList extends React.Component {
       dialog.showMessageBox(remote.getCurrentWindow(), {
         type: 'warning',
         message: 'Sorry!',
-        detail: 'md/text import is available only a markdown note.'
+        detail: 'md/text import is available only a markdown note.',
+        buttons: ['OK', 'Cancel']
       })
     }
   }
