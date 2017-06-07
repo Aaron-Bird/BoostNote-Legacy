@@ -15,6 +15,7 @@ import StatusBar from '../StatusBar'
 import context from 'browser/lib/context'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import _ from 'lodash'
+import { findNoteTitle } from 'browser/lib/findNoteTitle'
 
 function pass (name) {
   switch (name) {
@@ -75,41 +76,13 @@ class SnippetNoteDetail extends React.Component {
     if (this.saveQueue != null) this.saveNow()
   }
 
-  findTitle (value) {
-    let splitted = value.split('\n')
-    let title = null
-
-    for (let i = 0; i < splitted.length; i++) {
-      let trimmedLine = splitted[i].trim()
-      if (trimmedLine.match(/^# .+/)) {
-        title = trimmedLine.substring(1, trimmedLine.length).trim()
-        break
-      }
-    }
-
-    if (title == null) {
-      for (let i = 0; i < splitted.length; i++) {
-        let trimmedLine = splitted[i].trim()
-        if (trimmedLine.length > 0) {
-          title = trimmedLine
-          break
-        }
-      }
-      if (title == null) {
-        title = ''
-      }
-    }
-
-    return title
-  }
-
   handleChange (e) {
     let { note } = this.state
 
     note.tags = this.refs.tags.value
     note.description = this.refs.description.value
     note.updatedAt = new Date()
-    note.title = this.findTitle(note.description)
+    note.title = findNoteTitle(note.description)
 
     this.setState({
       note
