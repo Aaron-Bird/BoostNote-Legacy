@@ -216,6 +216,7 @@ class UiTab extends React.Component {
               >
                 <option value='sublime'>default</option>
                 <option value='vim'>vim</option>
+                <option value='emacs'>emacs</option>
               </select>
               <span styleName='note-for-keymap'>Please reload boostnote after you change the keymap</span>
             </div>
