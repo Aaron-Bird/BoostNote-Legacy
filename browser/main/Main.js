@@ -12,6 +12,7 @@ import ConfigManager from 'browser/main/lib/ConfigManager'
 import modal from 'browser/main/lib/modal'
 import InitModal from 'browser/main/modals/InitModal'
 import mixpanel from 'browser/main/lib/mixpanel'
+import mobileAnalytics from 'browser/main/lib/awsMobileAnalyticsConfig'
 
 function focused () {
   mixpanel.track('MAIN_FOCUSED')
@@ -20,6 +21,8 @@ function focused () {
 class Main extends React.Component {
   constructor (props) {
     super(props)
+
+    mobileAnalytics.initAwsMobileAnalytics()
 
     let { config } = props
 
