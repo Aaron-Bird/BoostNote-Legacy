@@ -12,9 +12,9 @@ const mobileAnalyticsClient = new AMA.Manager({
 })
 
 function initAwsMobileAnalytics () {
-  AWS.config.credentials.get(function(err) {
+  AWS.config.credentials.get(function (err) {
     if (!err) {
-      console.log("Cognito Identity ID: " + AWS.config.credentials.identityId)
+      console.log('Cognito Identity ID: ' + AWS.config.credentials.identityId)
     }
   })
   recordStaticCustomEvent()
