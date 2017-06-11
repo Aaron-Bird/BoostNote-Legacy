@@ -203,6 +203,7 @@ class NoteList extends React.Component {
 
   getNotes () {
     let { data, params, location } = this.props
+    let { router } = this.context
 
     if (location.pathname.match(/\/home/)) {
       return data.noteMap.map((note) => note)
@@ -214,7 +215,11 @@ class NoteList extends React.Component {
     }
 
     if (location.pathname.match(/\/searched/)) {
-      return searchFromNotes(this.props.data, document.getElementsByClassName('searchInput')[0].value)
+      const searchInputText = document.getElementsByClassName('searchInput')[0].value
+      if (searchInputText === '') {
+        router.push('/home')
+      }
+      return searchFromNotes(this.props.data, searchInputText)
     }
 
     let storageKey = params.storageKey
