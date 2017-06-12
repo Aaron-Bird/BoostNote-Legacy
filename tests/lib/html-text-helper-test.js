@@ -12,7 +12,8 @@ test('htmlTextHelper#decodeEntities should return encoded text (string)', t => {
     ['var test = &apos;test&apos;', 'var test = \'test\''],
     ['&lt;a href=&apos;https://boostnote.io&apos;&gt;Boostnote', '<a href=\'https://boostnote.io\'>Boostnote'],
     ['&lt;\\\\?php\n var = &apos;hoge&apos;;', '<\\\\?php\n var = \'hoge\';'],
-    ['&amp;', '&']
+    ['&amp;', '&'],
+    ['a&#36;&apos;', 'a\\$\'']
   ]
 
   testCases.forEach(testCase => {
@@ -27,7 +28,8 @@ test('htmlTextHelper#decodeEntities() should return decoded text (string)', t =>
     ['<a href=', '&lt;a href='],
     ['var test = \'test\'', 'var test = &apos;test&apos;'],
     ['<a href=\'https://boostnote.io\'>Boostnote', '&lt;a href=&apos;https://boostnote.io&apos;&gt;Boostnote'],
-    ['<?php\n var = \'hoge\';', '&lt;&#63;php\n var = &apos;hoge&apos;;']
+    ['<?php\n var = \'hoge\';', '&lt;&#63;php\n var = &apos;hoge&apos;;'],
+    ['a$\'','a&#36;&apos;']
   ]
 
   testCases.forEach(testCase => {
