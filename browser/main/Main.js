@@ -22,7 +22,9 @@ class Main extends React.Component {
   constructor (props) {
     super(props)
 
-    mobileAnalytics.initAwsMobileAnalytics()
+    if (process.env.NODE_ENV === 'production') {
+      mobileAnalytics.initAwsMobileAnalytics()
+    }
 
     let { config } = props
 
