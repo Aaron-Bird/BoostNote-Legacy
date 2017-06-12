@@ -14,7 +14,7 @@ export function decodeEntities (text) {
     ['lt', '<'],
     ['gt', '>'],
     ['#63', '\\?'],
-    ['#36', '\\$'],
+    ['#36', '\\$']
   ]
 
   for (var i = 0, max = entities.length; i < max; ++i) {
