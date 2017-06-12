@@ -13,7 +13,8 @@ export function decodeEntities (text) {
     ['amp', '&'],
     ['lt', '<'],
     ['gt', '>'],
-    ['#63', '\\?']
+    ['#63', '\\?'],
+    ['#36', '\\$']
   ]
 
   for (var i = 0, max = entities.length; i < max; ++i) {
@@ -28,7 +29,8 @@ export function encodeEntities (text) {
     ['\'', 'apos'],
     ['<', 'lt'],
     ['>', 'gt'],
-    ['\\?', '#63']
+    ['\\?', '#63'],
+    ['\\$', '#36']
   ]
 
   entities.forEach((entity) => {
