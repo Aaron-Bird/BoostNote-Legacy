@@ -11,6 +11,8 @@ import NoteItemSimple from 'browser/components/NoteItemSimple'
 import searchFromNotes from 'browser/lib/search'
 import fs from 'fs'
 import { hashHistory } from 'react-router'
+import markdown from 'browser/lib/markdown'
+import { findNoteTitle } from 'browser/lib/findNoteTitle'
 
 const { remote } = require('electron')
 const { Menu, MenuItem, dialog } = remote
@@ -392,11 +394,11 @@ class NoteList extends React.Component {
       filepaths.forEach((filepath) => {
         fs.readFile(filepath, (err, data) => {
           if (err) throw Error('File reading error: ', err)
-          // TODO: fill the title
+          const content = data.toString()
           const newNote = {
-            content: data.toString(),
+            content: content,
             folder: folderKey,
-            title: '',
+            title: markdown.strip(findNoteTitle(content)),
             type: 'MARKDOWN_NOTE'
           }
           dataApi.createNote(storageKey, newNote)
