@@ -377,7 +377,7 @@ class NoteList extends React.Component {
 
     const options = {
       filters: [
-        { name: 'Documents', extensions: ['md', 'txt']}
+        { name: 'Documents', extensions: ['md', 'txt'] }
       ],
       properties: ['openFile', 'multiSelections']
     }
