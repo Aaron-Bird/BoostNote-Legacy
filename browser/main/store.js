@@ -24,7 +24,8 @@ function data (state = defaultDataMap(), action) {
         state.storageMap.set(storage.key, storage)
       })
 
-      action.notes.forEach((note) => {
+      action.notes.some((note) => {
+        if (note === undefined) return true
         let uniqueKey = note.storage + '-' + note.key
         let folderKey = note.storage + '-' + note.folder
         state.noteMap.set(uniqueKey, note)
