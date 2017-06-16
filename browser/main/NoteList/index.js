@@ -9,6 +9,10 @@ import ConfigManager from 'browser/main/lib/ConfigManager'
 import NoteItem from 'browser/components/NoteItem'
 import NoteItemSimple from 'browser/components/NoteItemSimple'
 import searchFromNotes from 'browser/lib/search'
+import fs from 'fs'
+import { hashHistory } from 'react-router'
+import markdown from 'browser/lib/markdown'
+import { findNoteTitle } from 'browser/lib/findNoteTitle'
 
 const { remote } = require('electron')
 const { Menu, MenuItem, dialog } = remote
@@ -42,6 +46,7 @@ class NoteList extends React.Component {
     this.alertIfSnippetHandler = () => {
       this.alertIfSnippet()
     }
+    this.importFromFileHandler = this.importFromFile.bind(this)
 
     this.jumpToTopHandler = () => {
       this.jumpToTop()
@@ -59,6 +64,7 @@ class NoteList extends React.Component {
     ee.on('list:isMarkdownNote', this.alertIfSnippetHandler)
     ee.on('list:top', this.jumpToTopHandler)
     ee.on('list:jumpToTop', this.jumpToTopHandler)
+    ee.on('import:file', this.importFromFileHandler)
   }
 
   componentWillReceiveProps (nextProps) {
@@ -80,6 +86,7 @@ class NoteList extends React.Component {
     ee.off('list:isMarkdownNote', this.alertIfSnippetHandler)
     ee.off('list:top', this.jumpToTopHandler)
     ee.off('list:jumpToTop', this.jumpToTopHandler)
+    ee.off('import:file', this.importFromFileHandler)
   }
 
   componentDidUpdate (prevProps) {
@@ -363,6 +370,51 @@ class NoteList extends React.Component {
   handleDragStart (e, note) {
     const noteData = JSON.stringify(note)
     e.dataTransfer.setData('note', noteData)
+  }
+
+  importFromFile () {
+    const { dispatch, location } = this.props
+
+    const options = {
+      filters: [
+        { name: 'Documents', extensions: ['md', 'txt'] }
+      ],
+      properties: ['openFile', 'multiSelections']
+    }
+
+    const targetIndex = _.findIndex(this.notes, (note) => {
+      return note !== null && `${note.storage}-${note.key}` === location.query.key
+    })
+
+    const storageKey = this.notes[targetIndex].storage
+    const folderKey = this.notes[targetIndex].folder
+
+    dialog.showOpenDialog(remote.getCurrentWindow(), options, (filepaths) => {
+      if (filepaths === undefined) return
+      filepaths.forEach((filepath) => {
+        fs.readFile(filepath, (err, data) => {
+          if (err) throw Error('File reading error: ', err)
+          const content = data.toString()
+          const newNote = {
+            content: content,
+            folder: folderKey,
+            title: markdown.strip(findNoteTitle(content)),
+            type: 'MARKDOWN_NOTE'
+          }
+          dataApi.createNote(storageKey, newNote)
+          .then((note) => {
+            dispatch({
+              type: 'UPDATE_NOTE',
+              note: note
+            })
+            hashHistory.push({
+              pathname: location.pathname,
+              query: {key: `${note.storage}-${note.key}`}
+            })
+          })
+        })
+      })
+    })
   }
 
   render () {
