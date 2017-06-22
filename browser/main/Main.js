@@ -160,26 +160,29 @@ class Main extends React.Component {
   handleFullScreenButton (e) {
     this.setState({ fullScreen: !this.state.fullScreen }, () => {
       const noteDetail = document.querySelector('.NoteDetail')
+      const noteList = document.querySelector('.NoteList')
       const mainBody = document.querySelector('#main-body')
 
       if (this.state.fullScreen) {
-        this.hideLeftLists(noteDetail, mainBody)
+        this.hideLeftLists(noteDetail, noteList, mainBody)
       } else {
-        this.showLeftLists(noteDetail, mainBody)
+        this.showLeftLists(noteDetail, noteList, mainBody)
       }
     })
   }
 
-  hideLeftLists (noteDetail, mainBody) {
+  hideLeftLists (noteDetail, noteList, mainBody) {
     this.state.noteDetailWidth = noteDetail.style.left
     this.state.mainBodyWidth = mainBody.style.left
     noteDetail.style.left = '0px'
     mainBody.style.left = '0px'
+    noteList.style.display = 'none'
   }
 
-  showLeftLists (noteDetail, mainBody) {
+  showLeftLists (noteDetail, noteList, mainBody) {
     noteDetail.style.left = this.state.noteDetailWidth
     mainBody.style.left = this.state.mainBodyWidth
+    noteList.style.display = 'inline'
   }
 
   render () {
