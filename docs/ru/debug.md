@@ -18,3 +18,8 @@ Boostnote - это программа, сделанная с помощью Elec
 
 ## Рекомендации
 * [Официальная документация Google Chrome об отладке](https://developer.chrome.com/devtools)
+
+---
+
+Special thanks:
+Translated by @AlexanderBelkevich
