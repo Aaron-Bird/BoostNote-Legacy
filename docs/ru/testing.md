@@ -13,3 +13,8 @@ $ yarn run test:e2e
 
 ### TravisCI
 Я установил тесты e2e, запущенные на travisCI, только в ветке master. Если вас это интересует, ознакомьтесь с файлом .travis.yml
+
+---
+
+Special thanks:
+Translated by @AlexanderBelkevich
