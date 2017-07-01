@@ -24,7 +24,7 @@ function copyImage (filePath, storageKey) {
       const basename = `${imageName}${imageExt}`
       const outputImage = fs.createWriteStream(path.join(targetStorage.path, 'images', basename))
       inputImage.pipe(outputImage)
-      resolve(`${encodeURI(targetStorage.path)}/images/${encodeURI(basename)}`)
+      resolve(`${targetStorage.path}/images/${basename}`)
     } catch (e) {
       return reject(e)
     }
