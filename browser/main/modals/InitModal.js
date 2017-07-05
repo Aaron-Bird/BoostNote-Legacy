@@ -103,7 +103,7 @@ class InitModal extends React.Component {
           } else {
             return dataApi
               .createFolder(data.storage.key, {
-                color: '#6AA5E9',
+                color: '#1278BD',
                 name: 'Default'
               })
               .then((_data) => {
@@ -122,19 +122,6 @@ class InitModal extends React.Component {
             notes: data.notes
           })
 
-          let defaultMarkdownNote = dataApi
-            .createNote(data.storage.key, {
-              type: 'MARKDOWN_NOTE',
-              folder: data.storage.folders[0].key,
-              title: 'Welcome to Boostnote :)',
-              content: '# Welcome to Boostnote :)\nThis is a markdown note.\n\nClick to edit this note.'
-            })
-            .then((note) => {
-              store.dispatch({
-                type: 'UPDATE_NOTE',
-                note: note
-              })
-            })
           let defaultSnippetNote = dataApi
             .createNote(data.storage.key, {
               type: 'SNIPPET_NOTE',
@@ -145,14 +132,27 @@ class InitModal extends React.Component {
                 {
                   name: 'example.html',
                   mode: 'html',
-                  content: '<html>\n<body>\n<h1 id=\'hello\'>Hello World</h1>\n</body>\n</html>'
+                  content: '<html>\n<body>\n<h1 id=\'hello\'>Enjoy Boostnote!</h1>\n</body>\n</html>'
                 },
                 {
                   name: 'example.js',
                   mode: 'javascript',
-                  content: 'var html = document.getElementById(\'hello\').innerHTML\n\nconsole.log(html)'
+                  content: 'var boostnote = document.getElementById(\'enjoy\').innerHTML\n\nconsole.log(boostnote)'
                 }
               ]
+            })
+            .then((note) => {
+              store.dispatch({
+                type: 'UPDATE_NOTE',
+                note: note
+              })
+            })
+          let defaultMarkdownNote = dataApi
+            .createNote(data.storage.key, {
+              type: 'MARKDOWN_NOTE',
+              folder: data.storage.folders[0].key,
+              title: 'Welcome to Boostnote!',
+              content: '# Welcome to Boostnote! \n### _Click to edit this note._\n\n---\n\nBoostnote is an *open source* note-taking app. \nRepository is published on [GitHub](https://github.com/BoostIO/Boostnote), and tweeting everyday on [@Boostnoteapp](https://twitter.com/boostnoteapp)!\n\n## Features \n- [x] No Internet and Registration Required. \n- [ ] Quick search and copy the content of note. `macOS: Cmd + Alt + S / windows: Super + Alt + S` \n- [ ] Markdown & Snippet note. \n- [ ] Available for `vim` and `emacs` mode. \n- [ ] Choose your favorite theme on UI, Editor and Code Block! \n--- \n\n- Copy Codeblock on Makrdown Preview.\n```javascript\nvar boostnote = document.getElementById(\'enjoy\').innerHTML\n\nconsole.log(boostnote)\n```'
             })
             .then((note) => {
               store.dispatch({
