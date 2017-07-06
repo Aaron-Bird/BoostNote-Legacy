@@ -116,7 +116,7 @@ class Preferences extends React.Component {
         onKeyDown={(e) => this.handleKeyDown(e)}
       >
         <div styleName='top-bar'>
-          <p>Your menu for Boostnote</p>
+          <p>Your preferences for Boostnote</p>
         </div>
         <ModalEscButton handleEscButtonClick={(e) => this.handleEscButtonClick(e)} />
         <div styleName='nav'>
