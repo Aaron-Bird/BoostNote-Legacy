@@ -17,7 +17,7 @@ class Detail extends React.Component {
       this.refs.root != null && this.refs.root.focus()
     }
     this.deleteHandler = () => {
-      this.refs.root != null && this.refs.root.handleDeleteButtonClick()
+      this.refs.root != null && this.refs.root.handleTrashButtonClick()
     }
   }
 
