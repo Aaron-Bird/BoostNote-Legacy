@@ -9,6 +9,9 @@ import ee from 'browser/main/lib/eventEmitter'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import dataApi from 'browser/main/lib/dataApi'
 
+const { remote } = require('electron')
+const { dialog } = remote
+
 const OSX = window.process.platform === 'darwin'
 
 class TopBar extends React.Component {
@@ -41,7 +44,17 @@ class TopBar extends React.Component {
   }
 
   handleNewPostButtonClick (e) {
-    let { config } = this.props
+    let { config, location } = this.props
+
+    if (location.pathname === '/trashed') {
+      dialog.showMessageBox(remote.getCurrentWindow(), {
+        type: 'warning',
+        message: 'Cannot create new note',
+        detail: 'You cannot create new note in trash box.',
+        buttons: ['OK']
+      })
+      return
+    }
 
     switch (config.ui.defaultNote) {
       case 'MARKDOWN_NOTE':
