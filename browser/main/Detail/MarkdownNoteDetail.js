@@ -91,7 +91,7 @@ class MarkdownNoteDetail extends React.Component {
     let { note } = this.state
 
     note.content = this.refs.content.value
-    note.tags = this.refs.tags.value
+    if (this.refs.tags) note.tags = this.refs.tags.value
     note.title = markdown.strip(findNoteTitle(note.content))
     note.updatedAt = new Date()
 
