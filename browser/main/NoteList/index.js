@@ -439,22 +439,24 @@ class NoteList extends React.Component {
               <option value='ALPHABETICAL'>Alphabetical</option>
             </select>
           </div>
-          <button styleName={config.listStyle === 'DEFAULT'
-              ? 'control-button--active'
-              : 'control-button'
-            }
-            onClick={(e) => this.handleListStyleButtonClick(e, 'DEFAULT')}
-          >
-            <i className='fa fa-th-large' />
-          </button>
-          <button styleName={config.listStyle === 'SMALL'
-              ? 'control-button--active'
-              : 'control-button'
-            }
-            onClick={(e) => this.handleListStyleButtonClick(e, 'SMALL')}
-          >
-            <i className='fa fa-list-ul' />
-          </button>
+          <div styleName="control-button-area">
+            <button styleName={config.listStyle === 'DEFAULT'
+                ? 'control-button--active'
+                : 'control-button'
+              }
+              onClick={(e) => this.handleListStyleButtonClick(e, 'DEFAULT')}
+            >
+              <i className='fa fa-th-large' />
+            </button>
+            <button styleName={config.listStyle === 'SMALL'
+                ? 'control-button--active'
+                : 'control-button'
+              }
+              onClick={(e) => this.handleListStyleButtonClick(e, 'SMALL')}
+            >
+              <i className='fa fa-list-ul' />
+            </button>
+          </div>
         </div>
         <div styleName='list'
           ref='list'

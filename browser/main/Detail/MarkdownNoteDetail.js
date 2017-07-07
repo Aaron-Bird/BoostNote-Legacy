@@ -209,7 +209,7 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   getToggleLockButton () {
-    return this.state.isLocked ? 'fa-lock' : 'fa-unlock-alt'
+    return this.state.isLocked ? 'fa-lock' : 'fa-unlock'
   }
 
   handleDeleteKeyDown (e) {
@@ -272,7 +272,7 @@ class MarkdownNoteDetail extends React.Component {
                 >
                   <i className={faClassName} styleName='lock-button' />
                   <span styleName='control-lockButton-tooltip'>
-                    {this.state.isLocked ? 'Unlock' : 'Lock'}
+                    {this.state.isLocked ? 'Lock' : 'Unlock'}
                   </span>
                 </button>
               return (
@@ -285,7 +285,7 @@ class MarkdownNoteDetail extends React.Component {
             <button styleName='control-fullScreenButton'
               onMouseDown={(e) => this.handleFullScreenButton(e)}
             >
-              <i className='fa fa-arrows-alt' styleName='fullScreen-button' />
+              <i className='fa fa-expand' styleName='fullScreen-button' />
             </button>
           </div>
         </div>

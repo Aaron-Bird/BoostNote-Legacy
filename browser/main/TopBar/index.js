@@ -216,7 +216,7 @@ class TopBar extends React.Component {
                 ref='searchInput'
                 value={this.state.search}
                 onChange={(e) => this.handleSearchChange(e)}
-                placeholder='Search'
+                placeholder=''
                 type='text'
                 className='searchInput'
               />
@@ -232,7 +232,7 @@ class TopBar extends React.Component {
           </div>
           <button styleName='control-newPostButton'
             onClick={(e) => this.handleNewPostButtonClick(e)}>
-            <i className='fa fa-plus' />
+            <i className='fa fa-pencil-square-o' />
             <span styleName='control-newPostButton-tooltip'>
               Make a Note {OSX ? '⌘' : '^'} + n
             </span>
