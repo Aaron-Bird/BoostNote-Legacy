@@ -558,35 +558,35 @@ class SnippetNoteDetail extends React.Component {
     </div>
 
     const detailTopBar = <div styleName='info'>
-        <div styleName='info-left'>
-          <StarButton styleName='info-left-button'
-            onClick={(e) => this.handleStarButtonClick(e)}
-            isActive={note.isStarred}
+      <div styleName='info-left'>
+        <StarButton styleName='info-left-button'
+          onClick={(e) => this.handleStarButtonClick(e)}
+          isActive={note.isStarred}
+        />
+        <div styleName='info-left-top'>
+          <FolderSelect styleName='info-left-top-folderSelect'
+            value={this.state.note.storage + '-' + this.state.note.folder}
+            ref='folder'
+            data={data}
+            onChange={(e) => this.handleFolderChange(e)}
           />
-          <div styleName='info-left-top'>
-            <FolderSelect styleName='info-left-top-folderSelect'
-              value={this.state.note.storage + '-' + this.state.note.folder}
-              ref='folder'
-              data={data}
-              onChange={(e) => this.handleFolderChange(e)}
-            />
-          </div>
+        </div>
 
-          <TagSelect
-            ref='tags'
-            value={this.state.note.tags}
-            onChange={(e) => this.handleChange(e)}
-          />
-        </div>
-        <div styleName='info-right'>
-          <TrashButton onClick={(e) => this.handleTrashButtonClick(e)} />
-          <button styleName='control-fullScreenButton'
-            onMouseDown={(e) => this.handleFullScreenButton(e)}
-          >
-            <i className='fa fa-arrows-alt' styleName='fullScreen-button' />
-          </button>
-        </div>
+        <TagSelect
+          ref='tags'
+          value={this.state.note.tags}
+          onChange={(e) => this.handleChange(e)}
+        />
       </div>
+      <div styleName='info-right'>
+        <TrashButton onClick={(e) => this.handleTrashButtonClick(e)} />
+        <button styleName='control-fullScreenButton'
+          onMouseDown={(e) => this.handleFullScreenButton(e)}
+        >
+          <i className='fa fa-arrows-alt' styleName='fullScreen-button' />
+        </button>
+      </div>
+    </div>
 
     return (
       <div className='NoteDetail'
