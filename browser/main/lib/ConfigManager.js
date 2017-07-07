@@ -24,7 +24,7 @@ export const DEFAULT_CONFIG = {
     defaultNote: 'ALWAYS_ASK' // 'ALWAYS_ASK', 'SNIPPET_NOTE', 'MARKDOWN_NOTE'
   },
   editor: {
-    theme: 'default',
+    theme: 'base16-light',
     keyMap: 'sublime',
     fontSize: '14',
     fontFamily: 'Monaco, Consolas',
@@ -35,7 +35,7 @@ export const DEFAULT_CONFIG = {
   preview: {
     fontSize: '14',
     fontFamily: 'Lato',
-    codeBlockTheme: 'elegant',
+    codeBlockTheme: 'dracula',
     lineNumber: true
   }
 }
