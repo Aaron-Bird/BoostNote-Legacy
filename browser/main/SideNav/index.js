@@ -62,8 +62,8 @@ class SideNav extends React.Component {
           <button styleName='top-menu'
             onClick={(e) => this.handleMenuButtonClick(e)}
           >
-            <i className='fa fa-navicon fa-fw' />
-            <span styleName='top-menu-label'>Menu</span>
+            <i className='fa fa-wrench fa-fw' />
+            <span styleName='top-menu-label'>Preferences</span>
           </button>
         </div>
 
