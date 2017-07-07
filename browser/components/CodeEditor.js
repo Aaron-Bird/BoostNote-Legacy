@@ -57,6 +57,7 @@ export default class CodeEditor extends React.Component {
       keyMap: this.props.keyMap,
       inputStyle: 'textarea',
       dragDrop: false,
+      searchbox: true,
       extraKeys: {
         Tab: function (cm) {
           const cursor = cm.getCursor()
