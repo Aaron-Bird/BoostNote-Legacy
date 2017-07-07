@@ -70,7 +70,6 @@ class NoteList extends React.Component {
             dateDisplay={dateDisplay}
             key={key}
             handleNoteClick={(e) => this.props.handleNoteClick(e, _index)}
-            handleNoteContextMenu={() => ''}
           />
         )
       })

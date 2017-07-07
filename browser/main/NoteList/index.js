@@ -264,49 +264,6 @@ class NoteList extends React.Component {
     })
   }
 
-  handleNoteContextMenu (e, uniqueKey) {
-    let menu = new Menu()
-    menu.append(new MenuItem({
-      label: 'Delete Note',
-      click: (e) => this.handleDeleteNote(e, uniqueKey)
-    }))
-    menu.popup()
-  }
-
-  handleDeleteNote (e, uniqueKey) {
-    let index = dialog.showMessageBox(remote.getCurrentWindow(), {
-      type: 'warning',
-      message: 'Delete a note',
-      detail: 'This work cannot be undone.',
-      buttons: ['Confirm', 'Cancel']
-    })
-    if (index === 0) {
-      let { dispatch, location } = this.props
-      let splitted = uniqueKey.split('-')
-      let storageKey = splitted.shift()
-      let noteKey = splitted.shift()
-
-      dataApi
-        .deleteNote(storageKey, noteKey)
-        .then((data) => {
-          let dispatchHandler = () => {
-            dispatch({
-              type: 'DELETE_NOTE',
-              storageKey: data.storageKey,
-              noteKey: data.noteKey
-            })
-          }
-
-          if (location.query.key === uniqueKey) {
-            ee.once('list:moved', dispatchHandler)
-            ee.emit('list:next')
-          } else {
-            dispatchHandler()
-          }
-        })
-    }
-  }
-
   handleSortByChange (e) {
     let { dispatch } = this.props
 
@@ -449,7 +406,6 @@ class NoteList extends React.Component {
               dateDisplay={dateDisplay}
               key={key}
               handleNoteClick={this.handleNoteClick.bind(this)}
-              handleNoteContextMenu={this.handleNoteContextMenu.bind(this)}
               handleDragStart={this.handleDragStart.bind(this)}
             />
           )
@@ -461,7 +417,6 @@ class NoteList extends React.Component {
             note={note}
             key={key}
             handleNoteClick={this.handleNoteClick.bind(this)}
-            handleNoteContextMenu={this.handleNoteContextMenu.bind(this)}
             handleDragStart={this.handleDragStart.bind(this)}
           />
         )

@@ -166,7 +166,7 @@ class SnippetNoteDetail extends React.Component {
 
   }
 
-  handleDeleteButtonClick (e) {
+  handleTrashButtonClick (e) {
     let index = dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
       message: 'Delete a note',
@@ -520,7 +520,7 @@ class SnippetNoteDetail extends React.Component {
           </div>
           <div styleName='info-right'>
             <TrashButton
-              onClick={(e) => this.handleDeleteButtonClick(e)}
+              onClick={(e) => this.handleTrashButtonClick(e)}
             />
             <button styleName='control-fullScreenButton'
               onMouseDown={(e) => this.handleFullScreenButton(e)}
