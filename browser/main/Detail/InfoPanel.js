@@ -43,7 +43,7 @@ const InfoPanel = ({
         Note Link
       </div>
       <div styleName='group-section-control'>
-        <input value={noteKey} onClick={(e) => { e.target.select()}} />
+        <input value={noteKey} onClick={(e) => { e.target.select() }} />
       </div>
     </div>
 
