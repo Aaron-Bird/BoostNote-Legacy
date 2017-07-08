@@ -184,7 +184,7 @@ class NoteList extends React.Component {
 
   jumpNoteByHashHandler (event, noteHash) {
     // first argument event isn't used.
-    if (this.notes == null || this.notes.length === 0) {
+    if (this.notes === null || this.notes.length === 0) {
       return
     }
 
