@@ -205,7 +205,6 @@ class TopBar extends React.Component {
       >
         <div styleName='control'>
           <div styleName='control-search'>
-            <i styleName='control-search-icon' className='fa fa-search fa-fw' />
             <div styleName='control-search-input'
               onFocus={(e) => this.handleSearchFocus(e)}
               onBlur={(e) => this.handleSearchBlur(e)}
@@ -216,7 +215,7 @@ class TopBar extends React.Component {
                 ref='searchInput'
                 value={this.state.search}
                 onChange={(e) => this.handleSearchChange(e)}
-                placeholder=''
+                placeholder='Search'
                 type='text'
                 className='searchInput'
               />
