@@ -2,7 +2,7 @@
  * @fileoverview Component for show updated date of the detail.
  */
 import React, { PropTypes } from 'react'
-import { getLastUpdated } from 'browser/lib/date-formatter'
+import { formatDate } from 'browser/lib/date-formatter'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './LastUpdatedString.styl'
 
@@ -10,7 +10,7 @@ const LastUpdatedString = ({ date }) => {
   let text = ''
 
   try {
-    text = `Last updated at ${getLastUpdated(date)}`
+    text = `Last updated at ${formatDate(date)}`
   } catch (e) {
     text = ''
   }
