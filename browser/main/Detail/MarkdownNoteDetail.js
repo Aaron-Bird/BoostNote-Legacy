@@ -234,7 +234,7 @@ class MarkdownNoteDetail extends React.Component {
 
   handleInfoButtonClick (e) {
     const infoPanel = document.querySelector('.infoPanel')
-    infoPanel.style.display = display === 'none' ? 'inline' : 'none'
+    if (infoPanel.style) infoPanel.style.display = infoPanel.style.display === 'none' ? 'inline' : 'none'
   }
 
   render () {
@@ -309,7 +309,7 @@ class MarkdownNoteDetail extends React.Component {
               <i className='fa fa-arrows-alt' styleName='fullScreen-button' />
             </button>
             <InfoButton
-              onClick={this.handleInfoButtonClick()}
+              onClick={(e) => this.handleInfoButtonClick(e)}
             />
             <InfoPanel
               storageName={currentOption.storage.name}

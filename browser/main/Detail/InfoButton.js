@@ -6,13 +6,14 @@ const InfoButton = ({
   onClick
 }) => (
   <button styleName='control-infoButton'
-    onClick={(e) => onClick(e)}
+    onClick={onClick}
   >
     <i className='fa fa-info-circle infoButton' styleName='info-button' />
   </button>
 )
 
 InfoButton.propTypes = {
+  onClick: PropTypes.func.isRequired
 }
 
 export default CSSModules(InfoButton, styles)

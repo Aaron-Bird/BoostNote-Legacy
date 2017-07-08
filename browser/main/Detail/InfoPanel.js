@@ -54,7 +54,9 @@ const InfoPanel = ({
 InfoPanel.propTypes = {
   storageName: PropTypes.string.isRequired,
   folderName: PropTypes.string.isRequired,
-  noteKey: PropTypes.string.isRequired
+  noteKey: PropTypes.string.isRequired,
+  updatedAt: PropTypes.string.isRequired,
+  createdAt: PropTypes.string.isRequired
 }
 
 export default CSSModules(InfoPanel, styles)
