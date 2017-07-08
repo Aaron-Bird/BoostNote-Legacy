@@ -1,0 +1,44 @@
+.control-infoPanel
+  position fixed
+  pointer-events none
+  top 50px
+  z-index 200
+  padding 5px
+  line-height normal
+  border-radius 2px
+  opacity 0
+  transition 0.1s
+
+.control-infoButton-panel
+  z-index 200
+  margin-top 60px
+  margin-left -160px
+  position absolute
+  padding 10px
+  padding-left 15px
+  width 300px
+  background-color #EAEAEA
+  border 1px solid #d0d0d0
+  box-shadow 0 0 1px rgba(76,86,103,0.15), 0 2px 18px rgba(31,37,50,0.22)
+
+.group-section
+  display flex
+  line-height 30px
+  font-size 12px
+
+.group-section-label
+  width 70px
+  height 20px
+  text-align left
+  margin-right 30px
+  font-size 11px
+  color #939395
+
+.group-section-control
+  flex 1
+
+body[data-theme="dark"]
+  .control-infoButton-panel
+    background-color #3a404c
+    border 1px solid #474f5c
+    color #ffffff
