@@ -439,7 +439,7 @@ class NoteList extends React.Component {
               <option value='ALPHABETICAL'>Alphabetical</option>
             </select>
           </div>
-          <div styleName="control-button-area">
+          <div styleName='control-button-area'>
             <button styleName={config.listStyle === 'DEFAULT'
                 ? 'control-button--active'
                 : 'control-button'
