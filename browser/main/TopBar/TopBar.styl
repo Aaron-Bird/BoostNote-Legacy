@@ -19,26 +19,25 @@ $control-height = 34px
 
 .control-search
   height 32px
+  width 1px
   flex 1
   background-color white
   position relative
 
-.control-search-icon
-  absolute top bottom left
-  line-height 32px
-  width 35px
-  color $ui-inactive-text-color
-  background-color $ui-noteList-backgroundColor
-
 .control-search-input
   display block
   absolute top bottom right
-  left 30px
+  width 100%
+  padding-left 12px
+  background-color $ui-noteList-backgroundColor
   input
     width 100%
     height 100%
     outline none
     border none
+    color $ui-text-color
+    font-size 16px
+    padding-bottom 2px
     background-color $ui-noteList-backgroundColor
 
 .control-search-optionList
@@ -92,9 +91,7 @@ $control-height = 34px
   width 32px
   height $control-height - 2
   navButtonColor()
-  border $ui-border
-  border-radius 32px
-  font-size 14px
+  font-size 16px
   line-height 28px
   padding 0
   &:active
@@ -132,6 +129,7 @@ body[data-theme="dark"]
     background-color $ui-dark-noteList-backgroundColor
 
   .control-search-input
+    background-color $ui-dark-noteList-backgroundColor
     input
       background-color $ui-dark-noteList-backgroundColor
       color $ui-dark-text-color
