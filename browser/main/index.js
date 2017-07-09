@@ -23,6 +23,14 @@ document.addEventListener('dragover', function (e) {
   e.stopPropagation()
 })
 
+document.addEventListener('click', function (e) {
+  const isInfoButton = e.target.className.includes('infoButton')
+  const isInfoPanel = e.target.offsetParent.className.includes('infoPanel')
+  if (isInfoButton || isInfoPanel) return
+  const infoPanel = document.querySelector('.infoPanel')
+  if (infoPanel) infoPanel.style.display = 'none'
+})
+
 let el = document.getElementById('content')
 const history = syncHistoryWithStore(hashHistory, store)
 

@@ -15,6 +15,9 @@ import _ from 'lodash'
 import { findNoteTitle } from 'browser/lib/findNoteTitle'
 import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import TrashButton from './TrashButton'
+import InfoButton from './InfoButton'
+import InfoPanel from './InfoPanel'
+import { formatDate } from 'browser/lib/date-formatter'
 
 const electron = require('electron')
 const { remote } = electron
@@ -229,9 +232,27 @@ class MarkdownNoteDetail extends React.Component {
     this.focus()
   }
 
+  handleInfoButtonClick (e) {
+    const infoPanel = document.querySelector('.infoPanel')
+    if (infoPanel.style) infoPanel.style.display = infoPanel.style.display === 'none' ? 'inline' : 'none'
+  }
+
   render () {
-    let { data, config } = this.props
+    let { data, config, location } = this.props
     let { note } = this.state
+    let storageKey = note.storage
+    let folderKey = note.folder
+
+    let options = []
+    data.storageMap.forEach((storage, index) => {
+      storage.folders.forEach((folder) => {
+        options.push({
+          storage: storage,
+          folder: folder
+        })
+      })
+    })
+    let currentOption = options.filter((option) => option.storage.key === storageKey && option.folder.key === folderKey)[0]
 
     return (
       <div className='NoteDetail'
@@ -287,6 +308,16 @@ class MarkdownNoteDetail extends React.Component {
             >
               <i className='fa fa-expand' styleName='fullScreen-button' />
             </button>
+            <InfoButton
+              onClick={(e) => this.handleInfoButtonClick(e)}
+            />
+            <InfoPanel
+              storageName={currentOption.storage.name}
+              folderName={currentOption.folder.name}
+              noteKey={location.query.key}
+              updatedAt={formatDate(note.updatedAt)}
+              createdAt={formatDate(note.createdAt)}
+            />
           </div>
         </div>
 
