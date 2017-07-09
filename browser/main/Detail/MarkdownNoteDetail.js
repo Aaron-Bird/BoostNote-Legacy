@@ -344,8 +344,18 @@ class MarkdownNoteDetail extends React.Component {
         <button styleName='control-fullScreenButton'
           onMouseDown={(e) => this.handleFullScreenButton(e)}
         >
-          <i className='fa fa-arrows-alt' styleName='fullScreen-button' />
+          <i className='fa fa-expand' styleName='fullScreen-button' />
         </button>
+        <InfoButton
+          onClick={(e) => this.handleInfoButtonClick(e)}
+        />
+        <InfoPanel
+          storageName={currentOption.storage.name}
+          folderName={currentOption.folder.name}
+          noteKey={location.query.key}
+          updatedAt={formatDate(note.updatedAt)}
+          createdAt={formatDate(note.createdAt)}
+        />
       </div>
     </div>
 
