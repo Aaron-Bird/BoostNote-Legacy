@@ -24,7 +24,7 @@ const InfoPanel = ({
     </div>
     <div styleName='group-section'>
       <div styleName='group-section-label'>
-        CreatedAt
+        Created at
       </div>
       <div styleName='group-section-control'>
         {createdAt}
@@ -32,7 +32,7 @@ const InfoPanel = ({
     </div>
     <div styleName='group-section'>
       <div styleName='group-section-label'>
-        UpdatedAt
+        Updated at
       </div>
       <div styleName='group-section-control'>
         {updatedAt}

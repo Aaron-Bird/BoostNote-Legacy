@@ -3,42 +3,54 @@
   pointer-events none
   top 50px
   z-index 200
-  padding 5px
   line-height normal
-  border-radius 2px
+  border-radius 4px
   opacity 0
-  transition 0.1s
+  transition 0.2s
 
 .control-infoButton-panel
   z-index 200
-  margin-top 60px
-  margin-left -160px
+  margin-top 45px
+  margin-left -210px
   position absolute
-  padding 10px
-  padding-left 15px
-  width 300px
-  background-color #EAEAEA
-  border 1px solid #d0d0d0
-  box-shadow 0 0 1px rgba(76,86,103,0.15), 0 2px 18px rgba(31,37,50,0.22)
+  padding 20px
+  width 340px
+  background-color $ui-noteList-backgroundColor
+  border 1px solid $border-color
 
 .group-section
   display flex
   line-height 30px
-  font-size 12px
+  font-size 13px
 
 .group-section-label
   width 70px
   height 20px
   text-align left
-  margin-right 30px
-  font-size 11px
-  color #939395
+  margin-right 50px
+  font-size 13px
+  color $ui-inactive-text-color
 
 .group-section-control
   flex 1
+  font-size 13px
+  color $ui-text-color
+
+.group-section-control input
+  width 160px
+  height 25px
 
 body[data-theme="dark"]
   .control-infoButton-panel
-    background-color #3a404c
-    border 1px solid #474f5c
-    color #ffffff
+    background-color $ui-dark-noteList-backgroundColor
+    border 1px solid $ui-dark-borderColor
+
+  .group-section-label
+    color $ui-inactive-text-color
+
+  .group-section-control
+    color $ui-dark-text-color
+
+  .group-section-control input
+    background-color alpha($ui-dark-borderColor, 80%)
+    color $ui-dark-text-color
