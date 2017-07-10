@@ -6,7 +6,7 @@
   <br>
 </h1>
 <h4 align="center">Note-taking app for programmers. </h4>
-<h5 align="center">macOS, Windows and Linux</h5>
+<h5 align="center">macOS, Windows and Linux. Android and iOS apps will be released soon!</h5>
 <h5 align="center">Built with Electron, React + Redux, Webpack and CSSModules</h5>
 
 ![Boostnote app screenshot](./resources/repository/top.png)
@@ -29,9 +29,8 @@ Let's talk about Boostnote's great features, new feature requests and things lik
 
 ## More Information
 * [Website](https://boostnote.io)
-* [Boostnote Shop](https://boostnote.paintory.com/) : Products are shipped to all over the world 🌏
-* [Donate via Bountysource](https://salt.bountysource.com/teams/boostnote) : Thank you for your support 🎉
-* [GitHub Issues](https://github.com/BoostIO/Boostnote/issues) : We'd love to hear your feedback 🙌
+* [Boostnote Team](https://boostnote.io/team/) : Boostnote for the creative hacker teams. Share your markdown notes and snippets instantly with your team. **We will release it at August!** 🏃💨
+* [Support us via Bountysource](https://salt.bountysource.com/teams/boostnote) : Thank you for your support 🎉
 * [Development](https://github.com/BoostIO/Boostnote/blob/master/docs/build.md) : Development configurations for Boostnote 🚀
 * Copyright (C) 2017 Maisin&Co.
 
