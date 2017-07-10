@@ -384,10 +384,10 @@ export default class MarkdownPreview extends React.Component {
   }
 
   handlelinkClick (e) {
-    const noteHash = e.target.hash
-    const regexIsNoteLink = /^#(.{20})-(.{20})$/
+    const noteHash = e.target.href.split('/').pop()
+    const regexIsNoteLink = /^(.{20})-(.{20})$/
     if (regexIsNoteLink.test(noteHash)) {
-      eventEmitter.emit('list:jump', noteHash.replace(/^#/, ''))
+      eventEmitter.emit('list:jump', noteHash)
     }
   }
 
