@@ -60,6 +60,7 @@ ReactDOM.render((
         <Route path='home' />
         <Route path='starred' />
         <Route path='searched' />
+        <Route path='trashed' />
         <Route path='storages'>
           <IndexRedirect to='/home' />
           <Route path=':storageKey'>

@@ -33,12 +33,18 @@ class SideNav extends React.Component {
     })
   }
 
+  handleTrashedButtonClick (e) {
+    let { router } = this.context
+    router.push('/trashed')
+  }
+
   render () {
     let { data, location, config, dispatch } = this.props
 
     let isFolded = config.isSideNavFolded
     let isHomeActive = !!location.pathname.match(/^\/home$/)
     let isStarredActive = !!location.pathname.match(/^\/starred$/)
+    let isTrashedActive = !!location.pathname.match(/^\/trashed$/)
 
     let storageList = data.storageMap.map((storage, key) => {
       return <StorageItem
@@ -72,7 +78,9 @@ class SideNav extends React.Component {
           isHomeActive={isHomeActive}
           handleAllNotesButtonClick={(e) => this.handleHomeButtonClick(e)}
           isStarredActive={isStarredActive}
+          isTrashedActive={isTrashedActive}
           handleStarredButtonClick={(e) => this.handleStarredButtonClick(e)}
+          handleTrashedButtonClick={(e) => this.handleTrashedButtonClick(e)}
         />
 
         <div styleName='storageList'>

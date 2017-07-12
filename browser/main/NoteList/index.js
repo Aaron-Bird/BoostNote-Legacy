@@ -257,6 +257,11 @@ class NoteList extends React.Component {
       return searchFromNotes(this.props.data, searchInputText)
     }
 
+    if (location.pathname.match(/\/trashed/)) {
+      return data.trashedSet.toJS()
+        .map((uniqueKey) => data.noteMap.get(uniqueKey))
+    }
+
     let storageKey = params.storageKey
     let folderKey = params.folderKey
     let storage = data.storageMap.get(storageKey)
@@ -411,6 +416,10 @@ class NoteList extends React.Component {
       : sortByUpdatedAt
     this.notes = notes = this.getNotes()
       .sort(sortFunc)
+      .filter((note) => {
+        // this is for the trash box
+        if (note.isTrashed !== true || location.pathname === '/trashed') return true
+      })
 
     let noteList = notes
       .map(note => {
