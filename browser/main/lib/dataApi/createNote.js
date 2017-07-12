@@ -10,6 +10,7 @@ function validateInput (input) {
   input.tags = input.tags.filter((tag) => _.isString(tag) && tag.trim().length > 0)
   if (!_.isString(input.title)) input.title = ''
   input.isStarred = !!input.isStarred
+  input.isTrashed = !!input.isTrashed
 
   switch (input.type) {
     case 'MARKDOWN_NOTE':

@@ -56,7 +56,7 @@ class MarkdownNoteDetail extends React.Component {
         note: Object.assign({}, nextProps.note)
       }, () => {
         this.refs.content.reload()
-        this.refs.tags.reset()
+        if (this.refs.tags) this.refs.tags.reset()
       })
     }
   }
@@ -176,28 +176,57 @@ class MarkdownNoteDetail extends React.Component {
   }
 
   handleTrashButtonClick (e) {
-    let index = dialog.showMessageBox(remote.getCurrentWindow(), {
+    let { note } = this.state
+    const { isTrashed } = note
+
+    const popupMessage = isTrashed ? 'This work cannot be undone.' : 'Throw it into trashbox.'
+
+    let dialogueButtonIndex = dialog.showMessageBox(remote.getCurrentWindow(), {
       type: 'warning',
       message: 'Delete a note',
-      detail: 'This work cannot be undone.',
+      detail: popupMessage,
       buttons: ['Confirm', 'Cancel']
     })
-    if (index === 0) {
-      let { note, dispatch } = this.props
-      dataApi
-        .deleteNote(note.storage, note.key)
-        .then((data) => {
-          let dispatchHandler = () => {
-            dispatch({
-              type: 'DELETE_NOTE',
-              storageKey: data.storageKey,
-              noteKey: data.noteKey
-            })
-          }
-          ee.once('list:moved', dispatchHandler)
-          ee.emit('list:next')
+    if (dialogueButtonIndex === 0) {
+      if (!isTrashed) {
+        note.isTrashed = true
+
+        this.setState({
+          note
+        }, () => {
+          this.save()
         })
+      } else {
+        let { note, dispatch } = this.props
+        dataApi
+          .deleteNote(note.storage, note.key)
+          .then((data) => {
+            let dispatchHandler = () => {
+              dispatch({
+                type: 'DELETE_NOTE',
+                storageKey: data.storageKey,
+                noteKey: data.noteKey
+              })
+            }
+            ee.once('list:moved', dispatchHandler)
+          })
+      }
+      ee.emit('list:next')
     }
+  }
+
+  handleUndoButtonClick (e) {
+    let { note } = this.state
+
+    note.isTrashed = false
+
+    this.setState({
+      note
+    }, () => {
+      this.save()
+      this.refs.content.reload()
+      ee.emit('list:next')
+    })
   }
 
   handleFullScreenButton (e) {
@@ -254,72 +283,79 @@ class MarkdownNoteDetail extends React.Component {
     })
     let currentOption = options.filter((option) => option.storage.key === storageKey && option.folder.key === folderKey)[0]
 
+    const trashTopBar = <div styleName='info'>
+      <div styleName='info-left'>
+        <div styleName='info-left-top'>
+          <div styleName='info-left-top-folderSelect'>
+            <i styleName='undo-button'
+              className='fa fa-undo fa-fw'
+              onClick={(e) => this.handleUndoButtonClick(e)}
+            />
+          </div>
+        </div>
+      </div>
+      <div styleName='info-right'>
+        <TrashButton onClick={(e) => this.handleTrashButtonClick(e)} />
+      </div>
+    </div>
+
+    const detailTopBar = <div styleName='info'>
+      <div styleName='info-left'>
+        <StarButton styleName='info-left-button'
+          onClick={(e) => this.handleStarButtonClick(e)}
+          isActive={note.isStarred}
+        />
+        <div styleName='info-left-top'>
+          <FolderSelect styleName='info-left-top-folderSelect'
+            value={this.state.note.storage + '-' + this.state.note.folder}
+            ref='folder'
+            data={data}
+            onChange={(e) => this.handleFolderChange(e)}
+          />
+        </div>
+
+        <TagSelect
+          ref='tags'
+          value={this.state.note.tags}
+          onChange={(e) => this.handleChange(e)}
+        />
+        <TodoListPercentage
+          percentageOfTodo={this.getPercentageOfCompleteTodo(note.content)}
+        />
+      </div>
+      <div styleName='info-right'>
+        {(() => {
+          const faClassName = `fa ${this.getToggleLockButton()}`
+          const lockButtonComponent =
+            <button styleName='control-lockButton'
+              onFocus={(e) => this.handleFocus(e)}
+              onMouseDown={(e) => this.handleLockButtonMouseDown(e)}
+            >
+              <i className={faClassName} styleName='lock-button' />
+              <span styleName='control-lockButton-tooltip'>
+                {this.state.isLocked ? 'Unlock' : 'Lock'}
+              </span>
+            </button>
+          return (
+            this.state.isLockButtonShown ? lockButtonComponent : ''
+          )
+        })()}
+        <TrashButton onClick={(e) => this.handleTrashButtonClick(e)} />
+        <button styleName='control-fullScreenButton'
+          onMouseDown={(e) => this.handleFullScreenButton(e)}
+        >
+          <i className='fa fa-arrows-alt' styleName='fullScreen-button' />
+        </button>
+      </div>
+    </div>
+
     return (
       <div className='NoteDetail'
         style={this.props.style}
         styleName='root'
       >
-        <div styleName='info'>
-          <div styleName='info-left'>
-            <StarButton styleName='info-left-button'
-              onClick={(e) => this.handleStarButtonClick(e)}
-              isActive={note.isStarred}
-            />
-            <div styleName='info-left-top'>
-              <FolderSelect styleName='info-left-top-folderSelect'
-                value={this.state.note.storage + '-' + this.state.note.folder}
-                ref='folder'
-                data={data}
-                onChange={(e) => this.handleFolderChange(e)}
-              />
-            </div>
 
-            <TagSelect
-              ref='tags'
-              value={this.state.note.tags}
-              onChange={(e) => this.handleChange(e)}
-            />
-            <TodoListPercentage
-              percentageOfTodo={this.getPercentageOfCompleteTodo(note.content)}
-            />
-          </div>
-          <div styleName='info-right'>
-            {(() => {
-              const faClassName = `fa ${this.getToggleLockButton()}`
-              const lockButtonComponent =
-                <button styleName='control-lockButton'
-                  onFocus={(e) => this.handleFocus(e)}
-                  onMouseDown={(e) => this.handleLockButtonMouseDown(e)}
-                >
-                  <i className={faClassName} styleName='lock-button' />
-                  <span styleName='control-lockButton-tooltip'>
-                    {this.state.isLocked ? 'Lock' : 'Unlock'}
-                  </span>
-                </button>
-              return (
-                this.state.isLockButtonShown ? lockButtonComponent : ''
-              )
-            })()}
-            <TrashButton
-              onClick={(e) => this.handleTrashButtonClick(e)}
-            />
-            <button styleName='control-fullScreenButton'
-              onMouseDown={(e) => this.handleFullScreenButton(e)}
-            >
-              <i className='fa fa-expand' styleName='fullScreen-button' />
-            </button>
-            <InfoButton
-              onClick={(e) => this.handleInfoButtonClick(e)}
-            />
-            <InfoPanel
-              storageName={currentOption.storage.name}
-              folderName={currentOption.folder.name}
-              noteKey={location.query.key}
-              updatedAt={formatDate(note.updatedAt)}
-              createdAt={formatDate(note.createdAt)}
-            />
-          </div>
-        </div>
+        {location.pathname === '/trashed' ? trashTopBar : detailTopBar}
 
         <div styleName='body'>
           <MarkdownEditor

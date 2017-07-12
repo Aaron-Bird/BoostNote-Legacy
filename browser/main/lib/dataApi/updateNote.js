@@ -21,6 +21,10 @@ function validateInput (input) {
     validatedInput.isStarred = !!input.isStarred
   }
 
+  if (input.isTrashed != null) {
+    validatedInput.isTrashed = !!input.isTrashed
+  }
+
   validatedInput.type = input.type
   switch (input.type) {
     case 'MARKDOWN_NOTE':
@@ -101,6 +105,7 @@ function updateNote (storageKey, noteKey, input) {
         noteData.createdAt = new Date()
         noteData.updatedAt = new Date()
         noteData.isStarred = false
+        noteData.isTrashed = false
         noteData.tags = []
       }
 

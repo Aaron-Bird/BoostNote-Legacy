@@ -89,7 +89,8 @@ NoteItem.propTypes = {
     type: PropTypes.string.isRequired,
     title: PropTypes.string.isrequired,
     tags: PropTypes.array,
-    isStarred: PropTypes.bool.isRequired
+    isStarred: PropTypes.bool.isRequired,
+    isTrashed: PropTypes.bool.isRequired
   }),
   handleNoteClick: PropTypes.func.isRequired,
   handleDragStart: PropTypes.func.isRequired,
