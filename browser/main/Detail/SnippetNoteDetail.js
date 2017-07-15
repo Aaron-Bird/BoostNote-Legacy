@@ -585,6 +585,16 @@ class SnippetNoteDetail extends React.Component {
         >
           <i className='fa fa-arrows-alt' styleName='fullScreen-button' />
         </button>
+        <InfoButton
+          onClick={(e) => this.handleInfoButtonClick(e)}
+        />
+        <InfoPanel
+          storageName={currentOption.storage.name}
+          folderName={currentOption.folder.name}
+          noteLink={`[title](${location.query.key})`}
+          updatedAt={formatDate(note.updatedAt)}
+          createdAt={formatDate(note.createdAt)}
+        />
       </div>
     </div>
 
