@@ -3,7 +3,7 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './InfoPanel.styl'
 
 const InfoPanel = ({
-  storageName, folderName, noteKey, updatedAt, createdAt
+  storageName, folderName, noteLink, updatedAt, createdAt
 }) => (
   <div className='infoPanel' styleName='control-infoButton-panel' style={{display: 'none'}}>
     <div styleName='group-section'>
@@ -43,7 +43,7 @@ const InfoPanel = ({
         Note Link
       </div>
       <div styleName='group-section-control'>
-        <input value={noteKey} onClick={(e) => { e.target.select() }} />
+        <input value={noteLink} onClick={(e) => { e.target.select() }} />
       </div>
     </div>
 
@@ -54,7 +54,7 @@ const InfoPanel = ({
 InfoPanel.propTypes = {
   storageName: PropTypes.string.isRequired,
   folderName: PropTypes.string.isRequired,
-  noteKey: PropTypes.string.isRequired,
+  noteLink: PropTypes.string.isRequired,
   updatedAt: PropTypes.string.isRequired,
   createdAt: PropTypes.string.isRequired
 }
