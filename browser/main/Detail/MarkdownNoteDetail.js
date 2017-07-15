@@ -179,40 +179,37 @@ class MarkdownNoteDetail extends React.Component {
     let { note } = this.state
     const { isTrashed } = note
 
-    const popupMessage = isTrashed ? 'This work cannot be undone.' : 'Throw it into trashbox.'
-
-    let dialogueButtonIndex = dialog.showMessageBox(remote.getCurrentWindow(), {
-      type: 'warning',
-      message: 'Delete a note',
-      detail: popupMessage,
-      buttons: ['Confirm', 'Cancel']
-    })
-    if (dialogueButtonIndex === 0) {
-      if (!isTrashed) {
-        note.isTrashed = true
-
-        this.setState({
-          note
-        }, () => {
-          this.save()
+    if (isTrashed) {
+      let dialogueButtonIndex = dialog.showMessageBox(remote.getCurrentWindow(), {
+        type: 'warning',
+        message: 'Delete a note',
+        detail: 'This work cannot be undone.',
+        buttons: ['Confirm', 'Cancel']
+      })
+      if (dialogueButtonIndex === 1) return
+      let { note, dispatch } = this.props
+      dataApi
+        .deleteNote(note.storage, note.key)
+        .then((data) => {
+          let dispatchHandler = () => {
+            dispatch({
+              type: 'DELETE_NOTE',
+              storageKey: data.storageKey,
+              noteKey: data.noteKey
+            })
+          }
+          ee.once('list:moved', dispatchHandler)
         })
-      } else {
-        let { note, dispatch } = this.props
-        dataApi
-          .deleteNote(note.storage, note.key)
-          .then((data) => {
-            let dispatchHandler = () => {
-              dispatch({
-                type: 'DELETE_NOTE',
-                storageKey: data.storageKey,
-                noteKey: data.noteKey
-              })
-            }
-            ee.once('list:moved', dispatchHandler)
-          })
-      }
-      ee.emit('list:next')
+    } else {
+      note.isTrashed = true
+
+      this.setState({
+        note
+      }, () => {
+        this.save()
+      })
     }
+    ee.emit('list:next')
   }
 
   handleUndoButtonClick (e) {
