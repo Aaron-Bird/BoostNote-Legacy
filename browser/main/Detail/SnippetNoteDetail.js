@@ -466,6 +466,15 @@ class SnippetNoteDetail extends React.Component {
     if (infoPanel.style) infoPanel.style.display = infoPanel.style.display === 'none' ? 'inline' : 'none'
   }
 
+  showWarning () {
+    dialog.showMessageBox(remote.getCurrentWindow(), {
+      type: 'warning',
+      message: 'Sorry!',
+      detail: 'md/text import is available only a markdown note.',
+      buttons: ['OK', 'Cancel']
+    })
+  }
+
   render () {
     let { data, config, location } = this.props
     let { note } = this.state
@@ -591,6 +600,8 @@ class SnippetNoteDetail extends React.Component {
           noteLink={`[title](${location.query.key})`}
           updatedAt={formatDate(note.updatedAt)}
           createdAt={formatDate(note.createdAt)}
+          exportAsMd={this.showWarning}
+          exportAsTxt={this.showWarning}
         />
       </div>
     </div>
