@@ -471,7 +471,7 @@ class SnippetNoteDetail extends React.Component {
       type: 'warning',
       message: 'Sorry!',
       detail: 'md/text import is available only a markdown note.',
-      buttons: ['OK', 'Cancel']
+      buttons: ['OK']
     })
   }
 
