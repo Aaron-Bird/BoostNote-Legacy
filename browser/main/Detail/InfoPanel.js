@@ -3,7 +3,7 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './InfoPanel.styl'
 
 const InfoPanel = ({
-  storageName, folderName, noteKey, updatedAt, createdAt, exportAsMd, exportAsTxt
+  storageName, folderName, noteLink, updatedAt, createdAt, exportAsMd, exportAsTxt
 }) => (
   <div className='infoPanel' styleName='control-infoButton-panel' style={{display: 'none'}}>
     <div styleName='group-section'>
