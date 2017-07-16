@@ -22,7 +22,9 @@ function copyImage (filePath, storageKey) {
       const imageExt = path.extname(filePath)
       const imageName = Math.random().toString(36).slice(-16)
       const basename = `${imageName}${imageExt}`
-      const outputImage = fs.createWriteStream(path.join(targetStorage.path, 'images', basename))
+      const imageDir = path.join(targetStorage.path, 'images')
+      if (!fs.existsSync(imageDir)) fs.mkdirSync(imageDir)
+      const outputImage = fs.createWriteStream(path.join(imageDir, basename))
       inputImage.pipe(outputImage)
       resolve(`${targetStorage.path}/images/${basename}`)
     } catch (e) {
