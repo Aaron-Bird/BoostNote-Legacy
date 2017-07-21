@@ -1,6 +1,8 @@
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './InfoTab.styl'
+import ConfigManager from 'browser/main/lib/ConfigManager'
+import store from 'browser/main/store'
 
 const electron = require('electron')
 const { shell, remote } = electron
@@ -11,12 +13,32 @@ class InfoTab extends React.Component {
     super(props)
 
     this.state = {
+      config: this.props.config
     }
   }
 
   handleLinkClick (e) {
     shell.openExternal(e.currentTarget.href)
     e.preventDefault()
+  }
+
+  handleConfigChange (e) {
+    const newConfig = { amaEnabled: this.refs.amaEnabled.checked }
+
+    this.setState({ config: newConfig })
+  }
+
+  handleSaveButtonClick (e) {
+    let newConfig = {
+      amaEnabled: this.state.config.amaEnabled
+    }
+
+    ConfigManager.set(newConfig)
+
+    store.dispatch({
+      type: 'SET_CONFIG',
+      config: newConfig
+    })
   }
 
   render () {
@@ -68,6 +90,13 @@ class InfoTab extends React.Component {
             License: GPL v3
           </li>
         </ul>
+        <input onChange={(e) => this.handleConfigChange(e)}
+          checked={this.state.config.amaEnabled}
+          ref='amaEnabled'
+          type='checkbox'
+        />
+        Enable to send analytics to our servers
+        <button onClick={(e) => this.handleSaveButtonClick(e)}>Save</button>
       </div>
     )
   }

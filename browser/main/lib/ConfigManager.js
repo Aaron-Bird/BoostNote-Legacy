@@ -14,6 +14,7 @@ export const DEFAULT_CONFIG = {
   navWidth: 200,
   sortBy: 'UPDATED_AT', // 'CREATED_AT', 'UPDATED_AT', 'APLHABETICAL'
   listStyle: 'DEFAULT', // 'DEFAULT', 'SMALL'
+  amaEnabled: true,
   hotkey: {
     toggleFinder: OSX ? 'Cmd + Alt + S' : 'Super + Alt + S',
     toggleMain: OSX ? 'Cmd + Alt + L' : 'Super + Alt + E'

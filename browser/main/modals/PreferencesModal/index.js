@@ -44,7 +44,12 @@ class Preferences extends React.Component {
 
     switch (this.state.currentTab) {
       case 'INFO':
-        return <InfoTab />
+        return (
+          <InfoTab
+            dispatch={dispatch}
+            config={config}
+          />
+        )
       case 'HOTKEY':
         return (
           <HotkeyTab
