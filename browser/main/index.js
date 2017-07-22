@@ -25,7 +25,7 @@ document.addEventListener('dragover', function (e) {
 
 document.addEventListener('click', function (e) {
   const className = e.target.className
-  if (!className && typeof(className) !== 'string') return
+  if (!className && typeof (className) !== 'string') return
   const isInfoButton = className.includes('infoButton')
   const isInfoPanel = e.target.offsetParent.className.includes('infoPanel')
   if (isInfoButton || isInfoPanel) return
