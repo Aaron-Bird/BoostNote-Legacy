@@ -95,7 +95,7 @@ class InfoTab extends React.Component {
           </li>
         </ul>
         <hr />
-        <div styleName='policy'>Data collectiong policy</div>
+        <div styleName='policy'>Data collection policy</div>
         <p>We collect only the amount of users on Boostnote for DAU and any detail information<br />
         such as a note's content or title is not collected.</p>
         <p>You can see how it works on <a href='https://github.com/BoostIO/Boostnote'>GitHub</a></p>
