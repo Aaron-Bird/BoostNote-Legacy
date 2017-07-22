@@ -3,7 +3,7 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './InfoPanel.styl'
 
 const InfoPanel = ({
-  storageName, folderName, noteLink, updatedAt, createdAt
+  storageName, folderName, noteLink, updatedAt, createdAt, exportAsMd, exportAsTxt
 }) => (
   <div className='infoPanel' styleName='control-infoButton-panel' style={{display: 'none'}}>
     <div styleName='group-section'>
@@ -47,7 +47,15 @@ const InfoPanel = ({
       </div>
     </div>
 
-    <div styleName='group-export' />
+    <div styleName='group-export'>
+      <i className='fa fa-file-text fa-fw'
+        onClick={(e) => exportAsMd(e)}
+      />
+
+      <i className='fa fa-file-text fa-fw'
+        onClick={(e) => exportAsTxt(e)}
+      />
+    </div>
   </div>
 )
 
@@ -56,7 +64,9 @@ InfoPanel.propTypes = {
   folderName: PropTypes.string.isRequired,
   noteLink: PropTypes.string.isRequired,
   updatedAt: PropTypes.string.isRequired,
-  createdAt: PropTypes.string.isRequired
+  createdAt: PropTypes.string.isRequired,
+  exportAsMd: PropTypes.func.isRequired,
+  exportAsTxt: PropTypes.func.isRequired
 }
 
 export default CSSModules(InfoPanel, styles)

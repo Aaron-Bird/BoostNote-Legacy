@@ -175,6 +175,14 @@ class MarkdownNoteDetail extends React.Component {
 
   }
 
+  exportAsMd () {
+    ee.emit('export:save-md')
+  }
+
+  exportAsTxt () {
+    ee.emit('export:save-text')
+  }
+
   handleTrashButtonClick (e) {
     let { note } = this.state
     const { isTrashed } = note
@@ -352,6 +360,8 @@ class MarkdownNoteDetail extends React.Component {
           noteLink={`[${note.title}](${location.query.key})`}
           updatedAt={formatDate(note.updatedAt)}
           createdAt={formatDate(note.createdAt)}
+          exportAsMd={this.exportAsMd}
+          exportAsTxt={this.exportAsTxt}
         />
       </div>
     </div>
