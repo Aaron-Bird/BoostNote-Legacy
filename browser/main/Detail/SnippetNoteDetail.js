@@ -588,7 +588,7 @@ class SnippetNoteDetail extends React.Component {
         <InfoPanel
           storageName={currentOption.storage.name}
           folderName={currentOption.folder.name}
-          noteLink={`[title](${location.query.key})`}
+          noteLink={`[${note.title}](${location.query.key})`}
           updatedAt={formatDate(note.updatedAt)}
           createdAt={formatDate(note.createdAt)}
         />
