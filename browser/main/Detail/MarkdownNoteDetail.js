@@ -121,7 +121,7 @@ class MarkdownNoteDetail extends React.Component {
           type: 'UPDATE_NOTE',
           note: note
         })
-        AwsMobileAnalyticsConfig.recordDynamitCustomEvent('EDIT_NOTE')
+        AwsMobileAnalyticsConfig.recordDynamicCustomEvent('EDIT_NOTE')
       })
   }
 
@@ -160,7 +160,7 @@ class MarkdownNoteDetail extends React.Component {
 
   handleStarButtonClick (e) {
     let { note } = this.state
-    if (!note.isStarred) AwsMobileAnalyticsConfig.recordDynamitCustomEvent('ADD_STAR')
+    if (!note.isStarred) AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_STAR')
 
     note.isStarred = !note.isStarred
 

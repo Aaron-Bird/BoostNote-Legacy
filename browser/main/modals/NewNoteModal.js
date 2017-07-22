@@ -24,8 +24,8 @@ class NewNoteModal extends React.Component {
   }
 
   handleMarkdownNoteButtonClick (e) {
-    AwsMobileAnalyticsConfig.recordDynamitCustomEvent('ADD_MARKDOWN')
-    AwsMobileAnalyticsConfig.recordDynamitCustomEvent('ADD_ALLNOTE')
+    AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_MARKDOWN')
+    AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_ALLNOTE')
     let { storage, folder, dispatch, location } = this.props
     dataApi
       .createNote(storage, {
@@ -56,8 +56,8 @@ class NewNoteModal extends React.Component {
   }
 
   handleSnippetNoteButtonClick (e) {
-    AwsMobileAnalyticsConfig.recordDynamitCustomEvent('ADD_SNIPPET')
-    AwsMobileAnalyticsConfig.recordDynamitCustomEvent('ADD_ALLNOTE')
+    AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_SNIPPET')
+    AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_ALLNOTE')
     let { storage, folder, dispatch, location } = this.props
 
     dataApi

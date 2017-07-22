@@ -57,7 +57,7 @@ class TagSelect extends React.Component {
   }
 
   submitTag () {
-    AwsMobileAnalyticsConfig.recordDynamitCustomEvent('ADD_TAG')
+    AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_TAG')
     let { value } = this.props
     let newTag = this.refs.newTag.value.trim().replace(/ +/g, '_')
 

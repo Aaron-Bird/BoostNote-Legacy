@@ -95,7 +95,7 @@ class FinderMain extends React.Component {
 
     if (e.keyCode === 13) {
       this.refs.detail.saveToClipboard()
-      AwsMobileAnalyticsConfig.recordDynamitCustomEvent('COPY_FINDER')
+      AwsMobileAnalyticsConfig.recordDynamicCustomEvent('COPY_FINDER')
       hideFinder()
       e.preventDefault()
     }

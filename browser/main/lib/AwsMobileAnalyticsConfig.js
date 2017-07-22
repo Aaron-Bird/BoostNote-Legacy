@@ -23,7 +23,7 @@ function initAwsMobileAnalytics () {
   recordStaticCustomEvent()
 }
 
-function recordDynamitCustomEvent (type) {
+function recordDynamicCustomEvent (type) {
   if (process.env.NODE_ENV !== 'production' || !ConfigManager.default.get().amaEnabled) return
   mobileAnalyticsClient.recordEvent(type)
 }
@@ -37,5 +37,5 @@ function recordStaticCustomEvent () {
 
 module.exports = {
   initAwsMobileAnalytics,
-  recordDynamitCustomEvent
+  recordDynamicCustomEvent
 }
