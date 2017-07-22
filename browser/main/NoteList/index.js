@@ -49,10 +49,6 @@ class NoteList extends React.Component {
     this.importFromFileHandler = this.importFromFile.bind(this)
     this.jumpNoteByHash = this.jumpNoteByHashHandler.bind(this)
 
-    this.jumpToTopHandler = () => {
-      this.jumpToTop()
-    }
-
     this.state = {
     }
   }
@@ -63,8 +59,6 @@ class NoteList extends React.Component {
     ee.on('list:prior', this.selectPriorNoteHandler)
     ee.on('list:focus', this.focusHandler)
     ee.on('list:isMarkdownNote', this.alertIfSnippetHandler)
-    ee.on('list:top', this.jumpToTopHandler)
-    ee.on('list:jumpToTop', this.jumpToTopHandler)
     ee.on('import:file', this.importFromFileHandler)
     ee.on('list:jump', this.jumpNoteByHash)
   }
@@ -86,8 +80,6 @@ class NoteList extends React.Component {
     ee.off('list:prior', this.selectPriorNoteHandler)
     ee.off('list:focus', this.focusHandler)
     ee.off('list:isMarkdownNote', this.alertIfSnippetHandler)
-    ee.off('list:top', this.jumpToTopHandler)
-    ee.off('list:jumpToTop', this.jumpToTopHandler)
     ee.off('import:file', this.importFromFileHandler)
     ee.off('list:jump', this.jumpNoteByHash)
   }
@@ -338,23 +330,6 @@ class NoteList extends React.Component {
         buttons: ['OK', 'Cancel']
       })
     }
-  }
-
-  jumpToTop () {
-    if (this.notes === null || this.notes.length === 0) {
-      return
-    }
-    let { router } = this.context
-    let { location } = this.props
-
-    const targetIndex = 0
-
-    router.push({
-      pathname: location.pathname,
-      query: {
-        key: this.notes[targetIndex].storage + '-' + this.notes[targetIndex].key
-      }
-    })
   }
 
   handleDragStart (e, note) {
