@@ -49,7 +49,7 @@ class CreateFolderModal extends React.Component {
   }
 
   confirm () {
-    AwsMobileAnalyticsConfig.recordDynamitCustomEvent('ADD_FOLDER')
+    AwsMobileAnalyticsConfig.recordDynamicCustomEvent('ADD_FOLDER')
     if (this.state.name.trim().length > 0) {
       let { storage } = this.props
       let input = {
