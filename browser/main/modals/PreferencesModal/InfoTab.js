@@ -1,6 +1,9 @@
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './InfoTab.styl'
+import ConfigManager from 'browser/main/lib/ConfigManager'
+import store from 'browser/main/store'
+import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 
 const electron = require('electron')
 const { shell, remote } = electron
@@ -11,12 +14,35 @@ class InfoTab extends React.Component {
     super(props)
 
     this.state = {
+      config: this.props.config
     }
   }
 
   handleLinkClick (e) {
     shell.openExternal(e.currentTarget.href)
     e.preventDefault()
+  }
+
+  handleConfigChange (e) {
+    const newConfig = { amaEnabled: this.refs.amaEnabled.checked }
+
+    this.setState({ config: newConfig })
+  }
+
+  handleSaveButtonClick (e) {
+    let newConfig = {
+      amaEnabled: this.state.config.amaEnabled
+    }
+
+    ConfigManager.set(newConfig)
+
+    store.dispatch({
+      type: 'SET_CONFIG',
+      config: newConfig
+    })
+    if (!newConfig.amaEnabled) {
+      AwsMobileAnalyticsConfig.recordDynamitCustomEvent('DISABLE_AMA')
+    }
   }
 
   render () {
@@ -68,6 +94,18 @@ class InfoTab extends React.Component {
             License: GPL v3
           </li>
         </ul>
+        <hr />
+        <div styleName='policy'>Data collection policy</div>
+        <p>We collect only the number of users on Boostnote for DAU and any detail information<br />
+        such as a note's content or title is not collected.</p>
+        <p>You can see how it works on <a href='https://github.com/BoostIO/Boostnote'>GitHub</a></p>
+        <input onChange={(e) => this.handleConfigChange(e)}
+          checked={this.state.config.amaEnabled}
+          ref='amaEnabled'
+          type='checkbox'
+        />
+        Enable to send analytics to our servers<br />
+        <button onClick={(e) => this.handleSaveButtonClick(e)}>Save</button>
       </div>
     )
   }
