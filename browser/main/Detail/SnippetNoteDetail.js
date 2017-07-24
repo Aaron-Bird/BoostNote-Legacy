@@ -549,14 +549,10 @@ class SnippetNoteDetail extends React.Component {
 
     const trashTopBar = <div styleName='info'>
       <div styleName='info-left'>
-        <div styleName='info-left-top'>
-          <div styleName='info-left-top-folderSelect'>
-            <i styleName='undo-button'
-              className='fa fa-undo fa-fw'
-              onClick={(e) => this.handleUndoButtonClick(e)}
-            />
-          </div>
-        </div>
+        <i styleName='undo-button'
+          className='fa fa-undo fa-fw'
+          onClick={(e) => this.handleUndoButtonClick(e)}
+        />
       </div>
       <div styleName='info-right'>
         <TrashButton onClick={(e) => this.handleTrashButtonClick(e)} />
@@ -589,7 +585,7 @@ class SnippetNoteDetail extends React.Component {
         <button styleName='control-fullScreenButton'
           onMouseDown={(e) => this.handleFullScreenButton(e)}
         >
-          <i className='fa fa-arrows-alt' styleName='fullScreen-button' />
+          <i className='fa fa-expand' styleName='fullScreen-button' />
         </button>
         <InfoButton
           onClick={(e) => this.handleInfoButtonClick(e)}
