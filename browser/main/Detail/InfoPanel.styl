@@ -13,7 +13,7 @@
   margin-top 45px
   margin-left -210px
   position absolute
-  padding 20px
+  padding 20px 20px 0 20px
   width 340px
   background-color $ui-noteList-backgroundColor
   border 1px solid $border-color
@@ -40,8 +40,35 @@
   width 160px
   height 25px
 
-.group-export
-  height 25px
+[id=export-wrap]
+  height 90px
+  display flex
+  justify-content center
+  margin 20px 0 10px 0
+  button
+    outline none
+    font-size 48px
+    color #A0A0A0
+    background-color transparent
+    border none
+    margin 0 5px
+    border-radius 5px
+    &:hover
+      transition 0.2s
+      background-color alpha($ui-button--hover-backgroundColor, 30%)
+      color $ui-inactive-text-color
+  p
+    font-size 13px
+    color #A0A0A0
+    font-weight light
+    &:hover
+      color $ui-inactive-text-color
+
+.export--enable
+  cursor pointer
+
+.export--unable
+  cursor not-allowed
 
 body[data-theme="dark"]
   .control-infoButton-panel
@@ -57,3 +84,14 @@ body[data-theme="dark"]
   .group-section-control input
     background-color alpha($ui-dark-borderColor, 80%)
     color $ui-dark-text-color
+
+  [id=export-wrap]
+    button
+      color $ui-dark-inactive-text-color
+      &:hover
+        background-color alpha($ui-dark-borderColor, 20%)
+        color $ui-dark-text-color
+    p
+      color $ui-dark-inactive-text-color
+      &:hover
+        color $ui-dark-text-color
