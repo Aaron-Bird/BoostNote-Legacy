@@ -105,7 +105,7 @@ class InfoTab extends React.Component {
           type='checkbox'
         />
         Enable to send analytics to our servers<br />
-        <button onClick={(e) => this.handleSaveButtonClick(e)}>Save</button>
+        <button styleName='policy-submit' onClick={(e) => this.handleSaveButtonClick(e)}>Save</button>
       </div>
     )
   }
