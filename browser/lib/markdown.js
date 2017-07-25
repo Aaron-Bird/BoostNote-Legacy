@@ -159,7 +159,8 @@ function strip (input) {
 const markdown = {
   render: function markdown (content) {
     if (!_.isString(content)) content = ''
-    return md.render(content)
+    const renderedContent = md.render(content)
+    return md.normalizeLinkText(renderedContent)
   },
   strip
 }
