@@ -1,6 +1,7 @@
 import _ from 'lodash'
 
 const OSX = global.process.platform === 'darwin'
+const win = global.process.platform === 'win32'
 const electron = require('electron')
 const { ipcRenderer } = electron
 const consts = require('browser/lib/consts')
@@ -28,14 +29,14 @@ export const DEFAULT_CONFIG = {
     theme: 'base16-light',
     keyMap: 'sublime',
     fontSize: '14',
-    fontFamily: 'Monaco, Consolas',
+    fontFamily: win ? 'Segoe UI' : 'Monaco, Consolas',
     indentType: 'space',
     indentSize: '2',
     switchPreview: 'BLUR' // Available value: RIGHTCLICK, BLUR
   },
   preview: {
     fontSize: '14',
-    fontFamily: 'Lato',
+    fontFamily: win ? 'Segoe UI' : 'Lato',
     codeBlockTheme: 'dracula',
     lineNumber: true
   }
