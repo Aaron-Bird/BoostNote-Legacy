@@ -47,14 +47,21 @@ const InfoPanel = ({
       </div>
     </div>
 
-    <div styleName='group-export'>
-      <i className='fa fa-file-text fa-fw'
-        onClick={(e) => exportAsMd(e)}
-      />
+    <div id='export-wrap'>
+      <button styleName='export--enable' onClick={(e) => exportAsMd(e)}>
+        <i className='fa fa-file-code-o fa-fw' />
+        <p>.md</p>
+      </button>
 
-      <i className='fa fa-file-text fa-fw'
-        onClick={(e) => exportAsTxt(e)}
-      />
+      <button styleName='export--enable' onClick={(e) => exportAsTxt(e)}>
+        <i className='fa fa-file-text-o fa-fw' />
+        <p>.txt</p>
+      </button>
+
+      <button styleName='export--unable'>
+        <i className='fa fa-file-pdf-o fa-fw' />
+        <p>.pdf</p>
+      </button>
     </div>
   </div>
 )

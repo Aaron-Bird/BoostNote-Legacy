@@ -157,6 +157,9 @@ modal()
 
 topBarButtonLight()
   width 34px
+  display flex
+  align-items center
+  justify-content center
   height 34px
   border-radius 17px
   font-size 14px
@@ -168,7 +171,7 @@ topBarButtonLight()
   &:active
     border-color $ui-button--active-backgroundColor
   &:hover
-    background-color $ui-button--hover-backgroundColor
+    background-color alpha($ui-button--hover-backgroundColor, 60%)
     .control-lockButton-tooltip
       opacity 1
 
@@ -231,10 +234,12 @@ topBarButtonDark()
   color $ui-dark-topbar-button-color
   &:hover
     background-color $dark-default-button-background--hover
+    color $ui-dark-tooltip-text-color
   &:active
     border-color $ui-dark-button--focus-borderColor
   &:active:hover
     background-color $ui-dark-button--active-backgroundColor
+    color $ui-dark-tooltip-text-color
   &:focus
     border-color $ui-button--focus-borderColor
 

@@ -290,14 +290,10 @@ class MarkdownNoteDetail extends React.Component {
 
     const trashTopBar = <div styleName='info'>
       <div styleName='info-left'>
-        <div styleName='info-left-top'>
-          <div styleName='info-left-top-folderSelect'>
-            <i styleName='undo-button'
-              className='fa fa-undo fa-fw'
-              onClick={(e) => this.handleUndoButtonClick(e)}
-            />
-          </div>
-        </div>
+        <i styleName='undo-button'
+          className='fa fa-undo fa-fw'
+          onClick={(e) => this.handleUndoButtonClick(e)}
+        />
       </div>
       <div styleName='info-right'>
         <TrashButton onClick={(e) => this.handleTrashButtonClick(e)} />
