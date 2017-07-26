@@ -106,6 +106,11 @@ class NoteDetail extends React.Component {
     let editorIndentSize = parseInt(config.editor.indentSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 132)) editorIndentSize = 4
 
+    const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
+    if (!_.isArray(cachedStorageList)) throw new Error('Target storage doesn\'t exist.')
+    const storage = _.find(cachedStorageList, {key: note.storage})
+    if (storage === undefined) throw new Error('Target storage doesn\'t exist.')
+
     if (note.type === 'SNIPPET_NOTE') {
       let tabList = note.snippets.map((snippet, index) => {
         let isActive = this.state.snippetIndex === index
@@ -192,6 +197,7 @@ class NoteDetail extends React.Component {
         lineNumber={config.preview.lineNumber}
         indentSize={editorIndentSize}
         value={note.content}
+        storagePath={storage.path}
       />
     )
   }
