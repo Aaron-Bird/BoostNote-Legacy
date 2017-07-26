@@ -2,6 +2,7 @@ const resolveStorageData = require('./resolveStorageData')
 const _ = require('lodash')
 const path = require('path')
 const CSON = require('@rokt33r/season')
+const { findStorage } = require('browser/lib/findStorage')
 
 function validateInput (input) {
   let validatedInput = {}
@@ -68,11 +69,7 @@ function updateNote (storageKey, noteKey, input) {
     if (input == null) throw new Error('No input found.')
     input = validateInput(input)
 
-    let cachedStorageList = JSON.parse(localStorage.getItem('storages'))
-    if (!_.isArray(cachedStorageList)) throw new Error('Target storage doesn\'t exist.')
-
-    targetStorage = _.find(cachedStorageList, {key: storageKey})
-    if (targetStorage == null) throw new Error('Target storage doesn\'t exist.')
+    targetStorage = findStorage(storageKey)
   } catch (e) {
     return Promise.reject(e)
   }

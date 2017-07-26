@@ -2,15 +2,12 @@ const resolveStorageData = require('./resolveStorageData')
 const _ = require('lodash')
 const path = require('path')
 const sander = require('sander')
+const { findStorage } = require('browser/lib/findStorage')
 
 function deleteNote (storageKey, noteKey) {
   let targetStorage
   try {
-    let cachedStorageList = JSON.parse(localStorage.getItem('storages'))
-    if (!_.isArray(cachedStorageList)) throw new Error('Target storage doesn\'t exist.')
-
-    targetStorage = _.find(cachedStorageList, {key: storageKey})
-    if (targetStorage == null) throw new Error('Target storage doesn\'t exist.')
+    targetStorage = findStorage(storageKey)
   } catch (e) {
     return Promise.reject(e)
   }

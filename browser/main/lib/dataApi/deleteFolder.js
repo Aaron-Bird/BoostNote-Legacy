@@ -4,6 +4,7 @@ const resolveStorageData = require('./resolveStorageData')
 const resolveStorageNotes = require('./resolveStorageNotes')
 const CSON = require('@rokt33r/season')
 const sander = require('sander')
+const { findStorage } = require('browser/lib/findStorage')
 
 /**
  * @param {String} storageKey
@@ -21,11 +22,7 @@ function deleteFolder (storageKey, folderKey) {
   let rawStorages
   let targetStorage
   try {
-    rawStorages = JSON.parse(localStorage.getItem('storages'))
-    if (!_.isArray(rawStorages)) throw new Error('Target storage doesn\'t exist.')
-
-    targetStorage = _.find(rawStorages, {key: storageKey})
-    if (targetStorage == null) throw new Error('Target storage doesn\'t exist.')
+    targetStorage = findStorage(storageKey)
   } catch (e) {
     return Promise.reject(e)
   }
