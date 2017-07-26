@@ -4,6 +4,7 @@ import styles from './MarkdownEditor.styl'
 import CodeEditor from 'browser/components/CodeEditor'
 import MarkdownPreview from 'browser/components/MarkdownPreview'
 import eventEmitter from 'browser/main/lib/eventEmitter'
+const _ = require('lodash')
 
 class MarkdownEditor extends React.Component {
   constructor (props) {
@@ -213,6 +214,11 @@ class MarkdownEditor extends React.Component {
     let previewStyle = {}
     if (this.props.ignorePreviewPointerEvents) previewStyle.pointerEvents = 'none'
 
+    const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
+    if (!_.isArray(cachedStorageList)) throw new Error('Target storage doesn\'t exist.')
+    const storage = _.find(cachedStorageList, {key: storageKey})
+    if (storage === undefined) throw new Error('Target storage doesn\'t exist.')
+
     return (
       <div className={className == null
           ? 'MarkdownEditor'
@@ -260,6 +266,7 @@ class MarkdownEditor extends React.Component {
           onMouseUp={(e) => this.handlePreviewMouseUp(e)}
           onMouseDown={(e) => this.handlePreviewMouseDown(e)}
           onCheckboxClick={(e) => this.handleCheckboxClick(e)}
+          storagePath={storage.path}
         />
       </div>
     )

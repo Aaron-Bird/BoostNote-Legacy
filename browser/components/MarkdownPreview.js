@@ -255,7 +255,7 @@ export default class MarkdownPreview extends React.Component {
       el.removeEventListener('click', this.linkClickHandler)
     })
 
-    let { value, theme, indentSize, codeBlockTheme } = this.props
+    let { value, theme, indentSize, codeBlockTheme, storagePath } = this.props
 
     this.refs.root.contentWindow.document.body.setAttribute('data-theme', theme)
 
@@ -281,6 +281,11 @@ export default class MarkdownPreview extends React.Component {
 
     _.forEach(this.refs.root.contentWindow.document.querySelectorAll('a'), (el) => {
       el.addEventListener('click', this.linkClickHandler)
+    })
+
+    _.forEach(this.refs.root.contentWindow.document.querySelectorAll('img'), (el) => {
+      if (!/\/:storage/.test(el.src)) return
+      el.src = el.src.replace('/:storage', path.join(storagePath, 'images'))
     })
 
     codeBlockTheme = consts.THEMES.some((_theme) => _theme === codeBlockTheme)
@@ -412,5 +417,6 @@ MarkdownPreview.propTypes = {
   onMouseUp: PropTypes.func,
   onMouseDown: PropTypes.func,
   className: PropTypes.string,
-  value: PropTypes.string
+  value: PropTypes.string,
+  storagePath: PropTypes.string
 }

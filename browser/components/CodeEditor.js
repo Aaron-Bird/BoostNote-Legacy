@@ -192,8 +192,8 @@ export default class CodeEditor extends React.Component {
     const imagePath = e.dataTransfer.files[0].path
     const filename = path.basename(imagePath)
 
-    copyImage(imagePath, this.props.storageKey).then((imagePathInTheStorage) => {
-      const imageMd = `![${filename}](${imagePathInTheStorage})`
+    copyImage(imagePath, this.props.storageKey).then((imagePath) => {
+      const imageMd = `![${filename}](${path.join('/:storage', imagePath)})`
       this.insertImageMd(imageMd)
     })
   }
