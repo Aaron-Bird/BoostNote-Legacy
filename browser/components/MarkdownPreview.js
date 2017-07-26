@@ -285,7 +285,7 @@ export default class MarkdownPreview extends React.Component {
 
     _.forEach(this.refs.root.contentWindow.document.querySelectorAll('img'), (el) => {
       if (!/\/:storage/.test(el.src)) return
-      el.src = el.src.replace('/:storage', path.join(storagePath, 'images'))
+      el.src = `file:///${path.join(storagePath, 'images', path.basename(el.src))}`
     })
 
     codeBlockTheme = consts.THEMES.some((_theme) => _theme === codeBlockTheme)
