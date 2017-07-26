@@ -26,7 +26,7 @@ function copyImage (filePath, storageKey) {
       if (!fs.existsSync(imageDir)) fs.mkdirSync(imageDir)
       const outputImage = fs.createWriteStream(path.join(imageDir, basename))
       inputImage.pipe(outputImage)
-      resolve(`${targetStorage.path}/images/${basename}`)
+      resolve(basename)
     } catch (e) {
       return reject(e)
     }
