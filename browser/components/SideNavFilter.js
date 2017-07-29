@@ -34,7 +34,7 @@ const SideNavFilter = ({
       onClick={handleTrashedButtonClick}
     >
       <i className='fa fa-trash fa-fw' />
-      <span styleName='menu-button-label'>Trashed</span>
+      <span styleName='menu-button-label'>Trash</span>
     </button>
   </div>
 )
