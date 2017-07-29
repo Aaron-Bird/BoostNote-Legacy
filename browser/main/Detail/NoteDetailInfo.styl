@@ -55,7 +55,25 @@ $info-margin-under-border = 27px
   padding-left 30px
 
 .undo-button
-  topBarButtonLight()
+  width 34px
+  height 34px
+  border-radius 17px
+  font-size 14px
+  margin 15px 7px
+  border none
+  color $ui-button-color
+  display flex
+  align-items center
+  justify-content center
+  fill $ui-button-color
+  background-color transparent
+  cursor pointer
+  &:active
+    border-color $ui-button--active-backgroundColor
+  &:hover
+    background-color alpha($ui-button--hover-backgroundColor, 60%)
+    .control-lockButton-tooltip
+      opacity 1
 
 body[data-theme="dark"]
   .info
