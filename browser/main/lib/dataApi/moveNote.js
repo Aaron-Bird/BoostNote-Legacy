@@ -4,17 +4,13 @@ const path = require('path')
 const CSON = require('@rokt33r/season')
 const keygen = require('browser/lib/keygen')
 const sander = require('sander')
+const { findStorage } = require('browser/lib/findStorage')
 
 function moveNote (storageKey, noteKey, newStorageKey, newFolderKey) {
   let oldStorage, newStorage
   try {
-    let cachedStorageList = JSON.parse(localStorage.getItem('storages'))
-    if (!_.isArray(cachedStorageList)) throw new Error('Storage doesn\'t exist.')
-
-    oldStorage = _.find(cachedStorageList, {key: storageKey})
-    if (oldStorage == null) throw new Error('Storage doesn\'t exist.')
-
-    newStorage = _.find(cachedStorageList, {key: newStorageKey})
+    oldStorage = findStorage(storageKey)
+    newStorage = findStorage(newStorageKey)
     if (newStorage == null) throw new Error('Target storage doesn\'t exist.')
   } catch (e) {
     return Promise.reject(e)

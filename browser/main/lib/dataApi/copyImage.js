@@ -2,6 +2,7 @@ const fs = require('fs')
 const path = require('path')
 const _ = require('lodash')
 const sander = require('sander')
+const { findStorage } = require('browser/lib/findStorage')
 
 /**
  * @description To copy an image and return the path.
@@ -12,11 +13,7 @@ const sander = require('sander')
 function copyImage (filePath, storageKey) {
   return new Promise((resolve, reject) => {
     try {
-      const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
-      if (!_.isArray(cachedStorageList)) throw new Error('Target storage doesn\'t exist.')
-      const storage = _.find(cachedStorageList, {key: storageKey})
-      if (storage === undefined) throw new Error('Target storage doesn\'t exist.')
-      const targetStorage = storage
+      const targetStorage = findStorage(storageKey)
 
       const inputImage = fs.createReadStream(filePath)
       const imageExt = path.extname(filePath)

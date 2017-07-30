@@ -5,6 +5,7 @@ import MarkdownPreview from 'browser/components/MarkdownPreview'
 import MarkdownEditor from 'browser/components/MarkdownEditor'
 import CodeEditor from 'browser/components/CodeEditor'
 import CodeMirror from 'codemirror'
+import { findStorage } from 'browser/lib/findStorage'
 
 const electron = require('electron')
 const { clipboard } = electron
@@ -106,10 +107,7 @@ class NoteDetail extends React.Component {
     let editorIndentSize = parseInt(config.editor.indentSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 132)) editorIndentSize = 4
 
-    const cachedStorageList = JSON.parse(localStorage.getItem('storages'))
-    if (!_.isArray(cachedStorageList)) throw new Error('Target storage doesn\'t exist.')
-    const storage = _.find(cachedStorageList, {key: note.storage})
-    if (storage === undefined) throw new Error('Target storage doesn\'t exist.')
+    const storage = findStorage(note.storage)
 
     if (note.type === 'SNIPPET_NOTE') {
       let tabList = note.snippets.map((snippet, index) => {

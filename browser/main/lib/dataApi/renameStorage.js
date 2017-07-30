@@ -1,5 +1,7 @@
 const _ = require('lodash')
 const resolveStorageData = require('./resolveStorageData')
+const { findStorage } = require('browser/lib/findStorage')
+
 /**
  * @param {String} key
  * @param {String} name

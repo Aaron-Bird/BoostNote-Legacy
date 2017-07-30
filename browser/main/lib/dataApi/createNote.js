@@ -4,6 +4,7 @@ const _ = require('lodash')
 const keygen = require('browser/lib/keygen')
 const path = require('path')
 const CSON = require('@rokt33r/season')
+const { findStorage } = require('browser/lib/findStorage')
 
 function validateInput (input) {
   if (!_.isArray(input.tags)) input.tags = []
@@ -38,11 +39,7 @@ function createNote (storageKey, input) {
     input = Object.assign({}, input)
     validateInput(input)
 
-    let cachedStorageList = JSON.parse(localStorage.getItem('storages'))
-    if (!_.isArray(cachedStorageList)) throw new Error('Target storage doesn\'t exist.')
-
-    targetStorage = _.find(cachedStorageList, {key: storageKey})
-    if (targetStorage == null) throw new Error('Target storage doesn\'t exist.')
+    targetStorage = findStorage(storageKey)
   } catch (e) {
     return Promise.reject(e)
   }
