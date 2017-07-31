@@ -34,15 +34,16 @@ class InfoTab extends React.Component {
       amaEnabled: this.state.config.amaEnabled
     }
 
+    if (!newConfig.amaEnabled) {
+      AwsMobileAnalyticsConfig.recordDynamicCustomEvent('DISABLE_AMA')
+    }
+
     ConfigManager.set(newConfig)
 
     store.dispatch({
       type: 'SET_CONFIG',
       config: newConfig
     })
-    if (!newConfig.amaEnabled) {
-      AwsMobileAnalyticsConfig.recordDynamicCustomEvent('DISABLE_AMA')
-    }
   }
 
   render () {
