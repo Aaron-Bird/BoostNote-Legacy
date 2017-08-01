@@ -81,7 +81,6 @@ class MarkdownEditor extends React.Component {
         if (newStatus === 'CODE') {
           this.refs.code.focus()
         } else {
-          this.refs.code.blur()
           this.refs.preview.focus()
         }
         eventEmitter.emit('topbar:togglelockbutton', this.state.status)
@@ -164,15 +163,18 @@ class MarkdownEditor extends React.Component {
   }
 
   handleKeyDown (e) {
+    let { config } = this.props
     if (this.state.status !== 'CODE') return false
     const keyPressed = this.state.keyPressed
     keyPressed.add(e.keyCode)
     this.setState({ keyPressed })
     let isNoteHandlerKey = (el) => { return keyPressed.has(el) }
+    // These conditions are for ctrl-e and ctrl-w
     if (keyPressed.size === this.escapeFromEditor.length &&
         !this.state.isLocked && this.state.status === 'CODE' &&
         this.escapeFromEditor.every(isNoteHandlerKey)) {
-      document.activeElement.blur()
+      this.handleContextMenu()
+      if (config.editor.switchPreview === 'BLUR') document.activeElement.blur()
     }
     if (keyPressed.size === this.supportMdSelectionBold.length && this.supportMdSelectionBold.every(isNoteHandlerKey)) {
       this.addMdAroundWord('**')
