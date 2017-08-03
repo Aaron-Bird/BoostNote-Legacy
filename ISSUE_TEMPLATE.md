@@ -1,1 +1,1 @@
-Please paste some **screenshots** with opening the developer tool if you report a bug.
+Please paste some **screenshots** with the **developer tool** open if you report a bug.
