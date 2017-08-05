@@ -5,7 +5,7 @@ import _ from 'lodash'
 
 const pickContents = (notes) => notes.map((note) => { return note.content })
 
-let noteList = { noteMap: [] }
+let notes = []
 let note1, note2
 
 test.before(t => {
@@ -14,7 +14,7 @@ test.before(t => {
   note1 = dummyNote(data1)
   note2 = dummyNote(data2)
 
-  noteList.noteMap = [note1, note2]
+  notes = [note1, note2]
 })
 
 test('it can find notes by tags or words', t => {
@@ -30,7 +30,7 @@ test('it can find notes by tags or words', t => {
 
   testCases.forEach((testCase) => {
     const [input, expectedContents] = testCase
-    const results = searchFromNotes(noteList, input)
+    const results = searchFromNotes(notes, input)
     t.true(_.isEqual(pickContents(results).sort(), expectedContents.sort()))
   })
 })

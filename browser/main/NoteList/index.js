@@ -246,7 +246,7 @@ class NoteList extends React.Component {
       if (searchInputText === '') {
         router.push('/home')
       }
-      return searchFromNotes(this.props.data, searchInputText)
+      return searchFromNotes(this.notes, searchInputText)
     }
 
     if (location.pathname.match(/\/trashed/)) {
