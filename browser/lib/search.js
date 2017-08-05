@@ -1,7 +1,6 @@
 import _ from 'lodash'
 
-export default function searchFromNotes (data, search) {
-  let notes = data.noteMap.map((note) => note)
+export default function searchFromNotes (notes, search) {
   if (search.trim().length === 0) return []
   let searchBlocks = search.split(' ')
   searchBlocks.forEach((block) => {
