@@ -180,14 +180,20 @@ class StorageItem extends React.Component {
 
   render () {
     let { storage, location, isFolded, data, dispatch } = this.props
-    let { folderNoteMap } = data
+    let { folderNoteMap, trashedSet } = data
     let folderList = storage.folders.map((folder) => {
       let isActive = !!(location.pathname.match(new RegExp('\/storages\/' + storage.key + '\/folders\/' + folder.key)))
       let noteSet = folderNoteMap.get(storage.key + '-' + folder.key)
 
-      let noteCount = noteSet != null
-        ? noteSet.size
-        : 0
+      let noteCount = 0
+      if (noteSet) {
+        let trashedNoteCount = 0
+        const noteKeys = noteSet.map(noteKey => { return noteKey })
+        noteKeys.forEach(noteKey => {
+          if (trashedSet.toJS().some(trashedKey => { return noteKey === trashedKey })) trashedNoteCount++
+        })
+        noteCount = noteSet.size - trashedNoteCount
+      }
       return (
         <StorageItemChild
           key={folder.key}
