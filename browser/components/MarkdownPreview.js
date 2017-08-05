@@ -108,6 +108,7 @@ export default class MarkdownPreview extends React.Component {
     this.checkboxClickHandler = (e) => this.handleCheckboxClick(e)
     this.saveAsTextHandler = () => this.handleSaveAsText()
     this.saveAsMdHandler = () => this.handleSaveAsMd()
+    this.printHandler = () => this.handlePrint()
 
     this.linkClickHandler = this.handlelinkClick.bind(this)
   }
@@ -162,6 +163,10 @@ export default class MarkdownPreview extends React.Component {
     this.exportAsDocument('md')
   }
 
+  handlePrint () {
+    this.refs.root.contentWindow.print()
+  }
+
   exportAsDocument (fileType) {
     const options = {
       filters: [
@@ -198,6 +203,7 @@ export default class MarkdownPreview extends React.Component {
     this.refs.root.contentWindow.document.addEventListener('dragover', this.preventImageDroppedHandler)
     eventEmitter.on('export:save-text', this.saveAsTextHandler)
     eventEmitter.on('export:save-md', this.saveAsMdHandler)
+    eventEmitter.on('print', this.printHandler)
   }
 
   componentWillUnmount () {
@@ -208,6 +214,7 @@ export default class MarkdownPreview extends React.Component {
     this.refs.root.contentWindow.document.removeEventListener('dragover', this.preventImageDroppedHandler)
     eventEmitter.off('export:save-text', this.saveAsTextHandler)
     eventEmitter.off('export:save-md', this.saveAsMdHandler)
+    eventEmitter.off('print', this.printHandler)
   }
 
   componentDidUpdate (prevProps) {
