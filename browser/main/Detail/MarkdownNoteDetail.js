@@ -297,6 +297,18 @@ class MarkdownNoteDetail extends React.Component {
       </div>
       <div styleName='info-right'>
         <TrashButton onClick={(e) => this.handleTrashButtonClick(e)} />
+        <InfoButton
+          onClick={(e) => this.handleInfoButtonClick(e)}
+        />
+        <InfoPanel
+          storageName={currentOption.storage.name}
+          folderName={currentOption.folder.name}
+          noteLink={`[${note.title}](${location.query.key})`}
+          updatedAt={formatDate(note.updatedAt)}
+          createdAt={formatDate(note.createdAt)}
+          exportAsMd={this.exportAsMd}
+          exportAsTxt={this.exportAsTxt}
+        />
       </div>
     </div>
 
