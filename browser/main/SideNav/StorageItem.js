@@ -189,8 +189,8 @@ class StorageItem extends React.Component {
       if (noteSet) {
         let trashedNoteCount = 0
         const noteKeys = noteSet.map(noteKey => { return noteKey })
-        noteKeys.forEach(noteKey => {
-          if (trashedSet.toJS().some(trashedKey => { return noteKey === trashedKey })) trashedNoteCount++
+        trashedSet.toJS().forEach(trashedKey => {
+          if (noteKeys.some(noteKey => { return noteKey === trashedKey })) trashedNoteCount++
         })
         noteCount = noteSet.size - trashedNoteCount
       }
