@@ -20,6 +20,7 @@ import AwsMobileAnalyticsConfig from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import TrashButton from './TrashButton'
 import InfoButton from './InfoButton'
 import InfoPanel from './InfoPanel'
+import InfoPanelTrashed from './InfoPanelTrashed'
 import { formatDate } from 'browser/lib/date-formatter'
 
 function pass (name) {
@@ -559,10 +560,9 @@ class SnippetNoteDetail extends React.Component {
         <InfoButton
           onClick={(e) => this.handleInfoButtonClick(e)}
         />
-        <InfoPanel
+        <InfoPanelTrashed
           storageName={currentOption.storage.name}
           folderName={currentOption.folder.name}
-          noteLink={`[${note.title}](${location.query.key})`}
           updatedAt={formatDate(note.updatedAt)}
           createdAt={formatDate(note.createdAt)}
           exportAsMd={this.showWarning}
