@@ -1,0 +1,35 @@
+.todo-process
+  font-size 12px
+  display flex
+
+.todo-process-text
+  display inline-block
+  padding-right 10px
+  white-space nowrap
+  text-overflow ellipsis
+  i
+    color grey
+    padding-right 5px
+
+.todo-process-bar
+  display inline-block
+  margin auto
+  width 150px
+  height 5px
+  background-color #DADFE1
+  border-radius 2px
+  flex-grow 1
+
+.todo-process-bar--inner
+  height 100%
+  background-color #6C7A89
+
+
+body[data-theme="dark"]
+  .todo-process
+    color $ui-dark-text-color
+  .todo-process-bar
+    background-color #363A3D
+
+  .todo-process-bar--inner
+    background-color: alpha(#939395, 50%)
