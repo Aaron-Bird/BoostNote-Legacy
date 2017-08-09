@@ -176,8 +176,8 @@ class SnippetNoteDetail extends React.Component {
     if (isTrashed) {
       let dialogueButtonIndex = dialog.showMessageBox(remote.getCurrentWindow(), {
         type: 'warning',
-        message: 'Delete a note',
-        detail: 'This work cannot be undone.',
+        message: 'Confirm note deletion',
+        detail: 'This will permanently remove this note.',
         buttons: ['Confirm', 'Cancel']
       })
       if (dialogueButtonIndex === 1) return

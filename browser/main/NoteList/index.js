@@ -446,9 +446,9 @@ class NoteList extends React.Component {
               value={config.sortBy}
               onChange={(e) => this.handleSortByChange(e)}
             >
-              <option value='UPDATED_AT'>Updated Time</option>
-              <option value='CREATED_AT'>Created Time</option>
-              <option value='ALPHABETICAL'>Alphabetical</option>
+              <option value='UPDATED_AT'>Last Updated</option>
+              <option value='CREATED_AT'>Creation Time</option>
+              <option value='ALPHABETICAL'>Alphabetically</option>
             </select>
           </div>
           <div styleName='control-button-area'>
