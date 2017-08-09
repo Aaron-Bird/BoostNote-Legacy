@@ -146,6 +146,7 @@ class NoteDetail extends React.Component {
               config={config}
               value={snippet.content}
               ref={'code-' + index}
+              storageKey={note.storage}
             />
             : <CodeEditor styleName='tabView-content'
               mode={snippet.mode}

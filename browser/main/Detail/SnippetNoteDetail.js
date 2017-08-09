@@ -519,6 +519,7 @@ class SnippetNoteDetail extends React.Component {
             onChange={(e) => this.handleCodeChange(index)(e)}
             ref={'code-' + index}
             ignorePreviewPointerEvents={this.props.ignorePreviewPointerEvents}
+            storageKey={storageKey}
           />
           : <CodeEditor styleName='tabView-content'
             mode={snippet.mode}
