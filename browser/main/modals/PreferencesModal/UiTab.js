@@ -192,7 +192,7 @@ class UiTab extends React.Component {
 
           <div styleName='group-section'>
             <div styleName='group-section-label'>
-              Switching Preview
+              Switch to Preview
             </div>
             <div styleName='group-section-control'>
               <select value={config.editor.switchPreview}
@@ -200,7 +200,7 @@ class UiTab extends React.Component {
                 onChange={(e) => this.handleUIChange(e)}
               >
                 <option value='BLUR'>When Editor Blurred</option>
-                <option value='RIGHTCLICK'>When Right Clicking</option>
+                <option value='RIGHTCLICK'>On Right Click</option>
               </select>
             </div>
           </div>
@@ -218,7 +218,7 @@ class UiTab extends React.Component {
                 <option value='vim'>vim</option>
                 <option value='emacs'>emacs</option>
               </select>
-              <span styleName='note-for-keymap'>Please reload boostnote after you change the keymap</span>
+              <span styleName='note-for-keymap'>Please restart boostnote after you change the keymap</span>
             </div>
           </div>
 
@@ -271,7 +271,7 @@ class UiTab extends React.Component {
                 ref='previewLineNumber'
                 type='checkbox'
               />&nbsp;
-              Code block line numbering
+              Show line numbers for preview code blocks
             </label>
           </div>
 
