@@ -60,19 +60,18 @@ function _save (config) {
 }
 
 function get () {
-  let config = window.localStorage.getItem('config')
+  const storedConfig = window.localStorage.getItem('config')
+  let config = storedConfig
 
   try {
     const boostnotercConfig = RcParser.parse()
 
-    config = Object.assign({}, DEFAULT_CONFIG, JSON.parse(config))
-
-    config = Object.assign({}, DEFAULT_CONFIG, boostnotercConfig)
-    config = assignConfigValues(config, boostnotercConfig, config)
+    config = Object.assign({}, DEFAULT_CONFIG, JSON.parse(storedConfig))
+    config = assignConfigValues(config, boostnotercConfig)
 
     if (!validate(config)) throw new Error('INVALID CONFIG')
   } catch (err) {
-    console.warn('Boostnote resets the malformed configuration.')
+    console.warn('Boostnote resets the invalid configuration.')
     config = DEFAULT_CONFIG
     _save(config)
   }
@@ -131,12 +130,12 @@ function set (updates) {
   })
 }
 
-function assignConfigValues (config, rcConfig, originalConfig) {
-  config = Object.assign({}, DEFAULT_CONFIG, rcConfig, originalConfig)
-  config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, rcConfig.hotkey, originalConfig.hotkey)
-  config.ui = Object.assign({}, DEFAULT_CONFIG.ui, rcConfig.ui, originalConfig.ui)
-  config.editor = Object.assign({}, DEFAULT_CONFIG.editor, rcConfig.editor, originalConfig.editor)
-  config.preview = Object.assign({}, DEFAULT_CONFIG.preview, rcConfig.preview, originalConfig.preview)
+function assignConfigValues (originalConfig, rcConfig) {
+  let config = Object.assign({}, DEFAULT_CONFIG, originalConfig, rcConfig)
+  config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, originalConfig.hotkey, rcConfig.hotkey)
+  config.ui = Object.assign({}, DEFAULT_CONFIG.ui, originalConfig.ui, rcConfig.ui)
+  config.editor = Object.assign({}, DEFAULT_CONFIG.editor, originalConfig.editor, rcConfig.editor)
+  config.preview = Object.assign({}, DEFAULT_CONFIG.preview, originalConfig.preview, rcConfig.preview)
   return config
 }
 
