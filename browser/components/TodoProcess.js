@@ -7,7 +7,7 @@ import CSSModules from 'browser/lib/CSSModules'
 import styles from './TodoProcess.styl'
 
 const TodoProcess = ({
-  todoState: {
+  todoStatus: {
     total: totalTodo,
     completed: completedTodo
   }
@@ -24,7 +24,7 @@ const TodoProcess = ({
 )
 
 TodoProcess.propTypes = {
-  todoState: {
+  todoStatus: {
     total: PropTypes.number.isRequired,
     completed: PropTypes.number.isRequired
   }

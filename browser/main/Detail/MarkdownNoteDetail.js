@@ -18,7 +18,7 @@ import TrashButton from './TrashButton'
 import InfoButton from './InfoButton'
 import InfoPanel from './InfoPanel'
 import { formatDate } from 'browser/lib/date-formatter'
-import { getTodoPercentageOfCompleted } from 'browser/lib/getTodoState'
+import { getTodoPercentageOfCompleted } from 'browser/lib/getTodoStatus'
 
 const electron = require('electron')
 const { remote } = electron

@@ -4,7 +4,7 @@
 import React, { PropTypes } from 'react'
 import { isArray } from 'lodash'
 import CSSModules from 'browser/lib/CSSModules'
-import { getTodoState } from 'browser/lib/getTodoState'
+import { getTodoStatus } from 'browser/lib/getTodoStatus'
 import styles from './NoteItem.styl'
 import TodoProcess from './TodoProcess'
 
@@ -79,7 +79,7 @@ const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleDragStar
         </div>
       </div>
       {note.type === 'MARKDOWN_NOTE'
-        ? <TodoProcess todoState={getTodoState(note.content)} />
+        ? <TodoProcess todoStatus={getTodoStatus(note.content)} />
         : ''
       }
     </div>

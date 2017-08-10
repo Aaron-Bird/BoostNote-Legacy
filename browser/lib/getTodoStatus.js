@@ -1,4 +1,4 @@
-export function getTodoState (content) {
+export function getTodoStatus (content) {
   let splitted = content.split('\n')
   let numberOfTodo = 0
   let numberOfCompletedTodo = 0
@@ -20,6 +20,6 @@ export function getTodoState (content) {
 }
 
 export function getTodoPercentageOfCompleted (content) {
-  const state = getTodoState(content)
+  const state = getTodoStatus(content)
   return Math.floor(state.completed / state.total * 100)
 }
