@@ -14,7 +14,12 @@ function exec (boostnotercPath) {
   const config = this.parse(boostnotercPath)
   if (config.execs === undefined) return
   _.forEach(config.execs, (exec) => {
-    eval(exec)
+    try {
+      eval(exec)
+    } catch (e) {
+      // Ignore any errors in ~/.boostnoterc
+      console.log(e)
+    }
   })
 }
 
