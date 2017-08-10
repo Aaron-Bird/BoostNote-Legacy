@@ -14,8 +14,6 @@ import InitModal from 'browser/main/modals/InitModal'
 import mixpanel from 'browser/main/lib/mixpanel'
 import mobileAnalytics from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import eventEmitter from 'browser/main/lib/eventEmitter'
-import RcParser from 'browser/main/lib/RcParser'
-import path from 'path'
 
 const BOOSTNOTERC = '.boostnoterc'
 
@@ -80,10 +78,6 @@ class Main extends React.Component {
 
     eventEmitter.on('editor:fullscreen', this.toggleFullScreen)
     window.addEventListener('focus', focused)
-
-    const homePath = global.process.env.HOME || global.process.env.USERPROFILE
-    const boostnotercPath = path.join(homePath, BOOSTNOTERC)
-    RcParser.exec(boostnotercPath)
   }
 
   componentWillUnmount () {
