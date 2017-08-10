@@ -8,7 +8,6 @@ const { ipcRenderer } = electron
 const consts = require('browser/lib/consts')
 const path = require('path')
 const fs = require('fs')
-const BOOSTNOTERC = '.boostnoterc'
 
 let isInitialized = false
 
