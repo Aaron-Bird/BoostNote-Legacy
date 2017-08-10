@@ -15,8 +15,6 @@ import mixpanel from 'browser/main/lib/mixpanel'
 import mobileAnalytics from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import eventEmitter from 'browser/main/lib/eventEmitter'
 
-const BOOSTNOTERC = '.boostnoterc'
-
 function focused () {
   mixpanel.track('MAIN_FOCUSED')
 }
