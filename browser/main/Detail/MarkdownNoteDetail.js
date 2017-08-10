@@ -19,6 +19,7 @@ import InfoButton from './InfoButton'
 import InfoPanel from './InfoPanel'
 import InfoPanelTrashed from './InfoPanelTrashed'
 import { formatDate } from 'browser/lib/date-formatter'
+import { getTodoPercentageOfCompleted } from 'browser/lib/getTodoStatus'
 
 const electron = require('electron')
 const { remote } = electron
@@ -68,24 +69,6 @@ class MarkdownNoteDetail extends React.Component {
 
   componentDidUnmount () {
     ee.off('topbar:togglelockbutton', this.toggleLockButton)
-  }
-
-  getPercentageOfCompleteTodo (noteContent) {
-    let splitted = noteContent.split('\n')
-    let numberOfTodo = 0
-    let numberOfCompletedTodo = 0
-
-    splitted.forEach((line) => {
-      let trimmedLine = line.trim()
-      if (trimmedLine.match(/^[\+\-\*] \[\s|x\] ./)) {
-        numberOfTodo++
-      }
-      if (trimmedLine.match(/^[\+\-\*] \[x\] ./)) {
-        numberOfCompletedTodo++
-      }
-    })
-
-    return Math.floor(numberOfCompletedTodo / numberOfTodo * 100)
   }
 
   handleChange (e) {
@@ -333,7 +316,7 @@ class MarkdownNoteDetail extends React.Component {
           onChange={(e) => this.handleChange(e)}
         />
         <TodoListPercentage
-          percentageOfTodo={this.getPercentageOfCompleteTodo(note.content)}
+          percentageOfTodo={getTodoPercentageOfCompleted(note.content)}
         />
       </div>
       <div styleName='info-right'>
