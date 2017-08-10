@@ -1,12 +1,13 @@
-import _ from 'lodash'
+import path from 'path'
+import sander from 'sander'
 
-const path = require('path')
-const sander = require('sander')
+function parse () {
+  const BOOSTNOTERC = '.boostnoterc'
+  const homePath = global.process.env.HOME || global.process.env.USERPROFILE
+  const boostnotercPath = path.join(homePath, BOOSTNOTERC)
 
-function parse (boostnotercPath) {
-  if (!sander.existsSync(boostnotercPath)) return
-  let config = JSON.parse(sander.readFileSync(boostnotercPath).toString())
-  return config
+  if (!sander.existsSync(boostnotercPath)) return {}
+  return JSON.parse(sander.readFileSync(boostnotercPath).toString())
 }
 
 function exec (boostnotercPath) {
