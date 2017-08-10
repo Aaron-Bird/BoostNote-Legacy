@@ -133,10 +133,11 @@ function set (updates) {
 }
 
 function assignConfigValues (config, rcConfig, originalConfig) {
-  config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, rcConfig, originalConfig.hotkey)
-  config.ui = Object.assign({}, DEFAULT_CONFIG.ui, rcConfig, originalConfig.ui)
-  config.editor = Object.assign({}, DEFAULT_CONFIG.editor, rcConfig, originalConfig.editor)
-  config.preview = Object.assign({}, DEFAULT_CONFIG.preview, rcConfig, originalConfig.preview)
+  config = Object.assign({}, DEFAULT_CONFIG, rcConfig, originalConfig)
+  config.hotkey = Object.assign({}, DEFAULT_CONFIG.hotkey, rcConfig.hotkey, originalConfig.hotkey)
+  config.ui = Object.assign({}, DEFAULT_CONFIG.ui, rcConfig.ui, originalConfig.ui)
+  config.editor = Object.assign({}, DEFAULT_CONFIG.editor, rcConfig.editor, originalConfig.editor)
+  config.preview = Object.assign({}, DEFAULT_CONFIG.preview, rcConfig.preview, originalConfig.preview)
   return config
 }
 
