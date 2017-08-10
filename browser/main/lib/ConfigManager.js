@@ -60,14 +60,13 @@ function _save (config) {
 }
 
 function get () {
-  const storedConfig = window.localStorage.getItem('config')
+  const rawStoredConfig = window.localStorage.getItem('config')
+  const storedConfig = Object.assign({}, DEFAULT_CONFIG, JSON.parse(rawStoredConfig))
   let config = storedConfig
 
   try {
     const boostnotercConfig = RcParser.parse()
-
-    config = Object.assign({}, DEFAULT_CONFIG, JSON.parse(storedConfig))
-    config = assignConfigValues(config, boostnotercConfig)
+    config = assignConfigValues(storedConfig, boostnotercConfig)
 
     if (!validate(config)) throw new Error('INVALID CONFIG')
   } catch (err) {
