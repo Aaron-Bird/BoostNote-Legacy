@@ -20,7 +20,7 @@
         "codeBlockTheme": "dracula",
         "fontFamily": "Lato",
         "fontSize": "14",
-        "lineNumber": true,
+        "lineNumber": true
     },
     "sortBy": "UPDATED_AT",
     "ui": {
