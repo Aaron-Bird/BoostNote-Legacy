@@ -7,7 +7,13 @@ function parse () {
   const boostnotercPath = path.join(homePath, BOOSTNOTERC)
 
   if (!sander.existsSync(boostnotercPath)) return {}
-  return JSON.parse(sander.readFileSync(boostnotercPath).toString())
+  try {
+    return JSON.parse(sander.readFileSync(boostnotercPath).toString())
+  } catch (e) {
+    console.warn(e)
+    console.warn('Your .boostnoterc is broken so it\'s not used.')
+    return {}
+  }
 }
 
 export default {
