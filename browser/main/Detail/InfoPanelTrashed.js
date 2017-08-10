@@ -19,7 +19,7 @@ const InfoPanelTrashed = ({
         Folder
       </div>
       <div styleName='group-section-control'>
-        <text>in Trash</text>{folderName}
+        <text>Trash</text>{folderName}
       </div>
     </div>
     <div styleName='group-section'>
