@@ -14,7 +14,7 @@ const TodoProcess = ({
 }) => (
   <div styleName='todo-process' style={{display: totalTodo > 0 ? '' : 'none'}}>
     <div styleName='todo-process-text'>
-      <i className='fa fa-fw fa-tasks' />
+      <i className='fa fa-fw fa-check-square-o' />
       {completedTodo} of {totalTodo}
     </div>
     <div styleName='todo-process-bar'>
