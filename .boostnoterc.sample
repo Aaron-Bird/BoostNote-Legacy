@@ -1,4 +1,5 @@
 {
+    "amaEnabled": true,
     "editor": {
         "fontFamily": "Monaco, Consolas",
         "fontSize": "14",
