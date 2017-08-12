@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import RcParser from 'browser/main/lib/RcParser'
+import RcParser from 'browser/lib/RcParser'
 
 const OSX = global.process.platform === 'darwin'
 const win = global.process.platform === 'win32'
