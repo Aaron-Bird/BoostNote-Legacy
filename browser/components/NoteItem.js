@@ -70,6 +70,10 @@ const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleDragStar
       {note.isStarred
         ? <i styleName='item-star' className='fa fa-star' /> : ''
       }
+      {note.type === 'MARKDOWN_NOTE'
+        ? <TodoProcess todoStatus={getTodoStatus(note.content)} />
+        : ''
+      }
       <div styleName='item-bottom'>
         <div styleName='item-bottom-tagList'>
           {note.tags.length > 0
@@ -78,10 +82,6 @@ const NoteItem = ({ isActive, note, dateDisplay, handleNoteClick, handleDragStar
           }
         </div>
       </div>
-      {note.type === 'MARKDOWN_NOTE'
-        ? <TodoProcess todoStatus={getTodoStatus(note.content)} />
-        : ''
-      }
     </div>
   </div>
 )
