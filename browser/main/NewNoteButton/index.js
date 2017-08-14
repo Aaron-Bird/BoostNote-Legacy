@@ -23,7 +23,6 @@ class NewNoteButton extends React.Component {
     this.newNoteHandler = () => {
       this.handleNewNoteButtonClick()
     }
-
   }
 
   componentDidMount () {
