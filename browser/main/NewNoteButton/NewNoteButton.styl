@@ -20,7 +20,7 @@ $control-height = 34px
   overflow hidden
   display flex
 
-.control-newPostButton
+.control-newNoteButton
   display block
   width 32px
   height $control-height - 2
@@ -30,10 +30,10 @@ $control-height = 34px
   padding 0
   &:active
     border-color $ui-button--active-backgroundColor
-  &:hover .control-newPostButton-tooltip
+  &:hover .control-newNoteButton-tooltip
     opacity 1
 
-.control-newPostButton-tooltip
+.control-newNoteButton-tooltip
   tooltip()
   position fixed
   pointer-events none
@@ -53,7 +53,7 @@ body[data-theme="dark"]
   .control
     border-color $ui-dark-borderColor
 
-  .control-newPostButton
+  .control-newNoteButton
     color $ui-inactive-text-color
     border-color $ui-dark-borderColor
     background-color $ui-dark-noteList-backgroundColor
@@ -64,5 +64,5 @@ body[data-theme="dark"]
       background-color alpha($ui-dark-button--active-backgroundColor, 20%)
       border-color $ui-dark-button--active-backgroundColor
 
-  .control-newPostButton-tooltip
+  .control-newNoteButton-tooltip
     darkTooltip()

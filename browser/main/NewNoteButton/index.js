@@ -6,7 +6,6 @@ import modal from 'browser/main/lib/modal'
 import NewNoteModal from 'browser/main/modals/NewNoteModal'
 import { hashHistory } from 'react-router'
 import ee from 'browser/main/lib/eventEmitter'
-import ConfigManager from 'browser/main/lib/ConfigManager'
 import dataApi from 'browser/main/lib/dataApi'
 
 const { remote } = require('electron')
@@ -22,7 +21,7 @@ class NewNoteButton extends React.Component {
     }
 
     this.newNoteHandler = () => {
-      this.handleNewPostButtonClick()
+      this.handleNewNoteButtonClick()
     }
 
   }
@@ -35,38 +34,16 @@ class NewNoteButton extends React.Component {
     ee.off('top:new-note', this.newNoteHandler)
   }
 
-  handleNewPostButtonClick (e) {
-    let { config, location } = this.props
+  handleNewNoteButtonClick (e) {
+    let { config, location, dispatch } = this.props
+    let { storage, folder } = this.resolveTargetFolder()
 
-    if (location.pathname === '/trashed') {
-      dialog.showMessageBox(remote.getCurrentWindow(), {
-        type: 'warning',
-        message: 'Cannot create new note',
-        detail: 'You cannot create new note in trash box.',
-        buttons: ['OK']
-      })
-      return
-    }
-
-    switch (config.ui.defaultNote) {
-      case 'MARKDOWN_NOTE':
-        this.createNote('MARKDOWN_NOTE')
-        break
-      case 'SNIPPET_NOTE':
-        this.createNote('SNIPPET_NOTE')
-        break
-      case 'ALWAYS_ASK':
-      default:
-        let { dispatch, location } = this.props
-        let { storage, folder } = this.resolveTargetFolder()
-
-        modal.open(NewNoteModal, {
-          storage: storage.key,
-          folder: folder.key,
-          dispatch,
-          location
-        })
-    }
+    modal.open(NewNoteModal, {
+      storage: storage.key,
+      folder: folder.key,
+      dispatch,
+      location
+    })
   }
 
   resolveTargetFolder () {
@@ -91,85 +68,29 @@ class NewNoteButton extends React.Component {
     }
   }
 
-  createNote (noteType) {
-    let { dispatch, location } = this.props
-    if (noteType !== 'MARKDOWN_NOTE' && noteType !== 'SNIPPET_NOTE') throw new Error('Invalid note type.')
-
-    let { storage, folder } = this.resolveTargetFolder()
-
-    let newNote = noteType === 'MARKDOWN_NOTE'
-      ? {
-        type: 'MARKDOWN_NOTE',
-        folder: folder.key,
-        title: '',
-        content: ''
-      }
-      : {
-        type: 'SNIPPET_NOTE',
-        folder: folder.key,
-        title: '',
-        description: '',
-        snippets: [{
-          name: '',
-          mode: 'text',
-          content: ''
-        }]
-      }
-
-    dataApi
-      .createNote(storage.key, newNote)
-      .then((note) => {
-        dispatch({
-          type: 'UPDATE_NOTE',
-          note: note
-        })
-        hashHistory.push({
-          pathname: location.pathname,
-          query: {key: note.storage + '-' + note.key}
-        })
-        ee.emit('detail:focus')
-      })
-  }
-
-  setDefaultNote (defaultNote) {
-    let { config, dispatch } = this.props
-    let ui = Object.assign(config.ui)
-    ui.defaultNote = defaultNote
-    ConfigManager.set({
-      ui
-    })
-
-    dispatch({
-      type: 'SET_UI',
-      config: ConfigManager.get()
-    })
-  }
-
   render () {
-    let { config, style, data } = this.props
-    return (
-      <div className='NewNoteButton'
-        styleName={config.isSideNavFolded ? 'root--expanded' : 'root'}
-        style={style}
-      >
-        <div styleName='control'>
-          <button styleName='control-newPostButton'
-            onClick={(e) => this.handleNewPostButtonClick(e)}>
-            <i className='fa fa-pencil-square-o' />
-            <span styleName='control-newPostButton-tooltip'>
-              Make a Note {OSX ? '⌘' : '^'} + n
-            </span>
-          </button>
+    let { config, style, data, location } = this.props
+    if (location.pathname === '/trashed') {
+      return ''
+    } else {
+      return (
+        <div className='NewNoteButton'
+          styleName={config.isSideNavFolded ? 'root--expanded' : 'root'}
+          style={style}
+        >
+          <div styleName='control'>
+            <button styleName='control-newNoteButton'
+              onClick={(e) => this.handleNewNoteButtonClick(e)}>
+              <i className='fa fa-pencil-square-o' />
+              <span styleName='control-newNoteButton-tooltip'>
+                Make a Note {OSX ? '⌘' : '^'} + n
+              </span>
+            </button>
+          </div>
         </div>
-      </div>
-    )
+      )
+    }
   }
-}
-
-NewNoteButton.contextTypes = {
-  router: PropTypes.shape({
-    push: PropTypes.func
-  })
 }
 
 NewNoteButton.propTypes = {
