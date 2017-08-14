@@ -75,7 +75,7 @@ class TopBar extends React.Component {
   }
 
   render () {
-    let { config, style, data } = this.props
+    let { config, style, data, location } = this.props
     return (
       <div className='TopBar'
         styleName={config.isSideNavFolded ? 'root--expanded' : 'root'}
@@ -108,7 +108,8 @@ class TopBar extends React.Component {
 
           </div>
         </div>
-        <NewNoteButton
+        {location.pathname === '/trashed' ? ''
+        : <NewNoteButton
           {..._.pick(this.props, [
             'dispatch',
             'data',
@@ -116,7 +117,7 @@ class TopBar extends React.Component {
             'params',
             'location'
           ])}
-        />
+        />}
       </div>
     )
   }

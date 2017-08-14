@@ -68,27 +68,23 @@ class NewNoteButton extends React.Component {
   }
 
   render () {
-    const { config, style, data, location } = this.props
-    if (location.pathname === '/trashed') {
-      return ''
-    } else {
-      return (
-        <div className='NewNoteButton'
-          styleName={config.isSideNavFolded ? 'root--expanded' : 'root'}
-          style={style}
-        >
-          <div styleName='control'>
-            <button styleName='control-newNoteButton'
-              onClick={(e) => this.handleNewNoteButtonClick(e)}>
-              <i className='fa fa-pencil-square-o' />
-              <span styleName='control-newNoteButton-tooltip'>
-                Make a Note {OSX ? '⌘' : '^'} + n
-              </span>
-            </button>
-          </div>
+    const { config, style, data } = this.props
+    return (
+      <div className='NewNoteButton'
+        styleName={config.isSideNavFolded ? 'root--expanded' : 'root'}
+        style={style}
+      >
+        <div styleName='control'>
+          <button styleName='control-newNoteButton'
+            onClick={(e) => this.handleNewNoteButtonClick(e)}>
+            <i className='fa fa-pencil-square-o' />
+            <span styleName='control-newNoteButton-tooltip'>
+              Make a Note {OSX ? '⌘' : '^'} + n
+            </span>
+          </button>
         </div>
-      )
-    }
+      </div>
+    )
   }
 }
 
