@@ -271,7 +271,7 @@ class SnippetNoteDetail extends React.Component {
     let syntax = CodeMirror.findModeByFileName(name.trim())
     let mode = syntax != null ? syntax.name : null
     if (mode != null) snippets[index].mode = mode
-    this.state.note.snippets = snippets
+    this.setState({note: Object.assign(this.state.note, {snippets: snippets})})
 
     this.setState({
       note: this.state.note
@@ -284,7 +284,7 @@ class SnippetNoteDetail extends React.Component {
     return (e) => {
       let snippets = this.state.note.snippets.slice()
       snippets[index].mode = name
-      this.state.note.snippets = snippets
+      this.setState({note: Object.assign(this.state.note, {snippets: snippets})})
 
       this.setState({
         note: this.state.note
@@ -298,7 +298,7 @@ class SnippetNoteDetail extends React.Component {
     return (e) => {
       let snippets = this.state.note.snippets.slice()
       snippets[index].content = this.refs['code-' + index].value
-      this.state.note.snippets = snippets
+      this.setState({note: Object.assign(this.state.note, {snippets: snippets})})
       this.setState({
         note: this.state.note
       }, () => {

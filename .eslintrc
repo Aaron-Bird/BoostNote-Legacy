@@ -10,7 +10,6 @@
     "react/prop-types": 0,
     "react/no-string-refs": 0,
     "react/no-find-dom-node": "warn",
-    "react/no-direct-mutation-state": "warn",
     "react/no-render-return-value": "warn",
     "react/no-deprecated": "warn"
   }
