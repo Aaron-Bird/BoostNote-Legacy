@@ -34,8 +34,8 @@ class NewNoteButton extends React.Component {
   }
 
   handleNewNoteButtonClick (e) {
-    let { config, location, dispatch } = this.props
-    let { storage, folder } = this.resolveTargetFolder()
+    const { config, location, dispatch } = this.props
+    const { storage, folder } = this.resolveTargetFolder()
 
     modal.open(NewNoteModal, {
       storage: storage.key,
@@ -46,7 +46,7 @@ class NewNoteButton extends React.Component {
   }
 
   resolveTargetFolder () {
-    let { data, params } = this.props
+    const { data, params } = this.props
     let storage = data.storageMap.get(params.storageKey)
 
     // Find first storage
@@ -68,7 +68,7 @@ class NewNoteButton extends React.Component {
   }
 
   render () {
-    let { config, style, data, location } = this.props
+    const { config, style, data, location } = this.props
     if (location.pathname === '/trashed') {
       return ''
     } else {
