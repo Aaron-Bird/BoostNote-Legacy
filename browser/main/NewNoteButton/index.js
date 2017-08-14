@@ -68,7 +68,7 @@ class NewNoteButton extends React.Component {
   }
 
   render () {
-    const { config, style, data } = this.props
+    const { config, style } = this.props
     return (
       <div className='NewNoteButton'
         styleName={config.isSideNavFolded ? 'root--expanded' : 'root'}
