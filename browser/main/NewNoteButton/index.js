@@ -5,7 +5,7 @@ import _ from 'lodash'
 import modal from 'browser/main/lib/modal'
 import NewNoteModal from 'browser/main/modals/NewNoteModal'
 import { hashHistory } from 'react-router'
-import ee from 'browser/main/lib/eventEmitter'
+import eventEmitter from 'browser/main/lib/eventEmitter'
 import dataApi from 'browser/main/lib/dataApi'
 
 const { remote } = require('electron')
@@ -26,11 +26,11 @@ class NewNoteButton extends React.Component {
   }
 
   componentDidMount () {
-    ee.on('top:new-note', this.newNoteHandler)
+    eventEmitter.on('top:new-note', this.newNoteHandler)
   }
 
   componentWillUnmount () {
-    ee.off('top:new-note', this.newNoteHandler)
+    eventEmitter.off('top:new-note', this.newNoteHandler)
   }
 
   handleNewNoteButtonClick (e) {
