@@ -12,6 +12,7 @@
     "react/no-find-dom-node": "warn",
     "react/no-direct-mutation-state": "warn",
     "react/no-render-return-value": "warn",
-    "react/no-deprecated": "warn"
+    "react/no-deprecated": "warn",
+    "react/no-unescaped-entities": "warn"
   }
 }
