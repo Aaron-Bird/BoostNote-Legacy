@@ -58,8 +58,7 @@ class NewNoteButton extends React.Component {
     }
 
     if (storage == null) this.showMessageBox('No storage to create a note')
-    let folder = storage.folders[0]
-    folder = _.find(storage.folders, {key: params.folderKey})
+    const folder = _.find(storage.folders, {key: params.folderKey}) || storage.folders[0]
     if (folder == null) this.showMessageBox('No folder to create a note')
 
     return {
