@@ -59,6 +59,7 @@ md.use(math, {
 })
 md.use(require('markdown-it-imsize'))
 md.use(require('markdown-it-footnote'))
+md.use(require('markdown-it-multimd-table'))
 // Override task item
 md.block.ruler.at('paragraph', function (state, startLine/*, endLine */) {
   let content, terminate, i, l, token

@@ -65,6 +65,7 @@
     "markdown-it-emoji": "^1.1.1",
     "markdown-it-footnote": "^3.0.0",
     "markdown-it-imsize": "^2.0.1",
+    "markdown-it-multimd-table": "^2.0.1",
     "md5": "^2.0.0",
     "mixpanel": "^0.4.1",
     "moment": "^2.10.3",
