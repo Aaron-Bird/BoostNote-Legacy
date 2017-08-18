@@ -43,6 +43,8 @@ You can build the program by using `grunt`. However, we don't recommend this bec
 
 So, we've prepared a separate script which just makes an executable file.
 
+This build doesn't work on npm v5.3.0. So you need to use v5.2.0 when you build it.
+
 ```
 grunt pre-build
 ```
