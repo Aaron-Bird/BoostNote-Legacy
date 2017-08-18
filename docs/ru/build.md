@@ -43,6 +43,8 @@ $ yarn run dev-start
 
 Мы подготовили отдельный скрипт, который просто создает исполняемый файл:
 
+This build doesn't work on npm v5.3.0. So you need to use v5.2.0 when you build it.
+
 ```
 grunt pre-build
 ```
