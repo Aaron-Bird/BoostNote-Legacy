@@ -165,12 +165,17 @@ function strip (input) {
   return output
 }
 
+function normalizeLinkText (linkText) {
+  return md.normalizeLinkText(linkText)
+}
+
 const markdown = {
   render: function markdown (content) {
     if (!_.isString(content)) content = ''
     const renderedContent = md.render(content)
-    return md.normalizeLinkText(renderedContent)
+    return renderedContent
   },
-  strip
+  strip,
+  normalizeLinkText
 }
 export default markdown
