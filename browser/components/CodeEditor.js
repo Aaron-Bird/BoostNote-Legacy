@@ -3,6 +3,7 @@ import _ from 'lodash'
 import CodeMirror from 'codemirror'
 import path from 'path'
 import copyImage from 'browser/main/lib/dataApi/copyImage'
+import { findStorage } from 'browser/lib/findStorage'
 
 CodeMirror.modeURL = '../node_modules/codemirror/mode/%N/%N.js'
 
@@ -39,6 +40,7 @@ export default class CodeEditor extends React.Component {
       }
       this.props.onBlur != null && this.props.onBlur(e)
     }
+    this.pasteHandler = (editor, e) => this.handlePaste(editor, e).bind(this)
     this.loadStyleHandler = (e) => {
       this.editor.refresh()
     }
@@ -98,6 +100,7 @@ export default class CodeEditor extends React.Component {
 
     this.editor.on('blur', this.blurHandler)
     this.editor.on('change', this.changeHandler)
+    this.editor.on('paste', this.pasteHandler)
 
     let editorTheme = document.getElementById('editorTheme')
     editorTheme.addEventListener('load', this.loadStyleHandler)
@@ -106,6 +109,7 @@ export default class CodeEditor extends React.Component {
   componentWillUnmount () {
     this.editor.off('blur', this.blurHandler)
     this.editor.off('change', this.changeHandler)
+    this.editor.off('paste', this.pasteHandler)
     let editorTheme = document.getElementById('editorTheme')
     editorTheme.removeEventListener('load', this.loadStyleHandler)
   }
@@ -202,6 +206,29 @@ export default class CodeEditor extends React.Component {
     const textarea = this.editor.getInputField()
     const cm = this.editor
     textarea.value = `${textarea.value.substr(0, textarea.selectionStart)}${imageMd}${textarea.value.substr(textarea.selectionEnd)}`
+  }
+
+  handlePaste (editor, e) {
+    const dataTransferItem = e.clipboardData.items[0]
+    if (!dataTransferItem.type.match('image')) return
+
+    const blob = dataTransferItem.getAsFile()
+    let reader = new FileReader()
+    let base64data
+
+    reader.readAsDataURL(blob)
+    reader.onloadend = () => {
+      base64data = reader.result.replace(/^data:image\/png;base64,/, '')
+      base64data += base64data.replace('+', ' ')
+      const binaryData = new Buffer(base64data, 'base64').toString('binary')
+      const imageName = Math.random().toString(36).slice(-16)
+      const storagePath = findStorage(this.props.storageKey).path
+      const imagePath = path.join(`${storagePath}`, 'images', `${imageName}.png`)
+
+      require('fs').writeFile(imagePath, binaryData, 'binary')
+      const imageMd = `![${imageName}](${path.join('/:storage', `${imageName}.png`)})`
+      this.insertImageMd(imageMd)
+    }
   }
 
   render () {
