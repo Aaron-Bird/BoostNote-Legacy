@@ -40,7 +40,7 @@ export default class CodeEditor extends React.Component {
       }
       this.props.onBlur != null && this.props.onBlur(e)
     }
-    this.pasteHandler = (editor, e) => this.handlePaste(editor, e).bind(this)
+    this.pasteHandler = (editor, e) => this.handlePaste(editor, e)
     this.loadStyleHandler = (e) => {
       this.editor.refresh()
     }
