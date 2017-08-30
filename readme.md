@@ -1,15 +1,8 @@
-<h1 align="center">
-  <a href="https://github.com/BoostIO/Boostnote"><img src="./resources/app.png" alt="Boostnote" width="180"></a>
-  <br>
-  Boostnote
-  <br>
-  <br>
-</h1>
-<h4 align="center">Note-taking app for programmers. </h4>
-<h5 align="center">macOS, Windows and Linux. Android and iOS apps will be released soon!</h5>
-<h5 align="center">Built with Electron, React + Redux, Webpack and CSSModules</h5>
-
 ![Boostnote app screenshot](./resources/repository/top.png)
+
+<h4 align="center">Note-taking app for programmers. </h4>
+<h5 align="center">Apps available for Mac, Windows, Linux, Android and iOS!</h5>
+<h5 align="center">Built with Electron, React + Redux, Webpack and CSSModules</h5>
 
 [![Build Status](https://travis-ci.org/BoostIO/Boostnote.svg?branch=master)](https://travis-ci.org/BoostIO/Boostnote)
 
