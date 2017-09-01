@@ -353,6 +353,9 @@ class MarkdownNoteDetail extends React.Component {
           createdAt={formatDate(note.createdAt)}
           exportAsMd={this.exportAsMd}
           exportAsTxt={this.exportAsTxt}
+          wordCount={note.content.split(' ').length}
+          letterCount={note.content.length}
+          type={note.type}
         />
       </div>
     </div>
