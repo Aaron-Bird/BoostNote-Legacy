@@ -51,12 +51,12 @@ code {
   color: rgba(147,147,149,0.8);;
   fill: rgba(147,147,149,1);;
   border-radius: 50%;
-  margin: 7px;
+  margin: 0px 10px;
   border: none;
   background-color: transparent;
   outline: none;
-  height: 32px;
-  width: 32px;
+  height: 15px;
+  width: 15px;
   cursor: pointer;
 }
 
