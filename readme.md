@@ -1,3 +1,7 @@
+New:zap:
+
+[Android and iOS apps](https://github.com/BoostIO/Boostnote-mobile) are released!
+
 ![Boostnote app screenshot](./resources/repository/top.png)
 
 <h4 align="center">Note-taking app for programmers. </h4>
