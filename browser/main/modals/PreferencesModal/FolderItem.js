@@ -5,6 +5,7 @@ import styles from './FolderItem.styl'
 import dataApi from 'browser/main/lib/dataApi'
 import store from 'browser/main/store'
 import { SketchPicker } from 'react-color'
+import { SortableElement } from 'react-sortable-hoc'
 
 class FolderItem extends React.Component {
   constructor (props) {
@@ -273,4 +274,6 @@ FolderItem.propTypes = {
   })
 }
 
-export default CSSModules(FolderItem, styles)
+const StyledFolderItem = CSSModules(FolderItem, styles)
+
+export default SortableElement(StyledFolderItem)
