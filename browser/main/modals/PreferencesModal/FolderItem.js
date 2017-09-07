@@ -5,7 +5,7 @@ import styles from './FolderItem.styl'
 import dataApi from 'browser/main/lib/dataApi'
 import store from 'browser/main/store'
 import { SketchPicker } from 'react-color'
-import { SortableElement } from 'react-sortable-hoc'
+import { SortableElement, SortableHandle } from 'react-sortable-hoc'
 
 class FolderItem extends React.Component {
   constructor (props) {
@@ -274,6 +274,30 @@ FolderItem.propTypes = {
   })
 }
 
-const StyledFolderItem = CSSModules(FolderItem, styles)
+class Handle extends React.Component {
+  render() {
+    return (
+      <div styleName='folderItem-drag-handle'>
+        <i className="fa fa-reorder" />
+      </div>
+    )
+  }
+}
 
-export default SortableElement(StyledFolderItem)
+class SortableFolderItemComponent extends React.Component {
+  render() {
+    const StyledHandle = CSSModules(Handle, this.props.styles)
+    const DragHandle = SortableHandle(StyledHandle)
+
+    const StyledFolderItem = CSSModules(FolderItem, this.props.styles)
+
+    return (
+      <div>
+        <DragHandle />
+        <StyledFolderItem {...this.props} />
+      </div>
+    )
+  }
+}
+
+export default CSSModules(SortableElement(SortableFolderItemComponent), styles)
