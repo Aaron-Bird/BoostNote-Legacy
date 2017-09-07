@@ -68,7 +68,12 @@ class SortableFolderListComponent extends React.Component {
     const SortableFolderList = SortableContainer(StyledFolderList)
 
     return (
-      <SortableFolderList helperClass='sortableItemHelper' onSortEnd={this.onSortEnd} userDragHandle={true} {...this.props} />
+      <SortableFolderList
+        helperClass='sortableItemHelper'
+        onSortEnd={this.onSortEnd}
+        useDragHandle
+        {...this.props}
+      />
     )
   }
 }
