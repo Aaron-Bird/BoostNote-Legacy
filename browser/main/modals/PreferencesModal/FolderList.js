@@ -51,8 +51,6 @@ FolderList.propTypes = {
   })
 }
 
-const StyledFolderList = CSSModules(FolderList, styles)
-const SortableFolderList = SortableContainer(StyledFolderList)
 
 class SortableFolderListComponent extends React.Component {
   constructor (props) {
@@ -65,10 +63,14 @@ class SortableFolderListComponent extends React.Component {
   }
 
   render() {
+
+    const StyledFolderList = CSSModules(FolderList, this.props.styles)
+    const SortableFolderList = SortableContainer(StyledFolderList)
+
     return (
-      <SortableFolderList onSortEnd={this.onSortEnd} userDragHandle={true} {...this.props} />
+      <SortableFolderList helperClass='sortableItemHelper' onSortEnd={this.onSortEnd} userDragHandle={true} {...this.props} />
     )
   }
 }
 
-export default SortableFolderListComponent
+export default CSSModules(SortableFolderListComponent, styles)
