@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './FolderList.styl'
 import FolderItem from './FolderItem'
-import { SortableContainer } from 'react-sortable-hoc'
+import { SortableContainer, arrayMove } from 'react-sortable-hoc'
 
 class FolderList extends React.Component {
   constructor (props) {
@@ -58,7 +58,9 @@ class SortableFolderListComponent extends React.Component {
   constructor (props) {
     super(props)
     this.onSortEnd = ({oldIndex, newIndex}) => {
-      console.log("end")
+      let { storage } = this.props
+      storage.folders = arrayMove(storage.folders, oldIndex, newIndex)
+      this.setState()
     }
   }
 
