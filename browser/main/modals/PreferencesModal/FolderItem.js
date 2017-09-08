@@ -275,17 +275,17 @@ FolderItem.propTypes = {
 }
 
 class Handle extends React.Component {
-  render() {
+  render () {
     return (
       <div styleName='folderItem-drag-handle'>
-        <i className="fa fa-reorder" />
+        <i className='fa fa-reorder' />
       </div>
     )
   }
 }
 
 class SortableFolderItemComponent extends React.Component {
-  render() {
+  render () {
     const StyledHandle = CSSModules(Handle, this.props.styles)
     const DragHandle = SortableHandle(StyledHandle)
 

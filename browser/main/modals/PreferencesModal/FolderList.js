@@ -7,10 +7,6 @@ import FolderItem from './FolderItem'
 import { SortableContainer, arrayMove } from 'react-sortable-hoc'
 
 class FolderList extends React.Component {
-  constructor (props) {
-    super(props)
-  }
-
   render () {
     let { storage, hostBoundingBox } = this.props
 
@@ -18,7 +14,7 @@ class FolderList extends React.Component {
       return <FolderItem key={folder.key}
         folder={folder}
         storage={storage}
-        index = {index}
+        index={index}
         hostBoundingBox={hostBoundingBox}
       />
     })
@@ -53,7 +49,6 @@ FolderList.propTypes = {
   })
 }
 
-
 class SortableFolderListComponent extends React.Component {
   constructor (props) {
     super(props)
@@ -71,8 +66,7 @@ class SortableFolderListComponent extends React.Component {
     }
   }
 
-  render() {
-
+  render () {
     const StyledFolderList = CSSModules(FolderList, this.props.styles)
     const SortableFolderList = SortableContainer(StyledFolderList)
 
