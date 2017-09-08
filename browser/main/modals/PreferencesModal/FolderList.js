@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
+import dataApi from 'browser/main/lib/dataApi'
 import styles from './FolderList.styl'
+import store from 'browser/main/store'
 import FolderItem from './FolderItem'
 import { SortableContainer, arrayMove } from 'react-sortable-hoc'
 
@@ -57,8 +59,15 @@ class SortableFolderListComponent extends React.Component {
     super(props)
     this.onSortEnd = ({oldIndex, newIndex}) => {
       let { storage } = this.props
-      storage.folders = arrayMove(storage.folders, oldIndex, newIndex)
-      this.setState()
+      dataApi
+        .reorderFolder(storage.key, oldIndex, newIndex)
+        .then((data) => {
+          store.dispatch({
+            type: 'REORDER_FOLDER',
+            storage: data.storage
+          })
+          this.setState()
+        })
     }
   }
 
