@@ -21,7 +21,7 @@ test.beforeEach((t) => {
   localStorage.setItem('storages', JSON.stringify([t.context.storage.cache]))
 })
 
-test.serial('Update a folder', (t) => {
+test.serial('Reorder a folder', (t) => {
   const storageKey = t.context.storage.cache.key
   const firstFolderKey = t.context.storage.json.folders[0].key
   const secondFolderKey = t.context.storage.json.folders[1].key
