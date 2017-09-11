@@ -3,6 +3,7 @@ _.move = require('lodash-move').default
 const path = require('path')
 const resolveStorageData = require('./resolveStorageData')
 const CSON = require('@rokt33r/season')
+const { findStorage } = require('browser/lib/findStorage')
 
 /**
  * @param {String} storageKey
@@ -23,11 +24,7 @@ function reorderFolder (storageKey, oldIndex, newIndex) {
     if (!_.isNumber(oldIndex)) throw new Error('oldIndex must be a number.')
     if (!_.isNumber(newIndex)) throw new Error('newIndex must be a number.')
 
-    rawStorages = JSON.parse(localStorage.getItem('storages'))
-    if (!_.isArray(rawStorages)) throw new Error('Target storage doesn\'t exist.')
-
-    targetStorage = _.find(rawStorages, {key: storageKey})
-    if (targetStorage == null) throw new Error('Target storage doesn\'t exist.')
+    targetStorage = findStorage(storageKey)
   } catch (e) {
     return Promise.reject(e)
   }
