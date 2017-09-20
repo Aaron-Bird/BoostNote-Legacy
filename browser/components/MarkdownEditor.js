@@ -213,6 +213,8 @@ class MarkdownEditor extends React.Component {
     if (!(editorFontSize > 0 && editorFontSize < 101)) editorFontSize = 14
     let editorIndentSize = parseInt(config.editor.indentSize, 10)
     if (!(editorFontSize > 0 && editorFontSize < 132)) editorIndentSize = 4
+    let editorLineNumber = config.editor.lineNumber
+    if (editorLineNumber === undefined) editorLineNumber = true
 
     let previewStyle = {}
     if (this.props.ignorePreviewPointerEvents) previewStyle.pointerEvents = 'none'
@@ -242,6 +244,7 @@ class MarkdownEditor extends React.Component {
           fontSize={editorFontSize}
           indentType={config.editor.indentType}
           indentSize={editorIndentSize}
+          lineNumber={editorLineNumber}
           storageKey={storageKey}
           onChange={(e) => this.handleChange(e)}
           onBlur={(e) => this.handleBlur(e)}

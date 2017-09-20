@@ -50,7 +50,7 @@ export default class CodeEditor extends React.Component {
     this.value = this.props.value
     this.editor = CodeMirror(this.refs.root, {
       value: this.props.value,
-      lineNumbers: true,
+      lineNumbers: this.props.lineNumber,
       lineWrapping: true,
       theme: this.props.theme,
       indentUnit: this.props.indentSize,
@@ -139,6 +139,10 @@ export default class CodeEditor extends React.Component {
     }
     if (prevProps.indentType !== this.props.indentType) {
       this.editor.setOption('indentWithTabs', this.props.indentType !== 'space')
+    }
+
+    if (prevProps.lineNumber !== this.props.lineNumber) {
+      this.editor.setOption('lineNumbers', this.props.lineNumber)
     }
 
     if (needRefresh) {
