@@ -19,7 +19,8 @@ class RealtimeNotification extends React.Component {
   }
 
   fetchNotifications () {
-    fetch('https://raw.githubusercontent.com/asmsuechan/notification/master/notification.json')
+    const notificationsUrl = 'https://raw.githubusercontent.com/BoostIO/notification/master/notification.json'
+    fetch(notificationsUrl)
       .then(response => {
         return response.json()
       })
