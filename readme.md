@@ -22,11 +22,11 @@ New:zap:
 
 ## Slack Group
 Let's talk about Boostnote's great features, new feature requests and things like Japanese gourmet. 🍣 <br>
-[Join us](https://join.slack.com/t/boostnote-group/shared_invite/MjMxMDA0MjYxNzkzLTE1MDM2MjIyMjctZmNlNTMyZGJhZA)
+[Join us](https://join.slack.com/t/boostnote-group/shared_invite/enQtMjQ0MjYxNTMxNjY5LTI0NWFkZDEyYWYxYWE0YTMyYjI4NzA2YjBlNmFmOGVhNGFjY2I1MTNmZWJjYmMxYTdkM2VjNWNjYTFiYWQ3ZmQ)
 
 ## More Information
 * [Website](https://boostnote.io)
-* [Boostnote Team](https://boostnote.io/team/) : Boostnote for the creative hacker teams. Share your markdown notes and snippets instantly with your team. **We will release it at August!** 🏃💨
+* [10hz](https://boostnote.io/team/) : Boostnote for the creative hacker teams. Share your markdown notes and snippets instantly with your team. **We will release it at October!** 🏃💨
 * [Support us via Bountysource](https://salt.bountysource.com/teams/boostnote) : Thank you for your support 🎉
 * [Development](https://github.com/BoostIO/Boostnote/blob/master/docs/build.md) : Development configurations for Boostnote 🚀
 * Copyright (C) 2017 Maisin&Co.
