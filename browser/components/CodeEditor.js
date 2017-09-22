@@ -108,6 +108,7 @@ export default class CodeEditor extends React.Component {
     CodeMirror.Vim.defineEx('quit', 'q', this.quitEditor)
     CodeMirror.Vim.defineEx('q!', 'q!', this.quitEditor)
     CodeMirror.Vim.defineEx('wq', 'wq', this.quitEditor)
+    CodeMirror.Vim.defineEx('qw', 'qw', this.quitEditor)
   }
 
   quitEditor () {
