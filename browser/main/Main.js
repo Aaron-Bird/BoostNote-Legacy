@@ -256,7 +256,7 @@ class Main extends React.Component {
             ignorePreviewPointerEvents={this.state.isRightSliderFocused}
           />
         </div>
-        <RealtimeNotification/>
+        <RealtimeNotification />
       </div>
     )
   }
