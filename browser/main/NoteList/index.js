@@ -348,6 +348,21 @@ class NoteList extends React.Component {
       properties: ['openFile', 'multiSelections']
     }
 
+    dialog.showOpenDialog(remote.getCurrentWindow(), options, (filepaths) => {
+      this.addNotes(filepaths)
+    })
+  }
+
+  handleDrop (e) {
+    e.preventDefault()
+    const filepaths = Array.from(e.dataTransfer.files).map(file => { return file.path })
+    this.addNotes(filepaths)
+  }
+
+  // Add notes in the current folder
+  addNotes (filepaths) {
+    const { dispatch, location } = this.props
+
     const targetIndex = _.findIndex(this.notes, (note) => {
       return note !== null && `${note.storage}-${note.key}` === location.query.key
     })
@@ -355,28 +370,26 @@ class NoteList extends React.Component {
     const storageKey = this.notes[targetIndex].storage
     const folderKey = this.notes[targetIndex].folder
 
-    dialog.showOpenDialog(remote.getCurrentWindow(), options, (filepaths) => {
-      if (filepaths === undefined) return
-      filepaths.forEach((filepath) => {
-        fs.readFile(filepath, (err, data) => {
-          if (err) throw Error('File reading error: ', err)
-          const content = data.toString()
-          const newNote = {
-            content: content,
-            folder: folderKey,
-            title: markdown.strip(striptags(findNoteTitle(content))),
-            type: 'MARKDOWN_NOTE'
-          }
-          dataApi.createNote(storageKey, newNote)
-          .then((note) => {
-            dispatch({
-              type: 'UPDATE_NOTE',
-              note: note
-            })
-            hashHistory.push({
-              pathname: location.pathname,
-              query: {key: `${note.storage}-${note.key}`}
-            })
+    if (filepaths === undefined) return
+    filepaths.forEach((filepath) => {
+      fs.readFile(filepath, (err, data) => {
+        if (err) throw Error('File reading error: ', err)
+        const content = data.toString()
+        const newNote = {
+          content: content,
+          folder: folderKey,
+          title: markdown.strip(findNoteTitle(content)),
+          type: 'MARKDOWN_NOTE'
+        }
+        dataApi.createNote(storageKey, newNote)
+        .then((note) => {
+          dispatch({
+            type: 'UPDATE_NOTE',
+            note: note
+          })
+          hashHistory.push({
+            pathname: location.pathname,
+            query: {key: `${note.storage}-${note.key}`}
           })
         })
       })
@@ -439,6 +452,7 @@ class NoteList extends React.Component {
       <div className='NoteList'
         styleName='root'
         style={this.props.style}
+        onDrop={(e) => this.handleDrop(e)}
       >
         <div styleName='control'>
           <div styleName='control-sortBy'>
