@@ -37,7 +37,7 @@ class RealtimeNotification extends React.Component {
   render () {
     const { notifications } = this.state
     const link = notifications.length > 0
-      ? <a href={notifications[0].linkUrl}
+      ? <a styleName='notification-link' href={notifications[0].linkUrl}
         onClick={(e) => this.handleLinkClick(e)}
       >
         {notifications[0].text}
@@ -45,7 +45,7 @@ class RealtimeNotification extends React.Component {
     : ''
 
     return (
-      <div>{link}</div>
+      <div styleName='notification-area'>{link}</div>
     )
   }
 }

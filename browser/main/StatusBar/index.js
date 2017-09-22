@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './StatusBar.styl'
 import ZoomManager from 'browser/main/lib/ZoomManager'
-import RealtimeNotification from 'browser/components/RealtimeNotification'
 
 const electron = require('electron')
 const { remote, ipcRenderer } = electron
@@ -59,10 +58,6 @@ class StatusBar extends React.Component {
           <i className='fa fa-search-plus' />&nbsp;
           {Math.floor(config.zoom * 100)}%
         </button>
-
-        <RealtimeNotification
-          styleName='realtime-notification'
-        />
 
         {status.updateReady
           ? <button onClick={this.updateApp} styleName='update'>
