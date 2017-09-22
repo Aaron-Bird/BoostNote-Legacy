@@ -20,6 +20,7 @@ import InfoPanel from './InfoPanel'
 import InfoPanelTrashed from './InfoPanelTrashed'
 import { formatDate } from 'browser/lib/date-formatter'
 import { getTodoPercentageOfCompleted } from 'browser/lib/getTodoStatus'
+import striptags from 'striptags'
 
 const electron = require('electron')
 const { remote } = electron
@@ -76,7 +77,7 @@ class MarkdownNoteDetail extends React.Component {
 
     note.content = this.refs.content.value
     if (this.refs.tags) note.tags = this.refs.tags.value
-    note.title = markdown.strip(findNoteTitle(note.content))
+    note.title = markdown.strip(striptags(findNoteTitle(note.content)))
     note.updatedAt = new Date()
 
     this.setState({

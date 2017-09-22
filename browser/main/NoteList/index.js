@@ -13,6 +13,7 @@ import fs from 'fs'
 import { hashHistory } from 'react-router'
 import markdown from 'browser/lib/markdown'
 import { findNoteTitle } from 'browser/lib/findNoteTitle'
+import stripgtags from 'striptags'
 
 const { remote } = require('electron')
 const { Menu, MenuItem, dialog } = remote
@@ -363,7 +364,7 @@ class NoteList extends React.Component {
           const newNote = {
             content: content,
             folder: folderKey,
-            title: markdown.strip(findNoteTitle(content)),
+            title: markdown.strip(striptags(findNoteTitle(content))),
             type: 'MARKDOWN_NOTE'
           }
           dataApi.createNote(storageKey, newNote)
