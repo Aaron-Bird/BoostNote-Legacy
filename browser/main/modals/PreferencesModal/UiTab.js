@@ -90,9 +90,8 @@ class UiTab extends React.Component {
         <div styleName='group'>
           <div styleName='group-header'>UI</div>
 
-          <div styleName='group-header2'>Theme</div>
-
           <div styleName='group-section'>
+            Color Theme　
             <div styleName='group-section-control'>
               <select value={config.ui.theme}
                 onChange={(e) => this.handleUIChange(e)}
