@@ -598,7 +598,7 @@ class SnippetNoteDetail extends React.Component {
         <button styleName='control-fullScreenButton'
           onMouseDown={(e) => this.handleFullScreenButton(e)}
         >
-          <i className='fa fa-expand' styleName='fullScreen-button' />
+          <i className='fa fa-window-maximize' styleName='fullScreen-button' />
         </button>
         <InfoButton
           onClick={(e) => this.handleInfoButtonClick(e)}
