@@ -14,6 +14,7 @@ import InitModal from 'browser/main/modals/InitModal'
 import mixpanel from 'browser/main/lib/mixpanel'
 import mobileAnalytics from 'browser/main/lib/AwsMobileAnalyticsConfig'
 import eventEmitter from 'browser/main/lib/eventEmitter'
+import RealtimeNotification from 'browser/components/RealtimeNotification'
 
 function focused () {
   mixpanel.track('MAIN_FOCUSED')
@@ -255,6 +256,7 @@ class Main extends React.Component {
             ignorePreviewPointerEvents={this.state.isRightSliderFocused}
           />
         </div>
+        <RealtimeNotification />
       </div>
     )
   }
