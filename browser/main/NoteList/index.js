@@ -349,7 +349,7 @@ class NoteList extends React.Component {
     }
 
     dialog.showOpenDialog(remote.getCurrentWindow(), options, (filepaths) => {
-      this.addNotes(filepaths)
+      this.addNotesFromFiles(filepaths)
     })
   }
 
@@ -361,7 +361,7 @@ class NoteList extends React.Component {
   }
 
   // Add notes in the current folder
-  addNotes (filepaths) {
+  addNotesFromFiles (filepaths) {
     const { dispatch, location } = this.props
 
     const targetIndex = _.findIndex(this.notes, (note) => {
