@@ -99,7 +99,7 @@ class InfoTab extends React.Component {
         <div styleName='policy'>Data collection policy</div>
         <div>We collect only the number of DAU for Boostnote and **DO NOT collect** any detail information such as your note content.</div>
         <div>You can see how it works on <a href='https://github.com/BoostIO/Boostnote' onClick={(e) => this.handleLinkClick(e)}>GitHub</a>.</div>
-        <div>These data are only used for Boostnote improvements.</div>
+        <div>This data is only used for Boostnote improvements.</div>
         <input onChange={(e) => this.handleConfigChange(e)}
           checked={this.state.config.amaEnabled}
           ref='amaEnabled'
