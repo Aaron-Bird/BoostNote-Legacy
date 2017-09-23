@@ -360,7 +360,7 @@ class NoteList extends React.Component {
     if (!location.pathname.match(/\/trashed/)) this.addNotes(filepaths)
   }
 
-  // Add notes in the current folder
+  // Add notes to the current folder
   addNotesFromFiles (filepaths) {
     const { dispatch, location } = this.props
 
