@@ -355,7 +355,7 @@ class MarkdownNoteDetail extends React.Component {
           exportAsMd={this.exportAsMd}
           exportAsTxt={this.exportAsTxt}
           wordCount={note.content.split(' ').length}
-          letterCount={note.content.length}
+          letterCount={note.content.replace(/\r?\n/g, '').length}
           type={note.type}
         />
       </div>
