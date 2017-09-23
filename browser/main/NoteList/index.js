@@ -357,7 +357,7 @@ class NoteList extends React.Component {
     e.preventDefault()
     const { location } = this.props
     const filepaths = Array.from(e.dataTransfer.files).map(file => { return file.path })
-    if (!location.pathname.match(/\/trashed/)) this.addNotes(filepaths)
+    if (!location.pathname.match(/\/trashed/)) this.addNotesFromFiles(filepaths)
   }
 
   // Add notes to the current folder
