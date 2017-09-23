@@ -79,7 +79,7 @@
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
     "sander": "^0.5.1",
-    "striptags": "^3.1.0",
+    "striptags": "^2.2.1",
     "superagent": "^1.2.0",
     "superagent-promise": "^1.0.3"
   },
