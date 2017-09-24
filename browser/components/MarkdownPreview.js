@@ -40,7 +40,6 @@ body {
 code {
   font-family: ${codeBlockFontFamily.join(', ')};
   background-color: rgba(0,0,0,0.04);
-  color: #CC305F;
 }
 .lineNumber {
   ${lineNumber && 'display: block !important;'}
