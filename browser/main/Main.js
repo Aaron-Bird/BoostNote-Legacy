@@ -21,7 +21,7 @@ function focused () {
 }
 
 // the width of the navigation bar when it is folded/collapsed
-const foldedNavigationWidth = 44;
+const foldedNavigationWidth = 44
 
 class Main extends React.Component {
 
