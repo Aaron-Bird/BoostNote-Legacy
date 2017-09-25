@@ -20,7 +20,11 @@ function focused () {
   mixpanel.track('MAIN_FOCUSED')
 }
 
+// the width of the navigation bar when it is folded/collapsed
+const foldedNavigationWidth = 44;
+
 class Main extends React.Component {
+
   constructor (props) {
     super(props)
 
@@ -217,7 +221,7 @@ class Main extends React.Component {
         <div styleName={config.isSideNavFolded ? 'body--expanded' : 'body'}
           id='main-body'
           ref='body'
-          style={{left: config.isSideNavFolded ? 44 : this.state.navWidth}}
+          style={{left: config.isSideNavFolded ? foldedNavigationWidth : this.state.navWidth}}
         >
           <TopBar style={{width: this.state.listWidth}}
             {..._.pick(this.props, [
@@ -256,7 +260,9 @@ class Main extends React.Component {
             ignorePreviewPointerEvents={this.state.isRightSliderFocused}
           />
         </div>
-        <RealtimeNotification />
+        <RealtimeNotification
+          style={{left: config.isSideNavFolded ? foldedNavigationWidth : this.state.navWidth}}
+        />
       </div>
     )
   }
