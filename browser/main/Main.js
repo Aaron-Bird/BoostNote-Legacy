@@ -20,9 +20,6 @@ function focused () {
   mixpanel.track('MAIN_FOCUSED')
 }
 
-// the width of the navigation bar when it is folded/collapsed
-const foldedNavigationWidth = 44
-
 class Main extends React.Component {
 
   constructor (props) {
@@ -193,6 +190,17 @@ class Main extends React.Component {
   render () {
     let { config } = this.props
 
+    // the width of the navigation bar when it is folded/collapsed
+    const foldedNavigationWidth = 44
+    let notificationBarOffsetLeft
+    if (this.state.fullScreen) {
+      notificationBarOffsetLeft = 0
+    } else if (config.isSideNavFolded) {
+      notificationBarOffsetLeft = foldedNavigationWidth
+    } else {
+      notificationBarOffsetLeft = this.state.navWidth
+    }
+
     return (
       <div
         className='Main'
@@ -261,7 +269,7 @@ class Main extends React.Component {
           />
         </div>
         <RealtimeNotification
-          style={{left: config.isSideNavFolded ? foldedNavigationWidth : this.state.navWidth}}
+          style={{left: notificationBarOffsetLeft}}
         />
       </div>
     )
