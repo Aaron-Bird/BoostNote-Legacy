@@ -45,7 +45,7 @@ class RealtimeNotification extends React.Component {
     : ''
 
     return (
-      <div styleName='notification-area'>{link}</div>
+      <div styleName='notification-area' style={this.props.style}>{link}</div>
     )
   }
 }
