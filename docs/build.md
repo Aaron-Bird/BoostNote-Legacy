@@ -5,7 +5,7 @@ This page is also available in [Japanese](https://github.com/BoostIO/Boostnote/b
 * npm: 4.x
 * node: 7.x
 
-You should use `npm v4.x` because `$ grand pre-build` fails on `v5.x`.
+You should use `npm v4.x` because `$ grunt pre-build` fails on `v5.x`.
 
 ## Development
 
