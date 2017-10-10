@@ -10,11 +10,23 @@ if (process.env.NODE_ENV === 'production' && ConfigManager.default.get().amaEnab
   AWS.config.credentials = new AWS.CognitoIdentityCredentials({
     IdentityPoolId: 'us-east-1:xxxxxxxxxxxxxxxxxxxxxxxxx'
   })
+
+  const rawPlatform = os.platform()
+
+  let actualPlatform
+  if (rawPlatform === 'darwin') {
+    actualPlatform = 'MacOS'
+  } else if (rawPlatform === 'win32') {
+    actualPlatform = 'Windows'
+  } else if (rawPlatform === 'linux') {
+    actualPlatform = 'Linux'
+  }
+
   const mobileAnalyticsClient = new AMA.Manager({
     appId: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
     appTitle: 'xxxxxxxxxx',
     appVersionName: remote.app.getVersion().toString(),
-    platform: os.platform()
+    platform: actualPlatform
   })
 }
 
