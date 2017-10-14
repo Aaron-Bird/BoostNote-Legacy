@@ -11,23 +11,26 @@ if (process.env.NODE_ENV === 'production' && ConfigManager.default.get().amaEnab
     IdentityPoolId: 'us-east-1:xxxxxxxxxxxxxxxxxxxxxxxxx'
   })
 
-  const rawPlatform = os.platform()
-
-  let actualPlatform
-  if (rawPlatform === 'darwin') {
-    actualPlatform = 'MacOS'
-  } else if (rawPlatform === 'win32') {
-    actualPlatform = 'Windows'
-  } else if (rawPlatform === 'linux') {
-    actualPlatform = 'Linux'
-  }
+  const validPlatformName = convertPlatformName(os.platform())
 
   const mobileAnalyticsClient = new AMA.Manager({
     appId: 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
     appTitle: 'xxxxxxxxxx',
     appVersionName: remote.app.getVersion().toString(),
-    platform: actualPlatform
+    platform: validPlatformName
   })
+}
+
+function convertPlatformName (platformName) {
+  if (platformName === 'darwin') {
+    return 'MacOS'
+  } else if (platformName === 'win32') {
+    return 'Windows'
+  } else if (platformName === 'linux') {
+    return 'Linux'
+  } else {
+    return ''
+  }
 }
 
 function initAwsMobileAnalytics () {
