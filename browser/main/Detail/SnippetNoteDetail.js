@@ -530,7 +530,7 @@ class SnippetNoteDetail extends React.Component {
             fontSize={editorFontSize}
             indentType={config.editor.indentType}
             indentSize={editorIndentSize}
-            lineNumber
+            displayLineNumbers
             keyMap={config.editor.keyMap}
             onChange={(e) => this.handleCodeChange(index)(e)}
             ref={'code-' + index}

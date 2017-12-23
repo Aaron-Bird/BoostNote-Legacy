@@ -46,7 +46,7 @@ class UiTab extends React.Component {
         fontFamily: this.refs.editorFontFamily.value,
         indentType: this.refs.editorIndentType.value,
         indentSize: this.refs.editorIndentSize.value,
-        lineNumber: this.refs.editorLineNumber.checked,
+        displayLineNumbers: this.refs.editorDisplayLineNumbers.checked,
         switchPreview: this.refs.editorSwitchPreview.value,
         keyMap: this.refs.editorKeyMap.value
       },
@@ -226,8 +226,8 @@ class UiTab extends React.Component {
           <div styleName='group-checkBoxSection'>
             <label>
               <input onChange={(e) => this.handleUIChange(e)}
-                checked={this.state.config.editor.lineNumber}
-                ref='editorLineNumber'
+                checked={this.state.config.editor.displayLineNumbers}
+                ref='editorDisplayLineNumbers'
                 type='checkbox'
               />&nbsp;
               Show line numbers in the editor
