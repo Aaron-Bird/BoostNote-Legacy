@@ -1,5 +1,8 @@
-.top-menu-preference
+.top-menu-search
   navButtonColor()
+  position relative
+  margin-right 6px
+  top 3px
   width 2em
   background-color transparent
   &:hover
@@ -10,8 +13,11 @@
   &:active, &:active:hover
     color $ui-button-default--active-backgroundColor
 
+.icon-search
+  width 16px
+
 body[data-theme="white"]
-  .top-menu-preference
+  .top-menu-search
     navWhiteButtonColor()
     background-color transparent
     &:hover
@@ -22,7 +28,7 @@ body[data-theme="white"]
       background-color transparent
 
 body[data-theme="dark"]
-  .top-menu-preference
+  .top-menu-search
     navDarkButtonColor()
     background-color transparent
     &:active
@@ -31,6 +37,8 @@ body[data-theme="dark"]
     &:hover
       background-color alpha($ui-dark-button--active-backgroundColor, 20%)
       background-color transparent
+
+
 
 .tooltip
   tooltip()
