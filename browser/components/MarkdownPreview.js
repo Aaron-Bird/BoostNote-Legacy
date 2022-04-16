@@ -103,7 +103,9 @@ class MarkdownPreview extends React.Component {
     this.saveAsHtmlHandler = () => this.handleSaveAsHtml()
     this.saveAsPdfHandler = () => this.handleSaveAsPdf()
     this.printHandler = () => this.handlePrint()
-    this.navigationByHashHandle = (e, hash) => this.handleNavigationByHash(e, hash)
+    this.navigationByHashHandle = (e, hash) => {
+      return this.handleNavigationByHash(e, hash)
+    }
     this.resizeHandler = _.throttle(this.handleResize.bind(this), 100)
 
     this.linkClickHandler = this.handleLinkClick.bind(this)

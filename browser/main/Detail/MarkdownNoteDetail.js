@@ -613,12 +613,8 @@ class MarkdownNoteDetail extends React.Component {
           <TrashButton onClick={e => this.handleTrashButtonClick(e)} />
 
           <TocButton onClick={e => this.handleTocButtonClick(e)} />
-          
-          <TocPanel 
-            title={note.title}
-            content={note.content}
-            note={note}
-          />
+
+          <TocPanel title={note.title} content={note.content} note={note} />
 
           <InfoButton onClick={e => this.handleInfoButtonClick(e)} />
 
