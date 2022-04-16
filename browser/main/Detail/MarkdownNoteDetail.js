@@ -33,6 +33,8 @@ import markdownToc from 'browser/lib/markdown-toc-generator'
 import queryString from 'query-string'
 import { replace } from 'connected-react-router'
 import ToggleDirectionButton from 'browser/main/Detail/ToggleDirectionButton'
+import TocButton from './TocButton'
+import TocPanel from './TocPanel'
 
 class MarkdownNoteDetail extends React.Component {
   constructor(props) {
@@ -372,6 +374,13 @@ class MarkdownNoteDetail extends React.Component {
     this.focus()
   }
 
+  handleTocButtonClick(e) {
+    const tocPanel = document.querySelector('.tocPanel')
+    if (tocPanel.style)
+      tocPanel.style.display =
+        tocPanel.style.display === 'none' ? 'inline' : 'none'
+  }
+
   handleInfoButtonClick(e) {
     const infoPanel = document.querySelector('.infoPanel')
     if (infoPanel.style)
@@ -602,6 +611,14 @@ class MarkdownNoteDetail extends React.Component {
           <FullscreenButton onClick={e => this.handleFullScreenButton(e)} />
 
           <TrashButton onClick={e => this.handleTrashButtonClick(e)} />
+
+          <TocButton onClick={e => this.handleTocButtonClick(e)} />
+          
+          <TocPanel 
+            title={note.title}
+            content={note.content}
+            note={note}
+          />
 
           <InfoButton onClick={e => this.handleInfoButtonClick(e)} />
 

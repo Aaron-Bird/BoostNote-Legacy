@@ -103,6 +103,7 @@ class MarkdownPreview extends React.Component {
     this.saveAsHtmlHandler = () => this.handleSaveAsHtml()
     this.saveAsPdfHandler = () => this.handleSaveAsPdf()
     this.printHandler = () => this.handlePrint()
+    this.navigationByHashHandle = (e, hash) => this.handleNavigationByHash(e, hash)
     this.resizeHandler = _.throttle(this.handleResize.bind(this), 100)
 
     this.linkClickHandler = this.handleLinkClick.bind(this)
@@ -199,6 +200,10 @@ class MarkdownPreview extends React.Component {
 
   handlePrint() {
     this.refs.root.contentWindow.print()
+  }
+
+  handleNavigationByHash(event, hash) {
+    this.refs.root.contentWindow.location.hash = hash
   }
 
   exportAsDocument(fileType, contentFormatter) {
@@ -311,6 +316,7 @@ class MarkdownPreview extends React.Component {
     eventEmitter.on('export:save-html', this.saveAsHtmlHandler)
     eventEmitter.on('export:save-pdf', this.saveAsPdfHandler)
     eventEmitter.on('print', this.printHandler)
+    eventEmitter.on('navigation:hash', this.navigationByHashHandle)
   }
 
   componentWillUnmount() {
@@ -353,6 +359,7 @@ class MarkdownPreview extends React.Component {
     eventEmitter.off('export:save-html', this.saveAsHtmlHandler)
     eventEmitter.off('export:save-pdf', this.saveAsPdfHandler)
     eventEmitter.off('print', this.printHandler)
+    eventEmitter.off('navigation:hash', this.navigationByHashHandle)
   }
 
   componentDidUpdate(prevProps) {
