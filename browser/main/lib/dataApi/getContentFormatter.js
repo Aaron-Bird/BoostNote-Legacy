@@ -1,6 +1,7 @@
 import formatMarkdown from './formatMarkdown'
 import formatHTML from './formatHTML'
 import formatPDF from './formatPDF'
+import formatHexoMarkdown from './formatHexoMarkdown'
 
 /**
  * @param {Object} storage
@@ -51,6 +52,11 @@ export default function getContentFormatter(storage, fileType, config) {
       storagePath: storage.path,
       export: config.export,
       RTL: config.editor.rtlEnabled /*  && this.state.RTL */
+    })
+  } else if (fileType === 'hexo') {
+    return formatHexoMarkdown({
+      storagePath: storage.path,
+      export: config.export
     })
   }
 

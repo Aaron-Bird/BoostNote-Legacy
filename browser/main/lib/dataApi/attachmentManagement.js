@@ -731,7 +731,7 @@ function replaceStorageReferences(input, noteKey, destinationFolder) {
           new RegExp(
             STORAGE_FOLDER_PLACEHOLDER +
               '(' +
-              escapeStringRegexp(path.sep) +
+              escapeStringRegexp(path.posix.sep) +
               noteKey +
               ')?',
             'g'

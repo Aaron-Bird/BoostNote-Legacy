@@ -3,12 +3,32 @@ import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './ConfigTab.styl'
 import ConfigManager from 'browser/main/lib/ConfigManager'
-import store from 'browser/main/store'
+import { store } from 'browser/main/store'
 import _ from 'lodash'
 import i18n from 'browser/lib/i18n'
+import path from 'path'
 
 const electron = require('electron')
 const ipc = electron.ipcRenderer
+const { remote } = electron
+
+function browseFolder(defaultPath) {
+  const dialog = remote.dialog
+  // const defaultPath = remote.app.getPath('home')
+  return new Promise((resolve, reject) => {
+    dialog.showOpenDialog(
+      {
+        title: i18n.__('Select Directory'),
+        defaultPath,
+        properties: ['openDirectory', 'createDirectory']
+      },
+      function(targetPaths) {
+        if (targetPaths == null) return resolve('')
+        resolve(targetPaths[0])
+      }
+    )
+  })
+}
 
 class ExportTab extends React.Component {
   constructor(props) {
@@ -75,13 +95,17 @@ class ExportTab extends React.Component {
 
   handleExportChange(e) {
     const { config } = this.state
-
     config.export = {
       metadata: this.refs.metadata.value,
       variable: !_.isNil(this.refs.variable)
         ? this.refs.variable.value
         : config.export.variable,
-      prefixAttachmentFolder: this.refs.prefixAttachmentFolder.checked
+      prefixAttachmentFolder: this.refs.prefixAttachmentFolder.checked,
+      hexo: {
+        mdFileFolder: this.refs.hexoMd.value,
+        attachmentFolder: this.refs.hexoAttachment.value,
+        attachmentPathInMd: this.refs.hexoAttachmentPath.value
+      }
     }
 
     this.setState({
@@ -97,6 +121,21 @@ class ExportTab extends React.Component {
         message: i18n.__('Unsaved Changes!')
       })
     }
+  }
+
+  handlHexoBrowseButtonClick(e, inputRef) {
+    const defaultPath = path.resolve(this.refs[inputRef].value)
+    browseFolder(defaultPath)
+      .then(targetPath => {
+        if (targetPath.length > 0) {
+          this.refs[inputRef].value = targetPath
+          this.handleExportChange()
+        }
+      })
+      .catch(err => {
+        console.error('BrowseFAILED')
+        console.error(err)
+      })
   }
 
   render() {
@@ -159,6 +198,73 @@ class ExportTab extends React.Component {
               &nbsp;
               {i18n.__('Prefix attachment folder')}
             </label>
+          </div>
+
+          <div styleName='group-header2'>{i18n.__('Hexo')}</div>
+
+          <div styleName='group-section'>
+            <div styleName='group-section'>
+              <div styleName='group-section-label'>
+                {i18n.__('Markdown Folder Location')}
+              </div>
+              <div styleName='group-section-control'>
+                <input
+                  styleName='group-section-control-path-input'
+                  placeholder={i18n.__('Select Folder')}
+                  ref='hexoMd'
+                  value={config.export.hexo.mdFileFolder}
+                  onChange={e => this.handleExportChange(e)}
+                />
+                <button
+                  styleName='group-section-control-path-button'
+                  onClick={e => this.handlHexoBrowseButtonClick(e, 'hexoMd')}
+                >
+                  ...
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div styleName='group-section'>
+            <div styleName='group-section'>
+              <div styleName='group-section-label'>
+                {i18n.__('Attachment Folder Location')}
+              </div>
+              <div styleName='group-section-control'>
+                <input
+                  styleName='group-section-control-path-input'
+                  placeholder={i18n.__('Select Folder')}
+                  ref='hexoAttachment'
+                  value={config.export.hexo.attachmentFolder}
+                  onChange={e => this.handleExportChange(e)}
+                />
+                <button
+                  styleName='group-section-control-path-button'
+                  onClick={e =>
+                    this.handlHexoBrowseButtonClick(e, 'hexoAttachment')
+                  }
+                >
+                  ...
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div styleName='group-section'>
+            <div styleName='group-section'>
+              <div styleName='group-section-label'>
+                {i18n.__('Attachment folder path in Markdown')}
+              </div>
+              <div styleName='group-section-control'>
+                <input
+                  styleName='group-section-control-input'
+                  onChange={e => this.handleExportChange(e)}
+                  ref='hexoAttachmentPath'
+                  value={config.export.hexo.attachmentPathInMd}
+                  type='text'
+                />
+              </div>
+            </div>
           </div>
 
           <div styleName='group-control'>

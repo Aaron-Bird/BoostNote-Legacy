@@ -193,5 +193,11 @@
   "Filter tags/folders...": "filter tags/folders...",
   "Enable HTML label in mermaid flowcharts": "Enable HTML label in mermaid flowcharts ⚠ This option potentially has a risk of XSS.",
   "Wrap line in Snippet Note": "Wrap line in Snippet Note",
-  "Enable Auto Update": "Enable Auto Update"
+  "Enable Auto Update": "Enable Auto Update",
+  "Export": "Export",
+  "Export Note": "Export Note",
+  "Export as Hexo": "Export Note",
+  "Markdown Folder Location": "Markdown Folder Location",
+  "Attachment Folder Location": "Attachment Folder Location",
+  "Attachment folder path in Markdown": "Attachment folder path in Markdown"
 }

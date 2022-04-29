@@ -194,9 +194,9 @@ class NoteList extends React.Component {
 
         const overflowBelow =
           item.offsetTop +
-            item.clientHeight -
-            list.clientHeight -
-            list.scrollTop >
+          item.clientHeight -
+          list.clientHeight -
+          list.scrollTop >
           0
         if (overflowBelow) {
           list.scrollTop =
@@ -598,13 +598,13 @@ class NoteList extends React.Component {
 
   alertIfSnippet(msg) {
     const warningMessage = msg =>
-      ({
-        'export-txt': 'Text export',
-        'export-md': 'Markdown export',
-        'export-html': 'HTML export',
-        'export-pdf': 'PDF export',
-        print: 'Print'
-      }[msg])
+    ({
+      'export-txt': 'Text export',
+      'export-md': 'Markdown export',
+      'export-html': 'HTML export',
+      'export-pdf': 'PDF export',
+      print: 'Print'
+    }[msg])
 
     const targetIndex = this.getTargetIndex()
     if (this.notes[targetIndex].type === 'SNIPPET_NOTE') {
@@ -665,6 +665,28 @@ class NoteList extends React.Component {
           })
       }
     })
+  }
+
+  handleExportHexoClick(e, note) {
+    const { config } = this.props
+    const filename = filenamify(note.title, { replacement: '_' }) + '.md'
+    const filePath = path.resolve(config.export.hexo.mdFileFolder, filename)
+
+    dataApi
+      .exportNoteAs(note, filePath, 'hexo', config)
+      .then(res => {
+        dialog.showMessageBox(remote.getCurrentWindow(), {
+          type: 'info',
+          message: `Exported to ${filename}`
+        })
+      })
+      .catch(err => {
+        dialog.showErrorBox(
+          'Export error',
+          err ? err.message || err : 'Unexpected error during export'
+        )
+        throw err
+      })
   }
 
   handleNoteContextMenu(e, uniqueKey) {
@@ -748,6 +770,10 @@ class NoteList extends React.Component {
                 click: e => this.handleExportClick(e, note, 'pdf')
               }
             ]
+          },
+          {
+            label: i18n.__('Export as Hexo'),
+            click: e => this.handleExportHexoClick(e, note)
           }
         )
 
@@ -1208,8 +1234,8 @@ class NoteList extends React.Component {
       sortBy === 'CREATED_AT'
         ? sortByCreatedAt
         : sortBy === 'ALPHABETICAL'
-        ? sortByAlphabetical
-        : sortByUpdatedAt
+          ? sortByAlphabetical
+          : sortByUpdatedAt
     const sortedNotes = location.pathname.match(/\/starred|\/trash/)
       ? this.getNotes().sort(sortFunc)
       : this.sortByPin(this.getNotes().sort(sortFunc))

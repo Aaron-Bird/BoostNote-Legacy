@@ -246,5 +246,11 @@
   "Enable MarkdownLint": "启用 MarkdownLint",
   "When scrolling, synchronize preview with editor": "滚动编辑页时同步滚动预览页",
   "This will delete all notes in the folder and can not be undone.": "即将删除文件夹中所有笔记，并且不能撤销。",
-  "Always Ask": "每次询问"
+  "Always Ask": "每次询问",
+  "Export": "导出",
+  "Export Note": "导出笔记",
+  "Export as Hexo": "导出 Hexo 文件",
+  "Markdown Folder Location": "MarkDown 文件位置",
+  "Attachment Folder Location": "附件位置",
+  "Attachment folder path in Markdown": "MarkDown 文件内附件路径"
 }

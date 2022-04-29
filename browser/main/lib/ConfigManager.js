@@ -147,7 +147,12 @@ export const DEFAULT_CONFIG = {
   export: {
     metadata: 'DONT_EXPORT', // 'DONT_EXPORT', 'MERGE_HEADER', 'MERGE_VARIABLE'
     variable: 'boostnote',
-    prefixAttachmentFolder: false
+    prefixAttachmentFolder: false,
+    hexo: {
+      mdFileFolder: 'hexo',
+      attachmentFolder: 'attachments',
+      attachmentPathInMd: '/attachments'
+    }
   },
   coloredTags: {},
   wakatime: {
