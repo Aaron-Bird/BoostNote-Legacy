@@ -194,9 +194,9 @@ class NoteList extends React.Component {
 
         const overflowBelow =
           item.offsetTop +
-          item.clientHeight -
-          list.clientHeight -
-          list.scrollTop >
+            item.clientHeight -
+            list.clientHeight -
+            list.scrollTop >
           0
         if (overflowBelow) {
           list.scrollTop =
@@ -598,13 +598,13 @@ class NoteList extends React.Component {
 
   alertIfSnippet(msg) {
     const warningMessage = msg =>
-    ({
-      'export-txt': 'Text export',
-      'export-md': 'Markdown export',
-      'export-html': 'HTML export',
-      'export-pdf': 'PDF export',
-      print: 'Print'
-    }[msg])
+      ({
+        'export-txt': 'Text export',
+        'export-md': 'Markdown export',
+        'export-html': 'HTML export',
+        'export-pdf': 'PDF export',
+        print: 'Print'
+      }[msg])
 
     const targetIndex = this.getTargetIndex()
     if (this.notes[targetIndex].type === 'SNIPPET_NOTE') {
@@ -1234,8 +1234,8 @@ class NoteList extends React.Component {
       sortBy === 'CREATED_AT'
         ? sortByCreatedAt
         : sortBy === 'ALPHABETICAL'
-          ? sortByAlphabetical
-          : sortByUpdatedAt
+        ? sortByAlphabetical
+        : sortByUpdatedAt
     const sortedNotes = location.pathname.match(/\/starred|\/trash/)
       ? this.getNotes().sort(sortFunc)
       : this.sortByPin(this.getNotes().sort(sortFunc))
