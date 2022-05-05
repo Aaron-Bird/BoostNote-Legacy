@@ -9,7 +9,8 @@ export function confirmDeleteNote(confirmDeletion, permanent) {
       type: 'warning',
       message: i18n.__('Confirm note deletion'),
       detail: i18n.__('This will permanently remove this note.'),
-      buttons: [i18n.__('Confirm'), i18n.__('Cancel')]
+      buttons: [i18n.__('Confirm'), i18n.__('Cancel')],
+      cancelId: 1
     }
 
     const dialogButtonIndex = dialog.showMessageBox(
