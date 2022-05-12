@@ -103,14 +103,20 @@ class MarkdownSplitEditor extends React.Component {
         'refs.preview.refs.root.contentWindow.document'
       )
       const codeDoc = _.get(this, 'refs.code.editor.doc')
-
-      const from = codeDoc.cm.coordsChar({ left: 0, top: 0 }).line
+      const editorScrollTop = codeDoc.cm.getScrollInfo().top
+      const from = codeDoc.cm.coordsChar(
+        {
+          left: 0,
+          top: editorScrollTop
+        },
+        'local'
+      ).line
       const to = codeDoc.cm.coordsChar({
         left: 0,
+        // lastWrapHeight is the height of the editor
         top: codeDoc.cm.display.lastWrapHeight * 1.125
       }).line
       const previewTop = _.get(previewDoc, 'body.scrollTop')
-
       let top
       if (from === 0) {
         top = 0
@@ -119,8 +125,7 @@ class MarkdownSplitEditor extends React.Component {
           _.get(previewDoc, 'body.scrollHeight') -
           _.get(previewDoc, 'body.clientHeight')
       } else {
-        const line = from + Math.floor((to - from) / 3)
-
+        const line = from - 1
         const blockElements = previewDoc.querySelectorAll('body [data-line]')
         const blocks = []
         for (const block of blockElements) {
@@ -151,8 +156,7 @@ class MarkdownSplitEditor extends React.Component {
           (blocks[i].top - blocks[i - 1].top) /
           (blocks[i].line - blocks[i - 1].line)
 
-        top =
-          blocks[i - 1].top + Math.floor((line - blocks[i - 1].line) * ratio)
+        top = blocks[i - 1].top
       }
 
       this.scrollTo(previewTop, top, y =>

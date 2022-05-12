@@ -9,13 +9,19 @@ import _ from 'lodash'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import katex from 'katex'
 import { escapeHtmlCharacters, lastFindInArray } from './utils'
+import lineNumber from './markdown-it-line-number'
 
-function createGutter(str, firstLineNumber) {
+function createGutter(str, firstLineNumber, firstMarkdownNumber) {
   if (Number.isNaN(firstLineNumber)) firstLineNumber = 1
   const lastLineNumber = (str.match(/\n/g) || []).length + firstLineNumber - 1
   const lines = []
+  let markdownLine = firstMarkdownNumber + 1
   for (let i = firstLineNumber; i <= lastLineNumber; i++) {
-    lines.push('<span class="CodeMirror-linenumber">' + i + '</span>')
+    lines.push(
+      `<span class="CodeMirror-linenumber" data-line="${markdownLine++}">` +
+        i +
+        '</span>'
+    )
   }
   return (
     '<span class="lineNumber CodeMirror-gutters">' + lines.join('') + '</span>'
@@ -303,21 +309,21 @@ class Markdown {
             .join('\n')
 
           return `<pre class="fence" data-line="${token.map[0]}">
-              <span class="filename">${token.fileName}</span>
-              <div class="gallery" data-autoplay="${
-                token.parameters.autoplay
-              }" data-height="${token.parameters.height}">${content}</div>
-            </pre>`
+            <span class="filename">${token.fileName}</span>
+            <div class="gallery" data-autoplay="${
+              token.parameters.autoplay
+            }" data-height="${token.parameters.height}">${content}</div>
+          </pre>`
         },
         mermaid: token => {
           updatedOptions.onFence('mermaid')
 
           return `<pre class="fence" data-line="${token.map[0]}">
-            <span class="filename">${token.fileName}</span>
-            <div class="mermaid" data-height="${token.parameters.height}">${
+          <span class="filename">${token.fileName}</span>
+          <div class="mermaid" data-height="${token.parameters.height}">${
             token.content
           }</div>
-          </pre>`
+        </pre>`
         },
         sequence: token => {
           updatedOptions.onFence('sequence')
@@ -333,9 +339,16 @@ class Markdown {
       token => {
         updatedOptions.onFence('code', token.langType)
 
+        const firstMarkdownNumber = Array.isArray(token.map)
+          ? token.map[0]
+          : null
         return `<pre class="code CodeMirror" data-line="${token.map[0]}">
           <span class="filename">${token.fileName}</span>
-          ${createGutter(token.content, token.firstLineNumber)}
+          ${createGutter(
+            token.content,
+            token.firstLineNumber,
+            firstMarkdownNumber
+          )}
           <code class="${token.langType}">${token.content}</code>
         </pre>`
       }
@@ -494,25 +507,29 @@ class Markdown {
     }
 
     // Add line number attribute for scrolling
-    const originalRender = this.md.renderer.render
-    this.md.renderer.render = (tokens, options, env) => {
-      tokens.forEach(token => {
-        switch (token.type) {
-          case 'blockquote_open':
-          case 'dd_open':
-          case 'dt_open':
-          case 'heading_open':
-          case 'list_item_open':
-          case 'paragraph_open':
-          case 'table_open':
-            if (token.map) {
-              token.attrPush(['data-line', token.map[0]])
-            }
-        }
-      })
-      const result = originalRender.call(this.md.renderer, tokens, options, env)
-      return result
-    }
+    // const originalRender = this.md.renderer.render
+    // this.md.renderer.render = (tokens, options, env) => {
+    //   tokens.forEach(token => {
+    //     switch (token.type) {
+    //       case 'blockquote_open':
+    //       case 'dd_open':
+    //       case 'dt_open':
+    //       case 'heading_open':
+    //       case 'list_item_open':
+    //       case 'paragraph_open':
+    //       case 'table_open':
+    //         if (token.map) {
+    //           token.attrPush(['data-line', token.map[0]])
+    //         }
+    //     }
+    //   })
+    //   const result = originalRender.call(this.md.renderer, tokens, options, env)
+    //   return result
+    // }
+
+    // Markdown line number
+    this.md.use(lineNumber)
+
     // FIXME We should not depend on global variable.
     window.md = this.md
   }
