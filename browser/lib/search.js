@@ -13,6 +13,26 @@ export default function searchFromNotes(notes, search) {
   return foundNotes
 }
 
+export function searchLineFromNote(note, search) {
+  if (search.trim().length === 0) return []
+  if (note.type !== 'MARKDOWN_NOTE') return []
+  const searchBlocks = search.split(' ').reduce((list, block) => {
+    if (block) {
+      list.push(_.escapeRegExp(block))
+    }
+    return list
+  }, [])
+
+  const lineRegExp = new RegExp(searchBlocks.join('|'), 'i')
+  const lineList = note.content.split('\n').map((lineContent, index) => {
+    return {
+      content: lineContent,
+      index
+    }
+  })
+  return lineList.filter(line => lineRegExp.test(line.content))
+}
+
 function findByWordOrTag(notes, block) {
   let tag = block
   if (tag.match(/^#.+/)) {

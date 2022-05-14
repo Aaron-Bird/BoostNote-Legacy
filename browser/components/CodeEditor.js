@@ -51,7 +51,7 @@ function translateHotkey(hotkey) {
 export default class CodeEditor extends React.Component {
   constructor(props) {
     super(props)
-
+    this.triggerScrollEvent = true
     this.scrollHandler = _.debounce(this.handleScroll.bind(this), 100, {
       leading: false,
       trailing: true
@@ -965,15 +965,19 @@ export default class CodeEditor extends React.Component {
 
   moveCursorTo(row, col) {}
 
-  scrollToLine(event, num) {
-    const cursor = {
-      line: num,
-      ch: 1
-    }
-    this.editor.setCursor(cursor)
+  scrollToLine(event, num, triggerScrollEvent = false) {
     const top = this.editor.charCoords({ line: num, ch: 0 }, 'local').top
-    const middleHeight = this.editor.getScrollerElement().offsetHeight / 2
-    this.editor.scrollTo(null, top - middleHeight - 5)
+    this.triggerScrollEvent = triggerScrollEvent
+    try {
+      this.editor.scrollTo(null, top)
+    } catch (err) {
+      console.log(err)
+    } finally {
+      // TODO: Use callback instend of timer
+      setTimeout(() => {
+        this.triggerScrollEvent = true
+      }, 300)
+    }
   }
 
   focus() {
@@ -1159,7 +1163,7 @@ export default class CodeEditor extends React.Component {
   }
 
   handleScroll(e) {
-    if (this.props.onScroll) {
+    if (this.props.onScroll && this.triggerScrollEvent) {
       this.props.onScroll(e)
     }
   }

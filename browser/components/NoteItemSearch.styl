@@ -1,0 +1,48 @@
+.node-search-list
+  cursor pointer
+
+.node-search-item
+  font-size 13px
+  height 30px
+  padding-right 20px
+  box-sizing border-box
+  line-height 30px
+  overflow ellipsis
+  color $ui-inactive-text-color
+  position relative
+  padding-left 20px
+  transition 0.15s
+  &:hover
+    background alpha($ui-button--active-backgroundColor, 40%)
+    color $ui-text-color
+
+body[data-theme="white"]
+  .node-search-item
+    &:hover
+      background-color alpha($ui-button--active-backgroundColor, 60%)
+
+body[data-theme="dark"]
+  .node-search-item
+    &:hover
+      color $ui-dark-text-color
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+
+body[data-theme="solarized-dark"]
+  .node-search-item
+    color $ui-dark-text-color
+    &:hover
+      color $ui-solarized-dark-text-color
+      background-color alpha($ui-dark-button--active-backgroundColor, 60%)
+
+apply-theme(theme)
+  body[data-theme={theme}]
+    .node-search-item
+      color get-theme-var(theme, 'text-color')
+      &:hover
+        background-color alpha(get-theme-var(theme, 'tagList-backgroundColor'), 20%)
+
+for theme in 'dracula'
+  apply-theme(theme)
+
+for theme in $themes
+  apply-theme(theme)

@@ -11,7 +11,7 @@ import attachmentManagement from 'browser/main/lib/dataApi/attachmentManagement'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import NoteItem from 'browser/components/NoteItem'
 import NoteItemSimple from 'browser/components/NoteItemSimple'
-import searchFromNotes from 'browser/lib/search'
+import searchFromNotes, { searchLineFromNote } from 'browser/lib/search'
 import fs from 'fs'
 import path from 'path'
 import { push, replace } from 'connected-react-router'
@@ -547,6 +547,32 @@ class NoteList extends React.Component {
         })
       })
     )
+  }
+
+  handleNoteSearchClick(e, uniqueKey, lineNumber) {
+    e.stopPropagation()
+    e.preventDefault()
+    const { dispatch, location, config } = this.props
+    let searchKey
+    if (location.search) {
+      searchKey = queryString.parse(location.search).key
+    }
+
+    if (!searchKey || searchKey !== uniqueKey) {
+      dispatch(
+        push({
+          pathname: location.pathname,
+          search: queryString.stringify({
+            key: uniqueKey
+          })
+        })
+      )
+    }
+
+    setTimeout(() => {
+      ee.emit('line:jump', lineNumber, false)
+      ee.emit('navigation:line', lineNumber, false)
+    }, 0)
   }
 
   handleSortByChange(e) {
@@ -1327,6 +1353,8 @@ class NoteList extends React.Component {
           folderName={this.getNoteFolder(note).name}
           storageName={storage.name}
           viewType={viewType}
+          searchword={this.props.match.params.searchword}
+          handleNoteSearchClick={this.handleNoteSearchClick.bind(this)}
         />
       )
     })

@@ -104,6 +104,7 @@ class MarkdownSplitEditor extends React.Component {
       )
       const codeDoc = _.get(this, 'refs.code.editor.doc')
       const editorScrollTop = codeDoc.cm.getScrollInfo().top
+
       const from = codeDoc.cm.coordsChar(
         {
           left: 0,
@@ -116,8 +117,9 @@ class MarkdownSplitEditor extends React.Component {
         // lastWrapHeight is the height of the editor
         top: codeDoc.cm.display.lastWrapHeight * 1.125
       }).line
+
       const previewTop = _.get(previewDoc, 'body.scrollTop')
-      let top
+      let top = null
       if (from === 0) {
         top = 0
       } else if (to === codeDoc.lastLine()) {
@@ -125,43 +127,30 @@ class MarkdownSplitEditor extends React.Component {
           _.get(previewDoc, 'body.scrollHeight') -
           _.get(previewDoc, 'body.clientHeight')
       } else {
-        const line = from - 1
         const blockElements = previewDoc.querySelectorAll('body [data-line]')
         const blocks = []
         for (const block of blockElements) {
           const l = parseInt(block.getAttribute('data-line'))
 
-          blocks.push({
-            line: l,
-            top: block.offsetTop
-          })
-
-          if (l > line) {
+          if (l <= from) {
+            blocks.push({
+              line: l,
+              top: block.offsetTop
+            })
+          } else {
             break
           }
         }
-
-        if (blocks.length === 1) {
-          const block = blockElements[blockElements.length - 1]
-
-          blocks.push({
-            line: codeDoc.size,
-            top: block.offsetTop + block.offsetHeight
-          })
+        if (blocks.length) {
+          top = blocks[blocks.length - 1].top
         }
-
-        const i = blocks.length - 1
-
-        const ratio =
-          (blocks[i].top - blocks[i - 1].top) /
-          (blocks[i].line - blocks[i - 1].line)
-
-        top = blocks[i - 1].top
       }
 
-      this.scrollTo(previewTop, top, y =>
-        _.set(previewDoc, 'body.scrollTop', y)
-      )
+      if (top !== null) {
+        this.scrollTo(previewTop, top, y =>
+          _.set(previewDoc, 'body.scrollTop', y)
+        )
+      }
     }
   }
 

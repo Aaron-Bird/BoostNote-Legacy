@@ -88,7 +88,7 @@ function getSourceLineNumberByElement(element) {
 class MarkdownPreview extends React.Component {
   constructor(props) {
     super(props)
-
+    this.triggerScrollEvent = true
     this.contextMenuHandler = e => this.handleContextMenu(e)
     this.mouseDownHandler = e => this.handleMouseDown(e)
     this.mouseUpHandler = e => this.handleMouseUp(e)
@@ -103,8 +103,11 @@ class MarkdownPreview extends React.Component {
     this.saveAsHtmlHandler = () => this.handleSaveAsHtml()
     this.saveAsPdfHandler = () => this.handleSaveAsPdf()
     this.printHandler = () => this.handlePrint()
-    this.navigationByHashHandle = (e, hash) => {
-      return this.handleNavigationByHash(e, hash)
+    this.navigationByHashHandle = (e, hash, triggerScrollEvent) => {
+      return this.handleNavigationByHash(e, hash, triggerScrollEvent)
+    }
+    this.navigationByLineHandle = (e, line, triggerScrollEvent) => {
+      return this.handleNavigationByLine(e, line, triggerScrollEvent)
     }
     this.resizeHandler = _.throttle(this.handleResize.bind(this), 100)
 
@@ -127,7 +130,7 @@ class MarkdownPreview extends React.Component {
   }
 
   handleScroll(e) {
-    if (this.props.onScroll) {
+    if (this.props.onScroll && this.triggerScrollEvent) {
       this.props.onScroll(e)
     }
   }
@@ -204,8 +207,32 @@ class MarkdownPreview extends React.Component {
     this.refs.root.contentWindow.print()
   }
 
-  handleNavigationByHash(event, hash) {
-    this.refs.root.contentWindow.location.hash = hash
+  handleNavigationByHash(event, hash, triggerScrollEvent = false) {
+    this.triggerScrollEvent = triggerScrollEvent
+    try {
+      this.refs.root.contentWindow.location.hash = hash
+    } catch (err) {
+      console.log(err)
+    } finally {
+      // TODO: Use callback instend of timer
+      setTimeout(() => {
+        this.triggerScrollEvent = true
+      }, 300)
+    }
+  }
+
+  handleNavigationByLine(event, line, triggerScrollEvent = false) {
+    this.triggerScrollEvent = triggerScrollEvent
+    try {
+      this.scrollToLine(line)
+    } catch (err) {
+      console.log(err)
+    } finally {
+      // TODO: Use callback instend of timer
+      setTimeout(() => {
+        this.triggerScrollEvent = true
+      }, 300)
+    }
   }
 
   exportAsDocument(fileType, contentFormatter) {
@@ -319,6 +346,7 @@ class MarkdownPreview extends React.Component {
     eventEmitter.on('export:save-pdf', this.saveAsPdfHandler)
     eventEmitter.on('print', this.printHandler)
     eventEmitter.on('navigation:hash', this.navigationByHashHandle)
+    eventEmitter.on('navigation:line', this.navigationByLineHandle)
   }
 
   componentWillUnmount() {
@@ -362,6 +390,7 @@ class MarkdownPreview extends React.Component {
     eventEmitter.off('export:save-pdf', this.saveAsPdfHandler)
     eventEmitter.off('print', this.printHandler)
     eventEmitter.off('navigation:hash', this.navigationByHashHandle)
+    eventEmitter.off('navigation:line', this.navigationByLineHandle)
   }
 
   componentDidUpdate(prevProps) {
