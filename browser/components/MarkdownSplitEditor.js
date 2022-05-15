@@ -7,6 +7,8 @@ import _ from 'lodash'
 import styles from './MarkdownSplitEditor.styl'
 import CSSModules from 'browser/lib/CSSModules'
 
+const TOP_OFFSET = 20
+
 class MarkdownSplitEditor extends React.Component {
   constructor(props) {
     super(props)
@@ -36,54 +38,49 @@ class MarkdownSplitEditor extends React.Component {
         this,
         'refs.preview.refs.root.contentWindow.document'
       )
-      const previewTop = _.get(previewDoc, 'body.scrollTop')
-
-      const line = editor.doc.getCursor().line
-      let top
-      if (line === 0) {
-        top = 0
-      } else {
-        const blockElements = previewDoc.querySelectorAll('body [data-line]')
-        const blocks = []
-        for (const block of blockElements) {
-          const l = parseInt(block.getAttribute('data-line'))
-
-          blocks.push({
-            line: l,
-            top: block.offsetTop
-          })
-
-          if (l > line) {
-            break
-          }
-        }
-
-        if (blocks.length === 1) {
-          const block = blockElements[blockElements.length - 1]
-
-          blocks.push({
-            line: editor.doc.size,
-            top: block.offsetTop + block.offsetHeight
-          })
-        }
-
-        const i = blocks.length - 1
-
-        const ratio =
-          (blocks[i].top - blocks[i - 1].top) /
-          (blocks[i].line - blocks[i - 1].line)
-
-        const delta = Math.floor(_.get(previewDoc, 'body.clientHeight') / 3)
-
-        top =
-          blocks[i - 1].top +
-          Math.floor((line - blocks[i - 1].line) * ratio) -
-          delta
-      }
-
-      this.scrollTo(previewTop, top, y =>
-        _.set(previewDoc, 'body.scrollTop', y)
+      const previewScrollTop = _.get(previewDoc, 'body.scrollTop')
+      const codeCursor = editor.doc.getCursor()
+      const codeCursorCoords = editor.charCoords(
+        { line: codeCursor.line, ch: 0 },
+        'local'
       )
+      const codeDoc = _.get(this, 'refs.code.editor.doc')
+      const codeScrollTop = codeDoc.cm.getScrollInfo().top
+      const codeTop = codeCursorCoords.top - codeScrollTop
+
+      const blocks = previewDoc.querySelectorAll('body [data-line]')
+      if (!blocks.length) retun
+
+      const codeLine = codeCursor.line
+      let index = 0
+      while (index < blocks.length) {
+        const block = blocks[index]
+        const blockLine = parseInt(block.getAttribute('data-line'))
+        if (blockLine < codeLine) {
+          index++
+        } else {
+          if (blockLine > codeLine && index > 0) {
+            index--
+          }
+          break
+        }
+      }
+      const block = blocks[index]
+      if (!block) return
+
+      const previewPageYOffset = _.get(
+        this,
+        'refs.preview.refs.root.contentWindow.pageYOffset'
+      )
+
+      const blockRect = block.getBoundingClientRect()
+      const top = previewPageYOffset + blockRect.top
+
+      if (typeof top === 'number' || !Number.isNaN(top)) {
+        this.scrollTo(previewScrollTop, top - codeTop, y =>
+          _.set(previewDoc, 'body.scrollTop', y)
+        )
+      }
     }
   }
 
@@ -102,52 +99,45 @@ class MarkdownSplitEditor extends React.Component {
         this,
         'refs.preview.refs.root.contentWindow.document'
       )
+      const previewScrollTop = _.get(previewDoc, 'body.scrollTop')
       const codeDoc = _.get(this, 'refs.code.editor.doc')
       const editorScrollTop = codeDoc.cm.getScrollInfo().top
 
-      const from = codeDoc.cm.coordsChar(
+      const codeLine = codeDoc.cm.coordsChar(
         {
           left: 0,
-          top: editorScrollTop
+          top: editorScrollTop + TOP_OFFSET
         },
         'local'
       ).line
-      const to = codeDoc.cm.coordsChar({
-        left: 0,
-        // lastWrapHeight is the height of the editor
-        top: codeDoc.cm.display.lastWrapHeight * 1.125
-      }).line
 
-      const previewTop = _.get(previewDoc, 'body.scrollTop')
-      let top = null
-      if (from === 0) {
-        top = 0
-      } else if (to === codeDoc.lastLine()) {
-        top =
-          _.get(previewDoc, 'body.scrollHeight') -
-          _.get(previewDoc, 'body.clientHeight')
-      } else {
-        const blockElements = previewDoc.querySelectorAll('body [data-line]')
-        const blocks = []
-        for (const block of blockElements) {
-          const l = parseInt(block.getAttribute('data-line'))
+      const blocks = previewDoc.querySelectorAll('body [data-line]')
+      if (!blocks.length) return
 
-          if (l <= from) {
-            blocks.push({
-              line: l,
-              top: block.offsetTop
-            })
-          } else {
-            break
+      let index = 0
+      while (index < blocks.length) {
+        const block = blocks[index]
+        const blockLine = parseInt(block.getAttribute('data-line'))
+        if (blockLine < codeLine) {
+          index++
+        } else {
+          if (blockLine > codeLine && index > 0) {
+            index--
           }
-        }
-        if (blocks.length) {
-          top = blocks[blocks.length - 1].top
+          break
         }
       }
+      const block = blocks[index]
+      if (!block) return
 
-      if (top !== null) {
-        this.scrollTo(previewTop, top, y =>
+      const previewPageYOffset = _.get(
+        this,
+        'refs.preview.refs.root.contentWindow.pageYOffset'
+      )
+      const blockRect = block.getBoundingClientRect()
+      const top = previewPageYOffset + blockRect.top
+      if (typeof top === 'number' || !Number.isNaN(top)) {
+        this.scrollTo(previewScrollTop, top, y =>
           _.set(previewDoc, 'body.scrollTop', y)
         )
       }
@@ -156,58 +146,35 @@ class MarkdownSplitEditor extends React.Component {
 
   handlePreviewScroll(e) {
     if (this.userScroll) {
-      const previewDoc = _.get(
-        this,
-        'refs.preview.refs.root.contentWindow.document'
+      const previeWindow = this.refs.preview.getWindow()
+      const blocks = previeWindow.document.body.querySelectorAll(
+        'body [data-line]'
       )
-      const codeDoc = _.get(this, 'refs.code.editor.doc')
+      if (!blocks.length) return
 
-      const srcTop = _.get(previewDoc, 'body.scrollTop')
-      const editorTop = _.get(codeDoc, 'scrollTop')
-
-      let top
-      if (srcTop === 0) {
-        top = 0
-      } else {
-        const delta = Math.floor(_.get(previewDoc, 'body.clientHeight') / 3)
-        const previewTop = srcTop + delta
-
-        const blockElements = previewDoc.querySelectorAll('body [data-line]')
-        const blocks = []
-        for (const block of blockElements) {
-          const top = block.offsetTop
-
-          blocks.push({
-            line: parseInt(block.getAttribute('data-line')),
-            top
-          })
-
-          if (top > previewTop) {
-            break
+      let index = 0
+      while (index < blocks.length) {
+        const blockRect = blocks[index].getBoundingClientRect()
+        if (blockRect.top < TOP_OFFSET) {
+          index++
+        } else {
+          if (blockRect.top > TOP_OFFSET && index > 0) {
+            index--
           }
+          break
         }
-
-        if (blocks.length === 1) {
-          const block = blockElements[blockElements.length - 1]
-
-          blocks.push({
-            line: codeDoc.size,
-            top: block.offsetTop + block.offsetHeight
-          })
-        }
-
-        const i = blocks.length - 1
-
-        const from = codeDoc.cm.heightAtLine(blocks[i - 1].line, 'local')
-        const to = codeDoc.cm.heightAtLine(blocks[i].line, 'local')
-
-        const ratio =
-          (previewTop - blocks[i - 1].top) / (blocks[i].top - blocks[i - 1].top)
-
-        top = from + Math.floor((to - from) * ratio) - delta
       }
 
-      this.scrollTo(editorTop, top, y => codeDoc.cm.scrollTo(0, y))
+      const block = blocks[index]
+      if (!block) return
+
+      const line = parseInt(block.getAttribute('data-line'))
+      const editor = _.get(this, 'refs.code.editor')
+      const codeScrollTop = _.get(editor.doc, 'scrollTop')
+      const top = editor.charCoords({ line: line, ch: 0 }, 'local').top
+      if (typeof top === 'number' || !Number.isNaN(top)) {
+        this.scrollTo(codeScrollTop, top, y => editor.doc.cm.scrollTo(0, y))
+      }
     }
   }
 
