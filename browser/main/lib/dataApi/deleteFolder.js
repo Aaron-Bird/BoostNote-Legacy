@@ -37,22 +37,47 @@ function deleteFolder(storageKey, folderKey) {
     })
     .then(function deleteFolderAndNotes(data) {
       const { storage, notes } = data
-      storage.folders = storage.folders.filter(function excludeTargetFolder(
+
+      const folder = storage.folders.find(folder => folder.key === folderKey)
+      const deleteFolderKeys = [folder.key]
+      let index = 0
+      while (index < deleteFolderKeys.length) {
+        const key = deleteFolderKeys[index]
+        const folder = storage.folders.find(folder => folder.key === key)
+        if (Array.isArray(folder.children)) {
+          deleteFolderKeys.push(...folder.children)
+        }
+        index++
+      }
+      const folders = storage.folders.filter(function excludeTargetFolder(
         folder
       ) {
-        return folder.key !== folderKey
+        return !deleteFolderKeys.includes(folder.key)
+      })
+      folders.forEach(folder => {
+        if (Array.isArray(folder.children)) {
+          folder.children = folder.children.filter(childrenFolderKey => {
+            return !deleteFolderKeys.includes(childrenFolderKey)
+          })
+        }
       })
 
       const targetNotes = notes.filter(function filterTargetNotes(note) {
-        return note.folder === folderKey
+        return deleteFolderKeys.includes(note.folder)
       })
-
       const deleteAllNotes = targetNotes.map(function deleteNote(note) {
         return deleteSingleNote(storageKey, note.key)
       })
-      return Promise.all(deleteAllNotes).then(() => storage)
+
+      return Promise.all(deleteAllNotes).then(() => {
+        storage.folders = folders
+        storage.notes = notes.filter(function filterTargetNotes(note) {
+          return !deleteFolderKeys.includes(note.folder)
+        })
+        return [storage, deleteFolderKeys]
+      })
     })
-    .then(function(storage) {
+    .then(function([storage, deleteFolderKeys]) {
       CSON.writeFileSync(
         path.join(storage.path, 'boostnote.json'),
         _.pick(storage, ['folders', 'version'])
@@ -60,7 +85,8 @@ function deleteFolder(storageKey, folderKey) {
 
       return {
         storage,
-        folderKey
+        folderKey,
+        deleteFolderKeys: deleteFolderKeys
       }
     })
 }

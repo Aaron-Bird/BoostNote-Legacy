@@ -49,7 +49,7 @@ class MarkdownSplitEditor extends React.Component {
       const codeTop = codeCursorCoords.top - codeScrollTop
 
       const blocks = previewDoc.querySelectorAll('body [data-line]')
-      if (!blocks.length) retun
+      if (!blocks.length) return
 
       const codeLine = codeCursor.line
       let index = 0

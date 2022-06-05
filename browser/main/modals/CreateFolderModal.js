@@ -60,7 +60,7 @@ class CreateFolderModal extends React.Component {
       }
 
       dataApi
-        .createFolder(storage.key, input)
+        .createFolder(storage.key, input, this.props.parent)
         .then(data => {
           store.dispatch({
             type: 'UPDATE_FOLDER',
@@ -113,6 +113,10 @@ class CreateFolderModal extends React.Component {
 CreateFolderModal.propTypes = {
   storage: PropTypes.shape({
     key: PropTypes.string
+  }),
+  folder: PropTypes.shape({
+    key: PropTypes.string,
+    name: PropTypes.string
   })
 }
 

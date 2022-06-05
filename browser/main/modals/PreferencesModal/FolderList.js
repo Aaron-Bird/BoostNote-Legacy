@@ -5,29 +5,61 @@ import dataApi from 'browser/main/lib/dataApi'
 import styles from './FolderList.styl'
 import { store } from 'browser/main/store'
 import FolderItem from './FolderItem'
-import { SortableContainer } from 'react-sortable-hoc'
 import i18n from 'browser/lib/i18n'
+import {
+  SortableTree,
+  TreeNodeLine
+} from 'browser/lib/react-sortable-tree-list'
+import {
+  toSortableTreeData,
+  toStorageFoldersData
+} from 'browser/lib/sortableTreeDataTransform'
 
 class FolderList extends React.Component {
   render() {
     const { storage, hostBoundingBox } = this.props
-
-    const folderList = storage.folders.map((folder, index) => {
-      return (
-        <FolderItem
-          key={folder.key}
-          folder={folder}
-          storage={storage}
-          index={index}
-          hostBoundingBox={hostBoundingBox}
-        />
-      )
-    })
+    // const folderList = storage.folders.map((folder, index) => {
+    //   return (
+    //     <FolderItem
+    //       key={folder.key}
+    //       folder={folder}
+    //       storage={storage}
+    //       index={index}
+    //       hostBoundingBox={hostBoundingBox}
+    //     />
+    //   )
+    // })
 
     return (
       <div>
-        {folderList.length > 0 ? (
-          folderList
+        {storage.folders.length > 0 ? (
+          <SortableTree
+            expandAll
+            nodeList={toSortableTreeData(storage.folders)}
+            onChange={nodeList => {
+              dataApi
+                .updateFolders(storage.key, toStorageFoldersData(nodeList))
+                .then(data => {
+                  store.dispatch({
+                    type: 'REORDER_FOLDER',
+                    storage: data.storage
+                  })
+                })
+            }}
+          >
+            {TreeNodeLine(props => {
+              const { node: folder, updateComponent, nodeList, index } = props
+              return (
+                <FolderItem
+                  key={folder.key}
+                  folder={folder}
+                  storage={storage}
+                  index={index}
+                  hostBoundingBox={hostBoundingBox}
+                />
+              )
+            })}
+          </SortableTree>
         ) : (
           <div styleName='folderList-empty'>{i18n.__('No Folders')}</div>
         )}
@@ -56,32 +88,9 @@ FolderList.propTypes = {
 }
 
 class SortableFolderListComponent extends React.Component {
-  constructor(props) {
-    super(props)
-    this.onSortEnd = ({ oldIndex, newIndex }) => {
-      const { storage } = this.props
-      dataApi.reorderFolder(storage.key, oldIndex, newIndex).then(data => {
-        store.dispatch({
-          type: 'REORDER_FOLDER',
-          storage: data.storage
-        })
-        this.setState()
-      })
-    }
-  }
-
   render() {
     const StyledFolderList = CSSModules(FolderList, this.props.styles)
-    const SortableFolderList = SortableContainer(StyledFolderList)
-
-    return (
-      <SortableFolderList
-        helperClass='sortableItemHelper'
-        onSortEnd={this.onSortEnd}
-        useDragHandle
-        {...this.props}
-      />
-    )
+    return <StyledFolderList {...this.props} />
   }
 }
 

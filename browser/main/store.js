@@ -235,45 +235,55 @@ function data(state = defaultDataMap(), action) {
 
         // Get note list from folder-note map
         // and delete note set from folder-note map
-        const folderKey = action.storage.key + '-' + action.folderKey
-        const noteSet = state.folderNoteMap.get(folderKey)
-        state.folderNoteMap = new Map(state.folderNoteMap)
-        state.folderNoteMap.delete(folderKey)
+        const noteSets = []
+        if (action.deleteFolderKeys) {
+          action.deleteFolderKeys.forEach(key => {
+            const folderKey = action.storage.key + '-' + key
+            const noteSet = state.folderNoteMap.get(folderKey)
+            state.folderNoteMap = new Map(state.folderNoteMap)
+            state.folderNoteMap.delete(folderKey)
+
+            if (noteSet) {
+              noteSets.push(noteSet)
+            }
+          })
+        }
 
         state.noteMap = new Map(state.noteMap)
         state.storageNoteMap = new Map(state.storageNoteMap)
         let storageNoteSet = state.storageNoteMap.get(action.storage.key)
         storageNoteSet = new Set(storageNoteSet)
         state.storageNoteMap.set(action.storage.key, storageNoteSet)
+        if (noteSets.length) {
+          noteSets.forEach(noteSet => {
+            noteSet.forEach(function handleNoteKey(noteKey) {
+              // Get note from noteMap
+              const note = state.noteMap.get(noteKey)
+              if (note != null) {
+                state.noteMap.delete(noteKey)
 
-        if (noteSet != null) {
-          noteSet.forEach(function handleNoteKey(noteKey) {
-            // Get note from noteMap
-            const note = state.noteMap.get(noteKey)
-            if (note != null) {
-              state.noteMap.delete(noteKey)
+                // From storageSet
+                storageNoteSet.delete(noteKey)
 
-              // From storageSet
-              storageNoteSet.delete(noteKey)
+                // From starredSet
+                if (note.isStarred) {
+                  state.starredSet = new Set(state.starredSet)
+                  state.starredSet.delete(noteKey)
+                }
 
-              // From starredSet
-              if (note.isStarred) {
-                state.starredSet = new Set(state.starredSet)
-                state.starredSet.delete(noteKey)
+                if (note.isTrashed) {
+                  state.trashedSet = new Set(state.trashedSet)
+                  state.trashedSet.delete(noteKey)
+                }
+
+                // Delete key from tag map
+                state.tagNoteMap = new Map(state.tagNoteMap)
+                note.tags.forEach(tag => {
+                  const tagNoteSet = getOrInitItem(state.tagNoteMap, tag)
+                  tagNoteSet.delete(noteKey)
+                })
               }
-
-              if (note.isTrashed) {
-                state.trashedSet = new Set(state.trashedSet)
-                state.trashedSet.delete(noteKey)
-              }
-
-              // Delete key from tag map
-              state.tagNoteMap = new Map(state.tagNoteMap)
-              note.tags.forEach(tag => {
-                const tagNoteSet = getOrInitItem(state.tagNoteMap, tag)
-                tagNoteSet.delete(noteKey)
-              })
-            }
+            })
           })
         }
       }

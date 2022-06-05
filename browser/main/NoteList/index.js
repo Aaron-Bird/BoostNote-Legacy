@@ -188,6 +188,7 @@ class NoteList extends React.Component {
       const targetIndex = this.getTargetIndex()
       if (targetIndex > -1) {
         const list = this.refs.list
+        if (!list) return false
         const item = list.childNodes[targetIndex]
 
         if (item == null) return false
@@ -1321,6 +1322,8 @@ class NoteList extends React.Component {
 
       const storage = this.getNoteStorage(note)
 
+      const folder = this.getNoteFolder(note)
+      if (!folder) return null
       if (isDefault) {
         return (
           <NoteItem
@@ -1332,7 +1335,7 @@ class NoteList extends React.Component {
             handleNoteClick={this.handleNoteClick.bind(this)}
             handleDragStart={this.handleDragStart.bind(this)}
             pathname={location.pathname}
-            folderName={this.getNoteFolder(note).name}
+            folderName={folder && folder.name}
             storageName={storage.name}
             viewType={viewType}
             showTagsAlphabetically={config.ui.showTagsAlphabetically}
@@ -1350,7 +1353,7 @@ class NoteList extends React.Component {
           handleNoteClick={this.handleNoteClick.bind(this)}
           handleDragStart={this.handleDragStart.bind(this)}
           pathname={location.pathname}
-          folderName={this.getNoteFolder(note).name}
+          folderName={folder && folder.name}
           storageName={storage.name}
           viewType={viewType}
           searchword={this.props.match.params.searchword}

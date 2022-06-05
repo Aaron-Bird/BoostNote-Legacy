@@ -6,7 +6,6 @@ import styles from './FolderItem.styl'
 import dataApi from 'browser/main/lib/dataApi'
 import { store } from 'browser/main/store'
 import { SketchPicker } from 'react-color'
-import { SortableElement, SortableHandle } from 'react-sortable-hoc'
 import i18n from 'browser/lib/i18n'
 
 class FolderItem extends React.Component {
@@ -187,7 +186,8 @@ class FolderItem extends React.Component {
       store.dispatch({
         type: 'DELETE_FOLDER',
         storage: data.storage,
-        folderKey: data.folderKey
+        folderKey: data.folderKey,
+        deleteFolderKeys: data.deleteFolderKeys
       })
     })
   }
@@ -312,18 +312,14 @@ class Handle extends React.Component {
 
 class SortableFolderItemComponent extends React.Component {
   render() {
-    const StyledHandle = CSSModules(Handle, styles)
-    const DragHandle = SortableHandle(StyledHandle)
-
     const StyledFolderItem = CSSModules(FolderItem, styles)
 
     return (
       <div>
-        <DragHandle />
         <StyledFolderItem {...this.props} />
       </div>
     )
   }
 }
 
-export default CSSModules(SortableElement(SortableFolderItemComponent), styles)
+export default CSSModules(SortableFolderItemComponent, styles)

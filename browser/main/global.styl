@@ -134,10 +134,6 @@ modalBackColor = white
 .CodeMirror-hyperlink
   cursor pointer
 
-
-.sortableItemHelper
-  z-index modalZIndex + 5
-
 apply-theme(theme)
   body[data-theme={theme}]
     background-color get-theme-var(theme, 'backgroundColor')
@@ -146,8 +142,6 @@ apply-theme(theme)
     .ModalBase
       .modalBack
         background-color get-theme-var(theme, 'backgroundColor')
-    .sortableItemHelper
-      color get-theme-var(theme, 'text-color')
 
 for theme in 'dark' 'solarized-dark' 'dracula'
   apply-theme(theme)

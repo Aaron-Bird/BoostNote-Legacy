@@ -47,7 +47,12 @@ const StorageItem = ({
   noteCount,
   handleDrop,
   handleDragEnter,
-  handleDragLeave
+  handleDragLeave,
+  handleDragOver,
+  haveChildren,
+  showChildren,
+  handleClickShowChildrenBtn,
+  isSearchMode
 }) => {
   return (
     <button
@@ -58,20 +63,44 @@ const StorageItem = ({
       onDrop={handleDrop}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
+      onDragOver={handleDragOver}
     >
-      {!isFolded && (
+      {/* {!isFolded && (
         <DraggableIcon className={styles['folderList-item-reorder']} />
-      )}
+      )} */}
       <span
         styleName={
           isFolded ? 'folderList-item-name--folded' : 'folderList-item-name'
         }
       >
-        <FolderIcon
+        {/* <FolderIcon
           styleName='folderList-item-icon'
           color={folderColor}
           isActive={isActive}
-        />
+        /> */}
+
+        {!isFolded && (
+          <span
+            onClick={handleClickShowChildrenBtn}
+            className={styles['folderList-item-expended-icon']}
+          >
+            {haveChildren ? (
+              <i
+                className={`fa ${
+                  isSearchMode || showChildren
+                    ? 'fa-angle-down'
+                    : 'fa-angle-right'
+                }`}
+              />
+            ) : (
+              <FolderIcon
+                styleName='folderList-item-icon'
+                color={folderColor}
+                isActive={isActive}
+              />
+            )}
+          </span>
+        )}
         {isFolded
           ? _.truncate(folderName, { length: 1, omission: '' })
           : folderName}
@@ -99,7 +128,12 @@ StorageItem.propTypes = {
   isFolded: PropTypes.bool.isRequired,
   handleDragEnter: PropTypes.func.isRequired,
   handleDragLeave: PropTypes.func.isRequired,
-  noteCount: PropTypes.number
+  handleDragOver: PropTypes.func.isRequired,
+  noteCount: PropTypes.number,
+  haveChildren: PropTypes.bool,
+  showChildren: PropTypes.bool,
+  handleClickShowChildrenBtn: PropTypes.func.isRequired,
+  isSearchMode: PropTypes.bool
 }
 
 export default CSSModules(StorageItem, styles)

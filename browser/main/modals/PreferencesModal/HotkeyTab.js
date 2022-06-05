@@ -233,7 +233,7 @@ class HotkeyTab extends React.Component {
                 ref='insertDate'
                 value={config.hotkey.insertDate}
                 type='text'
-                disabled='true'
+                disabled
               />
             </div>
           </div>
@@ -247,7 +247,7 @@ class HotkeyTab extends React.Component {
                 ref='insertDateTime'
                 value={config.hotkey.insertDateTime}
                 type='text'
-                disabled='true'
+                disabled
               />
             </div>
           </div>

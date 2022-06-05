@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import PropTypes, { node } from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './StorageItem.styl'
@@ -8,10 +8,17 @@ import RenameFolderModal from 'browser/main/modals/RenameFolderModal'
 import dataApi from 'browser/main/lib/dataApi'
 import StorageItemChild from 'browser/components/StorageItem'
 import _ from 'lodash'
-import { SortableElement } from 'react-sortable-hoc'
 import i18n from 'browser/lib/i18n'
 import context from 'browser/lib/context'
 import { push } from 'connected-react-router'
+import {
+  SortableTree,
+  TreeNodeLine
+} from 'browser/lib/react-sortable-tree-list'
+import {
+  toSortableTreeData,
+  toStorageFoldersData
+} from 'browser/lib/sortableTreeDataTransform'
 
 const { remote } = require('electron')
 const { dialog } = remote
@@ -178,6 +185,10 @@ class StorageItem extends React.Component {
   handleFolderButtonContextMenu(e, folder) {
     context.popup([
       {
+        label: i18n.__('添加下级菜单'),
+        click: e => this.handleAddChildFolderClick(e, folder)
+      },
+      {
         label: i18n.__('Rename Folder'),
         click: e => this.handleRenameFolderClick(e, folder)
       },
@@ -220,6 +231,14 @@ class StorageItem extends React.Component {
     modal.open(RenameFolderModal, {
       storage,
       folder
+    })
+  }
+
+  handleAddChildFolderClick(e, folder) {
+    const { storage } = this.props
+    modal.open(CreateFolderModal, {
+      storage,
+      parent: folder
     })
   }
 
@@ -275,7 +294,8 @@ class StorageItem extends React.Component {
         dispatch({
           type: 'DELETE_FOLDER',
           storage: data.storage,
-          folderKey: data.folderKey
+          folderKey: data.folderKey,
+          deleteFolderKeys: data.deleteFolderKeys
         })
       })
     }
@@ -299,6 +319,11 @@ class StorageItem extends React.Component {
     this.setState({
       draggedOver: null
     })
+  }
+
+  handleDragOver(e, key) {
+    // Fix folder.key is null when drag note to folder element
+    this.handleDragEnter(e, key)
   }
 
   dropNote(storage, folder, dispatch, location, noteData) {
@@ -328,77 +353,31 @@ class StorageItem extends React.Component {
 
   handleDrop(e, storage, folder, dispatch, location) {
     e.preventDefault()
+    // Avoid bubble to sortable tree parent element
+    e.stopPropagation()
     if (this.state.draggedOver !== null) {
       this.setState({
         draggedOver: null
       })
     }
-    const noteData = JSON.parse(e.dataTransfer.getData('note'))
-    this.dropNote(storage, folder, dispatch, location, noteData)
+    // Avoid error when dragging a folder from storage to another
+    const noteDataStr = e.dataTransfer.getData('note')
+    if (noteDataStr) {
+      const noteData = JSON.parse(noteDataStr)
+      this.dropNote(storage, folder, dispatch, location, noteData)
+    }
   }
 
   render() {
-    const { storage, location, isFolded, data, dispatch } = this.props
+    const {
+      storage,
+      location,
+      isFolded,
+      data,
+      dispatch,
+      isSearchMode
+    } = this.props
     const { folderNoteMap, trashedSet } = data
-    const SortableStorageItemChild = SortableElement(StorageItemChild)
-    const folderList = storage.folders.map((folder, index) => {
-      const folderRegex = new RegExp(
-        escapeStringRegexp(path.sep) +
-          'storages' +
-          escapeStringRegexp(path.sep) +
-          storage.key +
-          escapeStringRegexp(path.sep) +
-          'folders' +
-          escapeStringRegexp(path.sep) +
-          folder.key
-      )
-      const isActive = !!location.pathname.match(folderRegex)
-      const tooltipRef = React.createRef(null)
-      const noteSet = folderNoteMap.get(storage.key + '-' + folder.key)
-
-      let noteCount = 0
-      if (noteSet) {
-        let trashedNoteCount = 0
-        const noteKeys = noteSet.map(noteKey => {
-          return noteKey
-        })
-        trashedSet.toJS().forEach(trashedKey => {
-          if (
-            noteKeys.some(noteKey => {
-              return noteKey === trashedKey
-            })
-          )
-            trashedNoteCount++
-        })
-        noteCount = noteSet.size - trashedNoteCount
-      }
-      return (
-        <SortableStorageItemChild
-          key={folder.key}
-          index={index}
-          isActive={isActive || folder.key === this.state.draggedOver}
-          tooltipRef={tooltipRef}
-          handleButtonClick={e => this.handleFolderButtonClick(folder.key)(e)}
-          handleMouseEnter={e =>
-            this.handleFolderMouseEnter(e, tooltipRef, isFolded)
-          }
-          handleContextMenu={e => this.handleFolderButtonContextMenu(e, folder)}
-          folderName={folder.name}
-          folderColor={folder.color}
-          isFolded={isFolded}
-          noteCount={noteCount}
-          handleDrop={e => {
-            this.handleDrop(e, storage, folder, dispatch, location)
-          }}
-          handleDragEnter={e => {
-            this.handleDragEnter(e, folder.key)
-          }}
-          handleDragLeave={e => {
-            this.handleDragLeave(e, folder)
-          }}
-        />
-      )
-    })
 
     const isActive = location.pathname.match(
       new RegExp(
@@ -454,14 +433,136 @@ class StorageItem extends React.Component {
             )}
           </button>
         </div>
-        {this.state.isOpen && <div>{folderList}</div>}
+        {this.state.isOpen && (
+          <SortableTree
+            sortable={!isSearchMode}
+            expandAll={isSearchMode}
+            nodeList={toSortableTreeData(storage.folders)}
+            onChange={nodeList => {
+              if (isSearchMode) return
+              dataApi
+                .updateFolders(storage.key, toStorageFoldersData(nodeList))
+                .then(data => {
+                  dispatch({ type: 'REORDER_FOLDER', storage: data.storage })
+                })
+            }}
+          >
+            {TreeNodeLine(
+              props => {
+                const { node: folder, updateComponent, nodeList } = props
+                const folderRegex = new RegExp(
+                  escapeStringRegexp(path.sep) +
+                    'storages' +
+                    escapeStringRegexp(path.sep) +
+                    storage.key +
+                    escapeStringRegexp(path.sep) +
+                    'folders' +
+                    escapeStringRegexp(path.sep) +
+                    folder.key
+                )
+                const isActive = !!location.pathname.match(folderRegex)
+                const tooltipRef = React.createRef(null)
+                const noteSet = folderNoteMap.get(
+                  storage.key + '-' + folder.key
+                )
+
+                let noteCount = 0
+                if (noteSet) {
+                  let trashedNoteCount = 0
+                  const noteKeys = noteSet.map(noteKey => {
+                    return noteKey
+                  })
+                  trashedSet.toJS().forEach(trashedKey => {
+                    if (
+                      noteKeys.some(noteKey => {
+                        return noteKey === trashedKey
+                      })
+                    )
+                      trashedNoteCount++
+                  })
+                  noteCount = noteSet.size - trashedNoteCount
+                }
+
+                return (
+                  <StorageItemChild
+                    key={folder.key}
+                    isSearchMode={isSearchMode}
+                    isActive={isActive || folder.key === this.state.draggedOver}
+                    tooltipRef={tooltipRef}
+                    handleButtonClick={e =>
+                      this.handleFolderButtonClick(folder.key)(e)
+                    }
+                    handleMouseEnter={e =>
+                      this.handleFolderMouseEnter(e, tooltipRef, isFolded)
+                    }
+                    handleContextMenu={e =>
+                      this.handleFolderButtonContextMenu(e, folder)
+                    }
+                    folderName={folder.name}
+                    folderColor={folder.color}
+                    isFolded={isFolded}
+                    noteCount={noteCount}
+                    handleDrop={e => {
+                      this.handleDrop(e, storage, folder, dispatch, location)
+                    }}
+                    handleDragEnter={e => {
+                      this.handleDragEnter(e, folder.key)
+                    }}
+                    handleDragLeave={e => {
+                      this.handleDragLeave(e, folder)
+                    }}
+                    handleDragOver={e => {
+                      this.handleDragOver(e, folder.key)
+                    }}
+                    haveChildren={
+                      Array.isArray(folder.children) &&
+                      folder.children.length > 0
+                    }
+                    showChildren={folder.expanded || false}
+                    handleClickShowChildrenBtn={e => {
+                      if (isSearchMode) return
+
+                      e.stopPropagation()
+                      folder.expanded = !folder.expanded
+                      if (!folder.expanded && folder.children) {
+                        const children = [...folder.children]
+                        while (children.length) {
+                          const childFolder = children.shift()
+                          childFolder.expanded = false
+                          if (childFolder.children) {
+                            children.push(...childFolder.children)
+                          }
+                        }
+                      }
+
+                      updateComponent()
+                      dataApi
+                        .updateFolders(
+                          storage.key,
+                          toStorageFoldersData(nodeList)
+                        )
+                        .then(data => {
+                          dispatch({
+                            type: 'UPDATE_FOLDER',
+                            storage: data.storage
+                          })
+                        })
+                    }}
+                  />
+                )
+              },
+              { indent: isFolded ? 0 : 20 }
+            )}
+          </SortableTree>
+        )}
       </div>
     )
   }
 }
 
 StorageItem.propTypes = {
-  isFolded: PropTypes.bool
+  isFolded: PropTypes.bool,
+  isSearchMode: PropTypes.bool
 }
 
 export default CSSModules(StorageItem, styles)

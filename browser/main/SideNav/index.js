@@ -18,7 +18,6 @@ import PreferenceButton from './PreferenceButton'
 import SearchButton from './SearchButton'
 import ListButton from './ListButton'
 import TagButton from './TagButton'
-import { SortableContainer } from 'react-sortable-hoc'
 import i18n from 'browser/lib/i18n'
 import context from 'browser/lib/context'
 import { remote } from 'electron'
@@ -42,10 +41,11 @@ class SideNav extends React.Component {
         show: false,
         color: null,
         tagName: null,
-        targetRect: null,
-        showSearch: false,
-        searchText: ''
-      }
+        targetRect: null
+      },
+      // Fix error: A component is changing an uncontrolled input of type text to be controlled.
+      showSearch: false,
+      searchText: ''
     }
 
     this.dismissColorPicker = this.dismissColorPicker.bind(this)
@@ -334,15 +334,6 @@ class SideNav extends React.Component {
     dispatch(push('/alltags'))
   }
 
-  onSortEnd(storage) {
-    return ({ oldIndex, newIndex }) => {
-      const { dispatch } = this.props
-      dataApi.reorderFolder(storage.key, oldIndex, newIndex).then(data => {
-        dispatch({ type: 'REORDER_FOLDER', storage: data.storage })
-      })
-    }
-  }
-
   SideNavComponent(isFolded) {
     const { location, data, config, dispatch } = this.props
     const { showSearch, searchText } = this.state
@@ -359,29 +350,47 @@ class SideNav extends React.Component {
       !location.pathname.match('/alltags')
     ) {
       let storageMap = data.storageMap
-      if (showSearch && searchText.length > 0) {
+      const isSearchMode = showSearch && searchText.length > 0
+      if (isSearchMode) {
         storageMap = storageMap.map(storage => {
-          const folders = storage.folders.filter(
-            folder =>
+          const folderMap = new Map()
+          const folders = storage.folders
+          folders.forEach(folder => folderMap.set(folder.key, folder))
+
+          const searchedSet = new Set()
+          folders.forEach(folder => {
+            const isMatch =
               folder.name.toLowerCase().indexOf(searchText.toLowerCase()) !== -1
-          )
-          return Object.assign({}, storage, { folders })
+            if (isMatch) {
+              searchedSet.add(folder)
+              let parentFolder = folderMap.get(folder.parent)
+              while (parentFolder) {
+                searchedSet.add(parentFolder)
+
+                parentFolder =
+                  parentFolder.parent !== undefined
+                    ? folderMap.get(parentFolder.parent)
+                    : null
+              }
+            }
+          })
+          return Object.assign({}, storage, {
+            folders: Array.from(searchedSet)
+          })
         })
       }
 
       const storageList = storageMap.map((storage, key) => {
-        const SortableStorageItem = SortableContainer(StorageItem)
         return (
-          <SortableStorageItem
+          <StorageItem
             key={storage.key}
             storage={storage}
             data={data}
             location={location}
             isFolded={isFolded}
             dispatch={dispatch}
-            onSortEnd={this.onSortEnd.bind(this)(storage)}
-            useDragHandle
             config={config}
+            isSearchMode={isSearchMode}
           />
         )
       })

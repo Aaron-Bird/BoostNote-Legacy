@@ -9,6 +9,7 @@
   background-color transparent
   color $ui-inactive-text-color
   padding 0
+  padding-left 8px
   text-align left
   border none
   overflow ellipsis
@@ -33,7 +34,8 @@
     background-color alpha($ui-button-default--active-backgroundColor, 50%)
 
 .folderList-item-name
-  display block
+  display flex
+  align-items center
   flex 1
   padding-right: 10px
   border-width 0 0 0 2px
@@ -82,6 +84,14 @@
   cursor: ns-resize
   &:before
     content: "\f142 \f142"
+
+.folderList-item-expended-icon
+  display inline-flex
+  justify-content center
+  align-items center
+  width 24px
+  font-size 12px
+  padding 10px 8px 10px 8px
 
 body[data-theme="white"]
   .folderList-item
