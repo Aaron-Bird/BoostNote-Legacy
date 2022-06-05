@@ -4593,6 +4593,13 @@ hoist-non-react-statics@^3.1.0, hoist-non-react-statics@^3.3.0:
   dependencies:
     react-is "^16.7.0"
 
+hoist-non-react-statics@^3.3.2:
+  version "3.3.2"
+  resolved "https://registry.yarnpkg.com/hoist-non-react-statics/-/hoist-non-react-statics-3.3.2.tgz#ece0acaf71d62c2969c2ec59feff42a4b1a85b45"
+  integrity sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==
+  dependencies:
+    react-is "^16.7.0"
+
 home-or-tmp@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/home-or-tmp/-/home-or-tmp-2.0.0.tgz#e36c3f2d2cae7d746a857e38d18d5f32a7882db8"
@@ -7957,11 +7964,13 @@ react-css-modules@^4.7.9:
     lodash "^4.16.6"
     object-unfreeze "^1.1.0"
 
-react-debounce-render@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/react-debounce-render/-/react-debounce-render-4.0.1.tgz#3a1814f67eca17e91d3101799805a7a4e2128a84"
+react-debounce-render@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/react-debounce-render/-/react-debounce-render-7.0.1.tgz#61a9fcb87c1ad94d207b347beacbddac70387926"
+  integrity sha512-jaUGT8QQMPeO09k4YnQne7WCQwZLSTAlvyc4QL1zrIcGIwaq6lgQmzPwqY/1xM4rKQGOP3ihYuGNnctB3BRYuA==
   dependencies:
-    lodash "^4.17.4"
+    hoist-non-react-statics "^3.3.2"
+    lodash.debounce "^4.0.8"
 
 react-deep-force-update@^1.0.0:
   version "1.1.1"

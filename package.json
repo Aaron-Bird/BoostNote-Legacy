@@ -110,7 +110,7 @@
     "react-codemirror": "^1.0.0",
     "react-color": "^2.2.2",
     "react-composition-input": "^1.1.1",
-    "react-debounce-render": "^4.0.1",
+    "react-debounce-render": "^7.0.1",
     "react-dom": "^16.8.6",
     "react-emoji-render": "^1.1.0",
     "react-image-carousel": "^2.0.18",
