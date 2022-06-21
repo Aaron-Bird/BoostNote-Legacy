@@ -73,34 +73,31 @@ const StorageItem = ({
           isFolded ? 'folderList-item-name--folded' : 'folderList-item-name'
         }
       >
-        {/* <FolderIcon
+        {!isFolded && (
+          <div
+            onClick={handleClickShowChildrenBtn}
+            className={styles['folderList-item-expended-wrapper']}
+          >
+            {haveChildren && (
+              <span className={styles['folderList-item-expended-icon']}>
+                <i
+                  className={`fa ${
+                    isSearchMode || showChildren
+                      ? 'fa-angle-down'
+                      : 'fa-angle-right'
+                  }`}
+                />
+              </span>
+            )}
+          </div>
+        )}
+
+        <FolderIcon
           styleName='folderList-item-icon'
           color={folderColor}
           isActive={isActive}
-        /> */}
+        />
 
-        {!isFolded && (
-          <span
-            onClick={handleClickShowChildrenBtn}
-            className={styles['folderList-item-expended-icon']}
-          >
-            {haveChildren ? (
-              <i
-                className={`fa ${
-                  isSearchMode || showChildren
-                    ? 'fa-angle-down'
-                    : 'fa-angle-right'
-                }`}
-              />
-            ) : (
-              <FolderIcon
-                styleName='folderList-item-icon'
-                color={folderColor}
-                isActive={isActive}
-              />
-            )}
-          </span>
-        )}
         {isFolded
           ? _.truncate(folderName, { length: 1, omission: '' })
           : folderName}

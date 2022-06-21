@@ -10,6 +10,8 @@
   margin-top 0px
   top: 50px
   right 25px
+  box-sizing border-box
+  max-height calc(100% - 80px)
   position absolute
   padding 20px 25px 0 25px
   width 300px
@@ -24,7 +26,30 @@
 .tocPanel-list
   margin-bottom: 16px;
   li 
-    margin-bottom: 6px
+    line-height 1.5em
     cursor: pointer
     &:hover 
-      opacity: 0.5;
+      transition 0.2s
+      background-color alpha($ui-button--hover-backgroundColor, 30%)
+      color $ui-inactive-text-color
+
+body[data-theme="white"]
+  .tocPanel-list li
+    &:hover
+      background-color alpha($ui-button--active-backgroundColor, 20%)
+
+apply-theme(theme)
+  body[data-theme={theme}]
+    .control-tocButton-panel-wrapper
+      background-color get-theme-var(theme, 'noteList-backgroundColor')
+      color get-theme-var(theme, 'text-color')
+    .tocPanel-list li
+      &:hover
+        background-color alpha(get-theme-var(theme, 'borderColor'), 20%)
+        color get-theme-var(theme, 'text-color')
+
+for theme in 'dark' 'solarized-dark' 'dracula'
+  apply-theme(theme)
+
+for theme in $themes
+  apply-theme(theme)

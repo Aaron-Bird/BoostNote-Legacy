@@ -18,18 +18,6 @@ import {
 class FolderList extends React.Component {
   render() {
     const { storage, hostBoundingBox } = this.props
-    // const folderList = storage.folders.map((folder, index) => {
-    //   return (
-    //     <FolderItem
-    //       key={folder.key}
-    //       folder={folder}
-    //       storage={storage}
-    //       index={index}
-    //       hostBoundingBox={hostBoundingBox}
-    //     />
-    //   )
-    // })
-
     return (
       <div>
         {storage.folders.length > 0 ? (

@@ -9,12 +9,13 @@
   background-color transparent
   color $ui-inactive-text-color
   padding 0
-  padding-left 8px
+  line-height 0
   text-align left
   border none
   overflow ellipsis
   font-size 14px
-  align-items: center
+  align-items center
+  justify-content center
   &:first-child
     margin-top 0
   &:hover
@@ -85,13 +86,22 @@
   &:before
     content: "\f142 \f142"
 
-.folderList-item-expended-icon
+.folderList-item-expended-wrapper
   display inline-flex
   justify-content center
   align-items center
   width 24px
   font-size 12px
-  padding 10px 8px 10px 8px
+  .folderList-item-expended-icon
+    width 18px
+    height 18px
+    display inline-flex
+    justify-content center
+    align-items center
+    border-radius 50%
+    &:hover 
+      background-color alpha($ui-button--active-backgroundColor, 20%)
+      transition background-color 0.15s
 
 body[data-theme="white"]
   .folderList-item
@@ -131,6 +141,11 @@ body[data-theme="dark"]
       color $ui-dark-text-color
       background-color alpha($ui-dark-button--active-backgroundColor, 50%)
 
+  .folderList-item-expended-icon
+    &:hover
+      background-color alpha($ui-dark-button--active-backgroundColor, 20%)
+      color $ui-dark-text-color
+
 apply-theme(theme)
   body[data-theme={theme}]
     .folderList-item
@@ -149,7 +164,12 @@ apply-theme(theme)
         background-color get-theme-var(theme, 'button-backgroundColor')
       &:hover
         color get-theme-var(theme, 'text-color')
-        background-color get-theme-var(theme, 'button-backgroundColor')
+        background-color get-theme-var(theme, 'button-backgroundColor')   
+
+    .folderList-item-expended-icon
+      &:hover
+        background-color alpha(get-theme-var(theme, 'button--active-backgroundColor'), 60%)
+        color get-theme-var(theme, 'text-color')
 
 for theme in 'solarized-dark' 'dracula'
   apply-theme(theme)

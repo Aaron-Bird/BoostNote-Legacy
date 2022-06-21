@@ -2,27 +2,31 @@ import PropTypes from 'prop-types'
 import React from 'react'
 import CSSModules from 'browser/lib/CSSModules'
 import styles from './TocPanel.styl'
-import i18n from 'browser/lib/i18n'
-import uslug from 'uslug'
 import eventEmitter from 'browser/main/lib/eventEmitter'
+import { generateToc } from 'browser/lib/markdown-toc-generator'
 
 const TocPanel = props => {
-  const contentSplit = props.content.split('\n')
-  const tocFlatList = contentSplit.reduce((list, str, line) => {
-    str = str.trim()
-    const reg = /^(#+)(.*?)$/
-    if (reg.test(str)) {
-      const matched = str.match(reg)
-      const title = matched[2].trim().replace(/:.*?:/, '')
-      list.push({
-        level: matched[1].length,
-        title: title,
-        href: uslug(title, { lower: false }),
-        line
-      })
-    }
-    return list
-  }, [])
+  const tocFlatList = generateToc(props.content).tokens.reduce(
+    (list, token, line) => {
+      if (token.type === 'inline' && token.slug) {
+        const title = token.children
+          ? token.children
+              .filter(i => i.type === 'text')
+              .map(i => i.content)
+              .join('')
+          : ''
+        const line = Array.isArray(token.lines) ? token.lines[0] : null
+        list.push({
+          level: token.lvl,
+          title,
+          href: token.slug,
+          line
+        })
+      }
+      return list
+    },
+    []
+  )
 
   return (
     <div
@@ -43,8 +47,9 @@ const TocPanel = props => {
               key={info.title + '-' + index}
               style={{ marginLeft: `${(info.level - 1) * 10}px` }}
               onClick={() => {
-                eventEmitter.emit('navigation:hash', '#' + info.href)
-                eventEmitter.emit('line:jump', info.line)
+                eventEmitter.emit('navigation:hash', '#' + info.href, false)
+                // eventEmitter.emit('navigation:line', info.line, false)
+                eventEmitter.emit('line:jump', info.line, false)
               }}
             >
               {info.title}

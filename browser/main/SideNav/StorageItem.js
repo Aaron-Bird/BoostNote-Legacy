@@ -185,7 +185,7 @@ class StorageItem extends React.Component {
   handleFolderButtonContextMenu(e, folder) {
     context.popup([
       {
-        label: i18n.__('添加下级菜单'),
+        label: i18n.__('Add Subfolder'),
         click: e => this.handleAddChildFolderClick(e, folder)
       },
       {

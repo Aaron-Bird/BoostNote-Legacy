@@ -11,7 +11,7 @@ import attachmentManagement from 'browser/main/lib/dataApi/attachmentManagement'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import NoteItem from 'browser/components/NoteItem'
 import NoteItemSimple from 'browser/components/NoteItemSimple'
-import searchFromNotes, { searchLineFromNote } from 'browser/lib/search'
+import searchFromNotes from 'browser/lib/search'
 import fs from 'fs'
 import path from 'path'
 import { push, replace } from 'connected-react-router'
@@ -1361,7 +1361,6 @@ class NoteList extends React.Component {
         />
       )
     })
-
     return (
       <div
         className='NoteList'
@@ -1390,52 +1389,61 @@ class NoteList extends React.Component {
             </select>
           </div>
           <div styleName='control-button-area'>
-            <button
-              title={i18n.__('Ascending Order')}
-              styleName={
-                config.listDirection === 'ASCENDING'
-                  ? 'control-button--active'
-                  : 'control-button'
-              }
-              onClick={e => this.handleListDirectionButtonClick(e, 'ASCENDING')}
-            >
-              <img src='../resources/icon/icon-up.svg' />
-            </button>
-            <button
-              title={i18n.__('Descending Order')}
-              styleName={
-                config.listDirection === 'DESCENDING'
-                  ? 'control-button--active'
-                  : 'control-button'
-              }
-              onClick={e =>
-                this.handleListDirectionButtonClick(e, 'DESCENDING')
-              }
-            >
-              <img src='../resources/icon/icon-down.svg' />
-            </button>
-            <button
-              title={i18n.__('Default View')}
-              styleName={
-                config.listStyle === 'DEFAULT'
-                  ? 'control-button--active'
-                  : 'control-button'
-              }
-              onClick={e => this.handleListStyleButtonClick(e, 'DEFAULT')}
-            >
-              <img src='../resources/icon/icon-column.svg' />
-            </button>
-            <button
-              title={i18n.__('Compressed View')}
-              styleName={
-                config.listStyle === 'SMALL'
-                  ? 'control-button--active'
-                  : 'control-button'
-              }
-              onClick={e => this.handleListStyleButtonClick(e, 'SMALL')}
-            >
-              <img src='../resources/icon/icon-column-list.svg' />
-            </button>
+            {this.props.config.listDirection === 'ASCENDING' ? (
+              <button
+                title={i18n.__('Ascending Order')}
+                styleName={
+                  config.listDirection === 'ASCENDING'
+                    ? 'control-button--active'
+                    : 'control-button'
+                }
+                onClick={e => {
+                  this.handleListDirectionButtonClick(e, 'DESCENDING')
+                }}
+              >
+                <img src='../resources/icon/icon-up.svg' />
+              </button>
+            ) : (
+              <button
+                title={i18n.__('Descending Order')}
+                styleName={
+                  config.listDirection === 'DESCENDING'
+                    ? 'control-button--active'
+                    : 'control-button'
+                }
+                onClick={e => {
+                  this.handleListDirectionButtonClick(e, 'ASCENDING')
+                }}
+              >
+                <img src='../resources/icon/icon-down.svg' />
+              </button>
+            )}
+
+            {this.props.config.listStyle === 'DEFAULT' ? (
+              <button
+                title={i18n.__('Default View')}
+                styleName={
+                  config.listStyle === 'DEFAULT'
+                    ? 'control-button--active'
+                    : 'control-button'
+                }
+                onClick={e => this.handleListStyleButtonClick(e, 'SMALL')}
+              >
+                <img src='../resources/icon/icon-column.svg' />
+              </button>
+            ) : (
+              <button
+                title={i18n.__('Compressed View')}
+                styleName={
+                  config.listStyle === 'SMALL'
+                    ? 'control-button--active'
+                    : 'control-button'
+                }
+                onClick={e => this.handleListStyleButtonClick(e, 'DEFAULT')}
+              >
+                <img src='../resources/icon/icon-column-list.svg' />
+              </button>
+            )}
           </div>
         </div>
         <div

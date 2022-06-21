@@ -28,6 +28,7 @@
   "Storage Locations": "Storage Locations",
   "Add Storage Location": "Add Storage Location",
   "Add Folder": "Add Folder",
+  "Add Subfolder": "Add Subfolder",
   "Select Folder": "Select Folder",
   "Open Storage folder": "Open Storage folder",
   "Unlink": "Unlink",
@@ -199,5 +200,6 @@
   "Export as Hexo": "Export as Hexo",
   "Markdown Folder Location": "Markdown Folder Location",
   "Attachment Folder Location": "Attachment Folder Location",
-  "Attachment folder path in Markdown": "Attachment folder path in Markdown"
+  "Attachment folder path in Markdown": "Attachment folder path in Markdown",
+  "Table of Contents": "Table of Contents"
 }

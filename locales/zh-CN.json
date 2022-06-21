@@ -25,6 +25,7 @@
   "Storage Locations": "本地存储",
   "Add Storage Location": "添加一个本地存储位置",
   "Add Folder": "新建文件夹",
+  "Add Subfolder": "新建子文件夹",
   "Open Storage folder": "打开本地存储文件夹",
   "Unlink": "取消链接",
   "Edit": "编辑",
@@ -252,5 +253,6 @@
   "Export as Hexo": "导出 Hexo 文件",
   "Markdown Folder Location": "MarkDown 文件位置",
   "Attachment Folder Location": "附件位置",
-  "Attachment folder path in Markdown": "MarkDown 文件内附件路径"
+  "Attachment folder path in Markdown": "MarkDown 文件内附件路径",
+  "Table of Contents": "目录"
 }

@@ -8,7 +8,7 @@ export default function searchFromNotes(notes, search) {
 
   let foundNotes = notes
   searchBlocks.forEach(block => {
-    foundNotes = findByWordOrTag(foundNotes, block)
+    foundNotes = findByWordOrTag(foundNotes, decodeURIComponent(block))
   })
   return foundNotes
 }

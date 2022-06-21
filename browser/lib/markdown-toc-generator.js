@@ -88,6 +88,22 @@ export function generate(markdownText) {
   return TOC_MARKER_START + EOL + EOL + md + EOL + EOL + TOC_MARKER_END
 }
 
+export function generateToc(markdownText) {
+  const slugs = {}
+  const opts = {
+    uniqueSlugStartIndex: 1
+  }
+
+  const result = toc(markdownText, {
+    slugify: title => {
+      return uniqueSlug(slugify(title), slugs, opts)
+    },
+    linkify: false
+  })
+
+  return result
+}
+
 function wrapTocWithEol(toc, editor) {
   const leftWrap = editor.getCursor().ch === 0 ? '' : EOL
   const rightWrap =
