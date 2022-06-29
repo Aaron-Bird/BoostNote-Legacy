@@ -220,6 +220,7 @@ function copyAttachment(
         )
         const dataBuffer = Buffer.from(base64Data, 'base64')
         outputFile.write(dataBuffer, () => {
+          outputFile.end()
           resolve(destinationName)
         })
       } else {
@@ -691,9 +692,58 @@ function moveAttachments(oldPath, newPath, noteKey, newNoteKey, noteContent) {
 function replaceNoteKeyWithNewNoteKey(noteContent, oldNoteKey, newNoteKey) {
   if (noteContent) {
     const preparedInput = noteContent.replace(
-      new RegExp('[' + PATH_SEPARATORS + ']', 'g'),
-      path.sep
+      // This Regexp will be /(\[[\s\S]*?\])\(:storage([^)\n]*?)\)/g
+      // match: [...](:storage...)
+      new RegExp(
+        '(\\[[\\s\\S]*?\\])' +
+          '\\(' +
+          STORAGE_FOLDER_PLACEHOLDER +
+          '([^)\n]*?)' +
+          '\\)',
+        'g'
+      ),
+      (str, storageNameCode, storagePath) => {
+        try {
+          if (storageNameCode.length > 2) {
+            const storageName = storageNameCode.slice(1, -1)
+            let i = 0
+            while (i < storageName.length) { 
+              if (
+                storageName[i] === ']' &&
+                (i === 0 || storageName[i - 1] !== '\\')
+              ) {
+                // '[]]'
+                return str
+              } else if (
+                storageName[i] === '\n' &&
+                storageName[i + 1] === '\n'
+              ) {
+                // '[a\n\nb]'
+                return str
+              }
+
+              i++
+            }
+          }
+
+          const storageSepPath = storagePath.replace(
+            new RegExp('[' + PATH_SEPARATORS + ']', 'g'),
+            path.sep
+          )
+          return (
+            storageNameCode +
+            '(' +
+            STORAGE_FOLDER_PLACEHOLDER +
+            storageSepPath +
+            ')'
+          )
+        } catch (err) {
+          console.log(err)
+          return str
+        }
+      }
     )
+
     return preparedInput.replace(
       new RegExp(
         STORAGE_FOLDER_PLACEHOLDER + escapeStringRegexp(path.sep) + oldNoteKey,

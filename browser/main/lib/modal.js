@@ -30,7 +30,7 @@ class ModalBase extends React.Component {
   render() {
     return (
       <div className={'ModalBase' + (this.state.isHidden ? ' hide' : '')}>
-        <div onClick={e => this.close(e)} className='modalBack' />
+        <div className='modalBack' />
         {this.state.component == null ? null : (
           <Provider store={store}>
             <this.state.component

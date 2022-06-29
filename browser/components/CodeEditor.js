@@ -582,6 +582,7 @@ export default class CodeEditor extends React.Component {
     this.editor.off('scroll', this.scrollHandler)
     this.editor.off('cursorActivity', this.editorActivityHandler)
     this.editor.off('contextmenu', this.contextMenuHandler)
+    eventEmitter.off('line:jump', this.scrollToLineHandeler)
 
     const editorTheme = document.getElementById('editorTheme')
     editorTheme.removeEventListener('load', this.loadStyleHandler)
@@ -1091,31 +1092,19 @@ export default class CodeEditor extends React.Component {
       }
 
       let line = (line = cursor.line - 1)
+      let num = 0
       while (line >= 0) {
         token = editor.getTokenAt({
           ch: 3,
           line
         })
-
-        if (token.start === token.end) {
-          --line
-        } else if (token.type === 'comment') {
-          if (line > 0) {
-            token = editor.getTokenAt({
-              ch: 3,
-              line: line - 1
-            })
-
-            return token.type !== 'comment'
-          } else {
-            return true
-          }
-        } else {
-          return false
+        if (token.type === 'comment') {
+          num++
         }
+        line--
       }
 
-      return false
+      return num % 2 > 0
     }
 
     const pastedTxt = clipboard.readText()
@@ -1189,6 +1178,9 @@ export default class CodeEditor extends React.Component {
       )
     }
     const replaceTaggedUrl = replacement => {
+      const scrollEl = editor.getScrollerElement()
+      const scrollTop = scrollEl.scrollTop
+
       const value = editor.getValue()
       const cursor = editor.getCursor()
       const newValue = value.replace(taggedUrl, titleMark + replacement)
@@ -1198,6 +1190,11 @@ export default class CodeEditor extends React.Component {
 
       editor.setValue(newValue)
       editor.setCursor(newCursor)
+      Promise.resolve().then(() => {
+        scrollEl.scrollTo({
+          top: scrollTop
+        })
+      })
     }
 
     fetch(urlToFetch, {
