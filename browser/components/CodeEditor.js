@@ -1094,11 +1094,8 @@ export default class CodeEditor extends React.Component {
       let line = (line = cursor.line - 1)
       let num = 0
       while (line >= 0) {
-        token = editor.getTokenAt({
-          ch: 3,
-          line
-        })
-        if (token.type === 'comment') {
+        token = editor.getTokenAt({ line })
+        if (token.string.trim().startsWith('```')) {
           num++
         }
         line--

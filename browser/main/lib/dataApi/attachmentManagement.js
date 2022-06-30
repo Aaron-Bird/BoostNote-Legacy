@@ -707,7 +707,7 @@ function replaceNoteKeyWithNewNoteKey(noteContent, oldNoteKey, newNoteKey) {
           if (storageNameCode.length > 2) {
             const storageName = storageNameCode.slice(1, -1)
             let i = 0
-            while (i < storageName.length) { 
+            while (i < storageName.length) {
               if (
                 storageName[i] === ']' &&
                 (i === 0 || storageName[i - 1] !== '\\')

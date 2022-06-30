@@ -7,7 +7,6 @@ require('!!style!css!stylus?sourceMap!./global.styl')
 import config from 'browser/main/lib/ConfigManager'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { ConnectedRouter } from 'connected-react-router'
-import DevTools from './DevTools'
 
 require('./lib/ipcClient')
 require('../lib/customMeta')
@@ -144,7 +143,6 @@ ReactDOM.render(
             component={Main}
           />
         </Switch>
-        <DevTools />
       </Fragment>
     </ConnectedRouter>
   </Provider>,

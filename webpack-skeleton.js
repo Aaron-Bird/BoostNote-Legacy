@@ -21,7 +21,15 @@ var config = {
       browser: path.join(__dirname, 'browser')
     }
   },
-  plugins: [new webpack.NoErrorsPlugin(), new NodeTargetPlugin()],
+  plugins: [
+    new webpack.NoErrorsPlugin(),
+    new NodeTargetPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('development')
+      }
+    })
+  ],
   stylus: {
     use: [require('nib')()],
     import: [

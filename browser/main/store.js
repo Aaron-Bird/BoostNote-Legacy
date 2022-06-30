@@ -4,7 +4,6 @@ import { createHashHistory as createHistory } from 'history'
 import ConfigManager from 'browser/main/lib/ConfigManager'
 import { Map, Set } from 'browser/lib/Mutable'
 import _ from 'lodash'
-import DevTools from './DevTools'
 
 function defaultDataMap() {
   return {
@@ -486,14 +485,14 @@ const reducer = combineReducers({
   router: connectRouter(history)
 })
 
+// Use Chrome extension: redux-devtools
+// https://github.com/reduxjs/redux-devtools/tree/main/extension#12-advanced-store-setup
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 const store = createStore(
   reducer,
   undefined,
   process.env.NODE_ENV === 'development'
-    ? compose(
-        applyMiddleware(routerMiddleware(history)),
-        DevTools.instrument()
-      )
+    ? composeEnhancers(applyMiddleware(routerMiddleware(history)))
     : applyMiddleware(routerMiddleware(history))
 )
 
